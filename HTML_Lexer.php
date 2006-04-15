@@ -55,7 +55,6 @@ class HTML_Lexer
         $array = array(); // result array
         
         while(true) {
-            
             $position_next_lt = strpos($string, '<', $cursor);
             $position_next_gt = strpos($string, '>', $cursor);
             
@@ -147,12 +146,16 @@ class HTML_Lexer
     function tokenizeAttributeString($string) {
         $string = (string) $string;
         if ($string == '') return array();
-        
         $array = array();
         $cursor = 0;
         $in_value = false;
         $i = 0;
         $size = strlen($string);
+        
+        // if we have unquoted attributes, the parser expects a terminating
+        // space, so let's guarantee that there's always a terminating space.
+        $string .= ' ';
+        
         while(true) {
             if ($cursor >= $size) {
                 break;
@@ -168,8 +171,34 @@ class HTML_Lexer
                  ($position_next_equal < $position_next_space ||
                   $position_next_space === false)) {
                 //attr="asdf"
+                // grab the key
                 $key = trim(substr($string, $cursor, $position_next_equal - $cursor));
+                
+                // set cursor right after the equal sign
+                $cursor = $position_next_equal + 1;
+                
+                // consume all spaces after the equal sign
+                $position_next_space = $this->nextWhiteSpace($string, $cursor);
+                while ($position_next_space === $cursor) {
+                    $cursor++;
+                    $position_next_space = $this->nextWhiteSpace($string, $cursor);
+                }
+                
+                // find the next quote
                 $position_next_quote = $this->nextQuote($string, $cursor);
+                
+                // if the quote is not where the cursor is, we're dealing
+                // with an unquoted attribute
+                if ($position_next_quote !== $cursor) {
+                    if ($key) {
+                        $array[$key] = trim(substr($string, $cursor,
+                          $position_next_space - $cursor));
+                    }
+                    $cursor = $position_next_space + 1;
+                    continue;
+                }
+                
+                // otherwise, regular attribute
                 $quote = $string{$position_next_quote};
                 $position_end_quote = strpos($string, $quote, $position_next_quote + 1);
                 $value = substr($string, $position_next_quote + 1,

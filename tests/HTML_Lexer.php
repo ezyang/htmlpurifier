@@ -152,6 +152,9 @@ class TestCase_HTML_Lexer extends UnitTestCase
         $input[] = '="asdf"';
         $expect[] = array();
         
+        $input[] = 'missile=launch';
+        $expect[] = array('missile' => 'launch');
+        
         $size = count($input);
         for($i = 0; $i < $size; $i++) {
             $result = $this->HTML_Lexer->tokenizeAttributeString($input[$i]);
