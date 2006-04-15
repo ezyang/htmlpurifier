@@ -9,6 +9,8 @@ STAGES
 
 == STAGE 1 - parsing ==
 
+: Status - largely FINISHED with a few quirks to work out
+
 We've got two options for this: HTMLSax or my MarkupLexer. Hopefully, we
 can make the two interfaces compatible. This means that we need a lot
 of little classes:
@@ -219,7 +221,9 @@ we probably want to have a function like...
 
 and then pass it to a switch.
 
-The final problem is CSS.
+The final problem is CSS. Get intimate with the syntax here:
+http://www.w3.org/TR/CSS21/syndata.html and also note the "bad" CSS elements
+that HTML_Safe defines to help determine a whitelist.
 
 == PART 5 - stringify ==
 
