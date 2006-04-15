@@ -1,16 +1,18 @@
 <?php
 
-class TestCase_MarkupLexer extends UnitTestCase
+class TestCase_HTML_Lexer extends UnitTestCase
 {
     
-    var $MarkupLexer;
+    var $HTML_Lexer;
+    var $HTML_Lexer_Sax;
     
     function setUp() {
-        $this->MarkupLexer =& new MarkupLexer();
+        $this->HTML_Lexer     =& new HTML_Lexer();
+        $this->HTML_Lexer_Sax =& new HTML_Lexer_Sax();
     }
     
     function test_nextWhiteSpace() {
-        $HP =& $this->MarkupLexer;
+        $HP =& $this->HTML_Lexer;
         $this->assertIdentical(false, $HP->nextWhiteSpace('asdf'));
         $this->assertIdentical(0, $HP->nextWhiteSpace(' asdf'));
         $this->assertIdentical(0, $HP->nextWhiteSpace("\nasdf"));
@@ -90,9 +92,13 @@ class TestCase_MarkupLexer extends UnitTestCase
         
         $size = count($input);
         for($i = 0; $i < $size; $i++) {
-            $result = $this->MarkupLexer->tokenizeHTML($input[$i]);
+            $result = $this->HTML_Lexer->tokenizeHTML($input[$i]);
             $this->assertEqual($expect[$i], $result);
             paintIf($result, $expect[$i] != $result);
+            
+            // since I didn't write the parser, I can't define its behavior
+            // however, make sure that the class runs without any errors
+            $exp_result = $this->HTML_Lexer_Sax->tokenizeHTML($input[$i]);
         }
         
     }
@@ -116,7 +122,7 @@ class TestCase_MarkupLexer extends UnitTestCase
         
         $size = count($input);
         for($i = 0; $i < $size; $i++) {
-            $result = $this->MarkupLexer->tokenizeAttributeString($input[$i]);
+            $result = $this->HTML_Lexer->tokenizeAttributeString($input[$i]);
             $this->assertEqual($expect[$i], $result);
             paintIf($result, $expect[$i] != $result);
         }

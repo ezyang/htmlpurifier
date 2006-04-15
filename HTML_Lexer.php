@@ -9,7 +9,7 @@ TODO:
 
 */
 
-class MarkupLexer
+class HTML_Lexer
 {
     
     function nextQuote($string, $offset = 0) {
@@ -98,7 +98,10 @@ class MarkupLexer
                     continue;
                 }
                 
-                // Check if it is self closing, if so, remove trailing slash
+                // Check if it is explicitly self closing, if so, remove
+                // trailing slash. Remember, we could have a tag like <br>, so
+                // any later token processing scripts must convert improperly
+                // classified EmptyTags from StartTags.
                 $is_self_closing = (strpos($segment,'/') === strlen($segment) - 1);
                 if ($is_self_closing) {
                     $segment = substr($segment, 0, strlen($segment) - 1);
@@ -185,6 +188,47 @@ class MarkupLexer
             }
         }
         return $array;
+    }
+    
+}
+
+// uses the PEAR class XML_HTMLSax3 to parse XML
+class HTML_Lexer_Sax extends HTML_Lexer
+{
+    
+    var $tokens = array();
+    
+    function tokenizeHTML($html) {
+        $this->tokens = array();
+        $parser=& new XML_HTMLSax3();
+        $parser->set_object($this);
+        $parser->set_element_handler('openHandler','closeHandler');
+        $parser->set_data_handler('dataHandler');
+        $parser->set_escape_handler('escapeHandler');
+        $parser->parse($html);
+        return $this->tokens;
+    }
+    
+    function openHandler(&$parser, $name, $attrs) {
+        $this->tokens[] = new MF_StartTag($name, $attrs);
+        return true;
+    }
+    
+    function closeHandler(&$parser, $name) {
+        $this->tokens[] = new MF_EndTag($name);
+        return true;
+    }
+    
+    function dataHandler(&$parser, $data) {
+        $this->tokens[] = new MF_Text($data);
+        return true;
+    }
+    
+    function escapeHandler(&$parser, $data) {
+        if (strpos($data, '-') === 0) {
+            $this->tokens[] = new MF_Comment($data);
+        }
+        return true;
     }
     
 }
