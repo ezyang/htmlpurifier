@@ -20,7 +20,7 @@ of little classes:
 * Comment(text)                 is escapeHandler (has leading -)
 * CharacterData(text)           is escapeHandler (has leading [)
 
-Ignorable (although we probably want to output them raw):
+Ignorable/not being implemented (although we probably want to output them raw):
 * ProcessingInstructions(text)  is piHandler
 * JavaOrASPInstructions(text)   is jaspHandler
 

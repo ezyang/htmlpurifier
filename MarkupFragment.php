@@ -9,7 +9,8 @@ class MF_Tag extends MF
 {
     var $name;
     function MF_Tag($name) {
-        $this->name = strtolower($name);
+        $this->name = strtolower($name); // for some reason, the SAX parser
+                                         // uses uppercase. Investigate?
     }
 }
 
@@ -31,6 +32,7 @@ class MF_Text extends MF
     var $data;
     function MF_Text($data) {
         $this->data = trim($data); // fairly certain trimming it's okay
+                                   // but it's not default SAX behavior
     }
     function append($mf_text) {
         return new MF_Text($this->data . $mf_text->data);

@@ -1,11 +1,14 @@
 <?php
 
 /*
-Lexes SGML style documents, aka HTML, XML, XHMTML, you name it.
+Forgivingly lexes SGML style documents, aka HTML, XML, XHMTML, you name it.
 
 TODO:
- * Validate element names and attributes for correct composition
  * Reread the XML spec and make sure I got everything right
+ * Add support for CDATA sections
+ * Have comments output with the leading and trailing --s
+ * Optimize and benchmark
+ * Check MF_Text behavior: shouldn't the info in there be raw (entities parsed?)
 
 */
 
@@ -193,6 +196,7 @@ class HTML_Lexer
 }
 
 // uses the PEAR class XML_HTMLSax3 to parse XML
+//   only shares the tokenizeHTML() function
 class HTML_Lexer_Sax extends HTML_Lexer
 {
     
@@ -209,12 +213,22 @@ class HTML_Lexer_Sax extends HTML_Lexer
         return $this->tokens;
     }
     
-    function openHandler(&$parser, $name, $attrs) {
-        $this->tokens[] = new MF_StartTag($name, $attrs);
+    function openHandler(&$parser, $name, $attrs, $closed) {
+        if ($closed) {
+            $this->tokens[] = new MF_EmptyTag($name, $attrs);
+        } else {
+            $this->tokens[] = new MF_StartTag($name, $attrs);
+        }
         return true;
     }
     
     function closeHandler(&$parser, $name) {
+        // HTMLSax3 seems to always send empty tags an extra close tag
+        // check and ignore if you see it:
+        // [TESTME] to make sure it doesn't overreach
+        if (is_a($this->tokens[count($this->tokens)-1], 'MF_EmptyTag')) {
+            return true;
+        }
         $this->tokens[] = new MF_EndTag($name);
         return true;
     }
