@@ -64,7 +64,7 @@ class MarkupLexer
             
             if (!$inside_tag && $position_next_lt !== false) {
                 // We are not inside tag and there still is another tag to parse
-                $array[] = new HTML_Text(substr($string, $cursor, $position_next_lt - $cursor));
+                $array[] = new MF_Text(substr($string, $cursor, $position_next_lt - $cursor));
                 $cursor  = $position_next_lt + 1;
                 $inside_tag = true;
                 continue;
@@ -73,7 +73,7 @@ class MarkupLexer
                 // If we're already at the end, break
                 if ($cursor === strlen($string)) break;
                 // Create Text of rest of string
-                $array[] = new HTML_Text(substr($string, $cursor));
+                $array[] = new MF_Text(substr($string, $cursor));
                 break;
             } elseif ($inside_tag && $position_next_gt !== false) {
                 // We are in tag and it is well formed
@@ -82,7 +82,7 @@ class MarkupLexer
                 
                 // Check if it's a comment
                 if (substr($segment,0,3) == '!--' && substr($segment,strlen($segment)-2,2) == '--') {
-                    $array[] = new HTML_Comment(substr($segment,3,strlen($segment)-5));
+                    $array[] = new MF_Comment(substr($segment,3,strlen($segment)-5));
                     $inside_tag = false;
                     $cursor = $position_next_gt + 1;
                     continue;
@@ -92,7 +92,7 @@ class MarkupLexer
                 $is_end_tag = (strpos($segment,'/') === 0);
                 if ($is_end_tag) {
                     $type = substr($segment, 1);
-                    $array[] = new HTML_EndTag($type);
+                    $array[] = new MF_EndTag($type);
                     $inside_tag = false;
                     $cursor = $position_next_gt + 1;
                     continue;
@@ -108,9 +108,9 @@ class MarkupLexer
                 $position_first_space = $this->nextWhiteSpace($segment);
                 if ($position_first_space === false) {
                     if ($is_self_closing) {
-                        $array[] = new HTML_EmptyTag($segment);
+                        $array[] = new MF_EmptyTag($segment);
                     } else {
-                        $array[] = new HTML_StartTag($segment, array());
+                        $array[] = new MF_StartTag($segment, array());
                     }
                     $inside_tag = false;
                     $cursor = $position_next_gt + 1;
@@ -122,15 +122,15 @@ class MarkupLexer
                 $attribute_string = trim(substr($segment, $position_first_space));
                 $attributes = $this->tokenizeAttributeString($attribute_string);
                 if ($is_self_closing) {
-                    $array[] = new HTML_EmptyTag($type, $attributes);
+                    $array[] = new MF_EmptyTag($type, $attributes);
                 } else {
-                    $array[] = new HTML_StartTag($type, $attributes);
+                    $array[] = new MF_StartTag($type, $attributes);
                 }
                 $cursor = $position_next_gt + 1;
                 $inside_tag = false;
                 continue;
             } else {
-                $array[] = new HTML_Text('<' . substr($string, $cursor));
+                $array[] = new MF_Text('<' . substr($string, $cursor));
                 break;
             }
             break;

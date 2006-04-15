@@ -1,6 +1,6 @@
 <?php
 
-class SimpleTest_MarkupLexer extends UnitTestCase
+class TestCase_MarkupLexer extends UnitTestCase
 {
     
     var $MarkupLexer;
@@ -26,66 +26,66 @@ class SimpleTest_MarkupLexer extends UnitTestCase
         
         $input[] = 'This is regular text.';
         $expect[] = array(
-            new HTML_Text('This is regular text.')
+            new MF_Text('This is regular text.')
             );
         
         $input[] = 'This is <b>bold</b> text';
         $expect[] = array(
-            new HTML_Text('This is ')
-           ,new HTML_StartTag('b', array())
-           ,new HTML_Text('bold')
-           ,new HTML_EndTag('b')
-           ,new HTML_Text(' text')
+            new MF_Text('This is ')
+           ,new MF_StartTag('b', array())
+           ,new MF_Text('bold')
+           ,new MF_EndTag('b')
+           ,new MF_Text(' text')
             );
         
         $input[] = '<DIV>Totally rad dude. <b>asdf</b></div>';
         $expect[] = array(
-            new HTML_StartTag('DIV', array())
-           ,new HTML_Text('Totally rad dude. ')
-           ,new HTML_StartTag('b', array())
-           ,new HTML_Text('asdf')
-           ,new HTML_EndTag('b')
-           ,new HTML_EndTag('div')
+            new MF_StartTag('DIV', array())
+           ,new MF_Text('Totally rad dude. ')
+           ,new MF_StartTag('b', array())
+           ,new MF_Text('asdf')
+           ,new MF_EndTag('b')
+           ,new MF_EndTag('div')
             );
         
         $input[] = '<asdf></asdf><d></d><poOloka><poolasdf><ds></asdf></ASDF>';
         $expect[] = array(
-            new HTML_StartTag('asdf')
-           ,new HTML_EndTag('asdf')
-           ,new HTML_StartTag('d')
-           ,new HTML_EndTag('d')
-           ,new HTML_StartTag('poOloka')
-           ,new HTML_StartTag('poolasdf')
-           ,new HTML_StartTag('ds')
-           ,new HTML_EndTag('asdf')
-           ,new HTML_EndTag('ASDF')
+            new MF_StartTag('asdf')
+           ,new MF_EndTag('asdf')
+           ,new MF_StartTag('d')
+           ,new MF_EndTag('d')
+           ,new MF_StartTag('poOloka')
+           ,new MF_StartTag('poolasdf')
+           ,new MF_StartTag('ds')
+           ,new MF_EndTag('asdf')
+           ,new MF_EndTag('ASDF')
             );
         
         $input[] = '<a'."\t".'href="foobar.php"'."\n".'title="foo!">Link to <b id="asdf">foobar</b></a>';
         $expect[] = array(
-            new HTML_StartTag('a',array('href'=>'foobar.php','title'=>'foo!'))
-           ,new HTML_Text('Link to ')
-           ,new HTML_StartTag('b',array('id'=>'asdf'))
-           ,new HTML_Text('foobar')
-           ,new HTML_EndTag('b')
-           ,new HTML_EndTag('a')
+            new MF_StartTag('a',array('href'=>'foobar.php','title'=>'foo!'))
+           ,new MF_Text('Link to ')
+           ,new MF_StartTag('b',array('id'=>'asdf'))
+           ,new MF_Text('foobar')
+           ,new MF_EndTag('b')
+           ,new MF_EndTag('a')
             );
         
         $input[] = '<br />';
         $expect[] = array(
-            new HTML_EmptyTag('br')
+            new MF_EmptyTag('br')
             );
         
         $input[] = '<!-- Comment --> <!-- not so well formed --->';
         $expect[] = array(
-            new HTML_Comment(' Comment ')
-           ,new HTML_Text(' ')
-           ,new HTML_Comment(' not so well formed -')
+            new MF_Comment(' Comment ')
+           ,new MF_Text(' ')
+           ,new MF_Comment(' not so well formed -')
             );
         
         $input[] = '<a href=""';
         $expect[] = array(
-            new HTML_Text('<a href=""')
+            new MF_Text('<a href=""')
             );
         
         $size = count($input);
