@@ -1,0 +1,228 @@
+REAL HTML PARSING!
+
+STAGES
+1. Parse document into an array of tag/text/etc objects
+2. Run through document and remove all elements not on whitelist
+3. Run through document and make it well formed, taking into mind quirks
+4. Run through all nodes and check nesting and check attributes
+5. Translate back into string
+
+== STAGE 1 - parsing ==
+
+We've got two options for this: HTMLSax or my MarkupLexer. Hopefully, we
+can make the two interfaces compatible. This means that we need a lot
+of little classes:
+
+* StartTag(name, attributes)    is openHandler
+* EndTag(name)                  is closeHandler
+* EmptyTag(name, attributes)    is openHandler   (is in array of empties)
+* Data(text)                    is dataHandler
+* Comment(text)                 is escapeHandler (has leading -)
+* CharacterData(text)           is escapeHandler (has leading [)
+
+Ignorable (although we probably want to output them raw):
+* ProcessingInstructions(text)  is piHandler
+* JavaOrASPInstructions(text)   is jaspHandler
+
+Prefixed with MF (Markup Fragment). We'll make 'em all immutable value objects.
+
+== STAGE 2 - remove foreign elements ==
+
+At this point, the parser needs to start knowing about the DTD. Since we
+hold everything in an associative $info array, if it's set, it's valid, and
+we can include. Otherwise zap it, or attempt to figure out what they meant.
+<stronf>? A misspelling of <strong>! This feature may be too sugary though.
+
+While we're at it, we can change the Processing Instructions and Java/ASP
+Instructions into data blocks, scratch comment blocks, change CharacterData
+into Data (although I don't see why we can't do that at the start).
+
+== STAGE 3 - make well formed ==
+
+Now we step through the whole thing and correct nesting issues. Most of the
+time, it's making sure the tags match up, but there's some trickery going on
+for HTML's quirks. They are:
+
+* Set of tags that close P
+        'address', 'blockquote', 'center', 'dd',      'dir',       'div', 
+        'dl',      'dt',         'h1',     'h2',      'h3',        'h4', 
+        'h5',      'h6',         'hr',     'isindex', 'listing',   'marquee', 
+        'menu',    'multicol',   'ol',     'p',       'plaintext', 'pre', 
+        'table',   'ul',         'xmp', 
+* Li closes li
+* more?
+
+We also want to do translations, like from FONT to SPAN with STYLE.
+
+== STAGE 4 - check nesting ==
+
+We know that the document is now well formed. The tokenizer should now take
+things in nodes: when you hit a start tag, keep on going until you get its
+ending tag, and then handle everything inside there. Fortunantely, no
+fancy recursion is necessary as going to the next node is as simple as
+scrolling to the next start tag.
+
+Suppose we have a node and encounter a problem with one of its children.
+Depending on the complexity of the rule, we will either delete the children,
+or delete the entire node itself.
+
+The simplest type of rule is zero or more valid elements, denoted like:
+
+  ( el1 | el2 | el3 )*
+
+The next simplest is with one or more valid elements:
+
+  ( li )+
+
+And then you have complex cases:
+
+ table (caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))
+ map ((%block; | form | %misc;)+ | area+)
+ html (head, body)
+ head (%head.misc;,
+     ((title, %head.misc;, (base, %head.misc;)?) |
+      (base, %head.misc;, (title, %head.misc;))))
+
+Each of these has to be dealt with. Case 1 is a joy, because you can zap
+as many as you want, but you'll never actually have to kill the node. Two
+and three need the entire node to be killed if you have a problem. This
+can be problematic, as the missing node might cause its parent node to now
+be incorrect. Granted, it's unlikely, and I'm fairly certain that HTML, let
+alone the simplified set I'm allowing will have this problem, but it's worth
+checking for.
+
+The way, I suppose, one would check for it, is whenever a node is removed,
+scroll to it's parent start, and re-evaluate it. Make sure you're able to do
+that with minimal code repetition.
+
+The most complex case can probably be done by using some fancy regexp
+expressions and transformations. However, it doesn't seem right that, say,
+a stray <b> in a <table> can cause the entire table to be removed. Fixing it,
+however, may be too difficult.
+
+So... here's the interesting code:
+
+--
+
+// Validate the order of the children
+if (!$was_error && count($dtd_children)) {
+    $children_list = implode(',', $children);
+    $regex = $this->dtd->getPcreRegex($name);
+    if (!preg_match('/^'.$regex.'$/', $children_list)) {
+        $dtd_regex = $this->dtd->getDTDRegex($name);
+        $this->_errors("In element <$name> the children list found:\n'$children_list', ".
+                       "does not conform the DTD definition: '$dtd_regex'", $lineno);
+    }
+}
+
+--
+
+//$ch is a string of the allowed childs
+$children = preg_split('/([^#a-zA-Z0-9_.-]+)/', $ch, -1, PREG_SPLIT_NO_EMPTY);
+// check for parsed character data special case
+if (in_array('#PCDATA', $children)) {
+    $content = '#PCDATA';
+    if (count($children) == 1) {
+        $children = array();
+        break;
+    }
+}
+// $children is not used after this
+
+$this->dtd['elements'][$elem_name]['child_validation_dtd_regex'] = $ch;
+// Convert the DTD regex language into PCRE regex format
+$reg = str_replace(',', ',?', $ch);
+$reg = preg_replace('/([#a-zA-Z0-9_.-]+)/', '(,?\\0)', $reg);
+$this->dtd['elements'][$elem_name]['child_validation_pcre_regex'] = $reg;
+
+--
+
+We can probably loot and steal all of this. This brilliance of this code is
+amazing. I'm lovin' it!
+
+So, the way we define these cases should work like this:
+
+class ChildDef with validateChildren($children_tags)
+
+The function needs to parse into nodes, then into the regex array.
+It can result in one of three actions: the removal of the entire parent node,
+replacement of all of the original child tags with a new set of child
+tags which it returns, or no changes. They shall be denoted as, respectively,
+
+Remove entire parent node    = false
+Replace child tags with this = array of tags
+No changes                   = true
+
+If we remove the entire parent node, we must scroll back to the parent of the
+parent.
+
+== STAGE 4 - check attributes ==
+
+While we're doing all this nesting hocus-pocus, attributes are also being
+checked. The reason why we need this to be done with the nesting stuff
+is if a REQUIRED attribute is not there, we might need to kill the tag (or
+replace it with data). Fortunantely, this is rare enough that we only have
+to worry about it for certain things:
+
+* ! bdo - dir > replace with span, preserve attributes
+* basefont - size
+* param - name
+* applet - width, height
+* ! img - src, alt > if only alt is missing, insert filename, else remove img
+* map - id
+* area - alt
+* form - action
+* optgroup - label
+* textarea - rows, cols
+
+As you can see, only two of them we would remotely consider for our simplified
+tag set. But each has a different set of challenges.
+
+So after that's all said and done, each of the different types of content
+inside the attributes needs to be handled differently.
+
+ContentType(s)  [RFC2045]
+Charset(s)      [RFC2045]
+LanguageCode    [RFC3066] (NMTOKEN)
+Character       [XML][2.2] (a single character)
+Number          /^\d+$/
+LinkTypes       [HTML][6.12] <space>
+MediaDesc       [HTML][6.13] <comma>
+URI/UriList     [RFC2396] <space>
+Datetime        (ISO date format)
+Script          ...
+StyleSheet      [CSS] (complex)
+Text            CDATA
+FrameTarget     NMTOKEN
+Length          (pixel, percentage) (?:px suffix allowed?)
+MultiLength     (pixel, percentage, or relative)
+Pixels          (integer)
+// map attributes omitted
+ImgAlign        (top|middle|bottom|left|right)
+Color           #NNNNNN, #NNN or color name (translate it
+    Black  = #000000    Green  = #008000
+    Silver = #C0C0C0    Lime   = #00FF00
+    Gray   = #808080    Olive  = #808000
+    White  = #FFFFFF    Yellow = #FFFF00
+    Maroon = #800000    Navy   = #000080
+    Red    = #FF0000    Blue   = #0000FF
+    Purple = #800080    Teal   = #008080
+    Fuchsia= #FF00FF    Aqua   = #00FFFF
+// plus some directly defined in the spec
+
+Everything else is either ID, or defined as a certain set of values.
+
+Unless we use reflection (which then we have to make sure the attribute exists),
+we probably want to have a function like...
+
+  validate($type, $value) where $type is like ContentType or Number
+
+and then pass it to a switch.
+
+The final problem is CSS.
+
+== PART 5 - stringify ==
+
+Should be fairly simple as long as we delegate to appropriate functions.
+It's probably too much trouble to indent the stuff properly, so just output
+stuff raw.
