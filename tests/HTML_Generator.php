@@ -63,6 +63,18 @@ class Test_HTML_Generator extends UnitTestCase
         
     }
     
+    function test_generateFromTokens() {
+        
+        $tokens = array(
+            new MF_StartTag('b'),
+            new MF_Text('Foobar!'),
+            new MF_EndTag('b')
+            );
+        $expect = '<b>Foobar!</b>';
+        $this->assertEqual($expect, $this->gen->generateFromTokens($tokens));
+        
+    }
+    
 }
 
 ?>

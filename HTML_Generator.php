@@ -3,6 +3,14 @@
 class HTML_Generator
 {
     
+    function generateFromTokens($tokens) {
+        $html = '';
+        foreach ($tokens as $token) {
+            $html .= $this->generateFromToken($token);
+        }
+        return $html;
+    }
+    
     function generateFromToken($token) {
         if (is_a($token, 'MF_StartTag')) {
             $attr = $this->generateAttributes($token->attributes);
