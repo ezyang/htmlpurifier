@@ -62,8 +62,7 @@ class HTML_Lexer
         while(true) {
             
             // infinite loop protection
-            $loops++;
-            if ($loops > 200000) return array();
+            if (++$loops > 200000) return array();
             
             $position_next_lt = strpos($string, '<', $cursor);
             $position_next_gt = strpos($string, '>', $cursor);
@@ -173,8 +172,7 @@ class HTML_Lexer
             
             // infinite loop protection
             // if we've looped 1000 times, abort. Nothing good can come of this 
-            $loops++;
-            if ($loops > 1000) return array();
+            if (++$loops > 1000) return array();
             
             if ($cursor >= $size) {
                 break;
