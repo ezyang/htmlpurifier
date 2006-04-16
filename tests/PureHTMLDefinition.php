@@ -53,7 +53,65 @@ class Test_PureHTMLDefinition extends UnitTestCase
         
         foreach ($inputs as $i => $input) {
             $result = $this->def->removeForeignElements($input);
-            $this->assertEqual($result, $expect[$i]);
+            $this->assertEqual($expect[$i], $result);
+            paintIf($result, $result != $expect[$i]);
+        }
+        
+    }
+    
+    function test_makeWellFormed() {
+        
+        $inputs = array();
+        $expect = array();
+        
+        $inputs[0] = array();
+        $expect[0] = $inputs[0];
+        
+        $inputs[1] = array(
+            new MF_Text('This is ')
+           ,new MF_StartTag('b')
+           ,new MF_Text('bold')
+           ,new MF_EndTag('b')
+           ,new MF_Text(' text')
+            );
+        $expect[1] = $inputs[1];
+        
+        $inputs[2] = array(
+            new MF_StartTag('b')
+           ,new MF_Text('Unclosed tag, gasp!')
+            );
+        $expect[2] = array(
+            new MF_StartTag('b')
+           ,new MF_Text('Unclosed tag, gasp!')
+           ,new MF_EndTag('b')
+            );
+        
+        $inputs[3] = array(
+            new MF_StartTag('b')
+           ,new MF_StartTag('i')
+           ,new MF_Text('The b is closed, but the i is not')
+           ,new MF_EndTag('b')
+            );
+        $expect[3] = array(
+            new MF_StartTag('b')
+           ,new MF_StartTag('i')
+           ,new MF_Text('The b is closed, but the i is not')
+           ,new MF_EndTag('i')
+           ,new MF_EndTag('b')
+            );
+        
+        $inputs[4] = array(
+            new MF_Text('Hey, recycle unused end tags!')
+           ,new MF_EndTag('b')
+            );
+        $expect[4] = array(
+            new MF_Text('Hey, recycle unused end tags!')
+           ,new MF_Text('</b>')
+            );
+        
+        foreach ($inputs as $i => $input) {
+            $result = $this->def->removeForeignElements($input);
+            $this->assertEqual($expect[$i], $result);
             paintIf($result, $result != $expect[$i]);
         }
         
