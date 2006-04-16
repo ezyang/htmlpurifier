@@ -14,16 +14,17 @@ class MF_Tag extends MF
     }
 }
 
-class MF_StartTag extends MF_Tag
+class MF_TagWithAttributes extends MF_Tag
 {
     var $attributes = array();
-    function MF_StartTag($type, $attributes = array()) {
+    function MF_TagWithAttributes($type, $attributes = array()) {
         $this->MF_Tag($type);
         $this->attributes = $attributes;
     }
 }
 
-class MF_EmptyTag extends MF_StartTag {}
+class MF_StartTag extends MF_TagWithAttributes {}
+class MF_EmptyTag extends MF_TagWithAttributes {}
 class MF_EndTag extends MF_Tag {}
 
 class MF_Text extends MF
