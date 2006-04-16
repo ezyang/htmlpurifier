@@ -12,6 +12,43 @@ require_once 'Text/Password.php';
 require_once '../MarkupFragment.php';
 require_once '../HTML_Lexer.php';
 
+class TinyTimer extends Benchmark_Timer
+{
+    
+    var $name;
+    
+    function TinyTimer($name, $auto = false) {
+        $this->name = htmlentities($name);
+        $this->Benchmark_Timer($auto);
+    }
+    
+    function getOutput() {
+
+        $total  = $this->TimeElapsed();
+        $result = $this->getProfiling();
+        $dashes = '';
+        
+        $out = '<tr>';
+        
+        $out .= "<td>{$this->name}</td>";
+        
+        foreach ($result as $k => $v) {
+            if ($v['name'] == 'Start' || $v['name'] == 'Stop') continue;
+            
+            $perc = (($v['diff'] * 100) / $total);
+            $tperc = (($v['total'] * 100) / $total);
+            
+            $out .= '<td align="right">' . number_format($perc, 2, '.', '') .
+                   "%</td>";
+            
+        }
+        
+        $out .= '</tr>';
+        
+        return $out;
+    }
+}
+
 ?>
 <html>
 <head>
@@ -19,11 +56,13 @@ require_once '../HTML_Lexer.php';
 </head>
 <body>
 <h1>Benchmark: HTML_Lexer versus HTMLSax</h1>
+<table border="1">
+<tr><th>Case</th><th>HTML_Lexer</th><th>HTML_Lexer_Sax</th></tr>
 <?php
 
 
-function do_benchmark($document) {
-    $timer = new Benchmark_Timer();
+function do_benchmark($name, $document) {
+    $timer = new TinyTimer($name);
     $timer->start();
     
     $lexer = new HTML_Lexer();
@@ -46,8 +85,7 @@ while (false !== ($filename = readdir($dh))) {
     
     if (strpos($filename, '.html') !== strlen($filename) - 5) continue;
     $document = file_get_contents($dir . '/' . $filename);
-    echo "<h2>File: $filename</h2>\n";
-    do_benchmark($document);
+    do_benchmark("File: $filename", $document);
     
 }
 
@@ -58,15 +96,24 @@ $snippets[] = '<a href="foo>';
 $snippets[] = '<a "=>';
 
 foreach ($snippets as $snippet) {
-    echo '<h2>' . htmlentities($snippet) . '</h2>';
-    do_benchmark($snippet);
+    do_benchmark($snippet, $snippet);
 }
 
 // random input
 
-$document = Text_Password::create(80, 'unpronounceable', 'qwerty <>="\'');
-echo "<h2>Random input</h2>\n";
-echo '<p style="font-family:monospace;">' . htmlentities($document) . '</p>';
-do_benchmark($document);
+$random = Text_Password::create(80, 'unpronounceable', 'qwerty <>="\'');
 
-?></body></html>
+do_benchmark('Random input', $random);
+
+?></table>
+
+<?php
+
+echo '<div>Random input was: ' .
+  '<span colspan="4" style="font-family:monospace;">' . htmlentities($random) .
+  '</span></div>';
+
+?>
+
+
+</body></html>
