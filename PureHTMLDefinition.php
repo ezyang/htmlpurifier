@@ -13,57 +13,52 @@ class PureHTMLDefinition
     function loadData() {
         // emulates the structure of the DTD
         
-        // array(
-        //   array of allowed child elements,
-        //   array of rejected child elements
-        //   indication about how many child elements are needed
-        // )
+        // entities: prefixed with e_ and _ replaces .
+        // we don't use an array because that complicates interpolation
+        // strings are used instead of arrays because if you use arrays,
+        // you have to do some hideous manipulation with array_merge()
         
-        $entity['special.extra'] = array('img');
-        $entity['special.basic'] = array('br','bdo','span');
-        $entity['special'] = array_merge($entity['special.basic'],
-          $entity['special.extra']);
+        // these are condensed, remember, with bad stuff taken out
         
-        $entity['fontstyle.extra'] = array('big','small');
-        $entity['fontstyle.basic'] = array('tt','i','b','u','s','strike');
-        $entity['fontstyle'] = array_merge($entity['fontstyle.extra'],
-          $entity['fontstyle.basic']);
+        // transforms: font, menu, dir, center
         
-        $entity['phrase.extra'] = array('sub','sup');
-        $entity['phrase.basic'] = array('em','strong','dfn','code','samp','kbd',
-          'var','cite','abbr','acronym','q');
-        $entity['phrase'] = array_merge($entity['phrase.extra'],
-          $entity['phrase.basic']);
-        
-        $entity['misc.inline'] = array('ins','del');
-        $entity['misc'] = $entity['misc.inline'];
-        
-        $entity['inline'] = array_merge(array('a'), $entity['special'],
-          $entity['fontstyle'], $entity['phrase']);
-        
-        $entity['heading'] = array('h1','h2','h3','h4','h5','h6');
-        $entity['lists'] = array('ul','ol', 'dl');
-        $entity['blocktext'] = array('pre','hr','blockquote','address');
-        
-        $entity['block'] = array_merge(array('p','div','table'),
-          $entity['heading'],$entity['lists'], $entity['blocktext']);
-        
-        $entity['Inline'] = array_merge(array('#PCDATA'),$entity['special'],
-          $entity['misc.inline']);
-        $entity['Flow'] = array_merge(array('#PCDATA'), $entity['block'],
-          $entity['inline'], $entity['misc']);
-        $entity['a.content'] = array_merge(array('#PCDATA'), $entity['special'],
-          $entity['fontstyle'], $entity['phrase'], $entity['misc.inline']);
-        
-        $entity['pre.content'] = array_merge(array('#PCDATA', 'a'),
-          $entity['special.basic'], $entity['fontstyle.basic'],
-          $entity['phrase.basic'], $entity['misc.inline']);
+        $e_special_extra = 'img';
+        $e_special_basic = 'br | span | bdo';
+        $e_special = "$e_special_basic | $e_special_extra";
+        $e_fontstyle_extra = 'big | small';
+        $e_fontstyle_basic = 'tt | i | b | u | s | strike';
+        $e_fontstyle = "$e_fontstyle_basic | $e_fontstyle_extra";
+        $e_phrase_extra = 'sub | sup';
+        $e_phrase_basic = 'em | strong | dfn | code | q | samp | kbd | var'.
+          ' | cite | abbr | acronym';
+        $e_phrase = "$e_phrase_basic | $e_phrase_extra";
+        $e_inline_forms = ''; // humor the dtd
+        $e_misc_inline = 'ins | del';
+        $e_misc = "$e_misc_inline";
+        $e_inline = "a | $e_special | $e_fontstyle | $e_phrase".
+          " | $e_inline_forms";
+        // note the casing
+        $e_Inline = new HTMLDTD_ChildDef_Optional("#PCDATA | $e_inline".
+          " | $e_misc_inline");
+        $e_heading = 'h1|h2|h3|h4|h5|h6';
+        $e_lists = 'ul | ol | dl';
+        $e_blocktext = 'pre | hr | blockquote | address';
+        $e_block = "p | $e_heading | div | $e_lists | $e_blocktext | table";
+        $e_Flow = new HTMLDTD_ChildDef_Optional("#PCDATA | $e_block".
+          " | $e_inline | $e_misc");
+        $e_a_content = new HTMLDTD_ChildDef_Optional("#PCDATA | $e_special".
+          " | $e_fontstyle | $e_phrase | $e_inline_forms | $e_misc_inline");
+        $e_pre_content = new HTMLDTD_ChildDef_Optional("#PCDATA | a".
+          " | $e_special_basic | $e_fontstyle_basic | $e_phrase_basic".
+          " | $e_inline_forms | $e_misc_inline");
+        $e_form_content = new HTMLDTD_ChildDef_Optional(''); //unused
+        $e_form_button_content = new HTMLDTD_ChildDef_Optional(''); // unused
         
         $this->info['ins'] =
         $this->info['del'] = 
         $this->info['blockquote'] =
         $this->info['dd']  =
-        $this->info['div'] = array($entity['Flow']);
+        $this->info['div'] = new HTMLDTD_Element($e_Flow);
         
         $this->info['em']  =
         $this->info['strong'] =
@@ -99,28 +94,32 @@ class PureHTMLDefinition
         $this->info['h3']   = 
         $this->info['h4']   = 
         $this->info['h5']   = 
-        $this->info['h6']   = array($entity['Inline']);
+        $this->info['h6']   = new HTMLDTD_Element($e_Inline);
         
         $this->info['ol']   =
-        $this->info['ul']   = array(array('li'),array(),'+');
-        // the plus requires at least one child. I don't know what the
-        // empty array is for though
+        $this->info['ul']   =
+          new HTMLDTD_Element(
+            new HTMLDTD_ChildDef_Required('li')
+          );
         
-        $this->info['dl']   = array(array('dt','dd'));
+        $this->info['dl']   =
+          new HTMLDTD_Element(
+            new HTMLDTD_ChildDef_Optional('dt|dd')
+          );
         $this->info['address'] =
-          array(
-            array_merge(
-              array('#PCDATA', 'p'),
-              $entity['inline'],
-              $entity['misc.inline']));
+          new HTMLDTD_Element(
+            new HTMLDTD_ChildDef_Optional("#PCDATA | p | $e_inline".
+              " | $e_misc_inline")
+          );
         
         $this->info['img']  =
         $this->info['br']   =
-        $this->info['hr']   = 'EMPTY';
+        $this->info['hr']   = new HTMLDTD_Element(new HTMLDTD_ChildDef_Empty());
         
-        $this->info['pre']  = array($entity['pre.content']);
+        $this->info['pre']  = new HTMLDTD_Element($e_pre_content);
         
-        $this->info['a']    = array($entity['a.content']);
+        $this->info['a']    = new HTMLDTD_Element($e_a_content);
+        
     }
     
     function purifyTokens($tokens) {
@@ -158,9 +157,108 @@ class PureHTMLDefinition
         $result = array();
         $current_nesting = array();
         foreach ($tokens as $token) {
-            if (!is_subclass_of($token, 'MF_Tag')) $result[] = $token;
+            if (!is_subclass_of($token, 'MF_Tag')) {
+                $result[] = $token;
+                continue;
+            }
+            $info = $this->info[$token->name]; // assumption but valid
+            
             // test if it claims to be a start tag but is empty
+            if (is_a($info->child_def, 'HTMLDTD_ChildDef_Empty') &&
+                is_a($token, 'MF_StartTag') ) {
+                
+                $result[] = new MF_EmptyTag($token->name, $token->attributes);
+                continue;
+            }
+            
+            // test if it claims to be empty but really is a start tag
+            if (!is_a($info->child_def, 'HTMLDTD_ChildDef_Empty') &&
+                is_a($token, 'MF_EmptyTag') ) {
+                
+                $result[] = new MF_StartTag($token->name, $token->attributes);
+                $result[] = new MF_EndTag($token->name);
+                
+                continue;
+            }
+            
+            // automatically insert empty tags
+            if (is_a($token, 'MF_EmptyTag')) {
+                $result[] = $token;
+                continue;
+            }
+            
+            // we give start tags precedence, so automatically accept
+            if (is_a($token, 'MF_StartTag')) {
+                $result[] = $token;
+                $current_nesting[] = $token;
+                continue;
+            }
+            
+            // sanity check
+            if (!is_a($token, 'MF_EndTag')) continue;
+            
+            // okay, we're dealing with a closing tag
+            
+            // make sure that we have something open
+            if (empty($current_nesting)) {
+                $result[] = new MF_Text($this->generator->generateFromToken($token));
+                continue;
+            }
+            
+            // first, check for the simplest case: everything closes neatly
+            
+            // current_nesting is modified
+            $current_parent = array_pop($current_nesting);
+            if ($current_parent->name == $token->name) {
+                $result[] = $token;
+                continue;
+            }
+            
+            // undo the array_pop
+            $current_nesting[] = $current_parent;
+            
+            // okay, so we're trying to close the wrong tag
+            
+            // scroll back the entire nest, trying to find our tag
+            // feature could be to specify how far you'd like to go
+            $size = count($current_nesting);
+            // -2 because -1 is the last element, but we already checked that
+            $skipped_tags = false;
+            for ($i = $size - 2; $i >= 0; $i--) {
+                if ($current_nesting[$i]->name == $token->name) {
+                    // current nesting is modified
+                    $skipped_tags = array_splice($current_nesting, $i);
+                    break;
+                }
+            }
+            
+            // we still didn't find the tag, so translate to text
+            if ($skipped_tags === false) {
+                $result[] = new MF_Text($this->generator->generateFromToken($token));
+                continue;
+            }
+            
+            // okay, we found it, close all the skipped tags
+            // note that skipped tags contains the element we need closed
+            $size = count($skipped_tags);
+            for ($i = $size - 1; $i >= 0; $i--) {
+                $result[] = new MF_EndTag($skipped_tags[$i]->name);
+            }
+            
+            // done!
+            
         }
+        
+        // we're at the end now, fix all still unclosed tags
+        
+        if (!empty($current_nesting)) {
+            $size = count($current_nesting);
+            for ($i = $size - 1; $i >= 0; $i--) {
+                $result[] = new MF_EndTag($current_nesting[$i]->name);
+            }
+        }
+        
+        return $result;
     }
     
     function fixNesting($tokens) {
@@ -181,34 +279,47 @@ class HTMLDTD_Element
     var $child_def;
     var $attr_def = array();
     
+    function HTMLDTD_Element($child_def, $attr_def = array()) {
+        $this->child_def = $child_def;
+        $this->attr_def  = $attr_def;
+    }
     
 }
 
-class HTMLDTD_ChildDef {
+class HTMLDTD_ChildDef
+{
     var $dtd_regex;
     function HTMLDTD_ChildDef($dtd_regex) {
         $this->dtd_regex = $dtd_regex;
     }
     function validateChildren($tokens_of_children) {}
 }
-class HTMLDTD_ChildDef_Simple extends HTMLDTD_ChildDef {
+class HTMLDTD_ChildDef_Simple extends HTMLDTD_ChildDef
+{
     var $elements = array();
     function HTMLDTD_ChildDef_Simple($elements) {
         $this->elements = $elements;
     }
 }
-class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple {
+class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
+{
     function validateChildren($tokens_of_children) {
     
     }
 }
-class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Simple {
+class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Simple
+{
     function validateChildren($tokens_of_children) {
         
     }
 }
+class HTMLDTD_ChildDef_Empty extends HTMLDTD_ChildDef
+{
+    function HTMLDTD_ChildDef_Empty() {}
+}
 
-class HTMLDTD_AttrDef {
+class HTMLDTD_AttrDef
+{
     var $def;
     function HTMLDTD_AttrDef($def) {
         $this->def = $def;

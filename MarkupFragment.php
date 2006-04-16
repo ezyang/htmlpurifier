@@ -17,8 +17,8 @@ class MF_Tag extends MF
 class MF_TagWithAttributes extends MF_Tag
 {
     var $attributes = array();
-    function MF_TagWithAttributes($type, $attributes = array()) {
-        $this->MF_Tag($type);
+    function MF_TagWithAttributes($name, $attributes = array()) {
+        $this->MF_Tag($name);
         $this->attributes = $attributes;
     }
 }

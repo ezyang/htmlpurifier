@@ -119,7 +119,7 @@ class Test_PureHTMLDefinition extends UnitTestCase
             );
         
         foreach ($inputs as $i => $input) {
-            $result = $this->def->removeForeignElements($input);
+            $result = $this->def->makeWellFormed($input);
             $this->assertEqual($expect[$i], $result);
             paintIf($result, $result != $expect[$i]);
         }
