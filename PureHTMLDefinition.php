@@ -5,6 +5,27 @@ class PureHTMLDefinition
     
     var $generator;
     var $info = array();
+    var $info_closes_p = array(
+        'address'       => true,
+        'blockquote'    => true,
+        'dd'            => true,
+        'dir'           => true,
+        'div'           => true, 
+        'dl'            => true,
+        'dt'            => true,
+        'h1'            => true,
+        'h2'            => true,
+        'h3'            => true,
+        'h4'            => true, 
+        'h5'            => true,
+        'h6'            => true,
+        'hr'            => true,
+        'ol'            => true,
+        'p'             => true,
+        'pre'           => true, 
+        'table'         => true,
+        'ul'            => true
+        );
     
     function PureHTMLDefinition() {
         $this->generator = new HTML_Generator();
@@ -58,6 +79,7 @@ class PureHTMLDefinition
         $this->info['del'] = 
         $this->info['blockquote'] =
         $this->info['dd']  =
+        $this->info['li']  =
         $this->info['div'] = new HTMLDTD_Element($e_Flow);
         
         $this->info['em']  =
@@ -187,8 +209,37 @@ class PureHTMLDefinition
                 continue;
             }
             
-            // we give start tags precedence, so automatically accept
+            // we give start tags precedence, so automatically accept unless...
+            // it's one of those special cases
             if (is_a($token, 'MF_StartTag')) {
+                
+                // if there's a parent, check for special case
+                if (!empty($current_nesting)) {
+                    $current_parent = array_pop($current_nesting);
+                    
+                    // check if we're closing a P tag
+                    if ($current_parent->name == 'p' &&
+                        isset($this->info_closes_p[$token->name])
+                        ) {
+                        $result[] = new MF_EndTag('p');
+                        $result[] = $token;
+                        $current_nesting[] = $token;
+                        continue;
+                    }
+                    
+                    // check if we're closing a LI tag
+                    if ($current_parent->name == 'li' &&
+                        $token->name == 'li'
+                        ) {
+                        $result[] = new MF_EndTag('li');
+                        $result[] = $token;
+                        $current_nesting[] = $token;
+                        continue;
+                    }
+                    
+                    $current_nesting[] = $current_parent; // undo the pop
+                }
+                
                 $result[] = $token;
                 $current_nesting[] = $token;
                 continue;

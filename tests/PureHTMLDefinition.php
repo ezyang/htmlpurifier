@@ -119,7 +119,55 @@ class Test_PureHTMLDefinition extends UnitTestCase
            ,new MF_EndTag('div')
             );
         
-        // demonstrates start tag precedence
+        // test automatic paragraph closing
+        
+        $inputs[7] = array(
+            new MF_StartTag('p')
+           ,new MF_Text('Paragraph 1')
+           ,new MF_StartTag('p')
+           ,new MF_Text('Paragraph 2')
+            );
+        $expect[7] = array(
+            new MF_StartTag('p')
+           ,new MF_Text('Paragraph 1')
+           ,new MF_EndTag('p')
+           ,new MF_StartTag('p')
+           ,new MF_Text('Paragraph 2')
+           ,new MF_EndTag('p')
+            );
+        
+        $inputs[8] = array(
+            new MF_StartTag('div')
+           ,new MF_StartTag('p')
+           ,new MF_Text('Paragraph 1 in a div')
+           ,new MF_EndTag('div')
+            );
+        $expect[8] = array(
+            new MF_StartTag('div')
+           ,new MF_StartTag('p')
+           ,new MF_Text('Paragraph 1 in a div')
+           ,new MF_EndTag('p')
+           ,new MF_EndTag('div')
+            );
+        
+        $inputs[9] = array(
+            new MF_StartTag('ol')
+           ,new MF_StartTag('li')
+           ,new MF_Text('Item 1')
+           ,new MF_StartTag('li')
+           ,new MF_Text('Item 2')
+           ,new MF_EndTag('ol')
+            );
+        $expect[9] = array(
+            new MF_StartTag('ol')
+           ,new MF_StartTag('li')
+           ,new MF_Text('Item 1')
+           ,new MF_EndTag('li')
+           ,new MF_StartTag('li')
+           ,new MF_Text('Item 2')
+           ,new MF_EndTag('li')
+           ,new MF_EndTag('ol')
+            );
         
         foreach ($inputs as $i => $input) {
             $result = $this->def->makeWellFormed($input);

@@ -49,11 +49,11 @@ time, it's making sure the tags match up, but there's some trickery going on
 for HTML's quirks. They are:
 
 * Set of tags that close P
-        'address', 'blockquote', 'center', 'dd',      'dir',       'div', 
+        'address', 'blockquote', 'dd',      'dir',       'div', 
         'dl',      'dt',         'h1',     'h2',      'h3',        'h4', 
-        'h5',      'h6',         'hr',     'isindex', 'listing',   'marquee', 
-        'menu',    'multicol',   'ol',     'p',       'plaintext', 'pre', 
-        'table',   'ul',         'xmp', 
+        'h5',      'h6',         'hr',
+        'ol',     'p',       'pre', 
+        'table',   'ul' 
 * Li closes li
 * more?
 
