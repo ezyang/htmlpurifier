@@ -3,10 +3,11 @@
 class PureHTMLDefinition
 {
     
+    var $generator;
     var $info = array();
     
     function PureHTMLDefinition() {
-        
+        $this->generator = new HTML_Generator();
     }
     
     function loadData() {
@@ -136,7 +137,10 @@ class PureHTMLDefinition
         $result = array();
         foreach($tokens as $token) {
             if (is_subclass_of($token, 'MF_Tag')) {
-                if (!isset($this->info[$token->name])) continue;
+                if (!isset($this->info[$token->name])) {
+                    // invalid tag, generate HTML and insert in
+                    $token = new MF_Text($this->generator->generateFromToken($token));
+                }
             } elseif (is_a($token, 'MF_Comment')) {
                 // strip comments
                 continue;

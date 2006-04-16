@@ -27,6 +27,9 @@ class UnitTest_HTML_Generator extends UnitTestCase
         $inputs[3] = new MF_EmptyTag('br', array('style' => 'font-family:"Courier New";'));
         $expect[3] = '<br style="font-family:&quot;Courier New&quot;;" />';
         
+        $inputs[4] = new MF_StartTag('asdf');
+        $expect[4] = '<asdf>';
+        
         foreach ($inputs as $i => $input) {
             $result = $this->gen->generateFromToken($input);
             $this->assertEqual($result, $expect[$i]);

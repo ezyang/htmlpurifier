@@ -6,7 +6,7 @@ class HTML_Generator
     function generateFromToken($token) {
         if (is_a($token, 'MF_StartTag')) {
             $attr = $this->generateAttributes($token->attributes);
-            return '<' . $token->name . ' ' . $attr . '>';
+            return '<' . $token->name . ($attr ? ' ' : '') . $attr . '>';
             
         } elseif (is_a($token, 'MF_EndTag')) {
             return '</' . $token->name . '>';
