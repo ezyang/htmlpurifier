@@ -56,12 +56,14 @@ class HTML_Lexer
         
         // infinite loop protection
         // has to be pretty big, since html docs can be big
+        // we're allow two hundred thousand tags... more than enough?
         $loops = 0;
         
         while(true) {
             
             // infinite loop protection
-            if ($loops > 1000000000) return array();
+            $loops++;
+            if ($loops > 200000) return array();
             
             $position_next_lt = strpos($string, '<', $cursor);
             $position_next_gt = strpos($string, '>', $cursor);
