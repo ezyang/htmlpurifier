@@ -58,6 +58,7 @@ class HTML_Lexer
             $position_next_lt = strpos($string, '<', $cursor);
             $position_next_gt = strpos($string, '>', $cursor);
             
+            
             // triggers on "<b>asdf</b>" but not "asdf <b></b>"
             if ($position_next_lt === $cursor) {
                 $inside_tag = true;
@@ -184,6 +185,12 @@ class HTML_Lexer
                     $position_next_space = $this->nextWhiteSpace($string, $cursor);
                 }
                 
+                // if we've hit the end, assign the key an empty value and abort
+                if ($cursor >= $size) {
+                    $array[$key] = '';
+                    break;
+                }
+                
                 // find the next quote
                 $position_next_quote = $this->nextQuote($string, $cursor);
                 
@@ -201,6 +208,13 @@ class HTML_Lexer
                 // otherwise, regular attribute
                 $quote = $string{$position_next_quote};
                 $position_end_quote = strpos($string, $quote, $position_next_quote + 1);
+                
+                // check if the ending quote is missing
+                if ($position_end_quote === false) {
+                    // it is, assign it to the end of the string
+                    $position_end_quote = $size;
+                }
+                
                 $value = substr($string, $position_next_quote + 1,
                   $position_end_quote - $position_next_quote - 1);
                 if ($key) {

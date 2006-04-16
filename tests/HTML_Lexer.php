@@ -112,6 +112,12 @@ class TestCase_HTML_Lexer extends UnitTestCase
         // however, we may want to change both styles
         // into parsed: '<b>'. SAX has an option for this
         
+        // [INVALID]
+        $input[10] = '<a "=>';
+        $expect[10] = array(
+            new MF_StartTag('a', array('"' => ''))
+            );
+        
         foreach($input as $i => $discard) {
             $result = $this->HTML_Lexer->tokenizeHTML($input[$i]);
             $this->assertEqual($expect[$i], $result);
@@ -154,6 +160,9 @@ class TestCase_HTML_Lexer extends UnitTestCase
         
         $input[] = 'missile=launch';
         $expect[] = array('missile' => 'launch');
+        
+        $input[] = 'href="foo';
+        $expect[] = array('href' => 'foo');
         
         $size = count($input);
         for($i = 0; $i < $size; $i++) {
