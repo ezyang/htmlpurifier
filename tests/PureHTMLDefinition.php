@@ -150,6 +150,8 @@ class Test_PureHTMLDefinition extends UnitTestCase
            ,new MF_EndTag('div')
             );
         
+        // automatic list closing
+        
         $inputs[9] = array(
             new MF_StartTag('ol')
            ,new MF_StartTag('li')

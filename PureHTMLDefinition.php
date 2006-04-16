@@ -6,6 +6,7 @@ class PureHTMLDefinition
     var $generator;
     var $info = array();
     var $info_closes_p = array(
+        // these are all block elements: blocks aren't allowed in P
         'address'       => true,
         'blockquote'    => true,
         'dd'            => true,
@@ -236,6 +237,10 @@ class PureHTMLDefinition
                         $current_nesting[] = $token;
                         continue;
                     }
+                    
+                    // this is more TIDY stuff
+                    // we should also get some TABLE related code
+                    // mismatched h#
                     
                     $current_nesting[] = $current_parent; // undo the pop
                 }
