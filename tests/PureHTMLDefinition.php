@@ -73,6 +73,7 @@ class Test_PureHTMLDefinition extends UnitTestCase
            ,new MF_Text('bold')
            ,new MF_EndTag('b')
            ,new MF_Text(' text')
+           ,new MF_EmptyTag('br')
             );
         $expect[1] = $inputs[1];
         
@@ -109,14 +110,16 @@ class Test_PureHTMLDefinition extends UnitTestCase
            ,new MF_Text('</b>')
             );
         
-        $inputs[5] = array(new MF_StartTag('br'));
-        $expect[5] = array(new MF_EmptyTag('br'));
+        $inputs[5] = array(new MF_StartTag('br', array('style' => 'clear:both;')));
+        $expect[5] = array(new MF_EmptyTag('br', array('style' => 'clear:both;')));
         
-        $inputs[6] = array(new MF_EmptyTag('div'));
+        $inputs[6] = array(new MF_EmptyTag('div', array('style' => 'clear:both;')));
         $expect[6] = array(
-            new MF_StartTag('div')
+            new MF_StartTag('div', array('style' => 'clear:both;'))
            ,new MF_EndTag('div')
             );
+        
+        // demonstrates start tag precedence
         
         foreach ($inputs as $i => $input) {
             $result = $this->def->makeWellFormed($input);
