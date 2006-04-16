@@ -161,6 +161,43 @@ No changes                   = true
 If we remove the entire parent node, we must scroll back to the parent of the
 parent.
 
+--
+
+Another few problems: EXCLUSIONS!
+
+a
+    must not contain other a elements.
+pre
+    must not contain the img, object, big, small, sub, or sup elements.
+button
+    must not contain the input, select, textarea, label, button, form, fieldset,
+    iframe or isindex elements.
+label
+    must not contain other label elements.
+form
+    must not contain other form elements. 
+
+Normative exclusions straight from the horses mouth. These are SGML style,
+not XML style, so we need to modify the ruleset slightly.
+
+--
+
+Also, what do we do with elements if they're not allowed somewhere? We need
+some sort of default behavior. I reckon that we should be allowed to:
+
+1. Delete the node
+2. Translate it into text (not okay for areas that don't allow #PCDATA)
+3. Move the node to somewhere where it is okay
+
+What complicates the matter is that Firefox has the ability to construct
+DOMs and render invalid nestings of elements (like <b><div>asdf</div></b>).
+This means that behavior for stray pcdata in ul/ol is undefined. Behavior
+with data in a table gets bubbled to the start of the table.
+
+So... I say delete the node when PCDATA isn't allowed (or the regex is too
+complicated to determine where PCDATA could be inserted), and translate the node
+to text when PCDATA is allowed.
+
 == STAGE 4 - check attributes ==
 
 While we're doing all this nesting hocus-pocus, attributes are also being
