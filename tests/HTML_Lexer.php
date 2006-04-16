@@ -107,7 +107,12 @@ class TestCase_HTML_Lexer extends UnitTestCase
         
         $input[9] = '&lt;b&gt;';
         $expect[9] = array(
-            new MF_Text('&lt;b&gt;')
+            new MF_Text('<b>')
+            );
+        $sax_expect[9] = array(
+            new MF_Text('<')
+           ,new MF_Text('b')
+           ,new MF_Text('>')
             );
         // however, we may want to change both styles
         // into parsed: '<b>'. SAX has an option for this

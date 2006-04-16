@@ -75,7 +75,7 @@ class HTML_Lexer
             
             if (!$inside_tag && $position_next_lt !== false) {
                 // We are not inside tag and there still is another tag to parse
-                $array[] = new MF_Text(substr($string, $cursor, $position_next_lt - $cursor));
+                $array[] = new MF_Text(html_entity_decode(substr($string, $cursor, $position_next_lt - $cursor)));
                 $cursor  = $position_next_lt + 1;
                 $inside_tag = true;
                 continue;
@@ -84,7 +84,7 @@ class HTML_Lexer
                 // If we're already at the end, break
                 if ($cursor === strlen($string)) break;
                 // Create Text of rest of string
-                $array[] = new MF_Text(substr($string, $cursor));
+                $array[] = new MF_Text(html_entity_decode(substr($string, $cursor)));
                 break;
             } elseif ($inside_tag && $position_next_gt !== false) {
                 // We are in tag and it is well formed
@@ -144,7 +144,7 @@ class HTML_Lexer
                 $inside_tag = false;
                 continue;
             } else {
-                $array[] = new MF_Text('<' . substr($string, $cursor));
+                $array[] = new MF_Text('<' . html_entity_decode(substr($string, $cursor)));
                 break;
             }
             break;
@@ -234,7 +234,7 @@ class HTML_Lexer
                 $value = substr($string, $position_next_quote + 1,
                   $position_end_quote - $position_next_quote - 1);
                 if ($key) {
-                    $array[$key] = $value;
+                    $array[$key] = html_entity_decode($value);
                 }
                 $cursor = $position_end_quote + 1;
             } else {
@@ -268,6 +268,7 @@ class HTML_Lexer_Sax extends HTML_Lexer
         $parser->set_element_handler('openHandler','closeHandler');
         $parser->set_data_handler('dataHandler');
         $parser->set_escape_handler('escapeHandler');
+        $parser->set_option('XML_OPTION_ENTITIES_PARSED', 1);
         $parser->parse($html);
         return $this->tokens;
     }
