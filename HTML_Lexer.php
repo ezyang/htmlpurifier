@@ -54,10 +54,17 @@ class HTML_Lexer
         $inside_tag = false; // whether or not we're parsing the inside of a tag
         $array = array(); // result array
         
+        // infinite loop protection
+        // has to be pretty big, since html docs can be big
+        $loops = 0;
+        
         while(true) {
+            
+            // infinite loop protection
+            if ($loops > 1000000000) return array();
+            
             $position_next_lt = strpos($string, '<', $cursor);
             $position_next_gt = strpos($string, '>', $cursor);
-            
             
             // triggers on "<b>asdf</b>" but not "asdf <b></b>"
             if ($position_next_lt === $cursor) {
@@ -157,7 +164,16 @@ class HTML_Lexer
         // space, so let's guarantee that there's always a terminating space.
         $string .= ' ';
         
+        // infinite loop protection
+        $loops = 0;
+        
         while(true) {
+            
+            // infinite loop protection
+            // if we've looped 1000 times, abort. Nothing good can come of this 
+            $loops++;
+            if ($loops > 1000) return array();
+            
             if ($cursor >= $size) {
                 break;
             }
