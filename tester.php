@@ -8,6 +8,7 @@ require_once 'HTML_Purifier.php';
 require_once 'HTML_Lexer.php';
 require_once 'MarkupFragment.php';
 require_once 'PureHTMLDefinition.php';
+require_once 'HTML_Generator.php';
 
 $test = new GroupTest('HTML_Purifier');
 
@@ -16,6 +17,7 @@ $test->addTestFile('HTML_Purifier.php');
 $test->addTestFile('HTML_Lexer.php');
 //$test->addTestFile('MarkupFragment.php');
 $test->addTestFile('PureHTMLDefinition.php');
+$test->addTestFile('HTML_Generator.php');
 chdir('../');
 
 $test->run(new HtmlReporter());
