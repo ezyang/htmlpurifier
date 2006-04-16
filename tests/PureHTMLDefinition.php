@@ -109,6 +109,15 @@ class Test_PureHTMLDefinition extends UnitTestCase
            ,new MF_Text('</b>')
             );
         
+        $inputs[5] = array(new MF_StartTag('br'));
+        $expect[5] = array(new MF_EmptyTag('br'));
+        
+        $inputs[6] = array(new MF_EmptyTag('div'));
+        $expect[6] = array(
+            new MF_StartTag('div')
+           ,new MF_EndTag('div')
+            );
+        
         foreach ($inputs as $i => $input) {
             $result = $this->def->removeForeignElements($input);
             $this->assertEqual($expect[$i], $result);

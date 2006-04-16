@@ -155,7 +155,12 @@ class PureHTMLDefinition
     
     function makeWellFormed($tokens) {
         if (empty($this->info)) $this->loadData();
-        
+        $result = array();
+        $current_nesting = array();
+        foreach ($tokens as $token) {
+            if (!is_subclass_of($token, 'MF_Tag')) $result[] = $token;
+            // test if it claims to be a start tag but is empty
+        }
     }
     
     function fixNesting($tokens) {
@@ -168,6 +173,46 @@ class PureHTMLDefinition
         
     }
     
+}
+
+class HTMLDTD_Element
+{
+    
+    var $child_def;
+    var $attr_def = array();
+    
+    
+}
+
+class HTMLDTD_ChildDef {
+    var $dtd_regex;
+    function HTMLDTD_ChildDef($dtd_regex) {
+        $this->dtd_regex = $dtd_regex;
+    }
+    function validateChildren($tokens_of_children) {}
+}
+class HTMLDTD_ChildDef_Simple extends HTMLDTD_ChildDef {
+    var $elements = array();
+    function HTMLDTD_ChildDef_Simple($elements) {
+        $this->elements = $elements;
+    }
+}
+class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple {
+    function validateChildren($tokens_of_children) {
+    
+    }
+}
+class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Simple {
+    function validateChildren($tokens_of_children) {
+        
+    }
+}
+
+class HTMLDTD_AttrDef {
+    var $def;
+    function HTMLDTD_AttrDef($def) {
+        $this->def = $def;
+    }
 }
 
 ?>
