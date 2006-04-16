@@ -1,11 +1,11 @@
 <?php
 
-class UnitTest_PureHTMLDefinition extends UnitTestCase
+class Test_PureHTMLDefinition extends UnitTestCase
 {
     
     var $def;
     
-    function UnitTest_PureHTMLDefinition() {
+    function Test_PureHTMLDefinition() {
         $this->UnitTestCase();
         $this->def = new PureHTMLDefinition();
         $this->def->loadData();

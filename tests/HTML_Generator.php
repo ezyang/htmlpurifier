@@ -1,11 +1,11 @@
 <?php
 
-class UnitTest_HTML_Generator extends UnitTestCase
+class Test_HTML_Generator extends UnitTestCase
 {
     
     var $gen;
     
-    function UnitTest_HTML_Generator() {
+    function Test_HTML_Generator() {
         $this->UnitTestCase();
         $this->gen = new HTML_Generator();
     }

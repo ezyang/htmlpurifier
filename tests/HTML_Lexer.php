@@ -4,7 +4,7 @@
     * Benchmark the SAX parser with my homemade one
  */
 
-class TestCase_HTML_Lexer extends UnitTestCase
+class Test_HTML_Lexer extends UnitTestCase
 {
     
     var $HTML_Lexer;

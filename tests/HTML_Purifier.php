@@ -1,9 +1,13 @@
 <?php
 
-class TestCase_HTML_Purifier extends UnitTestCase
+class Test_HTML_Purifier extends UnitTestCase
 {
     
-    
+    function Test_HTML_Purifier() {
+        
+        
+        
+    }
     
 }
 
