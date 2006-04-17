@@ -342,6 +342,10 @@ class HTMLDTD_Element
     
 }
 
+// HTMLDTD_ChildDef and inheritance have three types of output:
+// true = leave nodes as is
+// false = delete parent node and all children
+// array(...) = replace children nodes with these
 class HTMLDTD_ChildDef
 {
     var $dtd_regex;
@@ -354,13 +358,76 @@ class HTMLDTD_ChildDef_Simple extends HTMLDTD_ChildDef
 {
     var $elements = array();
     function HTMLDTD_ChildDef_Simple($elements) {
+        if (is_string($elements)) {
+            $elements = str_replace(' ', '', $elements);
+            $elements = explode('|', $elements);
+        }
+        $elements = array_flip($elements);
+        foreach ($elements as $i => $x) $elements[$i] = true;
         $this->elements = $elements;
+        $this->gen = new HTML_Generator();
     }
 }
 class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
 {
     function validateChildren($tokens_of_children) {
-    
+        // if there are no tokens, delete parent node
+        if (empty($tokens_of_children)) return false;
+        
+        // the new set of children
+        $result = array();
+        
+        // current depth into the nest
+        $nesting = 0;
+        
+        // whether or not we're deleting a node
+        $is_deleting = false;
+        
+        // whether or not parsed character data is allowed
+        // this controls whether or not we silently drop a tag
+        // or generate escaped HTML from it
+        $pcdata_allowed = isset($this->elements['#PCDATA']);
+        
+        // a little sanity check to make sure it's not ALL whitespace
+        $all_whitespace = true;
+        
+        foreach ($tokens_of_children as $token) {
+            if (!empty($token->is_whitespace)) {
+                $result[] = $token;
+                continue;
+            }
+            $all_whitespace = false; // phew, we're not talking about whitespace
+            
+            $is_child = ($nesting == 0);
+            
+            if (is_a($token, 'MF_StartTag')) {
+                $nesting++;
+            } elseif (is_a($token, 'MF_EndTag')) {
+                $nesting--;
+            }
+            
+            if ($is_child) {
+                $is_deleting = false;
+                if (!isset($this->elements[$token->name])) {
+                    $is_deleting = true;
+                    if ($pcdata_allowed) {
+                        $result[] = new MF_Text($this->gen->generateFromToken($token));
+                    }
+                    continue;
+                }
+            }
+            if (!$is_deleting) {
+                $result[] = $token;
+            } elseif ($pcdata_allowed) {
+                $result[] = new MF_Text($this->gen->generateFromToken($token));
+            } else {
+                // drop silently
+            }
+        }
+        if (empty($result)) return false;
+        if ($all_whitespace) return false;
+        if ($tokens_of_children == $result) return true;
+        return $result;
     }
 }
 class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Simple

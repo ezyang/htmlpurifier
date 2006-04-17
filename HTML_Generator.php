@@ -21,7 +21,7 @@ class HTML_Generator
             
         } elseif (is_a($token, 'MF_EmptyTag')) {
             $attr = $this->generateAttributes($token->attributes);
-             return '<' . $token->name . ' ' . $attr . ' />';
+             return '<' . $token->name . ($attr ? ' ' : '') . $attr . ' />';
             
         } elseif (is_a($token, 'MF_Text')) {
             return htmlentities($token->data, ENT_COMPAT, 'UTF-8');

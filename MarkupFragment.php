@@ -31,9 +31,10 @@ class MF_Text extends MF
 {
     var $name = '#PCDATA';
     var $data;
+    var $is_whitespace = false;
     function MF_Text($data) {
-        $this->data = trim($data); // fairly certain trimming it's okay
-                                   // but it's not default SAX behavior
+        $this->data = $data;
+        if (trim($data, " \n\r\t") === '') $this->is_whitespace = true;
     }
     function append($mf_text) {
         return new MF_Text($this->data . $mf_text->data);

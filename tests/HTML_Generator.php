@@ -30,6 +30,9 @@ class Test_HTML_Generator extends UnitTestCase
         $inputs[4] = new MF_StartTag('asdf');
         $expect[4] = '<asdf>';
         
+        $inputs[5] = new MF_EmptyTag('br');
+        $expect[5] = '<br />';
+        
         foreach ($inputs as $i => $input) {
             $result = $this->gen->generateFromToken($input);
             $this->assertEqual($result, $expect[$i]);
