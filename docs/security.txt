@@ -1,0 +1,34 @@
+== Possible Security Issues ==
+
+Like anything that claims to afford security, HTML_Purifier can be circumvented
+through negligence of people. This class will do its job: no more, no less,
+and it's up to you to provide it the proper information and proper context
+to be effective. Things to remember:
+
+1. UTF-8. Currently, the parser runs under the assumption that it is dealing
+with UTF-8. Not ISO-8859-1 or Windows-1252, UTF-8. And definitely not "no
+character encoding explicitly stated" or UTF-7. If you're not using UTF-8 as
+your character encoding, you should switch. Now. (in future versions, however,
+I may make the character encoding configurable, but there's only so much I
+can do). Make sure any input is properly converted to UTF-8, or the parser
+will mangle it badly (though it won't be a security risk if you're outputting
+it as UTF-8).
+
+2. XHTML 1.0. This is what the parser is outputting. For the most part, it's
+compatible with HTML 4.01, but XHTML enforces some very nice things that all
+web developers should use. Regardless, NO DOCTYPE is a NO. Quirks mode has
+waaaay too many quirks for a little parser to handle.
+
+3. [PROJECTED] IDs. They need to be unique, but without some knowledge of the
+rest of the document, it's difficult to know what's unique. I project default
+behavior being a customizable prefix to all ID declarations in the document,
+so make sure you don't use that prefix. Might cause problems for multiple
+instances of HTML escaped output too (especially when it comes to caching).
+Best to just zap them completely, perhaps. This will be configurable, and you'll
+have to pick the correct one.
+
+4. [PROJECTED] Links. We're not going to try for spam protection (although
+some hooks for such a module might be nice) but we may offer the ability to
+only accept relative URLs. Pick the one that's right for you.
+
+5. [PROJECTED] CSS. What a knotty issue. Probably will have to be configurable.
