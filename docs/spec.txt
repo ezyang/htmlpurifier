@@ -1,6 +1,6 @@
 
 HTML Purifier
-by Edward Z. Yang
+  by Edward Z. Yang
 
 == Introduction ==
 
@@ -39,7 +39,7 @@ with malformed input.
 
 In summary:
 
-1. Parse document into an array of tag and tokens
+1. Parse document into an array of tag and text tokens
 2. Remove all elements not on whitelist and transform certain other elements
    into acceptable forms (i.e. <font>)
 3. Make document well formed while helpfully taking into account certain quirks,
