@@ -1,11 +1,55 @@
-REAL HTML PARSING!
 
-STAGES
-1. Parse document into an array of tag/text/etc objects
-2. Run through document and remove all elements not on whitelist
-3. Run through document and make it well formed, taking into mind quirks
-4. Run through all nodes and check nesting and check attributes
-5. Translate back into string
+HTML Purifier
+by Edward Z. Yang
+
+== Introduction ==
+
+There are a number of ad hoc HTML filtering solutions out there on the web
+(some examples including HTML_Safe, kses and SafeHtmlChecker.class.php) that
+claim to filter HTML properly, preventing malicious JavaScript and layout
+breaking HTML from getting through the parser.  None of them, however,
+demonstrates a thorough knowledge of neither the DTD that defines the HTML
+nor the caveats of HTML that cannot be expressed by a DTD.  Configurable
+filters (such as kses or PHP's built-in striptags() function) have trouble
+validating the contents of attributes and can be subject to security attacks
+due to poor configuration.  Other filters take the naive approach of
+blacklisting known threats and tags, failing to account for the introduction
+of new technologies, new tags, new attributes or quirky browser behavior.
+
+However, HTML Purifier takes a different approach, one that doesn't use
+specification-ignorant regexes or narrow blacklists.  HTML Purifier will
+decompose the whole document into tokens, and rigorously process the tokens by:
+removing non-whitelisted elements, transforming bad practice tags like <font>
+into <span>, properly checking the nesting of tags and their children and
+validating all attributes according to their RFCs.
+
+To my knowledge, there is nothing like this on the web yet.  Not even MediaWiki,
+which allows an amazingly diverse mix of HTML and wikitext in its documents,
+gets all the nesting quirks right.  Existing solutions hope that no JavaScript
+will slip through, but either do not attempt to ensure that the resulting
+output is valid XHTML or send the HTML through a draconic XML parser (and yet
+still get the nesting wrong: SafeHtmlChecker.class.php does not prevent <a>
+tags from being nested within each other).
+
+This document seeks to detail the inner workings of HTML Purifier.  The first
+draft was drawn up after two rough code sketches and the implementation of a
+forgiving lexer.  You may also be interested in the unit tests located in the
+tests/ folder, which provide a living document on how exactly the filter deals
+with malformed input.
+
+In summary:
+
+1. Parse document into an array of tag and tokens
+2. Remove all elements not on whitelist and transform certain other elements
+   into acceptable forms (i.e. <font>)
+3. Make document well formed while helpfully taking into account certain quirks,
+   such as the fact that <p> tags traditionally are closed by other block-level
+   elements.
+4. Run through all nodes and check children for proper order (especially
+   important for tables).
+5. Validate attributes according to more restrictive definitions based on the
+   RFCs.
+6. Translate back into a string.
 
 == STAGE 1 - parsing ==
 
