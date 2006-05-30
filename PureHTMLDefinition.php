@@ -127,7 +127,7 @@ class PureHTMLDefinition
         
         $this->info['dl']   =
           new HTMLDTD_Element(
-            new HTMLDTD_ChildDef_Optional('dt|dd')
+            new HTMLDTD_ChildDef_Required('dt|dd')
           );
         $this->info['address'] =
           new HTMLDTD_Element(
@@ -161,7 +161,9 @@ class PureHTMLDefinition
             if (is_subclass_of($token, 'MF_Tag')) {
                 if (!isset($this->info[$token->name])) {
                     // invalid tag, generate HTML and insert in
-                    $token = new MF_Text($this->generator->generateFromToken($token));
+                    $token = new MF_Text(
+                        $this->generator->generateFromToken($token)
+                    );
                 }
             } elseif (is_a($token, 'MF_Comment')) {
                 // strip comments
@@ -257,7 +259,9 @@ class PureHTMLDefinition
             
             // make sure that we have something open
             if (empty($current_nesting)) {
-                $result[] = new MF_Text($this->generator->generateFromToken($token));
+                $result[] = new MF_Text(
+                    $this->generator->generateFromToken($token)
+                );
                 continue;
             }
             
@@ -290,7 +294,9 @@ class PureHTMLDefinition
             
             // we still didn't find the tag, so translate to text
             if ($skipped_tags === false) {
-                $result[] = new MF_Text($this->generator->generateFromToken($token));
+                $result[] = new MF_Text(
+                    $this->generator->generateFromToken($token)
+                );
                 continue;
             }
             
@@ -411,7 +417,9 @@ class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
                 if (!isset($this->elements[$token->name])) {
                     $is_deleting = true;
                     if ($pcdata_allowed) {
-                        $result[] = new MF_Text($this->gen->generateFromToken($token));
+                        $result[] = new MF_Text(
+                            $this->gen->generateFromToken($token)
+                        );
                     }
                     continue;
                 }
@@ -430,12 +438,19 @@ class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
         return $result;
     }
 }
-class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Simple
+
+// only altered behavior is that it returns an empty array
+// instead of a false (to delete the node)
+class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Required
 {
     function validateChildren($tokens_of_children) {
-        
+        $result = parent::validateChildren($tokens_of_children);
+        if ($result === false) return array();
+        return $result;
     }
 }
+
+// placeholder
 class HTMLDTD_ChildDef_Empty extends HTMLDTD_ChildDef
 {
     function HTMLDTD_ChildDef_Empty() {}

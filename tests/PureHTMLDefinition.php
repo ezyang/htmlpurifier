@@ -303,6 +303,28 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
         $this->assertEqual($expect, $def->validateChildren($input));
     }
     
+    function test_optional() {
+        $def = new HTMLDTD_ChildDef_Optional('b | i');
+        $input = array(
+            new MF_StartTag('b')
+           ,new MF_Text('Bold text')
+           ,new MF_EndTag('b')
+           ,new MF_EmptyTag('img') // illegal tag
+            );
+        $expect = array(
+            new MF_StartTag('b')
+           ,new MF_Text('Bold text')
+           ,new MF_EndTag('b')
+            );
+        $this->assertEqual($expect, $def->validateChildren($input));
+        
+        $input = array(
+            new MF_Text('Not allowed text')
+            );
+        $expect = array();
+        $this->assertEqual($expect, $def->validateChildren($input));
+    }
+    
 }
 
 ?>
