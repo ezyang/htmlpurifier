@@ -75,7 +75,14 @@ class HTML_Lexer
             
             if (!$inside_tag && $position_next_lt !== false) {
                 // We are not inside tag and there still is another tag to parse
-                $array[] = new MF_Text(html_entity_decode(substr($string, $cursor, $position_next_lt - $cursor)));
+                $array[] = new
+                    MF_Text(
+                        html_entity_decode(
+                            substr(
+                                $string, $cursor, $position_next_lt - $cursor
+                            )
+                        )
+                    );
                 $cursor  = $position_next_lt + 1;
                 $inside_tag = true;
                 continue;
@@ -84,16 +91,31 @@ class HTML_Lexer
                 // If we're already at the end, break
                 if ($cursor === strlen($string)) break;
                 // Create Text of rest of string
-                $array[] = new MF_Text(html_entity_decode(substr($string, $cursor)));
+                $array[] = new
+                    MF_Text(
+                        html_entity_decode(
+                            substr(
+                                $string, $cursor
+                            )
+                        )
+                    );
                 break;
             } elseif ($inside_tag && $position_next_gt !== false) {
                 // We are in tag and it is well formed
                 // Grab the internals of the tag
-                $segment = substr($string, $cursor, $position_next_gt - $cursor);
+                $segment = substr($string, $cursor, $position_next_gt-$cursor);
                 
                 // Check if it's a comment
-                if (substr($segment,0,3) == '!--' && substr($segment,strlen($segment)-2,2) == '--') {
-                    $array[] = new MF_Comment(substr($segment,3,strlen($segment)-5));
+                if (
+                    substr($segment,0,3) == '!--' &&
+                    substr($segment,strlen($segment)-2,2) == '--'
+                ) {
+                    $array[] = new
+                        MF_Comment(
+                            substr(
+                                $segment, 3, strlen($segment) - 5
+                            )
+                        );
                     $inside_tag = false;
                     $cursor = $position_next_gt + 1;
                     continue;
@@ -113,7 +135,7 @@ class HTML_Lexer
                 // trailing slash. Remember, we could have a tag like <br>, so
                 // any later token processing scripts must convert improperly
                 // classified EmptyTags from StartTags.
-                $is_self_closing = (strpos($segment,'/') === strlen($segment) - 1);
+                $is_self_closing= (strpos($segment,'/') === strlen($segment)-1);
                 if ($is_self_closing) {
                     $segment = substr($segment, 0, strlen($segment) - 1);
                 }
@@ -133,7 +155,12 @@ class HTML_Lexer
                 
                 // Grab out all the data
                 $type = substr($segment, 0, $position_first_space);
-                $attribute_string = trim(substr($segment, $position_first_space));
+                $attribute_string =
+                    trim(
+                        substr(
+                            $segment, $position_first_space
+                        )
+                    );
                 $attributes = $this->tokenizeAttributeString($attribute_string);
                 if ($is_self_closing) {
                     $array[] = new MF_EmptyTag($type, $attributes);
@@ -144,7 +171,13 @@ class HTML_Lexer
                 $inside_tag = false;
                 continue;
             } else {
-                $array[] = new MF_Text('<' . html_entity_decode(substr($string, $cursor)));
+                $array[] = new
+                    MF_Text(
+                        '<' .
+                        html_entity_decode(
+                            substr($string, $cursor)
+                        )
+                    );
                 break;
             }
             break;
@@ -189,7 +222,11 @@ class HTML_Lexer
                   $position_next_space === false)) {
                 //attr="asdf"
                 // grab the key
-                $key = trim(substr($string, $cursor, $position_next_equal - $cursor));
+                $key = trim(
+                    substr(
+                        $string, $cursor, $position_next_equal - $cursor
+                    )
+                );
                 
                 // set cursor right after the equal sign
                 $cursor = $position_next_equal + 1;
@@ -198,7 +235,7 @@ class HTML_Lexer
                 $position_next_space = $this->nextWhiteSpace($string, $cursor);
                 while ($position_next_space === $cursor) {
                     $cursor++;
-                    $position_next_space = $this->nextWhiteSpace($string, $cursor);
+                    $position_next_space=$this->nextWhiteSpace($string,$cursor);
                 }
                 
                 // if we've hit the end, assign the key an empty value and abort
@@ -223,7 +260,9 @@ class HTML_Lexer
                 
                 // otherwise, regular attribute
                 $quote = $string{$position_next_quote};
-                $position_end_quote = strpos($string, $quote, $position_next_quote + 1);
+                $position_end_quote = strpos(
+                    $string, $quote, $position_next_quote + 1
+                );
                 
                 // check if the ending quote is missing
                 if ($position_end_quote === false) {
