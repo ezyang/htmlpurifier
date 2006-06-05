@@ -153,6 +153,8 @@ So... here's the interesting code:
 
 --
 
+// # This actually does the validation
+
 // Validate the order of the children
 if (!$was_error && count($dtd_children)) {
     $children_list = implode(',', $children);
@@ -165,6 +167,8 @@ if (!$was_error && count($dtd_children)) {
 }
 
 --
+
+// # This figures out the PcreRegex
 
 //$ch is a string of the allowed childs
 $children = preg_split('/([^#a-zA-Z0-9_.-]+)/', $ch, -1, PREG_SPLIT_NO_EMPTY);
@@ -222,7 +226,8 @@ form
     must not contain other form elements. 
 
 Normative exclusions straight from the horses mouth. These are SGML style,
-not XML style, so we need to modify the ruleset slightly.
+not XML style, so we need to modify the ruleset slightly. However, the DTD
+may have done this for us already.
 
 --
 

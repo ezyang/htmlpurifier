@@ -190,7 +190,60 @@ class Test_PureHTMLDefinition extends UnitTestCase
 class Test_HTMLDTD_ChildDef extends UnitTestCase
 {
     
+    function assertSeries($inputs, $expect, $def) {
+        foreach ($inputs as $i => $input) {
+            $result = $def->validateChildren($input);
+            if (is_bool($expect[$i])) {
+                $this->assertIdentical($expect[$i], $result);
+            } else {
+                $this->assertEqual($expect[$i], $result);
+                paintIf($result, $result != $expect[$i]);
+            }
+        }
+    }
+    
+    function test_complex() {
+        
+        // the table definition
+        $def = new HTMLDTD_ChildDef(
+            '(caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))');
+        
+        $inputs[0] = array();
+        $expect[0] = false;
+        
+        // we really don't care what's inside, because if it turns out
+        // this tr is illegal, we'll end up re-evaluating the parent node
+        // anyway.
+        $inputs[1] = array(
+            new MF_StartTag('tr')       ,new MF_EndTag('tr')
+            );
+        $expect[1] = true;
+        
+        $inputs[2] = array(
+            new MF_StartTag('caption')  ,new MF_EndTag('caption')
+           ,new MF_StartTag('col')      ,new MF_EndTag('col')
+           ,new MF_StartTag('thead')    ,new MF_EndTag('thead')
+           ,new MF_StartTag('tfoot')    ,new MF_EndTag('tfoot')
+           ,new MF_StartTag('tbody')    ,new MF_EndTag('tbody')
+            );
+        $expect[2] = true;
+        
+        $inputs[3] = array(
+            new MF_StartTag('col')      ,new MF_EndTag('col')
+           ,new MF_StartTag('col')      ,new MF_EndTag('col')
+           ,new MF_StartTag('col')      ,new MF_EndTag('col')
+           ,new MF_StartTag('tr')       ,new MF_EndTag('tr')
+            );
+        $expect[3] = true;
+        
+        $this->assertSeries($inputs, $expect, $def);
+        
+    }
+    
     function test_simple() {
+        
+        // simple is actually an abstract class
+        // but we're unit testing some of the conv. functions it gives
         
         $def = new HTMLDTD_ChildDef_Simple('foobar | bang |gizmo');
         $this->assertEqual($def->elements,
@@ -274,15 +327,7 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
             );
         $expect[5] = false;
         
-        foreach ($inputs as $i => $input) {
-            $result = $def->validateChildren($input);
-            if (is_bool($expect[$i])) {
-                $this->assertIdentical($expect[$i], $result);
-            } else {
-                $this->assertEqual($expect[$i], $result);
-                paintIf($result, $result != $expect[$i]);
-            }
-        }
+        $this->assertSeries($inputs, $expect, $def);
         
     }
     

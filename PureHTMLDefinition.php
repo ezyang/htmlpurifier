@@ -352,13 +352,58 @@ class HTMLDTD_Element
 // true = leave nodes as is
 // false = delete parent node and all children
 // array(...) = replace children nodes with these
+
+// this is the hardest one to implement. We'll use fancy regexp tricks
+// right now, we only expect it to return TRUE or FALSE (it won't attempt
+// to fix the tree)
+
+// we may end up writing custom code for each HTML case
+// in order to make it self correcting
 class HTMLDTD_ChildDef
 {
     var $dtd_regex;
+    var $_pcre_regex;
     function HTMLDTD_ChildDef($dtd_regex) {
         $this->dtd_regex = $dtd_regex;
+        $this->_compileRegex();
     }
-    function validateChildren($tokens_of_children) {}
+    function _compileRegex() {
+        $raw = str_replace(' ', '', $this->dtd_regex);
+        if ($raw{0} != '(') {
+            $raw = "($raw)";
+        }
+        $reg = str_replace(',', ',?', $raw);
+        $reg = preg_replace('/([#a-zA-Z0-9_.-]+)/', '(,?\\0)', $reg);
+        $this->_pcre_regex = $reg;
+    }
+    function validateChildren($tokens_of_children) {
+        $list_of_children = '';
+        $nesting = 0; // depth into the nest
+        foreach ($tokens_of_children as $token) {
+            if (!empty($token->is_whitespace)) continue;
+            
+            $is_child = ($nesting == 0); // direct
+            
+            if (is_a($token, 'MF_StartTag')) {
+                $nesting++;
+            } elseif (is_a($token, 'MF_EndTag')) {
+                $nesting--;
+            }
+            
+            if ($is_child) {
+                $list_of_children .= $token->name . ',';
+            }
+        }
+        $list_of_children = rtrim($list_of_children, ',');
+        
+        $okay =
+            preg_match(
+                '/^'.$this->_pcre_regex.'$/',
+                $list_of_children
+            );
+        
+        return (bool) $okay;
+    }
 }
 class HTMLDTD_ChildDef_Simple extends HTMLDTD_ChildDef
 {
@@ -372,6 +417,9 @@ class HTMLDTD_ChildDef_Simple extends HTMLDTD_ChildDef
         foreach ($elements as $i => $x) $elements[$i] = true;
         $this->elements = $elements;
         $this->gen = new HTML_Generator();
+    }
+    function validateChildren() {
+        trigger_error('Cannot call abstract function!', E_USER_ERROR);
     }
 }
 class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
