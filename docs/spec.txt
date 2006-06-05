@@ -51,6 +51,11 @@ In summary:
    RFCs.
 6. Translate back into a string.
 
+HTML Purifier is best suited for documents that require a rich array of
+HTML tags. Things like blog comments are, in all likelihood, most appropriately
+written in an extremely restrictive set of markup that doesn't require
+all this functionality (or not written in HTML at all).
+
 == STAGE 1 - parsing ==
 
 : Status - largely FINISHED with a few quirks to work out
@@ -74,6 +79,8 @@ Prefixed with MF (Markup Fragment). We'll make 'em all immutable value objects.
 
 == STAGE 2 - remove foreign elements ==
 
+: Status - Core functionality finished, transformations not started
+
 At this point, the parser needs to start knowing about the DTD. Since we
 hold everything in an associative $info array, if it's set, it's valid, and
 we can include. Otherwise zap it, or attempt to figure out what they meant.
@@ -87,6 +94,8 @@ One last thing: the remove foreign elements has to do the element
 transformations, from FONT to SPAN, etc.
 
 == STAGE 3 - make well formed ==
+
+: Finished, but could have better well-formedness fixing
 
 Now we step through the whole thing and correct nesting issues. Most of the
 time, it's making sure the tags match up, but there's some trickery going on
@@ -104,6 +113,8 @@ for HTML's quirks. They are:
 We also want to do translations, like from FONT to SPAN with STYLE.
 
 == STAGE 4 - check nesting ==
+
+: Child definitions finished, actual function body not started
 
 We know that the document is now well formed. The tokenizer should now take
 things in nodes: when you hit a start tag, keep on going until you get its
@@ -149,7 +160,7 @@ expressions and transformations. However, it doesn't seem right that, say,
 a stray <b> in a <table> can cause the entire table to be removed. Fixing it,
 however, may be too difficult.
 
-So... here's the interesting code:
+This code was ripped from the PEAR class XML_DTD. It implements regexp checking.
 
 --
 
@@ -241,7 +252,8 @@ some sort of default behavior. I reckon that we should be allowed to:
 What complicates the matter is that Firefox has the ability to construct
 DOMs and render invalid nestings of elements (like <b><div>asdf</div></b>).
 This means that behavior for stray pcdata in ul/ol is undefined. Behavior
-with data in a table gets bubbled to the start of the table.
+with data in a table gets bubbled to the start of the table (assuming
+that we actually custom-make the table child validation class).
 
 So... I say delete the node when PCDATA isn't allowed (or the regex is too
 complicated to determine where PCDATA could be inserted), and translate the node
@@ -267,7 +279,9 @@ to worry about it for certain things:
 * textarea - rows, cols
 
 As you can see, only two of them we would remotely consider for our simplified
-tag set. But each has a different set of challenges.
+tag set. But each has a different set of challenges. For the img tag, we'd
+have to be careful about deleting it. If we do hit a snag, we can supply
+a default "blank" image.
 
 So after that's all said and done, each of the different types of content
 inside the attributes needs to be handled differently.
