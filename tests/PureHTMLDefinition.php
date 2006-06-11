@@ -3,12 +3,13 @@
 class Test_PureHTMLDefinition extends UnitTestCase
 {
     
-    var $def;
+    var $def, $lexer;
     
     function Test_PureHTMLDefinition() {
         $this->UnitTestCase();
         $this->def = new PureHTMLDefinition();
         $this->def->loadData();
+        $this->lexer = new HTML_Lexer();
     }
     
     function test_removeForeignElements() {
@@ -183,6 +184,54 @@ class Test_PureHTMLDefinition extends UnitTestCase
             paintIf($result, $result != $expect[$i]);
         }
         
+    }
+    
+    function test_fixNesting() {
+        $inputs = array();
+        $expect = array();
+        
+        // some legal nestings
+        
+        $inputs[0] = array(
+            new MF_StartTag('b'),
+                new MF_Text('Bold text'),
+            new MF_EndTag('b'),
+            );
+        $expect[0] = $inputs[0];
+        
+        // test acceptance of inline and block
+        // as the parent element is considered FLOW
+        $inputs[1] = array(
+            new MF_StartTag('a', array('href' => 'http://www.example.com/')),
+                new MF_Text('Linky'),
+            new MF_EndTag('a'),
+            new MF_StartTag('div'),
+                new MF_Text('Block element'),
+            new MF_EndTag('div'),
+            );
+        $expect[1] = $inputs[1];
+        
+        // test illegal block element -> text
+        $inputs[2] = array(
+            new MF_StartTag('b'),
+                new MF_StartTag('div'),
+                    new MF_Text('Illegal Div'),
+                new MF_EndTag('div'),
+            new MF_EndTag('b'),
+            );
+        $expect[2] = array(
+            new MF_StartTag('b'),
+                new MF_Text('<div>'),
+                new MF_Text('Illegal Div'),
+                new MF_Text('</div>'),
+            new MF_EndTag('b'),
+            );
+        
+        foreach ($inputs as $i => $input) {
+            $result = $this->def->fixNesting($input);
+            $this->assertEqual($expect[$i], $result);
+            paintIf($result, $result != $expect[$i]);
+        }
     }
     
 }
