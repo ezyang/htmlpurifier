@@ -502,6 +502,9 @@ class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Required
 class HTMLDTD_ChildDef_Empty extends HTMLDTD_ChildDef
 {
     function HTMLDTD_ChildDef_Empty() {}
+    function validateChildren() {
+        return false;
+    }
 }
 
 class HTMLDTD_AttrDef
