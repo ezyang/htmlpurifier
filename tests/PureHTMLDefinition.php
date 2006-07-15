@@ -1,5 +1,190 @@
 <?php
 
+class Test_HTMLDTD_ChildDef extends UnitTestCase
+{
+    
+    function assertSeries($inputs, $expect, $def) {
+        foreach ($inputs as $i => $input) {
+            $result = $def->validateChildren($input);
+            if (is_bool($expect[$i])) {
+                $this->assertIdentical($expect[$i], $result);
+            } else {
+                $this->assertEqual($expect[$i], $result);
+                paintIf($result, $result != $expect[$i]);
+            }
+        }
+    }
+    
+    function test_complex() {
+        
+        // the table definition
+        $def = new HTMLDTD_ChildDef(
+            '(caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))');
+        
+        $inputs[0] = array();
+        $expect[0] = false;
+        
+        // we really don't care what's inside, because if it turns out
+        // this tr is illegal, we'll end up re-evaluating the parent node
+        // anyway.
+        $inputs[1] = array(
+            new MF_StartTag('tr')       ,new MF_EndTag('tr')
+            );
+        $expect[1] = true;
+        
+        $inputs[2] = array(
+            new MF_StartTag('caption')  ,new MF_EndTag('caption')
+           ,new MF_StartTag('col')      ,new MF_EndTag('col')
+           ,new MF_StartTag('thead')    ,new MF_EndTag('thead')
+           ,new MF_StartTag('tfoot')    ,new MF_EndTag('tfoot')
+           ,new MF_StartTag('tbody')    ,new MF_EndTag('tbody')
+            );
+        $expect[2] = true;
+        
+        $inputs[3] = array(
+            new MF_StartTag('col')      ,new MF_EndTag('col')
+           ,new MF_StartTag('col')      ,new MF_EndTag('col')
+           ,new MF_StartTag('col')      ,new MF_EndTag('col')
+           ,new MF_StartTag('tr')       ,new MF_EndTag('tr')
+            );
+        $expect[3] = true;
+        
+        $this->assertSeries($inputs, $expect, $def);
+        
+    }
+    
+    function test_simple() {
+        
+        // simple is actually an abstract class
+        // but we're unit testing some of the conv. functions it gives
+        
+        $def = new HTMLDTD_ChildDef_Simple('foobar | bang |gizmo');
+        $this->assertEqual($def->elements,
+          array(
+            'foobar' => true
+           ,'bang'   => true
+           ,'gizmo'  => true
+          ));
+        
+        $def = new HTMLDTD_ChildDef_Simple(array('href', 'src'));
+        $this->assertEqual($def->elements,
+          array(
+            'href' => true
+           ,'src'  => true
+          ));
+    }
+    
+    function test_required_pcdata_forbidden() {
+        
+        $def = new HTMLDTD_ChildDef_Required('dt | dd');
+        
+        $inputs[0] = array();
+        $expect[0] = false;
+        
+        $inputs[1] = array(
+            new MF_StartTag('dt')
+           ,new MF_Text('Term')
+           ,new MF_EndTag('dt')
+           
+           ,new MF_Text('Text in an illegal location')
+           
+           ,new MF_StartTag('dd')
+           ,new MF_Text('Definition')
+           ,new MF_EndTag('dd')
+           
+           ,new MF_StartTag('b') // test tag removal too
+           ,new MF_EndTag('b')
+            );
+        $expect[1] = array(
+            new MF_StartTag('dt')
+           ,new MF_Text('Term')
+           ,new MF_EndTag('dt')
+           
+           ,new MF_StartTag('dd')
+           ,new MF_Text('Definition')
+           ,new MF_EndTag('dd')
+            );
+        
+        $inputs[2] = array(new MF_Text('How do you do!'));
+        $expect[2] = false;
+        
+        // whitespace shouldn't trigger it
+        $inputs[3] = array(
+            new MF_Text("\n")
+           ,new MF_StartTag('dd')
+           ,new MF_Text('Definition')
+           ,new MF_EndTag('dd')
+           ,new MF_Text('       ')
+            );
+        $expect[3] = true;
+        
+        $inputs[4] = array(
+            new MF_StartTag('dd')
+           ,new MF_Text('Definition')
+           ,new MF_EndTag('dd')
+           ,new MF_Text('       ')
+           ,new MF_StartTag('b')
+           ,new MF_EndTag('b')
+           ,new MF_Text('       ')
+            );
+        $expect[4] = array(
+            new MF_StartTag('dd')
+           ,new MF_Text('Definition')
+           ,new MF_EndTag('dd')
+           ,new MF_Text('       ')
+           ,new MF_Text('       ')
+            );
+        $inputs[5] = array(
+            new MF_Text('       ')
+           ,new MF_Text("\t")
+            );
+        $expect[5] = false;
+        
+        $this->assertSeries($inputs, $expect, $def);
+        
+    }
+    
+    function test_required_pcdata_allowed() {
+        $def = new HTMLDTD_ChildDef_Required('#PCDATA | b');
+        $input = array(
+            new MF_StartTag('b')
+           ,new MF_Text('Bold text')
+           ,new MF_EndTag('b')
+           ,new MF_EmptyTag('img') // illegal tag
+            );
+        $expect = array(
+            new MF_StartTag('b')
+           ,new MF_Text('Bold text')
+           ,new MF_EndTag('b')
+           ,new MF_Text('<img />')
+            );
+        $this->assertEqual($expect, $def->validateChildren($input));
+    }
+    
+    function test_optional() {
+        $def = new HTMLDTD_ChildDef_Optional('b | i');
+        $input = array(
+            new MF_StartTag('b')
+           ,new MF_Text('Bold text')
+           ,new MF_EndTag('b')
+           ,new MF_EmptyTag('img') // illegal tag
+            );
+        $expect = array(
+            new MF_StartTag('b')
+           ,new MF_Text('Bold text')
+           ,new MF_EndTag('b')
+            );
+        $this->assertEqual($expect, $def->validateChildren($input));
+        
+        $input = array(
+            new MF_Text('Not allowed text')
+            );
+        $expect = array();
+        $this->assertEqual($expect, $def->validateChildren($input));
+    }
+    
+}
+
 class Test_PureHTMLDefinition extends UnitTestCase
 {
     
@@ -232,191 +417,6 @@ class Test_PureHTMLDefinition extends UnitTestCase
             $this->assertEqual($expect[$i], $result);
             paintIf($result, $result != $expect[$i]);
         }
-    }
-    
-}
-
-class Test_HTMLDTD_ChildDef extends UnitTestCase
-{
-    
-    function assertSeries($inputs, $expect, $def) {
-        foreach ($inputs as $i => $input) {
-            $result = $def->validateChildren($input);
-            if (is_bool($expect[$i])) {
-                $this->assertIdentical($expect[$i], $result);
-            } else {
-                $this->assertEqual($expect[$i], $result);
-                paintIf($result, $result != $expect[$i]);
-            }
-        }
-    }
-    
-    function test_complex() {
-        
-        // the table definition
-        $def = new HTMLDTD_ChildDef(
-            '(caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))');
-        
-        $inputs[0] = array();
-        $expect[0] = false;
-        
-        // we really don't care what's inside, because if it turns out
-        // this tr is illegal, we'll end up re-evaluating the parent node
-        // anyway.
-        $inputs[1] = array(
-            new MF_StartTag('tr')       ,new MF_EndTag('tr')
-            );
-        $expect[1] = true;
-        
-        $inputs[2] = array(
-            new MF_StartTag('caption')  ,new MF_EndTag('caption')
-           ,new MF_StartTag('col')      ,new MF_EndTag('col')
-           ,new MF_StartTag('thead')    ,new MF_EndTag('thead')
-           ,new MF_StartTag('tfoot')    ,new MF_EndTag('tfoot')
-           ,new MF_StartTag('tbody')    ,new MF_EndTag('tbody')
-            );
-        $expect[2] = true;
-        
-        $inputs[3] = array(
-            new MF_StartTag('col')      ,new MF_EndTag('col')
-           ,new MF_StartTag('col')      ,new MF_EndTag('col')
-           ,new MF_StartTag('col')      ,new MF_EndTag('col')
-           ,new MF_StartTag('tr')       ,new MF_EndTag('tr')
-            );
-        $expect[3] = true;
-        
-        $this->assertSeries($inputs, $expect, $def);
-        
-    }
-    
-    function test_simple() {
-        
-        // simple is actually an abstract class
-        // but we're unit testing some of the conv. functions it gives
-        
-        $def = new HTMLDTD_ChildDef_Simple('foobar | bang |gizmo');
-        $this->assertEqual($def->elements,
-          array(
-            'foobar' => true
-           ,'bang'   => true
-           ,'gizmo'  => true
-          ));
-        
-        $def = new HTMLDTD_ChildDef_Simple(array('href', 'src'));
-        $this->assertEqual($def->elements,
-          array(
-            'href' => true
-           ,'src'  => true
-          ));
-    }
-    
-    function test_required_pcdata_forbidden() {
-        
-        $def = new HTMLDTD_ChildDef_Required('dt | dd');
-        
-        $inputs[0] = array();
-        $expect[0] = false;
-        
-        $inputs[1] = array(
-            new MF_StartTag('dt')
-           ,new MF_Text('Term')
-           ,new MF_EndTag('dt')
-           
-           ,new MF_Text('Text in an illegal location')
-           
-           ,new MF_StartTag('dd')
-           ,new MF_Text('Definition')
-           ,new MF_EndTag('dd')
-           
-           ,new MF_StartTag('b') // test tag removal too
-           ,new MF_EndTag('b')
-            );
-        $expect[1] = array(
-            new MF_StartTag('dt')
-           ,new MF_Text('Term')
-           ,new MF_EndTag('dt')
-           
-           ,new MF_StartTag('dd')
-           ,new MF_Text('Definition')
-           ,new MF_EndTag('dd')
-            );
-        
-        $inputs[2] = array(new MF_Text('How do you do!'));
-        $expect[2] = false;
-        
-        // whitespace shouldn't trigger it
-        $inputs[3] = array(
-            new MF_Text("\n")
-           ,new MF_StartTag('dd')
-           ,new MF_Text('Definition')
-           ,new MF_EndTag('dd')
-           ,new MF_Text('       ')
-            );
-        $expect[3] = true;
-        
-        $inputs[4] = array(
-            new MF_StartTag('dd')
-           ,new MF_Text('Definition')
-           ,new MF_EndTag('dd')
-           ,new MF_Text('       ')
-           ,new MF_StartTag('b')
-           ,new MF_EndTag('b')
-           ,new MF_Text('       ')
-            );
-        $expect[4] = array(
-            new MF_StartTag('dd')
-           ,new MF_Text('Definition')
-           ,new MF_EndTag('dd')
-           ,new MF_Text('       ')
-           ,new MF_Text('       ')
-            );
-        $inputs[5] = array(
-            new MF_Text('       ')
-           ,new MF_Text("\t")
-            );
-        $expect[5] = false;
-        
-        $this->assertSeries($inputs, $expect, $def);
-        
-    }
-    
-    function test_required_pcdata_allowed() {
-        $def = new HTMLDTD_ChildDef_Required('#PCDATA | b');
-        $input = array(
-            new MF_StartTag('b')
-           ,new MF_Text('Bold text')
-           ,new MF_EndTag('b')
-           ,new MF_EmptyTag('img') // illegal tag
-            );
-        $expect = array(
-            new MF_StartTag('b')
-           ,new MF_Text('Bold text')
-           ,new MF_EndTag('b')
-           ,new MF_Text('<img />')
-            );
-        $this->assertEqual($expect, $def->validateChildren($input));
-    }
-    
-    function test_optional() {
-        $def = new HTMLDTD_ChildDef_Optional('b | i');
-        $input = array(
-            new MF_StartTag('b')
-           ,new MF_Text('Bold text')
-           ,new MF_EndTag('b')
-           ,new MF_EmptyTag('img') // illegal tag
-            );
-        $expect = array(
-            new MF_StartTag('b')
-           ,new MF_Text('Bold text')
-           ,new MF_EndTag('b')
-            );
-        $this->assertEqual($expect, $def->validateChildren($input));
-        
-        $input = array(
-            new MF_Text('Not allowed text')
-            );
-        $expect = array();
-        $this->assertEqual($expect, $def->validateChildren($input));
     }
     
 }
