@@ -375,8 +375,9 @@ class Test_PureHTMLDefinition extends UnitTestCase
         $inputs = array();
         $expect = array();
         
-        // some legal nestings
+        // next id = 4
         
+        // legal inline nesting
         $inputs[0] = array(
             new MF_StartTag('b'),
                 new MF_Text('Bold text'),
@@ -384,7 +385,7 @@ class Test_PureHTMLDefinition extends UnitTestCase
             );
         $expect[0] = $inputs[0];
         
-        // test acceptance of inline and block
+        // legal inline and block
         // as the parent element is considered FLOW
         $inputs[1] = array(
             new MF_StartTag('a', array('href' => 'http://www.example.com/')),
@@ -396,7 +397,7 @@ class Test_PureHTMLDefinition extends UnitTestCase
             );
         $expect[1] = $inputs[1];
         
-        // test illegal block element -> text
+        // illegal block in inline, element -> text
         $inputs[2] = array(
             new MF_StartTag('b'),
                 new MF_StartTag('div'),
@@ -410,6 +411,18 @@ class Test_PureHTMLDefinition extends UnitTestCase
                 new MF_Text('Illegal Div'),
                 new MF_Text('</div>'),
             new MF_EndTag('b'),
+            );
+        
+        // illegal <a> in <a>
+        $inputs[3] = array(
+            new MF_StartTag('a'),
+                
+            new MF_EndTag('a')
+            );
+        $expect[3] = array(
+            new MF_StartTag('a'),
+                
+            new MF_EndTag('a')
             );
         
         foreach ($inputs as $i => $input) {
