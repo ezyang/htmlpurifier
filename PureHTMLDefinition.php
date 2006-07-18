@@ -165,10 +165,10 @@ class PureHTMLDefinition
                         $this->generator->generateFromToken($token)
                     );
                 }
-            } elseif (is_a($token, 'MF_Comment')) {
+            } elseif ($token->type == 'comment') {
                 // strip comments
                 continue;
-            } elseif (is_a($token, 'MF_Text')) {
+            } elseif ($token->type == 'text') {
             } else {
                 continue;
             }
@@ -189,16 +189,16 @@ class PureHTMLDefinition
             $info = $this->info[$token->name]; // assumption but valid
             
             // test if it claims to be a start tag but is empty
-            if (is_a($info->child_def, 'HTMLDTD_ChildDef_Empty') &&
-                is_a($token, 'MF_StartTag') ) {
+            if ($info->child_def->type == 'empty' &&
+                $token->type == 'start' ) {
                 
                 $result[] = new MF_EmptyTag($token->name, $token->attributes);
                 continue;
             }
             
             // test if it claims to be empty but really is a start tag
-            if (!is_a($info->child_def, 'HTMLDTD_ChildDef_Empty') &&
-                is_a($token, 'MF_EmptyTag') ) {
+            if ($info->child_def->type != 'empty' &&
+                $token->type == 'empty' ) {
                 
                 $result[] = new MF_StartTag($token->name, $token->attributes);
                 $result[] = new MF_EndTag($token->name);
@@ -207,14 +207,14 @@ class PureHTMLDefinition
             }
             
             // automatically insert empty tags
-            if (is_a($token, 'MF_EmptyTag')) {
+            if ($token->type == 'empty') {
                 $result[] = $token;
                 continue;
             }
             
             // we give start tags precedence, so automatically accept unless...
             // it's one of those special cases
-            if (is_a($token, 'MF_StartTag')) {
+            if ($token->type == 'start') {
                 
                 // if there's a parent, check for special case
                 if (!empty($current_nesting)) {
@@ -253,7 +253,7 @@ class PureHTMLDefinition
             }
             
             // sanity check
-            if (!is_a($token, 'MF_EndTag')) continue;
+            if ($token->type != 'end') continue;
             
             // okay, we're dealing with a closing tag
             
@@ -326,6 +326,16 @@ class PureHTMLDefinition
     function fixNesting($tokens) {
         if (empty($this->info)) $this->loadData();
         
+        /*$to_next_node = 0; // defines how much further to scroll to get
+                           // to next node.
+        
+        for ($i = 0, $size = count($tokens) ; $i < $size; $i += $to_next_node) {
+            
+            // scroll to the end of this node, and report number
+            for ($j = $i, $depth = 0; ; $j++) {
+            }
+        }*/
+        
     }
     
     function validateAttributes($tokens) {
@@ -384,9 +394,9 @@ class HTMLDTD_ChildDef
             
             $is_child = ($nesting == 0); // direct
             
-            if (is_a($token, 'MF_StartTag')) {
+            if ($token->type == 'start') {
                 $nesting++;
-            } elseif (is_a($token, 'MF_EndTag')) {
+            } elseif ($token->type == 'end') {
                 $nesting--;
             }
             
@@ -424,6 +434,7 @@ class HTMLDTD_ChildDef_Simple extends HTMLDTD_ChildDef
 }
 class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
 {
+    var $type = 'required';
     function validateChildren($tokens_of_children) {
         // if there are no tokens, delete parent node
         if (empty($tokens_of_children)) return false;
@@ -454,9 +465,9 @@ class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
             
             $is_child = ($nesting == 0);
             
-            if (is_a($token, 'MF_StartTag')) {
+            if ($token->type == 'start') {
                 $nesting++;
-            } elseif (is_a($token, 'MF_EndTag')) {
+            } elseif ($token->type == 'end') {
                 $nesting--;
             }
             
@@ -491,6 +502,7 @@ class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
 // instead of a false (to delete the node)
 class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Required
 {
+    var $type = 'optional';
     function validateChildren($tokens_of_children) {
         $result = parent::validateChildren($tokens_of_children);
         if ($result === false) return array();
@@ -501,6 +513,7 @@ class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Required
 // placeholder
 class HTMLDTD_ChildDef_Empty extends HTMLDTD_ChildDef
 {
+    var $type = 'empty';
     function HTMLDTD_ChildDef_Empty() {}
     function validateChildren() {
         return false;

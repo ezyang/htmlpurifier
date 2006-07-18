@@ -5,7 +5,7 @@
 
 class MF {}
 
-class MF_Tag extends MF
+class MF_Tag extends MF // abstract
 {
     var $name;
     function MF_Tag($name) {
@@ -14,7 +14,7 @@ class MF_Tag extends MF
     }
 }
 
-class MF_TagWithAttributes extends MF_Tag
+class MF_TagWithAttributes extends MF_Tag // abstract
 {
     var $attributes = array();
     function MF_TagWithAttributes($name, $attributes = array()) {
@@ -23,13 +23,25 @@ class MF_TagWithAttributes extends MF_Tag
     }
 }
 
-class MF_StartTag extends MF_TagWithAttributes {}
-class MF_EmptyTag extends MF_TagWithAttributes {}
-class MF_EndTag extends MF_Tag {}
+class MF_StartTag extends MF_TagWithAttributes
+{
+    var $type = 'start';
+}
+
+class MF_EmptyTag extends MF_TagWithAttributes
+{
+    var $type = 'empty';
+}
+
+class MF_EndTag extends MF_Tag
+{
+    var $type = 'end';
+}
 
 class MF_Text extends MF
 {
     var $name = '#PCDATA';
+    var $type = 'text';
     var $data;
     var $is_whitespace = false;
     function MF_Text($data) {
@@ -44,6 +56,7 @@ class MF_Text extends MF
 class MF_Comment extends MF
 {
     var $data;
+    var $type = 'comment';
     function MF_Comment($data) {
         $this->data = $data;
     }
