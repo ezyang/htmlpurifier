@@ -326,15 +326,48 @@ class PureHTMLDefinition
     function fixNesting($tokens) {
         if (empty($this->info)) $this->loadData();
         
-        /*$to_next_node = 0; // defines how much further to scroll to get
-                           // to next node.
+        // insert implicit "parent" node, will be removed at end
+        array_unshift($tokens, new MF_StartTag('div'));
+        $tokens[] = new MF_EndTag('div');
         
-        for ($i = 0, $size = count($tokens) ; $i < $size; $i += $to_next_node) {
+        for ($i = 0, $size = count($tokens) ; $i < $size; ) {
+            
+            $child_tokens = array();
             
             // scroll to the end of this node, and report number
             for ($j = $i, $depth = 0; ; $j++) {
+                if ($tokens[$j]->type == 'start') {
+                    $depth++;
+                    if ($depth == 1) continue;
+                } elseif ($tokens[$j]->type == 'end') {
+                    $depth--;
+                    if ($depth == 0) break;
+                }
+                $child_tokens[] = $tokens[$j];
             }
-        }*/
+            
+            // have DTD child def validate children
+            $element_def = $this->info[$tokens[$i]->name];
+            $result = $element_def->child_def->validateChildren($child_tokens);
+            
+            // process result
+            if ($result === true) {
+                
+                // leave the nodes as is, scroll to next node
+                $i++;
+                while ($i < $size and $tokens[$i]->type != 'start') {
+                    $i++;
+                }
+                
+            }
+            
+        }
+        
+        // remove implicit divs
+        array_shift($tokens);
+        array_pop($tokens);
+        
+        return $tokens;
         
     }
     

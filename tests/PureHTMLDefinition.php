@@ -413,17 +413,14 @@ class Test_PureHTMLDefinition extends UnitTestCase
             new MF_EndTag('b'),
             );
         
-        // illegal <a> in <a>
-        $inputs[3] = array(
-            new MF_StartTag('a'),
-                
-            new MF_EndTag('a')
-            );
-        $expect[3] = array(
-            new MF_StartTag('a'),
-                
-            new MF_EndTag('a')
-            );
+        // need test of empty set that's required, resulting in removal of node
+        
+        // need test of cascading removal (if possible)
+        
+        // ! cover all child element conditions
+        
+        // execute only one test at a time:
+        $inputs = array( $inputs[0] );
         
         foreach ($inputs as $i => $input) {
             $result = $this->def->fixNesting($input);
