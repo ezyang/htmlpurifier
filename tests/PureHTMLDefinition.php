@@ -413,14 +413,29 @@ class Test_PureHTMLDefinition extends UnitTestCase
             new MF_EndTag('b'),
             );
         
-        // need test of empty set that's required, resulting in removal of node
+        // test of empty set that's required, resulting in removal of node
+        $inputs[3] = array(
+            new MF_StartTag('ul'),
+            new MF_EndTag('ul')
+            );
+        $expect[3] = array();
         
-        // need test of cascading removal (if possible)
-        
-        // ! cover all child element conditions
-        
-        // execute only one test at a time:
-        $inputs = array( $inputs[0] );
+        // test illegal text which gets removed
+        $inputs[4] = array(
+            new MF_StartTag('ul'),
+                new MF_Text('Illegal Text'),
+                new MF_StartTag('li'),
+                    new MF_Text('Legal item'),
+                new MF_EndTag('li'),
+            new MF_EndTag('ul')
+            );
+        $expect[4] = array(
+            new MF_StartTag('ul'),
+                new MF_StartTag('li'),
+                    new MF_Text('Legal item'),
+                new MF_EndTag('li'),
+            new MF_EndTag('ul')
+            );
         
         foreach ($inputs as $i => $input) {
             $result = $this->def->fixNesting($input);
