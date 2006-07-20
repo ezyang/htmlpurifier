@@ -56,9 +56,11 @@ HTML tags. Things like blog comments are, in all likelihood, most appropriately
 written in an extremely restrictive set of markup that doesn't require
 all this functionality (or not written in HTML at all).
 
+
+
 == STAGE 1 - parsing ==
 
-: Status - largely FINISHED with a few quirks to work out
+    Status: A (see source, mainly internal raw)
 
 We've got two options for this: HTMLSax or my MarkupLexer. Hopefully, we
 can make the two interfaces compatible. This means that we need a lot
@@ -77,9 +79,11 @@ Ignorable/not being implemented (although we probably want to output them raw):
 
 Prefixed with MF (Markup Fragment). We'll make 'em all immutable value objects.
 
+
+
 == STAGE 2 - remove foreign elements ==
 
-: Status - Core functionality finished, transformations not started
+    Status: A- (transformations need to be implemented)
 
 At this point, the parser needs to start knowing about the DTD. Since we
 hold everything in an associative $info array, if it's set, it's valid, and
@@ -93,9 +97,11 @@ into Data (although I don't see why we can't do that at the start).
 One last thing: the remove foreign elements has to do the element
 transformations, from FONT to SPAN, etc.
 
+
+
 == STAGE 3 - make well formed ==
 
-: Finished, but could have better well-formedness fixing
+    Status: A- (not as good as possible)
 
 Now we step through the whole thing and correct nesting issues. Most of the
 time, it's making sure the tags match up, but there's some trickery going on
@@ -112,9 +118,11 @@ for HTML's quirks. They are:
 
 We also want to do translations, like from FONT to SPAN with STYLE.
 
+
+
 == STAGE 4 - check nesting ==
 
-: Child definitions finished, actual function body not started
+    Status: B (table custom definition needs to be implemented)
 
 We know that the document is now well formed. The tokenizer should now take
 things in nodes: when you hit a start tag, keep on going until you get its
@@ -272,6 +280,8 @@ implement custom handlers for each one that specify the stuff correctly.
 
 == STAGE 4 - check attributes ==
 
+    STATUS: N (not started)
+
 While we're doing all this nesting hocus-pocus, attributes are also being
 checked. The reason why we need this to be done with the nesting stuff
 is if a REQUIRED attribute is not there, we might need to kill the tag (or
@@ -340,6 +350,8 @@ http://www.w3.org/TR/CSS21/syndata.html and also note the "bad" CSS elements
 that HTML_Safe defines to help determine a whitelist.
 
 == PART 5 - stringify ==
+
+    Status: A+ (done completely!)
 
 Should be fairly simple as long as we delegate to appropriate functions.
 It's probably too much trouble to indent the stuff properly, so just output
