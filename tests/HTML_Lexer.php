@@ -25,6 +25,16 @@ class Test_HTML_Lexer extends UnitTestCase
         $this->assertIdentical(2, $HP->nextWhiteSpace("as\t\r\nasdf as"));
     }
     
+    function test_parseData() {
+        $HP =& $this->HTML_Lexer;
+        $this->assertIdentical('asdf', $HP->parseData('asdf'));
+        $this->assertIdentical('&', $HP->parseData('&amp;'));
+        $this->assertIdentical('"', $HP->parseData('&quot;'));
+        $this->assertIdentical("'", $HP->parseData('&#039;'));
+        $this->assertIdentical('-', $HP->parseData('&#x2D;'));
+        // UTF-8 needed!!!
+    }
+    
     function test_tokenizeHTML() {
         
         $input = array();
@@ -114,14 +124,24 @@ class Test_HTML_Lexer extends UnitTestCase
            ,new MF_Text('b')
            ,new MF_Text('>')
             );
-        // however, we may want to change both styles
-        // into parsed: '<b>'. SAX has an option for this
+        // note that SAX can clump text nodes together. We won't be
+        // too picky though
         
         // [INVALID]
         $input[10] = '<a "=>';
         $expect[10] = array(
             new MF_StartTag('a', array('"' => ''))
             );
+        
+        // [INVALID] [RECOVERABLE]
+        $input[11] = '"';
+        $expect[11] = array( new MF_Text('"') );
+        
+        // compare with this valid one:
+        $input[12] = '&quot;';
+        $expect[12] = array( new MF_Text('"') );
+        $sax_expect[12] = false;
+        // SAX chokes on this? We do have entity parsing on, so it should work!
         
         foreach($input as $i => $discard) {
             $result = $this->HTML_Lexer->tokenizeHTML($input[$i]);

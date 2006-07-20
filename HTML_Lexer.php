@@ -15,6 +15,51 @@ TODO:
 class HTML_Lexer
 {
     
+    // does this version of PHP support utf8 as entity function charset?
+    var $_entity_utf8;
+    
+    function HTML_Lexer() {
+        $this->_entity_utf8 = version_compare(PHP_VERSION, '5', '>=');
+    }
+    
+    // this is QUITE a knotty problem
+    // 
+    // The main trouble is that, even while assuming UTF-8 is what we're
+    // using, we've got to deal with HTML entities (like &mdash;)
+    // Not even sure if the PHP 5 decoding function does that. Plus,
+    // SimpleTest doesn't use UTF-8!
+    // 
+    // However, we MUST parse everything possible, because once you get
+    // to the HTML generator, it will escape everything possible (although
+    // that may not be correct, and we should be using htmlspecialchars() ).
+    // 
+    // Nevertheless, strictly XML speaking, we cannot assume any character
+    // entities are defined except the htmlspecialchars() ones, so leaving
+    // the entities inside HERE is not acceptable. (plus, htmlspecialchars
+    // might convert them anyway). So EVERYTHING must get parsed.
+    // 
+    // We may need to roll our own character entity lookup table. It's only
+    // about 250, fortunantely, the decimal/hex ones map cleanly to UTF-8.
+    function parseData($string) {
+        // we may want to let the user do a different char encoding,
+        // although there is NO REASON why they shouldn't be able
+        // to convert it to UTF-8 before they pass it to us
+        
+        // no support for less than PHP 4.3
+        if ($this->_entity_utf8) {
+            // PHP 5+, UTF-8 is nicely supported
+            return @html_entity_decode($string, ENT_QUOTES, 'UTF-8');
+        } else {
+            // PHP 4, do compat stuff
+            $string = html_entity_decode($string, ENT_QUOTES, 'ISO-8859-1');
+            // get the numeric UTF-8 stuff
+            $string = preg_replace('/&#(\d+);/me', "chr(\\1)", $string);
+            $string = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$string);
+            // get the stringy UTF-8 stuff
+            return $string;
+        }
+    }
+    
     function nextQuote($string, $offset = 0) {
         $quotes = array('"', "'");
         return $this->next($string, $quotes, $offset);
@@ -80,7 +125,8 @@ class HTML_Lexer
                         html_entity_decode(
                             substr(
                                 $string, $cursor, $position_next_lt - $cursor
-                            )
+                            ),
+                            ENT_QUOTES
                         )
                     );
                 $cursor  = $position_next_lt + 1;
@@ -96,7 +142,8 @@ class HTML_Lexer
                         html_entity_decode(
                             substr(
                                 $string, $cursor
-                            )
+                            ),
+                            ENT_QUOTES
                         )
                     );
                 break;
@@ -175,7 +222,8 @@ class HTML_Lexer
                     MF_Text(
                         '<' .
                         html_entity_decode(
-                            substr($string, $cursor)
+                            substr($string, $cursor),
+                            ENT_QUOTES
                         )
                     );
                 break;
@@ -273,7 +321,7 @@ class HTML_Lexer
                 $value = substr($string, $position_next_quote + 1,
                   $position_end_quote - $position_next_quote - 1);
                 if ($key) {
-                    $array[$key] = html_entity_decode($value);
+                    $array[$key] = html_entity_decode($value, ENT_QUOTES);
                 }
                 $cursor = $position_end_quote + 1;
             } else {
