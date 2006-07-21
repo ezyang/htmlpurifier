@@ -1,13 +1,13 @@
 <?php
 
-class Test_HTML_Generator extends UnitTestCase
+class Test_HTMLPurifier_Generator extends UnitTestCase
 {
     
     var $gen;
     
-    function Test_HTML_Generator() {
+    function Test_HTMLPurifier_Generator() {
         $this->UnitTestCase();
-        $this->gen = new HTML_Generator();
+        $this->gen = new HTMLPurifier_Generator();
     }
     
     function test_generateFromToken() {

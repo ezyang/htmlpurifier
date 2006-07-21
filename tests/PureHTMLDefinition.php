@@ -8,7 +8,7 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
     
     function Test_HTMLDTD_ChildDef() {
         $this->lex = new HTMLPurifier_Lexer();
-        $this->gen = new HTML_Generator();
+        $this->gen = new HTMLPurifier_Generator();
         parent::UnitTestCase();
     }
     

@@ -1,6 +1,6 @@
 <?php
 
-class HTML_Generator
+class HTMLPurifier_Generator
 {
     
     function generateFromTokens($tokens) {

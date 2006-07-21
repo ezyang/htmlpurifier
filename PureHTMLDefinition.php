@@ -29,7 +29,7 @@ class PureHTMLDefinition
         );
     
     function PureHTMLDefinition() {
-        $this->generator = new HTML_Generator();
+        $this->generator = new HTMLPurifier_Generator();
     }
     
     function loadData() {
@@ -506,7 +506,7 @@ class HTMLDTD_ChildDef_Simple extends HTMLDTD_ChildDef
         $elements = array_flip($elements);
         foreach ($elements as $i => $x) $elements[$i] = true;
         $this->elements = $elements;
-        $this->gen = new HTML_Generator();
+        $this->gen = new HTMLPurifier_Generator();
     }
     function validateChildren() {
         trigger_error('Cannot call abstract function!', E_USER_ERROR);
