@@ -9,8 +9,8 @@ require_once 'Benchmark/Timer.php';
 require_once 'XML/HTMLSax3.php';
 require_once 'Text/Password.php';
 
-require_once '../MarkupFragment.php';
-require_once '../HTML_Lexer.php';
+require_once '../Token.php';
+require_once '../Lexer.php';
 
 class TinyTimer extends Benchmark_Timer
 {
@@ -52,12 +52,12 @@ class TinyTimer extends Benchmark_Timer
 ?>
 <html>
 <head>
-<title>Benchmark: HTML_Lexer versus HTMLSax</title>
+<title>Benchmark: HTMLPurifier_Lexer versus HTMLSax</title>
 </head>
 <body>
-<h1>Benchmark: HTML_Lexer versus HTMLSax</h1>
+<h1>Benchmark: HTMLPurifier_Lexer versus HTMLSax</h1>
 <table border="1">
-<tr><th>Case</th><th>HTML_Lexer</th><th>HTML_Lexer_Sax</th></tr>
+<tr><th>Case</th><th>HTMLPurifier_Lexer</th><th>HTMLPurifier_Lexer_Sax</th></tr>
 <?php
 
 
@@ -65,13 +65,13 @@ function do_benchmark($name, $document) {
     $timer = new TinyTimer($name);
     $timer->start();
     
-    $lexer = new HTML_Lexer();
+    $lexer = new HTMLPurifier_Lexer();
     $tokens = $lexer->tokenizeHTML($document);
-    $timer->setMarker('HTML_Lexer');
+    $timer->setMarker('HTMLPurifier_Lexer');
     
-    $lexer = new HTML_Lexer_Sax();
+    $lexer = new HTMLPurifier_Lexer_Sax();
     $sax_tokens = $lexer->tokenizeHTML($document);
-    $timer->setMarker('HTML_Lexer_Sax');
+    $timer->setMarker('HTMLPurifier_Lexer_Sax');
     
     $timer->stop();
     $timer->display();
@@ -79,7 +79,7 @@ function do_benchmark($name, $document) {
 
 // sample of html pages
 
-$dir = 'samples/HTML_Lexer';
+$dir = 'samples/Lexer';
 $dh  = opendir($dir);
 while (false !== ($filename = readdir($dh))) {
     

@@ -7,7 +7,7 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
     var $gen;
     
     function Test_HTMLDTD_ChildDef() {
-        $this->lex = new HTML_Lexer();
+        $this->lex = new HTMLPurifier_Lexer();
         $this->gen = new HTML_Generator();
         parent::UnitTestCase();
     }
@@ -134,7 +134,7 @@ class Test_PureHTMLDefinition extends UnitTestCase
         $this->UnitTestCase();
         $this->def = new PureHTMLDefinition();
         $this->def->loadData();
-        $this->lex = new HTML_Lexer();
+        $this->lex = new HTMLPurifier_Lexer();
     }
     
     function test_removeForeignElements() {

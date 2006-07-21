@@ -8,7 +8,7 @@ class HTML_Purifier
     var $generator;
     
     function HTML_Purifier() {
-        $this->lexer = new HTML_Lexer();
+        $this->lexer = new HTMLPurifier_Lexer();
         $this->definition = new PureHTMLDefinition();
         $this->generator = new HTML_Generator();
     }

@@ -12,13 +12,13 @@ TODO:
 
 */
 
-class HTML_Lexer
+class HTMLPurifier_Lexer
 {
     
     // does this version of PHP support utf8 as entity function charset?
     var $_entity_utf8;
     
-    function HTML_Lexer() {
+    function HTMLPurifier_Lexer() {
         $this->_entity_utf8 = version_compare(PHP_VERSION, '5', '>=');
     }
     
@@ -343,7 +343,7 @@ class HTML_Lexer
 
 // uses the PEAR class XML_HTMLSax3 to parse XML
 //   only shares the tokenizeHTML() function
-class HTML_Lexer_Sax extends HTML_Lexer
+class HTMLPurifier_Lexer_Sax extends HTMLPurifier_Lexer
 {
     
     var $tokens = array();

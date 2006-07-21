@@ -4,19 +4,19 @@
     * Benchmark the SAX parser with my homemade one
  */
 
-class Test_HTML_Lexer extends UnitTestCase
+class Test_HTMLPurifier_Lexer extends UnitTestCase
 {
     
-    var $HTML_Lexer;
-    var $HTML_Lexer_Sax;
+    var $HTMLPurifier_Lexer;
+    var $HTMLPurifier_Lexer_Sax;
     
     function setUp() {
-        $this->HTML_Lexer     =& new HTML_Lexer();
-        $this->HTML_Lexer_Sax =& new HTML_Lexer_Sax();
+        $this->HTMLPurifier_Lexer     =& new HTMLPurifier_Lexer();
+        $this->HTMLPurifier_Lexer_Sax =& new HTMLPurifier_Lexer_Sax();
     }
     
     function test_nextWhiteSpace() {
-        $HP =& $this->HTML_Lexer;
+        $HP =& $this->HTMLPurifier_Lexer;
         $this->assertIdentical(false, $HP->nextWhiteSpace('asdf'));
         $this->assertIdentical(0, $HP->nextWhiteSpace(' asdf'));
         $this->assertIdentical(0, $HP->nextWhiteSpace("\nasdf"));
@@ -26,7 +26,7 @@ class Test_HTML_Lexer extends UnitTestCase
     }
     
     function test_parseData() {
-        $HP =& $this->HTML_Lexer;
+        $HP =& $this->HTMLPurifier_Lexer;
         $this->assertIdentical('asdf', $HP->parseData('asdf'));
         $this->assertIdentical('&', $HP->parseData('&amp;'));
         $this->assertIdentical('"', $HP->parseData('&quot;'));
@@ -144,12 +144,12 @@ class Test_HTML_Lexer extends UnitTestCase
         // SAX chokes on this? We do have entity parsing on, so it should work!
         
         foreach($input as $i => $discard) {
-            $result = $this->HTML_Lexer->tokenizeHTML($input[$i]);
+            $result = $this->HTMLPurifier_Lexer->tokenizeHTML($input[$i]);
             $this->assertEqual($expect[$i], $result);
             paintIf($result, $expect[$i] != $result);
             
             // assert unless I say otherwise
-            $sax_result = $this->HTML_Lexer_Sax->tokenizeHTML($input[$i]);
+            $sax_result = $this->HTMLPurifier_Lexer_Sax->tokenizeHTML($input[$i]);
             if (!isset($sax_expect[$i])) {
                 // by default, assert with normal result
                 $this->assertEqual($expect[$i], $sax_result);
@@ -191,7 +191,7 @@ class Test_HTML_Lexer extends UnitTestCase
         
         $size = count($input);
         for($i = 0; $i < $size; $i++) {
-            $result = $this->HTML_Lexer->tokenizeAttributeString($input[$i]);
+            $result = $this->HTMLPurifier_Lexer->tokenizeAttributeString($input[$i]);
             $this->assertEqual($expect[$i], $result);
             paintIf($result, $expect[$i] != $result);
         }
