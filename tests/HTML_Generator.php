@@ -15,22 +15,26 @@ class Test_HTML_Generator extends UnitTestCase
         $inputs = array();
         $expect = array();
         
-        $inputs[0] = new MF_Text('Foobar.<>');
+        $inputs[0] = new HTMLPurifier_Token_Text('Foobar.<>');
         $expect[0] = 'Foobar.&lt;&gt;';
         
-        $inputs[1] = new MF_StartTag('a', array('href' => 'dyn?a=foo&b=bar'));
+        $inputs[1] = new HTMLPurifier_Token_Start('a',
+                            array('href' => 'dyn?a=foo&b=bar')
+                         );
         $expect[1] = '<a href="dyn?a=foo&amp;b=bar">';
         
-        $inputs[2] = new MF_EndTag('b');
+        $inputs[2] = new HTMLPurifier_Token_End('b');
         $expect[2] = '</b>';
         
-        $inputs[3] = new MF_EmptyTag('br', array('style' => 'font-family:"Courier New";'));
+        $inputs[3] = new HTMLPurifier_Token_Empty('br',
+                            array('style' => 'font-family:"Courier New";')
+                         );
         $expect[3] = '<br style="font-family:&quot;Courier New&quot;;" />';
         
-        $inputs[4] = new MF_StartTag('asdf');
+        $inputs[4] = new HTMLPurifier_Token_Start('asdf');
         $expect[4] = '<asdf>';
         
-        $inputs[5] = new MF_EmptyTag('br');
+        $inputs[5] = new HTMLPurifier_Token_Empty('br');
         $expect[5] = '<br />';
         
         foreach ($inputs as $i => $input) {
@@ -69,9 +73,9 @@ class Test_HTML_Generator extends UnitTestCase
     function test_generateFromTokens() {
         
         $tokens = array(
-            new MF_StartTag('b'),
-            new MF_Text('Foobar!'),
-            new MF_EndTag('b')
+            new HTMLPurifier_Token_Start('b'),
+            new HTMLPurifier_Token_Text('Foobar!'),
+            new HTMLPurifier_Token_End('b')
             );
         $expect = '<b>Foobar!</b>';
         $this->assertEqual($expect, $this->gen->generateFromTokens($tokens));

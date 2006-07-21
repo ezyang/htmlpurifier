@@ -12,18 +12,18 @@ class HTML_Generator
     }
     
     function generateFromToken($token) {
-        if (is_a($token, 'MF_StartTag')) {
+        if ($token->type == 'start') {
             $attr = $this->generateAttributes($token->attributes);
             return '<' . $token->name . ($attr ? ' ' : '') . $attr . '>';
             
-        } elseif (is_a($token, 'MF_EndTag')) {
+        } elseif ($token->type == 'end') {
             return '</' . $token->name . '>';
             
-        } elseif (is_a($token, 'MF_EmptyTag')) {
+        } elseif ($token->type == 'empty') {
             $attr = $this->generateAttributes($token->attributes);
              return '<' . $token->name . ($attr ? ' ' : '') . $attr . ' />';
             
-        } elseif (is_a($token, 'MF_Text')) {
+        } elseif ($token->type == 'text') {
             return htmlentities($token->data, ENT_COMPAT, 'UTF-8');
             
         } else {

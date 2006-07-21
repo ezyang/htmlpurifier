@@ -162,10 +162,10 @@ class PureHTMLDefinition
         if (empty($this->info)) $this->loadData();
         $result = array();
         foreach($tokens as $token) {
-            if (is_subclass_of($token, 'MF_Tag')) {
+            if (!empty( $token->is_tag )) {
                 if (!isset($this->info[$token->name])) {
                     // invalid tag, generate HTML and insert in
-                    $token = new MF_Text(
+                    $token = new HTMLPurifier_Token_Text(
                         $this->generator->generateFromToken($token)
                     );
                 }
@@ -186,7 +186,7 @@ class PureHTMLDefinition
         $result = array();
         $current_nesting = array();
         foreach ($tokens as $token) {
-            if (!is_subclass_of($token, 'MF_Tag')) {
+            if (empty( $token->is_tag )) {
                 $result[] = $token;
                 continue;
             }
@@ -196,7 +196,8 @@ class PureHTMLDefinition
             if ($info->child_def->type == 'empty' &&
                 $token->type == 'start' ) {
                 
-                $result[] = new MF_EmptyTag($token->name, $token->attributes);
+                $result[] = new HTMLPurifier_Token_Empty($token->name,
+                                                         $token->attributes);
                 continue;
             }
             
@@ -204,8 +205,9 @@ class PureHTMLDefinition
             if ($info->child_def->type != 'empty' &&
                 $token->type == 'empty' ) {
                 
-                $result[] = new MF_StartTag($token->name, $token->attributes);
-                $result[] = new MF_EndTag($token->name);
+                $result[] = new HTMLPurifier_Token_Start($token->name,
+                                                         $token->attributes);
+                $result[] = new HTMLPurifier_Token_End($token->name);
                 
                 continue;
             }
@@ -228,7 +230,7 @@ class PureHTMLDefinition
                     if ($current_parent->name == 'p' &&
                         isset($this->info_closes_p[$token->name])
                         ) {
-                        $result[] = new MF_EndTag('p');
+                        $result[] = new HTMLPurifier_Token_End('p');
                         $result[] = $token;
                         $current_nesting[] = $token;
                         continue;
@@ -238,7 +240,7 @@ class PureHTMLDefinition
                     if ($current_parent->name == 'li' &&
                         $token->name == 'li'
                         ) {
-                        $result[] = new MF_EndTag('li');
+                        $result[] = new HTMLPurifier_Token_End('li');
                         $result[] = $token;
                         $current_nesting[] = $token;
                         continue;
@@ -263,7 +265,7 @@ class PureHTMLDefinition
             
             // make sure that we have something open
             if (empty($current_nesting)) {
-                $result[] = new MF_Text(
+                $result[] = new HTMLPurifier_Token_Text(
                     $this->generator->generateFromToken($token)
                 );
                 continue;
@@ -298,7 +300,7 @@ class PureHTMLDefinition
             
             // we still didn't find the tag, so translate to text
             if ($skipped_tags === false) {
-                $result[] = new MF_Text(
+                $result[] = new HTMLPurifier_Token_Text(
                     $this->generator->generateFromToken($token)
                 );
                 continue;
@@ -308,7 +310,7 @@ class PureHTMLDefinition
             // note that skipped tags contains the element we need closed
             $size = count($skipped_tags);
             for ($i = $size - 1; $i >= 0; $i--) {
-                $result[] = new MF_EndTag($skipped_tags[$i]->name);
+                $result[] = new HTMLPurifier_Token_End($skipped_tags[$i]->name);
             }
             
             // done!
@@ -320,7 +322,8 @@ class PureHTMLDefinition
         if (!empty($current_nesting)) {
             $size = count($current_nesting);
             for ($i = $size - 1; $i >= 0; $i--) {
-                $result[] = new MF_EndTag($current_nesting[$i]->name);
+                $result[] =
+                    new HTMLPurifier_Token_End($current_nesting[$i]->name);
             }
         }
         
@@ -331,8 +334,8 @@ class PureHTMLDefinition
         if (empty($this->info)) $this->loadData();
         
         // insert implicit "parent" node, will be removed at end
-        array_unshift($tokens, new MF_StartTag('div'));
-        $tokens[] = new MF_EndTag('div');
+        array_unshift($tokens, new HTMLPurifier_Token_Start('div'));
+        $tokens[] = new HTMLPurifier_Token_End('div');
         
         for ($i = 0, $size = count($tokens) ; $i < $size; ) {
             
@@ -553,7 +556,7 @@ class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
                 if (!isset($this->elements[$token->name])) {
                     $is_deleting = true;
                     if ($pcdata_allowed) {
-                        $result[] = new MF_Text(
+                        $result[] = new HTMLPurifier_Token_Text(
                             $this->gen->generateFromToken($token)
                         );
                     }
@@ -563,7 +566,10 @@ class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
             if (!$is_deleting) {
                 $result[] = $token;
             } elseif ($pcdata_allowed) {
-                $result[] = new MF_Text($this->gen->generateFromToken($token));
+                $result[] =
+                    new HTMLPurifier_Token_Text(
+                        $this->gen->generateFromToken( $token )
+                    );
             } else {
                 // drop silently
             }

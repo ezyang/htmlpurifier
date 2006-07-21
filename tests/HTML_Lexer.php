@@ -46,83 +46,83 @@ class Test_HTML_Lexer extends UnitTestCase
         
         $input[1] = 'This is regular text.';
         $expect[1] = array(
-            new MF_Text('This is regular text.')
+            new HTMLPurifier_Token_Text('This is regular text.')
             );
         
         $input[2] = 'This is <b>bold</b> text';
         $expect[2] = array(
-            new MF_Text('This is ')
-           ,new MF_StartTag('b', array())
-           ,new MF_Text('bold')
-           ,new MF_EndTag('b')
-           ,new MF_Text(' text')
+            new HTMLPurifier_Token_Text('This is ')
+           ,new HTMLPurifier_Token_Start('b', array())
+           ,new HTMLPurifier_Token_Text('bold')
+           ,new HTMLPurifier_Token_End('b')
+           ,new HTMLPurifier_Token_Text(' text')
             );
         
         $input[3] = '<DIV>Totally rad dude. <b>asdf</b></div>';
         $expect[3] = array(
-            new MF_StartTag('DIV', array())
-           ,new MF_Text('Totally rad dude. ')
-           ,new MF_StartTag('b', array())
-           ,new MF_Text('asdf')
-           ,new MF_EndTag('b')
-           ,new MF_EndTag('div')
+            new HTMLPurifier_Token_Start('DIV', array())
+           ,new HTMLPurifier_Token_Text('Totally rad dude. ')
+           ,new HTMLPurifier_Token_Start('b', array())
+           ,new HTMLPurifier_Token_Text('asdf')
+           ,new HTMLPurifier_Token_End('b')
+           ,new HTMLPurifier_Token_End('div')
             );
         
         $input[4] = '<asdf></asdf><d></d><poOloka><poolasdf><ds></asdf></ASDF>';
         $expect[4] = array(
-            new MF_StartTag('asdf')
-           ,new MF_EndTag('asdf')
-           ,new MF_StartTag('d')
-           ,new MF_EndTag('d')
-           ,new MF_StartTag('poOloka')
-           ,new MF_StartTag('poolasdf')
-           ,new MF_StartTag('ds')
-           ,new MF_EndTag('asdf')
-           ,new MF_EndTag('ASDF')
+            new HTMLPurifier_Token_Start('asdf')
+           ,new HTMLPurifier_Token_End('asdf')
+           ,new HTMLPurifier_Token_Start('d')
+           ,new HTMLPurifier_Token_End('d')
+           ,new HTMLPurifier_Token_Start('poOloka')
+           ,new HTMLPurifier_Token_Start('poolasdf')
+           ,new HTMLPurifier_Token_Start('ds')
+           ,new HTMLPurifier_Token_End('asdf')
+           ,new HTMLPurifier_Token_End('ASDF')
             );
         
         $input[5] = '<a'."\t".'href="foobar.php"'."\n".'title="foo!">Link to <b id="asdf">foobar</b></a>';
         $expect[5] = array(
-            new MF_StartTag('a',array('href'=>'foobar.php','title'=>'foo!'))
-           ,new MF_Text('Link to ')
-           ,new MF_StartTag('b',array('id'=>'asdf'))
-           ,new MF_Text('foobar')
-           ,new MF_EndTag('b')
-           ,new MF_EndTag('a')
+            new HTMLPurifier_Token_Start('a',array('href'=>'foobar.php','title'=>'foo!'))
+           ,new HTMLPurifier_Token_Text('Link to ')
+           ,new HTMLPurifier_Token_Start('b',array('id'=>'asdf'))
+           ,new HTMLPurifier_Token_Text('foobar')
+           ,new HTMLPurifier_Token_End('b')
+           ,new HTMLPurifier_Token_End('a')
             );
         
         $input[6] = '<br />';
         $expect[6] = array(
-            new MF_EmptyTag('br')
+            new HTMLPurifier_Token_Empty('br')
             );
         
         // [INVALID] [RECOVERABLE]
         $input[7] = '<!-- Comment --> <!-- not so well formed --->';
         $expect[7] = array(
-            new MF_Comment(' Comment ')
-           ,new MF_Text(' ')
-           ,new MF_Comment(' not so well formed -')
+            new HTMLPurifier_Token_Comment(' Comment ')
+           ,new HTMLPurifier_Token_Text(' ')
+           ,new HTMLPurifier_Token_Comment(' not so well formed -')
             );
         $sax_expect[7] = false; // we need to figure out proper comment output
         
         // [INVALID]
         $input[8] = '<a href=""';
         $expect[8] = array(
-            new MF_Text('<a href=""')
+            new HTMLPurifier_Token_Text('<a href=""')
             );
         // SAX parses it into a tag
         $sax_expect[8] = array(
-            new MF_StartTag('a', array('href'=>''))
+            new HTMLPurifier_Token_Start('a', array('href'=>''))
             ); 
         
         $input[9] = '&lt;b&gt;';
         $expect[9] = array(
-            new MF_Text('<b>')
+            new HTMLPurifier_Token_Text('<b>')
             );
         $sax_expect[9] = array(
-            new MF_Text('<')
-           ,new MF_Text('b')
-           ,new MF_Text('>')
+            new HTMLPurifier_Token_Text('<')
+           ,new HTMLPurifier_Token_Text('b')
+           ,new HTMLPurifier_Token_Text('>')
             );
         // note that SAX can clump text nodes together. We won't be
         // too picky though
@@ -130,16 +130,16 @@ class Test_HTML_Lexer extends UnitTestCase
         // [INVALID]
         $input[10] = '<a "=>';
         $expect[10] = array(
-            new MF_StartTag('a', array('"' => ''))
+            new HTMLPurifier_Token_Start('a', array('"' => ''))
             );
         
         // [INVALID] [RECOVERABLE]
         $input[11] = '"';
-        $expect[11] = array( new MF_Text('"') );
+        $expect[11] = array( new HTMLPurifier_Token_Text('"') );
         
         // compare with this valid one:
         $input[12] = '&quot;';
-        $expect[12] = array( new MF_Text('"') );
+        $expect[12] = array( new HTMLPurifier_Token_Text('"') );
         $sax_expect[12] = false;
         // SAX chokes on this? We do have entity parsing on, so it should work!
         

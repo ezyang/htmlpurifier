@@ -121,7 +121,7 @@ class HTML_Lexer
             if (!$inside_tag && $position_next_lt !== false) {
                 // We are not inside tag and there still is another tag to parse
                 $array[] = new
-                    MF_Text(
+                    HTMLPurifier_Token_Text(
                         html_entity_decode(
                             substr(
                                 $string, $cursor, $position_next_lt - $cursor
@@ -138,7 +138,7 @@ class HTML_Lexer
                 if ($cursor === strlen($string)) break;
                 // Create Text of rest of string
                 $array[] = new
-                    MF_Text(
+                    HTMLPurifier_Token_Text(
                         html_entity_decode(
                             substr(
                                 $string, $cursor
@@ -158,7 +158,7 @@ class HTML_Lexer
                     substr($segment,strlen($segment)-2,2) == '--'
                 ) {
                     $array[] = new
-                        MF_Comment(
+                        HTMLPurifier_Token_Comment(
                             substr(
                                 $segment, 3, strlen($segment) - 5
                             )
@@ -172,7 +172,7 @@ class HTML_Lexer
                 $is_end_tag = (strpos($segment,'/') === 0);
                 if ($is_end_tag) {
                     $type = substr($segment, 1);
-                    $array[] = new MF_EndTag($type);
+                    $array[] = new HTMLPurifier_Token_End($type);
                     $inside_tag = false;
                     $cursor = $position_next_gt + 1;
                     continue;
@@ -191,9 +191,9 @@ class HTML_Lexer
                 $position_first_space = $this->nextWhiteSpace($segment);
                 if ($position_first_space === false) {
                     if ($is_self_closing) {
-                        $array[] = new MF_EmptyTag($segment);
+                        $array[] = new HTMLPurifier_Token_Empty($segment);
                     } else {
-                        $array[] = new MF_StartTag($segment, array());
+                        $array[] = new HTMLPurifier_Token_Start($segment);
                     }
                     $inside_tag = false;
                     $cursor = $position_next_gt + 1;
@@ -210,16 +210,16 @@ class HTML_Lexer
                     );
                 $attributes = $this->tokenizeAttributeString($attribute_string);
                 if ($is_self_closing) {
-                    $array[] = new MF_EmptyTag($type, $attributes);
+                    $array[] = new HTMLPurifier_Token_Empty($type, $attributes);
                 } else {
-                    $array[] = new MF_StartTag($type, $attributes);
+                    $array[] = new HTMLPurifier_Token_Start($type, $attributes);
                 }
                 $cursor = $position_next_gt + 1;
                 $inside_tag = false;
                 continue;
             } else {
                 $array[] = new
-                    MF_Text(
+                    HTMLPurifier_Token_Text(
                         '<' .
                         html_entity_decode(
                             substr($string, $cursor),
@@ -362,9 +362,9 @@ class HTML_Lexer_Sax extends HTML_Lexer
     
     function openHandler(&$parser, $name, $attrs, $closed) {
         if ($closed) {
-            $this->tokens[] = new MF_EmptyTag($name, $attrs);
+            $this->tokens[] = new HTMLPurifier_Token_Empty($name, $attrs);
         } else {
-            $this->tokens[] = new MF_StartTag($name, $attrs);
+            $this->tokens[] = new HTMLPurifier_Token_Start($name, $attrs);
         }
         return true;
     }
@@ -373,21 +373,21 @@ class HTML_Lexer_Sax extends HTML_Lexer
         // HTMLSax3 seems to always send empty tags an extra close tag
         // check and ignore if you see it:
         // [TESTME] to make sure it doesn't overreach
-        if (is_a($this->tokens[count($this->tokens)-1], 'MF_EmptyTag')) {
+        if ($this->tokens[count($this->tokens)-1]->type == 'empty') {
             return true;
         }
-        $this->tokens[] = new MF_EndTag($name);
+        $this->tokens[] = new HTMLPurifier_Token_End($name);
         return true;
     }
     
     function dataHandler(&$parser, $data) {
-        $this->tokens[] = new MF_Text($data);
+        $this->tokens[] = new HTMLPurifier_Token_Text($data);
         return true;
     }
     
     function escapeHandler(&$parser, $data) {
         if (strpos($data, '-') === 0) {
-            $this->tokens[] = new MF_Comment($data);
+            $this->tokens[] = new HTMLPurifier_Token_Comment($data);
         }
         return true;
     }
