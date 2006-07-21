@@ -1,12 +1,12 @@
 <?php
 
-class Test_HTMLDTD_ChildDef extends UnitTestCase
+class Test_HTMLPurifier_ChildDef extends UnitTestCase
 {
     
     var $lex;
     var $gen;
     
-    function Test_HTMLDTD_ChildDef() {
+    function Test_HTMLPurifier_ChildDef() {
         $this->lex = new HTMLPurifier_Lexer();
         $this->gen = new HTMLPurifier_Generator();
         parent::UnitTestCase();
@@ -29,7 +29,7 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
     function test_complex() {
         
         // the table definition
-        $def = new HTMLDTD_ChildDef(
+        $def = new HTMLPurifier_ChildDef(
             '(caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))');
         
         $inputs[0] = '';
@@ -57,7 +57,7 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
         // simple is actually an abstract class
         // but we're unit testing some of the conv. functions it gives
         
-        $def = new HTMLDTD_ChildDef_Simple('foobar | bang |gizmo');
+        $def = new HTMLPurifier_ChildDef_Simple('foobar | bang |gizmo');
         $this->assertEqual($def->elements,
           array(
             'foobar' => true
@@ -65,7 +65,7 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
            ,'gizmo'  => true
           ));
         
-        $def = new HTMLDTD_ChildDef_Simple(array('href', 'src'));
+        $def = new HTMLPurifier_ChildDef_Simple(array('href', 'src'));
         $this->assertEqual($def->elements,
           array(
             'href' => true
@@ -75,7 +75,7 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
     
     function test_required_pcdata_forbidden() {
         
-        $def = new HTMLDTD_ChildDef_Required('dt | dd');
+        $def = new HTMLPurifier_ChildDef_Required('dt | dd');
         
         $inputs[0] = array();
         $expect[0] = false;
@@ -103,7 +103,7 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
     }
     
     function test_required_pcdata_allowed() {
-        $def = new HTMLDTD_ChildDef_Required('#PCDATA | b');
+        $def = new HTMLPurifier_ChildDef_Required('#PCDATA | b');
         
         $inputs[0] = '<b>Bold text</b><img />';
         $expect[0] = '<b>Bold text</b>&lt;img /&gt;';
@@ -112,7 +112,7 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
     }
     
     function test_optional() {
-        $def = new HTMLDTD_ChildDef_Optional('b | i');
+        $def = new HTMLPurifier_ChildDef_Optional('b | i');
         
         $inputs[0] = '<b>Bold text</b><img />';
         $expect[0] = '<b>Bold text</b>';
@@ -125,14 +125,14 @@ class Test_HTMLDTD_ChildDef extends UnitTestCase
     
 }
 
-class Test_PureHTMLDefinition extends UnitTestCase
+class Test_HTMLPurifier_Definition extends UnitTestCase
 {
     
     var $def, $lex;
     
-    function Test_PureHTMLDefinition() {
+    function Test_HTMLPurifier_Definition() {
         $this->UnitTestCase();
-        $this->def = new PureHTMLDefinition();
+        $this->def = new HTMLPurifier_Definition();
         $this->def->loadData();
         $this->lex = new HTMLPurifier_Lexer();
     }

@@ -1,6 +1,6 @@
 <?php
 
-class PureHTMLDefinition
+class HTMLPurifier_Definition
 {
     
     var $generator;
@@ -28,7 +28,7 @@ class PureHTMLDefinition
         'ul'            => true
         );
     
-    function PureHTMLDefinition() {
+    function HTMLPurifier_Definition() {
         $this->generator = new HTMLPurifier_Generator();
     }
     
@@ -64,21 +64,21 @@ class PureHTMLDefinition
         $e_inline = "a | $e_special | $e_fontstyle | $e_phrase".
           " | $e_inline_forms";
         // note the casing
-        $e_Inline = new HTMLDTD_ChildDef_Optional("#PCDATA | $e_inline".
+        $e_Inline = new HTMLPurifier_ChildDef_Optional("#PCDATA | $e_inline".
           " | $e_misc_inline");
         $e_heading = 'h1|h2|h3|h4|h5|h6';
         $e_lists = 'ul | ol | dl';
         $e_blocktext = 'pre | hr | blockquote | address';
         $e_block = "p | $e_heading | div | $e_lists | $e_blocktext | table";
-        $e_Flow = new HTMLDTD_ChildDef_Optional("#PCDATA | $e_block".
+        $e_Flow = new HTMLPurifier_ChildDef_Optional("#PCDATA | $e_block".
           " | $e_inline | $e_misc");
-        $e_a_content = new HTMLDTD_ChildDef_Optional("#PCDATA | $e_special".
+        $e_a_content = new HTMLPurifier_ChildDef_Optional("#PCDATA | $e_special".
           " | $e_fontstyle | $e_phrase | $e_inline_forms | $e_misc_inline");
-        $e_pre_content = new HTMLDTD_ChildDef_Optional("#PCDATA | a".
+        $e_pre_content = new HTMLPurifier_ChildDef_Optional("#PCDATA | a".
           " | $e_special_basic | $e_fontstyle_basic | $e_phrase_basic".
           " | $e_inline_forms | $e_misc_inline");
-        $e_form_content = new HTMLDTD_ChildDef_Optional(''); //unused
-        $e_form_button_content = new HTMLDTD_ChildDef_Optional(''); // unused
+        $e_form_content = new HTMLPurifier_ChildDef_Optional(''); //unused
+        $e_form_button_content = new HTMLPurifier_ChildDef_Optional(''); // unused
         
         $this->info['ins'] =
         $this->info['del'] = 
@@ -126,22 +126,22 @@ class PureHTMLDefinition
         $this->info['ol']   =
         $this->info['ul']   =
           new HTMLDTD_Element(
-            new HTMLDTD_ChildDef_Required('li')
+            new HTMLPurifier_ChildDef_Required('li')
           );
         
         $this->info['dl']   =
           new HTMLDTD_Element(
-            new HTMLDTD_ChildDef_Required('dt|dd')
+            new HTMLPurifier_ChildDef_Required('dt|dd')
           );
         $this->info['address'] =
           new HTMLDTD_Element(
-            new HTMLDTD_ChildDef_Optional("#PCDATA | p | $e_inline".
+            new HTMLPurifier_ChildDef_Optional("#PCDATA | p | $e_inline".
               " | $e_misc_inline")
           );
         
         $this->info['img']  =
         $this->info['br']   =
-        $this->info['hr']   = new HTMLDTD_Element(new HTMLDTD_ChildDef_Empty());
+        $this->info['hr']   = new HTMLDTD_Element(new HTMLPurifier_ChildDef_Empty());
         
         $this->info['pre']  = new HTMLDTD_Element($e_pre_content);
         
@@ -437,7 +437,7 @@ class HTMLDTD_Element
     
 }
 
-// HTMLDTD_ChildDef and inheritance have three types of output:
+// HTMLPurifier_ChildDef and inheritance have three types of output:
 // true = leave nodes as is
 // false = delete parent node and all children
 // array(...) = replace children nodes with these
@@ -448,12 +448,12 @@ class HTMLDTD_Element
 
 // we may end up writing custom code for each HTML case
 // in order to make it self correcting
-class HTMLDTD_ChildDef
+class HTMLPurifier_ChildDef
 {
     var $type = 'custom';
     var $dtd_regex;
     var $_pcre_regex;
-    function HTMLDTD_ChildDef($dtd_regex) {
+    function HTMLPurifier_ChildDef($dtd_regex) {
         $this->dtd_regex = $dtd_regex;
         $this->_compileRegex();
     }
@@ -495,10 +495,10 @@ class HTMLDTD_ChildDef
         return (bool) $okay;
     }
 }
-class HTMLDTD_ChildDef_Simple extends HTMLDTD_ChildDef
+class HTMLPurifier_ChildDef_Simple extends HTMLPurifier_ChildDef
 {
     var $elements = array();
-    function HTMLDTD_ChildDef_Simple($elements) {
+    function HTMLPurifier_ChildDef_Simple($elements) {
         if (is_string($elements)) {
             $elements = str_replace(' ', '', $elements);
             $elements = explode('|', $elements);
@@ -512,7 +512,7 @@ class HTMLDTD_ChildDef_Simple extends HTMLDTD_ChildDef
         trigger_error('Cannot call abstract function!', E_USER_ERROR);
     }
 }
-class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
+class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef_Simple
 {
     var $type = 'required';
     function validateChildren($tokens_of_children) {
@@ -583,7 +583,7 @@ class HTMLDTD_ChildDef_Required extends HTMLDTD_ChildDef_Simple
 
 // only altered behavior is that it returns an empty array
 // instead of a false (to delete the node)
-class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Required
+class HTMLPurifier_ChildDef_Optional extends HTMLPurifier_ChildDef_Required
 {
     var $type = 'optional';
     function validateChildren($tokens_of_children) {
@@ -594,19 +594,19 @@ class HTMLDTD_ChildDef_Optional extends HTMLDTD_ChildDef_Required
 }
 
 // placeholder
-class HTMLDTD_ChildDef_Empty extends HTMLDTD_ChildDef
+class HTMLPurifier_ChildDef_Empty extends HTMLPurifier_ChildDef
 {
     var $type = 'empty';
-    function HTMLDTD_ChildDef_Empty() {}
+    function HTMLPurifier_ChildDef_Empty() {}
     function validateChildren() {
         return false;
     }
 }
 
-class HTMLDTD_AttrDef
+class HTMLPurifier_AttrDef
 {
     var $def;
-    function HTMLDTD_AttrDef($def) {
+    function HTMLPurifier_AttrDef($def) {
         $this->def = $def;
     }
 }

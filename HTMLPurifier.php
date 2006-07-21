@@ -9,7 +9,7 @@ class HTMLPurifier
     
     function HTMLPurifier() {
         $this->lexer        = new HTMLPurifier_Lexer();
-        $this->definition   = new PureHTMLDefinition();
+        $this->definition   = new HTMLPurifier_Definition();
         $this->generator    = new HTMLPurifier_Generator();
     }
     
