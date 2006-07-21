@@ -1,16 +1,16 @@
 <?php
 
-class HTML_Purifier
+class HTMLPurifier
 {
     
     var $lexer;
     var $definition;
     var $generator;
     
-    function HTML_Purifier() {
-        $this->lexer = new HTMLPurifier_Lexer();
-        $this->definition = new PureHTMLDefinition();
-        $this->generator = new HTMLPurifier_Generator();
+    function HTMLPurifier() {
+        $this->lexer        = new HTMLPurifier_Lexer();
+        $this->definition   = new PureHTMLDefinition();
+        $this->generator    = new HTMLPurifier_Generator();
     }
     
     function purify($html) {
