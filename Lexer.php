@@ -21,8 +21,13 @@ class HTMLPurifier_Lexer
             $lexer = $prototype;
         }
         if (empty($lexer)) {
-            require_once 'HTMLPurifier/Lexer/DirectLex.php';
-            $lexer = new HTMLPurifier_Lexer_DirectLex();
+            if (version_compare(PHP_VERSION, '5', '>=')) {
+                require_once 'HTMLPurifier/Lexer/DOMLex.php';
+                $lexer = new HTMLPurifier_Lexer_DOMLex();
+            } else {
+                require_once 'HTMLPurifier/Lexer/DirectLex.php';
+                $lexer = new HTMLPurifier_Lexer_DirectLex();
+            }
         }
         return $lexer;
     }
