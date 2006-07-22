@@ -1,24 +1,21 @@
 <?php
 
-/* TODO
-    * Benchmark the SAX parser with my homemade one
- */
-
-require_once 'HTMLPurifier/Lexer.php';
+require_once 'HTMLPurifier/Lexer/DirectLex.php';
+require_once 'HTMLPurifier/Lexer/PEARSax3.php';
 
 class Test_HTMLPurifier_Lexer extends UnitTestCase
 {
     
-    var $HTMLPurifier_Lexer;
-    var $HTMLPurifier_Lexer_Sax;
+    var $DirectLex;
+    var $PEARSax3;
     
     function setUp() {
-        $this->HTMLPurifier_Lexer     =& new HTMLPurifier_Lexer();
-        $this->HTMLPurifier_Lexer_Sax =& new HTMLPurifier_Lexer_Sax();
+        $this->DirectLex =& new HTMLPurifier_Lexer_DirectLex();
+        $this->PEARSax3  =& new HTMLPurifier_Lexer_PEARSax3();
     }
     
     function test_nextWhiteSpace() {
-        $HP =& $this->HTMLPurifier_Lexer;
+        $HP =& $this->DirectLex;
         $this->assertIdentical(false, $HP->nextWhiteSpace('asdf'));
         $this->assertIdentical(0, $HP->nextWhiteSpace(' asdf'));
         $this->assertIdentical(0, $HP->nextWhiteSpace("\nasdf"));
@@ -28,7 +25,7 @@ class Test_HTMLPurifier_Lexer extends UnitTestCase
     }
     
     function test_parseData() {
-        $HP =& $this->HTMLPurifier_Lexer;
+        $HP =& $this->DirectLex;
         $this->assertIdentical('asdf', $HP->parseData('asdf'));
         $this->assertIdentical('&', $HP->parseData('&amp;'));
         $this->assertIdentical('"', $HP->parseData('&quot;'));
@@ -146,12 +143,12 @@ class Test_HTMLPurifier_Lexer extends UnitTestCase
         // SAX chokes on this? We do have entity parsing on, so it should work!
         
         foreach($input as $i => $discard) {
-            $result = $this->HTMLPurifier_Lexer->tokenizeHTML($input[$i]);
+            $result = $this->DirectLex->tokenizeHTML($input[$i]);
             $this->assertEqual($expect[$i], $result);
             paintIf($result, $expect[$i] != $result);
             
             // assert unless I say otherwise
-            $sax_result = $this->HTMLPurifier_Lexer_Sax->tokenizeHTML($input[$i]);
+            $sax_result = $this->PEARSax3->tokenizeHTML($input[$i]);
             if (!isset($sax_expect[$i])) {
                 // by default, assert with normal result
                 $this->assertEqual($expect[$i], $sax_result);
@@ -193,7 +190,7 @@ class Test_HTMLPurifier_Lexer extends UnitTestCase
         
         $size = count($input);
         for($i = 0; $i < $size; $i++) {
-            $result = $this->HTMLPurifier_Lexer->tokenizeAttributeString($input[$i]);
+            $result = $this->DirectLex->tokenizeAttributeString($input[$i]);
             $this->assertEqual($expect[$i], $result);
             paintIf($result, $expect[$i] != $result);
         }

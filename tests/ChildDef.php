@@ -11,7 +11,7 @@ class Test_HTMLPurifier_ChildDef extends UnitTestCase
     var $gen;
     
     function Test_HTMLPurifier_ChildDef() {
-        $this->lex = new HTMLPurifier_Lexer();
+        $this->lex = HTMLPurifier_Lexer::create();
         $this->gen = new HTMLPurifier_Generator();
         parent::UnitTestCase();
     }
@@ -81,7 +81,7 @@ class Test_HTMLPurifier_ChildDef extends UnitTestCase
         
         $def = new HTMLPurifier_ChildDef_Required('dt | dd');
         
-        $inputs[0] = array();
+        $inputs[0] = '';
         $expect[0] = false;
         
         $inputs[1] = '<dt>Term</dt>Text in an illegal location'.

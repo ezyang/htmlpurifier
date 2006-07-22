@@ -1,19 +1,16 @@
 <?php
 
-// test our parser versus HTMLSax parser
-
-set_time_limit(5);
-
 // emulates inserting a dir called HTMLPurifier into your class dir
 set_include_path(get_include_path() . PATH_SEPARATOR . '../../');
 
+require_once 'HTMLPurifier/Lexer/DirectLex.php';
+require_once 'HTMLPurifier/Lexer/PEARSax3.php';
+
 // PEAR
-require_once 'Benchmark/Timer.php';
-require_once 'XML/HTMLSax3.php';
-require_once 'Text/Password.php';
+require_once 'Benchmark/Timer.php'; // to do the timing
+require_once 'Text/Password.php'; // for generating random input
 
-require_once 'HTMLPurifier/Lexer.php';
-
+// custom class to aid unit testing
 class TinyTimer extends Benchmark_Timer
 {
     
@@ -37,11 +34,13 @@ class TinyTimer extends Benchmark_Timer
         foreach ($result as $k => $v) {
             if ($v['name'] == 'Start' || $v['name'] == 'Stop') continue;
             
-            $perc = (($v['diff'] * 100) / $total);
-            $tperc = (($v['total'] * 100) / $total);
+            //$perc = (($v['diff'] * 100) / $total);
+            //$tperc = (($v['total'] * 100) / $total);
             
-            $out .= '<td align="right">' . number_format($perc, 2, '.', '') .
-                   "%</td>";
+            $out .= '<td align="right">' . $v['diff'] . "</td>";
+            
+            //$out .= '<td align="right">' . number_format($perc, 2, '.', '') .
+            //       "%</td>";
             
         }
         
@@ -54,12 +53,12 @@ class TinyTimer extends Benchmark_Timer
 ?>
 <html>
 <head>
-<title>Benchmark: HTMLPurifier_Lexer versus HTMLSax</title>
+<title>Benchmark: DirectLex versus PEAR's XML_HTMLSax3</title>
 </head>
 <body>
-<h1>Benchmark: HTMLPurifier_Lexer versus HTMLSax</h1>
+<h1>Benchmark: DirectLex versus PEAR's XML_HTMLSax3</h1>
 <table border="1">
-<tr><th>Case</th><th>HTMLPurifier_Lexer</th><th>HTMLPurifier_Lexer_Sax</th></tr>
+<tr><th>Case</th><th>DirectLex</th><th>XML_HTMLSax3</th></tr>
 <?php
 
 
@@ -67,11 +66,11 @@ function do_benchmark($name, $document) {
     $timer = new TinyTimer($name);
     $timer->start();
     
-    $lexer = new HTMLPurifier_Lexer();
+    $lexer = new HTMLPurifier_Lexer_DirectLex();
     $tokens = $lexer->tokenizeHTML($document);
     $timer->setMarker('HTMLPurifier_Lexer');
     
-    $lexer = new HTMLPurifier_Lexer_Sax();
+    $lexer = new HTMLPurifier_Lexer_PEARSax3();
     $sax_tokens = $lexer->tokenizeHTML($document);
     $timer->setMarker('HTMLPurifier_Lexer_Sax');
     
