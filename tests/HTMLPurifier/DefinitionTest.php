@@ -3,12 +3,12 @@
 require_once 'HTMLPurifier/Definition.php';
 require_once 'HTMLPurifier/Lexer.php';
 
-class Test_HTMLPurifier_Definition extends UnitTestCase
+class HTMLPurifier_DefinitionTest extends UnitTestCase
 {
     
     var $def, $lex;
     
-    function Test_HTMLPurifier_Definition() {
+    function HTMLPurifier_DefinitionTest() {
         $this->UnitTestCase();
         $this->def = new HTMLPurifier_Definition();
         $this->def->loadData();

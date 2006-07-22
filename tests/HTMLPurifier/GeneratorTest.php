@@ -2,12 +2,12 @@
 
 require_once 'HTMLPurifier/Generator.php';
 
-class Test_HTMLPurifier_Generator extends UnitTestCase
+class HTMLPurifier_GeneratorTest extends UnitTestCase
 {
     
     var $gen;
     
-    function Test_HTMLPurifier_Generator() {
+    function HTMLPurifier_GeneratorTest() {
         $this->UnitTestCase();
         $this->gen = new HTMLPurifier_Generator();
     }

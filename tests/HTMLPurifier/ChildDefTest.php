@@ -4,13 +4,13 @@ require_once 'HTMLPurifier/ChildDef.php';
 require_once 'HTMLPurifier/Lexer.php';
 require_once 'HTMLPurifier/Generator.php';
 
-class Test_HTMLPurifier_ChildDef extends UnitTestCase
+class HTMLPurifier_ChildDefTest extends UnitTestCase
 {
     
     var $lex;
     var $gen;
     
-    function Test_HTMLPurifier_ChildDef() {
+    function HTMLPurifier_ChildDefTest() {
         $this->lex = HTMLPurifier_Lexer::create();
         $this->gen = new HTMLPurifier_Generator();
         parent::UnitTestCase();

@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 require_once 'HTMLPurifier/Lexer/PEARSax3.php';
 
-class Test_HTMLPurifier_Lexer extends UnitTestCase
+class HTMLPurifier_LexerTest extends UnitTestCase
 {
     
     var $DirectLex, $PEARSax3, $DOMLex;

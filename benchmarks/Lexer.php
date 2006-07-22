@@ -1,7 +1,7 @@
 <?php
 
 // emulates inserting a dir called HTMLPurifier into your class dir
-set_include_path(get_include_path() . PATH_SEPARATOR . '../../');
+set_include_path(get_include_path() . PATH_SEPARATOR . '../library/');
 
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 require_once 'HTMLPurifier/Lexer/PEARSax3.php';
