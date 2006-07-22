@@ -1,0 +1,28 @@
+
+Lexer
+
+The lexer parses a string of SGML-style markup and converts them into
+corresponding tokens. It doesn't check for correctness, although it's
+internal mechanism may make this automatic (such as the case of DOMLex).
+
+We have several implementations of the Lexer:
+
+DirectLex - our in-house implementation
+    DirectLex has absolutely no dependencies, making it a reasonably good
+    default for PHP4.  Written with efficiency in mind, it is generally
+    faster than the PEAR parser, although the two are very close and usually
+    overlap a bit.  It will support UTF-8 completely eventually.
+
+PEARSax3 - uses the PEAR package XML_HTMLSax3 to parse
+    PEAR, not suprisingly, also has a SAX parser for HTML.  I don't know
+    very much about implementation, but it's fairly well written.  You need
+    to have PEAR added to your path to use it though.  Not sure whether or
+    not it's UTF-8 aware.
+
+DOMLex - uses the PHP5 core extension DOM to parse
+    In PHP 5, the DOM XML extension was revamped into DOM and added to the core.
+    It gives us a forgiving HTML parser, which we use to transform the HTML
+    into a DOM, and then into the tokens.  It is extremely fast, and is the
+    default choice for PHP 5.  However, entity resolution may be troublesome,
+    though it's UTF-8 is excellent.
+

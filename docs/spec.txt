@@ -1,5 +1,5 @@
 
-HTML Purifier
+HTML Purifier Specification
   by Edward Z. Yang
 
 == Introduction ==
@@ -39,7 +39,7 @@ with malformed input.
 
 In summary:
 
-1. Parse document into an array of tag and text tokens
+1. Parse document into an array of tag and text tokens (Lexer)
 2. Remove all elements not on whitelist and transform certain other elements
    into acceptable forms (i.e. <font>)
 3. Make document well formed while helpfully taking into account certain quirks,
@@ -49,10 +49,10 @@ In summary:
    important for tables).
 5. Validate attributes according to more restrictive definitions based on the
    RFCs.
-6. Translate back into a string.
+6. Translate back into a string. (Generator)
 
 HTML Purifier is best suited for documents that require a rich array of
-HTML tags. Things like blog comments are, in all likelihood, most appropriately
+HTML tags.  Things like blog comments are, in all likelihood, most appropriately
 written in an extremely restrictive set of markup that doesn't require
 all this functionality (or not written in HTML at all).
 
@@ -60,24 +60,22 @@ all this functionality (or not written in HTML at all).
 
 == STAGE 1 - parsing ==
 
-    Status: A (see source, mainly internal raw)
+    Status: A (see source, mainly internals and UTF-8)
 
-We've got two options for this: HTMLSax or my MarkupLexer. Hopefully, we
-can make the two interfaces compatible. This means that we need a lot
-of little classes:
+The Lexer (currently we have three choices) handles parsing into Tokens.
 
-* StartTag(name, attributes)    is openHandler
-* EndTag(name)                  is closeHandler
-* EmptyTag(name, attributes)    is openHandler   (is in array of empties)
-* Data(text)                    is dataHandler
+Here are the mappings for Lexer_PEARSax3
+
+* Start(name, attributes)       is openHandler
+* End(name)                     is closeHandler
+* Empty(name, attributes)       is openHandler   (is in array of empties)
+* Data(parse(text))             is dataHandler
 * Comment(text)                 is escapeHandler (has leading -)
-* CharacterData(text)           is escapeHandler (has leading [)
+* Data(text)                    is escapeHandler (has leading [, CDATA)
 
 Ignorable/not being implemented (although we probably want to output them raw):
 * ProcessingInstructions(text)  is piHandler
 * JavaOrASPInstructions(text)   is jaspHandler
-
-Prefixed with MF (Markup Fragment). We'll make 'em all immutable value objects.
 
 
 

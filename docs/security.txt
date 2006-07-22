@@ -1,4 +1,5 @@
-== Possible Security Issues ==
+
+Security
 
 Like anything that claims to afford security, HTML_Purifier can be circumvented
 through negligence of people. This class will do its job: no more, no less,
@@ -14,10 +15,11 @@ can do). Make sure any input is properly converted to UTF-8, or the parser
 will mangle it badly (though it won't be a security risk if you're outputting
 it as UTF-8).
 
-2. XHTML 1.0. This is what the parser is outputting. For the most part, it's
-compatible with HTML 4.01, but XHTML enforces some very nice things that all
-web developers should use. Regardless, NO DOCTYPE is a NO. Quirks mode has
-waaaay too many quirks for a little parser to handle.
+2. XHTML 1.0 Transitional. This is what the parser is outputting. For the most
+part, it's compatible with HTML 4.01, but XHTML enforces some very nice things
+that all web developers should use. Regardless, NO DOCTYPE is a NO. Quirks mode
+has waaaay too many quirks for a little parser to handle. We did not select
+strict in order to prevent ourselves from being too draconic on users.
 
 3. [PROJECTED] IDs. They need to be unique, but without some knowledge of the
 rest of the document, it's difficult to know what's unique. I project default
