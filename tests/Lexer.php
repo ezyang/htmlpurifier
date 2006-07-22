@@ -2,7 +2,6 @@
 
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 require_once 'HTMLPurifier/Lexer/PEARSax3.php';
-require_once 'HTMLPurifier/Lexer/DOMLex.php';
 
 class Test_HTMLPurifier_Lexer extends UnitTestCase
 {
@@ -13,9 +12,14 @@ class Test_HTMLPurifier_Lexer extends UnitTestCase
     function setUp() {
         $this->DirectLex = new HTMLPurifier_Lexer_DirectLex();
         $this->PEARSax3  = new HTMLPurifier_Lexer_PEARSax3();
-        $this->DOMLex    = new HTMLPurifier_Lexer_DOMLex();
         
         $this->_has_dom = version_compare(PHP_VERSION, '5', '>=');
+        
+        if ($this->_has_dom) {
+            require_once 'HTMLPurifier/Lexer/DOMLex.php';
+            $this->DOMLex    = new HTMLPurifier_Lexer_DOMLex();
+        }
+        
     }
     
     function test_nextWhiteSpace() {
