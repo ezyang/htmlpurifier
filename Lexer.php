@@ -12,6 +12,8 @@ TODO:
 
 */
 
+require_once 'HTMLPurifier/Token.php';
+
 class HTMLPurifier_Lexer
 {
     

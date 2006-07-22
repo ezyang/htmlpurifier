@@ -1,5 +1,7 @@
 <?php
 
+require_once 'HTMLPurifier/Generator.php';
+
 class Test_HTMLPurifier_Generator extends UnitTestCase
 {
     

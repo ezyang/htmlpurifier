@@ -1,5 +1,10 @@
 <?php
 
+require_once 'HTMLPurifier/AttrDef.php';
+require_once 'HTMLPurifier/ChildDef.php';
+require_once 'HTMLPurifier/Generator.php';
+require_once 'HTMLPurifier/Token.php';
+
 class HTMLPurifier_Definition
 {
     

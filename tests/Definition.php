@@ -1,5 +1,8 @@
 <?php
 
+require_once 'HTMLPurifier/Definition.php';
+require_once 'HTMLPurifier/Lexer.php';
+
 class Test_HTMLPurifier_Definition extends UnitTestCase
 {
     

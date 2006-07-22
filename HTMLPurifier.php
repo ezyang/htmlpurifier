@@ -1,5 +1,9 @@
 <?php
 
+require_once 'HTMLPurifier/Lexer.php';
+require_once 'HTMLPurifier/Definition.php';
+require_once 'HTMLPurifier/Generator.php';
+
 class HTMLPurifier
 {
     
@@ -14,11 +18,9 @@ class HTMLPurifier
     }
     
     function purify($html) {
-        
         $tokens = $this->lexer->tokenizeHTML($html);
         $tokens = $this->definition->purifyTokens($tokens);
         return $this->generator->generateFromTokens($tokens);
-        
     }
     
 }

@@ -4,13 +4,15 @@
 
 set_time_limit(5);
 
+// emulates inserting a dir called HTMLPurifier into your class dir
+set_include_path(get_include_path() . PATH_SEPARATOR . '../../');
+
 // PEAR
 require_once 'Benchmark/Timer.php';
 require_once 'XML/HTMLSax3.php';
 require_once 'Text/Password.php';
 
-require_once '../Token.php';
-require_once '../Lexer.php';
+require_once 'HTMLPurifier/Lexer.php';
 
 class TinyTimer extends Benchmark_Timer
 {

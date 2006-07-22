@@ -6,7 +6,6 @@ Primary:
 Secondary:
 - Build an automated release system that will create minimal versions too
 - Build system that will in-line includes
-- Set up the file includes
 - Migrate all unit tests to use the lexer and generator
 - Build the entity lookup table
 

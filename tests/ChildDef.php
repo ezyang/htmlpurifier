@@ -1,5 +1,9 @@
 <?php
 
+require_once 'HTMLPurifier/ChildDef.php';
+require_once 'HTMLPurifier/Lexer.php';
+require_once 'HTMLPurifier/Generator.php';
+
 class Test_HTMLPurifier_ChildDef extends UnitTestCase
 {
     

@@ -4,6 +4,8 @@
     * Benchmark the SAX parser with my homemade one
  */
 
+require_once 'HTMLPurifier/Lexer.php';
+
 class Test_HTMLPurifier_Lexer extends UnitTestCase
 {
     
