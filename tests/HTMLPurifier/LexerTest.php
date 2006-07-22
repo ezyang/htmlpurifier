@@ -153,12 +153,17 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         
         // [SGML-INVALID]
         $input[10] = '<a "=>';
+        // We barf on this, aim for no attributes
         $expect[10] = array(
             new HTMLPurifier_Token_Start('a', array('"' => ''))
             );
-        // DOM doesn't register an invalid attribute
+        // DOM correctly has no attributes, but also closes the tag
         $dom_expect[10] = array(
             new HTMLPurifier_Token_Empty('a')
+            );
+        // SAX barfs on this
+        $sax_expect[10] = array(
+            new HTMLPurifier_Token_Start('a', array('"' => ''))
             );
         
         // [INVALID] [RECOVERABLE]
@@ -231,6 +236,18 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         
         $input[6] = 'href="foo';
         $expect[6] = array('href' => 'foo');
+        
+        $input[7] = '"=';
+        $expect[7] = array('"' => '');
+        //           0123456789012345678901234567890123
+        $input[8] = 'href ="about:blank"rel ="nofollow"';
+        $expect[8] = array('href' => 'about:blank', 'rel' => 'nofollow');
+        
+        $input[9] = 'foo bar';
+        $expect[9] = array('foo' => 'foo', 'bar' => 'bar');
+        
+        $input[10] = 'foo="bar" blue';
+        $expect[10] = array('foo' => 'bar', 'blue' => 'blue');
         
         $size = count($input);
         for($i = 0; $i < $size; $i++) {

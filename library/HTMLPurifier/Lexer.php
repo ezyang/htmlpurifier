@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Forgivingly lexes SGML style documents: HTML, XML, XHTML, etc.
+ * Forgivingly lexes HTML (not XML, since it doesn't adhere to spec exactly)
  */
 
 require_once 'HTMLPurifier/Token.php';

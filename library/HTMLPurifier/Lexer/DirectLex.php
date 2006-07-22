@@ -190,7 +190,14 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                             $segment, $position_first_space
                         )
                     );
-                $attributes = $this->tokenizeAttributeString($attribute_string);
+                if ($attribute_string) {
+                    $attributes = $this->tokenizeAttributeString(
+                                        $attribute_string
+                                  );
+                } else {
+                    $attributes = array();
+                }
+                
                 if ($is_self_closing) {
                     $array[] = new HTMLPurifier_Token_Empty($type, $attributes);
                 } else {
@@ -216,13 +223,47 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     }
     
     function tokenizeAttributeString($string) {
-        $string = (string) $string;
-        if ($string == '') return array();
-        $array = array();
-        $cursor = 0;
-        $in_value = false;
-        $i = 0;
-        $size = strlen($string);
+        $string = (string) $string; // quick typecast
+        
+        if ($string == '') return array(); // no attributes
+        
+        // let's see if we can abort as quickly as possible
+        // one equal sign, no spaces => one attribute
+        $num_equal = substr_count($string, '=');
+        $has_space = strpos($string, ' ');
+        if ($num_equal === 0 && !$has_space) {
+            // bool attribute
+            return array($string => $string);
+        } elseif ($num_equal === 1 && !$has_space) {
+            // only one attribute
+            list($key, $quoted_value) = explode('=', $string);
+            $quoted_value = trim($quoted_value);
+            if (!$key) return array();
+            if (!$quoted_value) return array($key => '');
+            $first_char = @$quoted_value[0];
+            $last_char  = @$quoted_value[strlen($quoted_value)-1];
+            
+            $same_quote = ($first_char == $last_char);
+            $open_quote = ($first_char == '"' || $first_char == "'");
+            
+            if ( $same_quote && $open_quote) {
+                // well behaved
+                $value = substr($quoted_value, 1, strlen($quoted_value) - 2);
+            } else {
+                // not well behaved
+                if ($open_quote) {
+                    $value = substr($quoted_value, 1);
+                } else {
+                    $value = $quoted_value;
+                }
+            }
+            return array($key => $value);
+        }
+        
+        // setup loop environment
+        $array  = array(); // return assoc array of attributes
+        $cursor = 0; // current position in string (moves forward)
+        $size   = strlen($string); // size of the string (stays the same)
         
         // if we have unquoted attributes, the parser expects a terminating
         // space, so let's guarantee that there's always a terminating space.
@@ -234,88 +275,75 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         while(true) {
             
             // infinite loop protection
-            // if we've looped 1000 times, abort. Nothing good can come of this 
             if (++$loops > 1000) return array();
             
             if ($cursor >= $size) {
                 break;
             }
+            
+            $cursor += ($value = strspn($string, "\x20\x09\x0D\x0A", $cursor));
+            
             $position_next_space = $this->nextWhiteSpace($string, $cursor);
-            //scroll to the last whitespace before text
-            while ($position_next_space === $cursor) {
-                $cursor++;
-                $position_next_space = $this->nextWhiteSpace($string, $cursor);
-            }
             $position_next_equal = strpos($string, '=', $cursor);
-            if ($position_next_equal !== false &&
-                 ($position_next_equal < $position_next_space ||
-                  $position_next_space === false)) {
-                //attr="asdf"
-                // grab the key
-                $key = trim(
-                    substr(
-                        $string, $cursor, $position_next_equal - $cursor
-                    )
-                );
+            
+            // grab the key
+            
+            $key_begin = $cursor; //we're currently at the start of the key
+            
+            // scroll past all characters that are the key (not whitespace or =)
+            $cursor += strcspn($string, "\x20\x09\x0D\x0A=", $cursor);
+            
+            $key_end = $cursor; // now at the end of the key
+            
+            $key = substr($string, $key_begin, $key_end - $key_begin);
+            
+            if (!$key) continue; // empty key
+            
+            // scroll past all whitespace
+            $cursor += strspn($string, "\x20\x09\x0D\x0A", $cursor);
+            
+            if ($cursor >= $size) {
+                $array[$key] = $key;
+                break;
+            }
+            
+            // if the next character is an equal sign, we've got a regular
+            // pair, otherwise, it's a bool attribute
+            $first_char = @$string[$cursor];
+            
+            if ($first_char == '=') {
+                // key="value"
                 
-                // set cursor right after the equal sign
-                $cursor = $position_next_equal + 1;
+                $cursor++;
+                $cursor += strspn($string, "\x20\x09\x0D\x0A", $cursor);
                 
-                // consume all spaces after the equal sign
-                $position_next_space = $this->nextWhiteSpace($string, $cursor);
-                while ($position_next_space === $cursor) {
+                // we might be in front of a quote right now
+                
+                $char = @$string[$cursor];
+                
+                if ($char == '"' || $char == "'") {
+                    // it's quoted, end bound is $char
                     $cursor++;
-                    $position_next_space=$this->nextWhiteSpace($string,$cursor);
+                    $value_begin = $cursor;
+                    $cursor = strpos($string, $char, $cursor);
+                    $value_end = $cursor;
+                } else {
+                    // it's not quoted, end bound is whitespace
+                    $value_begin = $cursor;
+                    $cursor += strcspn($string, "\x20\x09\x0D\x0A", $cursor);
+                    $value_end = $cursor;
                 }
                 
-                // if we've hit the end, assign the key an empty value and abort
-                if ($cursor >= $size) {
-                    $array[$key] = '';
-                    break;
-                }
+                $value = substr($string, $value_begin, $value_end - $value_begin);
+                $array[$key] = $value;
+                $cursor++;
                 
-                // find the next quote
-                $position_next_quote = $this->nextQuote($string, $cursor);
-                
-                // if the quote is not where the cursor is, we're dealing
-                // with an unquoted attribute
-                if ($position_next_quote !== $cursor) {
-                    if ($key) {
-                        $array[$key] = trim(substr($string, $cursor,
-                          $position_next_space - $cursor));
-                    }
-                    $cursor = $position_next_space + 1;
-                    continue;
-                }
-                
-                // otherwise, regular attribute
-                $quote = $string{$position_next_quote};
-                $position_end_quote = strpos(
-                    $string, $quote, $position_next_quote + 1
-                );
-                
-                // check if the ending quote is missing
-                if ($position_end_quote === false) {
-                    // it is, assign it to the end of the string
-                    $position_end_quote = $size;
-                }
-                
-                $value = substr($string, $position_next_quote + 1,
-                  $position_end_quote - $position_next_quote - 1);
-                if ($key) {
-                    $array[$key] = html_entity_decode($value, ENT_QUOTES);
-                }
-                $cursor = $position_end_quote + 1;
             } else {
-                //boolattr
-                if ($position_next_space === false) {
-                    $position_next_space = $size;
-                }
-                $key = substr($string, $cursor, $position_next_space - $cursor);
-                if ($key) {
+                // boolattr
+                if ($key !== '') {
                     $array[$key] = $key;
                 }
-                $cursor = $position_next_space + 1;
+                
             }
         }
         return $array;
