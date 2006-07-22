@@ -9,6 +9,8 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token // abstract
     var $is_tag = true;
     var $name;
     function HTMLPurifier_Token_Tag($name) {
+        // watch out, actually XML is case-sensitive, while HTML
+        // is case insensitive, which means we can't use this for XML
         $this->name = strtolower($name); // for some reason, the SAX parser
                                          // uses uppercase. Investigate?
     }
@@ -23,6 +25,8 @@ class HTMLPurifier_Token_RichTag extends HTMLPurifier_Token_Tag // abstract
         $this->attributes = $attributes;
     }
 }
+
+// start CONCRETE ones
 
 class HTMLPurifier_Token_Start extends HTMLPurifier_Token_RichTag
 {
