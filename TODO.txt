@@ -4,8 +4,6 @@ Primary:
 - Finish attributes fixing
 
 Secondary:
-- Rename all classes so that they're in the namespace HTMLPurifier_*
-- Factor out all classes into their own files
 - Build an automated release system that will create minimal versions too
 - Build system that will in-line includes
 - Set up the file includes
