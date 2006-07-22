@@ -1,6 +1,12 @@
 <?php
 
-load_simpletest(); // includes all relevant simpletest files
+error_reporting(E_ALL);
+
+require_once 'simpletest/unit_tester.php';
+require_once 'simpletest/reporter.php';
+require_once 'simpletest/mock_objects.php';
+
+require_once 'Debugger.php';
 
 // emulates inserting a dir called HTMLPurifier into your class dir
 set_include_path(get_include_path() . PATH_SEPARATOR . '../library');
