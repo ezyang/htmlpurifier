@@ -62,32 +62,13 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     }
     
     function nextQuote($string, $offset = 0) {
-        $quotes = array('"', "'");
-        return $this->next($string, $quotes, $offset);
+        $next = strcspn($string, '"\'', $offset) + $offset;
+        return strlen($string) == $next ? false : $next;
     }
     
     function nextWhiteSpace($string, $offset = 0) {
-        $spaces = array(chr(0x20), chr(0x9), chr(0xD), chr(0xA));
-        return $this->next($string, $spaces, $offset);
-    }
-    
-    function next($haystack, $needles, $offset = 0) {
-        if (is_string($needles)) {
-            $string_needles = $needles;
-            $needles = array();
-            $size = strlen($string_needles);
-            for ($i = 0; $i < $size; $i++) {
-                $needles[] = $string_needles{$i};
-            }
-        }
-        $positions = array();
-        foreach ($needles as $needle) {
-            $position = strpos($haystack, $needle, $offset);
-            if ($position !== false) {
-                $positions[] = $position;
-            }
-        }
-        return empty($positions) ? false : min($positions);
+        $next = strcspn($string, "\x20\x09\x0D\x0A", $offset) + $offset;
+        return strlen($string) == $next ? false : $next;
     }
     
     function tokenizeHTML($string) {

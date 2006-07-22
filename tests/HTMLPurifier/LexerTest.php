@@ -30,6 +30,7 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $this->assertIdentical(1, $HP->nextWhiteSpace("a\tsdf"));
         $this->assertIdentical(4, $HP->nextWhiteSpace("asdf\r"));
         $this->assertIdentical(2, $HP->nextWhiteSpace("as\t\r\nasdf as"));
+        $this->assertIdentical(3, $HP->nextWhiteSpace('a a ', 2));
     }
     
     function test_parseData() {
@@ -210,31 +211,31 @@ class HTMLPurifier_LexerTest extends UnitTestCase
     // internals testing
     function test_tokenizeAttributeString() {
         
-        $input[] = 'href="asdf" boom="assdf"';
-        $expect[] = array('href'=>'asdf', 'boom'=>'assdf');
+        $input[0] = 'href="asdf" boom="assdf"';
+        $expect[0] = array('href'=>'asdf', 'boom'=>'assdf');
         
-        $input[] = "href='r'";
-        $expect[] = array('href'=>'r');
+        $input[1] = "href='r'";
+        $expect[1] = array('href'=>'r');
         
-        $input[] = 'onclick="javascript:alert(\'asdf\');"';
-        $expect[] = array('onclick' => "javascript:alert('asdf');");
+        $input[2] = 'onclick="javascript:alert(\'asdf\');"';
+        $expect[2] = array('onclick' => "javascript:alert('asdf');");
         
-        $input[] = 'selected';
-        $expect[] = array('selected'=>'selected');
+        $input[3] = 'selected';
+        $expect[3] = array('selected'=>'selected');
         
-        $input[] = '="asdf"';
-        $expect[] = array();
+        $input[4] = '="asdf"';
+        $expect[4] = array();
         
-        $input[] = 'missile=launch';
-        $expect[] = array('missile' => 'launch');
+        $input[5] = 'missile=launch';
+        $expect[5] = array('missile' => 'launch');
         
-        $input[] = 'href="foo';
-        $expect[] = array('href' => 'foo');
+        $input[6] = 'href="foo';
+        $expect[6] = array('href' => 'foo');
         
         $size = count($input);
         for($i = 0; $i < $size; $i++) {
             $result = $this->DirectLex->tokenizeAttributeString($input[$i]);
-            $this->assertEqual($expect[$i], $result);
+            $this->assertEqual($expect[$i], $result, 'Test ' . $i . ': %s');
             paintIf($result, $expect[$i] != $result);
         }
         
