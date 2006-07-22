@@ -7,7 +7,6 @@ set_include_path(get_include_path() . PATH_SEPARATOR . '../library');
 
 $test = new GroupTest('HTMLPurifier');
 
-$test->addTestFile('HTMLPurifierTest.php');
 $test->addTestFile('HTMLPurifier/LexerTest.php');
 //$test->addTestFile('TokenTest.php');
 $test->addTestFile('HTMLPurifier/DefinitionTest.php');
