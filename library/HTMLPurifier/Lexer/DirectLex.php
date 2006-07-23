@@ -16,6 +16,7 @@ require_once 'HTMLPurifier/Lexer.php';
  * @todo Add support for CDATA sections.
  * @todo Determine correct behavior in outputting comment data. (preserve dashes?)
  * @todo Optimize main function tokenizeHTML().
+ * @todo Less than sign (<) being prohibited (even as entity) in attr-values?
  */
 class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
 {
@@ -108,6 +109,10 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     
     /**
      * Substitutes non-special entities with their parsed equivalents.
+     * 
+     * @protected
+     * @param $string String to have non-special entities parsed.
+     * @returns Parsed string.
      */
     function substituteNonSpecialEntities($string) {
         // it will try to detect missing semicolons, but don't rely on it
@@ -119,6 +124,14 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     
     /**
      * Callback function for substituteNonSpecialEntities() that does the work.
+     * 
+     * @warning Though this is public in order to let the callback happen,
+     *          calling it directly is not recommended.
+     * @param $matches  PCRE-style matches array, with 0 the entire match, and
+     *                  either index 1, 2 or 3 set with a hex value, dec value,
+     *                  or string (respectively).
+     * @returns Replacement string.
+     * @todo Implement string translations
      */
     function nonSpecialEntityCallback($matches) {
         // replaces all but big five
@@ -132,14 +145,19 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         } else {
             if (isset($this->_special_ent2dec[$matches[3]])) return $entity;
             // translate $matches[3]
+            return '';
         }
     }
     
     /**
      * Substitutes only special entities with their parsed equivalents.
      * 
-     * We try to avoid calling this function because otherwise, it would have
-     * to be called a lot (for every parsed section).
+     * @notice We try to avoid calling this function because otherwise, it
+     * would have to be called a lot (for every parsed section).
+     * 
+     * @protected
+     * @param $string String to have non-special entities parsed.
+     * @returns Parsed string.
      */
     function substituteSpecialEntities($string) {
         return preg_replace_callback(
@@ -151,7 +169,14 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     /**
      * Callback function for substituteSpecialEntities() that does the work.
      * 
-     * This callback is very similar to nonSpecialEntityCallback().
+     * This callback has same syntax as nonSpecialEntityCallback().
+     * 
+     * @warning Though this is public in order to let the callback happen,
+     *          calling it directly is not recommended.
+     * @param $matches  PCRE-style matches array, with 0 the entire match, and
+     *                  either index 1, 2 or 3 set with a hex value, dec value,
+     *                  or string (respectively).
+     * @returns Replacement string.
      */
     function specialEntityCallback($matches) {
         $entity = $matches[0];
@@ -327,7 +352,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
      * Takes the inside of an HTML tag and makes an assoc array of attributes.
      * 
      * @param $string Inside of tag excluding name.
-     * @return Assoc array of attributes.
+     * @returns Assoc array of attributes.
      */
     function parseAttributeString($string) {
         $string = (string) $string; // quick typecast
