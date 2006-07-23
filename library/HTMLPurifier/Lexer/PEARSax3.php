@@ -76,7 +76,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
     }
     
     /**
-     * Escaped text handler,interface is defined by PEAR package.
+     * Escaped text handler, interface is defined by PEAR package.
      */
     function escapeHandler(&$parser, $data) {
         if (strpos($data, '-') === 0) {
