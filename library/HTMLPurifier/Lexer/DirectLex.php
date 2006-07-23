@@ -62,43 +62,6 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     var $_whitespace = "\x20\x09\x0D\x0A";
     
     /**
-     * Decimal to parsed string conversion table for special entities.
-     * @protected
-     */
-    var $_special_dec2str = array(
-            34 => '"', // quote
-            38 => '&', // ampersand            
-            39 => "'", // apostrophe           
-            60 => '<', // less than sign
-            62 => '>'  // greater than sign
-        );
-    
-    /**
-     * Stripped entity names to decimal conversion table for special entities.
-     * @protected
-     */
-    var $_special_ent2dec = array(
-            'quot' => 34,
-            'amp'  => 38,
-            'lt'   => 60,
-            'gt'   => 62,
-        );
-    
-    /**
-     * Most common entity to raw value conversion table for special entities.
-     * @protected
-     */
-    var $_special_entity2str = array(
-            '&quot;' => '"',
-            '&amp;'  => '&',
-            '&lt;'   => '<',
-            '&gt;'   => '>',
-            '&#39;'  => "'",
-            '&#039;' => "'",
-            '&#x27;' => "'",
-        );
-    
-    /**
      * Substitutes only special entities with their parsed equivalents.
      * 
      * @notice We try to avoid calling this function because otherwise, it
@@ -152,6 +115,9 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         $cursor = 0; // our location in the text
         $inside_tag = false; // whether or not we're parsing the inside of a tag
         $array = array(); // result array
+        
+        // escape CDATA
+        $string = $this->escapeCDATA($string);
         
         // expand entities THAT AREN'T THE BIG FIVE
         $string = $this->substituteNonSpecialEntities($string);

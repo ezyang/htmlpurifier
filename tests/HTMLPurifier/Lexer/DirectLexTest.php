@@ -11,6 +11,13 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         $this->DirectLex = new HTMLPurifier_Lexer_DirectLex();
     }
     
+    function test_specialEntityCallback() {
+        $HP =& $this->DirectLex;
+        
+        $this->assertIdentical("'",$HP->specialEntityCallback(
+            array('&#39;', null, '39', null) ));
+    }
+    
     function test_parseData() {
         $HP =& $this->DirectLex;
         
@@ -27,13 +34,6 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         // This is not special, thus not converted. Test of fault tolerance,
         // realistically speaking, this should never happen
         $this->assertIdentical('&#x2D;', $HP->parseData('&#x2D;'));
-    }
-    
-    function test_specialEntityCallback() {
-        $HP =& $this->DirectLex;
-        
-        $this->assertIdentical("'",$HP->specialEntityCallback(
-            array('&#39;', null, '39', null) ));
     }
     
     // internals testing

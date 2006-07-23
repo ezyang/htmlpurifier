@@ -29,6 +29,8 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
     var $tokens = array();
     
     function tokenizeHTML($html) {
+        $html = $this->escapeCDATA($html);
+        $html = $this->substituteNonSpecialEntities($html);
         $parser=& new XML_HTMLSax3();
         $parser->set_object($this);
         $parser->set_element_handler('openHandler','closeHandler');
@@ -79,9 +81,14 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
      * Escaped text handler, interface is defined by PEAR package.
      */
     function escapeHandler(&$parser, $data) {
-        if (strpos($data, '-') === 0) {
+        if (strpos($data, '--') === 0) {
             $this->tokens[] = new HTMLPurifier_Token_Comment($data);
         }
+        // CDATA is handled elsewhere, but if it was handled here:
+        //if (strpos($data, '[CDATA[') === 0) {
+        //    $this->tokens[] = new HTMLPurifier_Token_Text(
+        //        substr($data, 7, strlen($data) - 9) );
+        //}
         return true;
     }
     

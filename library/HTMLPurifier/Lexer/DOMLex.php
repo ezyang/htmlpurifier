@@ -27,8 +27,14 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     
     public function tokenizeHTML($string) {
         $doc = new DOMDocument();
+        
         // preprocess string
         $string = '<html><body><div>'.$string.'</div></body></html>';
+        
+        // replace and escape the CDATA sections, since parsing under HTML
+        // mode won't get 'em.
+        $string = $this->escapeCDATA($string);
+        
         @$doc->loadHTML($string); // mute all errors, handle it transparently
         return $this->tokenizeDOM(
             $doc->childNodes->item(1)-> // html
@@ -55,7 +61,8 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         if ( !($node instanceof DOMElement) ) {
             if ($node instanceof DOMComment) {
                 $tokens[] = new HTMLPurifier_Token_Comment($node->data);
-            } elseif ($node instanceof DOMText) {
+            } elseif ($node instanceof DOMText ||
+                      $node instanceof DOMCharacterData) {
                 $tokens[] = new HTMLPurifier_Token_Text($node->data);
             }
             // quite possibly, the object wasn't handled, that's fine

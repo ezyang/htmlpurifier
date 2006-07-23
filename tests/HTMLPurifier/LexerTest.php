@@ -6,11 +6,14 @@ require_once 'HTMLPurifier/Lexer/PEARSax3.php';
 class HTMLPurifier_LexerTest extends UnitTestCase
 {
     
+    var $Lexer;
     var $DirectLex, $PEARSax3, $DOMLex;
     var $_entity_lookup;
     var $_has_dom;
     
     function setUp() {
+        $this->Lexer     = new HTMLPurifier_Lexer();
+        
         $this->DirectLex = new HTMLPurifier_Lexer_DirectLex();
         $this->PEARSax3  = new HTMLPurifier_Lexer_PEARSax3();
         
@@ -22,6 +25,14 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
         
+    }
+    
+    function test_substituteNonSpecialEntities() {
+        $char_theta = $this->_entity_lookup->table['theta'];
+        $this->assertIdentical($char_theta,
+            $this->Lexer->substituteNonSpecialEntities('&theta;') );
+        $this->assertIdentical('"',
+            $this->Lexer->substituteNonSpecialEntities('"') );
     }
     
     function test_tokenizeHTML() {
@@ -156,40 +167,70 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $expect[12] = array( new HTMLPurifier_Token_Text('"') );
         $sax_expect[12] = false; // choked!
         
-        // DOM and SAX choke on this
-        //$char_circ = $this->_entity_lookup->table['circ'];
-        //$input[13] = '&circ;';
-        //$expect[13] = array( new HTMLPurifier_Token_Text($char_circ) );
+        // CDATA sections!
+        $input[13] = '<![CDATA[You <b>can&#39;t</b> get me!]]>';
+        $expect[13] = array( new HTMLPurifier_Token_Text(
+            'You <b>can&#39;t</b> get me!' // raw
+            ) );
+        $sax_expect[13] = array( // SAX has a seperate call for each entity
+                new HTMLPurifier_Token_Text('You '),
+                new HTMLPurifier_Token_Text('<'),
+                new HTMLPurifier_Token_Text('b'),
+                new HTMLPurifier_Token_Text('>'),
+                new HTMLPurifier_Token_Text('can'),
+                new HTMLPurifier_Token_Text('&'),
+                new HTMLPurifier_Token_Text('#39;t'),
+                new HTMLPurifier_Token_Text('<'),
+                new HTMLPurifier_Token_Text('/b'),
+                new HTMLPurifier_Token_Text('>'),
+                new HTMLPurifier_Token_Text(' get me!')
+            );
+        
+        $char_theta = $this->_entity_lookup->table['theta'];
+        $char_rarr  = $this->_entity_lookup->table['rarr'];
+        
+        // test entity replacement
+        $input[14] = '&theta;';
+        $expect[14] = array( new HTMLPurifier_Token_Text($char_theta) );
+        
+        // test that entities aren't replaced in CDATA sections
+        $input[15] = '&theta; <![CDATA[&rarr;]]>';
+        $expect[15] = array( new HTMLPurifier_Token_Text($char_theta . ' &rarr;') );
+        $sax_expect[15] = array(
+                new HTMLPurifier_Token_Text($char_theta . ' '),
+                new HTMLPurifier_Token_Text('&'),
+                new HTMLPurifier_Token_Text('rarr;')
+            );
         
         foreach($input as $i => $discard) {
             $result = $this->DirectLex->tokenizeHTML($input[$i]);
-            $this->assertEqual($expect[$i], $result, 'Test '.$i.': %s');
+            $this->assertEqual($expect[$i], $result, 'DirectLexTest '.$i.': %s');
             paintIf($result, $expect[$i] != $result);
             
             // assert unless I say otherwise
             $sax_result = $this->PEARSax3->tokenizeHTML($input[$i]);
             if (!isset($sax_expect[$i])) {
                 // by default, assert with normal result
-                $this->assertEqual($expect[$i], $sax_result, 'Test '.$i.': %s');
+                $this->assertEqual($expect[$i], $sax_result, 'PEARSax3Test '.$i.': %s');
                 paintIf($sax_result, $expect[$i] != $sax_result);
             } elseif ($sax_expect[$i] === false) {
                 // assertions were turned off, optionally dump
                 // paintIf($sax_expect, $i == NUMBER);
             } else {
                 // match with a custom SAX result array
-                $this->assertEqual($sax_expect[$i], $sax_result, 'Test '.$i.': %s');
+                $this->assertEqual($sax_expect[$i], $sax_result, 'PEARSax3Test (custom) '.$i.': %s');
                 paintIf($sax_result, $sax_expect[$i] != $sax_result);
             }
             if ($this->_has_dom) {
                 $dom_result = $this->DOMLex->tokenizeHTML($input[$i]);
                 // same structure as SAX
                 if (!isset($dom_expect[$i])) {
-                    $this->assertEqual($expect[$i], $dom_result, 'Test '.$i.': %s');
+                    $this->assertEqual($expect[$i], $dom_result, 'DOMLexTest '.$i.': %s');
                     paintIf($dom_result, $expect[$i] != $dom_result);
                 } elseif ($dom_expect[$i] === false) {
                     // paintIf($dom_result, $i == NUMBER);
                 } else {
-                    $this->assertEqual($dom_expect[$i], $dom_result, 'Test '.$i.': %s');
+                    $this->assertEqual($dom_expect[$i], $dom_result, 'DOMLexTest (custom) '.$i.': %s');
                     paintIf($dom_result, $dom_expect[$i] != $dom_result);
                 }
             }

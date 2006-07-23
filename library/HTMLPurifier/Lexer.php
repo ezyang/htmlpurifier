@@ -15,20 +15,26 @@ require_once 'HTMLPurifier/Token.php';
  * recommended, as we adhere to a subset of the specification for optimization
  * reasons.
  * 
- * This class cannot be directly instantiated, but you may use create() to
+ * This class should not be directly instantiated, but you may use create() to
  * retrieve a default copy of the lexer.
+ * 
+ * @note The unit tests will instantiate this class for testing purposes, as
+ *       many of the utility functions require a class to be instantiated.
+ *       Be careful when porting this class to PHP 5.
+ * 
+ * @par
  * 
  * @note
  * We use tokens rather than create a DOM representation because DOM would:
  * 
- * @note
+ * @par
  *  -# Require more processing power to create,
  *  -# Require recursion to iterate,
  *  -# Must be compatible with PHP 5's DOM (otherwise duplication),
  *  -# Has the entire document structure (html and body not needed), and
  *  -# Has unknown readability improvement.
  * 
- * @note
+ * @par
  * What the last item means is that the functions for manipulating tokens are
  * already fairly compact, and when well-commented, more abstraction may not
  * be needed.
@@ -85,14 +91,53 @@ class HTMLPurifier_Lexer
         return $lexer;
     }
     
+    /**
+     * Decimal to parsed string conversion table for special entities.
+     * @protected
+     */
+    var $_special_dec2str =
+            array(
+                    34 => '"',
+                    38 => '&',
+                    39 => "'",
+                    60 => '<',
+                    62 => '>'
+            );
+    
+    /**
+     * Stripped entity names to decimal conversion table for special entities.
+     * @protected
+     */
+    var $_special_ent2dec =
+            array(
+                    'quot' => 34,
+                    'amp'  => 38,
+                    'lt'   => 60,
+                    'gt'   => 62
+            );
+    
+    /**
+     * Most common entity to raw value conversion table for special entities.
+     * @protected
+     */
+    var $_special_entity2str =
+            array(
+                    '&quot;' => '"',
+                    '&amp;'  => '&',
+                    '&lt;'   => '<',
+                    '&gt;'   => '>',
+                    '&#39;'  => "'",
+                    '&#039;' => "'",
+                    '&#x27;' => "'"
+            );
     
     /**
      * Callback regex string for parsing entities.
      * @protected
-     */
+     */                             
     var $_substituteEntitiesRegex =
-        //       1. hex          2. dec  3. string
-        '/&[#](?:x([a-fA-F0-9]+)|0*(\d+)|([A-Za-z]+));?/';
+'/&(?:[#]x([a-fA-F0-9]+)|[#]0*(\d+)|([A-Za-z]+));?/';
+//     1. hex             2. dec      3. string
     
     /**
      * Substitutes non-special entities with their parsed equivalents. Since
@@ -107,8 +152,9 @@ class HTMLPurifier_Lexer
         // it will try to detect missing semicolons, but don't rely on it
         return preg_replace_callback(
             $this->_substituteEntitiesRegex,
-            array('HTMLPurifier_Lexer_DirectLex', 'nonSpecialEntityCallback'),
-            $string);
+            array($this, 'nonSpecialEntityCallback'),
+            $string
+            );
     }
     
     /**
@@ -116,7 +162,7 @@ class HTMLPurifier_Lexer
      * 
      * @warning Though this is public in order to let the callback happen,
      *          calling it directly is not recommended.
-     * @param $matches  PCRE-style matches array, with 0 the entire match, and
+     * @param $matches  PCRE matches array, with 0 the entire match, and
      *                  either index 1, 2 or 3 set with a hex value, dec value,
      *                  or string (respectively).
      * @returns Replacement string.
@@ -135,7 +181,7 @@ class HTMLPurifier_Lexer
             if (isset($this->_special_ent2dec[$matches[3]])) return $entity;
             if (!$this->_entity_lookup) {
                 require_once 'HTMLPurifier/EntityLookup.php';
-                $this->_entity_lookup = EntityLookup::instance();
+                $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
             }
             if (isset($this->_entity_lookup->table[$matches[3]])) {
                 return $this->_entity_lookup->table[$matches[3]];
@@ -145,7 +191,40 @@ class HTMLPurifier_Lexer
         }
     }
     
+    /**
+     * Contains a copy of the EntityLookup table.
+     * @protected
+     */
     var $_entity_lookup;
+    
+    /**
+     * Translates CDATA sections into regular sections (through escaping).
+     * 
+     * @protected
+     * @param $string HTML string to process.
+     * @returns HTML with CDATA sections escaped.
+     */
+    function escapeCDATA($string) {
+        return preg_replace_callback(
+            '/<!\[CDATA\[(.+?)\]\]>/',
+            array('HTMLPurifier_Lexer', 'CDATACallback'),
+            $string
+        );
+    }
+    
+    /**
+     * Callback function for escapeCDATA() that does the work.
+     * 
+     * @warning Though this is public in order to let the callback happen,
+     *          calling it directly is not recommended.
+     * @params $matches PCRE matches array, with index 0 the entire match
+     *                  and 1 the inside of the CDATA section.
+     * @returns Escaped internals of the CDATA section.
+     */
+    function CDATACallback($matches) {
+        // not exactly sure why the character set is needed, but whatever
+        return htmlspecialchars($matches[1], ENT_COMPAT, 'UTF-8');
+    }
     
 }
 
