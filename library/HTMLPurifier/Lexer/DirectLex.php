@@ -11,7 +11,6 @@ require_once 'HTMLPurifier/Lexer.php';
  * pales in comparison to HTMLPurifier_Lexer_DOMLex.  It will support UTF-8
  * completely eventually.
  * 
- * @todo Implement non-special string entity conversion.
  * @todo Reread XML spec and document differences.
  * @todo Add support for CDATA sections.
  * @todo Determine correct behavior in outputting comment data. (preserve dashes?)
@@ -98,56 +97,6 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             '&#039;' => "'",
             '&#x27;' => "'",
         );
-    
-    /**
-     * Callback regex string for parsing entities.
-     * @protected
-     */
-    var $_substituteEntitiesRegex =
-        //       1. hex          2. dec  3. string
-        '/&[#](?:x([a-fA-F0-9]+)|0*(\d+)|([A-Za-z]+));?/';
-    
-    /**
-     * Substitutes non-special entities with their parsed equivalents.
-     * 
-     * @protected
-     * @param $string String to have non-special entities parsed.
-     * @returns Parsed string.
-     */
-    function substituteNonSpecialEntities($string) {
-        // it will try to detect missing semicolons, but don't rely on it
-        return preg_replace_callback(
-            $this->_substituteEntitiesRegex,
-            array('HTMLPurifier_Lexer_DirectLex', 'nonSpecialEntityCallback'),
-            $string);
-    }
-    
-    /**
-     * Callback function for substituteNonSpecialEntities() that does the work.
-     * 
-     * @warning Though this is public in order to let the callback happen,
-     *          calling it directly is not recommended.
-     * @param $matches  PCRE-style matches array, with 0 the entire match, and
-     *                  either index 1, 2 or 3 set with a hex value, dec value,
-     *                  or string (respectively).
-     * @returns Replacement string.
-     * @todo Implement string translations
-     */
-    function nonSpecialEntityCallback($matches) {
-        // replaces all but big five
-        $entity = $matches[0];
-        $is_num = (@$matches[0][1] === '#');
-        if ($is_num) {
-            $is_hex = (@$entity[2] === 'x');
-            $int = $is_hex ? hexdec($matches[1]) : (int) $matches[2];
-            if (isset($this->_special_dec2str[$int]))  return $entity;
-            return chr($int);
-        } else {
-            if (isset($this->_special_ent2dec[$matches[3]])) return $entity;
-            // translate $matches[3]
-            return '';
-        }
-    }
     
     /**
      * Substitutes only special entities with their parsed equivalents.

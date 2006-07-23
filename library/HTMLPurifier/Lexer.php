@@ -85,6 +85,68 @@ class HTMLPurifier_Lexer
         return $lexer;
     }
     
+    
+    /**
+     * Callback regex string for parsing entities.
+     * @protected
+     */
+    var $_substituteEntitiesRegex =
+        //       1. hex          2. dec  3. string
+        '/&[#](?:x([a-fA-F0-9]+)|0*(\d+)|([A-Za-z]+));?/';
+    
+    /**
+     * Substitutes non-special entities with their parsed equivalents. Since
+     * running this whenever you have parsed character is t3h 5uck, we run
+     * it before everything else.
+     * 
+     * @protected
+     * @param $string String to have non-special entities parsed.
+     * @returns Parsed string.
+     */
+    function substituteNonSpecialEntities($string) {
+        // it will try to detect missing semicolons, but don't rely on it
+        return preg_replace_callback(
+            $this->_substituteEntitiesRegex,
+            array('HTMLPurifier_Lexer_DirectLex', 'nonSpecialEntityCallback'),
+            $string);
+    }
+    
+    /**
+     * Callback function for substituteNonSpecialEntities() that does the work.
+     * 
+     * @warning Though this is public in order to let the callback happen,
+     *          calling it directly is not recommended.
+     * @param $matches  PCRE-style matches array, with 0 the entire match, and
+     *                  either index 1, 2 or 3 set with a hex value, dec value,
+     *                  or string (respectively).
+     * @returns Replacement string.
+     * @todo Implement string translations
+     */
+    function nonSpecialEntityCallback($matches) {
+        // replaces all but big five
+        $entity = $matches[0];
+        $is_num = (@$matches[0][1] === '#');
+        if ($is_num) {
+            $is_hex = (@$entity[2] === 'x');
+            $int = $is_hex ? hexdec($matches[1]) : (int) $matches[2];
+            if (isset($this->_special_dec2str[$int]))  return $entity;
+            return chr($int);
+        } else {
+            if (isset($this->_special_ent2dec[$matches[3]])) return $entity;
+            if (!$this->_entity_lookup) {
+                require_once 'HTMLPurifier/EntityLookup.php';
+                $this->_entity_lookup = EntityLookup::instance();
+            }
+            if (isset($this->_entity_lookup->table[$matches[3]])) {
+                return $this->_entity_lookup->table[$matches[3]];
+            } else {
+                return $entity;
+            }
+        }
+    }
+    
+    var $_entity_lookup;
+    
 }
 
 ?>

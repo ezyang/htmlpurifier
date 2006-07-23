@@ -7,6 +7,7 @@ class HTMLPurifier_LexerTest extends UnitTestCase
 {
     
     var $DirectLex, $PEARSax3, $DOMLex;
+    var $_entity_lookup;
     var $_has_dom;
     
     function setUp() {
@@ -14,11 +15,12 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $this->PEARSax3  = new HTMLPurifier_Lexer_PEARSax3();
         
         $this->_has_dom = version_compare(PHP_VERSION, '5', '>=');
-        
         if ($this->_has_dom) {
             require_once 'HTMLPurifier/Lexer/DOMLex.php';
             $this->DOMLex    = new HTMLPurifier_Lexer_DOMLex();
         }
+        
+        $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
         
     }
     
@@ -152,8 +154,12 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         // compare with this valid one:
         $input[12] = '&quot;';
         $expect[12] = array( new HTMLPurifier_Token_Text('"') );
-        $sax_expect[12] = false;
-        // SAX chokes on this? We do have entity parsing on, so it should work!
+        $sax_expect[12] = false; // choked!
+        
+        // DOM and SAX choke on this
+        //$char_circ = $this->_entity_lookup->table['circ'];
+        //$input[13] = '&circ;';
+        //$expect[13] = array( new HTMLPurifier_Token_Text($char_circ) );
         
         foreach($input as $i => $discard) {
             $result = $this->DirectLex->tokenizeHTML($input[$i]);

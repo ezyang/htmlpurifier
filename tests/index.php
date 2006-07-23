@@ -19,6 +19,7 @@ $test->addTestFile('HTMLPurifier/Lexer/DirectLexTest.php');
 $test->addTestFile('HTMLPurifier/DefinitionTest.php');
 $test->addTestFile('HTMLPurifier/ChildDefTest.php');
 $test->addTestFile('HTMLPurifier/GeneratorTest.php');
+$test->addTestFile('HTMLPurifier/EntityLookupTest.php');
 
 $test->run( new HtmlReporter() );
 
