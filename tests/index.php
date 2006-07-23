@@ -14,6 +14,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . '../library');
 $test = new GroupTest('HTMLPurifier');
 
 $test->addTestFile('HTMLPurifier/LexerTest.php');
+$test->addTestFile('HTMLPurifier/Lexer/DirectLexTest.php');
 //$test->addTestFile('TokenTest.php');
 $test->addTestFile('HTMLPurifier/DefinitionTest.php');
 $test->addTestFile('HTMLPurifier/ChildDefTest.php');
