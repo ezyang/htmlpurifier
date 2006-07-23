@@ -1,74 +1,172 @@
 <?php
 
-/*
-
-TODO:
- * Reread the XML spec and make sure I got everything right
- * Add support for CDATA sections
- * Have comments output with the leading and trailing --s
- * Optimize and benchmark
- * Check MF_Text behavior: shouldn't the info in there be raw (entities parsed?)
-
-*/
-
 require_once 'HTMLPurifier/Lexer.php';
 
+/**
+ * Our in-house implementation of a parser.
+ * 
+ * A pure PHP parser, DirectLex has absolutely no dependencies, making
+ * it a reasonably good default for PHP4.  Written with efficiency in mind,
+ * it can be four times faster than HTMLPurifier_Lexer_PEARSax3, although it
+ * pales in comparison to HTMLPurifier_Lexer_DOMLex.  It will support UTF-8
+ * completely eventually.
+ * 
+ * @todo Implement non-special string entity conversion.
+ * @todo Reread XML spec and document differences.
+ * @todo Add support for CDATA sections.
+ * @todo Determine correct behavior in outputting comment data. (preserve dashes?)
+ * @todo Optimize main function tokenizeHTML().
+ */
 class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
 {
     
-    // does this version of PHP support utf8 as entity function charset?
-    var $_entity_utf8;
-    
-    function HTMLPurifier_Lexer() {
-        $this->_entity_utf8 = version_compare(PHP_VERSION, '5', '>=');
+    /**
+     * Parses special entities into the proper characters.
+     * 
+     * This string will translate escaped versions of the special characters
+     * into the correct ones.
+     * 
+     * @warning
+     * You should be able to treat the output of this function as
+     * completely parsed, but that's only because all other entities should
+     * have been handled previously in substituteNonSpecialEntities()
+     * 
+     * @param $string String character data to be parsed.
+     * @returns Parsed character data.
+     */
+    function parseData($string) {
+        
+        // subtracts amps that cannot possibly be escaped
+        $num_amp = substr_count($string, '&') - substr_count($string, '& ') -
+            ($string[strlen($string)-1] === '&' ? 1 : 0);
+        
+        if (!$num_amp) return $string; // abort if no entities
+        $num_esc_amp = substr_count($string, '&amp;');
+        $string = strtr($string, $this->_special_entity2str);
+        
+        // code duplication for sake of optimization, see above
+        $num_amp_2 = substr_count($string, '&') - substr_count($string, '& ') -
+            ($string[strlen($string)-1] === '&' ? 1 : 0);
+        
+        if ($num_amp_2 <= $num_esc_amp) return $string;
+        
+        // hmm... now we have some uncommon entities. Use the callback.
+        $string = $this->substituteSpecialEntities($string);
+        return $string;
     }
     
-    // this is QUITE a knotty problem
-    // 
-    // The main trouble is that, even while assuming UTF-8 is what we're
-    // using, we've got to deal with HTML entities (like &mdash;)
-    // Not even sure if the PHP 5 decoding function does that. Plus,
-    // SimpleTest doesn't use UTF-8!
-    // 
-    // However, we MUST parse everything possible, because once you get
-    // to the HTML generator, it will escape everything possible (although
-    // that may not be correct, and we should be using htmlspecialchars() ).
-    // 
-    // Nevertheless, strictly XML speaking, we cannot assume any character
-    // entities are defined except the htmlspecialchars() ones, so leaving
-    // the entities inside HERE is not acceptable. (plus, htmlspecialchars
-    // might convert them anyway). So EVERYTHING must get parsed.
-    // 
-    // We may need to roll our own character entity lookup table. It's only
-    // about 250, fortunantely, the decimal/hex ones map cleanly to UTF-8.
-    function parseData($string) {
-        // we may want to let the user do a different char encoding,
-        // although there is NO REASON why they shouldn't be able
-        // to convert it to UTF-8 before they pass it to us
-        
-        // no support for less than PHP 4.3
-        if ($this->_entity_utf8) {
-            // PHP 5+, UTF-8 is nicely supported
-            return @html_entity_decode($string, ENT_QUOTES, 'UTF-8');
+    /**
+     * Whitespace characters for str(c)spn.
+     * @protected
+     */
+    var $_whitespace = "\x20\x09\x0D\x0A";
+    
+    /**
+     * Decimal to parsed string conversion table for special entities.
+     * @protected
+     */
+    var $_special_dec2str = array(
+            34 => '"', // quote
+            38 => '&', // ampersand            
+            39 => "'", // apostrophe           
+            60 => '<', // less than sign
+            62 => '>'  // greater than sign
+        );
+    
+    /**
+     * Stripped entity names to decimal conversion table for special entities.
+     * @protected
+     */
+    var $_special_ent2dec = array(
+            'quot' => 34,
+            'amp'  => 38,
+            'lt'   => 60,
+            'gt'   => 62,
+        );
+    
+    /**
+     * Most common entity to raw value conversion table for special entities.
+     * @protected
+     */
+    var $_special_entity2str = array(
+            '&quot;' => '"',
+            '&amp;'  => '&',
+            '&lt;'   => '<',
+            '&gt;'   => '>',
+            '&#39;'  => "'",
+            '&#039;' => "'",
+            '&#x27;' => "'",
+        );
+    
+    /**
+     * Callback regex string for parsing entities.
+     * @protected
+     */
+    var $_substituteEntitiesRegex =
+        //       1. hex          2. dec  3. string
+        '/&[#](?:x([a-fA-F0-9]+)|0*(\d+)|([A-Za-z]+));?/';
+    
+    /**
+     * Substitutes non-special entities with their parsed equivalents.
+     */
+    function substituteNonSpecialEntities($string) {
+        // it will try to detect missing semicolons, but don't rely on it
+        return preg_replace_callback(
+            $this->_substituteEntitiesRegex,
+            array('HTMLPurifier_Lexer_DirectLex', 'nonSpecialEntityCallback'),
+            $string);
+    }
+    
+    /**
+     * Callback function for substituteNonSpecialEntities() that does the work.
+     */
+    function nonSpecialEntityCallback($matches) {
+        // replaces all but big five
+        $entity = $matches[0];
+        $is_num = (@$matches[0][1] === '#');
+        if ($is_num) {
+            $is_hex = (@$entity[2] === 'x');
+            $int = $is_hex ? hexdec($matches[1]) : (int) $matches[2];
+            if (isset($this->_special_dec2str[$int]))  return $entity;
+            return chr($int);
         } else {
-            // PHP 4, do compat stuff
-            $string = html_entity_decode($string, ENT_QUOTES, 'ISO-8859-1');
-            // get the numeric UTF-8 stuff
-            $string = preg_replace('/&#(\d+);/me', "chr(\\1)", $string);
-            $string = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$string);
-            // get the stringy UTF-8 stuff
-            return $string;
+            if (isset($this->_special_ent2dec[$matches[3]])) return $entity;
+            // translate $matches[3]
         }
     }
     
-    function nextQuote($string, $offset = 0) {
-        $next = strcspn($string, '"\'', $offset) + $offset;
-        return strlen($string) == $next ? false : $next;
+    /**
+     * Substitutes only special entities with their parsed equivalents.
+     * 
+     * We try to avoid calling this function because otherwise, it would have
+     * to be called a lot (for every parsed section).
+     */
+    function substituteSpecialEntities($string) {
+        return preg_replace_callback(
+            $this->_substituteEntitiesRegex,
+            array('HTMLPurifier_Lexer_DirectLex', 'specialEntityCallback'),
+            $string);
     }
     
-    function nextWhiteSpace($string, $offset = 0) {
-        $next = strcspn($string, "\x20\x09\x0D\x0A", $offset) + $offset;
-        return strlen($string) == $next ? false : $next;
+    /**
+     * Callback function for substituteSpecialEntities() that does the work.
+     * 
+     * This callback is very similar to nonSpecialEntityCallback().
+     */
+    function specialEntityCallback($matches) {
+        $entity = $matches[0];
+        $is_num = (@$matches[0][1] === '#');
+        if ($is_num) {
+            $is_hex = (@$entity[2] === 'x');
+            $int = $is_hex ? hexdec($matches[1]) : (int) $matches[2];
+            return isset($this->_special_dec2str[$int]) ?
+                $this->_special_dec2str[$int] :
+                $entity;
+        } else {
+            return isset($this->_special_ent2dec[$matches[3]]) ?
+                $this->_special_ent2dec[$matches[3]] :
+                $entity;
+        }
     }
     
     function tokenizeHTML($string) {
@@ -80,6 +178,9 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         $cursor = 0; // our location in the text
         $inside_tag = false; // whether or not we're parsing the inside of a tag
         $array = array(); // result array
+        
+        // expand entities THAT AREN'T THE BIG FIVE
+        $string = $this->substituteNonSpecialEntities($string);
         
         // infinite loop protection
         // has to be pretty big, since html docs can be big
@@ -104,11 +205,10 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 // We are not inside tag and there still is another tag to parse
                 $array[] = new
                     HTMLPurifier_Token_Text(
-                        html_entity_decode(
+                        $this->parseData(
                             substr(
                                 $string, $cursor, $position_next_lt - $cursor
-                            ),
-                            ENT_QUOTES
+                            )
                         )
                     );
                 $cursor  = $position_next_lt + 1;
@@ -121,28 +221,28 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 // Create Text of rest of string
                 $array[] = new
                     HTMLPurifier_Token_Text(
-                        html_entity_decode(
+                        $this->parseData(
                             substr(
                                 $string, $cursor
-                            ),
-                            ENT_QUOTES
+                            )
                         )
                     );
                 break;
             } elseif ($inside_tag && $position_next_gt !== false) {
                 // We are in tag and it is well formed
                 // Grab the internals of the tag
-                $segment = substr($string, $cursor, $position_next_gt-$cursor);
+                $strlen_segment = $position_next_gt - $cursor;
+                $segment = substr($string, $cursor, $strlen_segment);
                 
                 // Check if it's a comment
                 if (
-                    substr($segment,0,3) == '!--' &&
-                    substr($segment,strlen($segment)-2,2) == '--'
+                    substr($segment, 0, 3) == '!--' &&
+                    substr($segment, $strlen_segment-2, 2) == '--'
                 ) {
                     $array[] = new
                         HTMLPurifier_Token_Comment(
                             substr(
-                                $segment, 3, strlen($segment) - 5
+                                $segment, 3, $strlen_segment - 5
                             )
                         );
                     $inside_tag = false;
@@ -164,14 +264,16 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 // trailing slash. Remember, we could have a tag like <br>, so
                 // any later token processing scripts must convert improperly
                 // classified EmptyTags from StartTags.
-                $is_self_closing= (strpos($segment,'/') === strlen($segment)-1);
+                $is_self_closing= (strpos($segment,'/') === $strlen_segment-1);
                 if ($is_self_closing) {
-                    $segment = substr($segment, 0, strlen($segment) - 1);
+                    $strlen_segment--;
+                    $segment = substr($segment, 0, $strlen_segment);
                 }
                 
                 // Check if there are any attributes
-                $position_first_space = $this->nextWhiteSpace($segment);
-                if ($position_first_space === false) {
+                $position_first_space = strcspn($segment, $this->_whitespace);
+                
+                if ($position_first_space >= $strlen_segment) {
                     if ($is_self_closing) {
                         $array[] = new HTMLPurifier_Token_Empty($segment);
                     } else {
@@ -191,7 +293,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                         )
                     );
                 if ($attribute_string) {
-                    $attributes = $this->tokenizeAttributeString(
+                    $attributes = $this->parseAttributeString(
                                         $attribute_string
                                   );
                 } else {
@@ -210,9 +312,8 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 $array[] = new
                     HTMLPurifier_Token_Text(
                         '<' .
-                        html_entity_decode(
-                            substr($string, $cursor),
-                            ENT_QUOTES
+                        $this->parseData(
+                            substr($string, $cursor)
                         )
                     );
                 break;
@@ -222,7 +323,13 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         return $array;
     }
     
-    function tokenizeAttributeString($string) {
+    /**
+     * Takes the inside of an HTML tag and makes an assoc array of attributes.
+     * 
+     * @param $string Inside of tag excluding name.
+     * @return Assoc array of attributes.
+     */
+    function parseAttributeString($string) {
         $string = (string) $string; // quick typecast
         
         if ($string == '') return array(); // no attributes
@@ -281,17 +388,14 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 break;
             }
             
-            $cursor += ($value = strspn($string, "\x20\x09\x0D\x0A", $cursor));
-            
-            $position_next_space = $this->nextWhiteSpace($string, $cursor);
-            $position_next_equal = strpos($string, '=', $cursor);
+            $cursor += ($value = strspn($string, $this->_whitespace, $cursor));
             
             // grab the key
             
             $key_begin = $cursor; //we're currently at the start of the key
             
             // scroll past all characters that are the key (not whitespace or =)
-            $cursor += strcspn($string, "\x20\x09\x0D\x0A=", $cursor);
+            $cursor += strcspn($string, $this->_whitespace . '=', $cursor);
             
             $key_end = $cursor; // now at the end of the key
             
@@ -300,7 +404,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             if (!$key) continue; // empty key
             
             // scroll past all whitespace
-            $cursor += strspn($string, "\x20\x09\x0D\x0A", $cursor);
+            $cursor += strspn($string, $this->_whitespace, $cursor);
             
             if ($cursor >= $size) {
                 $array[$key] = $key;
@@ -315,7 +419,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 // key="value"
                 
                 $cursor++;
-                $cursor += strspn($string, "\x20\x09\x0D\x0A", $cursor);
+                $cursor += strspn($string, $this->_whitespace, $cursor);
                 
                 // we might be in front of a quote right now
                 
@@ -330,12 +434,12 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 } else {
                     // it's not quoted, end bound is whitespace
                     $value_begin = $cursor;
-                    $cursor += strcspn($string, "\x20\x09\x0D\x0A", $cursor);
+                    $cursor += strcspn($string, $this->_whitespace, $cursor);
                     $value_end = $cursor;
                 }
                 
                 $value = substr($string, $value_begin, $value_end - $value_begin);
-                $array[$key] = $value;
+                $array[$key] = $this->parseData($value);
                 $cursor++;
                 
             } else {
