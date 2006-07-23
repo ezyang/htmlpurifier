@@ -41,16 +41,22 @@ class RowTimer extends Benchmark_Timer
         
         $out .= "<td>{$this->name}</td>";
         
+        $standard = false;
+        
         foreach ($result as $k => $v) {
             if ($v['name'] == 'Start' || $v['name'] == 'Stop') continue;
             
             //$perc = (($v['diff'] * 100) / $total);
             //$tperc = (($v['total'] * 100) / $total);
             
-            $out .= '<td align="right">' . $v['diff'] . '</td>';
+            //$out .= '<td align="right">' . $v['diff'] . '</td>';
             
-            //$out .= '<td align="right">' . number_format($perc, 2, '.', '') .
-            //       '%</td>';
+            if ($standard == false) $standard = $v['diff'];
+            
+            $perc = $v['diff'] * 100 / $standard;
+            
+            $out .= '<td align="right">' . number_format($perc, 2, '.', '') .
+                   '%</td>';
             
         }
         
