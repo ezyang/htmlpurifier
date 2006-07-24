@@ -1,18 +1,30 @@
 <?php
 
 require_once 'HTMLPurifier/Definition.php';
-require_once 'HTMLPurifier/Lexer.php';
+require_once 'HTMLPurifier/Lexer/DirectLex.php';
 
 class HTMLPurifier_DefinitionTest extends UnitTestCase
 {
     
-    var $def, $lex;
+    var $def, $lex, $gen;
     
     function HTMLPurifier_DefinitionTest() {
         $this->UnitTestCase();
         $this->def = new HTMLPurifier_Definition();
         $this->def->loadData();
-        $this->lex = new HTMLPurifier_Lexer();
+        
+        // we can't use the DOM lexer since it does too much stuff
+        // automatically, however, we should be able to use it
+        // interchangeably if we wanted to...
+        
+        if (true) {
+            $this->lex = new HTMLPurifier_Lexer_DirectLex();
+        } else {
+            require_once 'HTMLPurifier/Lexer/DOMLex.php';
+            $this->lex = new HTMLPurifier_Lexer_DOMLex();
+        }
+        
+        $this->gen = new HTMLPurifier_Generator();
     }
     
     function test_removeForeignElements() {
@@ -20,44 +32,21 @@ class HTMLPurifier_DefinitionTest extends UnitTestCase
         $inputs = array();
         $expect = array();
         
-        $inputs[0] = array();
+        $inputs[0] = '';
         $expect[0] = $inputs[0];
         
-        $inputs[1] = array(
-            new HTMLPurifier_Token_Text('This is ')
-           ,new HTMLPurifier_Token_Start('b', array())
-           ,new HTMLPurifier_Token_Text('bold')
-           ,new HTMLPurifier_Token_End('b')
-           ,new HTMLPurifier_Token_Text(' text')
-            );
+        $inputs[1] = 'This is <b>bold text</b>.';
         $expect[1] = $inputs[1];
         
-        $inputs[2] = array(
-            new HTMLPurifier_Token_Start('asdf')
-           ,new HTMLPurifier_Token_End('asdf')
-           ,new HTMLPurifier_Token_Start('d', array('href' => 'bang!'))
-           ,new HTMLPurifier_Token_End('d')
-           ,new HTMLPurifier_Token_Start('pooloka')
-           ,new HTMLPurifier_Token_Start('poolasdf')
-           ,new HTMLPurifier_Token_Start('ds', array('moogle' => '&'))
-           ,new HTMLPurifier_Token_End('asdf')
-           ,new HTMLPurifier_Token_End('asdf')
-            );
-        $expect[2] = array(
-            new HTMLPurifier_Token_Text('<asdf>')
-           ,new HTMLPurifier_Token_Text('</asdf>')
-           ,new HTMLPurifier_Token_Text('<d href="bang!">')
-           ,new HTMLPurifier_Token_Text('</d>')
-           ,new HTMLPurifier_Token_Text('<pooloka>')
-           ,new HTMLPurifier_Token_Text('<poolasdf>')
-           ,new HTMLPurifier_Token_Text('<ds moogle="&amp;">')
-           ,new HTMLPurifier_Token_Text('</asdf>')
-           ,new HTMLPurifier_Token_Text('</asdf>')
-            );
+        // [INVALID]
+        $inputs[2] = '<asdf>Bling</asdf><d href="bang">Bong</d><foobar />';
+        $expect[2] = htmlspecialchars($inputs[2]);
         
         foreach ($inputs as $i => $input) {
-            $result = $this->def->removeForeignElements($input);
-            $this->assertEqual($expect[$i], $result);
+            $tokens = $this->lex->tokenizeHTML($input);
+            $result_tokens = $this->def->removeForeignElements($tokens);
+            $result = $this->gen->generateFromTokens($result_tokens);
+            $this->assertEqual($expect[$i], $result, "Test $i: %s");
             paintIf($result, $result != $expect[$i]);
         }
         
@@ -68,122 +57,46 @@ class HTMLPurifier_DefinitionTest extends UnitTestCase
         $inputs = array();
         $expect = array();
         
-        $inputs[0] = array();
+        $inputs[0] = '';
         $expect[0] = $inputs[0];
         
-        $inputs[1] = array(
-            new HTMLPurifier_Token_Text('This is ')
-           ,new HTMLPurifier_Token_Start('b')
-           ,new HTMLPurifier_Token_Text('bold')
-           ,new HTMLPurifier_Token_End('b')
-           ,new HTMLPurifier_Token_Text(' text')
-           ,new HTMLPurifier_Token_Empty('br')
-            );
+        $inputs[1] = 'This is <b>bold text</b>.';
         $expect[1] = $inputs[1];
         
-        $inputs[2] = array(
-            new HTMLPurifier_Token_Start('b')
-           ,new HTMLPurifier_Token_Text('Unclosed tag, gasp!')
-            );
-        $expect[2] = array(
-            new HTMLPurifier_Token_Start('b')
-           ,new HTMLPurifier_Token_Text('Unclosed tag, gasp!')
-           ,new HTMLPurifier_Token_End('b')
-            );
+        $inputs[2] = '<b>Unclosed tag, gasp!';
+        $expect[2] = '<b>Unclosed tag, gasp!</b>';
         
-        $inputs[3] = array(
-            new HTMLPurifier_Token_Start('b')
-           ,new HTMLPurifier_Token_Start('i')
-           ,new HTMLPurifier_Token_Text('The b is closed, but the i is not')
-           ,new HTMLPurifier_Token_End('b')
-            );
-        $expect[3] = array(
-            new HTMLPurifier_Token_Start('b')
-           ,new HTMLPurifier_Token_Start('i')
-           ,new HTMLPurifier_Token_Text('The b is closed, but the i is not')
-           ,new HTMLPurifier_Token_End('i')
-           ,new HTMLPurifier_Token_End('b')
-            );
+        $inputs[3] = '<b><i>Bold and italic?</b>';
+        $expect[3] = '<b><i>Bold and italic?</i></b>';
         
-        $inputs[4] = array(
-            new HTMLPurifier_Token_Text('Hey, recycle unused end tags!')
-           ,new HTMLPurifier_Token_End('b')
-            );
-        $expect[4] = array(
-            new HTMLPurifier_Token_Text('Hey, recycle unused end tags!')
-           ,new HTMLPurifier_Token_Text('</b>')
-            );
+        // CHANGE THIS BEHAVIOR!
+        $inputs[4] = 'Unused end tags... recycle!</b>';
+        $expect[4] = 'Unused end tags... recycle!&lt;/b&gt;';
         
-        $inputs[5] = array(new HTMLPurifier_Token_Start('br', array('style' => 'clear:both;')));
-        $expect[5] = array(new HTMLPurifier_Token_Empty('br', array('style' => 'clear:both;')));
+        $inputs[5] = '<br style="clear:both;">';
+        $expect[5] = '<br style="clear:both;" />';
         
-        $inputs[6] = array(new HTMLPurifier_Token_Empty('div', array('style' => 'clear:both;')));
-        $expect[6] = array(
-            new HTMLPurifier_Token_Start('div', array('style' => 'clear:both;'))
-           ,new HTMLPurifier_Token_End('div')
-            );
+        $inputs[6] = '<div style="clear:both;" />';
+        $expect[6] = '<div style="clear:both;"></div>';
         
         // test automatic paragraph closing
         
-        $inputs[7] = array(
-            new HTMLPurifier_Token_Start('p')
-           ,new HTMLPurifier_Token_Text('Paragraph 1')
-           ,new HTMLPurifier_Token_Start('p')
-           ,new HTMLPurifier_Token_Text('Paragraph 2')
-            );
-        $expect[7] = array(
-            new HTMLPurifier_Token_Start('p')
-           ,new HTMLPurifier_Token_Text('Paragraph 1')
-           ,new HTMLPurifier_Token_End('p')
-           ,new HTMLPurifier_Token_Start('p')
-           ,new HTMLPurifier_Token_Text('Paragraph 2')
-           ,new HTMLPurifier_Token_End('p')
-            );
+        $inputs[7] = '<p>Paragraph 1<p>Paragraph 2';
+        $expect[7] = '<p>Paragraph 1</p><p>Paragraph 2</p>';
         
-        $inputs[8] = array(
-            new HTMLPurifier_Token_Start('div')
-           ,new HTMLPurifier_Token_Start('p')
-           ,new HTMLPurifier_Token_Text('Paragraph 1 in a div')
-           ,new HTMLPurifier_Token_End('div')
-            );
-        $expect[8] = array(
-            new HTMLPurifier_Token_Start('div')
-           ,new HTMLPurifier_Token_Start('p')
-           ,new HTMLPurifier_Token_Text('Paragraph 1 in a div')
-           ,new HTMLPurifier_Token_End('p')
-           ,new HTMLPurifier_Token_End('div')
-            );
+        $inputs[8] = '<div><p>Paragraphs<p>In<p>A<p>Div</div>';
+        $expect[8] = '<div><p>Paragraphs</p><p>In</p><p>A</p><p>Div</p></div>';
         
         // automatic list closing
         
-        $inputs[9] = array(
-            new HTMLPurifier_Token_Start('ol')
-            
-           ,new HTMLPurifier_Token_Start('li')
-           ,new HTMLPurifier_Token_Text('Item 1')
-           
-           ,new HTMLPurifier_Token_Start('li')
-           ,new HTMLPurifier_Token_Text('Item 2')
-           
-           ,new HTMLPurifier_Token_End('ol')
-            );
-        $expect[9] = array(
-            new HTMLPurifier_Token_Start('ol')
-            
-           ,new HTMLPurifier_Token_Start('li')
-           ,new HTMLPurifier_Token_Text('Item 1')
-           ,new HTMLPurifier_Token_End('li')
-           
-           ,new HTMLPurifier_Token_Start('li')
-           ,new HTMLPurifier_Token_Text('Item 2')
-           ,new HTMLPurifier_Token_End('li')
-           
-           ,new HTMLPurifier_Token_End('ol')
-            );
+        $inputs[9] = '<ol><li>Item 1<li>Item 2</ol>';
+        $expect[9] = '<ol><li>Item 1</li><li>Item 2</li></ol>';
         
         foreach ($inputs as $i => $input) {
-            $result = $this->def->makeWellFormed($input);
-            $this->assertEqual($expect[$i], $result);
+            $tokens = $this->lex->tokenizeHTML($input);
+            $result_tokens = $this->def->makeWellFormed($tokens);
+            $result = $this->gen->generateFromTokens($result_tokens);
+            $this->assertEqual($expect[$i], $result, "Test $i: %s");
             paintIf($result, $result != $expect[$i]);
         }
         
@@ -196,68 +109,31 @@ class HTMLPurifier_DefinitionTest extends UnitTestCase
         // next id = 4
         
         // legal inline nesting
-        $inputs[0] = array(
-            new HTMLPurifier_Token_Start('b'),
-                new HTMLPurifier_Token_Text('Bold text'),
-            new HTMLPurifier_Token_End('b'),
-            );
+        $inputs[0] = '<b>Bold text</b>';
         $expect[0] = $inputs[0];
         
         // legal inline and block
         // as the parent element is considered FLOW
-        $inputs[1] = array(
-            new HTMLPurifier_Token_Start('a', array('href' => 'http://www.example.com/')),
-                new HTMLPurifier_Token_Text('Linky'),
-            new HTMLPurifier_Token_End('a'),
-            new HTMLPurifier_Token_Start('div'),
-                new HTMLPurifier_Token_Text('Block element'),
-            new HTMLPurifier_Token_End('div'),
-            );
+        $inputs[1] = '<a href="about:blank">Blank</a><div>Block</div>';
         $expect[1] = $inputs[1];
         
         // illegal block in inline, element -> text
-        $inputs[2] = array(
-            new HTMLPurifier_Token_Start('b'),
-                new HTMLPurifier_Token_Start('div'),
-                    new HTMLPurifier_Token_Text('Illegal Div'),
-                new HTMLPurifier_Token_End('div'),
-            new HTMLPurifier_Token_End('b'),
-            );
-        $expect[2] = array(
-            new HTMLPurifier_Token_Start('b'),
-                new HTMLPurifier_Token_Text('<div>'),
-                new HTMLPurifier_Token_Text('Illegal Div'),
-                new HTMLPurifier_Token_Text('</div>'),
-            new HTMLPurifier_Token_End('b'),
-            );
+        $inputs[2] = '<b><div>Illegal div.</div></b>';
+        $expect[2] = '<b>&lt;div&gt;Illegal div.&lt;/div&gt;</b>';
         
         // test of empty set that's required, resulting in removal of node
-        $inputs[3] = array(
-            new HTMLPurifier_Token_Start('ul'),
-            new HTMLPurifier_Token_End('ul')
-            );
-        $expect[3] = array();
+        $inputs[3] = '<ul></ul>';
+        $expect[3] = '';
         
         // test illegal text which gets removed
-        $inputs[4] = array(
-            new HTMLPurifier_Token_Start('ul'),
-                new HTMLPurifier_Token_Text('Illegal Text'),
-                new HTMLPurifier_Token_Start('li'),
-                    new HTMLPurifier_Token_Text('Legal item'),
-                new HTMLPurifier_Token_End('li'),
-            new HTMLPurifier_Token_End('ul')
-            );
-        $expect[4] = array(
-            new HTMLPurifier_Token_Start('ul'),
-                new HTMLPurifier_Token_Start('li'),
-                    new HTMLPurifier_Token_Text('Legal item'),
-                new HTMLPurifier_Token_End('li'),
-            new HTMLPurifier_Token_End('ul')
-            );
+        $inputs[4] = '<ul>Illegal text<li>Legal item</li></ul>';
+        $expect[4] = '<ul><li>Legal item</li></ul>';
         
         foreach ($inputs as $i => $input) {
-            $result = $this->def->fixNesting($input);
-            $this->assertEqual($expect[$i], $result);
+            $tokens = $this->lex->tokenizeHTML($input);
+            $result_tokens = $this->def->fixNesting($tokens);
+            $result = $this->gen->generateFromTokens($result_tokens);
+            $this->assertEqual($expect[$i], $result, "Test $i: %s");
             paintIf($result, $result != $expect[$i]);
         }
     }
