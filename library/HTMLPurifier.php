@@ -8,10 +8,11 @@
  * is safe for output onto webpages. It achieves this by:
  * 
  *  -# Lexing (parsing into tokens) the document,
- *  -# Removing all elements not in the whitelist,
- *  -# Making the tokens well-formed,
- *  -# Fixing the nesting of the nodes,
- *  -# Validating attributes of the nodes, and
+ *  -# Executing various strategies on the tokens:
+ *      -# Removing all elements not in the whitelist,
+ *      -# Making the tokens well-formed,
+ *      -# Fixing the nesting of the nodes, and
+ *      -# Validating attributes of the nodes; and
  *  -# Generating HTML from the purified tokens.
  * 
  * See /docs/spec.txt for more details.
@@ -31,24 +32,15 @@ require_once 'HTMLPurifier/Generator.php';
 class HTMLPurifier
 {
     
-    var $lexer;         /*!< @brief Instance of HTMLPurifier_Lexer concrete
-                                    implementation. */
-    var $definition;    /*!< @brief Instance of HTMLPurifier_Definition. */
-    var $generator;     /*!< @brief Instance of HTMLPurifier_Generator. */
-    
     /**
      * Initializes the purifier.
      * 
      * The constructor instantiates all necessary sub-objects to do the job,
      * because creating some of them (esp. HTMLPurifier_Definition) can be
      * expensive.
-     * 
-     * @todo Accept Policy object to define configuration.
      */
     function HTMLPurifier() {
-        $this->lexer        = new HTMLPurifier_Lexer::create();
-        $this->definition   = new HTMLPurifier_Definition();
-        $this->generator    = new HTMLPurifier_Generator();
+        // unimplemented
     }
     
     /**
@@ -58,9 +50,7 @@ class HTMLPurifier
      * @return Purified HTML
      */
     function purify($html) {
-        $tokens = $this->lexer->tokenizeHTML($html);
-        $tokens = $this->definition->purifyTokens($tokens);
-        return $this->generator->generateFromTokens($tokens);
+        // unimplemented
     }
     
 }

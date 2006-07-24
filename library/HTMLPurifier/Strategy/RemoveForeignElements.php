@@ -10,7 +10,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
     var $generator;
     var $definition;
     
-    function HTMLPurifier_Definition() {
+    function HTMLPurifier_Strategy_RemoveForeignElements() {
         $this->generator = new HTMLPurifier_Generator();
         $this->definition = HTMLPurifier_Definition::instance();
     }

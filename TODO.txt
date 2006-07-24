@@ -1,11 +1,13 @@
-TODO
+Todo List
 
 Primary:
-- Finish attributes fixing
+ - Implement attribute validation
+ - Implement HTMLPurifier
 
 Secondary:
-- Migrate all unit tests to use the lexer and generator
+ - Migrate all unit tests to use the lexer and generator
 
 Code issues:
-- (In Progress) Factor PureHTMLDefinition into a set of strategies
-- (?) Create a TokenFactory to prevent really long lines
+ - Rename AbstractTest to Harness
+ - Reorganize Strategy hierarchy to minimize duplication
+ - (?) Create a TokenFactory to prevent really long lines

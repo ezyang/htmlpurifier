@@ -8,7 +8,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
     
     var $definition;
     
-    function HTMLPurifier_Definition() {
+    function HTMLPurifier_Strategy_FixNesting() {
         $this->definition = HTMLPurifier_Definition::instance();
     }
     

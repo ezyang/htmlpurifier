@@ -16,10 +16,12 @@ $test = new GroupTest('HTMLPurifier');
 $test->addTestFile('HTMLPurifier/LexerTest.php');
 $test->addTestFile('HTMLPurifier/Lexer/DirectLexTest.php');
 //$test->addTestFile('TokenTest.php');
-$test->addTestFile('HTMLPurifier/DefinitionTest.php');
 $test->addTestFile('HTMLPurifier/ChildDefTest.php');
 $test->addTestFile('HTMLPurifier/GeneratorTest.php');
 $test->addTestFile('HTMLPurifier/EntityLookupTest.php');
+$test->addTestFile('HTMLPurifier/Strategy/RemoveForeignElementsTest.php');
+$test->addTestFile('HTMLPurifier/Strategy/MakeWellFormedTest.php');
+$test->addTestFile('HTMLPurifier/Strategy/FixNestingTest.php');
 
 $test->run( new HtmlReporter() );
 

@@ -1,5 +1,6 @@
 <?php
 
+require_once 'HTMLPurifier/StrategyAbstractTest.php';
 require_once 'HTMLPurifier/Strategy/RemoveForeignElements.php';
 
 class HTMLPurifier_Strategy_RemoveForeignElementsTest
@@ -25,7 +26,7 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
         
         foreach ($inputs as $i => $input) {
             $tokens = $this->lex->tokenizeHTML($input);
-            $result_tokens = $this->strategy->execute($tokens);
+            $result_tokens = $strategy->execute($tokens);
             $result = $this->gen->generateFromTokens($result_tokens);
             $this->assertEqual($expect[$i], $result, "Test $i: %s");
             paintIf($result, $result != $expect[$i]);
