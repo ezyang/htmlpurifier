@@ -37,16 +37,14 @@ class HTMLPurifier_Definition
         static $instance = null;
         if (!$instance) {
             $instance = new HTMLPurifier_Definition();
+            $instance->setup();
         }
         return $instance;
     }
     
-    function HTMLPurifier_Definition() {
-        $this->generator = new HTMLPurifier_Generator();
-        $this->loadData();
-    }
+    function HTMLPurifier_Definition() {}
     
-    function loadData() {
+    function setup() {
         // emulates the structure of the DTD
         
         // entities: prefixed with e_ and _ replaces .
