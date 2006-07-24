@@ -1,7 +1,8 @@
 <?php
 
-require_once 'HTMLPurifier/Generator.php';
+require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/Definition.php';
+require_once 'HTMLPurifier/Generator.php';
 
 class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
 {
