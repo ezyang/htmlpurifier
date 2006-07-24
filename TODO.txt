@@ -4,12 +4,8 @@ Primary:
 - Finish attributes fixing
 
 Secondary:
-- Build an automated release system that will create minimal versions too
-- Build system that will in-line includes
 - Migrate all unit tests to use the lexer and generator
-- Build the entity lookup table
 
 Code issues:
-- Factor PureHTMLDefinition into a set of strategies
-- Create a TokenFactory to prevent really long lines
-- Fix the encoding problems in the lexer and generator
+- (In Progress) Factor PureHTMLDefinition into a set of strategies
+- (?) Create a TokenFactory to prevent really long lines
