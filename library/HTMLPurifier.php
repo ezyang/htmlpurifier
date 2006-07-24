@@ -26,7 +26,7 @@ require_once 'HTMLPurifier/Generator.php';
  * Main library execution class.
  * 
  * Facade that performs calls to the HTMLPurifier_Lexer,
- * HTMLPurifier_Definition and HTMLPurifier_Generator subsystems in order to
+ * HTMLPurifier_Strategy and HTMLPurifier_Generator subsystems in order to
  * purify HTML.
  */
 class HTMLPurifier
