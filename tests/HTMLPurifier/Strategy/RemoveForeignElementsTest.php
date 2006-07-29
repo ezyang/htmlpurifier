@@ -24,14 +24,7 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
         $inputs[2] = '<asdf>Bling</asdf><d href="bang">Bong</d><foobar />';
         $expect[2] = htmlspecialchars($inputs[2]);
         
-        foreach ($inputs as $i => $input) {
-            $tokens = $this->lex->tokenizeHTML($input);
-            $result_tokens = $strategy->execute($tokens);
-            $result = $this->gen->generateFromTokens($result_tokens);
-            $this->assertEqual($expect[$i], $result, "Test $i: %s");
-            paintIf($result, $result != $expect[$i]);
-        }
-        
+        $this->assertStrategyWorks($strategy, $inputs, $expect);
     }
     
 }

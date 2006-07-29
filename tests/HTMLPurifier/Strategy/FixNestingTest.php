@@ -37,13 +37,7 @@ class HTMLPurifier_Strategy_FixNestingTest
         $inputs[4] = '<ul>Illegal text<li>Legal item</li></ul>';
         $expect[4] = '<ul><li>Legal item</li></ul>';
         
-        foreach ($inputs as $i => $input) {
-            $tokens = $this->lex->tokenizeHTML($input);
-            $result_tokens = $strategy->execute($tokens);
-            $result = $this->gen->generateFromTokens($result_tokens);
-            $this->assertEqual($expect[$i], $result, "Test $i: %s");
-            paintIf($result, $result != $expect[$i]);
-        }
+        $this->assertStrategyWorks($strategy, $inputs, $expect);
     }
     
 }

@@ -11,6 +11,14 @@ require_once 'Debugger.php';
 // emulates inserting a dir called HTMLPurifier into your class dir
 set_include_path(get_include_path() . PATH_SEPARATOR . '../library');
 
+// since Mocks can't be called from within test files, we need to do
+// a little jumping through hoops to generate them
+function generate_mock_once($name) {
+    $mock_name = $name . 'Mock';
+    if (class_exists($mock_name)) return false;
+    Mock::generate($name, $mock_name);
+}
+
 $test = new GroupTest('HTMLPurifier');
 
 $test->addTestFile('HTMLPurifier/LexerTest.php');
@@ -22,6 +30,8 @@ $test->addTestFile('HTMLPurifier/EntityLookupTest.php');
 $test->addTestFile('HTMLPurifier/Strategy/RemoveForeignElementsTest.php');
 $test->addTestFile('HTMLPurifier/Strategy/MakeWellFormedTest.php');
 $test->addTestFile('HTMLPurifier/Strategy/FixNestingTest.php');
+$test->addTestFile('HTMLPurifier/Strategy/CompositeTest.php');
+$test->addTestFile('HTMLPurifier/Strategy/CoreTest.php');
 
 $test->run( new HtmlReporter() );
 

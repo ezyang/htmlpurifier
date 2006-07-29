@@ -25,6 +25,16 @@ class HTMLPurifier_StrategyAbstractTest extends UnitTestCase
         $this->gen = new HTMLPurifier_Generator();
     }
     
+    function assertStrategyWorks($strategy, $inputs, $expect) {
+        foreach ($inputs as $i => $input) {
+            $tokens = $this->lex->tokenizeHTML($input);
+            $result_tokens = $strategy->execute($tokens);
+            $result = $this->gen->generateFromTokens($result_tokens);
+            $this->assertEqual($expect[$i], $result, "Test $i: %s");
+            paintIf($result, $result != $expect[$i]);
+        }
+    }
+    
 }
 
 ?>

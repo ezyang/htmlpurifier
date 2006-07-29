@@ -49,14 +49,7 @@ class HTMLPurifier_Strategy_MakeWellFormedTest
         $inputs[9] = '<ol><li>Item 1<li>Item 2</ol>';
         $expect[9] = '<ol><li>Item 1</li><li>Item 2</li></ol>';
         
-        foreach ($inputs as $i => $input) {
-            $tokens = $this->lex->tokenizeHTML($input);
-            $result_tokens = $strategy->execute($tokens);
-            $result = $this->gen->generateFromTokens($result_tokens);
-            $this->assertEqual($expect[$i], $result, "Test $i: %s");
-            paintIf($result, $result != $expect[$i]);
-        }
-        
+        $this->assertStrategyWorks($strategy, $inputs, $expect);
     }
     
 }
