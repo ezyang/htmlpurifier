@@ -15,6 +15,7 @@ $entity_dir = '../docs/entities/';
 // defines the output file for the serialized content.
 $output_file = '../library/HTMLPurifier/EntityLookup/data.txt';
 
+// courtesy of a PHP manual comment
 function unichr($dec) {
     if ($dec < 128) {
         $utf  = chr($dec);
