@@ -74,13 +74,25 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
     
     function test_generateFromTokens() {
         
-        $tokens = array(
+        $inputs = array();
+        $expect = array();
+        
+        $inputs[0] = array(
             new HTMLPurifier_Token_Start('b'),
             new HTMLPurifier_Token_Text('Foobar!'),
             new HTMLPurifier_Token_End('b')
             );
-        $expect = '<b>Foobar!</b>';
-        $this->assertEqual($expect, $this->gen->generateFromTokens($tokens));
+        $expect[0] = '<b>Foobar!</b>';
+        
+        $inputs[1] = array();
+        $expect[1] = '';
+        
+        foreach ($inputs as $i => $input) {
+            $result = $this->gen->generateFromTokens($input);
+            $this->assertEqual($expect[$i], $result);
+            paintIf($result, $result != $expect[$i]);
+        }
+        
         
     }
     

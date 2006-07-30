@@ -74,14 +74,14 @@ be translated intelligently -->
   >
 
 <!ATTLIST bdo
-  %coreattrs;
+  %coreattrs; // !#!
   lang        %LanguageCode; #IMPLIED
   xml:lang    %LanguageCode; #IMPLIED
   dir         (ltr|rtl)      #REQUIRED
   >
 
 <!ATTLIST br
-  %coreattrs;
+  %coreattrs; // !#!
   DEPRECATED clear       (left|all|right|none) "none"
   >
 

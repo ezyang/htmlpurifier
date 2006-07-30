@@ -5,6 +5,7 @@ class HTMLPurifier_Generator
     
     function generateFromTokens($tokens) {
         $html = '';
+        if (!$tokens) return '';
         foreach ($tokens as $token) {
             $html .= $this->generateFromToken($token);
         }

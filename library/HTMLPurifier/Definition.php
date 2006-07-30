@@ -1,6 +1,8 @@
 <?php
 
 require_once 'HTMLPurifier/AttrDef.php';
+    require_once 'HTMLPurifier/AttrDef/Enum.php';
+    require_once 'HTMLPurifier/AttrDef/ID.php';
 require_once 'HTMLPurifier/ChildDef.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Token.php';
@@ -156,8 +158,16 @@ class HTMLPurifier_Definition
         $this->info['child']['a']    = $e_a_content;
         
         // attribute info
+        // this doesn't include REQUIRED declarations, those are handled
+        // by the transform classes
         
-        $a_dir = new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false);
+        // attrs, included in almost every single one except for a few
+        $this->info['attr']['*'] = array(
+            // core attrs
+            'id' => new HTMLPurifier_AttrDef_ID(),
+            // i18n
+            'dir' => new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false),
+            );
         
     }
     
