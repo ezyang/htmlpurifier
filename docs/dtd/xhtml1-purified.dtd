@@ -1,0 +1,271 @@
+<!-- Transform %TextAlign to align:value in style -->
+
+<!-- text alignment for p, div, h1-h6. The default is
+     align="left" for ltr headings, "right" for rtl
+     
+     Move to style! -->
+<!ENTITY % TextAlign "DEPRECATED align (left|center|right|justify) #IMPLIED">
+
+<!-- type and start should have CSS equivalents -->
+<!ENTITY % ULStyle "(disc|square|circle)">
+<!-- Ordered list numbering style
+
+    1   arabic numbers      1, 2, 3, ...
+    a   lower alpha         a, b, c, ...
+    A   upper alpha         A, B, C, ...
+    i   lower roman         i, ii, iii, ...
+    I   upper roman         I, II, III, ...
+
+    The style is applied to the sequence number which by default
+    is reset to 1 for the first list item in an ordered list.
+-->
+<!ENTITY % OLStyle "CDATA">
+<!-- LIStyle is constrained to: "(%ULStyle;|%OLStyle;)" -->
+<!ENTITY % LIStyle "CDATA">
+
+<!ATTLIST ol
+  %attrs;
+  DEPRECATED type        %OLStyle;      #IMPLIED
+  DEPRECATED start       %Number;       #IMPLIED
+  >
+
+<!ATTLIST li
+  %attrs;
+  DEPRECATED type        %LIStyle;      #IMPLIED
+  DEPRECATED value       %Number;       #IMPLIED
+  >
+
+<!ATTLIST hr
+  %attrs;
+  DEPRECATED align       (left|center|right) #IMPLIED
+  DEPRECATED size        %Pixels;       #IMPLIED
+  DEPRECATED width       %Length;       #IMPLIED
+  >
+
+<!ATTLIST pre
+  %attrs;
+  DEPRECATED width       %Number;      #IMPLIED
+  >
+
+<!ATTLIST blockquote
+  %attrs;
+  cite        %URI;          #IMPLIED
+  >
+
+<!ATTLIST ins
+  %attrs;
+  cite        %URI;          #IMPLIED
+  datetime    %Datetime;     #IMPLIED
+  >
+<!ATTLIST del
+  %attrs;
+  cite        %URI;          #IMPLIED
+  datetime    %Datetime;     #IMPLIED
+  >
+
+<!ATTLIST a
+  %attrs;
+  name        NMTOKEN        #IMPLIED // ID
+  href        %URI;          #IMPLIED
+  rel         %LinkTypes;    #IMPLIED // needs policing
+  rev         %LinkTypes;    #IMPLIED // see rel
+  target      %FrameTarget;  #IMPLIED // usually not used, but might be
+  >
+
+<!ATTLIST bdo
+  %coreattrs;
+  lang        %LanguageCode; #IMPLIED
+  xml:lang    %LanguageCode; #IMPLIED
+  dir         (ltr|rtl)      #REQUIRED
+  >
+
+<!ATTLIST br
+  %coreattrs;
+  DEPRECATED clear       (left|all|right|none) "none"
+  >
+
+<!ELEMENT q %Inline;>   <!-- inlined quote -->
+<!ATTLIST q
+  %attrs;
+  cite        %URI;          #IMPLIED
+  >
+
+<!ATTLIST img
+  %attrs;
+  src         %URI;          #REQUIRED
+  alt         %Text;         #REQUIRED
+  DEPRECATED name        NMTOKEN        #IMPLIED // ID
+  longdesc    %URI;          #IMPLIED
+  height      %Length;       #IMPLIED // dubious, but we'll allow
+  width       %Length;       #IMPLIED //
+  DEPRECATED align       %ImgAlign;     #IMPLIED
+  DEPRECATED border      %Length;       #IMPLIED
+  DEPRECATED hspace      %Pixels;       #IMPLIED // left/right margin
+  DEPRECATED vspace      %Pixels;       #IMPLIED // up/down margin
+  >
+
+<!--
+ The border attribute sets the thickness of the frame around the
+ table. The default units are screen pixels.
+
+ The frame attribute specifies which parts of the frame around
+ the table should be rendered. The values are not the same as
+ CALS to avoid a name clash with the valign attribute.
+-->
+<!ENTITY % TFrame "(void|above|below|hsides|lhs|rhs|vsides|box|border)">
+
+<!--
+ The rules attribute defines which rules to draw between cells:
+
+ If rules is absent then assume:
+     "none" if border is absent or border="0" otherwise "all"
+-->
+
+<!ENTITY % TRules "(none | groups | rows | cols | all)">
+  
+<!-- horizontal placement of table relative to document -->
+<!ENTITY % TAlign "(left|center|right)">
+
+<!-- horizontal alignment attributes for cell contents
+
+  char        alignment char, e.g. char=':'
+  charoff     offset for alignment char
+-->
+<!ENTITY % cellhalign
+  "align      (left|center|right|justify|char) #IMPLIED
+   char       %Character;    #IMPLIED
+   charoff    %Length;       #IMPLIED"
+  >
+
+<!-- vertical alignment attributes for cell contents -->
+<!ENTITY % cellvalign
+  "valign     (top|middle|bottom|baseline) #IMPLIED"
+  >
+
+<!-- we may want to convert some of these nonetheless -->
+<!ATTLIST table
+  %attrs;
+  summary     %Text;         #IMPLIED
+  width       %Length;       #IMPLIED
+  border      %Pixels;       #IMPLIED
+  frame       %TFrame;       #IMPLIED
+  rules       %TRules;       #IMPLIED
+  cellspacing %Length;       #IMPLIED
+  cellpadding %Length;       #IMPLIED
+  DEPRECATED align       %TAlign;       #IMPLIED
+  DEPRECATED bgcolor     %Color;        #IMPLIED
+  >
+
+<!ENTITY % CAlign "(top|bottom|left|right)">
+
+<!ATTLIST caption
+  %attrs;
+DEPRECATED  align       %CAlign;       #IMPLIED // watch, it's a special set
+  >
+
+<!--
+colgroup groups a set of col elements. It allows you to group
+several semantically related columns together.
+-->
+<!ATTLIST colgroup
+  %attrs;
+  span        %Number;       "1"
+  width       %MultiLength;  #IMPLIED
+  %cellhalign; // very interesting
+  %cellvalign;
+  >
+
+<!--
+ col elements define the alignment properties for cells in
+ one or more columns.
+
+ The width attribute specifies the width of the columns, e.g.
+
+     width=64        width in screen pixels
+     width=0.5*      relative width of 0.5
+
+ The span attribute causes the attributes of one
+ col element to apply to more than one column.
+-->
+<!ATTLIST col
+  %attrs;
+  span        %Number;       "1"
+  width       %MultiLength;  #IMPLIED
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!--
+    Use thead to duplicate headers when breaking table
+    across page boundaries, or for static headers when
+    tbody sections are rendered in scrolling panel.
+
+    Use tfoot to duplicate footers when breaking table
+    across page boundaries, or for static footers when
+    tbody sections are rendered in scrolling panel.
+
+    Use multiple tbody sections when rules are needed
+    between groups of table rows.
+-->
+<!ATTLIST thead
+  %attrs;
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tfoot
+  %attrs;
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tbody
+  %attrs;
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tr
+  %attrs;
+  %cellhalign;
+  %cellvalign;
+DEPRECATED  bgcolor     %Color;        #IMPLIED
+  >
+
+<!-- Scope is simpler than headers attribute for common tables -->
+<!ENTITY % Scope "(row|col|rowgroup|colgroup)">
+
+<!-- th is for headers, td for data and for cells acting as both -->
+
+<!ATTLIST th
+  %attrs;
+  abbr        %Text;         #IMPLIED
+  axis        CDATA          #IMPLIED
+  headers     IDREFS         #IMPLIED
+  scope       %Scope;        #IMPLIED
+  rowspan     %Number;       "1"
+  colspan     %Number;       "1"
+  %cellhalign;
+  %cellvalign;
+DEPRECATED  nowrap      (nowrap)       #IMPLIED
+DEPRECATED  bgcolor     %Color;        #IMPLIED
+DEPRECATED  width       %Length;       #IMPLIED
+DEPRECATED  height      %Length;       #IMPLIED
+  >
+
+<!ATTLIST td
+  %attrs;
+  abbr        %Text;         #IMPLIED
+  axis        CDATA          #IMPLIED
+  headers     IDREFS         #IMPLIED
+  scope       %Scope;        #IMPLIED
+  rowspan     %Number;       "1"
+  colspan     %Number;       "1"
+  %cellhalign;
+  %cellvalign;
+DEPRECATED  nowrap      (nowrap)       #IMPLIED
+DEPRECATED  bgcolor     %Color;        #IMPLIED
+DEPRECATED  width       %Length;       #IMPLIED
+DEPRECATED  height      %Length;       #IMPLIED
+  >
+

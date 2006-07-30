@@ -95,6 +95,10 @@ into Data (although I don't see why we can't do that at the start).
 One last thing: the remove foreign elements has to do the element
 transformations, from FONT to SPAN, etc.
 
+font -> span
+  size        CDATA          #IMPLIED
+  color       %Color;        #IMPLIED
+  face        CDATA          #IMPLIED
 
 
 == STAGE 3 - make well formed ==
@@ -276,6 +280,14 @@ to text when PCDATA is allowed.
 Note that generic child definitions are not usually desirable: we should
 implement custom handlers for each one that specify the stuff correctly.
 
+--
+
+<!--
+  ins/del are allowed in block and inline content, but it is
+  inappropriate to include block content within an ins element
+  occurring in inline content.
+-->
+
 == STAGE 4 - check attributes ==
 
     STATUS: N (not started)
@@ -332,7 +344,7 @@ Color           #NNNNNN, #NNN or color name (translate it
     Red    = #FF0000    Blue   = #0000FF
     Purple = #800080    Teal   = #008080
     Fuchsia= #FF00FF    Aqua   = #00FFFF
-// plus some directly defined in the spec
+// plus some directly in the spec
 
 Everything else is either ID, or defined as a certain set of values.
 
@@ -346,6 +358,32 @@ and then pass it to a switch.
 The final problem is CSS. Get intimate with the syntax here:
 http://www.w3.org/TR/CSS21/syndata.html and also note the "bad" CSS elements
 that HTML_Safe defines to help determine a whitelist.
+
+----
+
+<!ENTITY % coreattrs
+ "id          ID             #IMPLIED
+  class       CDATA          #IMPLIED
+  style       %StyleSheet;   #IMPLIED
+  title       %Text;         #IMPLIED"
+  >
+
+<!ENTITY % i18n
+ "lang        %LanguageCode; #IMPLIED
+  xml:lang    %LanguageCode; #IMPLIED
+  dir         (ltr|rtl)      #IMPLIED"
+  >
+
+<!ENTITY % attrs "%coreattrs; %i18n;">
+
+----
+
+These are the elements that only have %attrs:
+    ul, dl, dt, dd, address, span, em, strong, dfn, code, samp, kbd, var,
+    cite, abbr, acronym, sub, sup, tt, i, b, big, small, u, s, strike
+
+These are the elements that only have %attrs and need an alignment transform
+    div, p, h1, h2, h3, h4, h5, h6
 
 == PART 5 - stringify ==
 
