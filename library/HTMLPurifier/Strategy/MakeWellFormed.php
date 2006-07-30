@@ -23,10 +23,10 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 $result[] = $token;
                 continue;
             }
-            $info = $this->definition->info[$token->name]; // assumption but valid
+            $info = $this->definition->info['child'][$token->name]; // assumption but valid
             
             // test if it claims to be a start tag but is empty
-            if ($info->child_def->type == 'empty' &&
+            if ($info->type == 'empty' &&
                 $token->type == 'start' ) {
                 
                 $result[] = new HTMLPurifier_Token_Empty($token->name,
@@ -35,7 +35,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             }
             
             // test if it claims to be empty but really is a start tag
-            if ($info->child_def->type != 'empty' &&
+            if ($info->type != 'empty' &&
                 $token->type == 'empty' ) {
                 
                 $result[] = new HTMLPurifier_Token_Start($token->name,

@@ -19,7 +19,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         $result = array();
         foreach($tokens as $token) {
             if (!empty( $token->is_tag )) {
-                if (!isset($this->definition->info[$token->name])) {
+                if (!isset($this->definition->info['child'][$token->name])) {
                     // invalid tag, generate HTML and insert in
                     $token = new HTMLPurifier_Token_Text(
                         $this->generator->generateFromToken($token)

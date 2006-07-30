@@ -92,72 +92,66 @@ class HTMLPurifier_Definition
         $e_form_content = new HTMLPurifier_ChildDef_Optional(''); //unused
         $e_form_button_content = new HTMLPurifier_ChildDef_Optional(''); // unused
         
-        $this->info['ins'] =
-        $this->info['del'] = 
-        $this->info['blockquote'] =
-        $this->info['dd']  =
-        $this->info['li']  =
-        $this->info['div'] = new HTMLPurifier_ElementDef($e_Flow);
+        $this->info['child'] = array();
         
-        $this->info['em']  =
-        $this->info['strong'] =
-        $this->info['dfn']  =
-        $this->info['code'] =
-        $this->info['samp'] =
-        $this->info['kbd']  =
-        $this->info['var']  =
-        $this->info['code'] =
-        $this->info['samp'] =
-        $this->info['kbd']  =
-        $this->info['var']  =
-        $this->info['cite'] =
-        $this->info['abbr'] =
-        $this->info['acronym'] =
-        $this->info['q']    =
-        $this->info['sub']  =
-        $this->info['tt']   =
-        $this->info['sup']  =
-        $this->info['i']    =
-        $this->info['b']    =
-        $this->info['big']  =
-        $this->info['small'] =
-        $this->info['u']    =
-        $this->info['s']    =
-        $this->info['strike'] =
-        $this->info['bdo']  =
-        $this->info['span'] =
-        $this->info['dt']   =
-        $this->info['p']    = 
-        $this->info['h1']   = 
-        $this->info['h2']   = 
-        $this->info['h3']   = 
-        $this->info['h4']   = 
-        $this->info['h5']   = 
-        $this->info['h6']   = new HTMLPurifier_ElementDef($e_Inline);
+        $this->info['child']['ins'] =
+        $this->info['child']['del'] = 
+        $this->info['child']['blockquote'] =
+        $this->info['child']['dd']  =
+        $this->info['child']['li']  =
+        $this->info['child']['div'] = $e_Flow;
         
-        $this->info['ol']   =
-        $this->info['ul']   =
-          new HTMLPurifier_ElementDef(
-            new HTMLPurifier_ChildDef_Required('li')
-          );
+        $this->info['child']['em']  =
+        $this->info['child']['strong'] =
+        $this->info['child']['dfn']  =
+        $this->info['child']['code'] =
+        $this->info['child']['samp'] =
+        $this->info['child']['kbd']  =
+        $this->info['child']['var']  =
+        $this->info['child']['code'] =
+        $this->info['child']['samp'] =
+        $this->info['child']['kbd']  =
+        $this->info['child']['var']  =
+        $this->info['child']['cite'] =
+        $this->info['child']['abbr'] =
+        $this->info['child']['acronym'] =
+        $this->info['child']['q']    =
+        $this->info['child']['sub']  =
+        $this->info['child']['tt']   =
+        $this->info['child']['sup']  =
+        $this->info['child']['i']    =
+        $this->info['child']['b']    =
+        $this->info['child']['big']  =
+        $this->info['child']['small'] =
+        $this->info['child']['u']    =
+        $this->info['child']['s']    =
+        $this->info['child']['strike'] =
+        $this->info['child']['bdo']  =
+        $this->info['child']['span'] =
+        $this->info['child']['dt']   =
+        $this->info['child']['p']    = 
+        $this->info['child']['h1']   = 
+        $this->info['child']['h2']   = 
+        $this->info['child']['h3']   = 
+        $this->info['child']['h4']   = 
+        $this->info['child']['h5']   = 
+        $this->info['child']['h6']   = $e_Inline;
         
-        $this->info['dl']   =
-          new HTMLPurifier_ElementDef(
-            new HTMLPurifier_ChildDef_Required('dt|dd')
-          );
-        $this->info['address'] =
-          new HTMLPurifier_ElementDef(
-            new HTMLPurifier_ChildDef_Optional("#PCDATA | p | $e_inline".
-              " | $e_misc_inline")
-          );
+        $this->info['child']['ol']   =
+        $this->info['child']['ul']   = new HTMLPurifier_ChildDef_Required('li');
         
-        $this->info['img']  =
-        $this->info['br']   =
-        $this->info['hr']   = new HTMLPurifier_ElementDef(new HTMLPurifier_ChildDef_Empty());
+        $this->info['child']['dl']   = new HTMLPurifier_ChildDef_Required('dt|dd');
+        $this->info['child']['address'] =
+          new HTMLPurifier_ChildDef_Optional("#PCDATA | p | $e_inline".
+              " | $e_misc_inline");
         
-        $this->info['pre']  = new HTMLPurifier_ElementDef($e_pre_content);
+        $this->info['child']['img']  =
+        $this->info['child']['br']   =
+        $this->info['child']['hr']   = new HTMLPurifier_ChildDef_Empty();
         
-        $this->info['a']    = new HTMLPurifier_ElementDef($e_a_content);
+        $this->info['child']['pre']  = $e_pre_content;
+        
+        $this->info['child']['a']    = $e_a_content;
         
     }
     
