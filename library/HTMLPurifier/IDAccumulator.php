@@ -10,6 +10,12 @@ class HTMLPurifier_IDAccumulator
         return $this->ids[$id] = true;
     }
     
+    function load($array_of_ids) {
+        foreach ($array_of_ids as $id) {
+            $this->ids[$id] = true;
+        }
+    }
+    
 }
 
 ?>

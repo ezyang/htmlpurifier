@@ -33,6 +33,7 @@ $test->addTestFile('HTMLPurifier/Strategy/FixNestingTest.php');
 $test->addTestFile('HTMLPurifier/Strategy/CompositeTest.php');
 $test->addTestFile('HTMLPurifier/Strategy/CoreTest.php');
 $test->addTestFile('HTMLPurifier/AttrDef/EnumTest.php');
+$test->addTestFile('HTMLPurifier/AttrDef/IDTest.php');
 $test->addTestFile('HTMLPurifier/IDAccumulatorTest.php');
 
 $test->run( new HtmlReporter() );
