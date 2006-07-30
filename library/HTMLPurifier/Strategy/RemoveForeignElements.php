@@ -4,6 +4,13 @@ require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/Definition.php';
 require_once 'HTMLPurifier/Generator.php';
 
+/**
+ * Removes all unrecognized tags from the list of tokens.
+ * 
+ * This strategy iterates through all the tokens and removes unrecognized
+ * tokens.
+ */
+
 class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
 {
     
@@ -19,7 +26,8 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         $result = array();
         foreach($tokens as $token) {
             if (!empty( $token->is_tag )) {
-                if (!isset($this->definition->info['child'][$token->name])) {
+                // DEFINITION CALL
+                if (!isset($this->definition->info[$token->name])) {
                     // invalid tag, generate HTML and insert in
                     $token = new HTMLPurifier_Token_Text(
                         $this->generator->generateFromToken($token)

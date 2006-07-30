@@ -15,13 +15,14 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
     
     function execute($tokens) {
         $accumulator = new HTMLPurifier_IDAccumulator();
-        $d_defs = $this->definition->info['attr']['*'];
+        $d_defs = $this->definition->info_global_attr;
         foreach ($tokens as $key => $token) {
             if ($token->type !== 'start' && $token->type !== 'end') continue;
-            $name = $token->name;
+            
+            // DEFINITION CALL
+            $defs = $this->definition->info[$token->name]->attr;
+            
             $attr = $token->attributes;
-            $defs = isset($this->definition->info['attr'][$name]) ?
-                $this->definition->attr[$name] : array();
             $changed = false;
             foreach ($attr as $attr_key => $value) {
                 if ( isset($defs[$attr_key]) ) {

@@ -34,6 +34,7 @@ class HTMLPurifier_Definition
         'table'         => true,
         'ul'            => true
         );
+    var $info_global_attr = array();
     
     function instance() {
         static $instance = null;
@@ -48,6 +49,20 @@ class HTMLPurifier_Definition
     
     function setup() {
         // emulates the structure of the DTD
+        
+        $allowed_tags =
+            array(
+                'ins', 'del', 'blockquote', 'dd', 'li', 'div', 'em', 'strong',
+                'dfn', 'code', 'samp', 'kbd', 'var', 'cite', 'abbr', 'acronym',
+                'q', 'sub', 'tt', 'sup', 'i', 'b', 'big', 'small', 'u', 's',
+                'strike', 'bdo', 'span', 'dt', 'p', 'h1', 'h2', 'h3', 'h4',
+                'h5', 'h6', 'ol', 'ul', 'dl', 'address', 'img', 'br', 'hr',
+                'pre', 'a'
+            );
+        
+        foreach ($allowed_tags as $tag) {
+            $this->info[$tag] = new HTMLPurifier_ElementDef();
+        }
         
         // entities: prefixed with e_ and _ replaces .
         // we don't use an array because that complicates interpolation
@@ -96,73 +111,67 @@ class HTMLPurifier_Definition
         $e_form_content = new HTMLPurifier_ChildDef_Optional(''); //unused
         $e_form_button_content = new HTMLPurifier_ChildDef_Optional(''); // unused
         
-        $this->info['child'] = array();
+        $this->info['ins']->child =
+        $this->info['del']->child = 
+        $this->info['blockquote']->child =
+        $this->info['dd']->child  =
+        $this->info['li']->child  =
+        $this->info['div']->child = $e_Flow;
         
-        $this->info['child']['ins'] =
-        $this->info['child']['del'] = 
-        $this->info['child']['blockquote'] =
-        $this->info['child']['dd']  =
-        $this->info['child']['li']  =
-        $this->info['child']['div'] = $e_Flow;
+        $this->info['em']->child   =
+        $this->info['strong']->child =
+        $this->info['dfn']->child  =
+        $this->info['code']->child =
+        $this->info['samp']->child =
+        $this->info['kbd']->child  =
+        $this->info['var']->child  =
+        $this->info['cite']->child =
+        $this->info['abbr']->child =
+        $this->info['acronym']->child =
+        $this->info['q']->child    =
+        $this->info['sub']->child  =
+        $this->info['tt']->child   =
+        $this->info['sup']->child  =
+        $this->info['i']->child    =
+        $this->info['b']->child    =
+        $this->info['big']->child  =
+        $this->info['small']->child =
+        $this->info['u']->child    =
+        $this->info['s']->child    =
+        $this->info['strike']->child =
+        $this->info['bdo']->child  =
+        $this->info['span']->child =
+        $this->info['dt']->child   =
+        $this->info['p']->child    = 
+        $this->info['h1']->child   = 
+        $this->info['h2']->child   = 
+        $this->info['h3']->child   = 
+        $this->info['h4']->child   = 
+        $this->info['h5']->child   = 
+        $this->info['h6']->child   = $e_Inline;
         
-        $this->info['child']['em']  =
-        $this->info['child']['strong'] =
-        $this->info['child']['dfn']  =
-        $this->info['child']['code'] =
-        $this->info['child']['samp'] =
-        $this->info['child']['kbd']  =
-        $this->info['child']['var']  =
-        $this->info['child']['code'] =
-        $this->info['child']['samp'] =
-        $this->info['child']['kbd']  =
-        $this->info['child']['var']  =
-        $this->info['child']['cite'] =
-        $this->info['child']['abbr'] =
-        $this->info['child']['acronym'] =
-        $this->info['child']['q']    =
-        $this->info['child']['sub']  =
-        $this->info['child']['tt']   =
-        $this->info['child']['sup']  =
-        $this->info['child']['i']    =
-        $this->info['child']['b']    =
-        $this->info['child']['big']  =
-        $this->info['child']['small'] =
-        $this->info['child']['u']    =
-        $this->info['child']['s']    =
-        $this->info['child']['strike'] =
-        $this->info['child']['bdo']  =
-        $this->info['child']['span'] =
-        $this->info['child']['dt']   =
-        $this->info['child']['p']    = 
-        $this->info['child']['h1']   = 
-        $this->info['child']['h2']   = 
-        $this->info['child']['h3']   = 
-        $this->info['child']['h4']   = 
-        $this->info['child']['h5']   = 
-        $this->info['child']['h6']   = $e_Inline;
+        $this->info['ol']->child   =
+        $this->info['ul']->child   = new HTMLPurifier_ChildDef_Required('li');
         
-        $this->info['child']['ol']   =
-        $this->info['child']['ul']   = new HTMLPurifier_ChildDef_Required('li');
-        
-        $this->info['child']['dl']   = new HTMLPurifier_ChildDef_Required('dt|dd');
-        $this->info['child']['address'] =
+        $this->info['dl']->child   = new HTMLPurifier_ChildDef_Required('dt|dd');
+        $this->info['address']->child =
           new HTMLPurifier_ChildDef_Optional("#PCDATA | p | $e_inline".
               " | $e_misc_inline");
         
-        $this->info['child']['img']  =
-        $this->info['child']['br']   =
-        $this->info['child']['hr']   = new HTMLPurifier_ChildDef_Empty();
+        $this->info['img']->child  =
+        $this->info['br']->child   =
+        $this->info['hr']->child   = new HTMLPurifier_ChildDef_Empty();
         
-        $this->info['child']['pre']  = $e_pre_content;
+        $this->info['pre']->child  = $e_pre_content;
         
-        $this->info['child']['a']    = $e_a_content;
+        $this->info['a']->child    = $e_a_content;
         
         // attribute info
         // this doesn't include REQUIRED declarations, those are handled
         // by the transform classes
         
         // attrs, included in almost every single one except for a few
-        $this->info['attr']['*'] = array(
+        $this->info_global_attr = array(
             // core attrs
             'id' => new HTMLPurifier_AttrDef_ID(),
             // i18n
@@ -176,13 +185,8 @@ class HTMLPurifier_Definition
 class HTMLPurifier_ElementDef
 {
     
-    var $child_def;
-    var $attr_def = array();
-    
-    function HTMLPurifier_ElementDef($child_def, $attr_def = array()) {
-        $this->child_def = $child_def;
-        $this->attr_def  = $attr_def;
-    }
+    var $child;
+    var $attr = array();
     
 }
 

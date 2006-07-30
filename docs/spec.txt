@@ -1,8 +1,6 @@
 
-HTML Purifier Specification
+HTML Purifier
   by Edward Z. Yang
-
-== Introduction ==
 
 There are a number of ad hoc HTML filtering solutions out there on the web
 (some examples including HTML_Safe, kses and SafeHtmlChecker.class.php) that
@@ -55,29 +53,6 @@ HTML Purifier is best suited for documents that require a rich array of
 HTML tags.  Things like blog comments are, in all likelihood, most appropriately
 written in an extremely restrictive set of markup that doesn't require
 all this functionality (or not written in HTML at all).
-
-
-
-== STAGE 1 - parsing ==
-
-    Status: A (see source, mainly internals and UTF-8)
-
-The Lexer (currently we have three choices) handles parsing into Tokens.
-
-Here are the mappings for Lexer_PEARSax3
-
-* Start(name, attributes)       is openHandler
-* End(name)                     is closeHandler
-* Empty(name, attributes)       is openHandler   (is in array of empties)
-* Data(parse(text))             is dataHandler
-* Comment(text)                 is escapeHandler (has leading -)
-* Data(text)                    is escapeHandler (has leading [, CDATA)
-
-Ignorable/not being implemented (although we probably want to output them raw):
-* ProcessingInstructions(text)  is piHandler
-* JavaOrASPInstructions(text)   is jaspHandler
-
-
 
 == STAGE 2 - remove foreign elements ==
 

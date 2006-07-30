@@ -23,7 +23,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 $result[] = $token;
                 continue;
             }
-            $info = $this->definition->info['child'][$token->name]; // assumption but valid
+            
+            // DEFINITION CALL
+            $info = $this->definition->info[$token->name]->child;
             
             // test if it claims to be a start tag but is empty
             if ($info->type == 'empty' &&

@@ -38,8 +38,11 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             // $i is index of start token
             // $j is index of end token
             
+            
+            // DEFINITION CALL
+            $child_def = $this->definition->info[$tokens[$i]->name]->child;
+            
             // have DTD child def validate children
-            $child_def = $this->definition->info['child'][$tokens[$i]->name];
             $result = $child_def->validateChildren($child_tokens);
             
             // process result
