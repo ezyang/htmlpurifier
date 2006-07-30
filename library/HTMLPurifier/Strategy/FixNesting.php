@@ -14,8 +14,10 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
     
     function execute($tokens) {
         // insert implicit "parent" node, will be removed at end
-        array_unshift($tokens, new HTMLPurifier_Token_Start('div'));
-        $tokens[] = new HTMLPurifier_Token_End('div');
+        $parent_name = $this->definition->info_parent;
+        
+        array_unshift($tokens, new HTMLPurifier_Token_Start($parent_name));
+        $tokens[] = new HTMLPurifier_Token_End($parent_name);
         
         for ($i = 0, $size = count($tokens) ; $i < $size; ) {
             

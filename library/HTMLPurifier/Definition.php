@@ -7,11 +7,33 @@ require_once 'HTMLPurifier/ChildDef.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Token.php';
 
+/**
+ * Defines the purified HTML type with large amounts of objects.
+ * 
+ * The main function of this object is its $info array, which is an 
+ * associative array of all the child and attribute definitions for
+ * each allowed element. It also contains special use information (always
+ * prefixed by info) for intelligent tag closing and global attributes.
+ * 
+ * Planned improvements include attribute transformation objects as well as
+ * migration of auto-tag-closing from HTMLPurifier_Strategy_MakeWellFormed
+ * (these can likely just be extensions of ElementDef).
+ * 
+ * After development drops off, the definition generation will be moved to
+ * a maintenance script and we will stipulate that definition be created
+ * by a factory method that unserializes a serialized version of Definition.
+ * Customization would entail copying the maintenance script, making the
+ * necessary changes, generating the serialized object, and then hooking it
+ * in via the factory method. We would also offer a LiveDefinition for
+ * automatic recompilation, suggesting that we would have a DefinitionGenerator.
+ */
+
 class HTMLPurifier_Definition
 {
     
-    var $generator;
     var $info = array();
+    
+    // used solely by HTMLPurifier_Strategy_MakeWellFormed
     var $info_closes_p = array(
         // these are all block elements: blocks aren't allowed in P
         'address'       => true,
@@ -34,7 +56,12 @@ class HTMLPurifier_Definition
         'table'         => true,
         'ul'            => true
         );
+    
+    // used solely by HTMLPurifier_Strategy_ValidateAttributes
     var $info_global_attr = array();
+    
+    // used solely by HTMLPurifier_Strategy_FixNesting
+    var $info_parent = 'div';
     
     function instance() {
         static $instance = null;

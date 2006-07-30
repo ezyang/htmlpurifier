@@ -61,6 +61,8 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 if (!empty($current_nesting)) {
                     $current_parent = array_pop($current_nesting);
                     
+                    // this ought to be moved to definition
+                    
                     // check if we're closing a P tag
                     if ($current_parent->name == 'p' &&
                         isset($this->definition->info_closes_p[$token->name])
