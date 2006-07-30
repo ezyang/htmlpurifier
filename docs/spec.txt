@@ -385,6 +385,10 @@ These are the elements that only have %attrs:
 These are the elements that only have %attrs and need an alignment transform
     div, p, h1, h2, h3, h4, h5, h6
 
+----
+
+Prepend style transformations, as CSS takes precedence.
+
 == PART 5 - stringify ==
 
     Status: A+ (done completely!)

@@ -8,7 +8,8 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
     var $case_sensitive = false; // values according to W3C spec
     
     function HTMLPurifier_AttrDef_Enum(
-      $valid_values = array(), $case_sensitive = false) {
+        $valid_values = array(), $case_sensitive = false) {
+        
         $this->valid_values = array_flip($valid_values);
         $this->case_sensitive = $case_sensitive;
     }

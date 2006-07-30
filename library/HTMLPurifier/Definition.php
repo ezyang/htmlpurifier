@@ -60,6 +60,8 @@ class HTMLPurifier_Definition
         // and also know the assumptions the code makes about what this
         // contains for optimization purposes (see fixNesting)
         
+        // child info
+        
         $e_special_extra = 'img';
         $e_special_basic = 'br | span | bdo';
         $e_special = "$e_special_basic | $e_special_extra";
@@ -152,6 +154,10 @@ class HTMLPurifier_Definition
         $this->info['child']['pre']  = $e_pre_content;
         
         $this->info['child']['a']    = $e_a_content;
+        
+        // attribute info
+        
+        $a_dir = new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false);
         
     }
     

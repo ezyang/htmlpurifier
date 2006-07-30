@@ -6,7 +6,8 @@
      Move to style! -->
 <!ENTITY % TextAlign "DEPRECATED align (left|center|right|justify) #IMPLIED">
 
-<!-- type and start should have CSS equivalents -->
+<!-- type and start should have CSS equivalents, but they'll need to
+be translated intelligently -->
 <!ENTITY % ULStyle "(disc|square|circle)">
 <!-- Ordered list numbering style
 
