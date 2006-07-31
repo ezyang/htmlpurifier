@@ -30,10 +30,10 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         }
     }
     
-    function test_complex() {
+    function test_custom() {
         
         // the table definition
-        $def = new HTMLPurifier_ChildDef(
+        $def = new HTMLPurifier_ChildDef_Custom(
             '(caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))');
         
         $inputs[0] = '';
@@ -56,12 +56,9 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         
     }
     
-    function test_simple() {
+    function test_parsing() {
         
-        // simple is actually an abstract class
-        // but we're unit testing some of the conv. functions it gives
-        
-        $def = new HTMLPurifier_ChildDef_Simple('foobar | bang |gizmo');
+        $def = new HTMLPurifier_ChildDef_Required('foobar | bang |gizmo');
         $this->assertEqual($def->elements,
           array(
             'foobar' => true
@@ -69,7 +66,7 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
            ,'gizmo'  => true
           ));
         
-        $def = new HTMLPurifier_ChildDef_Simple(array('href', 'src'));
+        $def = new HTMLPurifier_ChildDef_Required(array('href', 'src'));
         $this->assertEqual($def->elements,
           array(
             'href' => true

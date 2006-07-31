@@ -38,8 +38,28 @@ class HTMLPurifier_Strategy_FixNestingTest
         $expect[4] = '<ul><li>Legal item</li></ul>';
         
         // test custom table definition
+        
         $inputs[5] = '<table><tr><td>Cell 1</td></tr></table>';
         $expect[5] = '<table><tr><td>Cell 1</td></tr></table>';
+        
+        $inputs[6] = '<table></table>';
+        $expect[6] = '';
+        
+        // breaks without the redundant checking code
+        $inputs[7] = '<table><tr></tr></table>';
+        $expect[7] = '';
+        
+        // special case, prevents scrolling one back to find parent
+        $inputs[8] = '<table><tr></tr><tr></tr></table>';
+        $expect[8] = '';
+        
+        // cascading rollbacks
+        $inputs[9] = '<table><tbody><tr></tr><tr></tr></tbody><tr></tr><tr></tr></table>';
+        $expect[9] = '';
+        
+        // rollbacks twice
+        $inputs[10] = '<table></table><table></table>';
+        $expect[10] = '';
         
         $this->assertStrategyWorks($strategy, $inputs, $expect);
     }

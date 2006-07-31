@@ -56,13 +56,6 @@ class HTMLPurifier_Definition
         // these are condensed, however, with bad stuff taken out
         // screening process was done by hand
         
-        // The code makes certain assumptions about the structure of this
-        // definition for optimization reasons:
-        // 
-        // FixNesting - There will never be a need for cascading removal
-        //              of tags, usually triggered by a node requiring the
-        //              existence of another node that may be deleted.
-        
         //////////////////////////////////////////////////////////////////////
         // info[] : initializes the definition objects
         
@@ -182,7 +175,7 @@ class HTMLPurifier_Definition
         
         $this->info['a']->child    = $e_a_content;
         
-        $this->info['table']->child = new HTMLPurifier_ChildDef(
+        $this->info['table']->child = new HTMLPurifier_ChildDef_Custom(
             '(caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))');
         
         // not a real entity, watch the double underscore

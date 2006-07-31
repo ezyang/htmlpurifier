@@ -3,6 +3,9 @@
 require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/Definition.php';
 
+// EXTRA: provide a mechanism for elements to be bubbled OUT of a node
+// or "Replace Nodes while including the parent nodes too"
+
 class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 {
     
@@ -13,11 +16,15 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
     }
     
     function execute($tokens) {
+        
         // insert implicit "parent" node, will be removed at end
         $parent_name = $this->definition->info_parent;
-        
         array_unshift($tokens, new HTMLPurifier_Token_Start($parent_name));
         $tokens[] = new HTMLPurifier_Token_End($parent_name);
+        
+        // stack that contains the indexes of all parents,
+        // $stack[count($stack)-1] being the current parent
+        $stack = array();
         
         for ($i = 0, $size = count($tokens) ; $i < $size; ) {
             
@@ -50,19 +57,15 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             // process result
             if ($result === true) {
                 
-                // leave the nodes as is
+                // leave the node as is
+                
+                // register start token as a parental node start
+                $stack[] = $i;
+                
+                // move cursor to next possible start node
+                $i++;
                 
             } elseif($result === false) {
-                
-                // WARNING WARNING WARNING!!!
-                // While for the original DTD, there will never be
-                // cascading removal, more complex ones may have such
-                // a problem.
-                
-                // If you modify the info array such that an element
-                // that requires children may contain a child that requires
-                // children, you need to also scroll back and re-check that
-                // elements parent node
                 
                 $length = $j - $i + 1;
                 
@@ -72,8 +75,18 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 // change size
                 $size -= $length;
                 
-                // ensure that we scroll to the next node
-                $i--;
+                // there is no start token to register,
+                // current node is now the next possible start node
+                // unless it turns out that we need to do a double-check
+                
+                $parent_index = $stack[count($stack)-1];
+                $parent_name  = $tokens[$parent_index]->name;
+                $parent_def   = $this->definition->info[$parent_name];
+                
+                if (!$parent_def->child->allow_empty) {
+                    // we need to do a double-check
+                    $i = $parent_index;
+                }
                 
             } else {
                 
@@ -86,11 +99,24 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 $size -= $length;
                 $size += count($result);
                 
+                // register start token as a parental node start
+                $stack[] = $i;
+                
+                // move cursor to next possible start node
+                $i++;
+                
             }
             
-            // scroll to next node
-            $i++;
-            while ($i < $size and $tokens[$i]->type != 'start') $i++;
+            // We assume, at this point, that $i is the index of the token
+            // that is the first possible new start point for a node.
+            
+            // Test if the token indeed is a start tag, if not, move forward
+            // and test again.
+            while ($i < $size and $tokens[$i]->type != 'start') {
+                // pop a token index off the stack if we ended a node
+                if ($tokens[$i]->type == 'end') array_pop($stack);
+                $i++;
+            }
             
         }
         

@@ -11,12 +11,23 @@
 
 // we may end up writing custom code for each HTML case
 // in order to make it self correcting
+
 class HTMLPurifier_ChildDef
 {
+    var $type;
+    var $allow_empty;
+    function validateChildren($tokens_of_children) {
+        trigger_error('Call to abstract function', E_USER_ERROR);
+    }
+}
+
+class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
+{
     var $type = 'custom';
+    var $allow_empty = false;
     var $dtd_regex;
     var $_pcre_regex;
-    function HTMLPurifier_ChildDef($dtd_regex) {
+    function HTMLPurifier_ChildDef_Custom($dtd_regex) {
         $this->dtd_regex = $dtd_regex;
         $this->_compileRegex();
     }
@@ -58,10 +69,11 @@ class HTMLPurifier_ChildDef
         return (bool) $okay;
     }
 }
-class HTMLPurifier_ChildDef_Simple extends HTMLPurifier_ChildDef
+
+class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
 {
     var $elements = array();
-    function HTMLPurifier_ChildDef_Simple($elements) {
+    function HTMLPurifier_ChildDef_Required($elements) {
         if (is_string($elements)) {
             $elements = str_replace(' ', '', $elements);
             $elements = explode('|', $elements);
@@ -71,12 +83,7 @@ class HTMLPurifier_ChildDef_Simple extends HTMLPurifier_ChildDef
         $this->elements = $elements;
         $this->gen = new HTMLPurifier_Generator();
     }
-    function validateChildren() {
-        trigger_error('Cannot call abstract function!', E_USER_ERROR);
-    }
-}
-class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef_Simple
-{
+    var $allow_empty = false;
     var $type = 'required';
     function validateChildren($tokens_of_children) {
         // if there are no tokens, delete parent node
@@ -148,6 +155,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef_Simple
 // instead of a false (to delete the node)
 class HTMLPurifier_ChildDef_Optional extends HTMLPurifier_ChildDef_Required
 {
+    var $allow_empty = true;
     var $type = 'optional';
     function validateChildren($tokens_of_children) {
         $result = parent::validateChildren($tokens_of_children);
@@ -159,6 +167,7 @@ class HTMLPurifier_ChildDef_Optional extends HTMLPurifier_ChildDef_Required
 // placeholder
 class HTMLPurifier_ChildDef_Empty extends HTMLPurifier_ChildDef
 {
+    var $allow_empty = true;
     var $type = 'empty';
     function HTMLPurifier_ChildDef_Empty() {}
     function validateChildren() {
