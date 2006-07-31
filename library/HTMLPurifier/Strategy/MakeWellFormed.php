@@ -59,35 +59,19 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 
                 // if there's a parent, check for special case
                 if (!empty($current_nesting)) {
-                    $current_parent = array_pop($current_nesting);
                     
-                    // this ought to be moved to definition
+                    $parent = array_pop($current_nesting);
+                    $parent_name = $parent->name;
+                    $parent_info = $this->definition->info[$parent_name];
                     
-                    // check if we're closing a P tag
-                    if ($current_parent->name == 'p' &&
-                        isset($this->definition->info_closes_p[$token->name])
-                        ) {
-                        $result[] = new HTMLPurifier_Token_End('p');
+                    if (isset($parent_info->auto_close[$token->name])) {
+                        $result[] = new HTMLPurifier_Token_End($parent_name);
                         $result[] = $token;
                         $current_nesting[] = $token;
                         continue;
                     }
                     
-                    // check if we're closing a LI tag
-                    if ($current_parent->name == 'li' &&
-                        $token->name == 'li'
-                        ) {
-                        $result[] = new HTMLPurifier_Token_End('li');
-                        $result[] = $token;
-                        $current_nesting[] = $token;
-                        continue;
-                    }
-                    
-                    // this is more TIDY stuff
-                    // we should also get some TABLE related code
-                    // mismatched h#
-                    
-                    $current_nesting[] = $current_parent; // undo the pop
+                    $current_nesting[] = $parent; // undo the pop
                 }
                 
                 $result[] = $token;

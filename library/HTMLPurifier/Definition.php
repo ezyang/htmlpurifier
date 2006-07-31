@@ -33,30 +33,6 @@ class HTMLPurifier_Definition
     
     var $info = array();
     
-    // used solely by HTMLPurifier_Strategy_MakeWellFormed
-    var $info_closes_p = array(
-        // these are all block elements: blocks aren't allowed in P
-        'address'       => true,
-        'blockquote'    => true,
-        'dd'            => true,
-        'dir'           => true,
-        'div'           => true, 
-        'dl'            => true,
-        'dt'            => true,
-        'h1'            => true,
-        'h2'            => true,
-        'h3'            => true,
-        'h4'            => true, 
-        'h5'            => true,
-        'h6'            => true,
-        'hr'            => true,
-        'ol'            => true,
-        'p'             => true,
-        'pre'           => true, 
-        'table'         => true,
-        'ul'            => true
-        );
-    
     // used solely by HTMLPurifier_Strategy_ValidateAttributes
     var $info_global_attr = array();
     
@@ -75,7 +51,23 @@ class HTMLPurifier_Definition
     function HTMLPurifier_Definition() {}
     
     function setup() {
+        
         // emulates the structure of the DTD
+        // these are condensed, however, with bad stuff taken out
+        // screening process was done by hand
+        
+        // The code makes certain assumptions about the structure of this
+        // definition for optimization reasons:
+        // 
+        // FixNesting - There will never be a need for cascading removal
+        //              of tags, usually triggered by a node requiring the
+        //              existence of another node that may be deleted.
+        
+        //////////////////////////////////////////////////////////////////////
+        // info[] : initializes the definition objects
+        
+        // if you attempt to define rules later on for a tag not in this array
+        // PHP will create an stdclass
         
         $allowed_tags =
             array(
@@ -84,27 +76,22 @@ class HTMLPurifier_Definition
                 'q', 'sub', 'tt', 'sup', 'i', 'b', 'big', 'small', 'u', 's',
                 'strike', 'bdo', 'span', 'dt', 'p', 'h1', 'h2', 'h3', 'h4',
                 'h5', 'h6', 'ol', 'ul', 'dl', 'address', 'img', 'br', 'hr',
-                'pre', 'a'
+                'pre', 'a', 'table', 'caption', 'thead', 'tfoot', 'tbody',
+                'colgroup', 'col', 'td', 'th', 'tr'
             );
         
         foreach ($allowed_tags as $tag) {
             $this->info[$tag] = new HTMLPurifier_ElementDef();
         }
         
+        //////////////////////////////////////////////////////////////////////
+        // info[]->child : defines allowed children for elements
+        
         // entities: prefixed with e_ and _ replaces .
+        
         // we don't use an array because that complicates interpolation
         // strings are used instead of arrays because if you use arrays,
         // you have to do some hideous manipulation with array_merge()
-        
-        // these are condensed, remember, with bad stuff taken out
-        
-        // transforms: font, menu, dir, center
-        
-        // DON'T MONKEY AROUND THIS unless you know what you are doing
-        // and also know the assumptions the code makes about what this
-        // contains for optimization purposes (see fixNesting)
-        
-        // child info
         
         $e_special_extra = 'img';
         $e_special_basic = 'br | span | bdo';
@@ -140,13 +127,13 @@ class HTMLPurifier_Definition
         
         $this->info['ins']->child =
         $this->info['del']->child = 
-        $this->info['blockquote']->child =
+        $this->info['blockquote']->child=
         $this->info['dd']->child  =
         $this->info['li']->child  =
         $this->info['div']->child = $e_Flow;
         
         $this->info['em']->child   =
-        $this->info['strong']->child =
+        $this->info['strong']->child    =
         $this->info['dfn']->child  =
         $this->info['code']->child =
         $this->info['samp']->child =
@@ -154,7 +141,7 @@ class HTMLPurifier_Definition
         $this->info['var']->child  =
         $this->info['cite']->child =
         $this->info['abbr']->child =
-        $this->info['acronym']->child =
+        $this->info['acronym']->child   =
         $this->info['q']->child    =
         $this->info['sub']->child  =
         $this->info['tt']->child   =
@@ -162,10 +149,10 @@ class HTMLPurifier_Definition
         $this->info['i']->child    =
         $this->info['b']->child    =
         $this->info['big']->child  =
-        $this->info['small']->child =
+        $this->info['small']->child=
         $this->info['u']->child    =
         $this->info['s']->child    =
-        $this->info['strike']->child =
+        $this->info['strike']->child    =
         $this->info['bdo']->child  =
         $this->info['span']->child =
         $this->info['dt']->child   =
@@ -177,10 +164,12 @@ class HTMLPurifier_Definition
         $this->info['h5']->child   = 
         $this->info['h6']->child   = $e_Inline;
         
+        // the only three required definitions, besides custom table code
         $this->info['ol']->child   =
         $this->info['ul']->child   = new HTMLPurifier_ChildDef_Required('li');
         
         $this->info['dl']->child   = new HTMLPurifier_ChildDef_Required('dt|dd');
+        
         $this->info['address']->child =
           new HTMLPurifier_ChildDef_Optional("#PCDATA | p | $e_inline".
               " | $e_misc_inline");
@@ -193,7 +182,23 @@ class HTMLPurifier_Definition
         
         $this->info['a']->child    = $e_a_content;
         
-        // attribute info
+        $this->info['table']->child = new HTMLPurifier_ChildDef(
+            '(caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))');
+        
+        // not a real entity, watch the double underscore
+        $e__row = new HTMLPurifier_ChildDef_Required('tr');
+        $this->info['thead']->child = $e__row;
+        $this->info['tfoot']->child = $e__row;
+        $this->info['tbody']->child = $e__row;
+        $this->info['colgroup']->child = new HTMLPurifier_ChildDef_Optional('col');
+        $this->info['col']->child = new HTMLPurifier_ChildDef_Empty();
+        $this->info['tr']->child = new HTMLPurifier_ChildDef_Required('th | td');
+        $this->info['th']->child = $e_Flow;
+        $this->info['td']->child = $e_Flow;
+        
+        //////////////////////////////////////////////////////////////////////
+        // info[]->attr : defines allowed attributes for elements
+        
         // this doesn't include REQUIRED declarations, those are handled
         // by the transform classes
         
@@ -205,6 +210,39 @@ class HTMLPurifier_Definition
             'dir' => new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false),
             );
         
+        //////////////////////////////////////////////////////////////////////
+        // UNIMP : info_tag_transform : transformations of tags
+        
+        // font -> span / attributes: size        color   face
+        //                       css: font-size   color   font-family
+        // menu -> ul
+        // dir -> ul
+        // center -> div / css: text-align: center;
+        
+        //////////////////////////////////////////////////////////////////////
+        // info[]->auto_close : tags that automatically close another
+        
+        // these are all block elements: blocks aren't allowed in P
+        $this->info['p']->auto_close = array_flip(array(
+                'address', 'blockquote', 'dd', 'dir', 'div', 'dl', 'dt',
+                'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'ol', 'p', 'pre',
+                'table', 'ul'
+            ));
+        
+        $this->info['li']->auto_close = array('li' => true);
+        
+        // we need TABLE and heading mismatch code
+        // we may need to make this more flexible for heading mismatch,
+        // or we can just create another info
+        
+        //////////////////////////////////////////////////////////////////////
+        // UNIMP : info[]->attr_transform : attribute transformations in elements
+        
+        //////////////////////////////////////////////////////////////////////
+        // UNIMP : info_attr_transform : global attribute transform (for xml:lang)
+        
+        // this might have bad implications for performance
+        
     }
     
 }
@@ -212,8 +250,9 @@ class HTMLPurifier_Definition
 class HTMLPurifier_ElementDef
 {
     
-    var $child;
     var $attr = array();
+    var $auto_close = array();
+    var $child;
     
 }
 

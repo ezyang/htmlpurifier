@@ -37,6 +37,10 @@ class HTMLPurifier_Strategy_FixNestingTest
         $inputs[4] = '<ul>Illegal text<li>Legal item</li></ul>';
         $expect[4] = '<ul><li>Legal item</li></ul>';
         
+        // test custom table definition
+        $inputs[5] = '<table><tr><td>Cell 1</td></tr></table>';
+        $expect[5] = '<table><tr><td>Cell 1</td></tr></table>';
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect);
     }
     
