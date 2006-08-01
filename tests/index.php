@@ -2,6 +2,7 @@
 
 error_reporting(E_ALL);
 
+// load files, assume that simpletest directory is in path
 require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/reporter.php';
 require_once 'simpletest/mock_objects.php';
@@ -37,6 +38,9 @@ $test->addTestFile('HTMLPurifier/AttrDef/EnumTest.php');
 $test->addTestFile('HTMLPurifier/AttrDef/IDTest.php');
 $test->addTestFile('HTMLPurifier/IDAccumulatorTest.php');
 
-$test->run( new HtmlReporter() );
+if (SimpleReporter::inCli()) $reporter = new TextReporter();
+else $reporter = new HTMLReporter();
+
+$test->run($reporter);
 
 ?>
