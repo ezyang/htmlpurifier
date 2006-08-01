@@ -63,10 +63,6 @@ hold everything in an associative $info array, if it's set, it's valid, and
 we can include. Otherwise zap it, or attempt to figure out what they meant.
 <stronf>? A misspelling of <strong>! This feature may be too sugary though.
 
-While we're at it, we can change the Processing Instructions and Java/ASP
-Instructions into data blocks, scratch comment blocks, change CharacterData
-into Data (although I don't see why we can't do that at the start).
-
 One last thing: the remove foreign elements has to do the element
 transformations, from FONT to SPAN, etc.
 

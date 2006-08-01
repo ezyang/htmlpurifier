@@ -29,7 +29,7 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
         
         // setup the object
         
-        $strategies = array($mock_1, $mock_2, $mock_3);
+        $strategies = array(&$mock_1, &$mock_2, &$mock_3);
         $composite = new HTMLPurifier_Strategy_Composite_Test($strategies);
         
         // setup expectations
