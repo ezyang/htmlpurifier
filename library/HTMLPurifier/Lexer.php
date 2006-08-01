@@ -5,18 +5,20 @@ require_once 'HTMLPurifier/Token.php';
 /**
  * Forgivingly lexes HTML (SGML-style) markup into tokens.
  * 
- * The lexer parses a string of SGML-style markup and converts them into
+ * A lexer parses a string of SGML-style markup and converts them into
  * corresponding tokens.  It doesn't check for well-formedness, although its
  * internal mechanism may make this automatic (such as the case of
  * HTMLPurifier_Lexer_DOMLex).  There are several implementations to choose
  * from.
  * 
- * The lexer is HTML-oriented: it might work with XML, but it's not
+ * A lexer is HTML-oriented: it might work with XML, but it's not
  * recommended, as we adhere to a subset of the specification for optimization
  * reasons.
  * 
  * This class should not be directly instantiated, but you may use create() to
- * retrieve a default copy of the lexer.
+ * retrieve a default copy of the lexer.  Being a supertype, this class
+ * does not actually define any implementation, but offers commonly used
+ * convenience functions for subclasses.
  * 
  * @note The unit tests will instantiate this class for testing purposes, as
  *       many of the utility functions require a class to be instantiated.

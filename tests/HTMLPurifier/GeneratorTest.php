@@ -1,15 +1,18 @@
 <?php
 
 require_once 'HTMLPurifier/Generator.php';
+require_once 'HTMLPurifier/EntityLookup.php';
 
 class HTMLPurifier_GeneratorTest extends UnitTestCase
 {
     
     var $gen;
+    var $_entity_lookup;
     
     function HTMLPurifier_GeneratorTest() {
         $this->UnitTestCase();
         $this->gen = new HTMLPurifier_Generator();
+        $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
     }
     
     function test_generateFromToken() {
@@ -39,6 +42,15 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
         $inputs[5] = new HTMLPurifier_Token_Empty('br');
         $expect[5] = '<br />';
         
+        // test fault tolerance
+        $inputs[6] = null;
+        $expect[6] = '';
+        
+        // don't convert non-special characters
+        $theta_char = $this->_entity_lookup->table['theta'];
+        $inputs[7] = new HTMLPurifier_Token_Text($theta_char);
+        $expect[7] = $theta_char;
+        
         foreach ($inputs as $i => $input) {
             $result = $this->gen->generateFromToken($input);
             $this->assertEqual($result, $expect[$i]);
@@ -63,6 +75,11 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
         
         $inputs[3] = array('src' => 'picture.jpg', 'alt' => 'Short & interesting');
         $expect[3] = 'src="picture.jpg" alt="Short &amp; interesting"';
+        
+        // don't escape nonspecial characters
+        $theta_char = $this->_entity_lookup->table['theta'];
+        $inputs[4] = array('title' => 'Theta is ' . $theta_char);
+        $expect[4] = 'title="Theta is ' . $theta_char . '"';
         
         foreach ($inputs as $i => $input) {
             $result = $this->gen->generateAttributes($input);

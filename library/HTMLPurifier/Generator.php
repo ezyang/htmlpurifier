@@ -13,6 +13,7 @@ class HTMLPurifier_Generator
     }
     
     function generateFromToken($token) {
+        if (!isset($token->type)) return '';
         if ($token->type == 'start') {
             $attr = $this->generateAttributes($token->attributes);
             return '<' . $token->name . ($attr ? ' ' : '') . $attr . '>';
@@ -25,7 +26,7 @@ class HTMLPurifier_Generator
              return '<' . $token->name . ($attr ? ' ' : '') . $attr . ' />';
             
         } elseif ($token->type == 'text') {
-            return htmlentities($token->data, ENT_COMPAT, 'UTF-8');
+            return htmlspecialchars($token->data, ENT_COMPAT, 'UTF-8');
             
         } else {
             return '';
@@ -36,7 +37,7 @@ class HTMLPurifier_Generator
     function generateAttributes($assoc_array_of_attributes) {
         $html = '';
         foreach ($assoc_array_of_attributes as $key => $value) {
-            $html .= $key.'="'.htmlentities($value, ENT_COMPAT, 'UTF-8').'" ';
+            $html .= $key.'="'.htmlspecialchars($value, ENT_COMPAT, 'UTF-8').'" ';
         }
         return rtrim($html);
     }
