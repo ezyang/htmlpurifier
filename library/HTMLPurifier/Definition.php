@@ -6,6 +6,7 @@ require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/ChildDef.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Token.php';
+require_once 'HTMLPurifier/TagTransform.php';
 
 /**
  * Defines the purified HTML type with large amounts of objects.
@@ -38,6 +39,9 @@ class HTMLPurifier_Definition
     
     // used solely by HTMLPurifier_Strategy_FixNesting
     var $info_parent = 'div';
+    
+    // used solely by HTMLPurifier_Strategy_RemoveForeignElements
+    var $info_tag_transform = array();
     
     function instance() {
         static $instance = null;
@@ -211,6 +215,11 @@ class HTMLPurifier_Definition
         // menu -> ul
         // dir -> ul
         // center -> div / css: text-align: center;
+        
+        //$this->info_tag_transform['font']   = new HTMLPurifier_TagTransform_Font();
+        $this->info_tag_transform['menu']   = new HTMLPurifier_TagTransform_Simple('ul');
+        $this->info_tag_transform['dir']    = new HTMLPurifier_TagTransform_Simple('ul');
+        $this->info_tag_transform['center'] = new HTMLPurifier_TagTransform_Center();
         
         //////////////////////////////////////////////////////////////////////
         // info[]->auto_close : tags that automatically close another

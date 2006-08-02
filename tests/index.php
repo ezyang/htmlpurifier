@@ -2,6 +2,9 @@
 
 error_reporting(E_ALL);
 
+// wishlist: automated calling of this file from multiple PHP versions so we
+// don't have to constantly switch around
+
 // load files, assume that simpletest directory is in path
 require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/reporter.php';
@@ -37,6 +40,7 @@ $test->addTestFile('HTMLPurifier/Strategy/ValidateAttributesTest.php');
 $test->addTestFile('HTMLPurifier/AttrDef/EnumTest.php');
 $test->addTestFile('HTMLPurifier/AttrDef/IDTest.php');
 $test->addTestFile('HTMLPurifier/IDAccumulatorTest.php');
+$test->addTestFile('HTMLPurifier/TagTransformTest.php');
 
 if (SimpleReporter::inCli()) $reporter = new TextReporter();
 else $reporter = new HTMLReporter();

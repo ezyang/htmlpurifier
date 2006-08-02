@@ -3,6 +3,7 @@
 require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/Definition.php';
 require_once 'HTMLPurifier/Generator.php';
+require_once 'HTMLPurifier/TagTransform.php';
 
 /**
  * Removes all unrecognized tags from the list of tokens.
@@ -27,7 +28,18 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         foreach($tokens as $token) {
             if (!empty( $token->is_tag )) {
                 // DEFINITION CALL
-                if (!isset($this->definition->info[$token->name])) {
+                if (isset($this->definition->info[$token->name])) {
+                    // leave untouched
+                } elseif (
+                    isset($this->definition->info_tag_transform[$token->name])
+                ) {
+                    // there is a transformation for this tag
+                    // DEFINITION CALL
+                    $token = $this->
+                                definition->
+                                    info_tag_transform[$token->name]->
+                                        transform($token);
+                } else {
                     // invalid tag, generate HTML and insert in
                     $token = new HTMLPurifier_Token_Text(
                         $this->generator->generateFromToken($token)

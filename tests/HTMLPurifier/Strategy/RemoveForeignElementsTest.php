@@ -24,6 +24,14 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
         $inputs[2] = '<asdf>Bling</asdf><d href="bang">Bong</d><foobar />';
         $expect[2] = htmlspecialchars($inputs[2]);
         
+        // test simple transform
+        $inputs[3] = '<menu><li>Item 1</li></menu>';
+        $expect[3] = '<ul><li>Item 1</li></ul>';
+        
+        // test center transform
+        $inputs[4] = '<center>Look I am Centered!</center>';
+        $expect[4] = '<div style="text-align:center;">Look I am Centered!</div>';
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect);
     }
     
