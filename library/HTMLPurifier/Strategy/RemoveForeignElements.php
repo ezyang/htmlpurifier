@@ -9,7 +9,8 @@ require_once 'HTMLPurifier/TagTransform.php';
  * Removes all unrecognized tags from the list of tokens.
  * 
  * This strategy iterates through all the tokens and removes unrecognized
- * tokens.
+ * tokens. If a token is not recognized but a TagTransform is defined for
+ * that element, the element will be transformed accordingly.
  */
 
 class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy

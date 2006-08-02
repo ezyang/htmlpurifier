@@ -54,22 +54,14 @@ HTML tags.  Things like blog comments are, in all likelihood, most appropriately
 written in an extremely restrictive set of markup that doesn't require
 all this functionality (or not written in HTML at all).
 
-== STAGE 2 - remove foreign elements ==
+The rest of this document is pending moving into their associated classes.
 
-    Status: A- (transformations need to be implemented)
 
-At this point, the parser needs to start knowing about the DTD. Since we
-hold everything in an associative $info array, if it's set, it's valid, and
-we can include. Otherwise zap it, or attempt to figure out what they meant.
-<stronf>? A misspelling of <strong>! This feature may be too sugary though.
 
-One last thing: the remove foreign elements has to do the element
-transformations, from FONT to SPAN, etc.
 
-font -> span
-  size        CDATA          #IMPLIED
-  color       %Color;        #IMPLIED
-  face        CDATA          #IMPLIED
+
+
+
 
 
 == STAGE 3 - make well formed ==
