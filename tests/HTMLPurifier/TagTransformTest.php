@@ -48,18 +48,6 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
         
     }
     
-    function test_normalizeAttributes() {
-        
-        $transformer = new HTMLPurifier_TagTransform();
-        
-        $this->assertEqual(array(), $transformer->normalizeAttributes(array()));
-        $this->assertEqual(array('class'=>'foo'),
-            $transformer->normalizeAttributes(array('class'=>'foo')));
-        $this->assertEqual(array('class'=>'foo'),
-            $transformer->normalizeAttributes(array('CLASS'=>'foo')));
-        
-    }
-    
     function testSimple() {
         
         $transformer = new HTMLPurifier_TagTransform_Simple('ul');

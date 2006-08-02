@@ -9,21 +9,6 @@ class HTMLPurifier_TagTransform
         trigger_error('Call to abstract function', E_USER_ERROR);
     }
     
-    function normalizeAttributes($attributes) {
-        $keys = array_keys($attributes);
-        foreach ($keys as $key) {
-            // normalization only necessary when key is not lowercase
-            if (!ctype_lower($key)) {
-                $new_key = strtolower($key);
-                if (!isset($attributes[$new_key])) {
-                    $attributes[$new_key] = $attributes[$key];
-                }
-                unset($attributes[$key]);
-            }
-        }
-        return $attributes;
-    }
-    
 }
 
 class HTMLPurifier_TagTransform_Simple extends HTMLPurifier_TagTransform
@@ -60,7 +45,7 @@ class HTMLPurifier_TagTransform_Simple extends HTMLPurifier_TagTransform
 class HTMLPurifier_TagTransform_Center extends HTMLPurifier_TagTransform
 {
     function transform($tag) {
-        $attributes = $this->normalizeAttributes($tag->attributes);
+        $attributes = $tag->attributes;
         $prepend_css = 'text-align:center;';
         if (isset($attributes['style'])) {
             $attributes['style'] = $prepend_css . $attributes['style'];

@@ -1,13 +1,9 @@
 Todo List
 
 Primary:
- - Implement attribute validation
- - Implement HTMLPurifier
-
-Secondary:
- - Migrate all unit tests to use the lexer and generator
+ - (In Progress) Implement attribute validation
+ - Implement HTMLPurifier (trivial)
 
 Code issues:
  - Rename AbstractTest to Harness
- - Reorganize Strategy hierarchy to minimize duplication
  - (?) Create a TokenFactory to prevent really long lines

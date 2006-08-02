@@ -52,6 +52,16 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token // abstract
      */
     function HTMLPurifier_Token_Tag($name, $attributes = array()) {
         $this->name = ctype_lower($name) ? $name : strtolower($name);
+        foreach ($attributes as $key => $value) {
+            // normalization only necessary when key is not lowercase
+            if (!ctype_lower($key)) {
+                $new_key = strtolower($key);
+                if (!isset($attributes[$new_key])) {
+                    $attributes[$new_key] = $attributes[$key];
+                }
+                unset($attributes[$key]);
+            }
+        }
         $this->attributes = $attributes;
     }
 }

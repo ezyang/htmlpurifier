@@ -30,6 +30,10 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $inputs[4] = '<span dir="up-to-down">Bad dir.</span>';
         $expect[4] = '<span>Bad dir.</span>';
         
+        // test case sensitivity
+        $inputs[5] = '<div ID="valid">Convert ID to lowercase.</div>';
+        $expect[5] = '<div id="valid">Convert ID to lowercase.</div>';
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect);
         
     }
