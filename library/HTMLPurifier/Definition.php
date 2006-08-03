@@ -210,13 +210,7 @@ class HTMLPurifier_Definition
         //////////////////////////////////////////////////////////////////////
         // UNIMP : info_tag_transform : transformations of tags
         
-        // font -> span / attributes: size        color   face
-        //                       css: font-size   color   font-family
-        // menu -> ul
-        // dir -> ul
-        // center -> div / css: text-align: center;
-        
-        //$this->info_tag_transform['font']   = new HTMLPurifier_TagTransform_Font();
+        $this->info_tag_transform['font']   = new HTMLPurifier_TagTransform_Font();
         $this->info_tag_transform['menu']   = new HTMLPurifier_TagTransform_Simple('ul');
         $this->info_tag_transform['dir']    = new HTMLPurifier_TagTransform_Simple('ul');
         $this->info_tag_transform['center'] = new HTMLPurifier_TagTransform_Center();

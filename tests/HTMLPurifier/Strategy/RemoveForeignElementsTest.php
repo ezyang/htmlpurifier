@@ -32,6 +32,10 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
         $inputs[4] = '<center>Look I am Centered!</center>';
         $expect[4] = '<div style="text-align:center;">Look I am Centered!</div>';
         
+        // test font transform
+        $inputs[5] = '<font color="red" face="Arial" size="6">Big Warning!</font>';
+        $expect[5] = '<span style="color:red;font-family:Arial;font-size:xx-large;">Big Warning!</span>';
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect);
     }
     
