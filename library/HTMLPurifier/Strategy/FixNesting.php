@@ -3,8 +3,33 @@
 require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/Definition.php';
 
-// EXTRA: provide a mechanism for elements to be bubbled OUT of a node
-// or "Replace Nodes while including the parent nodes too"
+/**
+ * Takes a well formed list of tokens and fixes their nesting.
+ * 
+ * HTML elements dictate which elements are allowed to be their children,
+ * for example, you can't have a p tag in a span tag.  Other elements have
+ * much more rigorous definitions: tables, for instance, require a specific
+ * order for their elements.  There are also constraints not expressible by
+ * document type definitions, such as the chameleon nature of ins/del
+ * tags and global child exclusions.
+ * 
+ * The first major objective of this strategy is to iterate through all the
+ * nodes (not tokens) of the list of tokens and determine whether or not
+ * their children conform to the element's definition.  If they do not, the
+ * child definition may optionally supply an amended list of elements that
+ * is valid or require that the entire node be deleted (and the previous
+ * node rescanned).
+ * 
+ * The second objective is to ensure that explicitly excluded elements of
+ * an element do not appear in its children.  Code that accomplishes this
+ * task is pervasive through the strategy, though the two are distinct tasks
+ * and could, theoretically, be seperated (although it's not recommended).
+ * 
+ * @note Whether or not unrecognized children are silently dropped or
+ *       translated into text depends on the child definitions.
+ * 
+ * @todo Enable nodes to be bubbled out of the structure.
+ */
 
 class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 {
