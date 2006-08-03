@@ -26,6 +26,9 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
         // $stack[count($stack)-1] being the current parent
         $stack = array();
         
+        // stack that contains all elements that are excluded
+        $exclude_stack = array();
+        
         for ($i = 0, $size = count($tokens) ; $i < $size; ) {
             
             $child_tokens = array();
@@ -63,11 +66,31 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 $context = 'unknown';
             }
             
-            // DEFINITION CALL
-            $child_def = $this->definition->info[$tokens[$i]->name]->child;
+            // determine whether or not element is excluded
+            $excluded = false;
+            if (!empty($exclude_stack)) {
+                foreach ($exclude_stack as $lookup) {
+                    if (isset($lookup[$tokens[$i]->name])) {
+                        $excluded = true;
+                        break;
+                    }
+                }
+            }
             
-            // have DTD child def validate children
-            $result = $child_def->validateChildren($child_tokens, $context);
+            if ($excluded) {
+                $result = false;
+            } else {
+                // DEFINITION CALL
+                $def = $this->definition->info[$tokens[$i]->name];
+                
+                $child_def = $def->child;
+                
+                // have DTD child def validate children
+                $result = $child_def->validateChildren($child_tokens, $context);
+                
+                // determine whether or not this element has any exclusions
+                $excludes = $def->excludes;
+            }
             
             // process result
             if ($result === true) {
@@ -76,6 +99,9 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 
                 // register start token as a parental node start
                 $stack[] = $i;
+                
+                // register exclusions if there are any
+                if (!empty($excludes)) $exclude_stack[] = $excludes;
                 
                 // move cursor to next possible start node
                 $i++;
@@ -113,6 +139,9 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 // register start token as a parental node start
                 $stack[] = $i;
                 
+                // register exclusions if there are any
+                if (!empty($excludes)) $exclude_stack[] = $excludes;
+                
                 // move cursor to next possible start node
                 $i++;
                 
@@ -124,8 +153,15 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             // Test if the token indeed is a start tag, if not, move forward
             // and test again.
             while ($i < $size and $tokens[$i]->type != 'start') {
-                // pop a token index off the stack if we ended a node
-                if ($tokens[$i]->type == 'end') array_pop($stack);
+                if ($tokens[$i]->type == 'end') {
+                    // pop a token index off the stack if we ended a node
+                    array_pop($stack);
+                    // pop an exclusion lookup off exclusion stack if
+                    // we ended node and that node had exclusions
+                    if ($this->definition->info[$tokens[$i]->name]->excludes) {
+                        array_pop($exclude_stack);
+                    }
+                }
                 $i++;
             }
             

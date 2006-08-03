@@ -65,6 +65,10 @@ class HTMLPurifier_Strategy_FixNestingTest
         $inputs[11] = '<span><ins><div>Not allowed!</div></ins></span>';
         $expect[11] = '<span><ins>&lt;div&gt;Not allowed!&lt;/div&gt;</ins></span>';
         
+        // test exclusions
+        $inputs[12] = '<a><span><a>Not allowed</a></span></a>';
+        $expect[12] = '<a><span></span></a>';
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect);
     }
     

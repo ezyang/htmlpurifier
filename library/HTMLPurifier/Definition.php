@@ -209,6 +209,16 @@ class HTMLPurifier_Definition
         }
         
         //////////////////////////////////////////////////////////////////////
+        // info[]->excludes : defines elements that aren't allowed in here
+        
+        // make sure you test using isset() and not !empty()
+        
+        $this->info['a']->excludes = array('a' => true);
+        $this->info['pre']->excludes = array_flip(array('img', 'big', 'small',
+            // technically in spec, but we don't allow em anyway
+            'object', 'applet', 'font', 'basefont'));
+        
+        //////////////////////////////////////////////////////////////////////
         // info[]->attr : defines allowed attributes for elements
         
         // this doesn't include REQUIRED declarations, those are handled
@@ -232,6 +242,8 @@ class HTMLPurifier_Definition
         
         //////////////////////////////////////////////////////////////////////
         // info[]->auto_close : tags that automatically close another
+        
+        // make sure you test using isset() not !empty()
         
         // these are all block elements: blocks aren't allowed in P
         $this->info['p']->auto_close = array_flip(array(
@@ -265,6 +277,7 @@ class HTMLPurifier_ElementDef
     var $auto_close = array();
     var $child;
     var $type = 'unknown';
+    var $excludes = array();
     
 }
 
