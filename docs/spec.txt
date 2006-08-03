@@ -64,24 +64,7 @@ The rest of this document is pending moving into their associated classes.
 
 
 
-== STAGE 3 - make well formed ==
 
-    Status: A- (not as good as possible)
-
-Now we step through the whole thing and correct nesting issues. Most of the
-time, it's making sure the tags match up, but there's some trickery going on
-for HTML's quirks. They are:
-
-* Set of tags that close P
-        'address', 'blockquote', 'dd',      'dir',       'div', 
-        'dl',      'dt',         'h1',     'h2',      'h3',        'h4', 
-        'h5',      'h6',         'hr',
-        'ol',     'p',       'pre', 
-        'table',   'ul' 
-* Li closes li
-* more?
-
-We also want to do translations, like from FONT to SPAN with STYLE.
 
 
 
@@ -128,60 +111,14 @@ The way, I suppose, one would check for it, is whenever a node is removed,
 scroll to it's parent start, and re-evaluate it. Make sure you're able to do
 that with minimal code repetition.
 
-EDITOR'S NOTE: this behavior is not implemented by default, because the
-default configuration has a setup that ensures that cascading node removals
-will never happen. However, there will be warning signs in case someone tries
-to hack it further.
-
 The most complex case can probably be done by using some fancy regexp
 expressions and transformations. However, it doesn't seem right that, say,
-a stray <b> in a <table> can cause the entire table to be removed. Fixing it,
-however, may be too difficult (or not, see below).
-
-This code was excerpted from the PEAR class XML_DTD. It implements regexp
-checking.
-
---
-
-// # This actually does the validation
-
-// Validate the order of the children
-if (!$was_error && count($dtd_children)) {
-    $children_list = implode(',', $children);
-    $regex = $this->dtd->getPcreRegex($name);
-    if (!preg_match('/^'.$regex.'$/', $children_list)) {
-        $dtd_regex = $this->dtd->getDTDRegex($name);
-        $this->_errors("In element <$name> the children list found:\n'$children_list', ".
-                       "does not conform the DTD definition: '$dtd_regex'", $lineno);
-    }
-}
+a stray <b> in a <table> can cause the entire table to be removed. Depending
+on how much work we want to do, this will at least need a custom child
+definition, and at most require extra element bubbling capabilities to be
+added.
 
 --
-
-// # This figures out the PcreRegex
-
-//$ch is a string of the allowed childs
-$children = preg_split('/([^#a-zA-Z0-9_.-]+)/', $ch, -1, PREG_SPLIT_NO_EMPTY);
-// check for parsed character data special case
-if (in_array('#PCDATA', $children)) {
-    $content = '#PCDATA';
-    if (count($children) == 1) {
-        $children = array();
-        break;
-    }
-}
-// $children is not used after this
-
-$this->dtd['elements'][$elem_name]['child_validation_dtd_regex'] = $ch;
-// Convert the DTD regex language into PCRE regex format
-$reg = str_replace(',', ',?', $ch);
-$reg = preg_replace('/([#a-zA-Z0-9_.-]+)/', '(,?\\0)', $reg);
-$this->dtd['elements'][$elem_name]['child_validation_pcre_regex'] = $reg;
-
---
-
-We can probably loot and steal all of this. This brilliance of this code is
-amazing. I'm lovin' it!
 
 So, the way we define these cases should work like this:
 
@@ -198,26 +135,6 @@ No changes                   = true
 
 If we remove the entire parent node, we must scroll back to the parent of the
 parent.
-
---
-
-Another few problems: EXCLUSIONS!
-
-a
-    must not contain other a elements.
-pre
-    must not contain the img, object, big, small, sub, or sup elements.
-button
-    must not contain the input, select, textarea, label, button, form, fieldset,
-    iframe or isindex elements.
-label
-    must not contain other label elements.
-form
-    must not contain other form elements. 
-
-Normative exclusions straight from the horses mouth. These are SGML style,
-not XML style, so we need to modify the ruleset slightly. However, the DTD
-may have done this for us already.
 
 --
 
@@ -240,20 +157,13 @@ to text when PCDATA is allowed.
 
 --
 
-Note that generic child definitions are not usually desirable: we should
-implement custom handlers for each one that specify the stuff correctly.
-
---
-
-<!--
-  ins/del are allowed in block and inline content, but it is
-  inappropriate to include block content within an ins element
-  occurring in inline content.
--->
+ins/del are allowed in block and inline content, but it is
+inappropriate to include block content within an ins element
+occurring in inline content. How would we fix this?
 
 == STAGE 4 - check attributes ==
 
-    STATUS: N (not started)
+    STATUS: F (currently implementing core/i18n)
 
 While we're doing all this nesting hocus-pocus, attributes are also being
 checked. The reason why we need this to be done with the nesting stuff
@@ -262,10 +172,10 @@ replace it with data). Fortunantely, this is rare enough that we only have
 to worry about it for certain things:
 
 * ! bdo - dir > replace with span, preserve attributes
+* ! img - src, alt > if only alt is missing, insert filename, else remove img
 * basefont - size
 * param - name
 * applet - width, height
-* ! img - src, alt > if only alt is missing, insert filename, else remove img
 * map - id
 * area - alt
 * form - action
