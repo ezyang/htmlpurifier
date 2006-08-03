@@ -47,12 +47,27 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             // $i is index of start token
             // $j is index of end token
             
+            // calculate parent information
+            if ($count = count($stack)) {
+                $parent_index = $stack[$count-1];
+                $parent_name  = $tokens[$parent_index]->name;
+                $parent_def   = $this->definition->info[$parent_name];
+            } else {
+                $parent_index = $parent_name = $parent_def = null;
+            }
+            
+            // calculate context
+            if (isset($parent_def)) {
+                $context = $parent_def->type;
+            } else {
+                $context = 'unknown';
+            }
             
             // DEFINITION CALL
             $child_def = $this->definition->info[$tokens[$i]->name]->child;
             
             // have DTD child def validate children
-            $result = $child_def->validateChildren($child_tokens);
+            $result = $child_def->validateChildren($child_tokens, $context);
             
             // process result
             if ($result === true) {
@@ -78,10 +93,6 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 // there is no start token to register,
                 // current node is now the next possible start node
                 // unless it turns out that we need to do a double-check
-                
-                $parent_index = $stack[count($stack)-1];
-                $parent_name  = $tokens[$parent_index]->name;
-                $parent_def   = $this->definition->info[$parent_name];
                 
                 if (!$parent_def->child->allow_empty) {
                     // we need to do a double-check

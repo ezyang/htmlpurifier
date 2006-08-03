@@ -175,4 +175,32 @@ class HTMLPurifier_ChildDef_Empty extends HTMLPurifier_ChildDef
     }
 }
 
+class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
+{
+    
+    var $inline;
+    var $block;
+    
+    function HTMLPurifier_ChildDef_Chameleon($inline, $block) {
+        $this->inline = new HTMLPurifier_ChildDef_Optional($inline);
+        $this->block  = new HTMLPurifier_ChildDef_Optional($block);
+    }
+    
+    function validateChildren($tokens_of_children, $context) {
+        switch ($context) {
+            case 'unknown':
+            case 'inline':
+                $result = $this->inline->validateChildren($tokens_of_children);
+                break;
+            case 'block':
+                $result = $this->block->validateChildren($tokens_of_children);
+                break;
+            default:
+                trigger_error('Invalid context', E_USER_ERROR);
+                return false;
+        }
+        return $result;
+    }
+}
+
 ?>

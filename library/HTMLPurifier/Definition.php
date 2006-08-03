@@ -105,15 +105,15 @@ class HTMLPurifier_Definition
         $e_misc = "$e_misc_inline";
         $e_inline = "a | $e_special | $e_fontstyle | $e_phrase".
           " | $e_inline_forms";
+        $e__inline = "#PCDATA | $e_inline | $e_misc_inline";
         // note the casing
-        $e_Inline = new HTMLPurifier_ChildDef_Optional("#PCDATA | $e_inline".
-          " | $e_misc_inline");
+        $e_Inline = new HTMLPurifier_ChildDef_Optional($e__inline);
         $e_heading = 'h1|h2|h3|h4|h5|h6';
         $e_lists = 'ul | ol | dl';
         $e_blocktext = 'pre | hr | blockquote | address';
         $e_block = "p | $e_heading | div | $e_lists | $e_blocktext | table";
-        $e_Flow = new HTMLPurifier_ChildDef_Optional("#PCDATA | $e_block".
-          " | $e_inline | $e_misc");
+        $e__flow = "#PCDATA | $e_block | $e_inline | $e_misc";
+        $e_Flow = new HTMLPurifier_ChildDef_Optional($e__flow);
         $e_a_content = new HTMLPurifier_ChildDef_Optional("#PCDATA | $e_special".
           " | $e_fontstyle | $e_phrase | $e_inline_forms | $e_misc_inline");
         $e_pre_content = new HTMLPurifier_ChildDef_Optional("#PCDATA | a".
@@ -123,7 +123,8 @@ class HTMLPurifier_Definition
         $e_form_button_content = new HTMLPurifier_ChildDef_Optional(''); // unused
         
         $this->info['ins']->child =
-        $this->info['del']->child = 
+        $this->info['del']->child = new HTMLPurifier_ChildDef_Chameleon($e__inline, $e__flow);
+        
         $this->info['blockquote']->child=
         $this->info['dd']->child  =
         $this->info['li']->child  =
@@ -194,6 +195,20 @@ class HTMLPurifier_Definition
         $this->info['td']->child = $e_Flow;
         
         //////////////////////////////////////////////////////////////////////
+        // info[]->type : defines the type of the element (block or inline)
+        
+        // reuses $e_Inline and $e_block
+        
+        foreach ($e_Inline->elements as $name) {
+            $this->info[$name]->type = 'inline';
+        }
+        
+        $e_Block = new HTMLPurifier_ChildDef_Optional($e_block);
+        foreach ($e_Block->elements as $name) {
+            $this->info[$name]->type = 'block';
+        }
+        
+        //////////////////////////////////////////////////////////////////////
         // info[]->attr : defines allowed attributes for elements
         
         // this doesn't include REQUIRED declarations, those are handled
@@ -249,6 +264,7 @@ class HTMLPurifier_ElementDef
     var $attr = array();
     var $auto_close = array();
     var $child;
+    var $type = 'unknown';
     
 }
 

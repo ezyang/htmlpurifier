@@ -61,6 +61,10 @@ class HTMLPurifier_Strategy_FixNestingTest
         $inputs[10] = '<table></table><table></table>';
         $expect[10] = '';
         
+        // block in inline ins not allowed
+        $inputs[11] = '<span><ins><div>Not allowed!</div></ins></span>';
+        $expect[11] = '<span><ins>&lt;div&gt;Not allowed!&lt;/div&gt;</ins></span>';
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect);
     }
     

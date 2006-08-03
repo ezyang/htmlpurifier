@@ -16,15 +16,21 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         parent::UnitTestCase();
     }
     
-    function assertSeries($inputs, $expect, $def) {
+    function assertSeries($inputs, $expect, $def, $context = array()) {
         foreach ($inputs as $i => $input) {
             $tokens = $this->lex->tokenizeHTML($input);
-            $result = $def->validateChildren($tokens);
+            
+            if (isset($context[$i])) {
+                $result = $def->validateChildren($tokens, $context[$i]);
+            } else {
+                $result = $def->validateChildren($tokens);
+            }
+            
             if (is_bool($expect[$i])) {
                 $this->assertIdentical($expect[$i], $result);
             } else {
                 $result_html = $this->gen->generateFromTokens($result);
-                $this->assertEqual($expect[$i], $result_html);
+                $this->assertEqual($expect[$i], $result_html, "Test $i: %s");
                 paintIf($result_html, $result_html != $expect[$i]);
             }
         }
@@ -122,6 +128,29 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         $expect[1] = '';
         
         $this->assertSeries($inputs, $expect, $def);
+    }
+    
+    function test_chameleon() {
+        
+        $def = new HTMLPurifier_ChildDef_Chameleon(
+            'b | i', // allowed only when in inline context
+            'b | i | div' // allowed only when in block context
+        );
+        
+        $inputs[0] = '<b>Allowed.</b>';
+        $expect[0] = true;
+        $context[0] = 'inline';
+        
+        $inputs[1] = '<div>Not allowed.</div>';
+        $expect[1] = '';
+        $context[1] = 'inline';
+        
+        $inputs[2] = '<div>Allowed.</div>';
+        $expect[2] = true;
+        $context[2] = 'block';
+        
+        $this->assertSeries($inputs, $expect, $def, $context);
+        
     }
     
 }
