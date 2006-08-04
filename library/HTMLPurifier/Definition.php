@@ -222,9 +222,11 @@ class HTMLPurifier_Definition
         // info[]->attr : defines allowed attributes for elements
         
         // this doesn't include REQUIRED declarations, those are handled
-        // by the transform classes
+        // by the transform classes. It will, however, do simple and slightly
+        // complex attribute value substitution
         
-        // attrs, included in almost every single one except for a few
+        // attrs, included in almost every single one except for a few,
+        // which manually override these in their local definitions
         $this->info_global_attr = array(
             // core attrs
             'id' => new HTMLPurifier_AttrDef_ID(),

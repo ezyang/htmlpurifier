@@ -26,6 +26,9 @@ class HTMLPurifier_AttrDef_IDTest extends UnitTestCase
         // test duplicate detection
         $this->assertFalse($def->validate('a'   , $acc));
         
+        // valid once whitespace stripped, but needs to be amended
+        $this->assertEqual('whee', $def->validate(' whee ', $acc));
+        
     }
     
 }

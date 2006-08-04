@@ -36,10 +36,17 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
                 } else {
                     $result = false;
                 }
-                if (!$result) {
+                if ($result === false) {
                     $changed = true;
                     unset($attr[$attr_key]);
+                } elseif (is_string($result)) {
+                    // simple substitution
+                    $changed = true;
+                    $attr[$attr_key] = $result;
                 }
+                // we'd also want slightly more complicated substitution,
+                // although we're not sure how colliding attributes would
+                // resolve
             }
             if ($changed) {
                 $tokens[$key]->attributes = $attr;

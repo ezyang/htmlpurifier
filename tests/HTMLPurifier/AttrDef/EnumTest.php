@@ -23,6 +23,14 @@ class HTMLPurifier_AttrDef_EnumTest extends UnitTestCase
         
     }
     
+    function testFixing() {
+        
+        $def = new HTMLPurifier_AttrDef_Enum(array('one'));
+        
+        $this->assertEqual('one', $def->validate(' one '));
+        
+    }
+    
 }
 
 ?>

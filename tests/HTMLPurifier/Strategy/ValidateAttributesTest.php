@@ -34,6 +34,10 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $inputs[5] = '<div ID="valid">Convert ID to lowercase.</div>';
         $expect[5] = '<div id="valid">Convert ID to lowercase.</div>';
         
+        // test simple attribute substitution
+        $inputs[6] = '<div id=" valid ">Trim whitespace.</div>';
+        $expect[6] = '<div id="valid">Trim whitespace.</div>';
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect);
         
     }
