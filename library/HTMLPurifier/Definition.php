@@ -3,6 +3,8 @@
 require_once 'HTMLPurifier/AttrDef.php';
     require_once 'HTMLPurifier/AttrDef/Enum.php';
     require_once 'HTMLPurifier/AttrDef/ID.php';
+    require_once 'HTMLPurifier/AttrDef/Class.php';
+    require_once 'HTMLPurifier/AttrDef/Text.php';
 require_once 'HTMLPurifier/ChildDef.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Token.php';
@@ -238,6 +240,7 @@ class HTMLPurifier_Definition
             // core attrs
             'id' => new HTMLPurifier_AttrDef_ID(),
             'class' => new HTMLPurifier_AttrDef_Class(),
+            'title' => new HTMLPurifier_AttrDef_Text(),
             // i18n
             'dir' => new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false),
             );

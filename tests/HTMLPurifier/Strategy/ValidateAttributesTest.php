@@ -52,6 +52,13 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $inputs[8] = '<div class="valid">Valid</div>';
         $expect[8] = $inputs[8];
         
+        $inputs[9] = '<div class="valid 0invalid">Keep valid.</div>';
+        $expect[9] = '<div class="valid">Keep valid.</div>';
+        
+        // test title
+        $inputs[10] = '<acronym title="PHP: Hypertext Preprocessor">PHP</acronym>';
+        $expect[10] = $inputs[10];
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
         
     }
