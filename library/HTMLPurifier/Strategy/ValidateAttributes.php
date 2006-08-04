@@ -34,17 +34,21 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             $attr = $token->attributes;
             $changed = false;
             foreach ($attr as $attr_key => $value) {
+                
+                // call the definition
                 if ( isset($defs[$attr_key]) ) {
                     if (!$defs[$attr_key]) {
                         $result = false;
                     } else {
-                        $result = $defs[$attr_key]->validate($value, $accumulator);
+                        $result = $defs[$attr_key]->validate($value, $config, $accumulator);
                     }
                 } elseif ( isset($d_defs[$attr_key]) ) {
-                    $result = $d_defs[$attr_key]->validate($value, $accumulator);
+                    $result = $d_defs[$attr_key]->validate($value, $config, $accumulator);
                 } else {
                     $result = false;
                 }
+                
+                // put the results into effect
                 if ($result === false) {
                     $changed = true;
                     unset($attr[$attr_key]);

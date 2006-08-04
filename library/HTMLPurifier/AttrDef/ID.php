@@ -6,7 +6,7 @@ require_once 'HTMLPurifier/IDAccumulator.php';
 class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
 {
     
-    function validate($old_id, &$accumulator) {
+    function validate($old_id, $config, &$accumulator) {
         
         $id = trim($old_id); // trim it first
         
