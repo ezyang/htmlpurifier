@@ -1,0 +1,43 @@
+<?php
+
+require_once 'HTMLPurifier/AttrDef.php';
+require_once 'HTMLPurifier/Config.php';
+
+class HTMLPurifier_AttrDef_Class extends HTMLPurifier_AttrDef
+{
+    
+    function validate($raw_string, $config = null) {
+        
+        if (!$config) $config = HTMLPurifier_Config::createDefault();
+        
+        $string = trim($raw_string);
+        
+        // early abort: '' and '0' (strings that convert to false) are invalid
+        if (!$string) return false;
+        
+        // OPTIMIZABLE!
+        // do the preg_match, capture all subpatterns for reformulation
+        
+        // we don't support U+00A1 and up codepoints or
+        // escaping because I don't know how to do that with regexps
+        // and plus it would complicate optimization efforts (you never
+        // see that anyway).
+        $matches = array();
+        $pattern = '/(?:\s|\A)'.
+                   '((?:-?[A-Za-z_]|--)[A-Za-z_\-0-9]*)'.
+                   '(?:\s|\z)/';
+        preg_match_all($pattern, $string, $matches);
+        
+        $new_string = '';
+        foreach ($matches[1] as $class_names) {
+            $new_string .= $class_names . ' ';
+        }
+        $new_string = rtrim($new_string);
+        
+        return ($new_string == $raw_string) ? true : $new_string ? $new_string : false;
+        
+    }
+    
+}
+
+?>

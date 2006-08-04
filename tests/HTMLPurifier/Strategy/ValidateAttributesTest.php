@@ -19,20 +19,22 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $inputs[0] = '';
         $expect[0] = '';
         
+        // test ids
+        
         $inputs[1] = '<div id="valid">Preserve the ID.</div>';
         $expect[1] = $inputs[1];
         
         $inputs[2] = '<div id="0invalid">Kill the ID.</div>';
         $expect[2] = '<div>Kill the ID.</div>';
         
-        // test accumulator
+        // test id accumulator
         $inputs[3] = '<div id="valid">Valid</div><div id="valid">Invalid</div>';
         $expect[3] = '<div id="valid">Valid</div><div>Invalid</div>';
         
         $inputs[4] = '<span dir="up-to-down">Bad dir.</span>';
         $expect[4] = '<span>Bad dir.</span>';
         
-        // test case sensitivity
+        // test attribute case sensitivity
         $inputs[5] = '<div ID="valid">Convert ID to lowercase.</div>';
         $expect[5] = '<div id="valid">Convert ID to lowercase.</div>';
         
@@ -45,6 +47,10 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $expect[7] = '<div>Invalid</div>';
         $config[7] = HTMLPurifier_Config::createDefault();
         $config[7]->attr_id_blacklist = array('invalid');
+        
+        // test classes
+        $inputs[8] = '<div class="valid">Valid</div>';
+        $expect[8] = $inputs[8];
         
         $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
         

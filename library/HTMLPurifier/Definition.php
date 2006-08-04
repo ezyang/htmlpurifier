@@ -237,6 +237,7 @@ class HTMLPurifier_Definition
         $this->info_global_attr = array(
             // core attrs
             'id' => new HTMLPurifier_AttrDef_ID(),
+            'class' => new HTMLPurifier_AttrDef_Class(),
             // i18n
             'dir' => new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false),
             );
