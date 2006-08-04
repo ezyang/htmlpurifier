@@ -49,7 +49,7 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
                 }
                 
                 // put the results into effect
-                if ($result === false) {
+                if ($result === false || $result === null) {
                     $changed = true;
                     unset($attr[$attr_key]);
                 } elseif (is_string($result)) {
