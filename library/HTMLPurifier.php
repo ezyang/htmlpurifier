@@ -34,12 +34,9 @@ class HTMLPurifier
     
     /**
      * Initializes the purifier.
-     * 
-     * The constructor instantiates all necessary sub-objects to do the job,
-     * because creating some of them (esp. HTMLPurifier_Definition) can be
-     * expensive.
+     * @param $config Configuration for all instances of the purifier
      */
-    function HTMLPurifier() {
+    function HTMLPurifier($config = null) {
         // unimplemented
     }
     
@@ -47,9 +44,10 @@ class HTMLPurifier
      * Purifies HTML.
      * 
      * @param $html String of HTML to purify
+     * @param $config HTMLPurifier_Config object for this specific round
      * @return Purified HTML
      */
-    function purify($html) {
+    function purify($html, $config = null) {
         // unimplemented
     }
     

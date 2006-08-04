@@ -2,6 +2,7 @@
 
 require_once('HTMLPurifier/Strategy.php');
 require_once('HTMLPurifier/Strategy/Composite.php');
+require_once('HTMLPurifier/Config.php');
 
 class HTMLPurifier_Strategy_Composite_Test
     extends HTMLPurifier_Strategy_Composite
@@ -20,6 +21,7 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
     function test() {
         
         generate_mock_once('HTMLPurifier_Strategy');
+        generate_mock_once('HTMLPurifier_Config');
         
         // setup a bunch of mock strategies to inject into our composite test
         
@@ -39,18 +41,24 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
         $input_3 = 'Processed by 1 and 2';
         $input_4 = 'Processed by 1, 2 and 3'; // expected output
         
-        $mock_1->expectOnce('execute', array($input_1));
-        $mock_1->setReturnValue('execute', $input_2, array($input_1));
+        $config = new HTMLPurifier_ConfigMock();
         
-        $mock_2->expectOnce('execute', array($input_2));
-        $mock_2->setReturnValue('execute', $input_3, array($input_2));
+        $params_1 = array($input_1, $config);
+        $params_2 = array($input_2, $config);
+        $params_3 = array($input_3, $config);
         
-        $mock_3->expectOnce('execute', array($input_3));
-        $mock_3->setReturnValue('execute', $input_4, array($input_3));
+        $mock_1->expectOnce('execute', $params_1);
+        $mock_1->setReturnValue('execute', $input_2, $params_1);
+        
+        $mock_2->expectOnce('execute', $params_2);
+        $mock_2->setReturnValue('execute', $input_3, $params_2);
+        
+        $mock_3->expectOnce('execute', $params_3);
+        $mock_3->setReturnValue('execute', $input_4, $params_3);
         
         // perform test
         
-        $output = $composite->execute($input_1);
+        $output = $composite->execute($input_1, $config);
         $this->assertIdentical($input_4, $output);
         
         // tally the calls

@@ -1,5 +1,6 @@
 <?php
 
+require_once('HTMLPurifier/Config.php');
 require_once('HTMLPurifier/StrategyAbstractTest.php');
 require_once('HTMLPurifier/Strategy/ValidateAttributes.php');
 
@@ -13,6 +14,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         
         $inputs = array();
         $expect = array();
+        $config = array();
         
         $inputs[0] = '';
         $expect[0] = '';
@@ -38,7 +40,13 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $inputs[6] = '<div id=" valid ">Trim whitespace.</div>';
         $expect[6] = '<div id="valid">Trim whitespace.</div>';
         
-        $this->assertStrategyWorks($strategy, $inputs, $expect);
+        // test configuration id blacklist
+        $inputs[7] = '<div id="invalid">Invalid</div>';
+        $expect[7] = '<div>Invalid</div>';
+        $config[7] = HTMLPurifier_Config::createDefault();
+        $config[7]->attr_id_blacklist = array('invalid');
+        
+        $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
         
     }
     

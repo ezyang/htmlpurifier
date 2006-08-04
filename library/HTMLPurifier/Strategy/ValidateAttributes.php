@@ -13,9 +13,18 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
         $this->definition = HTMLPurifier_Definition::instance();
     }
     
-    function execute($tokens) {
+    function execute($tokens, $config = null) {
+        
+        // load default configuration object if none passed
+        if (!$config) $config = HTMLPurifier_Config::createDefault();
+        
+        // setup ID accumulator and load it with blacklisted IDs
         $accumulator = new HTMLPurifier_IDAccumulator();
+        $accumulator->load($config->attr_id_blacklist);
+        
+        // DEFINITION CALL
         $d_defs = $this->definition->info_global_attr;
+        
         foreach ($tokens as $key => $token) {
             if ($token->type !== 'start' && $token->type !== 'end') continue;
             

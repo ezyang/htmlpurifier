@@ -15,9 +15,10 @@ class HTMLPurifier_Strategy
      * Executes the strategy on the tokens.
      * 
      * @param $tokens Array of HTMLPurifier_Token objects to be operated on.
+     * @param $config Configuration options
      * @returns Processed array of token objects.
      */
-    function execute($tokens) {
+    function execute($tokens, $config = null) {
         trigger_error('Cannot call abstract function', E_USER_ERROR);
     }
     

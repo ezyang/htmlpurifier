@@ -43,9 +43,16 @@ class HTMLPurifier_Definition
     // used solely by HTMLPurifier_Strategy_RemoveForeignElements
     var $info_tag_transform = array();
     
-    function instance() {
+    // WARNING! Prototype is not passed by reference, so in order to get
+    // a copy of the real one, you'll have to destroy your copy and
+    // use instance() to get it.
+    // Usually, however, modifying the returned definition (reference) should be
+    // sufficient
+    function &instance($prototype = null) {
         static $instance = null;
-        if (!$instance) {
+        if ($prototype) {
+            $instance = $prototype;
+        } elseif (!$instance) {
             $instance = new HTMLPurifier_Definition();
             $instance->setup();
         }
