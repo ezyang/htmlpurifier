@@ -4,13 +4,14 @@ require_once 'XML/HTMLSax3.php'; // PEAR
 require_once 'HTMLPurifier/Lexer.php';
 
 /**
- * Lexer that uses the PEAR package XML_HTMLSax3 to parse
+ * Proof-of-concept lexer that uses the PEAR package XML_HTMLSax3 to parse HTML.
  * 
  * PEAR, not suprisingly, also has a SAX parser for HTML.  I don't know
  * very much about implementation, but it's fairly well written.  However, that
  * abstraction comes at a price: performance. You need to have it installed,
  * and if the API changes, it might break our adapter. Not sure whether or not
- * it's UTF-8 aware, but it has some entity parsing trouble.
+ * it's UTF-8 aware, but it has some entity parsing trouble (in all areas,
+ * text and attributes).
  * 
  * Quite personally, I don't recommend using the PEAR class, and the defaults
  * don't use it. The unit tests do perform the tests on the SAX parser too, but

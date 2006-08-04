@@ -202,6 +202,15 @@ class HTMLPurifier_LexerTest extends UnitTestCase
                 new HTMLPurifier_Token_Text('rarr;')
             );
         
+        // test entity resolution in attributes
+        $input[16] = '<a href="index.php?title=foo&amp;id=bar">Link</a>';
+        $expect[16] = array(
+                new HTMLPurifier_Token_Start('a',array('href' => 'index.php?title=foo&id=bar'))
+               ,new HTMLPurifier_Token_Text('Link')
+               ,new HTMLPurifier_Token_End('a')
+            );
+        $sax_expect[16] = false; // PEARSax doesn't support it!
+        
         foreach($input as $i => $discard) {
             $result = $this->DirectLex->tokenizeHTML($input[$i]);
             $this->assertEqual($expect[$i], $result, 'DirectLexTest '.$i.': %s');
