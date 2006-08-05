@@ -33,9 +33,16 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             
             $attr = $token->attributes;
             
+            // do global transformations
             // DEFINITION CALL
-            foreach ($this->definition->info_attr_transform as $transformer) {
-                $attr = $transformer->transform($attr);
+            foreach ($this->definition->info_attr_transform as $transform) {
+                $attr = $transform->transform($attr);
+            }
+            
+            // do local transformations
+            // DEFINITION CALL
+            foreach ($this->definition->info[$token->name]->attr_transform as $transform) {
+                $attr = $transform->transform($attr);
             }
             
             foreach ($attr as $attr_key => $value) {

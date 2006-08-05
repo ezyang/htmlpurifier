@@ -59,9 +59,13 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $inputs[10] = '<acronym title="PHP: Hypertext Preprocessor">PHP</acronym>';
         $expect[10] = $inputs[10];
         
-        // test lang (NEEDS CORRECTION!)
+        // test lang
         $inputs[11] = '<span lang="fr">La soupe.</span>';
         $expect[11] = '<span lang="fr" xml:lang="fr">La soupe.</span>';
+        
+        // test align (won't work till CSS validation is fixed)
+        // $inputs[12] = '<h1 align="center">Centered Headline</h1>';
+        // $expect[12] = '<h1 style="text-align:center;">Centered Headline</h1>';
         
         $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
         

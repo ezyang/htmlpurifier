@@ -5,6 +5,10 @@ require_once 'HTMLPurifier/AttrDef.php';
     require_once 'HTMLPurifier/AttrDef/ID.php';
     require_once 'HTMLPurifier/AttrDef/Class.php';
     require_once 'HTMLPurifier/AttrDef/Text.php';
+    require_once 'HTMLPurifier/AttrDef/Lang.php';
+require_once 'HTMLPurifier/AttrTransform.php';
+    require_once 'HTMLPurifier/AttrTransform/Lang.php';
+    require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
 require_once 'HTMLPurifier/ChildDef.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Token.php';
@@ -286,7 +290,16 @@ class HTMLPurifier_Definition
         // or we can just create another info
         
         //////////////////////////////////////////////////////////////////////
-        // UNIMP : info[]->attr_transform : attribute transformations in elements
+        // info[]->attr_transform : attribute transformations in elements
+        
+        $transform = new HTMLPurifier_AttrTransform_TextAlign();
+        $this->info['h1']->attr_transform[] =
+        $this->info['h2']->attr_transform[] =
+        $this->info['h3']->attr_transform[] =
+        $this->info['h4']->attr_transform[] =
+        $this->info['h5']->attr_transform[] =
+        $this->info['h6']->attr_transform[] =
+        $this->info['p'] ->attr_transform[] = $transform;
         
         //////////////////////////////////////////////////////////////////////
         // info_attr_transform : global attribute transformation that is
@@ -303,6 +316,7 @@ class HTMLPurifier_ElementDef
 {
     
     var $attr = array();
+    var $attr_transform = array();
     var $auto_close = array();
     var $child;
     var $type = 'unknown';
