@@ -6,11 +6,11 @@ require_once 'HTMLPurifier/Config.php';
 class HTMLPurifier_AttrDef_Class extends HTMLPurifier_AttrDef
 {
     
-    function validate($raw_string, $config = null) {
+    function validate($string, $config = null) {
         
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         
-        $string = trim($raw_string);
+        $string = trim($string);
         
         // early abort: '' and '0' (strings that convert to false) are invalid
         if (!$string) return false;
@@ -23,10 +23,12 @@ class HTMLPurifier_AttrDef_Class extends HTMLPurifier_AttrDef
         // and plus it would complicate optimization efforts (you never
         // see that anyway).
         $matches = array();
-        $pattern = '/(?:\s|\A)'.
-                   '((?:-?[A-Za-z_]|--)[A-Za-z_\-0-9]*)'.
-                   '(?:\s|\z)/';
+        $pattern = '/(?:(?<=\s)|\A)'.
+                   '((?:--|-?[A-Za-z_])[A-Za-z_\-0-9]*)'.
+                   '(?:(?=\s)|\z)/';
         preg_match_all($pattern, $string, $matches);
+        
+        if (empty($matches[1])) return false;
         
         $new_string = '';
         foreach ($matches[1] as $class_names) {
@@ -34,7 +36,7 @@ class HTMLPurifier_AttrDef_Class extends HTMLPurifier_AttrDef
         }
         $new_string = rtrim($new_string);
         
-        return ($new_string == $raw_string) ? true : $new_string ? $new_string : false;
+        return $new_string;
         
     }
     

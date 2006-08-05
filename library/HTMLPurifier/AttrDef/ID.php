@@ -12,9 +12,9 @@ require_once 'HTMLPurifier/IDAccumulator.php';
 class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
 {
     
-    function validate($old_id, $config, &$accumulator) {
+    function validate($id, $config, &$accumulator) {
         
-        $id = trim($old_id); // trim it first
+        $id = trim($id); // trim it first
         
         if ($id === '') return false;
         if (isset($accumulator->ids[$id])) return false;
@@ -37,7 +37,7 @@ class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
         // if no change was made to the ID, return the result
         // else, return the new id if stripping whitespace made it
         //     valid, or return false.
-        return ($id == $old_id) ? $result : ($result ? $id : false);
+        return $result ? $id : false;
         
     }
     

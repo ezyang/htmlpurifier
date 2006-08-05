@@ -3,12 +3,12 @@
 require_once 'HTMLPurifier/Definition.php';
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 
-class HTMLPurifier_StrategyAbstractTest extends UnitTestCase
+class HTMLPurifier_StrategyHarness extends UnitTestCase
 {
     
     var $lex, $gen;
     
-    function HTMLPurifier_StrategyAbstractTest() {
+    function HTMLPurifier_StrategyHarness() {
         $this->UnitTestCase();
         
         // we can't use the DOM lexer since it does too much stuff

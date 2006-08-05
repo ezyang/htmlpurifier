@@ -1,10 +1,10 @@
 <?php
 
-require_once 'HTMLPurifier/StrategyAbstractTest.php';
+require_once 'HTMLPurifier/StrategyHarness.php';
 require_once 'HTMLPurifier/Strategy/FixNesting.php';
 
 class HTMLPurifier_Strategy_FixNestingTest
-    extends HTMLPurifier_StrategyAbstractTest
+    extends HTMLPurifier_StrategyHarness
 {
     
     function test() {

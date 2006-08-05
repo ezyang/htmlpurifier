@@ -1,29 +1,30 @@
 <?php
 
+require_once 'HTMLPurifier/AttrDefHarness.php';
 require_once 'HTMLPurifier/AttrDef/Class.php';
 require_once 'HTMLPurifier/Config.php';
 
-class HTMLPurifier_AttrDef_ClassTest extends UnitTestCase
+class HTMLPurifier_AttrDef_ClassTest extends HTMLPurifier_AttrDefHarness
 {
     
     function testDefault() {
         
-        $def = new HTMLPurifier_AttrDef_Class();
+        $this->def = new HTMLPurifier_AttrDef_Class();
         
-        $this->assertTrue($def->validate('valid'));
-        $this->assertTrue($def->validate('a0-_'));
-        $this->assertTrue($def->validate('-valid'));
-        $this->assertTrue($def->validate('_valid'));
-        $this->assertTrue($def->validate('double valid'));
+        $this->assertDef('valid');
+        $this->assertDef('a0-_');
+        $this->assertDef('-valid');
+        $this->assertDef('_valid');
+        $this->assertDef('double valid');
         
-        $this->assertFalse($def->validate('0invalid'));
-        $this->assertFalse($def->validate('-0'));
+        $this->assertDef('0invalid', false);
+        $this->assertDef('-0', false);
         
         // test conditional replacement
-        $this->assertEqual('validassoc', $def->validate('validassoc 0invalid'));
+        $this->assertDef('validassoc 0invalid', 'validassoc');
         
         // test whitespace leniency
-        $this->assertTrue('double valid', $def->validate(" double\nvalid\r"));
+        $this->assertDef(" double\nvalid\r", 'double valid');
         
     }
     

@@ -26,6 +26,15 @@ class HTMLPurifier_Config
     var $attr_class_blacklist = array();
     var $attr_class_whitelist = array();
     
+    // designate whether or not to allow numerals in language code subtags
+    // RFC 1766, the current standard referenced by XML, does not permit
+    //           numbers, but,
+    // RFC 3066, the superseding best practice standard since January 2001,
+    //           permits them.
+    // we allow numbers by default, although you generally never see them
+    // at all.
+    var $attr_lang_alpha = false;
+    
     function createDefault() {
         $config = new HTMLPurifier_Config();
         return $config;

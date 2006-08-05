@@ -1,11 +1,11 @@
 <?php
 
 require_once('HTMLPurifier/Config.php');
-require_once('HTMLPurifier/StrategyAbstractTest.php');
+require_once('HTMLPurifier/StrategyHarness.php');
 require_once('HTMLPurifier/Strategy/ValidateAttributes.php');
 
 class HTMLPurifier_Strategy_ValidateAttributesTest extends
-      HTMLPurifier_StrategyAbstractTest
+      HTMLPurifier_StrategyHarness
 {
     
     function test() {
