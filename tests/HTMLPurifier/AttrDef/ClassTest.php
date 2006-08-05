@@ -26,6 +26,9 @@ class HTMLPurifier_AttrDef_ClassTest extends HTMLPurifier_AttrDefHarness
         // test whitespace leniency
         $this->assertDef(" double\nvalid\r", 'double valid');
         
+        // test case sensitivity
+        $this->assertDef('VALID');
+        
     }
     
 }
