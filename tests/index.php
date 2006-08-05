@@ -42,8 +42,10 @@ $test->addTestFile('HTMLPurifier/AttrDef/EnumTest.php');
 $test->addTestFile('HTMLPurifier/AttrDef/IDTest.php');
 $test->addTestFile('HTMLPurifier/AttrDef/ClassTest.php');
 $test->addTestFile('HTMLPurifier/AttrDef/TextTest.php');
+$test->addTestFile('HTMLPurifier/AttrDef/LangTest.php');
 $test->addTestFile('HTMLPurifier/IDAccumulatorTest.php');
 $test->addTestFile('HTMLPurifier/TagTransformTest.php');
+$test->addTestFile('HTMLPurifier/AttrTransform/LangTest.php');
 
 if (SimpleReporter::inCli()) $reporter = new TextReporter();
 else $reporter = new HTMLReporter();

@@ -5,7 +5,7 @@ class HTMLPurifier_AttrDef
 {
     function HTMLPurifier_AttrDef() {}
     
-    function validate() {
+    function validate($string, $config = null) {
         trigger_error('Cannot call abstract function', E_USER_ERROR);
     }
     

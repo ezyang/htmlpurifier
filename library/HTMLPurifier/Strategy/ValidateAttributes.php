@@ -26,10 +26,15 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
         $d_defs = $this->definition->info_global_attr;
         
         foreach ($tokens as $key => $token) {
-            if ($token->type !== 'start' && $token->type !== 'end') continue;
+            if ($token->type !== 'start' && $token->type !== 'empty') continue;
             
             // DEFINITION CALL
             $defs = $this->definition->info[$token->name]->attr;
+            
+            // DEFINITION CALL
+            foreach ($this->definition->info_attr_transform as $transformer) {
+                $token = $transformer->transform($token);
+            }
             
             $attr = $token->attributes;
             $changed = false;

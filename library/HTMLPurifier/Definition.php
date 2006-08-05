@@ -45,6 +45,9 @@ class HTMLPurifier_Definition
     // used solely by HTMLPurifier_Strategy_RemoveForeignElements
     var $info_tag_transform = array();
     
+    // used solely by HTMLPurifier_Strategy_ValidateAttributes
+    var $info_attr_transform = array();
+    
     // WARNING! Prototype is not passed by reference, so in order to get
     // a copy of the real one, you'll have to destroy your copy and
     // use instance() to get it.
@@ -238,11 +241,22 @@ class HTMLPurifier_Definition
         // which manually override these in their local definitions
         $this->info_global_attr = array(
             // core attrs
-            'id' => new HTMLPurifier_AttrDef_ID(),
+            'id'    => new HTMLPurifier_AttrDef_ID(),
             'class' => new HTMLPurifier_AttrDef_Class(),
             'title' => new HTMLPurifier_AttrDef_Text(),
             // i18n
-            'dir' => new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false),
+            'dir'   => new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false),
+            'lang'  => new HTMLPurifier_AttrDef_Lang(),
+            'xml:lang' => new HTMLPurifier_AttrDef_Lang(),
+            );
+        
+        // required attribute stipulation handled in attribute transformation
+        $this->info['bdo']->attr = array();
+        
+        $this->info['br']->attr = array(
+            'dir' => false,
+            'lang' => false,
+            'xml:lang' => false,
             );
         
         //////////////////////////////////////////////////////////////////////
@@ -275,9 +289,11 @@ class HTMLPurifier_Definition
         // UNIMP : info[]->attr_transform : attribute transformations in elements
         
         //////////////////////////////////////////////////////////////////////
-        // UNIMP : info_attr_transform : global attribute transform (for xml:lang)
+        // info_attr_transform : global attribute transformation that is
+        // unconditionally called. Good for transformations that have complex
+        // start conditions
         
-        // this might have bad implications for performance
+        $this->info_attr_transform[] = new HTMLPurifier_AttrTransform_Lang();
         
     }
     

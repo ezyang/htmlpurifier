@@ -59,6 +59,10 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $inputs[10] = '<acronym title="PHP: Hypertext Preprocessor">PHP</acronym>';
         $expect[10] = $inputs[10];
         
+        // test lang (NEEDS CORRECTION!)
+        $inputs[11] = '<span lang="fr">La soupe.</span>';
+        $expect[11] = '<span lang="fr" xml:lang="fr">La soupe.</span>';
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
         
     }
