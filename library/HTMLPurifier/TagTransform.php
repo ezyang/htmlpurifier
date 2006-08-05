@@ -21,22 +21,8 @@ class HTMLPurifier_TagTransform_Simple extends HTMLPurifier_TagTransform
     }
     
     function transform($tag) {
-        switch ($tag->type) {
-            case 'end':
-                $new_tag = new HTMLPurifier_Token_End($this->transform_to);
-                break;
-            case 'start':
-                $new_tag = new HTMLPurifier_Token_Start($this->transform_to,
-                                                        $tag->attributes);
-                break;
-            case 'empty':
-                $new_tag = new HTMLPurifier_Token_Empty($this->transform_to,
-                                                        $tag->attributes);
-                break;
-            default:
-                trigger_error('Failed tag transformation', E_USER_WARNING);
-                return;
-        }
+        $new_tag = $tag->copy();
+        $new_tag->name = $this->transform_to;
         return $new_tag;
     }
     
@@ -58,17 +44,9 @@ class HTMLPurifier_TagTransform_Center extends HTMLPurifier_TagTransform
         } else {
             $attributes['style'] = $prepend_css;
         }
-        switch ($tag->type) {
-            case 'start':
-                $new_tag = new HTMLPurifier_Token_Start($this->transform_to, $attributes);
-                break;
-            case 'empty':
-                $new_tag = new HTMLPurifier_Token_Empty($this->transform_to, $attributes);
-                break;
-            default:
-                trigger_error('Failed tag transformation', E_USER_WARNING);
-                return;
-        }
+        $new_tag = $tag->copy();
+        $new_tag->name = $this->transform_to;
+        $new_tag->attributes = $attributes;
         return $new_tag;
     }
 }
@@ -132,17 +110,10 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
                 $prepend_style;
         }
         
-        switch ($tag->type) {
-            case 'start':
-                $new_tag = new HTMLPurifier_Token_Start($this->transform_to, $attributes);
-                break;
-            case 'empty':
-                $new_tag = new HTMLPurifier_Token_Empty($this->transform_to, $attributes);
-                break;
-            default:
-                trigger_error('Failed tag transformation', E_USER_WARNING);
-                return;
-        }
+        $new_tag = $tag->copy();
+        $new_tag->name = $this->transform_to;
+        $new_tag->attributes = $attributes;
+        
         return $new_tag;
         
     }
