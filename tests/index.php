@@ -23,29 +23,49 @@ function generate_mock_once($name) {
     Mock::generate($name, $mock_name);
 }
 
-$test = new GroupTest('HTMLPurifier');
+// define callable test files
+$test_files = array();
+$test_files[] = 'LexerTest.php';
+$test_files[] = 'Lexer/DirectLexTest.php';
+//$test_files[] = 'TokenTest.php';
+$test_files[] = 'ChildDefTest.php';
+$test_files[] = 'GeneratorTest.php';
+$test_files[] = 'EntityLookupTest.php';
+$test_files[] = 'Strategy/RemoveForeignElementsTest.php';
+$test_files[] = 'Strategy/MakeWellFormedTest.php';
+$test_files[] = 'Strategy/FixNestingTest.php';
+$test_files[] = 'Strategy/CompositeTest.php';
+$test_files[] = 'Strategy/CoreTest.php';
+$test_files[] = 'Strategy/ValidateAttributesTest.php';
+$test_files[] = 'AttrDefTest.php';
+$test_files[] = 'AttrDef/EnumTest.php';
+$test_files[] = 'AttrDef/IDTest.php';
+$test_files[] = 'AttrDef/ClassTest.php';
+$test_files[] = 'AttrDef/TextTest.php';
+$test_files[] = 'AttrDef/LangTest.php';
+$test_files[] = 'IDAccumulatorTest.php';
+$test_files[] = 'TagTransformTest.php';
+$test_files[] = 'AttrTransform/LangTest.php';
 
-$test->addTestFile('HTMLPurifier/LexerTest.php');
-$test->addTestFile('HTMLPurifier/Lexer/DirectLexTest.php');
-//$test->addTestFile('TokenTest.php');
-$test->addTestFile('HTMLPurifier/ChildDefTest.php');
-$test->addTestFile('HTMLPurifier/GeneratorTest.php');
-$test->addTestFile('HTMLPurifier/EntityLookupTest.php');
-$test->addTestFile('HTMLPurifier/Strategy/RemoveForeignElementsTest.php');
-$test->addTestFile('HTMLPurifier/Strategy/MakeWellFormedTest.php');
-$test->addTestFile('HTMLPurifier/Strategy/FixNestingTest.php');
-$test->addTestFile('HTMLPurifier/Strategy/CompositeTest.php');
-$test->addTestFile('HTMLPurifier/Strategy/CoreTest.php');
-$test->addTestFile('HTMLPurifier/Strategy/ValidateAttributesTest.php');
-$test->addTestFile('HTMLPurifier/AttrDefTest.php');
-$test->addTestFile('HTMLPurifier/AttrDef/EnumTest.php');
-$test->addTestFile('HTMLPurifier/AttrDef/IDTest.php');
-$test->addTestFile('HTMLPurifier/AttrDef/ClassTest.php');
-$test->addTestFile('HTMLPurifier/AttrDef/TextTest.php');
-$test->addTestFile('HTMLPurifier/AttrDef/LangTest.php');
-$test->addTestFile('HTMLPurifier/IDAccumulatorTest.php');
-$test->addTestFile('HTMLPurifier/TagTransformTest.php');
-$test->addTestFile('HTMLPurifier/AttrTransform/LangTest.php');
+$test_file_lookup = array_flip($test_files);
+
+if (isset($_GET['file']) && isset($test_file_lookup[$_GET['file']])) {
+    
+    // execute only one test
+    $test_file = $_GET['file'];
+    
+    $test = new GroupTest('HTMLPurifier - ' . $test_file);
+    $test->addTestFile('HTMLPurifier/' . $test_file);
+    
+} else {
+    
+    $test = new GroupTest('HTMLPurifier');
+
+    foreach ($test_files as $test_file) {
+        $test->addTestFile('HTMLPurifier/' . $test_file);
+    }
+    
+}
 
 if (SimpleReporter::inCli()) $reporter = new TextReporter();
 else $reporter = new HTMLReporter();
