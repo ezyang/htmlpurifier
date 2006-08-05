@@ -241,13 +241,19 @@ class HTMLPurifier_Definition
         // by the transform classes. It will, however, do simple and slightly
         // complex attribute value substitution
         
+        $e_Text = new HTMLPurifier_AttrDef_Text();
+        $e_TFrame = new HTMLPurifier_AttrDef_Enum(array('void', 'above',
+            'below', 'hsides', 'lhs', 'rhs', 'vsides', 'box', 'border'), false);
+        $e_TRules = new HTMLPurifier_AttrDef_Enum(array('none', 'groups',
+            'rows', 'cols', 'all'), false);
+        
         // attrs, included in almost every single one except for a few,
         // which manually override these in their local definitions
         $this->info_global_attr = array(
             // core attrs
             'id'    => new HTMLPurifier_AttrDef_ID(),
             'class' => new HTMLPurifier_AttrDef_Class(),
-            'title' => new HTMLPurifier_AttrDef_Text(),
+            'title' => $e_Text,
             // i18n
             'dir'   => new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false),
             'lang'  => new HTMLPurifier_AttrDef_Lang(),
@@ -255,13 +261,40 @@ class HTMLPurifier_Definition
             );
         
         // required attribute stipulation handled in attribute transformation
-        $this->info['bdo']->attr = array();
+        $this->info['bdo']->attr = array(); // nothing else
         
-        $this->info['br']->attr = array(
-            'dir' => false,
-            'lang' => false,
-            'xml:lang' => false,
-            );
+        $this->info['br']->attr['dir'] = false;
+        $this->info['br']->attr['lang'] = false;
+        $this->info['br']->attr['xml:lang'] = false;
+        
+        $this->info['td']->attr['abbr'] = $e_Text;
+        $this->info['th']->attr['abbr'] = $e_Text;
+        
+        $this->info['col']->attr['align'] = 
+        $this->info['colgroup']->attr['align'] = 
+        $this->info['tbody']->attr['align'] = 
+        $this->info['td']->attr['align'] = 
+        $this->info['tfoot']->attr['align'] = 
+        $this->info['th']->attr['align'] = 
+        $this->info['thead']->attr['align'] = 
+        $this->info['tr']->attr['align'] = new HTMLPurifier_AttrDef_Enum(
+            array('left', 'center', 'right', 'justify', 'char'), false);
+        
+        $this->info['col']->attr['valign'] = 
+        $this->info['colgroup']->attr['valign'] = 
+        $this->info['tbody']->attr['valign'] = 
+        $this->info['td']->attr['valign'] = 
+        $this->info['tfoot']->attr['valign'] = 
+        $this->info['th']->attr['valign'] = 
+        $this->info['thead']->attr['valign'] = 
+        $this->info['tr']->attr['valign'] = new HTMLPurifier_AttrDef_Enum(
+            array('top', 'middle', 'bottom', 'baseline'), false);
+        
+        $this->info['img']->attr['alt'] = $e_Text;
+        
+        $this->info['table']->attr['frame'] = $e_TFrame;
+        $this->info['table']->attr['rules'] = $e_TRules;
+        $this->info['table']->attr['summary'] = $e_Text;
         
         //////////////////////////////////////////////////////////////////////
         // UNIMP : info_tag_transform : transformations of tags

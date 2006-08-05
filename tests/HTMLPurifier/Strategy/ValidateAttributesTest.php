@@ -63,9 +63,22 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $inputs[11] = '<span lang="fr">La soupe.</span>';
         $expect[11] = '<span lang="fr" xml:lang="fr">La soupe.</span>';
         
-        // test align (won't work till CSS validation is fixed)
+        // test align (won't work till CSS validation is implemented)
         // $inputs[12] = '<h1 align="center">Centered Headline</h1>';
         // $expect[12] = '<h1 style="text-align:center;">Centered Headline</h1>';
+        
+        // test table
+        $inputs[13] = <<<HTML
+<table frame="above" rules="rows" summary="A test table">
+    <tr valign="top">
+        <th abbr="super" align="left">Supercalifragilistic</th>
+    </tr>
+    <tr>
+        <td abbr="one">Cell one</td>
+    </tr>
+</table>
+HTML;
+        $expect[13] = $inputs[13];
         
         $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
         
