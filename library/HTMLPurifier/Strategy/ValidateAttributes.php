@@ -31,13 +31,13 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             // DEFINITION CALL
             $defs = $this->definition->info[$token->name]->attr;
             
+            $attr = $token->attributes;
+            
             // DEFINITION CALL
             foreach ($this->definition->info_attr_transform as $transformer) {
-                $token = $transformer->transform($token);
+                $attr = $transformer->transform($attr);
             }
             
-            $attr = $token->attributes;
-            $changed = false;
             foreach ($attr as $attr_key => $value) {
                 
                 // call the definition
@@ -55,20 +55,19 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
                 
                 // put the results into effect
                 if ($result === false || $result === null) {
-                    $changed = true;
                     unset($attr[$attr_key]);
                 } elseif (is_string($result)) {
                     // simple substitution
-                    $changed = true;
                     $attr[$attr_key] = $result;
                 }
                 // we'd also want slightly more complicated substitution,
                 // although we're not sure how colliding attributes would
                 // resolve
             }
-            if ($changed) {
-                $tokens[$key]->attributes = $attr;
-            }
+            
+            // commit changes
+            // could interfere with flyweight implementation
+            $tokens[$key]->attributes = $attr;
         }
         return $tokens;
     }
