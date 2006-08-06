@@ -39,6 +39,46 @@ class HTMLPurifier_Config
     var $attr_pixels_hmax = 600;  // horizontal context
     var $attr_pixels_vmax = 1200; // vertical context
     
+    // allowed URI schemes
+    var $uri_schemes = array(
+        // based off of MediaWiki's default settings
+        // the ones that definitely must be implemented (they're the same though)
+        'http'  => true, // "Hypertext Transfer Protocol", nuf' said
+        'https' => true, // HTTP over SSL (Secure Socket Layer)
+        // quite useful, but not necessary
+        'mailto' => true,// Email
+        'ftp'   => true, // "File Transfer Protocol"
+        'irc'   => true, // "Internet Relay Chat", usually needs another app
+        // obscure
+        'telnet' => true,// network protocol for non-secure remote terminal sessions
+        // for Usenet, these two are similar, but distinct
+        'nntp'  => true, // individual Netnews articles
+        'news'  => true  // newsgroup or individual Netnews articles
+        // gopher and worldwind excluded
+    );
+    
+    // will munge all URIs to a different URI, which should redirect
+    // the user to the applicable page. A urlencoded version of the URI
+    // will replace any instances of %s in the string. One possible
+    // string is 'http://www.google.com/url?q=%s'. Useful for preventing
+    // pagerank from being sent to other sites
+    var $uri_munge = false;
+    
+    // will add rel="nofollow" to all links, also helps prevent pagerank
+    // from going around
+    var $uri_add_relnofollow = false;
+    
+    // web root of the website, we'll try to auto-detect it. Something
+    // like 'www.example.com/'???
+    var $uri_webroot = null;
+    
+    // transform all relative URIs into their absolute forms, requires
+    // $uri_webroot
+    var $uri_make_absolute = false;
+    
+    // disables external links, requires $uri_webroot
+    var $uri_disable_external = false;
+    
     function createDefault() {
         $config = new HTMLPurifier_Config();
         return $config;
