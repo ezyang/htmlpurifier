@@ -11,12 +11,8 @@ th {text-align:left;padding-top:1.4em;font-size:13pt;
     border-bottom:2px solid #000;background:#FFF;}
 thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
-.impl-standard {background:#CFC;}
-.impl-aural {background:#CCF;}
-.impl-table {background:#FFC;}
-.impl-position {background:#FCF;}
+.impl-yes {background:#CFC;}
 .impl-no {background:#FCC;}
-.impl-unknown {background:#CCC;}
 
 </style>
 
@@ -74,35 +70,32 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tbody>
 <tr><th colspan="3">Transform</th></tr>
 <tr><td rowspan="4">align</td><td>CAPTION</td><td></td></tr>
-    <tr><td>IMG</td><td></td></tr>
-    <tr><td>TABLE</td><td></td></tr>
-    <tr><td>HR</td><td></td></tr>
-<tr><td>alt</td><td>IMG</td><td>Required</td></tr>
-<tr><td rowspan="3">bgcolor</td><td>TABLE</td><td></td></tr>
-    <tr><td>TR</td><td></td></tr>
-    <tr><td>TD, TH</td><td></td></tr>
-<tr><td rowspan="3">bgcolor</td><td>TABLE</td><td></td></tr>
-    <tr><td>TR</td><td></td></tr>
-    <tr><td>TD, TH</td><td></td></tr>
-<tr><td>border</td><td>IMG</td><td></td></tr>
-<tr><td>clear</td><td>BR</td><td></td></tr>
-<tr><td>compact</td><td>DL, OL, UL</td><td>Boolean</td></tr>
-<tr><td>dir</td><td>BDO</td><td>Required</td></tr>
-<tr><td>height</td><td>TD, TH</td><td></td></tr>
-<tr><td>hspace</td><td>IMG</td><td></td></tr>
-<tr><td rowspan="2">name</td><td>IMG</td><td></td></tr>
-    <tr><td>A</td><td></td></tr>
-<tr><td>noshade</td><td>HR</td><td>Boolean</td></tr>
-<tr><td>nowrap</td><td>TD, TH</td><td>Boolean</td></tr>
-<tr><td>size</td><td>HR</td><td></td></tr>
-<tr><td>start</td><td>OL</td><td></td></tr>
-<tr><td rowspan="3">type</td><td>LI</td><td></td></tr>
-    <tr><td>OL</td><td></td></tr>
-    <tr><td>UL</td><td></td></tr>
-<tr><td>value</td><td>LI</td><td></td></tr>
-<tr><td>vspace</td><td>IMG</td><td></td></tr>
-<tr><td rowspan="2">width</td><td>HR</td><td></td></tr>
-    <tr><td>TD, TH</td><td></td></tr>
+    <tr><td>IMG</td><td>Near-equiv style 'caption-side', drop left and right</td></tr>
+    <tr><td>TABLE</td><td>Margin-left and margin-right = auto or parent div</td></tr>
+    <tr><td>HR</td><td>Margin-left and margin-right = auto or parent div (disputed, 'text-align' may work)</td></tr>
+<tr><td>alt</td><td>IMG</td><td>Required, insert image filename if non-existant</td></tr>
+<tr><td rowspan="3">bgcolor</td><td>TABLE</td><td>Equivalent style 'background-color' (test compat)</td></tr>
+    <tr><td>TR</td><td>Equivalent style 'background-color' (test compat)</td></tr>
+    <tr><td>TD, TH</td><td>Equivalent style 'background-color'</td></tr>
+<tr><td>border</td><td>IMG</td><td>No clean way, either set 'border-width' in parent A, custom CSS class ~'nolinkborder' if border=0</td></tr>
+<tr><td>clear</td><td>BR</td><td>Near-equiv style 'clear', transform 'all' into 'both'</td></tr>
+<tr><td>compact</td><td>DL, OL, UL</td><td>Boolean, needs custom CSS class</td></tr>
+<tr><td>dir</td><td>BDO</td><td>Required, insert ltr (or configuration value) if none</td></tr>
+<tr><td>height</td><td>TD, TH</td><td>Near-equiv style 'height', needs px suffix if original was in pixels</td></tr>
+<tr><td>hspace</td><td>IMG</td><td>Near-equiv styles 'margin-top' and 'margin-bottom'</td></tr>
+<tr><td rowspan="2">name</td><td>IMG</td><td>Turn into ID</td></tr>
+    <tr><td>A</td><td>Turn into ID? (not deprecated)</td></tr>
+<tr><td>noshade</td><td>HR</td><td>Boolean, style 'border-style:solid;'</td></tr>
+<tr><td>nowrap</td><td>TD, TH</td><td>Boolean, style 'white-space:nowrap;' (not compat with IE5)</td></tr>
+<tr><td>size</td><td>HR</td><td>Near-equiv 'width', needs px suffix if original was pixels</td></tr>
+<tr><td>start</td><td>OL</td><td>Poorly supported 'counter-reset', transform may not be desirable</td></tr>
+<tr><td rowspan="3">type</td><td>LI</td><td rowspan="3">Equivalent style 'list-style-type', different allowed values though. (needs testing)</td></tr>
+    <tr><td>OL</td></tr>
+    <tr><td>UL</td></tr>
+<tr><td>value</td><td>LI</td><td>Poorly supported 'counter-reset', transform may not be desirable, see ol.start</td></tr>
+<tr><td>vspace</td><td>IMG</td><td>Near-equiv styles 'margin-left' and 'margin-right', see hspace</td></tr>
+<tr><td rowspan="2">width</td><td rowspan="2">HR</td><td>Near-equiv style 'width', needs px suffix if original was pixels</td></tr>
+    <tr><td>TD, TH</td></tr>
 </tbody>
 
 </table>
@@ -119,7 +112,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td></td><td></td></tr>
 -->
 
-<tbody class="impl-standard">
+<tbody>
 <tr><th colspan="2">Standard</th></tr>
 <tr><td>background-color</td><td></td></tr>
 <tr><td>background</td><td>Depends on background-*</td></tr>
@@ -159,7 +152,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td>word-spacing</td><td>IE 5 no support</td></tr>
 </tbody>
 
-<tbody class="impl-table">
+<tbody>
 <tr><th colspan="2">Table</th></tr>
 <tr><td>border-collapse</td><td></td></tr>
 <tr><td>caption-side</td><td></td></tr>
@@ -168,7 +161,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td>vertical-align</td><td>Also applies to others with explicit height</td></tr>
 </tbody>
 
-<tbody class="impl-position">
+<tbody>
 <tr><th colspan="2">Absolute positioning</th></tr>
 <tr><td>bottom</td><td rowspan="4">Dangerous, must be non-negative</td></tr>
 <tr><td>left</td></tr>
@@ -179,7 +172,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td>z-index</td><td>Dangerous</td></tr>
 </tbody>
 
-<tbody class="impl-unknown">
+<tbody>
 <tr><th colspan="2">Unknown</th></tr>
 <tr><td>background-image</td><td>Dangerous</td></tr>
 <tr><td>background-attachment</td><td>Depends on background-image</td></tr>
@@ -207,7 +200,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     pre-wrap (only Opera), pre-line (no-support). Fixable?</td></tr>
 </tbody>
 
-<tbody class="impl-aural">
+<tbody>
 <tr><th colspan="2">Aural</th></tr>
 <tr><td>azimuth</td><td></td></tr>
 <tr><td>cue</td><td></td></tr>
