@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+
+<title>HTMLPurifier Progress</title>
+
+<style type="text/css">
+thead tr {background-color:#EEE;}
+td {padding-right:1em;border-bottom:1px solid #CCC;}
+th {text-align:left;padding-top:1.4em;font-size:13pt;}
+thead th {text-align:left;padding:0.1em;}
+</style>
+
+</head><body>
+
+<h1>HTMLPurifier Progress</h1>
+
+<h2>Attributes</h2>
+
+<table frame="hsides" rules="groups">
+
+<thead>
+<tr><th>Attribute</th><th>Tags</th><th>Notes</th></tr>
+</thead>
+
+<!--
+<tr><th></th></tr>
+<tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody>
+-->
+
+<tbody>
+<tr><th>CSS</th></tr>
+<tr><td>style</td><td>All</td><td>Needs CSS parser</td></tr>
+</tbody>
+
+<tbody>
+<tr><th>Questionable</th></tr>
+<tr><td>accesskey</td><td>A</td><td>May interfere with main interface</td></tr>
+<tr><td>tabindex</td><td>A</td><td>May interfere with main interface</td></tr>
+<tr><td>target</td><td>A</td><td>Config? (only useful for frame layouts)</td></tr>
+</tbody>
+
+<tbody>
+<tr><th>Miscellaneous</th></tr>
+<tr><td>datetime</td><td>DEL, INS</td><td>No visible effect</td></tr>
+<tr><td>rel</td><td>A</td><td>Largely user-defined</td></tr>
+<tr><td>rev</td><td>A</td><td>Largely user-defined</td></tr>
+<tr><td>axis</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
+<tr><td>char</td><td>COL, COLGROUP, TBODY, TD,<br />TFOOT, TH, THEAD, TR</td><td>W3C only: No browser implementation</td></tr>
+<tr><td>headers</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
+<tr><td>scope</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
+</tbody>
+
+<tbody>
+<tr><th>URI</th></tr>
+<tr><td rowspan="2">cite</td><td>BLOCKQUOTE, Q</td><td></td></tr>
+    <tr><td>DEL, INS</td><td></td></tr>
+<tr><td>href</td><td>A</td><td></td></tr>
+<tr><td>longdesc</td><td>IMG</td><td></td></tr>
+<tr><td>src</td><td>IMG</td><td>Required</td></tr>
+</tbody>
+
+<tbody>
+<tr><th>Transform</th></tr>
+<tr><td rowspan="4">align</td><td>CAPTION</td><td></td></tr>
+    <tr><td>IMG</td><td></td></tr>
+    <tr><td>TABLE</td><td></td></tr>
+    <tr><td>HR</td><td></td></tr>
+<tr><td>alt</td><td>IMG</td><td>Required</td></tr>
+<tr><td rowspan="3">bgcolor</td><td>TABLE</td><td></td></tr>
+    <tr><td>TR</td><td></td></tr>
+    <tr><td>TD, TH</td><td></td></tr>
+<tr><td rowspan="3">bgcolor</td><td>TABLE</td><td></td></tr>
+    <tr><td>TR</td><td></td></tr>
+    <tr><td>TD, TH</td><td></td></tr>
+<tr><td>border</td><td>IMG</td><td></td></tr>
+<tr><td>clear</td><td>BR</td><td></td></tr>
+<tr><td>compact</td><td>DL, OL, UL</td><td>Boolean</td></tr>
+<tr><td>dir</td><td>BDO</td><td>Required</td></tr>
+<tr><td>height</td><td>TD, TH</td><td></td></tr>
+<tr><td>hspace</td><td>IMG</td><td></td></tr>
+<tr><td rowspan="2">name</td><td>IMG</td><td></td></tr>
+    <tr><td>A</td><td></td></tr>
+<tr><td>noshade</td><td>HR</td><td>Boolean</td></tr>
+<tr><td>nowrap</td><td>TD, TH</td><td>Boolean</td></tr>
+<tr><td>size</td><td>HR</td><td></td></tr>
+<tr><td>start</td><td>OL</td><td></td></tr>
+<tr><td rowspan="3">type</td><td>LI</td><td></td></tr>
+    <tr><td>OL</td><td></td></tr>
+    <tr><td>UL</td><td></td></tr>
+<tr><td>value</td><td>LI</td><td></td></tr>
+<tr><td>vspace</td><td>IMG</td><td></td></tr>
+<tr><td rowspan="2">width</td><td>HR</td><td></td></tr>
+    <tr><td>TD, TH</td><td></td></tr>
+</tbody>
+
+</table>
+
+<h3>CSS</h3>
+
+<p>Coming soon...</p>
+
+</body></html>
