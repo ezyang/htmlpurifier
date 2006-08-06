@@ -1,6 +1,6 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDefHarness.php';
+require_once 'HTMLPurifier/AttrDef/PixelTest.php';
 require_once 'HTMLPurifier/AttrDef/Length.php';
 
 class HTMLPurifier_AttrDef_LengthTest extends HTMLPurifier_AttrDef_PixelsTest
