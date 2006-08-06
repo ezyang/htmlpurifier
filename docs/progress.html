@@ -6,6 +6,7 @@
 <title>HTMLPurifier Progress</title>
 
 <style type="text/css">
+
 td {padding-right:1em;border-bottom:1px solid #000;}
 th {text-align:left;padding-top:1.4em;font-size:13pt;
     border-bottom:2px solid #000;background:#FFF;}
@@ -31,7 +32,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <!--
 <tr><th></th></tr>
 <tbody>
-<tr><td></td><td></td><td></td></tr>
+<tr><td>-</td><td>-</td><td>-</td></tr>
 </tbody>
 -->
 
@@ -60,16 +61,16 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <tbody>
 <tr><th colspan="3">URI</th></tr>
-<tr><td rowspan="2">cite</td><td>BLOCKQUOTE, Q</td><td></td></tr>
-    <tr><td>DEL, INS</td><td></td></tr>
-<tr><td>href</td><td>A</td><td></td></tr>
-<tr><td>longdesc</td><td>IMG</td><td></td></tr>
+<tr><td rowspan="2">cite</td><td>BLOCKQUOTE, Q</td><td>-</td></tr>
+    <tr><td>DEL, INS</td><td>-</td></tr>
+<tr><td>href</td><td>A</td><td>-</td></tr>
+<tr><td>longdesc</td><td>IMG</td><td>-</td></tr>
 <tr><td>src</td><td>IMG</td><td>Required</td></tr>
 </tbody>
 
 <tbody>
 <tr><th colspan="3">Transform</th></tr>
-<tr><td rowspan="4">align</td><td>CAPTION</td><td></td></tr>
+<tr><td rowspan="4">align</td><td>CAPTION</td><td>-</td></tr>
     <tr><td>IMG</td><td>Near-equiv style 'caption-side', drop left and right</td></tr>
     <tr><td>TABLE</td><td>Margin-left and margin-right = auto or parent div</td></tr>
     <tr><td>HR</td><td>Margin-left and margin-right = auto or parent div (disputed, 'text-align' may work)</td></tr>
@@ -109,55 +110,55 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 </thead>
 
 <!--
-<tr><td></td><td></td></tr>
+<tr><td>-</td><td>-</td></tr>
 -->
 
 <tbody>
 <tr><th colspan="2">Standard</th></tr>
-<tr><td>background-color</td><td></td></tr>
+<tr><td>background-color</td><td>-</td></tr>
 <tr><td>background</td><td>Depends on background-*</td></tr>
-<tr><td>border</td><td></td></tr>
-<tr><td>border-color</td><td></td></tr>
-<tr><td>border-style</td><td></td></tr>
-<tr><td>border-width</td><td></td></tr>
-<tr><td>border-*</td><td></td></tr>
-<tr><td>border-*-color</td><td></td></tr>
-<tr><td>border-*-style</td><td></td></tr>
-<tr><td>border-*-width</td><td></td></tr>
-<tr><td>clear</td><td></td></tr>
-<tr><td>color</td><td></td></tr>
+<tr><td>border</td><td>-</td></tr>
+<tr><td>border-color</td><td>-</td></tr>
+<tr><td>border-style</td><td>-</td></tr>
+<tr><td>border-width</td><td>-</td></tr>
+<tr><td>border-*</td><td>-</td></tr>
+<tr><td>border-*-color</td><td>-</td></tr>
+<tr><td>border-*-style</td><td>-</td></tr>
+<tr><td>border-*-width</td><td>-</td></tr>
+<tr><td>clear</td><td>-</td></tr>
+<tr><td>color</td><td>-</td></tr>
 <tr><td>float</td><td>May require layout precautions with clear</td></tr>
 <tr><td>font-family</td><td>CSS validator may complain if fallback font
     family not specified</td></tr>
-<tr><td>font-size</td><td></td></tr>
-<tr><td>font-style</td><td></td></tr>
-<tr><td>font-variant</td><td></td></tr>
-<tr><td>font-weight</td><td></td></tr>
-<tr><td>letter-spacing</td><td></td></tr>
-<tr><td>line-height</td><td></td></tr>
+<tr><td>font-size</td><td>-</td></tr>
+<tr><td>font-style</td><td>-</td></tr>
+<tr><td>font-variant</td><td>-</td></tr>
+<tr><td>font-weight</td><td>-</td></tr>
+<tr><td>letter-spacing</td><td>-</td></tr>
+<tr><td>line-height</td><td>-</td></tr>
 <tr><td>list-style-position</td><td>Strange behavior in browsers</td></tr>
 <tr><td>list-style-type</td><td>Well-supported values are: disc, circle, square
     decimal, lower-roman, upper-roman, lower-alpha and upper-alpha. See also
     CSS 3. Mostly IE lack of support.</td></tr>
-<tr><td>list-style</td><td></td></tr>
-<tr><td>margin</td><td></td></tr>
-<tr><td>margin-*</td><td></td></tr>
-<tr><td>padding</td><td></td></tr>
-<tr><td>padding-*</td><td></td></tr>
-<tr><td>text-align</td><td></td></tr>
+<tr><td>list-style</td><td>-</td></tr>
+<tr><td>margin</td><td>-</td></tr>
+<tr><td>margin-*</td><td>-</td></tr>
+<tr><td>padding</td><td>-</td></tr>
+<tr><td>padding-*</td><td>-</td></tr>
+<tr><td>text-align</td><td>-</td></tr>
 <tr><td>text-decoration</td><td>No blink (argh my eyes)</td></tr>
-<tr><td>text-indent</td><td></td></tr>
-<tr><td>text-transform</td><td></td></tr>
+<tr><td>text-indent</td><td>-</td></tr>
+<tr><td>text-transform</td><td>-</td></tr>
 <tr><td>width</td><td>Interesting</td></tr>
 <tr><td>word-spacing</td><td>IE 5 no support</td></tr>
 </tbody>
 
 <tbody>
 <tr><th colspan="2">Table</th></tr>
-<tr><td>border-collapse</td><td></td></tr>
-<tr><td>caption-side</td><td></td></tr>
+<tr><td>border-collapse</td><td>-</td></tr>
+<tr><td>caption-side</td><td>-</td></tr>
 <tr><td>empty-cells</td><td>No IE support, possible fix with &amp;nbsp;?</td></tr>
-<tr><td>table-layout</td><td></td></tr>
+<tr><td>table-layout</td><td>-</td></tr>
 <tr><td>vertical-align</td><td>Also applies to others with explicit height</td></tr>
 </tbody>
 
@@ -167,8 +168,8 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td>left</td></tr>
 <tr><td>right</td></tr>
 <tr><td>top</td></tr>
-<tr><td>clip</td><td></td></tr>
-<tr><td>position</td><td></td></tr>
+<tr><td>clip</td><td>-</td></tr>
+<tr><td>position</td><td>-</td></tr>
 <tr><td>z-index</td><td>Dangerous</td></tr>
 </tbody>
 
@@ -202,26 +203,26 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <tbody>
 <tr><th colspan="2">Aural</th></tr>
-<tr><td>azimuth</td><td></td></tr>
-<tr><td>cue</td><td></td></tr>
-<tr><td>cue-after</td><td></td></tr>
-<tr><td>cue-before</td><td></td></tr>
-<tr><td>elevation</td><td></td></tr>
-<tr><td>pause-after</td><td></td></tr>
-<tr><td>pause-before</td><td></td></tr>
-<tr><td>pause</td><td></td></tr>
-<tr><td>pitch-range</td><td></td></tr>
-<tr><td>pitch</td><td></td></tr>
-<tr><td>play-during</td><td></td></tr>
-<tr><td>richness</td><td></td></tr>
+<tr><td>azimuth</td><td>-</td></tr>
+<tr><td>cue</td><td>-</td></tr>
+<tr><td>cue-after</td><td>-</td></tr>
+<tr><td>cue-before</td><td>-</td></tr>
+<tr><td>elevation</td><td>-</td></tr>
+<tr><td>pause-after</td><td>-</td></tr>
+<tr><td>pause-before</td><td>-</td></tr>
+<tr><td>pause</td><td>-</td></tr>
+<tr><td>pitch-range</td><td>-</td></tr>
+<tr><td>pitch</td><td>-</td></tr>
+<tr><td>play-during</td><td>-</td></tr>
+<tr><td>richness</td><td>-</td></tr>
 <tr><td>speak-header</td><td>Table related</td></tr>
-<tr><td>speak-numeral</td><td></td></tr>
-<tr><td>speak-punctuation</td><td></td></tr>
-<tr><td>speak</td><td></td></tr>
-<tr><td>speech-rate</td><td></td></tr>
-<tr><td>stress</td><td></td></tr>
-<tr><td>voice-family</td><td></td></tr>
-<tr><td>volume</td><td></td></tr>
+<tr><td>speak-numeral</td><td>-</td></tr>
+<tr><td>speak-punctuation</td><td>-</td></tr>
+<tr><td>speak</td><td>-</td></tr>
+<tr><td>speech-rate</td><td>-</td></tr>
+<tr><td>stress</td><td>-</td></tr>
+<tr><td>voice-family</td><td>-</td></tr>
+<tr><td>volume</td><td>-</td></tr>
 </tbody>
 
 <tbody class="impl-no">

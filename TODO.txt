@@ -10,3 +10,4 @@ Code issues:
 
 Enhancements:
  - Do fixes for Firefox's inability to handle COL alignment props (Bug 915)
+ - Have lexers strip out HTML and BODY tags rather than choke
