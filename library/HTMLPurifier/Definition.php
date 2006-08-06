@@ -8,6 +8,7 @@ require_once 'HTMLPurifier/AttrDef.php';
     require_once 'HTMLPurifier/AttrDef/Lang.php';
     require_once 'HTMLPurifier/AttrDef/Pixels.php';
     require_once 'HTMLPurifier/AttrDef/Length.php';
+    require_once 'HTMLPurifier/AttrDef/MultiLength.php';
 require_once 'HTMLPurifier/AttrTransform.php';
     require_once 'HTMLPurifier/AttrTransform/Lang.php';
     require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
@@ -295,6 +296,10 @@ class HTMLPurifier_Definition
         $this->setAttrForTableElements('charoff', $e_Length);
         $this->info['img']->attr['height'] = $e_Length;
         $this->info['img']->attr['width'] = $e_Length;
+        
+        $e_MultiLength = new HTMLPurifier_AttrDef_MultiLength();
+        $this->info['col']->attr['width'] = $e_MultiLength;
+        $this->info['colgroup']->attr['width'] = $e_MultiLength;
         
         //////////////////////////////////////////////////////////////////////
         // UNIMP : info_tag_transform : transformations of tags
