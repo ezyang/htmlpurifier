@@ -9,6 +9,7 @@ require_once 'HTMLPurifier/AttrDef.php';
     require_once 'HTMLPurifier/AttrDef/Pixels.php';
     require_once 'HTMLPurifier/AttrDef/Length.php';
     require_once 'HTMLPurifier/AttrDef/MultiLength.php';
+    require_once 'HTMLPurifier/AttrDef/NumberSpan.php';
 require_once 'HTMLPurifier/AttrTransform.php';
     require_once 'HTMLPurifier/AttrTransform/Lang.php';
     require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
@@ -290,16 +291,25 @@ class HTMLPurifier_Definition
         $this->info['table']->attr['border'] = new HTMLPurifier_AttrDef_Pixels();
         
         $e_Length = new HTMLPurifier_AttrDef_Length();
-        $this->info['table']->attr['cellpadding'] = $e_Length;
-        $this->info['table']->attr['cellspacing'] = $e_Length;
-        $this->info['table']->attr['width'] = $e_Length;
-        $this->setAttrForTableElements('charoff', $e_Length);
-        $this->info['img']->attr['height'] = $e_Length;
+        $this->info['table']->attr['cellpadding'] =
+        $this->info['table']->attr['cellspacing'] =
+        $this->info['table']->attr['width'] =
+        $this->info['img']->attr['height'] =
         $this->info['img']->attr['width'] = $e_Length;
+        $this->setAttrForTableElements('charoff', $e_Length);
         
         $e_MultiLength = new HTMLPurifier_AttrDef_MultiLength();
-        $this->info['col']->attr['width'] = $e_MultiLength;
+        $this->info['col']->attr['width'] =
         $this->info['colgroup']->attr['width'] = $e_MultiLength;
+        
+        $e__NumberSpan = new HTMLPurifier_AttrDef_NumberSpan();
+        $this->info['colgroup']->attr['span'] =
+        $this->info['col']->attr['span']   =
+        $this->info['td']->attr['rowspan'] =
+        $this->info['th']->attr['rowspan'] = 
+        $this->info['td']->attr['colspan'] =
+        $this->info['th']->attr['colspan'] = $e__NumberSpan;
+        
         
         //////////////////////////////////////////////////////////////////////
         // UNIMP : info_tag_transform : transformations of tags

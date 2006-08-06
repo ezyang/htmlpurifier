@@ -80,6 +80,9 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         <td abbr="carrot">Carrot Humungous</td>
         <td>$500.23</td>
     </tr>
+    <tr>
+        <td colspan="2">Taken off the market</td>
+    </tr>
 </table>
 HTML;
         $expect[13] = $inputs[13];

@@ -7,3 +7,6 @@ Primary:
 Code issues:
  - Rename AbstractTest to Harness
  - (?) Create a TokenFactory to prevent really long lines
+
+Enhancements:
+ - Do fixes for Firefox's inability to handle COL alignment props (Bug 915)
