@@ -69,12 +69,16 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         
         // test table
         $inputs[13] = <<<HTML
-<table frame="above" rules="rows" summary="A test table" border="2">
+<table frame="above" rules="rows" summary="A test table" border="2" cellpadding="5%" cellspacing="3" width="100%">
+    <col align="right" />
+    <col charoff="5" align="char" />
     <tr valign="top">
-        <th abbr="super" align="left">Supercalifragilistic</th>
+        <th abbr="name">Fiddly name</th>
+        <th abbr="price">Super-duper-price</th>
     </tr>
     <tr>
-        <td abbr="one">Cell one</td>
+        <td abbr="carrot">Carrot Humungous</td>
+        <td>$500.23</td>
     </tr>
 </table>
 HTML;

@@ -6,9 +6,11 @@ require_once 'HTMLPurifier/AttrDef/Pixels.php';
 class HTMLPurifier_AttrDef_PixelsTest extends HTMLPurifier_AttrDefHarness
 {
     
-    function test() {
-        
+    function setup() {
         $this->def = new HTMLPurifier_AttrDef_Pixels();
+    }
+    
+    function test() {
         
         $this->assertDef('1');
         $this->assertDef('0');

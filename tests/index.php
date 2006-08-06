@@ -44,6 +44,7 @@ $test_files[] = 'AttrDef/ClassTest.php';
 $test_files[] = 'AttrDef/TextTest.php';
 $test_files[] = 'AttrDef/LangTest.php';
 $test_files[] = 'AttrDef/PixelsTest.php';
+$test_files[] = 'AttrDef/LengthTest.php';
 $test_files[] = 'IDAccumulatorTest.php';
 $test_files[] = 'TagTransformTest.php';
 $test_files[] = 'AttrTransform/LangTest.php';

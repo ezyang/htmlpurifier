@@ -7,6 +7,7 @@ require_once 'HTMLPurifier/AttrDef.php';
     require_once 'HTMLPurifier/AttrDef/Text.php';
     require_once 'HTMLPurifier/AttrDef/Lang.php';
     require_once 'HTMLPurifier/AttrDef/Pixels.php';
+    require_once 'HTMLPurifier/AttrDef/Length.php';
 require_once 'HTMLPurifier/AttrTransform.php';
     require_once 'HTMLPurifier/AttrTransform/Lang.php';
     require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
@@ -243,10 +244,6 @@ class HTMLPurifier_Definition
         // complex attribute value substitution
         
         $e_Text = new HTMLPurifier_AttrDef_Text();
-        $e_TFrame = new HTMLPurifier_AttrDef_Enum(array('void', 'above',
-            'below', 'hsides', 'lhs', 'rhs', 'vsides', 'box', 'border'), false);
-        $e_TRules = new HTMLPurifier_AttrDef_Enum(array('none', 'groups',
-            'rows', 'cols', 'all'), false);
         
         // attrs, included in almost every single one except for a few,
         // which manually override these in their local definitions
@@ -271,33 +268,33 @@ class HTMLPurifier_Definition
         $this->info['td']->attr['abbr'] = $e_Text;
         $this->info['th']->attr['abbr'] = $e_Text;
         
-        $this->info['col']->attr['align'] = 
-        $this->info['colgroup']->attr['align'] = 
-        $this->info['tbody']->attr['align'] = 
-        $this->info['td']->attr['align'] = 
-        $this->info['tfoot']->attr['align'] = 
-        $this->info['th']->attr['align'] = 
-        $this->info['thead']->attr['align'] = 
-        $this->info['tr']->attr['align'] = new HTMLPurifier_AttrDef_Enum(
-            array('left', 'center', 'right', 'justify', 'char'), false);
+        $this->setAttrForTableElements('align', new HTMLPurifier_AttrDef_Enum(
+            array('left', 'center', 'right', 'justify', 'char'), false));
         
-        $this->info['col']->attr['valign'] = 
-        $this->info['colgroup']->attr['valign'] = 
-        $this->info['tbody']->attr['valign'] = 
-        $this->info['td']->attr['valign'] = 
-        $this->info['tfoot']->attr['valign'] = 
-        $this->info['th']->attr['valign'] = 
-        $this->info['thead']->attr['valign'] = 
-        $this->info['tr']->attr['valign'] = new HTMLPurifier_AttrDef_Enum(
-            array('top', 'middle', 'bottom', 'baseline'), false);
+        $this->setAttrForTableElements('valign', new HTMLPurifier_AttrDef_Enum(
+            array('top', 'middle', 'bottom', 'baseline'), false));
         
         $this->info['img']->attr['alt'] = $e_Text;
         
+        $e_TFrame = new HTMLPurifier_AttrDef_Enum(array('void', 'above',
+            'below', 'hsides', 'lhs', 'rhs', 'vsides', 'box', 'border'), false);
         $this->info['table']->attr['frame'] = $e_TFrame;
+        
+        $e_TRules = new HTMLPurifier_AttrDef_Enum(array('none', 'groups',
+            'rows', 'cols', 'all'), false);
         $this->info['table']->attr['rules'] = $e_TRules;
+        
         $this->info['table']->attr['summary'] = $e_Text;
         
         $this->info['table']->attr['border'] = new HTMLPurifier_AttrDef_Pixels();
+        
+        $e_Length = new HTMLPurifier_AttrDef_Length();
+        $this->info['table']->attr['cellpadding'] = $e_Length;
+        $this->info['table']->attr['cellspacing'] = $e_Length;
+        $this->info['table']->attr['width'] = $e_Length;
+        $this->setAttrForTableElements('charoff', $e_Length);
+        $this->info['img']->attr['height'] = $e_Length;
+        $this->info['img']->attr['width'] = $e_Length;
         
         //////////////////////////////////////////////////////////////////////
         // UNIMP : info_tag_transform : transformations of tags
@@ -344,6 +341,17 @@ class HTMLPurifier_Definition
         
         $this->info_attr_transform[] = new HTMLPurifier_AttrTransform_Lang();
         
+    }
+    
+    function setAttrForTableElements($attr, $def) {
+        $this->info['col']->attr[$attr] = 
+        $this->info['colgroup']->attr[$attr] = 
+        $this->info['tbody']->attr[$attr] = 
+        $this->info['td']->attr[$attr] = 
+        $this->info['tfoot']->attr[$attr] = 
+        $this->info['th']->attr[$attr] = 
+        $this->info['thead']->attr[$attr] = 
+        $this->info['tr']->attr[$attr] = $def;
     }
     
 }
