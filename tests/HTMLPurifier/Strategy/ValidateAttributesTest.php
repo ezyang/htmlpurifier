@@ -69,7 +69,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         
         // test table
         $inputs[13] = <<<HTML
-<table frame="above" rules="rows" summary="A test table">
+<table frame="above" rules="rows" summary="A test table" border="2">
     <tr valign="top">
         <th abbr="super" align="left">Supercalifragilistic</th>
     </tr>

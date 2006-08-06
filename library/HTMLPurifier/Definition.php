@@ -6,6 +6,7 @@ require_once 'HTMLPurifier/AttrDef.php';
     require_once 'HTMLPurifier/AttrDef/Class.php';
     require_once 'HTMLPurifier/AttrDef/Text.php';
     require_once 'HTMLPurifier/AttrDef/Lang.php';
+    require_once 'HTMLPurifier/AttrDef/Pixels.php';
 require_once 'HTMLPurifier/AttrTransform.php';
     require_once 'HTMLPurifier/AttrTransform/Lang.php';
     require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
@@ -295,6 +296,8 @@ class HTMLPurifier_Definition
         $this->info['table']->attr['frame'] = $e_TFrame;
         $this->info['table']->attr['rules'] = $e_TRules;
         $this->info['table']->attr['summary'] = $e_Text;
+        
+        $this->info['table']->attr['border'] = new HTMLPurifier_AttrDef_Pixels();
         
         //////////////////////////////////////////////////////////////////////
         // UNIMP : info_tag_transform : transformations of tags

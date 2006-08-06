@@ -35,6 +35,10 @@ class HTMLPurifier_Config
     // at all.
     var $attr_lang_alpha = false;
     
+    // max amount of pixels allowed to be specified
+    var $attr_pixels_hmax = 600;  // horizontal context
+    var $attr_pixels_vmax = 1200; // vertical context
+    
     function createDefault() {
         $config = new HTMLPurifier_Config();
         return $config;

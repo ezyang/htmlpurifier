@@ -43,10 +43,12 @@ $test_files[] = 'AttrDef/IDTest.php';
 $test_files[] = 'AttrDef/ClassTest.php';
 $test_files[] = 'AttrDef/TextTest.php';
 $test_files[] = 'AttrDef/LangTest.php';
+$test_files[] = 'AttrDef/PixelsTest.php';
 $test_files[] = 'IDAccumulatorTest.php';
 $test_files[] = 'TagTransformTest.php';
 $test_files[] = 'AttrTransform/LangTest.php';
 $test_files[] = 'AttrTransform/TextAlignTest.php';
+
 
 $test_file_lookup = array_flip($test_files);
 
