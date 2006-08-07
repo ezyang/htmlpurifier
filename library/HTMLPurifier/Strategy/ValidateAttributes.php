@@ -4,6 +4,10 @@ require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/Definition.php';
 require_once 'HTMLPurifier/IDAccumulator.php';
 
+/**
+ * Validate all attributes in the tokens.
+ */
+
 class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
 {
     
@@ -19,57 +23,90 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         
         // setup ID accumulator and load it with blacklisted IDs
+        //     eventually, we'll have a dedicated context object to hold
+        //     all these accumulators and caches. For now, just an IDAccumulator
         $accumulator = new HTMLPurifier_IDAccumulator();
         $accumulator->load($config->attr_id_blacklist);
         
+        // create alias to global definition array, see also $defs
         // DEFINITION CALL
         $d_defs = $this->definition->info_global_attr;
         
         foreach ($tokens as $key => $token) {
+            
+            // only process tokens that have attributes,
+            //   namely start and empty tags
             if ($token->type !== 'start' && $token->type !== 'empty') continue;
             
-            // DEFINITION CALL
-            $defs = $this->definition->info[$token->name]->attr;
-            
+            // copy out attributes for easy manipulation
             $attr = $token->attributes;
             
             // do global transformations
+            // ex. <ELEMENT lang="fr"> to <ELEMENT lang="fr" xml:lang="fr">
             // DEFINITION CALL
             foreach ($this->definition->info_attr_transform as $transform) {
                 $attr = $transform->transform($attr);
             }
             
-            // do local transformations
+            // do local transformations only applicable to this element
+            // ex. <p align="right"> to <p style="text-align:right;">
             // DEFINITION CALL
-            foreach ($this->definition->info[$token->name]->attr_transform as $transform) {
+            foreach ($this->definition->info[$token->name]->attr_transform
+                as $transform
+            ) {
                 $attr = $transform->transform($attr);
             }
             
+            // create alias to this element's attribute definition array, see
+            // also $d_defs (global attribute definition array)
+            // DEFINITION CALL
+            $defs = $this->definition->info[$token->name]->attr;
+            
+            // iterate through all the attribute keypairs
+            // Watch out for name collisions: $key has previously been used
             foreach ($attr as $attr_key => $value) {
                 
                 // call the definition
                 if ( isset($defs[$attr_key]) ) {
+                    // there is a local definition defined
                     if (!$defs[$attr_key]) {
+                        // We've explicitly been told not to allow this element.
+                        // This is usually when there's a global definition
+                        // that must be overridden.
+                        // Theoretically speaking, we could have a
+                        // AttrDef_DenyAll, but this is faster!
                         $result = false;
                     } else {
-                        $result = $defs[$attr_key]->validate($value, $config, $accumulator);
+                        // validate according to the element's definition
+                        $result = $defs[$attr_key]->validate(
+                                        $value, $config, $accumulator
+                                   );
                     }
                 } elseif ( isset($d_defs[$attr_key]) ) {
-                    $result = $d_defs[$attr_key]->validate($value, $config, $accumulator);
+                    // there is a global definition defined, validate according
+                    // to the global definition
+                    $result = $d_defs[$attr_key]->validate(
+                                    $value, $config, $accumulator
+                               );
                 } else {
+                    // system never heard of the attribute? DELETE!
                     $result = false;
                 }
                 
                 // put the results into effect
                 if ($result === false || $result === null) {
+                    // remove the attribute
                     unset($attr[$attr_key]);
                 } elseif (is_string($result)) {
                     // simple substitution
                     $attr[$attr_key] = $result;
                 }
-                // we'd also want slightly more complicated substitution,
+                
+                // we'd also want slightly more complicated substitution
+                // involving an array as the return value,
                 // although we're not sure how colliding attributes would
-                // resolve
+                // resolve (certain ones would be completely overriden,
+                // others would prepend themselves).
             }
             
             // commit changes
