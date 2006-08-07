@@ -7,7 +7,7 @@
 
 <style type="text/css">
 
-td {padding-right:1em;border-bottom:1px solid #000;}
+td {padding-right:1em;border-bottom:1px solid #000;padding-left:0.5em;}
 th {text-align:left;padding-top:1.4em;font-size:13pt;
     border-bottom:2px solid #000;background:#FFF;}
 thead th {text-align:left;padding:0.1em;background-color:#EEE;}
@@ -16,6 +16,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 .impl-no {background:#FAA;}
 
 .danger {background:#FEE;}
+.css1 {color:#060;}
 
 </style>
 
@@ -25,7 +26,12 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <h2>Key</h2>
 
-
+<table cellspacing="0"><tbody>
+<tr><td class="impl-yes">Implemented</td></tr>
+<tr><td class="impl-no">Will not implement</td></tr>
+<tr><td class="danger">Dangerous attribute/property</td></tr>
+<tr><td class="css1">Present in CSS1</td></tr>
+</tbody></table>
 
 <h2>Interesting Attributes</h2>
 
@@ -51,13 +57,13 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><th colspan="3">Questionable</th></tr>
 <tr><td>accesskey</td><td>A</td><td>May interfere with main interface</td></tr>
 <tr><td>tabindex</td><td>A</td><td>May interfere with main interface</td></tr>
-<tr><td>target</td><td>A</td><td>Config? (only useful for frame layouts)</td></tr>
+<tr><td>target</td><td>A</td><td>Config enabled, only useful for frame layouts</td></tr>
 </tbody>
 
 <tbody>
 <tr><th colspan="3">Miscellaneous</th></tr>
-<tr><td>datetime</td><td>DEL, INS</td><td>No visible effect</td></tr>
-<tr><td>rel</td><td>A</td><td>Largely user-defined</td></tr>
+<tr><td>datetime</td><td>DEL, INS</td><td>No visible effect, ISO format</td></tr>
+<tr><td>rel</td><td>A</td><td>Largely user-defined, nofollow</td></tr>
 <tr><td>rev</td><td>A</td><td>Largely user-defined</td></tr>
 <tr><td>axis</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
 <tr><td>char</td><td>COL, COLGROUP, TBODY, TD, TFOOT, TH, THEAD, TR</td><td>W3C only: No browser implementation</td></tr>
@@ -103,7 +109,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     <tr><td>UL</td></tr>
 <tr><td>value</td><td>LI</td><td>Poorly supported 'counter-reset', transform may not be desirable, see ol.start</td></tr>
 <tr><td>vspace</td><td>IMG</td><td>Near-equiv styles 'margin-left' and 'margin-right', see hspace</td></tr>
-<tr><td rowspan="2">width</td><td rowspan="2">HR</td><td>Near-equiv style 'width', needs px suffix if original was pixels</td></tr>
+<tr><td rowspan="2">width</td><td>HR</td><td rowspan="2">Near-equiv style 'width', needs px suffix if original was pixels</td></tr>
     <tr><td>TD, TH</td></tr>
 </tbody>
 
@@ -123,42 +129,43 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <tbody>
 <tr><th colspan="2">Standard</th></tr>
-<tr><td>background-color</td><td>-</td></tr>
-<tr><td>background</td><td>Depends on background-*</td></tr>
-<tr><td>border</td><td>-</td></tr>
-<tr><td>border-color</td><td>-</td></tr>
-<tr><td>border-style</td><td>-</td></tr>
-<tr><td>border-width</td><td>-</td></tr>
-<tr><td>border-*</td><td>-</td></tr>
+<tr class="css1"><td>background-color</td><td>-</td></tr>
+<tr class="css1"><td>background</td><td>Depends on background-*</td></tr>
+<tr class="css1"><td>border</td><td>-</td></tr>
+<tr class="css1"><td>border-color</td><td>-</td></tr>
+<tr class="css1"><td>border-style</td><td>-</td></tr>
+<tr class="css1"><td>border-width</td><td>-</td></tr>
+<tr class="css1"><td>border-*</td><td>-</td></tr>
 <tr><td>border-*-color</td><td>-</td></tr>
 <tr><td>border-*-style</td><td>-</td></tr>
-<tr><td>border-*-width</td><td>-</td></tr>
-<tr><td>clear</td><td>-</td></tr>
-<tr><td>color</td><td>-</td></tr>
-<tr><td>float</td><td>May require layout precautions with clear</td></tr>
-<tr><td>font-family</td><td>CSS validator may complain if fallback font
+<tr class="css1"><td>border-*-width</td><td>-</td></tr>
+<tr class="css1"><td>clear</td><td>-</td></tr>
+<tr class="css1"><td>color</td><td>-</td></tr>
+<tr class="css1"><td>float</td><td>May require layout precautions with clear</td></tr>
+<tr class="css1"><td>font</td><td>-</td></tr>
+<tr class="css1"><td>font-family</td><td>CSS validator may complain if fallback font
     family not specified</td></tr>
-<tr><td>font-size</td><td>-</td></tr>
-<tr><td>font-style</td><td>-</td></tr>
-<tr><td>font-variant</td><td>-</td></tr>
-<tr><td>font-weight</td><td>-</td></tr>
-<tr><td>letter-spacing</td><td>-</td></tr>
-<tr><td>line-height</td><td>-</td></tr>
-<tr><td>list-style-position</td><td>Strange behavior in browsers</td></tr>
-<tr><td>list-style-type</td><td>Well-supported values are: disc, circle, square
+<tr class="css1"><td>font-size</td><td>-</td></tr>
+<tr class="css1"><td>font-style</td><td>-</td></tr>
+<tr class="css1"><td>font-variant</td><td>-</td></tr>
+<tr class="css1"><td>font-weight</td><td>-</td></tr>
+<tr class="css1"><td>letter-spacing</td><td>-</td></tr>
+<tr class="css1"><td>line-height</td><td>-</td></tr>
+<tr class="css1"><td>list-style-position</td><td>Strange behavior in browsers</td></tr>
+<tr class="css1"><td>list-style-type</td><td>Well-supported values are: disc, circle, square
     decimal, lower-roman, upper-roman, lower-alpha and upper-alpha. See also
     CSS 3. Mostly IE lack of support.</td></tr>
-<tr><td>list-style</td><td>-</td></tr>
-<tr><td>margin</td><td>-</td></tr>
-<tr><td>margin-*</td><td>-</td></tr>
-<tr><td>padding</td><td>-</td></tr>
-<tr><td>padding-*</td><td>-</td></tr>
-<tr><td>text-align</td><td>-</td></tr>
-<tr><td>text-decoration</td><td>No blink (argh my eyes)</td></tr>
-<tr><td>text-indent</td><td>-</td></tr>
-<tr><td>text-transform</td><td>-</td></tr>
-<tr><td>width</td><td>Interesting</td></tr>
-<tr><td>word-spacing</td><td>IE 5 no support</td></tr>
+<tr class="css1"><td>list-style</td><td>-</td></tr>
+<tr class="css1"><td>margin</td><td>-</td></tr>
+<tr class="css1"><td>margin-*</td><td>-</td></tr>
+<tr class="css1"><td>padding</td><td>-</td></tr>
+<tr class="css1"><td>padding-*</td><td>-</td></tr>
+<tr class="css1"><td>text-align</td><td>-</td></tr>
+<tr class="css1"><td>text-decoration</td><td>No blink (argh my eyes)</td></tr>
+<tr class="css1"><td>text-indent</td><td>-</td></tr>
+<tr class="css1"><td>text-transform</td><td>-</td></tr>
+<tr class="css1"><td>width</td><td>Interesting</td></tr>
+<tr class="css1"><td>word-spacing</td><td>IE 5 no support</td></tr>
 </tbody>
 
 <tbody>
@@ -167,7 +174,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td>caption-side</td><td>-</td></tr>
 <tr><td>empty-cells</td><td>No IE support, possible fix with &amp;nbsp;?</td></tr>
 <tr><td>table-layout</td><td>-</td></tr>
-<tr><td>vertical-align</td><td>Also applies to others with explicit height</td></tr>
+<tr class="css1"><td>vertical-align</td><td>Also applies to others with explicit height</td></tr>
 </tbody>
 
 <tbody>
@@ -183,16 +190,16 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <tbody>
 <tr><th colspan="2">Unknown</th></tr>
-<tr class="danger"><td>background-image</td><td>Dangerous</td></tr>
-<tr><td>background-attachment</td><td>Depends on background-image</td></tr>
-<tr><td>background-position</td><td>Depends on background-image</td></tr>
+<tr class="danger css1"><td>background-image</td><td>Dangerous</td></tr>
+<tr class="css1"><td>background-attachment</td><td>Depends on background-image</td></tr>
+<tr class="css1"><td>background-position</td><td>Depends on background-image</td></tr>
 <tr class="danger"><td>cursor</td><td>Dangerous but fluffy</td></tr>
-<tr class="danger"><td>display</td><td>Dangerous but interesting;
+<tr class="danger css1"><td>display</td><td>Dangerous but interesting;
     will not implement list-item, run-in (Opera only) or table (no IE);
     inline-block has incomplete IE6 support and requires -moz-inline-box
     for Mozilla.</td></tr>
-<tr><td>height</td><td>Interesting, why use it?</td></tr>
-<tr class="danger"><td>list-style-image</td><td>Dangerous?</td></tr>
+<tr><td class="css1">height</td><td>Interesting, why use it?</td></tr>
+<tr class="danger css1"><td>list-style-image</td><td>Dangerous?</td></tr>
 <tr><td>max-height</td><td rowspan="4">No IE 5/6</td></tr>
 <tr><td>min-height</td></tr>
 <tr><td>max-width</td></tr>
@@ -205,7 +212,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td>page-break-inside</td><td>Opera only</td></tr>
 <tr><td>quotes</td><td>May be dropped from CSS2</td></tr>
 <tr class="danger"><td>visibility</td><td>Dangerous</td></tr>
-<tr><td>white-space</td><td>Spotty implementation: pre (no IE 5/6), nowrap (no IE 5),
+<tr><td class="css1">white-space</td><td>Spotty implementation: pre (no IE 5/6), nowrap (no IE 5),
     pre-wrap (only Opera), pre-line (no-support). Fixable?</td></tr>
 </tbody>
 
