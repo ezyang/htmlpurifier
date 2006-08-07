@@ -42,31 +42,53 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
     
     function execute($tokens) {
         
-        // insert implicit "parent" node, will be removed at end
+        //####################################################################//
+        // Pre-processing
+        
+        // insert implicit "parent" node, will be removed at end.
+        // ! we might want to move this to configuration
+        // DEFINITION CALL
         $parent_name = $this->definition->info_parent;
         array_unshift($tokens, new HTMLPurifier_Token_Start($parent_name));
         $tokens[] = new HTMLPurifier_Token_End($parent_name);
+        
+        //####################################################################//
+        // Loop initialization
         
         // stack that contains the indexes of all parents,
         // $stack[count($stack)-1] being the current parent
         $stack = array();
         
         // stack that contains all elements that are excluded
+        // same structure as $stack, but it is only populated when an element
+        // with exclusions is processed, i.e. there won't be empty exclusions.
         $exclude_stack = array();
         
+        //####################################################################//
+        // Loop
+        
+        // iterate through all start nodes. Determining the start node
+        // is complicated so it has been omitted from the loop construct
         for ($i = 0, $size = count($tokens) ; $i < $size; ) {
             
+            //################################################################//
+            // Gather information on children
+            
+            // child token accumulator
             $child_tokens = array();
             
-            // scroll to the end of this node, and report number
+            // scroll to the end of this node, report number, and collect
+            // all children
             for ($j = $i, $depth = 0; ; $j++) {
                 if ($tokens[$j]->type == 'start') {
                     $depth++;
-                    // skip token assignment on first iteration
+                    // skip token assignment on first iteration, this is the
+                    // token we currently are on
                     if ($depth == 1) continue;
                 } elseif ($tokens[$j]->type == 'end') {
                     $depth--;
-                    // skip token assignment on last iteration
+                    // skip token assignment on last iteration, this is the
+                    // end token of the token we're currently on
                     if ($depth == 0) break;
                 }
                 $child_tokens[] = $tokens[$j];
@@ -75,12 +97,16 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             // $i is index of start token
             // $j is index of end token
             
+            //################################################################//
+            // Gather information on parent
+            
             // calculate parent information
             if ($count = count($stack)) {
                 $parent_index = $stack[$count-1];
                 $parent_name  = $tokens[$parent_index]->name;
                 $parent_def   = $this->definition->info[$parent_name];
             } else {
+                // unknown info, it won't be used anyway
                 $parent_index = $parent_name = $parent_def = null;
             }
             
@@ -88,26 +114,36 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             if (isset($parent_def)) {
                 $context = $parent_def->type;
             } else {
+                // generally found in specialized elements like UL
                 $context = 'unknown';
             }
             
-            // determine whether or not element is excluded
+            //################################################################//
+            // Determine whether element is explicitly excluded SGML-style
+            
+            // determine whether or not element is excluded by checking all
+            // parent exclusions. The array should not be very large, two
+            // elements at most.
             $excluded = false;
             if (!empty($exclude_stack)) {
                 foreach ($exclude_stack as $lookup) {
                     if (isset($lookup[$tokens[$i]->name])) {
                         $excluded = true;
+                        // no need to continue processing
                         break;
                     }
                 }
             }
             
+            //################################################################//
+            // Perform child validation
+            
             if ($excluded) {
+                // there is an exclusion, remove the entire node
                 $result = false;
             } else {
                 // DEFINITION CALL
                 $def = $this->definition->info[$tokens[$i]->name];
-                
                 $child_def = $def->child;
                 
                 // have DTD child def validate children
@@ -117,9 +153,12 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 $excludes = $def->excludes;
             }
             
-            // process result
+            // $result is now a bool or array
+            
+            //################################################################//
+            // Process result by interpreting $result
+            
             if ($result === true) {
-                
                 // leave the node as is
                 
                 // register start token as a parental node start
@@ -132,13 +171,15 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 $i++;
                 
             } elseif($result === false) {
+                // remove entire node
                 
+                // calculate length of inner tokens and current tokens
                 $length = $j - $i + 1;
                 
-                // remove entire node
+                // perform removal
                 array_splice($tokens, $i, $length);
                 
-                // change size
+                // update size
                 $size -= $length;
                 
                 // there is no start token to register,
@@ -150,14 +191,19 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                     $i = $parent_index;
                 }
                 
-            } else {
+                // PROJECTED OPTIMIZATION: Process all children elements before
+                // reprocessing parent node.
                 
+            } else {
+                // replace node with $result
+                
+                // calculate length of inner tokens
                 $length = $j - $i - 1;
                 
-                // replace node with $result
+                // perform replacement
                 array_splice($tokens, $i + 1, $length, $result);
                 
-                // change size
+                // update size
                 $size -= $length;
                 $size += count($result);
                 
@@ -171,6 +217,9 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 $i++;
                 
             }
+            
+            //################################################################//
+            // Scroll to next start node
             
             // We assume, at this point, that $i is the index of the token
             // that is the first possible new start point for a node.
@@ -192,9 +241,15 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             
         }
         
-        // remove implicit divs
+        //####################################################################//
+        // Post-processing
+        
+        // remove implicit parent tokens at the beginning and end
         array_shift($tokens);
         array_pop($tokens);
+        
+        //####################################################################//
+        // Return
         
         return $tokens;
         
