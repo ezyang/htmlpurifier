@@ -5,11 +5,13 @@ error_reporting(E_ALL);
 // wishlist: automated calling of this file from multiple PHP versions so we
 // don't have to constantly switch around
 
-// load files, assume that simpletest directory is in path
-require_once 'simpletest/unit_tester.php';
-require_once 'simpletest/reporter.php';
-require_once 'simpletest/mock_objects.php';
+$simpletest_location = 'simpletest/';
+if (file_exists('../config.php')) include_once '../config.php';
+require_once $simpletest_location . 'unit_tester.php';
+require_once $simpletest_location . 'reporter.php';
+require_once $simpletest_location . 'mock_objects.php';
 
+// debugger
 require_once 'Debugger.php';
 
 // emulates inserting a dir called HTMLPurifier into your class dir
