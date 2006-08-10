@@ -39,12 +39,14 @@ Abbreviations are avoided
         Attr(s) -> Attribute(s)
         Def -> Definition
 
-Ambiguity concerning the definition of Definition
+Ambiguity concerning the definition of Def/Definition
     While a definition normally defines the structure/acceptable values of
     an entity, most of the definitions in this application also attempt
     to validate and fix the value.  I am unsure of a better name, as
     "Validator" would exclude fixing the value, "Fixer" doesn't invoke
     the proper image of "fixing" something, and "ValidatorFixer" is too long!
+    Some other suggestions were "Handler", "Reference", "Check", "Fix",
+    "Repair" and "Heal".
 
 Transform not Transformer
     Transform is both a noun and a verb, and thus we define a "Transform" as
