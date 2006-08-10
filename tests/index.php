@@ -5,17 +5,26 @@ error_reporting(E_ALL);
 // wishlist: automated calling of this file from multiple PHP versions so we
 // don't have to constantly switch around
 
+// configuration
+$GLOBALS['HTMLPurifierTest']['PEAR'] = false; // do PEAR tests
+
 $simpletest_location = 'simpletest/';
 if (file_exists('../config.php')) include_once '../config.php';
 require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
 require_once $simpletest_location . 'mock_objects.php';
 
+// configure PEAR if necessary
+if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {
+    set_include_path($GLOBALS['HTMLPurifierTest']['PEAR'] . PATH_SEPARATOR .
+        get_include_path());
+}
+
 // debugger
 require_once 'Debugger.php';
 
 // emulates inserting a dir called HTMLPurifier into your class dir
-set_include_path(get_include_path() . PATH_SEPARATOR . '../library');
+set_include_path('../library' . PATH_SEPARATOR . get_include_path());
 
 // since Mocks can't be called from within test files, we need to do
 // a little jumping through hoops to generate them

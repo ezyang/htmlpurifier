@@ -1,7 +1,6 @@
 <?php
 
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
-require_once 'HTMLPurifier/Lexer/PEARSax3.php';
 
 class HTMLPurifier_LexerTest extends UnitTestCase
 {
@@ -9,13 +8,19 @@ class HTMLPurifier_LexerTest extends UnitTestCase
     var $Lexer;
     var $DirectLex, $PEARSax3, $DOMLex;
     var $_entity_lookup;
-    var $_has_dom;
+    var $_has_pear = false;
+    var $_has_dom  = false;
     
     function setUp() {
         $this->Lexer     = new HTMLPurifier_Lexer();
         
         $this->DirectLex = new HTMLPurifier_Lexer_DirectLex();
-        $this->PEARSax3  = new HTMLPurifier_Lexer_PEARSax3();
+        
+        if ( $GLOBALS['HTMLPurifierTest']['PEAR'] ) {
+            $this->_has_pear = true;
+            require_once 'HTMLPurifier/Lexer/PEARSax3.php';
+            $this->PEARSax3  = new HTMLPurifier_Lexer_PEARSax3();
+        }
         
         $this->_has_dom = version_compare(PHP_VERSION, '5', '>=');
         if ($this->_has_dom) {
@@ -216,20 +221,23 @@ class HTMLPurifier_LexerTest extends UnitTestCase
             $this->assertEqual($expect[$i], $result, 'DirectLexTest '.$i.': %s');
             paintIf($result, $expect[$i] != $result);
             
-            // assert unless I say otherwise
-            $sax_result = $this->PEARSax3->tokenizeHTML($input[$i]);
-            if (!isset($sax_expect[$i])) {
-                // by default, assert with normal result
-                $this->assertEqual($expect[$i], $sax_result, 'PEARSax3Test '.$i.': %s');
-                paintIf($sax_result, $expect[$i] != $sax_result);
-            } elseif ($sax_expect[$i] === false) {
-                // assertions were turned off, optionally dump
-                // paintIf($sax_expect, $i == NUMBER);
-            } else {
-                // match with a custom SAX result array
-                $this->assertEqual($sax_expect[$i], $sax_result, 'PEARSax3Test (custom) '.$i.': %s');
-                paintIf($sax_result, $sax_expect[$i] != $sax_result);
+            if ($this->_has_pear) {
+                // assert unless I say otherwise
+                $sax_result = $this->PEARSax3->tokenizeHTML($input[$i]);
+                if (!isset($sax_expect[$i])) {
+                    // by default, assert with normal result
+                    $this->assertEqual($expect[$i], $sax_result, 'PEARSax3Test '.$i.': %s');
+                    paintIf($sax_result, $expect[$i] != $sax_result);
+                } elseif ($sax_expect[$i] === false) {
+                    // assertions were turned off, optionally dump
+                    // paintIf($sax_expect, $i == NUMBER);
+                } else {
+                    // match with a custom SAX result array
+                    $this->assertEqual($sax_expect[$i], $sax_result, 'PEARSax3Test (custom) '.$i.': %s');
+                    paintIf($sax_result, $sax_expect[$i] != $sax_result);
+                }
             }
+            
             if ($this->_has_dom) {
                 $dom_result = $this->DOMLex->tokenizeHTML($input[$i]);
                 // same structure as SAX
