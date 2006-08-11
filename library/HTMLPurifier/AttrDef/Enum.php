@@ -14,7 +14,7 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
         $this->case_sensitive = $case_sensitive;
     }
     
-    function validate($string) {
+    function validate($string, $config = null) {
         $string = trim($string);
         if (!$this->case_sensitive) {
             $string = ctype_lower($string) ? $string : strtolower($string);
