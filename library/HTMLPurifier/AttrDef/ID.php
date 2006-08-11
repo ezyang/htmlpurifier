@@ -4,7 +4,7 @@ require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/IDAccumulator.php';
         
 // NOTE QUIRKY BEHAVIOR: even though this is the id processor, it
-// will ignore HTMLPurifier_Config::$attr_id_blacklist: it will only
+// will ignore directive Attr:IDBlacklist, since it will only
 // go according to the ID accumulator. Since the accumulator is
 // automatically generated, it will have already absorbed the
 // blacklist. If you're hacking around, make sure you use load()!

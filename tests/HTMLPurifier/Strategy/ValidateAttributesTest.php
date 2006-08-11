@@ -46,7 +46,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $inputs[7] = '<div id="invalid">Invalid</div>';
         $expect[7] = '<div>Invalid</div>';
         $config[7] = HTMLPurifier_Config::createDefault();
-        $config[7]->attr_id_blacklist = array('invalid');
+        $config[7]->set('Attr', 'IDBlacklist', array('invalid'));
         
         // test classes
         $inputs[8] = '<div class="valid">Valid</div>';

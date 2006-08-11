@@ -34,11 +34,16 @@ function generate_mock_once($name) {
     Mock::generate($name, $mock_name);
 }
 
+// this has to be defined before we do any includes of library files
+require_once 'HTMLPurifier/ConfigDef.php';
+
 // define callable test files
 $test_files = array();
+$test_files[] = 'ConfigTest.php';
+$test_files[] = 'ConfigDefTest.php';
 $test_files[] = 'LexerTest.php';
 $test_files[] = 'Lexer/DirectLexTest.php';
-//$test_files[] = 'TokenTest.php';
+$test_files[] = 'TokenTest.php';
 $test_files[] = 'ChildDefTest.php';
 $test_files[] = 'GeneratorTest.php';
 $test_files[] = 'EntityLookupTest.php';
@@ -57,13 +62,26 @@ $test_files[] = 'AttrDef/LangTest.php';
 $test_files[] = 'AttrDef/PixelsTest.php';
 $test_files[] = 'AttrDef/LengthTest.php';
 $test_files[] = 'AttrDef/NumberSpanTest.php';
+//$test_files[] = 'AttrDef/URITest.php';
 $test_files[] = 'IDAccumulatorTest.php';
 $test_files[] = 'TagTransformTest.php';
 $test_files[] = 'AttrTransform/LangTest.php';
 $test_files[] = 'AttrTransform/TextAlignTest.php';
 
-
 $test_file_lookup = array_flip($test_files);
+
+function htmlpurifier_path2class($path) {
+    $temp = $path;
+    $temp = str_replace('./', '',  $temp); // remove leading './'
+    $temp = str_replace('.\\', '',  $temp); // remove leading '.\'
+    $temp = str_replace('\\', '_', $temp); // normalize \ to _
+    $temp = str_replace('/',  '_', $temp); // normalize / to _
+    while(strpos($temp, '__') !== false) $temp = str_replace('__', '_', $temp);
+    $temp = str_replace('.php', '', $temp);
+    return $temp;
+}
+
+// we can't use addTestFile because SimpleTest chokes on E_STRICT warnings
 
 if (isset($_GET['file']) && isset($test_file_lookup[$_GET['file']])) {
     
@@ -71,14 +89,18 @@ if (isset($_GET['file']) && isset($test_file_lookup[$_GET['file']])) {
     $test_file = $_GET['file'];
     
     $test = new GroupTest('HTMLPurifier - ' . $test_file);
-    $test->addTestFile('HTMLPurifier/' . $test_file);
+    $path = 'HTMLPurifier/' . $test_file;
+    require_once $path;
+    $test->addTestClass(htmlpurifier_path2class($path));
     
 } else {
     
     $test = new GroupTest('HTMLPurifier');
 
     foreach ($test_files as $test_file) {
-        $test->addTestFile('HTMLPurifier/' . $test_file);
+        $path = 'HTMLPurifier/' . $test_file;
+        require_once $path;
+        $test->addTestClass(htmlpurifier_path2class($path));
     }
     
 }

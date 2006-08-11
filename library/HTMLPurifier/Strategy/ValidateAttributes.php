@@ -3,6 +3,11 @@
 require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/Definition.php';
 require_once 'HTMLPurifier/IDAccumulator.php';
+require_once 'HTMLPurifier/ConfigDef.php';
+
+HTMLPurifier_ConfigDef::define(
+    'Attr', 'IDBlacklist', array(),
+    'Array of IDs not allowed in the document.');
 
 /**
  * Validate all attributes in the tokens.
@@ -26,7 +31,7 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
         //     eventually, we'll have a dedicated context object to hold
         //     all these accumulators and caches. For now, just an IDAccumulator
         $accumulator = new HTMLPurifier_IDAccumulator();
-        $accumulator->load($config->attr_id_blacklist);
+        $accumulator->load($config->get('Attr', 'IDBlacklist'));
         
         // create alias to global definition array, see also $defs
         // DEFINITION CALL
@@ -69,7 +74,7 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
                 // call the definition
                 if ( isset($defs[$attr_key]) ) {
                     // there is a local definition defined
-                    if (!$defs[$attr_key]) {
+                    if ($defs[$attr_key] === false) {
                         // We've explicitly been told not to allow this element.
                         // This is usually when there's a global definition
                         // that must be overridden.
