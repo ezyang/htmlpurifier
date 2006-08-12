@@ -11,7 +11,7 @@ class HTMLPurifier_AttrDef_Length extends HTMLPurifier_AttrDef_Pixels
         $string = trim($string);
         if ($string === '') return false;
         
-        $parent_result = parent::validate($string);
+        $parent_result = parent::validate($string, $config, $context);
         if ($parent_result !== false) return $parent_result;
         
         $length = strlen($string);

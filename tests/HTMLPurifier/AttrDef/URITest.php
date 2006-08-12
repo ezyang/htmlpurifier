@@ -175,6 +175,12 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
             if (!isset($expect_uri[$i])) {
                 $expect_uri[$i] = $value;
             }
+            if (!isset($config[$i])) {
+                $config[$i] = HTMLPurifier_Config::createDefault();
+            }
+            if (!isset($context[$i])) {
+                $context[$i] = new HTMLPurifier_AttrContext();
+            }
             if ($components[$i] === false) {
                 $scheme->expectNever('validateComponents');
             } else {
@@ -182,7 +188,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
                     'validateComponents', $return_components[$i], $components[$i]);
                 $scheme->expectOnce('validateComponents', $components[$i]);
             }
-            $result = $def->validate($value);
+            $result = $def->validate($value, $config[$i], $context[$i]);
             $scheme->tally();
             $this->assertIdentical($expect_uri[$i], $result, "Test $i: %s");
             
