@@ -117,7 +117,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         // test overlarge port (max is 65535, although this isn't official)
         $uri[13] = 'http://example.com:65536';
         $components[13] = array('example.com', '', null, null);
-        $uri[13] = 'http://example.com';
+        $expect_uri[13] = 'http://example.com';
         
         // some spec abnf tests
         
@@ -157,14 +157,14 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
             // I cannot set a default value to function parameters that are passed
             // by reference. So we use the value instance() returns.
             $fake_registry = new HTMLPurifier_URISchemeRegistryMock($this);
-            $registry = HTMLPurifier_URISchemeRegistry::instance($fake_registry);
+            $registry =& HTMLPurifier_URISchemeRegistry::instance($fake_registry);
             
             // now, let's at a pseudo-scheme to the registry
-            $scheme = new HTMLPurifier_URISchemeMock($this);
+            $scheme =& new HTMLPurifier_URISchemeMock($this);
             
             // here are the schemes we will support with overloaded mocks
-            $registry->setReturnValue('getScheme', $scheme, array('http'));
-            $registry->setReturnValue('getScheme', $scheme, array('mailto'));
+            $registry->setReturnReference('getScheme', $scheme, array('http'));
+            $registry->setReturnReference('getScheme', $scheme, array('mailto'));
             
             // default return value is false (meaning no scheme defined: reject)
             $registry->setReturnValue('getScheme', false, array('*'));
@@ -184,7 +184,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
             }
             $result = $def->validate($value);
             $scheme->tally();
-            $this->assertIdentical($expect_uri[$i], $result);
+            $this->assertIdentical($expect_uri[$i], $result, "Test $i: %s");
             
         }
         

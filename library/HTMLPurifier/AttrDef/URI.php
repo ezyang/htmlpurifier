@@ -43,15 +43,15 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         
         
         
-        $registry = HTMLPurifier_URISchemeRegistry::instance();
+        $registry =& HTMLPurifier_URISchemeRegistry::instance();
         if ($scheme !== null) {
             // no need to validate the scheme's fmt since we do that when we
             // retrieve the specific scheme object from the registry
             $scheme = ctype_lower($scheme) ? $scheme : strtolower($scheme);
-            $scheme_obj = $registry->getScheme($scheme);
+            $scheme_obj =& $registry->getScheme($scheme);
             if (!$scheme_obj) return ''; // invalid scheme, clean it out
         } else {
-            $scheme_obj = $registry->getScheme($config->get('URI', 'DefaultScheme'));
+            $scheme_obj =& $registry->getScheme($config->get('URI', 'DefaultScheme'));
         }
         
         
