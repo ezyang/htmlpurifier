@@ -5,9 +5,12 @@ require_once 'HTMLPurifier/URIScheme.php';
 require_once 'HTMLPurifier/URIScheme/http.php';
 require_once 'HTMLPurifier/URIScheme/ftp.php';
 require_once 'HTMLPurifier/URIScheme/https.php';
-//require_once 'HTMLPurifier/URIScheme/mailto.php';
+require_once 'HTMLPurifier/URIScheme/mailto.php';
 require_once 'HTMLPurifier/URIScheme/news.php';
 require_once 'HTMLPurifier/URIScheme/nntp.php';
+
+// WARNING: All the URI schemes are far to relaxed, we need to tighten
+// the checks.
 
 class HTMLPurifier_URISchemeTest extends UnitTestCase
 {
@@ -104,8 +107,7 @@ class HTMLPurifier_URISchemeTest extends UnitTestCase
         );
     }
     
-    // mailto currently isn't implemented yet
-    function non_test_mailto() {
+    function test_mailto() {
         
         $scheme = new HTMLPurifier_URIScheme_mailto();
         $config = HTMLPurifier_Config::createDefault();
@@ -114,6 +116,12 @@ class HTMLPurifier_URISchemeTest extends UnitTestCase
           $scheme->validateComponents(
                 null, null, null, 'bob@example.com', null, $config),
           array(null, null, null, 'bob@example.com', null)
+        );
+        
+        $this->assertIdentical(
+          $scheme->validateComponents(
+                'user', 'example.com', 80, 'bob@example.com', 'subject=Foo!', $config),
+          array(null, null, null, 'bob@example.com', 'subject=Foo!')
         );
         
     }

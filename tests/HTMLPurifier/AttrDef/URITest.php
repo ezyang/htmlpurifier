@@ -145,7 +145,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         
         // test invalid scheme, components shouldn't be passed
         $uri[17] = 'javascript:alert("moo");';
-        $expect_uri[17] = '';
+        $expect_uri[17] = false;
         
         // relative URIs
         
@@ -176,7 +176,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
             $this->config  = isset($config[$i])  ? $config[$i]  : null;
             $this->context = isset($context[$i]) ? $context[$i] : null;
             
-            $this->assertDef($value, $expect_uri[$i], "Test $i: %s");
+            $this->assertDef($value, $expect_uri[$i], true, "Test $i: %s");
             
         }
         
@@ -214,6 +214,20 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
     
     function tearDownAssertDef() {
         $this->scheme->tally();
+    }
+    
+    function testIntegration() {
+        
+        $this->def = new HTMLPurifier_AttrDef_URI();
+        $this->config = $this->context = null;
+        
+        $this->assertDef('http://www.google.com/');
+        $this->assertDef('javascript:bad_stuff();', false);
+        $this->assertDef('ftp://www.example.com/');
+        $this->assertDef('news:rec.alt');
+        $this->assertDef('nntp://news.example.com/324234');
+        $this->assertDef('mailto:bob@example.com');
+        
     }
     
 }
