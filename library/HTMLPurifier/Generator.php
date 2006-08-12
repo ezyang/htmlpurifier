@@ -1,5 +1,7 @@
 <?php
 
+// pretty-printing with indentation would be pretty cool
+
 class HTMLPurifier_Generator
 {
     

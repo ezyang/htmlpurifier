@@ -20,6 +20,7 @@ AttrDef
         out for mailto scheme, IPv6 validation is broken (fringe), unintuitive
         variable overwriting, missing validation for query, fragment and path,
         no percent-encode fixing
+    CSS - parser doesn't accept advanced CSS (fringe)
 AttrTransform - doesn't accept AttrContext, non-validating
     Lang - invalid xml:lang value can overwrite valid lang value (fringe)
 ChildDef - not-allowed nodes translated to text, likely invalid handling

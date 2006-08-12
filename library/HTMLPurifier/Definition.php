@@ -255,6 +255,7 @@ class HTMLPurifier_Definition
             'id'    => new HTMLPurifier_AttrDef_ID(),
             'class' => new HTMLPurifier_AttrDef_Class(),
             'title' => $e_Text,
+            'style' => new HTMLPurifier_AttrDef_CSS(),
             // i18n
             'dir'   => new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false),
             'lang'  => new HTMLPurifier_AttrDef_Lang(),
