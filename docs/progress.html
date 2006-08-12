@@ -71,7 +71,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td>scope</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
 </tbody>
 
-<tbody>
+<tbody class="impl-yes">
 <tr><th colspan="3">URI</th></tr>
 <tr><td rowspan="2">cite</td><td>BLOCKQUOTE, Q</td><td>-</td></tr>
     <tr><td>DEL, INS</td><td>-</td></tr>
@@ -103,6 +103,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td>noshade</td><td>HR</td><td>Boolean, style 'border-style:solid;'</td></tr>
 <tr><td>nowrap</td><td>TD, TH</td><td>Boolean, style 'white-space:nowrap;' (not compat with IE5)</td></tr>
 <tr><td>size</td><td>HR</td><td>Near-equiv 'width', needs px suffix if original was pixels</td></tr>
+<tr><td>src</td><td>IMG</td><td>Required, insert blank or default img if not set</td></tr>
 <tr><td>start</td><td>OL</td><td>Poorly supported 'counter-reset', transform may not be desirable</td></tr>
 <tr><td rowspan="3">type</td><td>LI</td><td rowspan="3">Equivalent style 'list-style-type', different allowed values though. (needs testing)</td></tr>
     <tr><td>OL</td></tr>

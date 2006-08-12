@@ -87,6 +87,14 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
 HTML;
         $expect[13] = $inputs[13];
         
+        // test URI
+        $inputs[14] = '<a href="http://www.google.com/">Google</a>';
+        $expect[14] = $inputs[14];
+        
+        // test invalid URI
+        $inputs[15] = '<a href="javascript:badstuff();">Google</a>';
+        $expect[15] = '<a>Google</a>';
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
         
     }

@@ -10,6 +10,7 @@ require_once 'HTMLPurifier/AttrDef.php';
     require_once 'HTMLPurifier/AttrDef/Length.php';
     require_once 'HTMLPurifier/AttrDef/MultiLength.php';
     require_once 'HTMLPurifier/AttrDef/NumberSpan.php';
+    require_once 'HTMLPurifier/AttrDef/URI.php';
 require_once 'HTMLPurifier/AttrTransform.php';
     require_once 'HTMLPurifier/AttrTransform/Lang.php';
     require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
@@ -310,6 +311,14 @@ class HTMLPurifier_Definition
         $this->info['td']->attr['colspan'] =
         $this->info['th']->attr['colspan'] = $e__NumberSpan;
         
+        $e_URI = new HTMLPurifier_AttrDef_URI();
+        $this->info['a']->attr['href'] =
+        $this->info['img']->attr['longdesc'] =
+        $this->info['img']->attr['src'] =
+        $this->info['del']->attr['cite'] =
+        $this->info['ins']->attr['cite'] =
+        $this->info['blockquote']->attr['cite'] =
+        $this->info['q']->attr['cite'] = $e_URI;
         
         //////////////////////////////////////////////////////////////////////
         // UNIMP : info_tag_transform : transformations of tags

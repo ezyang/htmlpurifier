@@ -1,15 +1,13 @@
 Todo List
 
-Primary:
- - (In Progress) Implement attribute validation
- - Implement HTMLPurifier (trivial)
-
 Code issues:
- - Rename AbstractTest to Harness
  - (?) Create a TokenFactory to prevent really long lines
  - Massive profiling
  - Fix IPv6 issues
- - Make URI validation routines tighter
+ - Make URI validation routines tighter (especially mailto)
+ - Distinguish between different types of URIs, for instance, a mailto URI
+   in IMG SRC is nonsensical
+ - Factor out Host validation to its own AttrDef
 
 Enhancements:
  - Do fixes for Firefox's inability to handle COL alignment props (Bug 915)
