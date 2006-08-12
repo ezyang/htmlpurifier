@@ -8,6 +8,8 @@ Code issues:
  - Rename AbstractTest to Harness
  - (?) Create a TokenFactory to prevent really long lines
  - Massive profiling
+ - Fix IPv6 issues
+ - Make URI validation routines tighter
 
 Enhancements:
  - Do fixes for Firefox's inability to handle COL alignment props (Bug 915)
