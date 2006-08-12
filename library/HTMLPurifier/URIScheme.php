@@ -3,7 +3,7 @@
 class HTMLPurifier_URIScheme
 {
     
-    function validateComponents() {
+    function validateComponents($authority, $path, $query, $fragment) {
         
     }
     

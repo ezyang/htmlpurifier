@@ -5,7 +5,7 @@ require_once 'HTMLPurifier/AttrDef/URI.php';
 
 // WARNING: INCOMPLETE UNIT TESTS!
 // we are currently abstaining IPv6 and percent-encode fixing unit tests
-// as well as recomposition tests
+// we also need to test all the configuration directives defined by this class
 
 class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
 {
@@ -14,6 +14,8 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         
         generate_mock_once('HTMLPurifier_URIScheme');
         generate_mock_once('HTMLPurifier_URISchemeRegistry');
+        
+        $old_registry = HTMLPurifier_URISchemeRegistry::instance();
         
         // finally, lets get a copy of the actual class
         $def = new HTMLPurifier_AttrDef_URI();
@@ -185,6 +187,9 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
             $this->assertIdentical($expect_uri[$i], $result);
             
         }
+        
+        // reset to regular implementation
+        HTMLPurifier_URISchemeRegistry::instance($old_registry);
         
     }
     

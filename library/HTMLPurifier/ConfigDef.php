@@ -29,6 +29,7 @@ class HTMLPurifier_ConfigDef {
             return;
         }
         if (isset($def->info[$namespace][$name])) {
+            // this behavior is at risk of change
             trigger_error('Cannot redefine directive', E_USER_ERROR);
             return;
         }

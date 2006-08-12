@@ -50,6 +50,9 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         $this->swallowErrors();
         
         // test overloading already defined value
+        // ACTUALLY, we probably should allow this behavior, which simply
+        // means that two class files need that directive. Using debug_backtrace
+        // we could probably figure which files those are too! :-D
         HTMLPurifier_ConfigDef::define('Core', 'Name', 89,
             'What, you\'re not allowed to overload directives? Bummer!');
         $this->assertError('Cannot redefine directive');

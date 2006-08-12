@@ -1,5 +1,21 @@
 <?php
 
+HTMLPurifier_ConfigDef::define(
+    'URI', 'AllowedSchemes', array(
+        'http'  => true, // "Hypertext Transfer Protocol", nuf' said
+        'https' => true, // HTTP over SSL (Secure Socket Layer)
+        // quite useful, but not necessary
+        'mailto' => true,// Email
+        'ftp'   => true, // "File Transfer Protocol"
+        'irc'   => true, // "Internet Relay Chat", usually needs another app
+        // for Usenet, these two are similar, but distinct
+        'nntp'  => true, // individual Netnews articles
+        'news'  => true  // newsgroup or individual Netnews articles),
+    ),
+    'Whitelist that defines the schemes that a URI is allowed to have.  This '.
+    'prevents XSS attacks from using pseudo-schemes like javascript or mocha.'
+);
+
 class HTMLPurifier_URISchemeRegistry
 {
     
@@ -16,7 +32,25 @@ class HTMLPurifier_URISchemeRegistry
         return $instance;
     }
     
-    function &getScheme($scheme) {}
+    var $schemes = array();
+    var $_scheme_dir = null;
+    
+    function &getScheme($scheme, $config = null) {
+        if (!$config) $config = HTMLPurifier_Config::createDefault();
+        $null = null; // for the sake of passing by reference
+        if (isset($this->schemes[$scheme])) return $this->schemes[$scheme];
+        if (empty($this->_dir)) $this->_dir = dirname(__FILE__) . '/URIScheme/';
+        
+        // important, otherwise attacker could include arbitrary file
+        $allowed_schemes = $config->get('URI', 'AllowedSchemes');
+        if (!isset($allowed_schemes[$scheme])) return $null;
+        
+        @include_once $this->_dir . $scheme . '.php';
+        $class = 'HTMLPurifier_URIScheme_' . $scheme;
+        if (!class_exists($class)) return $null;
+        $this->schemes[$scheme] = new $class();
+        return $this->schemes[$scheme];
+    }
     
 }
 
