@@ -1,11 +1,13 @@
 <?php
 
+require_once 'HTMLPurifier/AttrContext.php';
+
 // AttrDef = Attribute Definition
 class HTMLPurifier_AttrDef
 {
     function HTMLPurifier_AttrDef() {}
     
-    function validate($string, $config = null) {
+    function validate($string, $config, &$context) {
         trigger_error('Cannot call abstract function', E_USER_ERROR);
     }
     

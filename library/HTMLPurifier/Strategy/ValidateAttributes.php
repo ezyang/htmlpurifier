@@ -4,6 +4,7 @@ require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/Definition.php';
 require_once 'HTMLPurifier/IDAccumulator.php';
 require_once 'HTMLPurifier/ConfigDef.php';
+require_once 'HTMLPurifier/AttrContext.php';
 
 HTMLPurifier_ConfigDef::define(
     'Attr', 'IDBlacklist', array(),
@@ -27,11 +28,14 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
         // load default configuration object if none passed
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         
+        // setup StrategyContext
+        $context = new HTMLPurifier_AttrContext();
+        
         // setup ID accumulator and load it with blacklisted IDs
         //     eventually, we'll have a dedicated context object to hold
         //     all these accumulators and caches. For now, just an IDAccumulator
-        $accumulator = new HTMLPurifier_IDAccumulator();
-        $accumulator->load($config->get('Attr', 'IDBlacklist'));
+        $context->id_accumulator = new HTMLPurifier_IDAccumulator();
+        $context->id_accumulator->load($config->get('Attr', 'IDBlacklist'));
         
         // create alias to global definition array, see also $defs
         // DEFINITION CALL
@@ -84,14 +88,14 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
                     } else {
                         // validate according to the element's definition
                         $result = $defs[$attr_key]->validate(
-                                        $value, $config, $accumulator
+                                        $value, $config, $context
                                    );
                     }
                 } elseif ( isset($d_defs[$attr_key]) ) {
                     // there is a global definition defined, validate according
                     // to the global definition
                     $result = $d_defs[$attr_key]->validate(
-                                    $value, $config, $accumulator
+                                    $value, $config, $context
                                );
                 } else {
                     // system never heard of the attribute? DELETE!

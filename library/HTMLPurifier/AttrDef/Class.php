@@ -6,9 +6,7 @@ require_once 'HTMLPurifier/Config.php';
 class HTMLPurifier_AttrDef_Class extends HTMLPurifier_AttrDef
 {
     
-    function validate($string, $config = null) {
-        
-        if (!$config) $config = HTMLPurifier_Config::createDefault();
+    function validate($string, $config, &$context) {
         
         $string = trim($string);
         

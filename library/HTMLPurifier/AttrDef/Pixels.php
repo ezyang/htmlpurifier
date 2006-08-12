@@ -5,7 +5,7 @@ require_once 'HTMLPurifier/AttrDef.php';
 class HTMLPurifier_AttrDef_Pixels extends HTMLPurifier_AttrDef
 {
     
-    function validate($string, $config = null) {
+    function validate($string, $config, &$context) {
         
         $string = trim($string);
         if ($string === '0') return $string;

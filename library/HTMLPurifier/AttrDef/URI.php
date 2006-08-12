@@ -12,12 +12,10 @@ HTMLPurifier_ConfigDef::define(
 class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
 {
     
-    function validate($uri, $config = null) {
+    function validate($uri, $config, &$context) {
         
         // We'll write stack-based parsers later, for now, use regexps to
         // get things working as fast as possible (irony)
-        
-        if (!$config) $config = HTMLPurifier_Config::createDefault();
         
         // parse as CDATA
         $uri = $this->parseCDATA($uri);

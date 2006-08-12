@@ -6,7 +6,7 @@ require_once 'HTMLPurifier/AttrDef/Length.php';
 class HTMLPurifier_AttrDef_MultiLength extends HTMLPurifier_AttrDef_Length
 {
     
-    function validate($string, $config = null) {
+    function validate($string, $config, &$context) {
         
         $string = trim($string);
         if ($string === '') return false;
