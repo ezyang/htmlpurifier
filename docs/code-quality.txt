@@ -1,0 +1,37 @@
+
+Code Quality Issues
+
+Okay, face it.  Programmers can get lazy, cut corners, or make mistakes. They
+also can do quick prototypes, and then forget to rewrite them later.  Well,
+while I can't list mistakes in here, I can list prototype-like segments
+of code that should be aggressively refactored after the beta is released.
+This does not list optimization issues, that needs to be done after intense
+profiling.
+
+Here we go:
+
+AttrDef
+    Class - doesn't support Unicode characters, uses regular expressions
+    Lang - code duplication, premature optimization, doesn't consult official
+        lists
+    Pixels/Length/MultiLength - implemented according to HTML spec (excludes
+        code reuse in CSS)
+    URI - multiple regular expressions, needs host validation routines factored
+        out for mailto scheme, IPv6 validation is broken (fringe), unintuitive
+        variable overwriting, missing validation for query, fragment and path,
+        no percent-encode fixing
+AttrTransform - doesn't accept AttrContext, non-validating
+    Lang - invalid xml:lang value can overwrite valid lang value (fringe)
+ChildDef - not-allowed nodes translated to text, likely invalid handling
+Config - "load configuration" hooks missing, rich set* accessors missing
+Strategy
+    FixNesting - cannot bubble nodes out of structures
+    MakeWellFormed - insufficient automatic closing definitions
+    RemoveForeignElements - should be run in parallel with MakeWellFormed
+URIScheme - needs to have callable generic checks
+    ftp - missing typecode check
+    mailto - doesn't validate emails
+    news - doesn't validate opaque path
+    nntp - doesn't constrain path
+EOL
+
