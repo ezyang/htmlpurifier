@@ -68,6 +68,7 @@ $test_files[] = 'TagTransformTest.php';
 $test_files[] = 'AttrTransform/LangTest.php';
 $test_files[] = 'AttrTransform/TextAlignTest.php';
 $test_files[] = 'URISchemeRegistryTest.php';
+$test_files[] = 'URISchemeTest.php';
 
 $test_file_lookup = array_flip($test_files);
 

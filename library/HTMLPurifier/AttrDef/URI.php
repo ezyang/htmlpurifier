@@ -49,7 +49,9 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             $scheme_obj =& $registry->getScheme($scheme, $config);
             if (!$scheme_obj) return ''; // invalid scheme, clean it out
         } else {
-            $scheme_obj =& $registry->getScheme($config->get('URI', 'DefaultScheme'), $config);
+            $scheme_obj =& $registry->getScheme(
+                $config->get('URI', 'DefaultScheme'), $config
+            );
         }
         
         
@@ -99,11 +101,8 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             
             // userinfo and host are validated within the regexp
             
-            // regenerate authority
-            $authority =
-                ($userinfo === null ? '' : ($userinfo . '@')) .
-                $host .
-                ($port === null ? '' : (':' . $port));
+        } else {
+            $port = $host = $userinfo = null;
         }
         
         
@@ -120,10 +119,21 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         
         
         // okay, now we defer execution to the subobject for more processing
-        list($authority, $path, $query, $fragment) = 
-        $scheme_obj->validateComponents($authority, $path, $query, $fragment);
+        // note that $fragment is omitted
+        list($userinfo, $host, $port, $path, $query) = 
+            $scheme_obj->validateComponents(
+                $userinfo, $host, $port, $path, $query, $config
+            );
         
         
+        // reconstruct authority
+        $authority = null;
+        if (!is_null($userinfo) || !is_null($host) || !is_null($port)) {
+            $authority = '';
+            if($userinfo !== null) $authority .= $userinfo . '@';
+            $authority .= $host;
+            if($port !== null) $authority .= ':' . $port;
+        }
         
         // reconstruct the result
         $result = '';

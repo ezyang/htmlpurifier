@@ -2,9 +2,9 @@
 
 require_once 'HTMLPurifier/URIScheme.php';
 
-class HTMLPurifier_URIScheme_http extends HTMLPurifier_URIScheme {
+class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme {
     
-    var $default_port = 80;
+    var $default_port = 21;
     
     function validateComponents(
         $userinfo, $host, $port, $path, $query, $config
@@ -12,7 +12,8 @@ class HTMLPurifier_URIScheme_http extends HTMLPurifier_URIScheme {
         list($userinfo, $host, $port, $path, $query) = 
             parent::validateComponents(
                 $userinfo, $host, $port, $path, $query, $config );
-        return array(null, $host, $port, $path, $query);
+        // typecode check needed on path
+        return array($userinfo, $host, $port, $path, null);
     }
     
 }
