@@ -110,10 +110,12 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         // test invalid port
         $uri[12] = 'http://example.com:foobar';
         $components[12] = array('example.com', '', null, null);
+        $expect_uri[12] = 'http://example.com';
         
         // test overlarge port (max is 65535, although this isn't official)
         $uri[13] = 'http://example.com:65536';
         $components[13] = array('example.com', '', null, null);
+        $uri[13] = 'http://example.com';
         
         // some spec abnf tests
         
@@ -124,20 +126,28 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $components[14] = array(null, '/this/is/path', null, null);
         $expect_uri[14] = 'http:/this/is/path'; // do not munge scheme off
         
+        // scheme munging is not being tested yet, it's an extra feature
+        
         // "path-rootless" - this should not be used but is allowed
         $uri[15] = 'http:this/is/path';
         $components[15] = array(null, 'this/is/path', null, null);
-        $expect_uri[15] = 'this/is/path'; // munge scheme off
+        //$expect_uri[15] = 'this/is/path'; // munge scheme off
         
         // "path-empty" - a rather interesting case, remove the scheme
         $uri[16] = 'http:';
         $components[16] = array(null, '', null, null);
-        $expect_uri[16] = ''; // munge scheme off
+        //$expect_uri[16] = ''; // munge scheme off
         
         // test invalid scheme
         $uri[17] = 'javascript:alert("moo");';
         $components[17] = false;
         $expect_uri[17] = '';
+        
+        // relative URIs
+        
+        // test basic case
+        $uri[18] = '/a/b';
+        $components[18] = array(null, '/a/b', null, null);
         
         foreach ($uri as $i => $value) {
             
@@ -172,7 +182,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
             }
             $result = $def->validate($value);
             $scheme->tally();
-            //$this->assertIdentical($expect_uri[$i], $result);
+            $this->assertIdentical($expect_uri[$i], $result);
             
         }
         

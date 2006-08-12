@@ -7,6 +7,7 @@ class HTMLPurifier_ConfigDef {
     function initialize() {
         $this->defineNamespace('Core', 'Core features that are always available.');
         $this->defineNamespace('Attr', 'Features regarding attribute validation.');
+        $this->defineNamespace('URI', 'Features regarding Uniform Resource Identifiers.');
     }
     
     function &instance($prototype = null) {
