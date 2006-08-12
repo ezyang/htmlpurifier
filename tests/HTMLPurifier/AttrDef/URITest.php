@@ -10,6 +10,8 @@ require_once 'HTMLPurifier/AttrDef/URI.php';
 class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
 {
     
+    var $scheme, $components, $return_components;
+    
     function testGenericURI() {
         
         generate_mock_once('HTMLPurifier_URIScheme');
@@ -18,7 +20,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $old_registry = HTMLPurifier_URISchemeRegistry::instance();
         
         // finally, lets get a copy of the actual class
-        $def = new HTMLPurifier_AttrDef_URI();
+        $this->def = new HTMLPurifier_AttrDef_URI();
         
         // initialize test inputs
         $uri = // input URI
@@ -140,9 +142,8 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $components[16] = array(null, '', null, null);
         //$expect_uri[16] = ''; // munge scheme off
         
-        // test invalid scheme
+        // test invalid scheme, components shouldn't be passed
         $uri[17] = 'javascript:alert("moo");';
-        $components[17] = false;
         $expect_uri[17] = '';
         
         // relative URIs
@@ -153,50 +154,64 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         
         foreach ($uri as $i => $value) {
             
-            // $fake_registry isn't the real mock, because due to PHP 4 weirdness
-            // I cannot set a default value to function parameters that are passed
-            // by reference. So we use the value instance() returns.
-            $fake_registry = new HTMLPurifier_URISchemeRegistryMock($this);
-            $registry =& HTMLPurifier_URISchemeRegistry::instance($fake_registry);
-            
-            // now, let's at a pseudo-scheme to the registry
-            $scheme =& new HTMLPurifier_URISchemeMock($this);
-            
-            // here are the schemes we will support with overloaded mocks
-            $registry->setReturnReference('getScheme', $scheme, array('http'));
-            $registry->setReturnReference('getScheme', $scheme, array('mailto'));
-            
-            // default return value is false (meaning no scheme defined: reject)
-            $registry->setReturnValue('getScheme', false, array('*'));
-            
-            if (!isset($return_components[$i])) {
-                $return_components[$i] = $components[$i];
-            }
-            if (!isset($expect_uri[$i])) {
-                $expect_uri[$i] = $value;
-            }
-            if (!isset($config[$i])) {
-                $config[$i] = HTMLPurifier_Config::createDefault();
-            }
-            if (!isset($context[$i])) {
-                $context[$i] = new HTMLPurifier_AttrContext();
-            }
-            if ($components[$i] === false) {
-                $scheme->expectNever('validateComponents');
+            // setUpAssertDef
+            if ( isset($components[$i]) ) {
+                $this->components = $components[$i];
             } else {
-                $scheme->setReturnValue(
-                    'validateComponents', $return_components[$i], $components[$i]);
-                $scheme->expectOnce('validateComponents', $components[$i]);
+                $this->components = false;
             }
-            $result = $def->validate($value, $config[$i], $context[$i]);
-            $scheme->tally();
-            $this->assertIdentical($expect_uri[$i], $result, "Test $i: %s");
+            if ( isset($return_components[$i]) ) {
+                $this->return_components = $return_components[$i];
+            } else {
+                $this->return_components = $this->components;
+            }
+            
+            // parameters
+            if (!isset($expect_uri[$i])) {
+                $expect_uri[$i] = $value; // untouched
+            }
+            
+            // the read in values
+            $this->config  = isset($config[$i])  ? $config[$i]  : null;
+            $this->context = isset($context[$i]) ? $context[$i] : null;
+            
+            $this->assertDef($value, $expect_uri[$i], "Test $i: %s");
             
         }
         
         // reset to regular implementation
         HTMLPurifier_URISchemeRegistry::instance($old_registry);
         
+    }
+    
+    function setUpAssertDef() {
+        // $fake_registry isn't the real mock, because due to PHP 4 weirdness
+        // I cannot set a default value to function parameters that are passed
+        // by reference. So we use the value instance() returns.
+        $fake_registry = new HTMLPurifier_URISchemeRegistryMock($this);
+        $registry =& HTMLPurifier_URISchemeRegistry::instance($fake_registry);
+        
+        // now, let's at a pseudo-scheme to the registry
+        $this->scheme =& new HTMLPurifier_URISchemeMock($this);
+        
+        // here are the schemes we will support with overloaded mocks
+        $registry->setReturnReference('getScheme', $this->scheme, array('http'));
+        $registry->setReturnReference('getScheme', $this->scheme, array('mailto'));
+        
+        // default return value is false (meaning no scheme defined: reject)
+        $registry->setReturnValue('getScheme', false, array('*'));
+        
+        if ($this->components === false) {
+            $this->scheme->expectNever('validateComponents');
+        } else {
+            $this->scheme->setReturnValue(
+                'validateComponents', $this->return_components, $this->components);
+            $this->scheme->expectOnce('validateComponents', $this->components);
+        }
+    }
+    
+    function tearDownAssertDef() {
+        $this->scheme->tally();
     }
     
 }
