@@ -52,6 +52,10 @@ class HTMLPurifier_URISchemeRegistry
         return $this->schemes[$scheme];
     }
     
+    function register($scheme, &$scheme_obj) {
+        $this->schemes[$scheme] =& $scheme_obj;
+    }
+    
 }
 
 ?>
