@@ -16,6 +16,14 @@ HTMLPurifier_ConfigDef::define(
     'prevents XSS attacks from using pseudo-schemes like javascript or mocha.'
 );
 
+HTMLPurifier_ConfigDef::define(
+    'URI', 'OverrideAllowedSchemes', true,
+    'If this is set to true (which it is by default), you can override '.
+    '%URI.AllowedSchemes by simply registering a HTMLPurifier_URIScheme '.
+    'to the registry.  If false, you will also have to update that directive '.
+    'in order to add more schemes.'
+);
+
 class HTMLPurifier_URISchemeRegistry
 {
     
@@ -38,11 +46,18 @@ class HTMLPurifier_URISchemeRegistry
     function &getScheme($scheme, $config = null) {
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $null = null; // for the sake of passing by reference
-        if (isset($this->schemes[$scheme])) return $this->schemes[$scheme];
-        if (empty($this->_dir)) $this->_dir = dirname(__FILE__) . '/URIScheme/';
         
         // important, otherwise attacker could include arbitrary file
         $allowed_schemes = $config->get('URI', 'AllowedSchemes');
+        if (!$config->get('URI', 'OverrideAllowedSchemes') &&
+            !isset($allowed_schemes[$scheme])
+        ) {
+            return $null;
+        }
+        
+        if (isset($this->schemes[$scheme])) return $this->schemes[$scheme];
+        if (empty($this->_dir)) $this->_dir = dirname(__FILE__) . '/URIScheme/';
+        
         if (!isset($allowed_schemes[$scheme])) return $null;
         
         @include_once $this->_dir . $scheme . '.php';

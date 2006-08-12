@@ -11,6 +11,7 @@ class HTMLPurifier_URISchemeRegistryTest extends UnitTestCase
         
         $config = HTMLPurifier_Config::createDefault();
         $config->set('URI', 'AllowedSchemes', array('http' => true, 'telnet' => true));
+        $config->set('URI', 'OverrideAllowedSchemes', true);
         
         $registry = new HTMLPurifier_URISchemeRegistry();
         $this->assertIsA($registry->getScheme('http'), 'HTMLPurifier_URIScheme_http');
@@ -31,7 +32,11 @@ class HTMLPurifier_URISchemeRegistryTest extends UnitTestCase
         $registry->register('foobar', $scheme_foobar);
         $this->assertIdentical($registry->getScheme('foobar', $config), $scheme_foobar);
         
-        // however, don't try to get a scheme that isn't allowed
+        // now, test when overriding is not allowed
+        $config->set('URI', 'OverrideAllowedSchemes', false);
+        $this->assertNull($registry->getScheme('foobar', $config));
+        
+        // scheme not allowed and never registered
         $this->assertNull($registry->getScheme('ftp', $config));
         
     }
