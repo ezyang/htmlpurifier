@@ -6,6 +6,7 @@ class HTMLPurifier_AttrDef_Composite_Testable extends
       HTMLPurifier_AttrDef_Composite
 {
     
+    // we need to pass by ref to get the mocks in
     function HTMLPurifier_AttrDef_Composite_Testable(&$defs) {
         $this->defs =& $defs;
     }
