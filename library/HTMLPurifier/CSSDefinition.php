@@ -49,9 +49,27 @@ class HTMLPurifier_CSSDefinition
         $this->info['border-bottom-color'] = 
         $this->info['border-left-color'] = 
         $this->info['border-right-color'] = 
-        $this->info['background-color'] = new HTMLPurifier_AttrDef_Composite( array(
+        $this->info['background-color'] = new HTMLPurifier_AttrDef_Composite(array(
             new HTMLPurifier_AttrDef_Enum(array('transparent')),
             new HTMLPurifier_AttrDef_Color()
+        ));
+        
+        $this->info['border-top-width'] = 
+        $this->info['border-bottom-width'] = 
+        $this->info['border-left-width'] = 
+        $this->info['border-right-width'] = new HTMLPurifier_AttrDef_Composite(array(
+            new HTMLPurifier_AttrDef_Enum(array('thin', 'medium', 'thick')),
+            new HTMLPurifier_AttrDef_CSSLength(true) //disallow negative
+        ));
+        
+        $this->info['letter-spacing'] = new HTMLPurifier_AttrDef_Composite(array(
+            new HTMLPurifier_AttrDef_Enum(array('normal')),
+            new HTMLPurifier_AttrDef_CSSLength()
+        ));
+        
+        $this->info['word-spacing'] = new HTMLPurifier_AttrDef_Composite(array(
+            new HTMLPurifier_AttrDef_Enum(array('normal')),
+            new HTMLPurifier_AttrDef_CSSLength()
         ));
         
         // this could use specialized code

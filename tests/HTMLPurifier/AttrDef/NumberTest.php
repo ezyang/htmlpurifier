@@ -26,6 +26,14 @@ class HTMLPurifier_AttrDef_NumberTest extends HTMLPurifier_AttrDefHarness
         
     }
     
+    function testNonNegative() {
+        
+        $this->def = new HTMLPurifier_AttrDef_Number(true);
+        $this->assertDef('23');
+        $this->assertDef('-12', false);
+        
+    }
+    
 }
 
 ?>

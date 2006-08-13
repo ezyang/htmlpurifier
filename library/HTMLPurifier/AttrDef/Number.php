@@ -3,6 +3,12 @@
 class HTMLPurifier_AttrDef_Number extends HTMLPurifier_AttrDef
 {
     
+    var $non_negative = false;
+    
+    function HTMLPurifier_AttrDef_Number($non_negative = false) {
+        $this->non_negative = $non_negative;
+    }
+    
     function validate($number, $config, &$context) {
         
         $number = $this->parseCDATA($number);
@@ -12,6 +18,7 @@ class HTMLPurifier_AttrDef_Number extends HTMLPurifier_AttrDef
         $sign = '';
         switch ($number[0]) {
             case '-':
+                if ($this->non_negative) return false;
                 $sign = '-';
             case '+':
                 $number = substr($number, 1);

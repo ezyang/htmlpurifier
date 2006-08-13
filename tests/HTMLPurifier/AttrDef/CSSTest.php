@@ -24,6 +24,13 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('background-color:transparent;');
         $this->assertDef('color:#F00;');
         $this->assertDef('border-top-color:#F00;');
+        $this->assertDef('border-top-width:thin;');
+        $this->assertDef('border-top-width:12px;');
+        $this->assertDef('border-top-width:-12px;', false);
+        $this->assertDef('letter-spacing:normal;');
+        $this->assertDef('letter-spacing:2px;');
+        $this->assertDef('word-spacing:normal;');
+        $this->assertDef('word-spacing:3em;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',
