@@ -21,10 +21,20 @@ class HTMLPurifier_AttrDef_CSS
             if (!strpos($declaration, ':')) continue;
             list($property, $value) = explode(':', $declaration, 2);
             if (!isset($definition->info[$property])) continue;
-            $result = $definition->info[$property]->validate($value,$config,$context);
+            // inefficient call, since the validator will do this again
+            // inherit works for everything
+            if (strtolower(trim($value)) !== 'inherit') {
+                $result = $definition->info[$property]->validate(
+                    $value, $config, $context );
+            } else {
+                $result = 'inherit';
+            }
             if ($result === false) continue;
             $propvalues[$property] = $result;
         }
+        
+        // slightly inefficient, but it's the only way of getting rid of
+        // duplicates. Perhaps config to optimize it, but not now.
         
         $new_declarations = '';
         foreach ($propvalues as $prop => $value) {
