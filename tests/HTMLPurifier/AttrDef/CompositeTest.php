@@ -2,6 +2,16 @@
 
 require_once 'HTMLPurifier/AttrDef/Composite.php';
 
+class HTMLPurifier_AttrDef_Composite_Testable extends
+      HTMLPurifier_AttrDef_Composite
+{
+    
+    function HTMLPurifier_AttrDef_Composite_Testable(&$defs) {
+        $this->defs =& $defs;
+    }
+    
+}
+
 class HTMLPurifier_AttrDef_CompositeTest extends HTMLPurifier_AttrDefHarness
 {
     
@@ -20,7 +30,7 @@ class HTMLPurifier_AttrDef_CompositeTest extends HTMLPurifier_AttrDefHarness
         $def1 =& new HTMLPurifier_AttrDefMock($this);
         $def2 =& new HTMLPurifier_AttrDefMock($this);
         $defs = array(&$def1, &$def2);
-        $def =& new HTMLPurifier_AttrDef_Composite($defs);
+        $def =& new HTMLPurifier_AttrDef_Composite_Testable($defs);
         $input = 'FOOBAR';
         $output = 'foobar';
         $def1_params = array($input, $config, $context);
@@ -39,7 +49,7 @@ class HTMLPurifier_AttrDef_CompositeTest extends HTMLPurifier_AttrDefHarness
         $def1 =& new HTMLPurifier_AttrDefMock($this);
         $def2 =& new HTMLPurifier_AttrDefMock($this);
         $defs = array(&$def1, &$def2);
-        $def =& new HTMLPurifier_AttrDef_Composite($defs);
+        $def =& new HTMLPurifier_AttrDef_Composite_Testable($defs);
         $input = 'BOOMA';
         $output = 'booma';
         $def_params = array($input, $config, $context);
@@ -59,7 +69,7 @@ class HTMLPurifier_AttrDef_CompositeTest extends HTMLPurifier_AttrDefHarness
         $def1 =& new HTMLPurifier_AttrDefMock($this);
         $def2 =& new HTMLPurifier_AttrDefMock($this);
         $defs = array(&$def1, &$def2);
-        $def =& new HTMLPurifier_AttrDef_Composite($defs);
+        $def =& new HTMLPurifier_AttrDef_Composite_Testable($defs);
         $input = 'BOOMA';
         $output = false;
         $def_params = array($input, $config, $context);

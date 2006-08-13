@@ -20,6 +20,10 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('list-style-position:outside;');
         $this->assertDef('list-style-type:upper-roman;');
         $this->assertDef('text-transform:capitalize;');
+        $this->assertDef('background-color:rgb(0,0,255);');
+        $this->assertDef('background-color:transparent;');
+        $this->assertDef('color:#F00;');
+        $this->assertDef('border-top-color:#F00;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',

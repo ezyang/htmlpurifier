@@ -5,8 +5,8 @@ class HTMLPurifier_AttrDef_Composite extends HTMLPurifier_AttrDef
     
     var $defs;
     
-    function HTMLPurifier_AttrDef_Composite(&$defs) {
-        $this->defs =& $defs;
+    function HTMLPurifier_AttrDef_Composite($defs) {
+        $this->defs = $defs;
     }
     
     function validate($string, $config, &$context) {

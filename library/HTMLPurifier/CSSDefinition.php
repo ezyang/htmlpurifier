@@ -43,6 +43,16 @@ class HTMLPurifier_CSSDefinition
             'upper-roman', 'lower-alpha', 'upper-alpha'), false);
         $this->info['text-transform'] = new HTMLPurifier_AttrDef_Enum(
             array('capitalize', 'uppercase', 'lowercase', 'none'), false);
+        $this->info['color'] = new HTMLPurifier_AttrDef_Color();
+        
+        $this->info['border-top-color'] = 
+        $this->info['border-bottom-color'] = 
+        $this->info['border-left-color'] = 
+        $this->info['border-right-color'] = 
+        $this->info['background-color'] = new HTMLPurifier_AttrDef_Composite( array(
+            new HTMLPurifier_AttrDef_Enum(array('transparent')),
+            new HTMLPurifier_AttrDef_Color()
+        ));
         
         // this could use specialized code
         $this->info['font-weight'] = new HTMLPurifier_AttrDef_Enum(
