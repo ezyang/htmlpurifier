@@ -11,7 +11,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         
         // regular cases, singular
         $this->assertDef('text-align:right;');
-        $this->assertDef('border-style:solid;');
+        $this->assertDef('border-left-style:solid;');
         $this->assertDef('clear:right;');
         $this->assertDef('float:left;');
         $this->assertDef('font-style:italic;');

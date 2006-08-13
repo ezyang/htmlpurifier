@@ -22,7 +22,10 @@ class HTMLPurifier_CSSDefinition
         
         $this->info['text-align'] = new HTMLPurifier_AttrDef_Enum(
             array('left', 'right', 'center', 'justify'), false);
-        $this->info['border-style'] =  new HTMLPurifier_AttrDef_Enum(
+        $this->info['border-bottom-style'] = 
+        $this->info['border-right-style'] = 
+        $this->info['border-left-style'] = 
+        $this->info['border-top-style'] =  new HTMLPurifier_AttrDef_Enum(
             array('none', 'hidden', 'dotted', 'dashed', 'solid', 'double',
             'groove', 'ridge', 'inset', 'outset'), false);
         $this->info['clear'] = new HTMLPurifier_AttrDef_Enum(
