@@ -3,6 +3,15 @@
 require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/AttrDef/Pixels.php';
 
+/**
+ * Validates the HTML type length (not to be confused with CSS's length).
+ * 
+ * This accepts integer pixels or percentages as lengths for certain
+ * HTML attributes. Don't use this for CSS: that's
+ * HTMLPurifier_AttrDef_CSSLength which requires prefixes and allows a lot
+ * more different types.
+ */
+
 class HTMLPurifier_AttrDef_Length extends HTMLPurifier_AttrDef_Pixels
 {
     
