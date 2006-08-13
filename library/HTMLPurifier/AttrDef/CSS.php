@@ -3,10 +3,12 @@
 require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/CSSDefinition.php';
 
-class HTMLPurifier_AttrDef_CSS
+class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
 {
     
     function validate($css, $config, &$context) {
+        
+        $css = $this->parseCDATA($css);
         
         $definition = HTMLPurifier_CSSDefinition::instance();
         
