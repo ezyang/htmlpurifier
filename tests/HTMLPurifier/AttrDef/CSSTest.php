@@ -22,14 +22,16 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('text-transform:capitalize;');
         
         // duplicates
-        $this->assertDef('text-align:right;text-align:left;', 'text-align:left;');
+        $this->assertDef('text-align:right;text-align:left;',
+                                          'text-align:left;');
         
         // a few composites
         $this->assertDef('font-variant:small-caps;font-weight:900;');
         $this->assertDef('float:right;text-align:right;');
         
         // selective removal
-        $this->assertDef('text-transform:capitalize;destroy:it;', 'text-transform:capitalize;');
+        $this->assertDef('text-transform:capitalize;destroy:it;',
+                         'text-transform:capitalize;');
         
         // inherit works for everything
         $this->assertDef('text-align:inherit;');
