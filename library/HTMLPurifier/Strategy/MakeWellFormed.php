@@ -15,7 +15,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $this->definition = HTMLPurifier_Definition::instance();
     }
     
-    function execute($tokens) {
+    function execute($tokens, $config) {
         $result = array();
         $current_nesting = array();
         foreach ($tokens as $token) {

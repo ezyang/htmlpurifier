@@ -7,6 +7,7 @@ require_once 'HTMLPurifier/Generator.php';
 class HTMLPurifier_ChildDefTest extends UnitTestCase
 {
     
+    var $def;
     var $lex;
     var $gen;
     
@@ -16,21 +17,24 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         parent::UnitTestCase();
     }
     
-    function assertSeries($inputs, $expect, $def, $context = array()) {
+    function assertSeries($inputs, $expect, $config, $context = array()) {
         foreach ($inputs as $i => $input) {
             $tokens = $this->lex->tokenizeHTML($input);
             
-            if (isset($context[$i])) {
-                $result = $def->validateChildren($tokens, $context[$i]);
-            } else {
-                $result = $def->validateChildren($tokens);
+            if (!isset($context[$i])) {
+                $context[$i] = null;
+            }
+            if (!isset($config[$i])) {
+                $config[$i] = HTMLPurifier_Config::createDefault();
             }
             
+            $result = $this->def->validateChildren($tokens, $config[$i], $context[$i]);
+            
             if (is_bool($expect[$i])) {
-                $this->assertIdentical($expect[$i], $result);
+                $this->assertIdentical($expect[$i], $result, "Test $i: %s");
             } else {
                 $result_html = $this->gen->generateFromTokens($result);
-                $this->assertEqual($expect[$i], $result_html, "Test $i: %s");
+                $this->assertIdentical($expect[$i], $result_html, "Test $i: %s");
                 paintIf($result_html, $result_html != $expect[$i]);
             }
         }
@@ -39,8 +43,10 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
     function test_custom() {
         
         // the table definition
-        $def = new HTMLPurifier_ChildDef_Custom(
+        $this->def = new HTMLPurifier_ChildDef_Custom(
             '(caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))');
+        
+        $inputs = $expect = $config = array();
         
         $inputs[0] = '';
         $expect[0] = false;
@@ -58,7 +64,7 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         $inputs[3] = '<col></col><col></col><col></col><tr></tr>';
         $expect[3] = true;
         
-        $this->assertSeries($inputs, $expect, $def);
+        $this->assertSeries($inputs, $expect, $config);
         
     }
     
@@ -82,7 +88,8 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
     
     function test_required_pcdata_forbidden() {
         
-        $def = new HTMLPurifier_ChildDef_Required('dt | dd');
+        $this->def = new HTMLPurifier_ChildDef_Required('dt | dd');
+        $inputs = $expect = $config = array();
         
         $inputs[0] = '';
         $expect[0] = false;
@@ -105,21 +112,31 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         $inputs[5] = "\t      ";
         $expect[5] = false;
         
-        $this->assertSeries($inputs, $expect, $def);
+        $this->assertSeries($inputs, $expect, $config);
         
     }
     
     function test_required_pcdata_allowed() {
-        $def = new HTMLPurifier_ChildDef_Required('#PCDATA | b');
+        $this->def = new HTMLPurifier_ChildDef_Required('#PCDATA | b');
+        
+        $inputs = $expect = $config = array();
         
         $inputs[0] = '<b>Bold text</b><img />';
-        $expect[0] = '<b>Bold text</b>&lt;img /&gt;';
+        $expect[0] = '<b>Bold text</b>';
         
-        $this->assertSeries($inputs, $expect, $def);
+        // with child escaping on
+        $inputs[1] = '<b>Bold text</b><img />';
+        $expect[1] = '<b>Bold text</b>&lt;img /&gt;';
+        $config[1] = HTMLPurifier_Config::createDefault();
+        $config[1]->set('Core', 'EscapeInvalidChildren', true);
+        
+        $this->assertSeries($inputs, $expect, $config);
     }
     
     function test_optional() {
-        $def = new HTMLPurifier_ChildDef_Optional('b | i');
+        $this->def = new HTMLPurifier_ChildDef_Optional('b | i');
+        
+        $inputs = $expect = $config = array();
         
         $inputs[0] = '<b>Bold text</b><img />';
         $expect[0] = '<b>Bold text</b>';
@@ -127,15 +144,18 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         $inputs[1] = 'Not allowed text';
         $expect[1] = '';
         
-        $this->assertSeries($inputs, $expect, $def);
+        $this->assertSeries($inputs, $expect, $config);
     }
     
     function test_chameleon() {
         
-        $def = new HTMLPurifier_ChildDef_Chameleon(
+        $this->def = new HTMLPurifier_ChildDef_Chameleon(
             'b | i', // allowed only when in inline context
             'b | i | div' // allowed only when in block context
         );
+        
+        $inputs = $expect = $config = array();
+        $context = array();
         
         $inputs[0] = '<b>Allowed.</b>';
         $expect[0] = true;
@@ -149,7 +169,7 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         $expect[2] = true;
         $context[2] = 'block';
         
-        $this->assertSeries($inputs, $expect, $def, $context);
+        $this->assertSeries($inputs, $expect, $config, $context);
         
     }
     

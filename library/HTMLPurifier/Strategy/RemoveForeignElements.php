@@ -24,7 +24,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         $this->definition = HTMLPurifier_Definition::instance();
     }
     
-    function execute($tokens) {
+    function execute($tokens, $config) {
         $result = array();
         foreach($tokens as $token) {
             if (!empty( $token->is_tag )) {

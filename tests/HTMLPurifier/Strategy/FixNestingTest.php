@@ -13,6 +13,10 @@ class HTMLPurifier_Strategy_FixNestingTest
         
         $inputs = array();
         $expect = array();
+        $config = array();
+        
+        $config_escape = HTMLPurifier_Config::createDefault();
+        $config_escape->set('Core', 'EscapeInvalidChildren', true);
         
         // next id = 4
         
@@ -27,7 +31,12 @@ class HTMLPurifier_Strategy_FixNestingTest
         
         // illegal block in inline, element -> text
         $inputs[2] = '<b><div>Illegal div.</div></b>';
-        $expect[2] = '<b>&lt;div&gt;Illegal div.&lt;/div&gt;</b>';
+        $expect[2] = '<b></b>';
+        
+        // same test with different configuration (fragile)
+        $inputs[13]  = '<b><div>Illegal div.</div></b>';
+        $expect[13] = '<b>&lt;div&gt;Illegal div.&lt;/div&gt;</b>';
+        $config[13] = $config_escape;
         
         // test of empty set that's required, resulting in removal of node
         $inputs[3] = '<ul></ul>';
@@ -63,13 +72,20 @@ class HTMLPurifier_Strategy_FixNestingTest
         
         // block in inline ins not allowed
         $inputs[11] = '<span><ins><div>Not allowed!</div></ins></span>';
-        $expect[11] = '<span><ins>&lt;div&gt;Not allowed!&lt;/div&gt;</ins></span>';
+        $expect[11] = '<span><ins></ins></span>';
+        
+        // block in inline ins not allowed
+        $inputs[14] = '<span><ins><div>Not allowed!</div></ins></span>';
+        $expect[14] = '<span><ins>&lt;div&gt;Not allowed!&lt;/div&gt;</ins></span>';
+        $config[14] = $config_escape;
         
         // test exclusions
         $inputs[12] = '<a><span><a>Not allowed</a></span></a>';
         $expect[12] = '<a><span></span></a>';
         
-        $this->assertStrategyWorks($strategy, $inputs, $expect);
+        // next test is *15*
+        
+        $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
     }
     
 }

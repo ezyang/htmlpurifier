@@ -40,7 +40,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
         $this->definition = HTMLPurifier_Definition::instance();
     }
     
-    function execute($tokens) {
+    function execute($tokens, $config) {
         
         //####################################################################//
         // Pre-processing
@@ -147,7 +147,8 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 $child_def = $def->child;
                 
                 // have DTD child def validate children
-                $result = $child_def->validateChildren($child_tokens, $context);
+                $result = $child_def->validateChildren(
+                    $child_tokens, $config,$context);
                 
                 // determine whether or not this element has any exclusions
                 $excludes = $def->excludes;

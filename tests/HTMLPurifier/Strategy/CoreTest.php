@@ -12,6 +12,10 @@ class HTMLPurifier_Strategy_CoreTest
         
         $inputs = array();
         $expect = array();
+        $config = array();
+        
+        $config_escape = HTMLPurifier_Config::createDefault();
+        $config_escape->set('Core', 'EscapeInvalidChildren', true);
         
         $inputs[0] = '';
         $expect[0] = '';
@@ -19,19 +23,17 @@ class HTMLPurifier_Strategy_CoreTest
         $inputs[1] = '<b>Make well formed.';
         $expect[1] = '<b>Make well formed.</b>';
         
-        // behavior may change
         $inputs[2] = '<b><div>Fix nesting.</div></b>';
-        $expect[2] = '<b>&lt;div&gt;Fix nesting.&lt;/div&gt;</b>';
+        $expect[2] = '<b></b>';
         
         // behavior may change
         $inputs[3] = '<asdf>Foreign element removal.</asdf>';
         $expect[3] = '&lt;asdf&gt;Foreign element removal.&lt;/asdf&gt;';
         
-        // behavior may change
         $inputs[4] = '<foo><b><div>All three.</div></b>';
-        $expect[4] = '&lt;foo&gt;<b>&lt;div&gt;All three.&lt;/div&gt;</b>';
+        $expect[4] = '&lt;foo&gt;<b></b>';
         
-        $this->assertStrategyWorks($strategy, $inputs, $expect);
+        $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
     }
     
 }

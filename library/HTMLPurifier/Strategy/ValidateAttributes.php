@@ -23,10 +23,7 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
         $this->definition = HTMLPurifier_Definition::instance();
     }
     
-    function execute($tokens, $config = null) {
-        
-        // load default configuration object if none passed
-        if (!$config) $config = HTMLPurifier_Config::createDefault();
+    function execute($tokens, $config) {
         
         // setup StrategyContext
         $context = new HTMLPurifier_AttrContext();

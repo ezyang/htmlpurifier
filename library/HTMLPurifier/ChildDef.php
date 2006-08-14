@@ -12,6 +12,13 @@
 // we may end up writing custom code for each HTML case
 // in order to make it self correcting
 
+HTMLPurifier_ConfigDef::define(
+    'Core', 'EscapeInvalidChildren', false,
+    'When true, a child is found that is not allowed in the context of the '.
+    'parent element will be transformed into text as if it were ASCII. When '.
+    'false, that element (and all its descendants) will be silently dropped.'
+);
+
 class HTMLPurifier_ChildDef
 {
     var $type;
@@ -40,7 +47,7 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
         $reg = preg_replace('/([#a-zA-Z0-9_.-]+)/', '(,?\\0)', $reg);
         $this->_pcre_regex = $reg;
     }
-    function validateChildren($tokens_of_children) {
+    function validateChildren($tokens_of_children, $config, $context) {
         $list_of_children = '';
         $nesting = 0; // depth into the nest
         foreach ($tokens_of_children as $token) {
@@ -85,7 +92,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
     }
     var $allow_empty = false;
     var $type = 'required';
-    function validateChildren($tokens_of_children) {
+    function validateChildren($tokens_of_children, $config, $context) {
         // if there are no tokens, delete parent node
         if (empty($tokens_of_children)) return false;
         
@@ -106,6 +113,9 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
         // a little sanity check to make sure it's not ALL whitespace
         $all_whitespace = true;
         
+        // some configuration
+        $escape_invalid_children = $config->get('Core', 'EscapeInvalidChildren');
+        
         foreach ($tokens_of_children as $token) {
             if (!empty($token->is_whitespace)) {
                 $result[] = $token;
@@ -125,21 +135,21 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
                 $is_deleting = false;
                 if (!isset($this->elements[$token->name])) {
                     $is_deleting = true;
-                    if ($pcdata_allowed) {
-                        //$result[] = new HTMLPurifier_Token_Text(
-                        //    $this->gen->generateFromToken($token)
-                        //);
+                    if ($pcdata_allowed && $escape_invalid_children) {
+                        $result[] = new HTMLPurifier_Token_Text(
+                            $this->gen->generateFromToken($token)
+                        );
                     }
                     continue;
                 }
             }
             if (!$is_deleting) {
                 $result[] = $token;
-            } elseif ($pcdata_allowed) {
-                //$result[] =
-                //    new HTMLPurifier_Token_Text(
-                //        $this->gen->generateFromToken( $token )
-                //    );
+            } elseif ($pcdata_allowed && $escape_invalid_children) {
+                $result[] =
+                    new HTMLPurifier_Token_Text(
+                        $this->gen->generateFromToken( $token )
+                    );
             } else {
                 // drop silently
             }
@@ -157,8 +167,8 @@ class HTMLPurifier_ChildDef_Optional extends HTMLPurifier_ChildDef_Required
 {
     var $allow_empty = true;
     var $type = 'optional';
-    function validateChildren($tokens_of_children) {
-        $result = parent::validateChildren($tokens_of_children);
+    function validateChildren($tokens_of_children, $config, $context) {
+        $result = parent::validateChildren($tokens_of_children, $config, $context);
         if ($result === false) return array();
         return $result;
     }
@@ -170,7 +180,7 @@ class HTMLPurifier_ChildDef_Empty extends HTMLPurifier_ChildDef
     var $allow_empty = true;
     var $type = 'empty';
     function HTMLPurifier_ChildDef_Empty() {}
-    function validateChildren() {
+    function validateChildren($tokens_of_children, $config, $context) {
         return false;
     }
 }
@@ -186,14 +196,16 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
         $this->block  = new HTMLPurifier_ChildDef_Optional($block);
     }
     
-    function validateChildren($tokens_of_children, $context) {
+    function validateChildren($tokens_of_children, $config, $context) {
         switch ($context) {
             case 'unknown':
             case 'inline':
-                $result = $this->inline->validateChildren($tokens_of_children);
+                $result = $this->inline->validateChildren(
+                    $tokens_of_children, $config, $context);
                 break;
             case 'block':
-                $result = $this->block->validateChildren($tokens_of_children);
+                $result = $this->block->validateChildren(
+                    $tokens_of_children, $config, $context);
                 break;
             default:
                 trigger_error('Invalid context', E_USER_ERROR);
