@@ -43,8 +43,8 @@ class HTMLPurifier_AttrTransform_TextAlignTest extends HTMLPurifier_AttrTransfor
         $expect[7] = array('style' => 'text-align:left;font-weight:bold;');
         
         // test case insensitivity
-        $inputs[4] = array('align' => 'CENTER');
-        $expect[4] = array('style' => 'text-align:center;');
+        $inputs[8] = array('align' => 'CENTER');
+        $expect[8] = array('style' => 'text-align:center;');
         
         $this->assertTransform($inputs, $expect);
         
