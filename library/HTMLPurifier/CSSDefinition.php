@@ -4,6 +4,7 @@ require_once 'HTMLPurifier/AttrDef/Enum.php';
 require_once 'HTMLPurifier/AttrDef/Color.php';
 require_once 'HTMLPurifier/AttrDef/Composite.php';
 require_once 'HTMLPurifier/AttrDef/CSSLength.php';
+require_once 'HTMLPurifier/AttrDef/Percentage.php';
 
 class HTMLPurifier_CSSDefinition
 {
