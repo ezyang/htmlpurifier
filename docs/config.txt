@@ -3,5 +3,9 @@ Configuration
 
 Configuration is documented on a per-use case: if a class uses a certain
 value from the configuration object, it has to define its name and what the
-value is used for.  This means decentralized configuration declaration that
-is nevertheless error checking.
+value is used for.  This means decentralized configuration declarations that
+are nevertheless error checking and a centralized configuration object.
+
+Directives are divided into namespaces, indicating the major portion of
+functionality they cover (although there may be overlaps.  Please consult
+the documentation in ConfigDef for more information on these namespaces.

@@ -12,12 +12,6 @@ HTMLPurifier_ConfigDef::define(
 class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
 {
     
-    var $required = false;
-    
-    function HTMLPurifier_AttrDef_URI($required = false) {
-        $this->required = $required;
-    }
-    
     function validate($uri, $config, &$context) {
         
         // We'll write stack-based parsers later, for now, use regexps to
@@ -30,18 +24,23 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         // for HTTP and thus won't work for our generic URI parsing
         
         // according to the RFC... (but this cuts corners, i.e. non-validating)
-        $r_URI = '!^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?!';
-        //           12            3  4          5       6  7        8 9
+        $r_URI = '!^'.
+            '(([^:/?#<>]+):)?'. // 2. Scheme
+            '(//([^/?#<>]*))?'. // 4. Authority
+            '([^?#<>]*)'.       // 5. Path
+            '(\?([^#<>]*))?'.   // 7. Query
+            '(#([^<>]*))?'.     // 8. Fragment
+            '$!';
         
         $matches = array();
         $result = preg_match($r_URI, $uri, $matches);
         
-        if (!$result)  return '';
+        if (!$result) return false; // invalid URI
         
         // seperate out parts
         $scheme     = !empty($matches[1]) ? $matches[2] : null;
         $authority  = !empty($matches[3]) ? $matches[4] : null;
-        $path       = $matches[5]; // always present
+        $path       = $matches[5]; // always present, can be empty
         $query      = !empty($matches[6]) ? $matches[7] : null;
         $fragment   = !empty($matches[8]) ? $matches[9] : null;
         
@@ -53,7 +52,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             // retrieve the specific scheme object from the registry
             $scheme = ctype_lower($scheme) ? $scheme : strtolower($scheme);
             $scheme_obj =& $registry->getScheme($scheme, $config);
-            if (!$scheme_obj) return $this->required ? '' : false; // invalid scheme, clean it out
+            if (!$scheme_obj) return false; // invalid scheme, clean it out
         } else {
             $scheme_obj =& $registry->getScheme(
                 $config->get('URI', 'DefaultScheme'), $config
