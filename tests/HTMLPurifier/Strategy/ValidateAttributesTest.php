@@ -12,6 +12,9 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         
         $strategy = new HTMLPurifier_Strategy_ValidateAttributes();
         
+        // attribute order is VERY fragile, perhaps we should define
+        // an ordering scheme!
+        
         $inputs = array();
         $expect = array();
         $config = array();
@@ -68,8 +71,9 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $expect[12] = '<h1 style="text-align:center;">Centered Headline</h1>';
         
         // test table
-        $inputs[13] = <<<HTML
-<table frame="above" rules="rows" summary="A test table" border="2" cellpadding="5%" cellspacing="3" width="100%">
+        $inputs[13] = 
+        
+'<table frame="above" rules="rows" summary="A test table" border="2" cellpadding="5%" cellspacing="3" width="100%">
     <col align="right" width="4*" />
     <col charoff="5" align="char" width="1*" />
     <tr valign="top">
@@ -83,8 +87,8 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     <tr>
         <td colspan="2">Taken off the market</td>
     </tr>
-</table>
-HTML;
+</table>';
+        
         $expect[13] = $inputs[13];
         
         // test URI
@@ -94,6 +98,27 @@ HTML;
         // test invalid URI
         $inputs[15] = '<a href="javascript:badstuff();">Google</a>';
         $expect[15] = '<a>Google</a>';
+        
+        // test required attributes for img
+        $inputs[16] = '<img />';
+        $expect[16] = '<img src="" alt="Invalid image" />';
+        
+        $inputs[17] = '<img src="foobar.jpg" />';
+        $expect[17] = '<img src="foobar.jpg" alt="foobar.jpg" />';
+        
+        $inputs[18] = '<img alt="pretty picture" />';
+        $expect[18] = '<img alt="pretty picture" src="" />';
+        
+        // test required attributes for bdo
+        $inputs[19] = '<bdo>Go left.</bdo>';
+        $expect[19] = '<bdo dir="ltr">Go left.</bdo>';
+        
+        $inputs[20] = '<bdo dir="blahblah">Invalid value!</bdo>';
+        $expect[20] = '<bdo dir="ltr">Invalid value!</bdo>';
+        
+        // comparison check for test 20
+        $inputs[21] = '<span dir="blahblah">Invalid value!</span>';
+        $expect[21] = '<span>Invalid value!</span>';
         
         $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
         

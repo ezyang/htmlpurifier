@@ -80,7 +80,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     <tr><td>DEL, INS</td><td>Link to explanation why it changed</td></tr>
 <tr><td>href</td><td>A</td><td>-</td></tr>
 <tr><td>longdesc</td><td>IMG</td><td>-</td></tr>
-<tr class="required impl-partial"><td>src</td><td>IMG</td><td>Required</td></tr>
+<tr class="required"><td>src</td><td>IMG</td><td>Required</td></tr>
 </tbody>
 
 <tbody>
@@ -90,14 +90,14 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     <tr><td>TABLE</td></tr>
     <tr><td>HR</td><td>Equivalent style 'text-align' (IE tested)</td></tr>
     <tr class="impl-yes"><td>H1, H2, H3, H4, H5, H6, P</td><td>Equivalent style 'text-align'</td></tr>
-<tr class="required"><td>alt</td><td>IMG</td><td>Required, insert image filename if non-existant</td></tr>
+<tr class="required impl-yes"><td>alt</td><td>IMG</td><td>Required, insert image filename if src is present or default invalid image text</td></tr>
 <tr><td rowspan="3">bgcolor</td><td>TABLE</td><td>Equivalent style 'background-color' (IE tested)</td></tr>
     <tr><td>TR</td><td>Equivalent style 'background-color' (IE tested)</td></tr>
     <tr><td>TD, TH</td><td>Equivalent style 'background-color'</td></tr>
 <tr><td>border</td><td>IMG</td><td>Equivalent style 'border-width', only applies when link present</td></tr>
 <tr><td>clear</td><td>BR</td><td>Near-equiv style 'clear', transform 'all' into 'both'</td></tr>
 <tr class="impl-no"><td>compact</td><td>DL, OL, UL</td><td>Boolean, needs custom CSS class</td></tr>
-<tr class="required"><td>dir</td><td>BDO</td><td>Required, insert ltr (or configuration value) if none</td></tr>
+<tr class="required impl-yes"><td>dir</td><td>BDO</td><td>Required, insert ltr (or configuration value) if none</td></tr>
 <tr><td>height</td><td>TD, TH</td><td>Near-equiv style 'height', needs px suffix if original was in pixels</td></tr>
 <tr><td>hspace</td><td>IMG</td><td>Near-equiv styles 'margin-top' and 'margin-bottom', needs px suffix</td></tr>
 <tr class="impl-yes"><td>lang</td><td>*</td><td>Copy value to xml:lang</td></tr>
@@ -106,7 +106,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td>noshade</td><td>HR</td><td>Boolean, style 'border-style:solid;'</td></tr>
 <tr><td>nowrap</td><td>TD, TH</td><td>Boolean, style 'white-space:nowrap;' (not compat with IE5)</td></tr>
 <tr><td>size</td><td>HR</td><td>Near-equiv 'width', needs px suffix if original was pixels</td></tr>
-<tr class="required"><td>src</td><td>IMG</td><td>Required, insert blank or default img if not set</td></tr>
+<tr class="required impl-yes"><td>src</td><td>IMG</td><td>Required, insert blank or default img if not set</td></tr>
 <tr><td>start</td><td>OL</td><td>Poorly supported 'counter-reset', transform may not be desirable</td></tr>
 <tr><td rowspan="3">type</td><td>LI</td><td rowspan="3">Equivalent style 'list-style-type', different allowed values though. (needs testing)</td></tr>
     <tr><td>OL</td></tr>
@@ -168,7 +168,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     decimal, lower-roman, upper-roman, lower-alpha and upper-alpha. See also
     CSS 3. Mostly IE lack of support.</td></tr>
 <tr class="css1"><td>list-style</td><td>SHORTHAND</td></tr>
-<tr class="css1"><td>margin</td><td>MULIPLE</td></tr>
+<tr class="css1"><td>margin</td><td>MULTIPLE</td></tr>
 <tr class="css1"><td>margin-*</td><td>COMPOSITE(&lt;length&gt;,
     &lt;percentage&gt;, auto)</td></tr>
 <tr class="css1"><td>padding</td><td>MULTIPLE</td></tr>

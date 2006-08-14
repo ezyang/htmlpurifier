@@ -5,7 +5,7 @@ require_once 'HTMLPurifier/AttrTransform.php';
 class HTMLPurifier_AttrTransform_TextAlign
     extends HTMLPurifier_AttrTransform {
 
-    function transform($attr) {
+    function transform($attr, $config) {
         
         if (!isset($attr['align'])) return $attr;
         

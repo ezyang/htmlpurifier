@@ -74,6 +74,8 @@ $test_files[] = 'IDAccumulatorTest.php';
 $test_files[] = 'TagTransformTest.php';
 $test_files[] = 'AttrTransform/LangTest.php';
 $test_files[] = 'AttrTransform/TextAlignTest.php';
+$test_files[] = 'AttrTransform/BdoDirTest.php';
+$test_files[] = 'AttrTransform/ImgRequiredTest.php';
 $test_files[] = 'URISchemeRegistryTest.php';
 $test_files[] = 'URISchemeTest.php';
 

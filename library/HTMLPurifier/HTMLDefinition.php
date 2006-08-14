@@ -15,6 +15,8 @@ require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/AttrTransform.php';
     require_once 'HTMLPurifier/AttrTransform/Lang.php';
     require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
+    require_once 'HTMLPurifier/AttrTransform/BdoDir.php';
+    require_once 'HTMLPurifier/AttrTransform/ImgRequired.php';
 require_once 'HTMLPurifier/ChildDef.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Token.php';
@@ -56,7 +58,8 @@ class HTMLPurifier_HTMLDefinition
     var $info_tag_transform = array();
     
     // used solely by HTMLPurifier_Strategy_ValidateAttributes
-    var $info_attr_transform = array();
+    var $info_attr_transform_pre = array();
+    var $info_attr_transform_post = array();
     
     // WARNING! Prototype is not passed by reference, so in order to get
     // a copy of the real one, you'll have to destroy your copy and
@@ -350,23 +353,31 @@ class HTMLPurifier_HTMLDefinition
         // or we can just create another info
         
         //////////////////////////////////////////////////////////////////////
-        // info[]->attr_transform : attribute transformations in elements
+        // info[]->attr_transform_* : attribute transformations in elements
+        // pre is applied before any validation is done, post is done after
         
-        $transform = new HTMLPurifier_AttrTransform_TextAlign();
-        $this->info['h1']->attr_transform[] =
-        $this->info['h2']->attr_transform[] =
-        $this->info['h3']->attr_transform[] =
-        $this->info['h4']->attr_transform[] =
-        $this->info['h5']->attr_transform[] =
-        $this->info['h6']->attr_transform[] =
-        $this->info['p'] ->attr_transform[] = $transform;
+        $this->info['h1']->attr_transform_pre[] =
+        $this->info['h2']->attr_transform_pre[] =
+        $this->info['h3']->attr_transform_pre[] =
+        $this->info['h4']->attr_transform_pre[] =
+        $this->info['h5']->attr_transform_pre[] =
+        $this->info['h6']->attr_transform_pre[] =
+        $this->info['p'] ->attr_transform_pre[] = 
+                    new HTMLPurifier_AttrTransform_TextAlign();
+        
+        $this->info['bdo']->attr_transform_post[] =
+                    new HTMLPurifier_AttrTransform_BdoDir();
+        
+        $this->info['img']->attr_transform_post[] =
+                    new HTMLPurifier_AttrTransform_ImgRequired();
         
         //////////////////////////////////////////////////////////////////////
-        // info_attr_transform : global attribute transformation that is
+        // info_attr_transform_* : global attribute transformation that is
         // unconditionally called. Good for transformations that have complex
         // start conditions
+        // pre is applied before any validation is done, post is done after
         
-        $this->info_attr_transform[] = new HTMLPurifier_AttrTransform_Lang();
+        $this->info_attr_transform_post[] = new HTMLPurifier_AttrTransform_Lang();
         
     }
     
@@ -387,7 +398,8 @@ class HTMLPurifier_ElementDef
 {
     
     var $attr = array();
-    var $attr_transform = array();
+    var $attr_transform_pre = array();
+    var $attr_transform_post = array();
     var $auto_close = array();
     var $child;
     var $type = 'unknown';

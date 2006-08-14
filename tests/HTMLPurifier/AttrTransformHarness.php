@@ -5,14 +5,13 @@ class HTMLPurifier_AttrTransformHarness extends UnitTestCase
     
     var $transform;
     
-    function assertTransform($inputs, $expect) {
+    function assertTransform($inputs, $expect, $config = array()) {
+        $default_config = HTMLPurifier_Config::createDefault();
         foreach ($inputs as $i => $input) {
-            $result = $this->transform->transform($input);
-            if ($expect[$i] === true) {
-                $this->assertEqual($input, $result, "Test $i: %s");
-            } else {
-                $this->assertEqual($expect[$i], $result, "Test $i: %s");
-            }
+            if (!isset($config[$i])) $config[$i] = $default_config;
+            $result = $this->transform->transform($input, $config[$i]);
+            if ($expect[$i] === true) $expect[$i] = $input;
+            $this->assertEqual($expect[$i], $result, "Test $i: %s");
         }
     }
     

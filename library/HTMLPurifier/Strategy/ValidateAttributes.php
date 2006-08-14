@@ -47,20 +47,20 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             // copy out attributes for easy manipulation
             $attr = $token->attributes;
             
-            // do global transformations
+            // do global transformations (pre)
             // ex. <ELEMENT lang="fr"> to <ELEMENT lang="fr" xml:lang="fr">
             // DEFINITION CALL
-            foreach ($this->definition->info_attr_transform as $transform) {
-                $attr = $transform->transform($attr);
+            foreach ($this->definition->info_attr_transform_pre as $transform) {
+                $attr = $transform->transform($attr, $config);
             }
             
-            // do local transformations only applicable to this element
+            // do local transformations only applicable to this element (pre)
             // ex. <p align="right"> to <p style="text-align:right;">
             // DEFINITION CALL
-            foreach ($this->definition->info[$token->name]->attr_transform
+            foreach ($this->definition->info[$token->name]->attr_transform_pre
                 as $transform
             ) {
-                $attr = $transform->transform($attr);
+                $attr = $transform->transform($attr, $config);
             }
             
             // create alias to this element's attribute definition array, see
@@ -113,6 +113,14 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
                 // although we're not sure how colliding attributes would
                 // resolve (certain ones would be completely overriden,
                 // others would prepend themselves).
+            }
+            
+            // post transforms
+            foreach ($this->definition->info_attr_transform_post as $transform) {
+                $attr = $transform->transform($attr, $config);
+            }
+            foreach ($this->definition->info[$token->name]->attr_transform_post as $transform) {
+                $attr = $transform->transform($attr, $config);
             }
             
             // commit changes
