@@ -77,11 +77,20 @@ class HTMLPurifier_CSSDefinition
             new HTMLPurifier_AttrDef_CSSLength()
         ));
         
+        $this->info['font-size'] = new HTMLPurifier_AttrDef_Composite(array(
+            new HTMLPurifier_AttrDef_Enum(array('xx-small', 'x-small',
+                'small', 'medium', 'large', 'x-large', 'xx-large',
+                'larger', 'smaller')),
+            new HTMLPurifier_AttrDef_Percentage(),
+            new HTMLPurifier_AttrDef_CSSLength()
+        ));
+        
+        
+        
         // this could use specialized code
         $this->info['font-weight'] = new HTMLPurifier_AttrDef_Enum(
             array('normal', 'bold', 'bolder', 'lighter', '100', '200', '300',
             '400', '500', '600', '700', '800', '900'), false);
-        
         
     }
     

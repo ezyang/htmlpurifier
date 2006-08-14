@@ -31,6 +31,9 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('letter-spacing:2px;');
         $this->assertDef('word-spacing:normal;');
         $this->assertDef('word-spacing:3em;');
+        $this->assertDef('font-size:200%;');
+        $this->assertDef('font-size:larger;');
+        $this->assertDef('font-size:12pt;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',
