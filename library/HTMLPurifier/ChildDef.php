@@ -126,9 +126,9 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
                 if (!isset($this->elements[$token->name])) {
                     $is_deleting = true;
                     if ($pcdata_allowed) {
-                        $result[] = new HTMLPurifier_Token_Text(
-                            $this->gen->generateFromToken($token)
-                        );
+                        //$result[] = new HTMLPurifier_Token_Text(
+                        //    $this->gen->generateFromToken($token)
+                        //);
                     }
                     continue;
                 }
@@ -136,10 +136,10 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
             if (!$is_deleting) {
                 $result[] = $token;
             } elseif ($pcdata_allowed) {
-                $result[] =
-                    new HTMLPurifier_Token_Text(
-                        $this->gen->generateFromToken( $token )
-                    );
+                //$result[] =
+                //    new HTMLPurifier_Token_Text(
+                //        $this->gen->generateFromToken( $token )
+                //    );
             } else {
                 // drop silently
             }
