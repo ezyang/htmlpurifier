@@ -33,7 +33,7 @@ echo $pure_html;
 <p>Here is the source code of the purified HTML:</p>
 <pre><?php
 
-echo htmlspecialchars($pure_html);
+echo htmlspecialchars($pure_html, ENT_COMPAT, 'UTF-8');
 
 ?></pre>
 <?php
@@ -53,7 +53,7 @@ will filter it.</p>
         <legend>HTML</legend>
         <textarea name="html" cols="60" rows="15"><?php
 
-if (isset($html)) echo htmlspecialchars($html);
+if (isset($html)) echo htmlspecialchars($html, ENT_COMPAT, 'UTF-8');
 
         ?></textarea>
         <div>
