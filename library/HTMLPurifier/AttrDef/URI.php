@@ -12,6 +12,12 @@ HTMLPurifier_ConfigDef::define(
 class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
 {
     
+    var $required = false;
+    
+    function HTMLPurifier_AttrDef_URI($required = false) {
+        $this->required = $required;
+    }
+    
     function validate($uri, $config, &$context) {
         
         // We'll write stack-based parsers later, for now, use regexps to
@@ -47,7 +53,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             // retrieve the specific scheme object from the registry
             $scheme = ctype_lower($scheme) ? $scheme : strtolower($scheme);
             $scheme_obj =& $registry->getScheme($scheme, $config);
-            if (!$scheme_obj) return false; // invalid scheme, clean it out
+            if (!$scheme_obj) return $this->required ? '' : false; // invalid scheme, clean it out
         } else {
             $scheme_obj =& $registry->getScheme(
                 $config->get('URI', 'DefaultScheme'), $config

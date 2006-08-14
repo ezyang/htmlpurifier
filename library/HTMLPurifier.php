@@ -18,9 +18,12 @@
  * See /docs/spec.txt for more details.
  */
 
+require_once 'HTMLPurifier/ConfigDef.php';
+require_once 'HTMLPurifier/Config.php';
 require_once 'HTMLPurifier/Lexer.php';
 require_once 'HTMLPurifier/Definition.php';
 require_once 'HTMLPurifier/Generator.php';
+require_once 'HTMLPurifier/Strategy/Core.php';
 
 /**
  * Main library execution class.
@@ -32,12 +35,14 @@ require_once 'HTMLPurifier/Generator.php';
 class HTMLPurifier
 {
     
+    var $config;
+    
     /**
      * Initializes the purifier.
      * @param $config Configuration for all instances of the purifier
      */
     function HTMLPurifier($config = null) {
-        // unimplemented
+        $this->config = $config ? $config : HTMLPurifier_Config::createDefault();
     }
     
     /**
@@ -48,7 +53,15 @@ class HTMLPurifier
      * @return Purified HTML
      */
     function purify($html, $config = null) {
-        // unimplemented
+        $config = $config ? $config : $this->config;
+        $lexer = HTMLPurifier_Lexer::create();
+        $strategy = new HTMLPurifier_Strategy_Core();
+        $generator = new HTMLPurifier_Generator();
+        return $generator->generateFromTokens(
+            $strategy->execute(
+                $lexer->tokenizeHTML($html)
+            )
+        );
     }
     
 }
