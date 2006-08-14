@@ -2,70 +2,44 @@
 Configuration Ideas
 
 Here are some theoretical configuration ideas that we could implement some
-time.
+time.  Note the naming convention: %Namespace.Directive
 
 %Attr.IDPrefix - prefix all ids with this
+
 %Attr.RewriteFragments - if there's %Attr.IDPrefix we may want to transparently
     rewrite the URLs we parse too.  However, we can only do it when it's a pure
     anchor link, so it's not foolproof
 
-// determines how the classes array should be construed:
-// blacklist - allow allow except those in $classes_blacklist
-// whitelist - only allow those in $classes_whitelist
-// when one is chosen, the other has no effect
-%Attr.ClassBlacklist 
-%Attr.ClassWhitelist 
-%Attr.ClassListMode 
+%Attr.ClassBlacklist,
+%Attr.ClassWhitelist,
+%Attr.ClassListMode - determines what classes are allowed. When
+    %Attr.ClassListMode is set to Blacklist, only allow those not in
+    %Attr.ClassBlacklist. When it's Whitelist, only allow those in
+    %Attr.ClassWhitelist.
 
-// designate whether or not to allow numerals in language code subtags
-// RFC 1766, the current standard referenced by XML, does not permit
-//           numbers, but,
-// RFC 3066, the superseding best practice standard since January 2001,
-//           permits them.
-// we allow numbers by default, although you generally never see them
-// at all.
-%Attr.LangAlphaOnly 
+%Attr.LangAlphaOnly - designate whether or not to allow numerals in language
+    code subtags
+    * RFC 1766, the current standard referenced by XML, does not permit
+        numbers, but,
+    * RFC 3066, the superseding best practice standard since January 2001,
+        permits them.
+    We allow numbers by default, but you generally never see them
+    at all, which makes this a little more sane.
 
-// max amount of pixels allowed to be specified
-var $attr_pixels_hmax = 600;  // horizontal context
-var $attr_pixels_vmax = 1200; // vertical context
+%Attr.MaxWidth, 
+%Attr.MaxHeight - caps for width and height related checks.
 
-// allowed URI schemes
-var $uri_schemes = array(
-    // based off of MediaWiki's default settings
-    // the ones that definitely must be implemented (they're the same though)
-    'http'  => true, // "Hypertext Transfer Protocol", nuf' said
-    'https' => true, // HTTP over SSL (Secure Socket Layer)
-    // quite useful, but not necessary
-    'mailto' => true,// Email
-    'ftp'   => true, // "File Transfer Protocol"
-    'irc'   => true, // "Internet Relay Chat", usually needs another app
-    // obscure
-    'telnet' => true,// network protocol for non-secure remote terminal sessions
-    // for Usenet, these two are similar, but distinct
-    'nntp'  => true, // individual Netnews articles
-    'news'  => true  // newsgroup or individual Netnews articles
-    // gopher and worldwind excluded
-);
+%URI.Munge - will munge all URIs to a different URI, which should redirect
+    the user to the applicable page. A urlencoded version of the URI
+    will replace any instances of %s in the string. One possible
+    string is 'http://www.google.com/url?q=%s'. Useful for preventing
+    pagerank from being sent to other sites
 
-// will munge all URIs to a different URI, which should redirect
-// the user to the applicable page. A urlencoded version of the URI
-// will replace any instances of %s in the string. One possible
-// string is 'http://www.google.com/url?q=%s'. Useful for preventing
-// pagerank from being sent to other sites
-var $uri_munge = false;
+%URI.AddRelNofollow - will add rel="nofollow" to all links, preventing the
+    spread of ill-gotten pagerank
 
-// will add rel="nofollow" to all links, also helps prevent pagerank
-// from going around
-var $uri_add_relnofollow = false;
+%URI.Host - host of website, for external link checks
 
-// web root of the website, we'll try to auto-detect it. Something
-// like 'www.example.com/'???
-var $uri_webroot = null;
+%URI.RelativeToAbsolute - transforms all relative URIs to absolute form
 
-// transform all relative URIs into their absolute forms, requires
-// $uri_webroot
-var $uri_make_absolute = false;
-
-// disables external links, requires $uri_webroot
-var $uri_disable_external = false;
+%URI.DisableExternal - disable external links
