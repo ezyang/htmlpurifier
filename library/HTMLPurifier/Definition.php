@@ -152,6 +152,7 @@ class HTMLPurifier_Definition
         $this->info['li']->child  =
         $this->info['div']->child = $e_Flow;
         
+        $this->info['caption']->child   = 
         $this->info['em']->child   =
         $this->info['strong']->child    =
         $this->info['dfn']->child  =
