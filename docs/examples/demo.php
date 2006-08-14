@@ -48,7 +48,7 @@ will filter it.</p>
 }
 
 ?>
-<form name="filter" action="filter.php" method="post">
+<form name="filter" action="demo.php" method="post">
     <fieldset>
         <legend>HTML</legend>
         <textarea name="html" cols="60" rows="15"><?php
