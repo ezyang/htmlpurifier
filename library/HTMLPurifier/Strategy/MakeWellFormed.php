@@ -1,7 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/Strategy.php';
-require_once 'HTMLPurifier/Definition.php';
+require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/Generator.php';
 
 class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
@@ -12,7 +12,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     
     function HTMLPurifier_Strategy_MakeWellFormed() {
         $this->generator = new HTMLPurifier_Generator();
-        $this->definition = HTMLPurifier_Definition::instance();
+        $this->definition = HTMLPurifier_HTMLDefinition::instance();
     }
     
     function execute($tokens, $config) {

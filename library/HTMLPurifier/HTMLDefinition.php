@@ -41,7 +41,7 @@ require_once 'HTMLPurifier/TagTransform.php';
  * automatic recompilation, suggesting that we would have a DefinitionGenerator.
  */
 
-class HTMLPurifier_Definition
+class HTMLPurifier_HTMLDefinition
 {
     
     var $info = array();
@@ -68,13 +68,13 @@ class HTMLPurifier_Definition
         if ($prototype) {
             $instance = $prototype;
         } elseif (!$instance) {
-            $instance = new HTMLPurifier_Definition();
+            $instance = new HTMLPurifier_HTMLDefinition();
             $instance->setup();
         }
         return $instance;
     }
     
-    function HTMLPurifier_Definition() {}
+    function HTMLPurifier_HTMLDefinition() {}
     
     function setup() {
         

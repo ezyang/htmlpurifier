@@ -1,7 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/Strategy.php';
-require_once 'HTMLPurifier/Definition.php';
+require_once 'HTMLPurifier/HTMLDefinition.php';
 
 /**
  * Takes a well formed list of tokens and fixes their nesting.
@@ -37,7 +37,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
     var $definition;
     
     function HTMLPurifier_Strategy_FixNesting() {
-        $this->definition = HTMLPurifier_Definition::instance();
+        $this->definition = HTMLPurifier_HTMLDefinition::instance();
     }
     
     function execute($tokens, $config) {

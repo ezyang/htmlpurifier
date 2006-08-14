@@ -21,7 +21,7 @@
 require_once 'HTMLPurifier/ConfigDef.php';
 require_once 'HTMLPurifier/Config.php';
 require_once 'HTMLPurifier/Lexer.php';
-require_once 'HTMLPurifier/Definition.php';
+require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Strategy/Core.php';
 

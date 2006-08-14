@@ -1,7 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/Strategy.php';
-require_once 'HTMLPurifier/Definition.php';
+require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/IDAccumulator.php';
 require_once 'HTMLPurifier/ConfigDef.php';
 require_once 'HTMLPurifier/AttrContext.php';
@@ -20,7 +20,7 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
     var $definition;
     
     function HTMLPurifier_Strategy_ValidateAttributes() {
-        $this->definition = HTMLPurifier_Definition::instance();
+        $this->definition = HTMLPurifier_HTMLDefinition::instance();
     }
     
     function execute($tokens, $config) {

@@ -1,6 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Definition.php';
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 
 class HTMLPurifier_StrategyHarness extends UnitTestCase
