@@ -216,6 +216,11 @@ class HTMLPurifier_LexerTest extends UnitTestCase
             );
         $sax_expect[16] = false; // PEARSax doesn't support it!
         
+        // test that UTF-8 is preserved
+        $char_hearts = $this->_entity_lookup->table['hearts'];
+        $input[17] = $char_hearts;
+        $expect[17] = array( new HTMLPurifier_Token_Text($char_hearts) );
+        
         foreach($input as $i => $discard) {
             $result = $this->DirectLex->tokenizeHTML($input[$i]);
             $this->assertEqual($expect[$i], $result, 'DirectLexTest '.$i.': %s');

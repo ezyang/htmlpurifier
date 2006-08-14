@@ -27,18 +27,23 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     
     public function tokenizeHTML($string) {
         $doc = new DOMDocument();
-        
-        // preprocess string
-        $string = '<html><body><div>'.$string.'</div></body></html>';
+        $doc->encoding = 'UTF-8'; // technically does nothing, but comprehensive
         
         // replace and escape the CDATA sections, since parsing under HTML
         // mode won't get 'em.
         $string = $this->escapeCDATA($string);
         
+        // preprocess string, essential for UTF-8
+        $string =
+        '<html><head>'.
+        '<meta http-equiv="Content-Type" content="text/html;'.
+            ' charset=utf-8" />'.
+        '</head><body><div>'.$string.'</div></body></html>';
+        
         @$doc->loadHTML($string); // mute all errors, handle it transparently
         return $this->tokenizeDOM(
             $doc->childNodes->item(1)-> // html
-                  childNodes->item(0)-> // body
+                  childNodes->item(1)-> // body
                   childNodes->item(0)   // div
             );
     }
