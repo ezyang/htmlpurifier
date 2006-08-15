@@ -31,11 +31,14 @@ $purifier = new HTMLPurifier();
 <?php
 
 foreach ($xml->attack as $attack) {
+    $code = $attack->code;
+    // custom code for US-ASCII, which couldn't be expressed in XML without encoding
+    if ($attack->name == 'US-ASCII encoding') $code = urldecode($code);
 ?>
     <tr>
         <td><?php echo htmlspecialchars($attack->name); ?></td>
-        <td><textarea readonly="readonly" cols="20" rows="2"><?php echo htmlspecialchars($attack->code); ?></textarea></td>
-        <?php $pure_html = $purifier->purify($attack->code); ?>
+        <td><textarea readonly="readonly" cols="20" rows="2"><?php echo htmlspecialchars($code); ?></textarea></td>
+        <?php $pure_html = $purifier->purify($code); ?>
         <td><textarea readonly="readonly" cols="20" rows="2"><?php echo htmlspecialchars($pure_html); ?></textarea></td>
         <td><?php echo $pure_html ?></td>
     </tr>
