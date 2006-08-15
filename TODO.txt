@@ -1,8 +1,12 @@
 Todo List
 
+Core:
+ - Finish all the Core CSS traits
+ - Implement all non-essential attribute transforms
+ - Change default behavior from escape to drop unrecognized stuff (merge config)
+
 Code issues:
- - (?) Create a TokenFactory to prevent really long lines
- - Massive profiling
+ - Massive profiling (library occasionally times out on large input)
  - Fix IPv6 issues
  - Make URI validation routines tighter (especially mailto)
  - Distinguish between different types of URIs, for instance, a mailto URI
@@ -11,4 +15,3 @@ Code issues:
 
 Enhancements:
  - Do fixes for Firefox's inability to handle COL alignment props (Bug 915)
- - Have lexers strip out HTML and BODY tags rather than choke

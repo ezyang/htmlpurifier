@@ -49,6 +49,7 @@ class HTMLPurifier_LexerTest extends UnitTestCase
     function test_extractBody() {
         $this->assertExtractBody('<b>Bold</b>');
         $this->assertExtractBody('<html><body><b>Bold</b></body></html>', '<b>Bold</b>');
+        $this->assertExtractBody('<HTML><BODY><B>Bold</B></BODY></HTML>', '<B>Bold</B>');
         $this->assertExtractBody(
 '<?xml version="1.0"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
