@@ -8,8 +8,8 @@
 </head>
 <body>
 <h1>HTMLPurifier XSS Attacks Smoketest</h1>
-<p>XSS attacks courtsey of
-<a href="http://ha.ckers.org/xss.html">http://ha.ckers.org/xss.html</a></p>
+<p>XSS attacks are from
+<a href="http://ha.ckers.org/xss.html">http://ha.ckers.org/xss.html</a>.</p>
 <p>The last segment of tests regarding blacklisted websites is not
 applicable at the moment, but when we add that functionality they'll be
 relevant.</p>
