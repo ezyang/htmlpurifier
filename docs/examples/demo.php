@@ -10,6 +10,8 @@
 <h1>HTMLPurifier Live Demo</h1>
 <?php
 
+set_time_limit(120);
+
 set_include_path('../../library' . PATH_SEPARATOR . get_include_path());
 require_once 'HTMLPurifier.php';
 
@@ -48,7 +50,10 @@ will filter it.</p>
 }
 
 ?>
-<form name="filter" action="demo.php" method="post">
+<form name="filter" action="demo.php<?php
+if (isset($_GET['profile']) || isset($_GET['XDEBUG_PROFILE'])) {
+    echo '?XDEBUG_PROFILE=1';
+} ?>" method="post">
     <fieldset>
         <legend>HTML</legend>
         <textarea name="html" cols="60" rows="15"><?php
