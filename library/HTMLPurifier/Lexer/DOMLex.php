@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/Lexer.php';
+require_once 'HTMLPurifier/TokenFactory.php';
 
 /**
  * Parser that uses PHP 5's DOM extension (part of the core).
@@ -24,6 +25,13 @@ require_once 'HTMLPurifier/Lexer.php';
 
 class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
 {
+    
+    private $factory;
+    
+    public function __construct() {
+        // setup the factory
+        $this->factory = new HTMLPurifier_TokenFactory();
+    }
     
     public function tokenizeHTML($string, $config = null) {
         if (!$config) $config = HTMLPurifier_Config::createDefault();
@@ -50,10 +58,12 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         
         @$doc->loadHTML($string); // mute all errors, handle it transparently
         
-        return $this->tokenizeDOM(
+        $tokens = array();
+        $this->tokenizeDOM(
             $doc->childNodes->item(1)-> // html
                   getElementsByTagName('body')->item(0) // body
-            );
+            , $tokens);
+        return $tokens;
     }
     
     /**
@@ -66,33 +76,33 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      *                  tag you're dealing with.
      * @returns Tokens of node appended to previously passed tokens.
      */
-    protected function tokenizeDOM($node, $tokens = array(), $collect = false) {
+    protected function tokenizeDOM($node, &$tokens, $collect = false) {
         // recursive goodness!
         
         // intercept non element nodes
         
         if ( !($node instanceof DOMElement) ) {
             if ($node instanceof DOMComment) {
-                $tokens[] = new HTMLPurifier_Token_Comment($node->data);
+                $tokens[] = $this->factory->createComment($node->data);
             } elseif ($node instanceof DOMText ||
                       $node instanceof DOMCharacterData) {
-                $tokens[] = new HTMLPurifier_Token_Text($node->data);
+                $tokens[] = $this->factory->createText($node->data);
             }
             // quite possibly, the object wasn't handled, that's fine
-            return $tokens;
+            return;
         }
         
         // We still have to make sure that the element actually IS empty
         if (!$node->hasChildNodes()) {
             if ($collect) {
-                $tokens[] = new HTMLPurifier_Token_Empty(
+                $tokens[] = $this->factory->createEmpty(
                     $node->tagName,
                     $this->transformAttrToAssoc($node->attributes)
                 );
             }
         } else {
             if ($collect) { // don't wrap on first iteration
-                $tokens[] = new HTMLPurifier_Token_Start(
+                $tokens[] = $this->factory->createStart(
                     $tag_name = $node->tagName, // somehow, it get's dropped
                     $this->transformAttrToAssoc($node->attributes)
                 );
@@ -100,14 +110,12 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             foreach ($node->childNodes as $node) {
                 // remember, it's an accumulator. Otherwise, we'd have
                 // to use array_merge
-                $tokens = $this->tokenizeDOM($node, $tokens, true);
+                $this->tokenizeDOM($node, $tokens, true);
             }
             if ($collect) {
-                $tokens[] = new HTMLPurifier_Token_End($tag_name);
+                $tokens[] = $this->factory->createEnd($tag_name);
             }
         }
-        
-        return $tokens;
         
     }
     

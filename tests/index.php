@@ -79,6 +79,10 @@ $test_files[] = 'AttrTransform/ImgRequiredTest.php';
 $test_files[] = 'URISchemeRegistryTest.php';
 $test_files[] = 'URISchemeTest.php';
 
+if (version_compare(PHP_VERSION, '5', '>=')) {
+    $test_files[] = 'TokenFactoryTest.php';
+}
+
 $test_file_lookup = array_flip($test_files);
 
 function htmlpurifier_path2class($path) {

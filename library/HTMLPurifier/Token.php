@@ -51,6 +51,7 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token // abstract
      * @param $attributes   Associative array of attributes.
      */
     function HTMLPurifier_Token_Tag($name, $attributes = array()) {
+        //if ($attributes === null) var_dump(debug_backtrace());
         $this->name = ctype_lower($name) ? $name : strtolower($name);
         foreach ($attributes as $key => $value) {
             // normalization only necessary when key is not lowercase
