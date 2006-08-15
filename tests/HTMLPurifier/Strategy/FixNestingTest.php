@@ -29,9 +29,9 @@ class HTMLPurifier_Strategy_FixNestingTest
         $inputs[1] = '<a href="about:blank">Blank</a><div>Block</div>';
         $expect[1] = $inputs[1];
         
-        // illegal block in inline, element -> text
+        // illegal block in inline
         $inputs[2] = '<b><div>Illegal div.</div></b>';
-        $expect[2] = '<b></b>';
+        $expect[2] = '<b>Illegal div.</b>';
         
         // same test with different configuration (fragile)
         $inputs[13]  = '<b><div>Illegal div.</div></b>';
@@ -72,7 +72,7 @@ class HTMLPurifier_Strategy_FixNestingTest
         
         // block in inline ins not allowed
         $inputs[11] = '<span><ins><div>Not allowed!</div></ins></span>';
-        $expect[11] = '<span><ins></ins></span>';
+        $expect[11] = '<span><ins>Not allowed!</ins></span>';
         
         // block in inline ins not allowed
         $inputs[14] = '<span><ins><div>Not allowed!</div></ins></span>';

@@ -18,6 +18,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     function execute($tokens, $config) {
         $result = array();
         $current_nesting = array();
+        $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
         foreach ($tokens as $token) {
             if (empty( $token->is_tag )) {
                 $result[] = $token;
@@ -86,9 +87,11 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             
             // make sure that we have something open
             if (empty($current_nesting)) {
-                $result[] = new HTMLPurifier_Token_Text(
-                    $this->generator->generateFromToken($token, $config)
-                );
+                if ($escape_invalid_tags) {
+                    $result[] = new HTMLPurifier_Token_Text(
+                        $this->generator->generateFromToken($token, $config)
+                    );
+                }
                 continue;
             }
             
@@ -121,9 +124,11 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             
             // we still didn't find the tag, so translate to text
             if ($skipped_tags === false) {
-                $result[] = new HTMLPurifier_Token_Text(
-                    $this->generator->generateFromToken($token, $config)
-                );
+                if ($escape_invalid_tags) {
+                    $result[] = new HTMLPurifier_Token_Text(
+                        $this->generator->generateFromToken($token, $config)
+                    );
+                }
                 continue;
             }
             

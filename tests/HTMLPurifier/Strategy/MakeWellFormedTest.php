@@ -28,7 +28,7 @@ class HTMLPurifier_Strategy_MakeWellFormedTest
         
         // CHANGE THIS BEHAVIOR!
         $inputs[4] = 'Unused end tags... recycle!</b>';
-        $expect[4] = 'Unused end tags... recycle!&lt;/b&gt;';
+        $expect[4] = 'Unused end tags... recycle!';
         
         $inputs[5] = '<br style="clear:both;">';
         $expect[5] = '<br style="clear:both;" />';

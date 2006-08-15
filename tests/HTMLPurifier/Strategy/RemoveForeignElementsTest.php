@@ -22,7 +22,7 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
         
         // [INVALID]
         $inputs[2] = '<asdf>Bling</asdf><d href="bang">Bong</d><foobar />';
-        $expect[2] = htmlspecialchars($inputs[2]);
+        $expect[2] = 'BlingBong';
         
         // test simple transform
         $inputs[3] = '<menu><li>Item 1</li></menu>';

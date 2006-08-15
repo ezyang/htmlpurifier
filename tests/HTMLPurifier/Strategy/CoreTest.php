@@ -24,14 +24,13 @@ class HTMLPurifier_Strategy_CoreTest
         $expect[1] = '<b>Make well formed.</b>';
         
         $inputs[2] = '<b><div>Fix nesting.</div></b>';
-        $expect[2] = '<b></b>';
+        $expect[2] = '<b>Fix nesting.</b>';
         
-        // behavior may change
         $inputs[3] = '<asdf>Foreign element removal.</asdf>';
-        $expect[3] = '&lt;asdf&gt;Foreign element removal.&lt;/asdf&gt;';
+        $expect[3] = 'Foreign element removal.';
         
         $inputs[4] = '<foo><b><div>All three.</div></b>';
-        $expect[4] = '&lt;foo&gt;<b></b>';
+        $expect[4] = '<b>All three.</b>';
         
         $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
     }

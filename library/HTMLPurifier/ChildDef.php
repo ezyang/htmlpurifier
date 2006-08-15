@@ -16,7 +16,9 @@ HTMLPurifier_ConfigDef::define(
     'Core', 'EscapeInvalidChildren', false,
     'When true, a child is found that is not allowed in the context of the '.
     'parent element will be transformed into text as if it were ASCII. When '.
-    'false, that element (and all its descendants) will be silently dropped.'
+    'false, that element and all internal tags will be dropped, though text '.
+    'will be preserved.  There is no option for dropping the element but '.
+    'preserving child nodes.'
 );
 
 class HTMLPurifier_ChildDef
@@ -135,7 +137,9 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
                 $is_deleting = false;
                 if (!isset($this->elements[$token->name])) {
                     $is_deleting = true;
-                    if ($pcdata_allowed && $escape_invalid_children) {
+                    if ($pcdata_allowed && $token->type == 'text') {
+                        $result[] = $token;
+                    } elseif ($pcdata_allowed && $escape_invalid_children) {
                         $result[] = new HTMLPurifier_Token_Text(
                             $this->gen->generateFromToken($token, $config)
                         );
@@ -143,7 +147,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
                     continue;
                 }
             }
-            if (!$is_deleting) {
+            if (!$is_deleting || ($pcdata_allowed && $token->type == 'text')) {
                 $result[] = $token;
             } elseif ($pcdata_allowed && $escape_invalid_children) {
                 $result[] =

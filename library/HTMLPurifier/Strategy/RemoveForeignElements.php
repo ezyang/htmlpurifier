@@ -26,6 +26,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
     
     function execute($tokens, $config) {
         $result = array();
+        $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
         foreach($tokens as $token) {
             if (!empty( $token->is_tag )) {
                 // DEFINITION CALL
@@ -40,11 +41,13 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                                 definition->
                                     info_tag_transform[$token->name]->
                                         transform($token);
-                } else {
+                } elseif ($escape_invalid_tags) {
                     // invalid tag, generate HTML and insert in
                     $token = new HTMLPurifier_Token_Text(
                         $this->generator->generateFromToken($token, $config)
                     );
+                } else {
+                    continue;
                 }
             } elseif ($token->type == 'comment') {
                 // strip comments
