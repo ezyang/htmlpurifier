@@ -19,7 +19,6 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
     
     function assertSeries($inputs, $expect, $config, $context = array()) {
         foreach ($inputs as $i => $input) {
-            $tokens = $this->lex->tokenizeHTML($input);
             
             if (!isset($context[$i])) {
                 $context[$i] = null;
@@ -28,12 +27,13 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
                 $config[$i] = HTMLPurifier_Config::createDefault();
             }
             
+            $tokens = $this->lex->tokenizeHTML($input, $config[$i]);
             $result = $this->def->validateChildren($tokens, $config[$i], $context[$i]);
             
             if (is_bool($expect[$i])) {
                 $this->assertIdentical($expect[$i], $result, "Test $i: %s");
             } else {
-                $result_html = $this->gen->generateFromTokens($result);
+                $result_html = $this->gen->generateFromTokens($result, $config[$i]);
                 $this->assertIdentical($expect[$i], $result_html, "Test $i: %s");
                 paintIf($result_html, $result_html != $expect[$i]);
             }

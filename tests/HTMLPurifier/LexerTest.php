@@ -40,11 +40,16 @@ class HTMLPurifier_LexerTest extends UnitTestCase
             $this->Lexer->substituteNonSpecialEntities('"') );
     }
     
+    function test_extractBody() {
+        
+    }
+    
     function test_tokenizeHTML() {
         
         $input = array();
         $expect = array();
         $sax_expect = array();
+        $config = array();
         
         $input[0] = '';
         $expect[0] = array();
@@ -221,14 +226,17 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $input[17] = $char_hearts;
         $expect[17] = array( new HTMLPurifier_Token_Text($char_hearts) );
         
+        $default_config = HTMLPurifier_Config::createDefault();
         foreach($input as $i => $discard) {
-            $result = $this->DirectLex->tokenizeHTML($input[$i]);
+            if (!isset($config[$i])) $config[$i] = $default_config;
+            
+            $result = $this->DirectLex->tokenizeHTML($input[$i], $config[$i]);
             $this->assertEqual($expect[$i], $result, 'DirectLexTest '.$i.': %s');
             paintIf($result, $expect[$i] != $result);
             
             if ($this->_has_pear) {
                 // assert unless I say otherwise
-                $sax_result = $this->PEARSax3->tokenizeHTML($input[$i]);
+                $sax_result = $this->PEARSax3->tokenizeHTML($input[$i], $config[$i]);
                 if (!isset($sax_expect[$i])) {
                     // by default, assert with normal result
                     $this->assertEqual($expect[$i], $sax_result, 'PEARSax3Test '.$i.': %s');
@@ -244,7 +252,7 @@ class HTMLPurifier_LexerTest extends UnitTestCase
             }
             
             if ($this->_has_dom) {
-                $dom_result = $this->DOMLex->tokenizeHTML($input[$i]);
+                $dom_result = $this->DOMLex->tokenizeHTML($input[$i], $config[$i]);
                 // same structure as SAX
                 if (!isset($dom_expect[$i])) {
                     $this->assertEqual($expect[$i], $dom_result, 'DOMLexTest '.$i.': %s');

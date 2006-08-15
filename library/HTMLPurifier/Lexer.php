@@ -2,6 +2,14 @@
 
 require_once 'HTMLPurifier/Token.php';
 
+HTMLPurifier_ConfigDef::define(
+    'Core', 'AcceptFullDocuments', true,
+    'This parameter determines whether or not the filter should accept full '.
+    'HTML documents, not just HTML fragments.  When on, it will '.
+    'drop all sections except the content between body.  Depending on '.
+    'the implementation in use, this may speed up document parse times.'
+);
+
 /**
  * Forgivingly lexes HTML (SGML-style) markup into tokens.
  * 
@@ -52,7 +60,7 @@ class HTMLPurifier_Lexer
      * @param $string String HTML.
      * @return HTMLPurifier_Token array representation of HTML.
      */
-    function tokenizeHTML($string) {
+    function tokenizeHTML($string, $config = null) {
         trigger_error('Call to abstract class', E_USER_ERROR);
     }
     
@@ -226,6 +234,14 @@ class HTMLPurifier_Lexer
     function CDATACallback($matches) {
         // not exactly sure why the character set is needed, but whatever
         return htmlspecialchars($matches[1], ENT_COMPAT, 'UTF-8');
+    }
+    
+    /**
+     * Takes a string of HTML (fragment or document) and returns the content
+     */
+    function extractBody($html) {
+        if (strpos($html, '<html') === false) return $html; // already fragment
+        // ...
     }
     
 }

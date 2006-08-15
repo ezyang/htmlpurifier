@@ -137,7 +137,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
                     $is_deleting = true;
                     if ($pcdata_allowed && $escape_invalid_children) {
                         $result[] = new HTMLPurifier_Token_Text(
-                            $this->gen->generateFromToken($token)
+                            $this->gen->generateFromToken($token, $config)
                         );
                     }
                     continue;
@@ -148,7 +148,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
             } elseif ($pcdata_allowed && $escape_invalid_children) {
                 $result[] =
                     new HTMLPurifier_Token_Text(
-                        $this->gen->generateFromToken( $token )
+                        $this->gen->generateFromToken( $token, $config )
                     );
             } else {
                 // drop silently

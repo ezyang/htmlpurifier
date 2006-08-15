@@ -31,7 +31,7 @@ class HTMLPurifier_StrategyHarness extends UnitTestCase
                 $config[$i] = HTMLPurifier_Config::createDefault();
             }
             $result_tokens = $strategy->execute($tokens, $config[$i]);
-            $result = $this->gen->generateFromTokens($result_tokens);
+            $result = $this->gen->generateFromTokens($result_tokens, $config[$i]);
             $this->assertEqual($expect[$i], $result, "Test $i: %s");
             paintIf($result, $result != $expect[$i]);
         }

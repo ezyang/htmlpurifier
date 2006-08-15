@@ -43,7 +43,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                 } else {
                     // invalid tag, generate HTML and insert in
                     $token = new HTMLPurifier_Token_Text(
-                        $this->generator->generateFromToken($token)
+                        $this->generator->generateFromToken($token, $config)
                     );
                 }
             } elseif ($token->type == 'comment') {

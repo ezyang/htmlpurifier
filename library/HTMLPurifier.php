@@ -59,8 +59,10 @@ class HTMLPurifier
         $generator = new HTMLPurifier_Generator();
         return $generator->generateFromTokens(
             $strategy->execute(
-                $lexer->tokenizeHTML($html), $config
-            )
+                $lexer->tokenizeHTML($html, $config),
+                $config
+            ),
+            $config
         );
     }
     

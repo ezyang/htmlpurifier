@@ -106,7 +106,9 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         }
     }
     
-    function tokenizeHTML($string) {
+    function tokenizeHTML($string, $config = null) {
+        
+        if (!$config) $config = HTMLPurifier_Config::createDefault();
         
         // some quick checking (if empty, return empty)
         $string = @ (string) $string;

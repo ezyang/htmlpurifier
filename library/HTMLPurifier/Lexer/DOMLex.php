@@ -25,7 +25,9 @@ require_once 'HTMLPurifier/Lexer.php';
 class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
 {
     
-    public function tokenizeHTML($string) {
+    public function tokenizeHTML($string, $config = null) {
+        if (!$config) $config = HTMLPurifier_Config::createDefault();
+        
         $doc = new DOMDocument();
         $doc->encoding = 'UTF-8'; // technically does nothing, but comprehensive
         

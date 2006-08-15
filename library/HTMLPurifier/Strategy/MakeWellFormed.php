@@ -87,7 +87,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // make sure that we have something open
             if (empty($current_nesting)) {
                 $result[] = new HTMLPurifier_Token_Text(
-                    $this->generator->generateFromToken($token)
+                    $this->generator->generateFromToken($token, $config)
                 );
                 continue;
             }
@@ -122,7 +122,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // we still didn't find the tag, so translate to text
             if ($skipped_tags === false) {
                 $result[] = new HTMLPurifier_Token_Text(
-                    $this->generator->generateFromToken($token)
+                    $this->generator->generateFromToken($token, $config)
                 );
                 continue;
             }
