@@ -40,7 +40,44 @@ class HTMLPurifier_LexerTest extends UnitTestCase
             $this->Lexer->substituteNonSpecialEntities('"') );
     }
     
+    function assertExtractBody($text, $extract = true) {
+        $result = $this->Lexer->extractBody($text);
+        if ($extract === true) $extract = $text;
+        $this->assertIdentical($extract, $result);
+    }
+    
     function test_extractBody() {
+        $this->assertExtractBody('<b>Bold</b>');
+        $this->assertExtractBody('<html><body><b>Bold</b></body></html>', '<b>Bold</b>');
+        $this->assertExtractBody(
+'<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+   <head>
+      <title>xyz</title>
+   </head>
+   <body>
+      <form method="post" action="whatever1">
+         <div>
+            <input type="text" name="username" />
+            <input type="text" name="password" />
+            <input type="submit" />
+         </div>
+      </form>
+   </body>
+</html>',
+    '
+      <form method="post" action="whatever1">
+         <div>
+            <input type="text" name="username" />
+            <input type="text" name="password" />
+            <input type="submit" />
+         </div>
+      </form>
+   ');
+        $this->assertExtractBody('<html><body bgcolor="#F00"><b>Bold</b></body></html>', '<b>Bold</b>');
+        $this->assertExtractBody('<body>asdf'); // not closed, don't accept
         
     }
     

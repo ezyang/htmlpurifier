@@ -114,6 +114,10 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         $string = @ (string) $string;
         if ($string == '') return array();
         
+        if ($config->get('Core', 'AcceptFullDocuments')) {
+            $string = $this->extractBody($string);
+        }
+        
         $cursor = 0; // our location in the text
         $inside_tag = false; // whether or not we're parsing the inside of a tag
         $array = array(); // result array

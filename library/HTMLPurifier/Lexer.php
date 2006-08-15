@@ -239,9 +239,15 @@ class HTMLPurifier_Lexer
     /**
      * Takes a string of HTML (fragment or document) and returns the content
      */
-    function extractBody($html) {
-        if (strpos($html, '<html') === false) return $html; // already fragment
-        // ...
+    function extractBody($html, $return_bool = false) {
+        $matches = array();
+        $result = preg_match('!<body[^>]*>(.+?)</body>!is', $html, $matches);
+        if ($return_bool) return $result;
+        if ($result) {
+            return $matches[1];
+        } else {
+            return $html;
+        }
     }
     
 }
