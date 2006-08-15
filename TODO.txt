@@ -3,7 +3,6 @@ Todo List
 Core:
  - Finish all the Core CSS traits
  - Implement all non-essential attribute transforms
- - Change default behavior from escape to drop unrecognized stuff (merge config)
 
 Code issues:
  - Massive profiling (library occasionally times out on large input)
@@ -12,6 +11,7 @@ Code issues:
  - Distinguish between different types of URIs, for instance, a mailto URI
    in IMG SRC is nonsensical
  - Factor out Host validation to its own AttrDef
+ - Rewrite table's child definition
 
 Enhancements:
  - Do fixes for Firefox's inability to handle COL alignment props (Bug 915)
