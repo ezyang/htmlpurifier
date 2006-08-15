@@ -19,7 +19,11 @@ class HTMLPurifier_AttrDef_Pixels extends HTMLPurifier_AttrDef
         
         if ($int < 0) return '0';
         
-        // could use some upper-bound checking
+        // upper-bound value, extremely high values can
+        // crash operating systems, see <http://ha.ckers.org/imagecrash.html>
+        // WARNING, above link WILL crash you if you're using Windows
+        
+        if ($int > 1200) return '1200';
         
         return (string) $int;
         
