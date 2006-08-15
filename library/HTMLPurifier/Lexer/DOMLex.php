@@ -81,19 +81,19 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         
         // intercept non element nodes
         
-        if ( !($node instanceof DOMElement) ) {
-            if ($node instanceof DOMComment) {
-                $tokens[] = $this->factory->createComment($node->data);
-            } elseif ($node instanceof DOMText ||
-                      $node instanceof DOMCharacterData) {
+        if ( isset($node->data) ) {
+            if ($node->nodeType === XML_TEXT_NODE ||
+                      $node->nodeType === XML_CDATA_SECTION_NODE) {
                 $tokens[] = $this->factory->createText($node->data);
+            } elseif ($node->nodeType === XML_COMMENT_NODE) {
+                $tokens[] = $this->factory->createComment($node->data);
             }
             // quite possibly, the object wasn't handled, that's fine
             return;
         }
         
         // We still have to make sure that the element actually IS empty
-        if (!$node->hasChildNodes()) {
+        if (!$node->childNodes->length) {
             if ($collect) {
                 $tokens[] = $this->factory->createEmpty(
                     $node->tagName,
@@ -125,13 +125,16 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      * @param $attribute_list DOMNamedNodeMap of DOMAttr objects.
      * @returns Associative array of attributes.
      */
-    protected function transformAttrToAssoc($attribute_list) {
-        $attribute_array = array();
-        // undocumented behavior
-        foreach ($attribute_list as $key => $attr) {
-            $attribute_array[$key] = $attr->value;
+    protected function transformAttrToAssoc($node_map) {
+        // NamedNodeMap is documented very well, so we're using undocumented
+        // features, namely, the fact that it implements Iterator and
+        // has a ->length attribute
+        if ($node_map->length === 0) return array();
+        $array = array();
+        foreach ($node_map as $attr) {
+            $array[$attr->name] = $attr->value;
         }
-        return $attribute_array;
+        return $array;
     }
     
 }
