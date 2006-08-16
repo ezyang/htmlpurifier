@@ -1,0 +1,30 @@
+<?php
+
+require_once 'HTMLPurifier/AttrDef/Integer.php';
+require_once 'HTMLPurifier/AttrDef/Multiple.php';
+
+class HTMLPurifier_AttrDef_MultipleTest extends HTMLPurifier_AttrDefHarness
+{
+    
+    function test() {
+        $this->def = new HTMLPurifier_AttrDef_Multiple(
+            new HTMLPurifier_AttrDef_Integer()
+        );
+        
+        $this->assertDef('1 2 3 4');
+        $this->assertDef('6');
+        $this->assertDef('4 5');
+        $this->assertDef('  2  54 2 3', '2 54 2 3');
+        $this->assertDef("6\r3", '6 3');
+        
+        $this->assertDef('asdf', false);
+        $this->assertDef('a s d f', false);
+        $this->assertDef('1 2 3 4 5', '1 2 3 4');
+        $this->assertDef('1 2 invalid 3', '1 2 3');
+        
+        
+    }
+    
+}
+
+?>
