@@ -191,11 +191,14 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <tbody>
 <tr><th colspan="2">Table</th></tr>
-<tr><td>border-collapse</td><td>ENUM</td></tr>
-<tr><td>caption-side</td><td>ENUM</td></tr>
-<tr><td>empty-cells</td><td>ENUM, No IE support, possible fix with &amp;nbsp;?</td></tr>
-<tr><td>table-layout</td><td>ENUM</td></tr>
-<tr class="css1"><td>vertical-align</td><td>Also applies to others with explicit height</td></tr>
+<tr><td>border-collapse</td><td>ENUM(collapse, seperate)</td></tr>
+<tr><td>caption-side</td><td>ENUM(top, bottom)</td></tr>
+<tr><td>empty-cells</td><td>ENUM(show, hide), No IE support, possible fix
+    with &amp;nbsp;?</td></tr>
+<tr><td>table-layout</td><td>ENUM(auto, fixed)</td></tr>
+<tr class="css1"><td>vertical-align</td><td>COMPOSITE(ENUM(baseline, sub,
+    super, top, text-top, middle, bottom, text-bottom), &lt;percentage&gt;,
+    &lt;length&gt;) Also applies to others with explicit height</td></tr>
 </tbody>
 
 <tbody>
@@ -223,12 +226,12 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     for Mozilla.</td></tr>
 <tr><td class="css1">height</td><td>Interesting, why use it?</td></tr>
 <tr class="danger css1"><td>list-style-image</td><td>Dangerous?</td></tr>
-<tr><td>max-height</td><td rowspan="4">No IE 5/6</td></tr>
-<tr><td>min-height</td></tr>
-<tr><td>max-width</td></tr>
-<tr><td>min-width</td></tr>
-<tr><td>orphans</td><td>No IE support</td></tr>
-<tr><td>widows</td><td>No IE support</td></tr>
+<tr class="impl-no"><td>max-height</td><td rowspan="4">No IE 5/6</td></tr>
+<tr class="impl-no"><td>min-height</td></tr>
+<tr class="impl-no"><td>max-width</td></tr>
+<tr class="impl-no"><td>min-width</td></tr>
+<tr class="impl-no"><td>orphans</td><td>No IE support</td></tr>
+<tr class="impl-no"><td>widows</td><td>No IE support</td></tr>
 <tr><td>overflow</td><td>ENUM, IE 5/6 almost (remove visible if set)</td></tr>
 <tr><td>page-break-after</td><td>ENUM(auto, always, avoid, left, right),
     IE 5.5/6 and Opera</td></tr>
@@ -236,7 +239,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     Mostly supported</td></tr>
 <tr><td>page-break-inside</td><td>ENUM(avoid, auto), Opera only</td></tr>
 <tr class="impl-no"><td>quotes</td><td>May be dropped from CSS2</td></tr>
-<tr class="danger"><td>visibility</td><td>ENUM(visible, hidden, collapse),
+<tr class="impl-no"><td>visibility</td><td>ENUM(visible, hidden, collapse),
     Dangerous</td></tr>
 <tr><td class="css1">white-space</td><td>ENUM(normal, pre, nowrap, pre-wrap,
     pre-line), Spotty implementation:
@@ -244,7 +247,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     pre-wrap (only Opera), pre-line (no support). Fixable?</td></tr>
 </tbody>
 
-<tbody>
+<tbody class="impl-no">
 <tr><th colspan="2">Aural</th></tr>
 <tr><td>azimuth</td><td>-</td></tr>
 <tr><td>cue</td><td>-</td></tr>
