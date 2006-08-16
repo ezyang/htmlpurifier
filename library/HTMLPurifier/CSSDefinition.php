@@ -6,6 +6,7 @@ require_once 'HTMLPurifier/AttrDef/Composite.php';
 require_once 'HTMLPurifier/AttrDef/CSSLength.php';
 require_once 'HTMLPurifier/AttrDef/Percentage.php';
 require_once 'HTMLPurifier/AttrDef/Multiple.php';
+require_once 'HTMLPurifier/AttrDef/TextDecoration.php';
 
 class HTMLPurifier_CSSDefinition
 {
@@ -139,6 +140,8 @@ class HTMLPurifier_CSSDefinition
             new HTMLPurifier_AttrDef_Percentage(true),
             new HTMLPurifier_AttrDef_Enum(array('auto'))
         ));
+        
+        $this->info['text-decoration'] = new HTMLPurifier_AttrDef_TextDecoration();
         
         // this could use specialized code
         $this->info['font-weight'] = new HTMLPurifier_AttrDef_Enum(

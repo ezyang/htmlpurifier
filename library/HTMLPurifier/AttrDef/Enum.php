@@ -1,5 +1,7 @@
 <?php
 
+require_once 'HTMLPurifier/AttrDef.php';
+
 // Enum = Enumerated
 class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
 {

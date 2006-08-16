@@ -57,6 +57,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('width:50px;');
         $this->assertDef('width:auto;');
         $this->assertDef('width:-50px;', false);
+        $this->assertDef('text-decoration:underline;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',
