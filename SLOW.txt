@@ -1,0 +1,34 @@
+
+SLOW
+  also known as the HELP ME LIBRARY IS TOO SLOW MY PAGE TAKE TOO LONG LOAD page
+
+HTMLPurifier is a very powerful library.  But with power comes great
+responsibility, or, at least, longer execution times.  Remember, this
+library isn't lightly grazing over submitted HTML: it's deconstructing
+the whole thing, rigorously checking the parts, and then putting it
+back together.
+
+So, if it so turns out that HTMLPurifier is kinda too slow for outbound
+filtering, you've got a few options:
+
+1. Inbound filtering - perform filtering of HTML when it's submitted by the
+user.  Since the user is already submitting something, an extra half a
+second tacked on to the load time probably isn't going to be that huge of
+a problem.  Then, displaying the content is a simple a manner of outputting
+it directly from your database/filesystem.  The trouble with this method is
+that your user loses the original text, and when doing edits, will be
+handling the filtered text.  Of course, maybe that's a good thing.  If you
+don't mind a little extra complexity, you can try...
+
+2. Caching the filtered output - accept the submitted text and put it
+unaltered into the database, but then also generate a filtered version and
+stash that in the database.  Serve the filtered version to readers, and the
+unaltered version to editors.  If need be, you can invalidate the cache and
+have the cached filtered version be regenerated on the first page view.  Pros?
+Full data retention.  Cons?  It's more complicated.
+
+In short, inbound filtering is almost as simple as outbound filtering, but
+it has some drawbacks which cannot be fixed unless you save both the original
+and the filtered versions.
+
+There is a third option: profile and optimize HTMLPurifier yourself.  ;-)
