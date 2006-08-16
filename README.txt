@@ -1,0 +1,12 @@
+
+README
+    All about HTMLPurifier
+
+HTMLPurifier is an HTML filtering solution.  It uses a unique combination of
+robust whitelists and agressive parsing to ensure that not only are XSS
+attacks thwarted, but the resulting HTML is standards compliant.
+
+See INSTALL on how to use the library.  See docs/ for more developer-oriented
+documentation as well as some code examples.
+
+HTMLPurifier can be found on the web at: http://hp.jpsband.org/

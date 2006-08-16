@@ -1,0 +1,61 @@
+
+Install
+    How to install HTMLPurifier
+
+Being a library, there's no fancy GUI that will take you step-by-step through
+configuring database credentials and other mumbo-jumbo.  HTMLPurifier is
+designed to run "out of the box."  Regardless, there are still a couple of
+things you should be mindful of.
+
+
+
+1.  Including the proper files
+
+The library/ directory must be added to your path: HTMLPurifier will not be
+able to find the necessary includes otherwise.  This is as simple as:
+
+set_include_path('/path/to/htmlpurifier/library' . PATH_SEPARATOR . get_include_path());
+
+...replacing /path/to/htmlpurifier with the actual location of the folder. Don't
+worry, HTMLPurifier is namespaced so unless you have another file named
+HTMLPurifier.php, the files won't collide with any of your includes.
+
+Then, it's a simple matter of including the base file:
+
+require_once 'HTMLPurifier.php';
+
+...and you're good to go.
+
+
+
+2.  Preparing the proper environment
+
+While no configuration is necessary, you first should take precautions regarding
+the other output HTML that the filtered content will be going along with.  Here
+is a (short) checklist:
+
+ * Have I specified XHTML 1.0 Transitional as the doctype?
+ * Have I specified UTF-8 as the character encoding?
+
+I cannot stress the importance of these two bullets enough.  Omitting either
+of them could have dire consequences not only for security but for plain
+old usability.  You can find a more in-depth discussion of why this is needed
+in docs/security.txt, in the meantime, try to change your output so this is
+the case.
+
+If, for some reason, you are unable to switch to UTF-8 immediately, you can
+use iconv to convert the output of HTMLPurifier to your desired encoding.
+We may integrate support for other encodings in later releases, but for now,
+UTF-8 is all you should need.  (If you're not using UTF-8, switch now!)
+
+
+
+3.   Using the code
+
+The interface is mind-numbingly simple.
+
+$purifier = new HTMLPurifier();
+$clean_html = $purifier->purify($dirty_html);
+
+That's it.  For more examples, check out docs/examples/.  Also, SLOW gives
+advice on what to do if HTMLPurifier is slowing down your application.
