@@ -34,6 +34,24 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('font-size:200%;');
         $this->assertDef('font-size:larger;');
         $this->assertDef('font-size:12pt;');
+        $this->assertDef('line-height:2;');
+        $this->assertDef('line-height:2em;');
+        $this->assertDef('line-height:20%;');
+        $this->assertDef('line-height:normal;');
+        $this->assertDef('line-height:-20%;', false);
+        $this->assertDef('margin-left:5px;');
+        $this->assertDef('margin-right:20%;');
+        $this->assertDef('margin-top:auto;');
+        $this->assertDef('padding-bottom:5px;');
+        $this->assertDef('padding-top:20%;');
+        $this->assertDef('padding-top:-20%;', false);
+        $this->assertDef('text-indent:3em;');
+        $this->assertDef('text-indent:5%;');
+        $this->assertDef('text-indent:-3em;');
+        $this->assertDef('width:50%;');
+        $this->assertDef('width:50px;');
+        $this->assertDef('width:auto;');
+        $this->assertDef('width:-50px;', false);
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',

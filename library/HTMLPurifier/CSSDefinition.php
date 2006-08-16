@@ -86,7 +86,41 @@ class HTMLPurifier_CSSDefinition
             new HTMLPurifier_AttrDef_CSSLength()
         ));
         
+        $this->info['line-height'] = new HTMLPurifier_AttrDef_Composite(array(
+            new HTMLPurifier_AttrDef_Enum(array('normal')),
+            new HTMLPurifier_AttrDef_Number(true), // no negatives
+            new HTMLPurifier_AttrDef_CSSLength(true),
+            new HTMLPurifier_AttrDef_Percentage(true)
+        ));
         
+        $this->info['margin-top'] = 
+        $this->info['margin-bottom'] = 
+        $this->info['margin-left'] = 
+        $this->info['margin-right'] = new HTMLPurifier_AttrDef_Composite(array(
+            new HTMLPurifier_AttrDef_CSSLength(),
+            new HTMLPurifier_AttrDef_Percentage(),
+            new HTMLPurifier_AttrDef_Enum(array('auto'))
+        ));
+        
+        // non-negative
+        $this->info['padding-top'] = 
+        $this->info['padding-bottom'] = 
+        $this->info['padding-left'] = 
+        $this->info['padding-right'] = new HTMLPurifier_AttrDef_Composite(array(
+            new HTMLPurifier_AttrDef_CSSLength(true),
+            new HTMLPurifier_AttrDef_Percentage(true)
+        ));
+        
+        $this->info['text-indent'] = new HTMLPurifier_AttrDef_Composite(array(
+            new HTMLPurifier_AttrDef_CSSLength(),
+            new HTMLPurifier_AttrDef_Percentage()
+        ));
+        
+        $this->info['width'] = new HTMLPurifier_AttrDef_Composite(array(
+            new HTMLPurifier_AttrDef_CSSLength(true),
+            new HTMLPurifier_AttrDef_Percentage(true),
+            new HTMLPurifier_AttrDef_Enum(array('auto'))
+        ));
         
         // this could use specialized code
         $this->info['font-weight'] = new HTMLPurifier_AttrDef_Enum(
