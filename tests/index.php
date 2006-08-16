@@ -72,6 +72,7 @@ $test_files[] = 'AttrDef/CSSLengthTest.php';
 $test_files[] = 'AttrDef/PercentageTest.php';
 $test_files[] = 'AttrDef/MultipleTest.php';
 $test_files[] = 'AttrDef/TextDecorationTest.php';
+$test_files[] = 'AttrDef/FontFamilyTest.php';
 $test_files[] = 'IDAccumulatorTest.php';
 $test_files[] = 'TagTransformTest.php';
 $test_files[] = 'AttrTransform/LangTest.php';

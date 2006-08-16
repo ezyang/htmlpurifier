@@ -7,6 +7,7 @@ require_once 'HTMLPurifier/AttrDef/CSSLength.php';
 require_once 'HTMLPurifier/AttrDef/Percentage.php';
 require_once 'HTMLPurifier/AttrDef/Multiple.php';
 require_once 'HTMLPurifier/AttrDef/TextDecoration.php';
+require_once 'HTMLPurifier/AttrDef/FontFamily.php';
 
 class HTMLPurifier_CSSDefinition
 {
@@ -142,6 +143,8 @@ class HTMLPurifier_CSSDefinition
         ));
         
         $this->info['text-decoration'] = new HTMLPurifier_AttrDef_TextDecoration();
+        
+        $this->info['font-family'] = new HTMLPurifier_AttrDef_FontFamily();
         
         // this could use specialized code
         $this->info['font-weight'] = new HTMLPurifier_AttrDef_Enum(
