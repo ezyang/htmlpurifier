@@ -5,6 +5,7 @@ require_once 'HTMLPurifier/AttrDef/Color.php';
 require_once 'HTMLPurifier/AttrDef/Composite.php';
 require_once 'HTMLPurifier/AttrDef/CSSLength.php';
 require_once 'HTMLPurifier/AttrDef/Percentage.php';
+require_once 'HTMLPurifier/AttrDef/Multiple.php';
 
 class HTMLPurifier_CSSDefinition
 {
@@ -28,12 +29,17 @@ class HTMLPurifier_CSSDefinition
         
         $this->info['text-align'] = new HTMLPurifier_AttrDef_Enum(
             array('left', 'right', 'center', 'justify'), false);
+        
+        $border_style =
         $this->info['border-bottom-style'] = 
         $this->info['border-right-style'] = 
         $this->info['border-left-style'] = 
         $this->info['border-top-style'] =  new HTMLPurifier_AttrDef_Enum(
             array('none', 'hidden', 'dotted', 'dashed', 'solid', 'double',
             'groove', 'ridge', 'inset', 'outset'), false);
+        
+        $this->info['border-style'] = new HTMLPurifier_AttrDef_Multiple($border_style);
+        
         $this->info['clear'] = new HTMLPurifier_AttrDef_Enum(
             array('none', 'left', 'right', 'both'), false);
         $this->info['float'] = new HTMLPurifier_AttrDef_Enum(
@@ -51,6 +57,7 @@ class HTMLPurifier_CSSDefinition
             array('capitalize', 'uppercase', 'lowercase', 'none'), false);
         $this->info['color'] = new HTMLPurifier_AttrDef_Color();
         
+        $border_color = 
         $this->info['border-top-color'] = 
         $this->info['border-bottom-color'] = 
         $this->info['border-left-color'] = 
@@ -60,6 +67,9 @@ class HTMLPurifier_CSSDefinition
             new HTMLPurifier_AttrDef_Color()
         ));
         
+        $this->info['border-color'] = new HTMLPurifier_AttrDef_Multiple($border_color);
+        
+        $border_width = 
         $this->info['border-top-width'] = 
         $this->info['border-bottom-width'] = 
         $this->info['border-left-width'] = 
@@ -67,6 +77,8 @@ class HTMLPurifier_CSSDefinition
             new HTMLPurifier_AttrDef_Enum(array('thin', 'medium', 'thick')),
             new HTMLPurifier_AttrDef_CSSLength(true) //disallow negative
         ));
+        
+        $this->info['border-width'] = new HTMLPurifier_AttrDef_Multiple($border_width);
         
         $this->info['letter-spacing'] = new HTMLPurifier_AttrDef_Composite(array(
             new HTMLPurifier_AttrDef_Enum(array('normal')),
@@ -93,6 +105,7 @@ class HTMLPurifier_CSSDefinition
             new HTMLPurifier_AttrDef_Percentage(true)
         ));
         
+        $margin =
         $this->info['margin-top'] = 
         $this->info['margin-bottom'] = 
         $this->info['margin-left'] = 
@@ -102,7 +115,10 @@ class HTMLPurifier_CSSDefinition
             new HTMLPurifier_AttrDef_Enum(array('auto'))
         ));
         
+        $this->info['margin'] = new HTMLPurifier_AttrDef_Multiple($margin);
+        
         // non-negative
+        $padding =
         $this->info['padding-top'] = 
         $this->info['padding-bottom'] = 
         $this->info['padding-left'] = 
@@ -110,6 +126,8 @@ class HTMLPurifier_CSSDefinition
             new HTMLPurifier_AttrDef_CSSLength(true),
             new HTMLPurifier_AttrDef_Percentage(true)
         ));
+        
+        $this->info['padding'] = new HTMLPurifier_AttrDef_Multiple($padding);
         
         $this->info['text-indent'] = new HTMLPurifier_AttrDef_Composite(array(
             new HTMLPurifier_AttrDef_CSSLength(),

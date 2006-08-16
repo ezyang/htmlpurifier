@@ -12,6 +12,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         // regular cases, singular
         $this->assertDef('text-align:right;');
         $this->assertDef('border-left-style:solid;');
+        $this->assertDef('border-style:solid dotted;');
         $this->assertDef('clear:right;');
         $this->assertDef('float:left;');
         $this->assertDef('font-style:italic;');
@@ -24,8 +25,10 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('background-color:transparent;');
         $this->assertDef('color:#F00;');
         $this->assertDef('border-top-color:#F00;');
+        $this->assertDef('border-color:#F00 #FF0;');
         $this->assertDef('border-top-width:thin;');
         $this->assertDef('border-top-width:12px;');
+        $this->assertDef('border-width:5px 1px 4px 2px;');
         $this->assertDef('border-top-width:-12px;', false);
         $this->assertDef('letter-spacing:normal;');
         $this->assertDef('letter-spacing:2px;');
@@ -42,8 +45,10 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('margin-left:5px;');
         $this->assertDef('margin-right:20%;');
         $this->assertDef('margin-top:auto;');
+        $this->assertDef('margin:auto 5%;');
         $this->assertDef('padding-bottom:5px;');
         $this->assertDef('padding-top:20%;');
+        $this->assertDef('padding:20% 10%;');
         $this->assertDef('padding-top:-20%;', false);
         $this->assertDef('text-indent:3em;');
         $this->assertDef('text-indent:5%;');
