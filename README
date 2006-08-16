@@ -7,6 +7,7 @@ robust whitelists and agressive parsing to ensure that not only are XSS
 attacks thwarted, but the resulting HTML is standards compliant.
 
 See INSTALL on how to use the library.  See docs/ for more developer-oriented
-documentation as well as some code examples.
+documentation as well as some code examples.  Users of TinyMCE or FCKeditor
+may be especially interested in WYSIWYG.
 
 HTMLPurifier can be found on the web at: http://hp.jpsband.org/
