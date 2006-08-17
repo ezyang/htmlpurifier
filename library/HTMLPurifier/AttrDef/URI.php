@@ -1,7 +1,9 @@
 <?php
 
+require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/URIScheme.php';
 require_once 'HTMLPurifier/URISchemeRegistry.php';
+require_once 'HTMLPurifier/AttrDef/Host.php';
 
 HTMLPurifier_ConfigDef::define(
     'URI', 'DefaultScheme', 'http',
@@ -11,6 +13,12 @@ HTMLPurifier_ConfigDef::define(
 
 class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
 {
+    
+    var $host;
+    
+    function HTMLPurifier_AttrDef_URI() {
+        $this->host = new HTMLPurifier_AttrDef_Host();
+    }
     
     function validate($uri, $config, &$context) {
         
@@ -63,34 +71,12 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         
         if ($authority !== null) {
             
-            // define regexps
-            // this stuff may need to be factored out so Email can get to it
-            
             $HEXDIG = '[A-Fa-f0-9]';
             $unreserved = 'A-Za-z0-9-._~'; // make sure you wrap with []
             $sub_delims = '!$&\'()'; // needs []
             $pct_encoded = "%$HEXDIG$HEXDIG";
-            $h16 = "{$HEXDIG}{1,4}";
-            $dec_octet = '(?:25[0-5]|2[0-4]\d|1\d\d|1\d|[0-9])';
-            $IPv4address = "$dec_octet.$dec_octet.$dec_octet.$dec_octet";
-            $ls32 = "(?:$h16:$h16|$IPv4address)";
-            $IPvFuture = "v$HEXDIG+\.[:$unreserved$sub_delims]+";
-            $IPv6Address = "(?:".
-                                        "(?:$h16:){6}$ls32" .
-                                     "|::(?:$h16:){5}$ls32" .
-                            "|(?:$h16)?::(?:$h16:){4}$ls32" .
-                "|(?:(?:$h16:){1}$h16)?::(?:$h16:){3}$ls32" .
-                "|(?:(?:$h16:){2}$h16)?::(?:$h16:){2}$ls32" .
-                "|(?:(?:$h16:){3}$h16)?::(?:$h16:){1}$ls32" .
-                "|(?:(?:$h16:){4}$h16)?::$ls32" .
-                "|(?:(?:$h16:){5}$h16)?::$h16" .
-                "|(?:(?:$h16:){6}$h16)?::" .
-                ")";
-            $IP_literal = "\[(?:$IPvFuture|$IPv6Address)\]";
             $r_userinfo = "(?:[$unreserved$sub_delims:]|$pct_encoded)*";
-            
-            // IPv6 is broken
-            $r_authority = "/^(($r_userinfo)@)?(\[$IP_literal\]|[^:]*)(:(\d*))?/";
+            $r_authority = "/^(($r_userinfo)@)?(\[[^\]]+\]|[^:]*)(:(\d*))?/";
             $matches = array();
             preg_match($r_authority, $authority, $matches);
             // overloads regexp!
@@ -103,6 +89,9 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
                 $port = (int) $port;
                 if ($port < 1 || $port > 65535) $port = null;
             }
+            
+            $host = $this->host->validate($host, $config, $context);
+            if ($host === false) $host = null;
             
             // userinfo and host are validated within the regexp
             

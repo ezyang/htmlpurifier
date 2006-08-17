@@ -4,8 +4,11 @@ require_once 'HTMLPurifier/AttrDefHarness.php';
 require_once 'HTMLPurifier/AttrDef/URI.php';
 
 // WARNING: INCOMPLETE UNIT TESTS!
-// we are currently abstaining IPv6 and percent-encode fixing unit tests
+// we are currently abstaining percent-encode fixing unit tests
 // we also need to test all the configuration directives defined by this class
+
+// http: is returned quite often when a URL is invalid. We have to change
+// this behavior to just a plain old "FALSE"!
 
 class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
 {
@@ -95,8 +98,9 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $components[8] = array(null, '333.123.32.123', null, '/', null);
         
         // test IPv6 address, using amended form of RFC's example
-        //$uri[9] = 'http://[2001:db8::7]/c=GB?objectClass?one';
-        //$components[9] = array('[2001:db8::7]', '/c=GB', 'objectClass?one', null);
+        $uri[9] = 'http://[2001:db8::7]/c=GB?objectClass?one';
+        $components[9] = array(null, '[2001:db8::7]', null, '/c=GB',
+            'objectClass?one');
         
         // We will not implement punycode encoding, that's up to the browsers
         // We also will not implement percent to IDNA encoding transformations:
@@ -109,8 +113,9 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $components[10] = array(null, 'tūdaliņ.lv', null, '', null);
         
         // test invalid IPv6 address and invalid reg-name
-        //$uri[11] = 'http://[2001:0db8:85z3:08d3:1319:8a2e:0370:7334]';
-        //$components[11] = array(null, '', null, null);
+        $uri[11] = 'http://[2001:0db8:85z3:08d3:1319:8a2e:0370:7334]';
+        $components[11] = array(null, null, null, '', null);
+        $expect_uri[11] = 'http:';
         
         // test invalid port
         $uri[12] = 'http://example.com:foobar';
