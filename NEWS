@@ -5,5 +5,4 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - First public release, most functionality implemented. Notable omissions are:
   . Shorthand CSS properties
   . Table CSS properties
-  . IPv6 validation
   . Deprecated attribute transformations

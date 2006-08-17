@@ -6,7 +6,6 @@ Core:
 
 Code issues:
  - Massive profiling, make it faster!
- - Fix IPv6 issues
  - Make URI validation routines tighter (especially mailto)
  - Distinguish between different types of URIs, for instance, a mailto URI
    in IMG SRC is nonsensical
