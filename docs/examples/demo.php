@@ -66,5 +66,6 @@ if (isset($html)) echo htmlspecialchars($html, ENT_COMPAT, 'UTF-8');
         </div>
     </fieldset>
 </form>
+<p>Return to <a href="http://hp.jpsband.org/">HTMLPurifier's home page</a>.</p>
 </body>
 </html>
