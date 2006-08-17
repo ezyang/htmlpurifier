@@ -1,10 +1,14 @@
-<!DOCTYPE html 
+<?php
+
+header('Content-type: text/html; charset=UTF-8');
+
+?><!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>HTMLPurifier XSS Attacks Smoketest</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>HTMLPurifier XSS Attacks Smoketest</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
 <h1>HTMLPurifier XSS Attacks Smoketest</h1>
@@ -13,6 +17,8 @@
 <p>The last segment of tests regarding blacklisted websites is not
 applicable at the moment, but when we add that functionality they'll be
 relevant.</p>
+<p>Most of the XSS broadcasts its presence by spawning an alert dialogue.</p>
+<h2>Test</h2>
 <?php
 
 if (version_compare(PHP_VERSION, '5', '<')) exit('<p>Requires PHP 5.</p>');
@@ -24,6 +30,7 @@ $xml = simplexml_load_file('xssAttacks.xml');
 $purifier = new HTMLPurifier();
 
 ?>
+<!-- form is used so that we can use textareas and stay valid -->
 <form method="post" action="xssAttacks.php">
 <table>
 <thead><tr><th>Name</th><th width="30%">Raw</th><th>Output</th><th>Render</th></tr></thead>
