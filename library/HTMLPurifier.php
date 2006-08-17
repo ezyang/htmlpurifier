@@ -3,7 +3,7 @@
 /*!
  * @mainpage
  * 
- * HTMLPurifier is a purification class that will take an arbitrary snippet of
+ * HTMLPurifier is an HTML filter that will take an arbitrary snippet of
  * HTML and rigorously test, validate and filter it into a version that
  * is safe for output onto webpages. It achieves this by:
  * 
@@ -15,7 +15,10 @@
  *      -# Validating attributes of the nodes; and
  *  -# Generating HTML from the purified tokens.
  * 
- * See /docs/spec.txt for more details.
+ * However, most users will only need to interface with the HTMLPurifier
+ * class, so this massive amount of infrastructure is usually concealed.
+ * If you plan on working with the internals, be sure to include
+ * HTMLPurifier_ConfigDef and HTMLPurifier_Config.
  */
 
 require_once 'HTMLPurifier/ConfigDef.php';
@@ -37,29 +40,37 @@ class HTMLPurifier
     
     var $config;
     
+    var $lexer, $strategy, $generator;
+    
     /**
      * Initializes the purifier.
-     * @param $config Configuration for all instances of the purifier
+     * @param $config Optional HTMLPurifier_Config object for all instances of
+     *                the purifier, if omitted, a default configuration is
+     *                supplied.
      */
     function HTMLPurifier($config = null) {
         $this->config = $config ? $config : HTMLPurifier_Config::createDefault();
+        
+        $this->lexer = HTMLPurifier_Lexer::create();
+        $this->strategy = new HTMLPurifier_Strategy_Core();
+        $this->generator = new HTMLPurifier_Generator();
     }
     
     /**
-     * Purifies HTML.
+     * Filters an HTML snippet/document to be XSS-free and standards-compliant.
      * 
      * @param $html String of HTML to purify
-     * @param $config HTMLPurifier_Config object for this specific round
+     * @param $config HTMLPurifier_Config object for this operation, if omitted,
+     *                defaults to the config object specified during this
+     *                object's construction.
      * @return Purified HTML
      */
     function purify($html, $config = null) {
         $config = $config ? $config : $this->config;
-        $lexer = HTMLPurifier_Lexer::create();
-        $strategy = new HTMLPurifier_Strategy_Core();
-        $generator = new HTMLPurifier_Generator();
-        return $generator->generateFromTokens(
-            $strategy->execute(
-                $lexer->tokenizeHTML($html, $config),
+        return
+            $this->generator->generateFromTokens(
+                $this->strategy->execute(
+                    $this->lexer->tokenizeHTML($html, $config),
                 $config
             ),
             $config

@@ -22,23 +22,23 @@ HTMLPurifier_ConfigDef::define(
 class HTMLPurifier_AttrTransform_ImgRequired extends HTMLPurifier_AttrTransform
 {
     
-    function transform($attributes, $config) {
+    function transform($attr, $config) {
         
         $src = true;
-        if (!isset($attributes['src'])) {
-            $attributes['src'] = $config->get('Attr', 'DefaultInvalidImage');
+        if (!isset($attr['src'])) {
+            $attr['src'] = $config->get('Attr', 'DefaultInvalidImage');
             $src = false;
         }
         
-        if (!isset($attributes['alt'])) {
+        if (!isset($attr['alt'])) {
             if ($src) {
-                $attributes['alt'] = basename($attributes['src']);
+                $attr['alt'] = basename($attr['src']);
             } else {
-                $attributes['alt'] = $config->get('Attr', 'DefaultInvalidImageAlt');
+                $attr['alt'] = $config->get('Attr', 'DefaultInvalidImageAlt');
             }
         }
         
-        return $attributes;
+        return $attr;
         
     }
     

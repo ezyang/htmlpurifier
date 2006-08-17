@@ -14,10 +14,10 @@ HTMLPurifier_ConfigDef::define(
 class HTMLPurifier_AttrTransform_BdoDir extends HTMLPurifier_AttrTransform
 {
     
-    function transform($attributes, $config) {
-        if (isset($attributes['dir'])) return $attributes;
-        $attributes['dir'] = $config->get('Attr', 'DefaultTextDir');
-        return $attributes;
+    function transform($attr, $config) {
+        if (isset($attr['dir'])) return $attributes;
+        $attr['dir'] = $config->get('Attr', 'DefaultTextDir');
+        return $attr;
     }
     
 }

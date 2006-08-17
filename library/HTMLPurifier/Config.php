@@ -1,6 +1,14 @@
 <?php
 
-// subclass this to add custom settings
+/**
+ * 
+ * 
+ * @note Many classes that could (although many times don't) use the
+ *       configuration object make it a mandatory parameter.  This is
+ *       because a configuration object should always be forwarded,
+ *       otherwise, you run the risk of missing a parameter and then
+ *       being stumped when a configuration directive doesn't work.
+ */
 class HTMLPurifier_Config
 {
     

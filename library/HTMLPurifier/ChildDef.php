@@ -21,6 +21,9 @@ HTMLPurifier_ConfigDef::define(
     'preserving child nodes.'
 );
 
+/**
+ * Class that defines allowed child nodes and validates tokens against this.
+ */
 class HTMLPurifier_ChildDef
 {
     var $type;
