@@ -2,6 +2,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 1.0.0rc1, released 2006-??-??
+- Fixed broken numeric entity conversion
 
 1.0.0beta, released 2006-08-16
 - First public release, most functionality implemented. Notable omissions are:
