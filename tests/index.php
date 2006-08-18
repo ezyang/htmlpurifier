@@ -127,7 +127,7 @@ if (isset($_GET['file']) && isset($test_file_lookup[$_GET['file']])) {
 }
 
 if (SimpleReporter::inCli()) $reporter = new TextReporter();
-else $reporter = new HTMLReporter();
+else $reporter = new HTMLReporter('UTF-8');
 
 $test->run($reporter);
 
