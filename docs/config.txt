@@ -16,3 +16,30 @@ make this optional: they will supply a default configuration object if none
 are passed.  These classes are: HTMLPurifier::*, Generator::generateFromTokens
 and Lexer::tokenizeHTML.  However, whenever a valid configuration object
 is defined, that object should be used.
+
+In relation to HTMLDefinition and CSSDefinition, there are going to be some
+major structural changes to enable the easy configuration of these objects.
+Due to the intricacy of these objects, it's not feasible to ask an average
+user to twiddle around with an element and its 20 other dependencies.  However,
+these objects are the only possible point where change could occur in the
+context of configuration.
+
+The solution is to introduce a special class of directives that influence the
+*construction* of the Definition object.  A standard call pattern would look
+like:
+
+1. Client calls Config->getHTMLDefinition()
+2. Config calls HTMLDefinition->createNew(this)
+3. HTMLDefinition constructs itself with base configuration
+4. HTMLDefinition calls Config->get('HTMLDefinition')
+5. Config returns array of directives that later construction
+6. HTMLDefinition performs operations and changes specified by directives
+7. HTMLPurifier returns constructed definition
+8. Config caches definition so it doesn't have to be generated again
+9. Config returns definition
+
+You could also override Config's copy of the definition with your own
+custom copy, which OVERRIDES all directives.  Only the base, vanilla copy
+is the Singleton, the object actually interfaced with is a operated-upon
+clone of that object.  Also, if an update to the directives would update
+the definition, you'd have to force reconstruction.
