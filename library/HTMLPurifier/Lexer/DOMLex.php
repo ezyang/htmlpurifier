@@ -49,19 +49,23 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         
         if (!$is_full) {
         // preprocess string, essential for UTF-8
-        $string =
+          $string =
+            '<!DOCTYPE html '.
+                'PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'.
+                '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.
             '<html><head>'.
             '<meta http-equiv="Content-Type" content="text/html;'.
                 ' charset=utf-8" />'.
-            '</head><body>'.$string.'</body></html>';
+            '</head><body><div>'.$string.'</div></body></html>';
         }
         
         @$doc->loadHTML($string); // mute all errors, handle it transparently
         
         $tokens = array();
         $this->tokenizeDOM(
-            $doc->childNodes->item(1)-> // html
-                  getElementsByTagName('body')->item(0) // body
+            $doc->getElementsByTagName('html')->item(0)-> // html
+                  getElementsByTagName('body')->item(0)-> // body
+                  getElementsByTagName('div')->item(0) // div
             , $tokens);
         return $tokens;
     }
