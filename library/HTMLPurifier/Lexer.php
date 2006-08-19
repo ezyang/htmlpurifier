@@ -435,9 +435,9 @@ class HTMLPurifier_Lexer
                     }
                 } else {
                     // ((0xC0 & (*in) != 0x80) && (mState != 0))
-                     * 
-                     * Incomplete multi-octet sequence.
-                     */
+                    //
+                    // Incomplete multi-octet sequence.
+                    //
                     return false;
                 }
             }
