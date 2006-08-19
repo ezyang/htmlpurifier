@@ -9,11 +9,24 @@ require_once 'HTMLPurifier/AttrDef/Multiple.php';
 require_once 'HTMLPurifier/AttrDef/TextDecoration.php';
 require_once 'HTMLPurifier/AttrDef/FontFamily.php';
 
+/**
+ * Defines allowed CSS attributes and what their values are.
+ * @see HTMLPurifier_HTMLDefinition
+ */
 class HTMLPurifier_CSSDefinition
 {
     
+    /**
+     * Assoc array of attribute name to definition object.
+     */
     var $info = array();
     
+    /**
+     * Returns sole instance of this definition.
+     * @param $prototype Optional prototype you may pass in to overload
+     *        the sole instance.  Good for replacing an instance of
+     *        the object with your own, custom object.
+     */
     function &instance($prototype = null) {
         static $instance = null;
         if ($prototype) {
@@ -25,8 +38,9 @@ class HTMLPurifier_CSSDefinition
         return $instance;
     }
     
-    function HTMLPurifier_CSSDefinition() {}
-    
+    /**
+     * Constructs the info array.  The meat of this class.
+     */
     function setup() {
         
         $this->info['text-align'] = new HTMLPurifier_AttrDef_Enum(

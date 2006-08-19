@@ -22,27 +22,73 @@ HTMLPurifier_ConfigDef::define(
 );
 
 /**
- * Class that defines allowed child nodes and validates tokens against this.
+ * Defines allowed child nodes and validates tokens against it.
  */
 class HTMLPurifier_ChildDef
 {
+    /**
+     * Type of child definition, usually right-most part of class name lowercase
+     * 
+     * Used occasionally in terms of context.  Possible values include
+     * custom, required, optional and empty.
+     */
     var $type;
+    
+    /**
+     * Bool that indicates whether or not an empty array of children is okay
+     * 
+     * This is necessary for redundant checking when changes affecting
+     * a child node may cause a parent node to now be disallowed.
+     */
     var $allow_empty;
-    function validateChildren($tokens_of_children) {
+    
+    /**
+     * Validates nodes according to definition and returns modification.
+     * 
+     * @warning $context is NOT HTMLPurifier_AttrContext
+     * @param $tokens_of_children Array of HTMLPurifier_Token
+     * @param $config HTMLPurifier_Config object
+     * @param $context String context indicating inline, block or unknown
+     * @return bool true to leave nodes as is
+     * @return bool false to remove parent node
+     * @return array of replacement child tokens
+     */
+    function validateChildren($tokens_of_children, $config, $context) {
         trigger_error('Call to abstract function', E_USER_ERROR);
     }
 }
 
+/**
+ * Custom validation class, accepts DTD child definitions
+ * 
+ * @warning Currently this class is an all or nothing proposition, that is,
+ *          it will only give a bool return value.  Table is the only
+ *          child definition that uses this class, and we ought to give
+ *          it a dedicated one.
+ */
 class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
 {
     var $type = 'custom';
     var $allow_empty = false;
+    /**
+     * Allowed child pattern as defined by the DTD
+     */
     var $dtd_regex;
+    /**
+     * PCRE regex derived from $dtd_regex
+     * @private
+     */
     var $_pcre_regex;
+    /**
+     * @param $dtd_regex Allowed child pattern from the DTD
+     */
     function HTMLPurifier_ChildDef_Custom($dtd_regex) {
         $this->dtd_regex = $dtd_regex;
         $this->_compileRegex();
     }
+    /**
+     * Compiles the PCRE regex from a DTD regex ($dtd_regex to $_pcre_regex)
+     */
     function _compileRegex() {
         $raw = str_replace(' ', '', $this->dtd_regex);
         if ($raw{0} != '(') {
@@ -82,9 +128,18 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
     }
 }
 
+/**
+ * Definition that allows a set of elements, but disallows empty children.
+ */
 class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
 {
+    /**
+     * Lookup table of allowed elements.
+     */
     var $elements = array();
+    /**
+     * @param $elements List of allowed element names (lowercase).
+     */
     function HTMLPurifier_ChildDef_Required($elements) {
         if (is_string($elements)) {
             $elements = str_replace(' ', '', $elements);
@@ -168,8 +223,13 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
     }
 }
 
-// only altered behavior is that it returns an empty array
-// instead of a false (to delete the node)
+/**
+ * Definition that allows a set of elements, and allows no children.
+ * @note This is a hack to reuse code from HTMLPurifier_ChildDef_Required,
+ *       really, one shouldn't inherit from the other.  Only altered behavior
+ *       is to overload a returned false with an array.  Thus, it will never
+ *       return false.
+ */
 class HTMLPurifier_ChildDef_Optional extends HTMLPurifier_ChildDef_Required
 {
     var $allow_empty = true;
@@ -181,23 +241,48 @@ class HTMLPurifier_ChildDef_Optional extends HTMLPurifier_ChildDef_Required
     }
 }
 
-// placeholder
+/**
+ * Definition that disallows all elements.
+ * @warning validateChildren() in this class is actually never called, because
+ *          empty elements are corrected in HTMLPurifier_Strategy_MakeWellFormed
+ *          before child definitions are parsed in earnest by
+ *          HTMLPurifier_Strategy_FixNesting.
+ */
 class HTMLPurifier_ChildDef_Empty extends HTMLPurifier_ChildDef
 {
     var $allow_empty = true;
     var $type = 'empty';
     function HTMLPurifier_ChildDef_Empty() {}
     function validateChildren($tokens_of_children, $config, $context) {
-        return false;
+        return array();
     }
 }
 
+/**
+ * Definition that uses different definitions depending on context.
+ * 
+ * The del and ins tags are notable because they allow different types of
+ * elements depending on whether or not they're in a block or inline context.
+ * Chameleon allows this behavior to happen by using two different
+ * definitions depending on context.  While this somewhat generalized,
+ * it is specifically intended for those two tags.
+ */
 class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
 {
     
+    /**
+     * Instance of the definition object to use when inline. Usually stricter.
+     */
     var $inline;
+    /**
+     * Instance of the definition object to use when block.
+     */
     var $block;
     
+    /**
+     * @param $inline List of elements to allow when inline.
+     * @param $block List of elements to allow when block.
+     */
     function HTMLPurifier_ChildDef_Chameleon($inline, $block) {
         $this->inline = new HTMLPurifier_ChildDef_Optional($inline);
         $this->block  = new HTMLPurifier_ChildDef_Optional($block);
