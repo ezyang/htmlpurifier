@@ -29,20 +29,21 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
      */
     var $tokens = array();
     
-    function tokenizeHTML($html, $config = null) {
+    function tokenizeHTML($string, $config = null) {
         if (!$config) $config = HTMLPurifier_Config::createDefault();
-        $html = $this->escapeCDATA($html);
+        $string = $this->escapeCDATA($string);
         if ($config->get('Core', 'AcceptFullDocuments')) {
-            $html = $this->extractBody($html);
+            $string = $this->extractBody($string);
         }
-        $html = $this->substituteNonSpecialEntities($html);
+        $string = $this->substituteNonSpecialEntities($string);
+        $string = $this->cleanUTF8($string);
         $parser=& new XML_HTMLSax3();
         $parser->set_object($this);
         $parser->set_element_handler('openHandler','closeHandler');
         $parser->set_data_handler('dataHandler');
         $parser->set_escape_handler('escapeHandler');
         $parser->set_option('XML_OPTION_ENTITIES_PARSED', 1);
-        $parser->parse($html);
+        $parser->parse($string);
         $tokens = $this->tokens;
         $this->tokens = array();
         return $tokens;

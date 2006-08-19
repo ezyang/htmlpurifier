@@ -1,6 +1,6 @@
 <?php
 
-header('Content-type: text/html; charset=UTF-8');
+require_once('common.php');
 
 ?><!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -23,9 +23,6 @@ relevant.</p>
 
 if (version_compare(PHP_VERSION, '5', '<')) exit('<p>Requires PHP 5.</p>');
 
-set_include_path('../library' . PATH_SEPARATOR . get_include_path());
-require_once 'HTMLPurifier.php';
-
 $xml = simplexml_load_file('xssAttacks.xml');
 $purifier = new HTMLPurifier();
 
@@ -43,10 +40,10 @@ foreach ($xml->attack as $attack) {
     if ($attack->name == 'US-ASCII encoding') $code = urldecode($code);
 ?>
     <tr>
-        <td><?php echo htmlspecialchars($attack->name); ?></td>
-        <td><textarea readonly="readonly" cols="20" rows="2"><?php echo htmlspecialchars($code); ?></textarea></td>
+        <td><?php echo escapeHTML($attack->name); ?></td>
+        <td><textarea readonly="readonly" cols="20" rows="2"><?php echo escapeHTML($code); ?></textarea></td>
         <?php $pure_html = $purifier->purify($code); ?>
-        <td><textarea readonly="readonly" cols="20" rows="2"><?php echo htmlspecialchars($pure_html); ?></textarea></td>
+        <td><textarea readonly="readonly" cols="20" rows="2"><?php echo escapeHTML($pure_html); ?></textarea></td>
         <td><?php echo $pure_html ?></td>
     </tr>
 <?php

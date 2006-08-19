@@ -128,6 +128,9 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         // expand entities THAT AREN'T THE BIG FIVE
         $string = $this->substituteNonSpecialEntities($string);
         
+        // clean it into wellformed UTF-8 string
+        $string = $this->cleanUTF8($string);
+        
         // infinite loop protection
         // has to be pretty big, since html docs can be big
         // we're allow two hundred thousand tags... more than enough?

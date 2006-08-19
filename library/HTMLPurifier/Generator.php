@@ -2,35 +2,51 @@
 
 // pretty-printing with indentation would be pretty cool
 
+require_once 'HTMLPurifier/Lexer.php';
+
+HTMLPurifier_ConfigDef::define(
+    'Core', 'CleanUTF8DuringGeneration', false,
+    'When true, HTMLPurifier_Generator will also check all strings it '.
+    'escapes for UTF-8 well-formedness as a defense in depth measure. '.
+    'This could cause a considerable performance impact, and is not '.
+    'strictly necessary due to the fact that the Lexers should have '.
+    'ensured that all the UTF-8 strings were well-formed.  Note that '.
+    'the configuration value is only read at the beginning of '.
+    'generateFromTokens.'
+);
+
 class HTMLPurifier_Generator
 {
+    
+    var $clean_utf8 = false;
     
     // only unit tests may omit configuration: internals MUST pass config
     function generateFromTokens($tokens, $config = null) {
         $html = '';
         if (!$config) $config = HTMLPurifier_Config::createDefault();
+        $this->clean_utf8 = $config->get('Core', 'CleanUTF8DuringGeneration');
         if (!$tokens) return '';
         foreach ($tokens as $token) {
-            $html .= $this->generateFromToken($token, $config);
+            $html .= $this->generateFromToken($token);
         }
         return $html;
     }
     
-    function generateFromToken($token, $config) {
+    function generateFromToken($token) {
         if (!isset($token->type)) return '';
         if ($token->type == 'start') {
-            $attr = $this->generateAttributes($token->attributes, $config);
+            $attr = $this->generateAttributes($token->attributes);
             return '<' . $token->name . ($attr ? ' ' : '') . $attr . '>';
             
         } elseif ($token->type == 'end') {
             return '</' . $token->name . '>';
             
         } elseif ($token->type == 'empty') {
-            $attr = $this->generateAttributes($token->attributes, $config);
+            $attr = $this->generateAttributes($token->attributes);
              return '<' . $token->name . ($attr ? ' ' : '') . $attr . ' />';
             
         } elseif ($token->type == 'text') {
-            return htmlspecialchars($token->data, ENT_COMPAT, 'UTF-8');
+            return $this->escape($token->data);
             
         } else {
             return '';
@@ -38,12 +54,17 @@ class HTMLPurifier_Generator
         }
     }
     
-    function generateAttributes($assoc_array_of_attributes, $config) {
+    function generateAttributes($assoc_array_of_attributes) {
         $html = '';
         foreach ($assoc_array_of_attributes as $key => $value) {
-            $html .= $key.'="'.htmlspecialchars($value, ENT_COMPAT, 'UTF-8').'" ';
+            $html .= $key.'="'.$this->escape($value).'" ';
         }
         return rtrim($html);
+    }
+    
+    function escape($string) {
+        if ($this->clean_utf8) $string = HTMLPurifier_Lexer::cleanUTF8($string);
+        return htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
     }
     
 }

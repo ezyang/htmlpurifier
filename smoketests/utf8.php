@@ -1,7 +1,6 @@
 <?php
 
-// there must not be a byte order mark
-header('Content-type: text/html; charset=UTF-8');
+require_once 'common.php';
 
 ?><!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -14,9 +13,6 @@ header('Content-type: text/html; charset=UTF-8');
 <body>
 <h1>HTMLPurifier UTF-8 Smoketest</h1>
 <?php
-
-set_include_path('../library' . PATH_SEPARATOR . get_include_path());
-require_once 'HTMLPurifier.php';
 
 $purifier = new HTMLPurifier();
 $string = '

@@ -47,6 +47,14 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         // mode won't get 'em.
         $string = $this->escapeCDATA($string);
         
+        // substitute non-special entities. While DOM is perfectly capable
+        // of doing this, we need to get at the UTF-8 characters in
+        // cleanUTF8
+        $string = $this->substituteNonSpecialEntities($string);
+        
+        // clean it into well-formed UTF-8 string
+        $string = $this->cleanUTF8($string);
+        
         if (!$is_full) {
         // preprocess string, essential for UTF-8
           $string =

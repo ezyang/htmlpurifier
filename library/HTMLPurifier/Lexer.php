@@ -307,16 +307,19 @@ class HTMLPurifier_Lexer
     }
     
     /**
-     * Currently converts UTF8 into an array of Unicode codepoints. (changing)
+     * Cleans a UTF-8 string for well-formedness and SGML validity
      * 
-     * We're going to convert this into a multi-purpose UTF-8 well-formedness
-     * checker as well as handler for the control characters that are illegal
-     * in SGML documents.  But *after* we draw up some unit-tests.  This means
-     * that the function, in the end, will not return an array of codepoints
-     * but a valid UTF8 string, with non-SGML codepoints excluded.
+     * It will parse according to UTF-8 and return a valid UTF8 string, with
+     * non-SGML codepoints excluded.
+     * 
+     * @warning This function can find a lot of use, so we may be moving
+     *          it to a dedicated class.
      * 
      * @note Just for reference, the non-SGML code points are 0 to 31 and
-     *       127 to 159, inclusive.
+     *       127 to 159, inclusive.  However, we allow code points 9, 10
+     *       and 13, which are the tab, line feed and carriage return
+     *       respectively. 128 and above the code points map to multibyte
+     *       UTF-8 representations.
      * 
      * @note The functionality provided by the original function could be
      *       implemented with iconv using 'UTF-8//IGNORE', mbstring, or
@@ -332,7 +335,7 @@ class HTMLPurifier_Lexer
      * 
      * @note Code adapted from utf8ToUnicode by Henri Sivonen and
      *       hsivonen@iki.fi at <http://iki.fi/hsivonen/php-utf8/> under the
-     *       LGPL license.
+     *       LGPL license.  Notes on what changed are inside.
      */
     function cleanUTF8($str) {
         $mState = 0; // cached expected number of octets after the current octet
@@ -340,17 +343,33 @@ class HTMLPurifier_Lexer
         $mUcs4  = 0; // cached Unicode character
         $mBytes = 1; // cached expected number of octets in the current sequence
         
-        $out = array();
+        // original code involved an $out that was an array of Unicode
+        // codepoints.  Instead of having to convert back into UTF-8, we've
+        // decided to directly append valid UTF-8 characters onto a string
+        // $out once they're done.  $char accumulates raw bytes, while $mUcs4
+        // turns into the Unicode code point, so there's some redundancy.
+        
+        $out = '';
+        $char = '';
         
         $len = strlen($str);
         for($i = 0; $i < $len; $i++) {
             $in = ord($str{$i});
+            $char .= $str[$i]; // append byte to char
             if (0 == $mState) {
                 // When mState is zero we expect either a US-ASCII character 
                 // or a multi-octet sequence.
                 if (0 == (0x80 & ($in))) {
                     // US-ASCII, pass straight through.
-                    $out[] = $in;
+                    if (($in <= 31 || $in == 127) && 
+                        !($in == 9 || $in == 13 || $in == 10) // save \r\t\n
+                    ) {
+                        // control characters, remove
+                    } else {
+                        $out .= $char;
+                    }
+                    // reset
+                    $char = '';
                     $mBytes = 1;
                 } elseif (0xC0 == (0xE0 & ($in))) {
                     // First octet of 2 octet sequence
@@ -394,7 +413,10 @@ class HTMLPurifier_Lexer
                 } else {
                     // Current octet is neither in the US-ASCII range nor a 
                     // legal first octet of a multi-octet sequence.
-                    return false;
+                    $mState = 0;
+                    $mUcs4  = 0;
+                    $mBytes = 1;
+                    $char = '';
                 }
             } else {
                 // When mState is non-zero, we expect a continuation of the
@@ -422,23 +444,26 @@ class HTMLPurifier_Lexer
                             // Codepoints outside the Unicode range are illegal
                             ($mUcs4 > 0x10FFFF)
                         ) {
-                            return false;
+                            
+                        } elseif (0xFEFF != $mUcs4 && // omit BOM
+                            !($mUcs4 >= 128 && $mUcs4 <= 159) // omit non-SGML
+                        ) {
+                            $out .= $char;
                         }
-                        if (0xFEFF != $mUcs4) {
-                            // BOM is legal but we don't want to output it
-                            $out[] = $mUcs4;
-                        }
-                        //initialize UTF8 cache
+                        // initialize UTF8 cache (reset)
                         $mState = 0;
                         $mUcs4  = 0;
                         $mBytes = 1;
+                        $char = '';
                     }
                 } else {
                     // ((0xC0 & (*in) != 0x80) && (mState != 0))
-                    //
                     // Incomplete multi-octet sequence.
-                    //
-                    return false;
+                    // used to result in complete fail, but we'll reset
+                    $mState = 0;
+                    $mUcs4  = 0;
+                    $mBytes = 1;
+                    $char ='';
                 }
             }
         }

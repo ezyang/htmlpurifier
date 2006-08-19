@@ -1,6 +1,6 @@
 <?php
 
-header('Content-type: text/html; charset=UTF-8');
+require_once 'common.php';
 
 ?><!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -19,15 +19,7 @@ in Internet Explorer, if it works at all.</p>
 <h2>Test</h2>
 <?php
 
-set_include_path('../library' . PATH_SEPARATOR . get_include_path());
-require_once 'HTMLPurifier.php';
 $purifier = new HTMLPurifier();
-
-function escape($string) {
-    $string = htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
-    $string = iconv('UTF-8', 'UTF-8//IGNORE', $string);
-    return $string;
-}
 
 ?>
 <table>
@@ -44,8 +36,8 @@ for ($i = 0; $i < 256; $i++) {
 ?>
 <tr>
     <td><?php echo $i; ?></td>
-    <td style="font-size:8pt;"><?php echo escape($html); ?></td>
-    <td style="font-size:8pt;"><?php echo escape($pure_html); ?></td>
+    <td style="font-size:8pt;"><?php echo escapeHTML($html); ?></td>
+    <td style="font-size:8pt;"><?php echo escapeHTML($pure_html); ?></td>
     <td><?php echo $pure_html; ?></td>
 </tr>
 <?php } ?>
@@ -54,9 +46,8 @@ for ($i = 0; $i < 256; $i++) {
 
 <h2>Analysis</h2>
 
-<p>This test currently passes the XSS aspect but fails the validation aspect
-due to generalized encoding issues.  An augmented UTF-8 smoketest is 
-pending, until then, consider this a pass.</p>
+<p>By making sure that UTF-8 is well formed and non-SGML codepoints are
+removed, as well as escaping quotes outside of tags, this is a non-threat.</p>
 
 </body>
 </html>
