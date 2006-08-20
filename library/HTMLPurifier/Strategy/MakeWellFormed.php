@@ -4,6 +4,9 @@ require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/Generator.php';
 
+/**
+ * Takes tokens makes them well-formed (balance end tags, etc.)
+ */
 class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
 {
     

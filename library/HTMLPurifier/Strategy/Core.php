@@ -7,6 +7,9 @@ require_once 'HTMLPurifier/Strategy/MakeWellFormed.php';
 require_once 'HTMLPurifier/Strategy/FixNesting.php';
 require_once 'HTMLPurifier/Strategy/ValidateAttributes.php';
 
+/**
+ * Core strategy composed of the big four strategies.
+ */
 class HTMLPurifier_Strategy_Core extends HTMLPurifier_Strategy_Composite
 {
     
