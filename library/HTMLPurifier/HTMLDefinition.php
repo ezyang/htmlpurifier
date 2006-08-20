@@ -30,12 +30,8 @@ require_once 'HTMLPurifier/TagTransform.php';
  * each allowed element. It also contains special use information (always
  * prefixed by info) for intelligent tag closing and global attributes.
  * 
- * Planned improvements include attribute transformation objects as well as
- * migration of auto-tag-closing from HTMLPurifier_Strategy_MakeWellFormed
- * (these can likely just be extensions of ElementDef).
- * 
- * After development drops off, the definition generation will be moved to
- * a maintenance script and we will stipulate that definition be created
+ * For optimization, the definition generation may be moved to
+ * a maintenance script and stipulate that definition be created
  * by a factory method that unserializes a serialized version of Definition.
  * Customization would entail copying the maintenance script, making the
  * necessary changes, generating the serialized object, and then hooking it
@@ -46,26 +42,50 @@ require_once 'HTMLPurifier/TagTransform.php';
 class HTMLPurifier_HTMLDefinition
 {
     
+    /**
+     * Associative array of element names to HTMLPurifier_ElementDef
+     * @public
+     */
     var $info = array();
     
-    // used solely by HTMLPurifier_Strategy_ValidateAttributes
+    /**
+     * Associative array of global attribute name to attribute definition.
+     * @public
+     */
     var $info_global_attr = array();
     
-    // used solely by HTMLPurifier_Strategy_FixNesting
+    /**
+     * String name of parent element HTML will be going into.
+     * @public
+     */
     var $info_parent = 'div';
     
-    // used solely by HTMLPurifier_Strategy_RemoveForeignElements
+    /**
+     * Associative array of deprecated tag name to HTMLPurifier_TagTransform
+     * @public
+     */
     var $info_tag_transform = array();
     
-    // used solely by HTMLPurifier_Strategy_ValidateAttributes
+    /**
+     * List of HTMLPurifier_AttrTransform to be performed before validation.
+     * @public
+     */
     var $info_attr_transform_pre = array();
+    
+    /**
+     * List of HTMLPurifier_AttrTransform to be performed after validation/
+     * @public
+     */
     var $info_attr_transform_post = array();
     
-    // WARNING! Prototype is not passed by reference, so in order to get
-    // a copy of the real one, you'll have to destroy your copy and
-    // use instance() to get it.
-    // Usually, however, modifying the returned definition (reference) should be
-    // sufficient
+    /**
+     * Retrieve sole instance of definition object.
+     * @param $prototype Optional prototype to overload instance with.
+     * @warning Prototype is not passed by reference, so in order to get
+     *          a copy of the real one, you'll have to destroy your copy
+     *          and use instance() to get it.  We strongly recommend modifying
+     *          the default returned definition instead.
+     */
     function &instance($prototype = null) {
         static $instance = null;
         if ($prototype) {
@@ -77,8 +97,9 @@ class HTMLPurifier_HTMLDefinition
         return $instance;
     }
     
-    function HTMLPurifier_HTMLDefinition() {}
-    
+    /**
+     * Initializes the definition, the meat of the class.
+     */
     function setup() {
         
         // emulates the structure of the DTD
@@ -130,6 +151,7 @@ class HTMLPurifier_HTMLDefinition
         $e_misc = "$e_misc_inline";
         $e_inline = "a | $e_special | $e_fontstyle | $e_phrase".
           " | $e_inline_forms";
+        // pseudo-property we created for convenience, see later on
         $e__inline = "#PCDATA | $e_inline | $e_misc_inline";
         // note the casing
         $e_Inline = new HTMLPurifier_ChildDef_Optional($e__inline);
@@ -394,15 +416,52 @@ class HTMLPurifier_HTMLDefinition
     
 }
 
+/**
+ * Structure that stores an element definition.
+ */
 class HTMLPurifier_ElementDef
 {
     
+    /**
+     * Associative array of attribute name to HTMLPurifier_AttrDef
+     * @public
+     */
     var $attr = array();
+    
+    /**
+     * List of tag's HTMLPurifier_AttrTransform to be done before validation
+     * @public
+     */
     var $attr_transform_pre = array();
+    
+    /**
+     * List of tag's HTMLPurifier_AttrTransform to be done after validation
+     * @public
+     */
     var $attr_transform_post = array();
+    
+    /**
+     * Lookup table of tags that close this tag.
+     * @public
+     */
     var $auto_close = array();
+    
+    /**
+     * HTMLPurifier_ChildDef of this tag.
+     * @public
+     */
     var $child;
+    
+    /**
+     * Type of the tag: inline or block or unknown?
+     * @public
+     */
     var $type = 'unknown';
+    
+    /**
+     * Lookup table of tags excluded from all descendants of this tag.
+     * @public
+     */
     var $excludes = array();
     
 }

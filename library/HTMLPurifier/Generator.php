@@ -15,16 +15,29 @@ HTMLPurifier_ConfigDef::define(
     'generateFromTokens.'
 );
 
+/**
+ * Generates HTML from tokens.
+ */
 class HTMLPurifier_Generator
 {
     
-    var $clean_utf8 = false;
+    /**
+     * Bool cache of the CleanUTF8DuringGeneration directive.
+     * @private
+     */
+    var $_clean_utf8 = false;
     
-    // only unit tests may omit configuration: internals MUST pass config
+    /**
+     * Generates HTML from an array of tokens.
+     * @param $tokens Array of HTMLPurifier_Token
+     * @param $config HTMLPurifier_Config object
+     * @return Generated HTML
+     * @note Only unit tests may omit configuration: internals MUST pass config
+     */
     function generateFromTokens($tokens, $config = null) {
         $html = '';
         if (!$config) $config = HTMLPurifier_Config::createDefault();
-        $this->clean_utf8 = $config->get('Core', 'CleanUTF8DuringGeneration');
+        $this->_clean_utf8 = $config->get('Core', 'CleanUTF8DuringGeneration');
         if (!$tokens) return '';
         foreach ($tokens as $token) {
             $html .= $this->generateFromToken($token);
@@ -32,6 +45,11 @@ class HTMLPurifier_Generator
         return $html;
     }
     
+    /**
+     * Generates HTML from a single token.
+     * @param $token HTMLPurifier_Token object.
+     * @return Generated HTML
+     */
     function generateFromToken($token) {
         if (!isset($token->type)) return '';
         if ($token->type == 'start') {
@@ -54,6 +72,11 @@ class HTMLPurifier_Generator
         }
     }
     
+    /**
+     * Generates attribute declarations from attribute array.
+     * @param $assoc_array_of_attributes Attribute array
+     * @return Generate HTML fragment for insertion.
+     */
     function generateAttributes($assoc_array_of_attributes) {
         $html = '';
         foreach ($assoc_array_of_attributes as $key => $value) {
@@ -62,8 +85,13 @@ class HTMLPurifier_Generator
         return rtrim($html);
     }
     
+    /**
+     * Escapes raw text data.
+     * @param $string String data to escape for HTML.
+     * @return String escaped data.
+     */
     function escape($string) {
-        if ($this->clean_utf8) $string = HTMLPurifier_Lexer::cleanUTF8($string);
+        if ($this->_clean_utf8) $string = HTMLPurifier_Lexer::cleanUTF8($string);
         return htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
     }
     

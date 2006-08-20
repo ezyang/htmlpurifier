@@ -11,6 +11,14 @@
  */
 class HTMLPurifier_Token {
     var $type; /**< Type of node to bypass <tt>is_a()</tt>. @public */
+    
+    /**
+     * Copies the tag into a new one (clone substitute).
+     * @return Copied token
+     */
+    function copy() {
+        trigger_error('Cannot copy abstract class', E_USER_ERROR);
+    }
 }
 
 /**

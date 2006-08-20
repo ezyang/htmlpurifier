@@ -24,12 +24,19 @@ HTMLPurifier_ConfigDef::define(
     'in order to add more schemes.'
 );
 
+/**
+ * Registry for retrieving specific URI scheme validator objects.
+ */
 class HTMLPurifier_URISchemeRegistry
 {
     
-    // pass a registry object $prototype with a compatible interface and
-    // the function will copy it and return it all further times.
-    // pass bool true to reset to the default registry
+    /**
+     * Retrieve sole instance of the registry.
+     * @param $prototype Optional prototype to overload sole instance with,
+     *                   or bool true to reset to default registry.
+     * @note Pass a registry object $prototype with a compatible interface and
+     *       the function will copy it and return it all further times.
+     */
     function &instance($prototype = null) {
         static $instance = null;
         if ($prototype !== null) {
@@ -40,9 +47,23 @@ class HTMLPurifier_URISchemeRegistry
         return $instance;
     }
     
+    /**
+     * Cache of retrieved schemes.
+     * @protected
+     */
     var $schemes = array();
+    
+    /**
+     * Directory where scheme objects can be found
+     * @private
+     */
     var $_scheme_dir = null;
     
+    /**
+     * Retrieves a scheme validator object
+     * @param $scheme String scheme name like http or mailto
+     * @param $config HTMLPurifier_Config object
+     */
     function &getScheme($scheme, $config = null) {
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $null = null; // for the sake of passing by reference
@@ -67,6 +88,11 @@ class HTMLPurifier_URISchemeRegistry
         return $this->schemes[$scheme];
     }
     
+    /**
+     * Registers a custom scheme to the cache.
+     * @param $scheme Scheme name
+     * @param $scheme_obj HTMLPurifier_URIScheme object
+     */
     function register($scheme, &$scheme_obj) {
         $this->schemes[$scheme] =& $scheme_obj;
     }

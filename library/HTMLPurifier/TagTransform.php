@@ -2,20 +2,37 @@
 
 require_once('HTMLPurifier/Token.php');
 
+/**
+ * Defines a mutation of an obsolete tag into a valid tag.
+ */
 class HTMLPurifier_TagTransform
 {
     
+    /**
+     * Tag name to transform the tag to.
+     * @public
+     */
+    var $transform_to;
+    
+    /**
+     * Transforms the obsolete tag into the valid tag.
+     * @param $tag Tag to be transformed.
+     */
     function transform($tag) {
         trigger_error('Call to abstract function', E_USER_ERROR);
     }
     
 }
 
+/**
+ * Simple transformation, just change tag name to something else.
+ */
 class HTMLPurifier_TagTransform_Simple extends HTMLPurifier_TagTransform
 {
     
-    var $transform_to;
-    
+    /**
+     * @param $transform_to Tag name to transform to.
+     */
     function HTMLPurifier_TagTransform_Simple($transform_to) {
         $this->transform_to = $transform_to;
     }
@@ -28,6 +45,12 @@ class HTMLPurifier_TagTransform_Simple extends HTMLPurifier_TagTransform
     
 }
 
+/**
+ * Transforms CENTER tags into proper version (DIV with text-align CSS)
+ * 
+ * Takes a CENTER tag, parses the align attribute, and then if it's valid
+ * assigns it to the CSS property text-align.
+ */
 class HTMLPurifier_TagTransform_Center extends HTMLPurifier_TagTransform
 {
     var $transform_to = 'div';
@@ -51,6 +74,18 @@ class HTMLPurifier_TagTransform_Center extends HTMLPurifier_TagTransform
     }
 }
 
+/**
+ * Transforms FONT tags to the proper form (SPAN with CSS styling)
+ * 
+ * This transformation takes the three proprietary attributes of FONT and
+ * transforms them into their corresponding CSS attributes.  These are color,
+ * face, and size.
+ * 
+ * @note Size is an interesting case because it doesn't map cleanly to CSS.
+ *       Thanks to
+ *       http://style.cleverchimp.com/font_size_intervals/altintervals.html
+ *       for reasonable mappings.
+ */
 class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
 {
     
@@ -78,8 +113,6 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
             return $new_tag;
         }
         
-        // font size lookup table based off of:
-        //  http://style.cleverchimp.com/font_size_intervals/altintervals.html
         $attributes = $tag->attributes;
         $prepend_style = '';
         
