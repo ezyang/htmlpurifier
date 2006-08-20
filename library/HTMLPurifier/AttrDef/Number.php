@@ -1,10 +1,19 @@
 <?php
 
+/**
+ * Validates a number as defined by the CSS spec.
+ */
 class HTMLPurifier_AttrDef_Number extends HTMLPurifier_AttrDef
 {
     
+    /**
+     * Bool indicating whether or not only positive values allowed.
+     */
     var $non_negative = false;
     
+    /**
+     * @param $non_negative Bool indicating whether negatives are forbidden
+     */
     function HTMLPurifier_AttrDef_Number($non_negative = false) {
         $this->non_negative = $non_negative;
     }

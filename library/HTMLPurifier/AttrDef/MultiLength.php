@@ -3,6 +3,12 @@
 require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/AttrDef/Length.php';
 
+/**
+ * Validates a MultiLength as defined by the HTML spec.
+ * 
+ * A multilength is either a integer (pixel count), a percentage, or
+ * a relative number.
+ */
 class HTMLPurifier_AttrDef_MultiLength extends HTMLPurifier_AttrDef_Length
 {
     

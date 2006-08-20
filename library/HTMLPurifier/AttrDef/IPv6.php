@@ -2,11 +2,12 @@
 
 require_once 'HTMLPurifier/AttrDef/IPv4.php';
 
-// IPv6 by Feyd, source is in public domain
-
-// note that this expects the brackets to be removed from IPv6 addresses
-// extends from the IPv4 impl. so we can borrow its regex
-
+/**
+ * Validates an IPv6 address.
+ * @author Feyd @ forums.devnetwork.net (public domain)
+ * @note This function requires brackets to have been removed from address
+ *       in URI.
+ */
 class HTMLPurifier_AttrDef_IPv6 extends HTMLPurifier_AttrDef_IPv4
 {
     

@@ -3,11 +3,21 @@
 require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/AttrDef/Number.php';
 
+/**
+ * Validates a Percentage as defined by the HTML spec.
+ * @note This also allows integer pixel values.
+ */
 class HTMLPurifier_AttrDef_Percentage extends HTMLPurifier_AttrDef
 {
     
+    /**
+     * Instance of HTMLPurifier_AttrDef_Number to defer pixel validation
+     */
     var $number_def;
     
+    /**
+     * @param Bool indicating whether to forbid negative values
+     */
     function HTMLPurifier_AttrDef_Percentage($non_negative = false) {
         $this->number_def = new HTMLPurifier_AttrDef_Number($non_negative);
     }

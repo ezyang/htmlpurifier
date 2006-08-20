@@ -3,6 +3,9 @@
 require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/Config.php';
 
+/**
+ * Validates the contents of the global HTML attribute class.
+ */
 class HTMLPurifier_AttrDef_Class extends HTMLPurifier_AttrDef
 {
     

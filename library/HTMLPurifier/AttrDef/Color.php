@@ -2,6 +2,9 @@
 
 require_once 'HTMLPurifier/AttrDef.php';
 
+/**
+ * Validates Color as defined by CSS.
+ */
 class HTMLPurifier_AttrDef_Color
 {
     

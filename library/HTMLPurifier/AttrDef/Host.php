@@ -4,9 +4,15 @@ require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/AttrDef/IPv4.php';
 require_once 'HTMLPurifier/AttrDef/IPv6.php';
 
+/**
+ * Validates a host according to the IPv4, IPv6 and DNS specifications.
+ */
 class HTMLPurifier_AttrDef_Host extends HTMLPurifier_AttrDef
 {
     
+    /**
+     * Instances of HTMLPurifier_AttrDef_IPv4 and HTMLPurifier_AttrDef_IPv6
+     */
     var $ipv4, $ipv6;
     
     function HTMLPurifier_AttrDef_Host() {

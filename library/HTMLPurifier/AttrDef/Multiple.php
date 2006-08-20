@@ -2,12 +2,30 @@
 
 require_once 'HTMLPurifier/AttrDef.php';
 
+/**
+ * Framework class for strings that involve multiple values.
+ * 
+ * Certain CSS properties such as border-width and margin allow multiple
+ * lengths to be specified.  This class can take a vanilla border-width
+ * definition and multiply it, usually into a max of four.
+ */
 class HTMLPurifier_AttrDef_Multiple extends HTMLPurifier_AttrDef
 {
     
+    /**
+     * Instance of component definition to defer validation to.
+     */
     var $single;
+    
+    /**
+     * Max number of values allowed.
+     */
     var $max;
     
+    /**
+     * @param $single HTMLPurifier_AttrDef to multiply
+     * @param $max Max number of values allowed (usually four)
+     */
     function HTMLPurifier_AttrDef_Multiple($single, $max = 4) {
         $this->single = $single;
         $this->max = $max;

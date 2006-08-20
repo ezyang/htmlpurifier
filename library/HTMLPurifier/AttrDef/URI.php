@@ -11,6 +11,10 @@ HTMLPurifier_ConfigDef::define(
     'select the proper object validator when no scheme information is present.'
 );
 
+/**
+ * Validates a URI as defined by RFC 3986.
+ * @note Scheme-specific mechanics deferred to HTMLPurifier_URIScheme
+ */
 class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
 {
     

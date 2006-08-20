@@ -3,6 +3,12 @@
 require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/CSSDefinition.php';
 
+/**
+ * Validates the HTML attribute style, otherwise known as CSS.
+ * @note We don't implement the whole CSS specification, so it might be
+ *       difficult to reuse this component in the context of validating
+ *       actual stylesheet declarations.
+ */
 class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
 {
     

@@ -2,14 +2,24 @@
 
 require_once 'HTMLPurifier/AttrDef.php';
 
-// appears to be a dud class: no currently allowed CSS uses this type
-// Uses this: widows, orphans, z-index, counter-increment, counter-reset
-
+/**
+ * Validates an integer.
+ * @note While this class was modeled off the CSS definition, no currently
+ *       allowed CSS uses this type.  The properties that do are: widows,
+ *       orphans, z-index, counter-increment, counter-reset.  Some of the
+ *       HTML attributes, however, find use for a non-negative version of this.
+ */
 class HTMLPurifier_AttrDef_Integer extends HTMLPurifier_AttrDef
 {
     
+    /**
+     * Bool indicating whether or not integers can only be positive.
+     */
     var $non_negative = false;
     
+    /**
+     * @param $non_negative bool indicating whether or not only positive
+     */
     function HTMLPurifier_AttrDef_Integer($non_negative = false) {
         $this->non_negative = $non_negative;
     }

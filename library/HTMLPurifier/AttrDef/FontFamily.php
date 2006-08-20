@@ -4,9 +4,16 @@ require_once 'HTMLPurifier/AttrDef.php';
 
 // whitelisting allowed fonts would be nice
 
+/**
+ * Validates a font family list according to CSS spec
+ */
 class HTMLPurifier_AttrDef_FontFamily extends HTMLPurifier_AttrDef
 {
     
+    /**
+     * Generic font family keywords.
+     * @protected
+     */
     var $generic_names = array(
         'serif' => true,
         'sans-serif' => true,

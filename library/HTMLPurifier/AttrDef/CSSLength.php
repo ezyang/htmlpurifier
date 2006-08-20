@@ -3,13 +3,29 @@
 require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/AttrDef/Number.php';
 
+/**
+ * Represents a Length as defined by CSS.
+ * @warning Be sure not to confuse this with HTMLPurifier_AttrDef_Length!
+ */
 class HTMLPurifier_AttrDef_CSSLength extends HTMLPurifier_AttrDef
 {
     
+    /**
+     * Valid unit lookup table.
+     * @warning The code assumes all units are two characters long.  Be careful
+     *          if we have to change this behavior!
+     */
     var $units = array('em' => true, 'ex' => true, 'px' => true, 'in' => true,
          'cm' => true, 'mm' => true, 'pt' => true, 'pc' => true);
+    /**
+     * Instance of HTMLPurifier_AttrDef_Number to defer number validation to
+     */
     var $number_def;
     
+    /**
+     * @param $non_negative Bool indication whether or not negative values are
+     *                      allowed.
+     */
     function HTMLPurifier_AttrDef_CSSLength($non_negative = false) {
         $this->number_def = new HTMLPurifier_AttrDef_Number($non_negative);
     }

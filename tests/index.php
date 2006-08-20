@@ -61,7 +61,6 @@ $test_files[] = 'AttrDef/TextTest.php';
 $test_files[] = 'AttrDef/LangTest.php';
 $test_files[] = 'AttrDef/PixelsTest.php';
 $test_files[] = 'AttrDef/LengthTest.php';
-$test_files[] = 'AttrDef/NumberSpanTest.php';
 $test_files[] = 'AttrDef/URITest.php';
 $test_files[] = 'AttrDef/CSSTest.php';
 $test_files[] = 'AttrDef/CompositeTest.php';

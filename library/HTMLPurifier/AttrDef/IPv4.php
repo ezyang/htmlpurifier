@@ -2,12 +2,17 @@
 
 require_once 'HTMLPurifier/AttrDef.php';
 
-// spliced from Feyd's IPv6 function (pd)
-
+/**
+ * Validates an IPv4 address
+ * @author Feyd @ forums.devnetwork.net (public domain)
+ */
 class HTMLPurifier_AttrDef_IPv4 extends HTMLPurifier_AttrDef
 {
     
-    // regex is public so that IPv6 can reuse it
+    /**
+     * IPv4 regex, protected so that IPv6 can reuse it
+     * @protected
+     */
     var $ip4;
     
     function HTMLPurifier_AttrDef_IPv4() {

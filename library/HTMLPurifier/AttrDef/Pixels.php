@@ -2,6 +2,9 @@
 
 require_once 'HTMLPurifier/AttrDef.php';
 
+/**
+ * Validates an integer representation of pixels according to the HTML spec.
+ */
 class HTMLPurifier_AttrDef_Pixels extends HTMLPurifier_AttrDef
 {
     
