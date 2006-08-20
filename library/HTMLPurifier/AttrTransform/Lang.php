@@ -2,9 +2,11 @@
 
 require_once 'HTMLPurifier/AttrTransform.php';
 
-// this transformation may be done pre or post validation, but post is
-// preferred, since invalid languages then will have been dropped.
-
+/**
+ * Post-transform that copies lang's value to xml:lang (and vice-versa)
+ * @note Theoretically speaking, this could be a pre-transform, but putting
+ *       post is more efficient.
+ */
 class HTMLPurifier_AttrTransform_Lang extends HTMLPurifier_AttrTransform
 {
     

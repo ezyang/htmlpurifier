@@ -11,6 +11,9 @@ HTMLPurifier_ConfigDef::define(
     'attribute in HTML, or ltr if that is not specified.'
 );
 
+/**
+ * Post-trasnform that ensures that bdo tags have the dir attribute set.
+ */
 class HTMLPurifier_AttrTransform_BdoDir extends HTMLPurifier_AttrTransform
 {
     

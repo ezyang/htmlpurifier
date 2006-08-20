@@ -19,6 +19,9 @@ HTMLPurifier_ConfigDef::define(
     'image is valid but there was no alt attribute present.'
 );
 
+/**
+ * Post-transform that ensures the required attrs of img (alt and src) are set
+ */
 class HTMLPurifier_AttrTransform_ImgRequired extends HTMLPurifier_AttrTransform
 {
     
