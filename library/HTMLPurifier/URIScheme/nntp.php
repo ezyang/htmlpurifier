@@ -2,6 +2,9 @@
 
 require_once 'HTMLPurifier/URIScheme.php';
 
+/**
+ * Validates nntp (Network News Transfer Protocol) as defined by generic RFC 1738
+ */
 class HTMLPurifier_URIScheme_nntp extends HTMLPurifier_URIScheme {
     
     var $default_port = 119;

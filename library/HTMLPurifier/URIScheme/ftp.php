@@ -2,6 +2,10 @@
 
 require_once 'HTMLPurifier/URIScheme.php';
 
+/**
+ * Validates ftp (File Transfer Protocol) URIs as defined by generic RFC 1738.
+ * @todo Typecode check on path
+ */
 class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme {
     
     var $default_port = 21;
