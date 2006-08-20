@@ -62,7 +62,7 @@ class HTMLPurifier_TokenFactory
      * @param $name Tag name
      * @param $attribute Associative array of attributes
      * @return Generated HTMLPurifier_Token_Empty
-     */s
+     */
     public function createEmpty($name, $attributes = array()) {
         $p = clone $this->p_empty;
         $p->HTMLPurifier_Token_Tag($name, $attributes);
