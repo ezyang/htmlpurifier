@@ -58,8 +58,10 @@ if (isset($_GET['profile']) || isset($_GET['XDEBUG_PROFILE'])) {
         <legend>HTML</legend>
         <textarea name="html" cols="60" rows="15"><?php
 
-if (isset($html)) echo htmlspecialchars($html, ENT_COMPAT, 'UTF-8');
-
+if (isset($html)) {
+    echo htmlspecialchars(
+            HTMLPurifier_Lexer::cleanUTF8($html), ENT_COMPAT, 'UTF-8');
+}
         ?></textarea>
         <div>
             <input type="submit" value="Submit" name="submit" class="button" />
