@@ -2,7 +2,14 @@ Todo List
 
 Core:
  - Finish table and shorthand CSS attributes
+    - border-collapse, caption-side, empty-cells, table-layout, vertical-align
+    - background
+    - border, border-*
+    - font
+    - list-style
  - Implement all non-essential attribute transforms
+ - Microsoft Word HTML cleaning
+ - Plugins for major CMSes
 
 Code issues:
  - Massive profiling, make it faster!
