@@ -331,7 +331,7 @@ class HTMLPurifier_HTMLDefinition
         $this->info['col']->attr['width'] =
         $this->info['colgroup']->attr['width'] = $e_MultiLength;
         
-        $e__NumberSpan = new HTMLPurifier_AttrDef_Integer(true);
+        $e__NumberSpan = new HTMLPurifier_AttrDef_Integer(false, false, true);
         $this->info['colgroup']->attr['span'] =
         $this->info['col']->attr['span']   =
         $this->info['td']->attr['rowspan'] =

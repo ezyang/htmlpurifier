@@ -13,15 +13,31 @@ class HTMLPurifier_AttrDef_Integer extends HTMLPurifier_AttrDef
 {
     
     /**
-     * Bool indicating whether or not integers can only be positive.
+     * Bool indicating whether or not negative values are allowed
      */
-    var $non_negative = false;
+    var $negative = true;
     
     /**
-     * @param $non_negative bool indicating whether or not only positive
+     * Bool indicating whether or not zero is allowed
      */
-    function HTMLPurifier_AttrDef_Integer($non_negative = false) {
-        $this->non_negative = $non_negative;
+    var $zero = true;
+    
+    /**
+     * Bool indicating whether or not positive values are allowed
+     */
+    var $positive = true;
+    
+    /**
+     * @param $negative Bool indicating whether or not negative values are allowed
+     * @param $zero Bool indicating whether or not zero is allowed
+     * @param $positive Bool indicating whether or not positive values are allowed
+     */
+    function HTMLPurifier_AttrDef_Integer(
+        $negative = true, $zero = true, $positive = true
+    ) {
+        $this->negative = $negative;
+        $this->zero     = $zero;
+        $this->positive = $positive;
     }
     
     function validate($integer, $config, &$context) {
@@ -29,15 +45,27 @@ class HTMLPurifier_AttrDef_Integer extends HTMLPurifier_AttrDef
         $integer = $this->parseCDATA($integer);
         if ($integer === '') return false;
         
-        if ( !$this->non_negative && $integer[0] === '-' ) {
+        // we could possibly simply typecast it to integer, but there are
+        // certain fringe cases that must not return an integer.
+        
+        // clip leading sign
+        if ( $this->negative && $integer[0] === '-' ) {
             $digits = substr($integer, 1);
-        } elseif( $integer[0] === '+' ) {
-            $digits = $integer = substr($integer, 1);
+            if ($digits === '0') $integer = '0'; // rm minus sign for zero
+        } elseif( $this->positive && $integer[0] === '+' ) {
+            $digits = $integer = substr($integer, 1); // rm unnecessary plus
         } else {
             $digits = $integer;
         }
         
+        // test if it's numeric
         if (!ctype_digit($digits)) return false;
+        
+        // perform scope tests
+        if (!$this->zero     && $integer == 0) return false;
+        if (!$this->positive && $integer > 0) return false;
+        if (!$this->negative && $integer < 0) return false;
+        
         return $integer;
         
     }

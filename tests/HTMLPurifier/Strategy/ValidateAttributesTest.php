@@ -120,6 +120,10 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $inputs[21] = '<span dir="blahblah">Invalid value!</span>';
         $expect[21] = '<span>Invalid value!</span>';
         
+        // test col.span is non-zero
+        $inputs[22] = '<col span="0" />';
+        $expect[22] = '<col />';
+        
         $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
         
     }
