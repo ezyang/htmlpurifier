@@ -28,6 +28,7 @@ time.  Note the naming convention: %Namespace.Directive
 
 %Attr.MaxWidth, 
 %Attr.MaxHeight - caps for width and height related checks.
+    (a hack in Pixels for an image crashing attack could be replaced by this)
 
 %URI.Munge - will munge all URIs to a different URI, which should redirect
     the user to the applicable page. A urlencoded version of the URI

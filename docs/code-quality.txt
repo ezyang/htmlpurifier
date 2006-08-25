@@ -21,13 +21,15 @@ AttrDef
         variable overwriting, missing validation for query, fragment and path,
         no percent-encode fixing
     CSS - parser doesn't accept advanced CSS (fringe)
+    Number - constructor interface is inconsistent with Integer
 AttrTransform - doesn't accept AttrContext, non-validating
-    Lang - invalid xml:lang value can overwrite valid lang value (fringe)
 ChildDef - not-allowed nodes translated to text, likely invalid handling
-Config - "load configuration" hooks missing, rich set* accessors missing
+Config - "load configuration" hooks missing, rich set* accessors missing,
+    needs redefined relationship with the definitions
 Strategy
     FixNesting - cannot bubble nodes out of structures
-    MakeWellFormed - insufficient automatic closing definitions
+    MakeWellFormed - insufficient automatic closing definitions (check HTML
+        spec for optional end tags).
     RemoveForeignElements - should be run in parallel with MakeWellFormed
 URIScheme - needs to have callable generic checks
     ftp - missing typecode check

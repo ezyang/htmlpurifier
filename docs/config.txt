@@ -17,6 +17,8 @@ are passed.  These classes are: HTMLPurifier::*, Generator::generateFromTokens
 and Lexer::tokenizeHTML.  However, whenever a valid configuration object
 is defined, that object should be used.
 
+-- the following is projected changes to the configuration system --
+
 In relation to HTMLDefinition and CSSDefinition, there are going to be some
 major structural changes to enable the easy configuration of these objects.
 Due to the intricacy of these objects, it's not feasible to ask an average

@@ -29,7 +29,8 @@ output is valid XHTML or send the HTML through a draconic XML parser (and yet
 still get the nesting wrong: SafeHtmlChecker.class.php does not prevent <a>
 tags from being nested within each other).
 
-This document seeks to detail the inner workings of HTML Purifier.  The first
+This document no longer is a detailed description of how HTMLPurifier works,
+as those descriptions have been moved to the appropriate code.  The first
 draft was drawn up after two rough code sketches and the implementation of a
 forgiving lexer.  You may also be interested in the unit tests located in the
 tests/ folder, which provide a living document on how exactly the filter deals
@@ -52,4 +53,5 @@ In summary:
 HTML Purifier is best suited for documents that require a rich array of
 HTML tags.  Things like blog comments are, in all likelihood, most appropriately
 written in an extremely restrictive set of markup that doesn't require
-all this functionality (or not written in HTML at all).
+all this functionality (or not written in HTML at all), although this may
+be changing in the future.
