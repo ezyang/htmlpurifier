@@ -1,0 +1,67 @@
+
+Filter Levels
+    When one size *does not* fit all
+
+The more I think about it, the less sense it makes for maintaining one huge
+monolithic HTMLDefinition class.  There's simply so much variation that
+could go into this definition: the set of HTML good for blog entries is
+definitely too large for HTML that would be allowed in blog comments. Going
+from Transitional to Strict requires changes to the definition.
+
+However, allowing users to specify their own whitelists was an idea I
+rejected from the start.  Simply put, the typical programmer is too lazy
+to actually go through the trouble of investigating which tags, attributes
+and properties to allow.  HTMLDefinition makes a big part of what HTMLPurifier
+is.
+
+The idea, then, is to setup fundamentally different set of definitions, which
+can further be customized using simpler configuration options.
+
+Here are some fuzzy levels you could set:
+
+1. Comments - Wordpress recommends a, abbr, acronym, b, blockquote, cite,
+    code, em, i, strike, strong; however, you could get away with only a, b and
+    i; also having p and pre tags would be helpful.
+2. Pages - As permissive as possible without allowing XSS.  No protection
+    against bad design sense, unfortunantely.  Suitable for wiki and page
+    environments.
+3. Lint - Accept everything in the spec, a Tidy wannabe.
+
+I've also decomposed tags into risk levels.  An asterisk indicates that no one
+really uses that tag, tilde indicates it's deprecated.
+
+1 - blockquote, code, em, i, p, tt / strong, sub, sup
+1* - abbr, acronym, bdo, cite, dfn, kbd, q, samp
+2 - b, br, del, div, pre, span / ins, s, strike ~ u
+3 - h2, h3, h4, h5, h6 ~ center
+4 - h1, big ~ font
+5 - a
+7 - area, map
+
+Lists - dd, dl, dt, li, ol, ul ~ menu, dir
+Tables - caption, table, td, th, tr / col, colgroup, tbody, tfoot, thead
+Forms - fieldset, form, input, lable, legend, optgroup, option, select, textarea
+XSS - noscript, object, script ~ applet
+
+Meta - base, basefont, body, head, html, link, meta, style, title
+Frames - frame, frameset, iframe
+
+And tag specific notes:
+
+a - general problems involving linkspam
+b - too much bold is bad, typographically speaking bold is discouraged
+br - often misused
+center - CSS, usually no legit use
+del - only useful in editing context
+div - little meaning in certain contexts i.e. blog comment
+h1 - usually no legit use, as header is already set by application
+h* - not needed in blog comments
+hr - usually not necessary in blog comments
+img - could be extremely undesirable if linking to external pics
+pre - could use formatting, only useful in code contexts
+q - very little support
+s - transform into span with styling or del?
+small - technically presentational
+span - depends on attribute allowances
+sub, sup - specialized
+u - little legit use, prefer class with text-decoration
