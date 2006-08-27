@@ -4,7 +4,6 @@ Core:
  - Finish table and shorthand CSS attributes
     - border-collapse, caption-side, empty-cells, table-layout, vertical-align
     - background (and friends)
-    - border, border-*
     - list-style
  - Implement all non-essential attribute transforms
  - Microsoft Word HTML cleaning

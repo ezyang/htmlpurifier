@@ -9,6 +9,7 @@ require_once 'HTMLPurifier/AttrDef/Multiple.php';
 require_once 'HTMLPurifier/AttrDef/TextDecoration.php';
 require_once 'HTMLPurifier/AttrDef/FontFamily.php';
 require_once 'HTMLPurifier/AttrDef/Font.php';
+require_once 'HTMLPurifier/AttrDef/Border.php';
 
 /**
  * Defines allowed CSS attributes and what their values are.
@@ -169,6 +170,13 @@ class HTMLPurifier_CSSDefinition
         // MUST be called after other font properties, as it references
         // a CSSDefinition object
         $this->info['font'] = new HTMLPurifier_AttrDef_Font();
+        
+        // same here
+        $this->info['border'] =
+        $this->info['border-bottom'] = 
+        $this->info['border-top'] = 
+        $this->info['border-left'] = 
+        $this->info['border-right'] = new HTMLPurifier_AttrDef_Border();
         
     }
     
