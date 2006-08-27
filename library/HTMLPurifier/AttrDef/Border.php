@@ -29,7 +29,7 @@ class HTMLPurifier_AttrDef_Border extends HTMLPurifier_AttrDef
         foreach ($bits as $bit) {
             foreach ($this->info as $propname => $validator) {
                 if (isset($done[$propname])) continue;
-                $r = $validator->validate($bit, $config, &$context);
+                $r = $validator->validate($bit, $config, $context);
                 if ($r !== false) {
                     $ret .= $r . ' ';
                     $done[$propname] = true;
