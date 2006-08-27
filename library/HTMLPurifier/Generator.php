@@ -5,7 +5,7 @@
 require_once 'HTMLPurifier/Lexer.php';
 
 HTMLPurifier_ConfigDef::define(
-    'Core', 'CleanUTF8DuringGeneration', false,
+    'Core', 'CleanUTF8DuringGeneration', false, 'bool',
     'When true, HTMLPurifier_Generator will also check all strings it '.
     'escapes for UTF-8 well-formedness as a defense in depth measure. '.
     'This could cause a considerable performance impact, and is not '.

@@ -6,8 +6,9 @@ help you find the correct functionality more quickly.  Here they are:
 
 All classes occupy the HTMLPurifier pseudo-namespace.
     This means that all classes are prefixed with HTMLPurifier_.  As such, all
-    names under HTMLPurifier_ are reserved, and userspace extensions should
-    be registered in a different namespace (or the main namespace).
+    names under HTMLPurifier_ are reserved.  I recommend that you use the name
+    HTMLPurifierX_YourName_ClassName, especially if you want to take advantage
+    of HTMLPurifier_ConfigDef.
 
 All classes correspond to their path if library/ was in the include path
     HTMLPurifier_AttrDef is located at HTMLPurifier/AttrDef.php; replace

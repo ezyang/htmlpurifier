@@ -9,7 +9,7 @@
  */
 
 HTMLPurifier_ConfigDef::define(
-    'Core', 'EscapeInvalidTags', false,
+    'Core', 'EscapeInvalidTags', false, 'bool',
     'When true, invalid tags will be written back to the document as plain '.
     'text.  Otherwise, they are silently dropped.'
 );

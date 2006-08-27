@@ -7,10 +7,35 @@
 class HTMLPurifier_ConfigDef {
     
     /**
-     * Currently defined directives (and namespaces).
+     * Defaults of the directives and namespaces.
      * @note This shares the exact same structure as HTMLPurifier_Config::$conf
      */
+    var $defaults = array();
+    
+    /**
+     * Definition of the directives.
+     */
     var $info = array();
+    
+    /**
+     * Definition of namespaces.
+     */
+    var $info_namespace = array();
+    
+    /**
+     * Lookup table of allowed types.
+     */
+    var $types = array(
+        'string' => true,
+        'istring' => true,
+        'int' => true,
+        'float' => true,
+        'bool' => true,
+        'lookup' => true,
+        'list' => true,
+        'hash' => true,
+        'mixed' => true
+    );
     
     /**
      * Initializes the default namespaces.
@@ -44,9 +69,14 @@ class HTMLPurifier_ConfigDef {
      * @param $namespace Namespace the directive is in
      * @param $name Key of directive
      * @param $default Default value of directive
+     * @param $type Allowed type of the directive. See
+     *      HTMLPurifier_DirectiveDef::$type for allowed values
      * @param $description Description of directive for documentation
      */
-    function define($namespace, $name, $default, $description) {
+    function define(
+        $namespace, $name, $default, $type, 
+        $description
+    ) {
         $def =& HTMLPurifier_ConfigDef::instance();
         if (!isset($def->info[$namespace])) {
             trigger_error('Cannot define directive for undefined namespace',
@@ -54,11 +84,33 @@ class HTMLPurifier_ConfigDef {
             return;
         }
         if (isset($def->info[$namespace][$name])) {
-            // this behavior is at risk of change
-            trigger_error('Cannot redefine directive', E_USER_ERROR);
-            return;
+            if (
+                $def->info[$namespace][$name]->type !== $type ||
+                $def->defaults[$namespace][$name]   !== $default
+            ) {
+                trigger_error('Inconsistent default or type, cannot redefine');
+                return;
+            }
+        } else {
+            if (!isset($def->types[$type])) {
+                trigger_error('Invalid type for configuration directive',
+                    E_USER_ERROR);
+                return;
+            }
+            if ($def->validate($default, $type) === null) {
+                trigger_error('Default value does not match directive type',
+                    E_USER_ERROR);
+                return;
+            }
+            $def->info[$namespace][$name] =
+                new HTMLPurifier_ConfigEntity_Directive();
+            $def->info[$namespace][$name]->type = $type;
+            $def->defaults[$namespace][$name]   = $default;
         }
-        $def->info[$namespace][$name] = $default;
+        $backtrace = debug_backtrace();
+        $file = $def->mungeFilename($backtrace[0]['file']);
+        $line = $backtrace[0]['line'];
+        $def->info[$namespace][$name]->addDescription($file,$line,$description);
     }
     
     /**
@@ -73,7 +125,186 @@ class HTMLPurifier_ConfigDef {
             return;
         }
         $def->info[$namespace] = array();
+        $def->info_namespace[$namespace] = new HTMLPurifier_ConfigEntity_Namespace();
+        $backtrace = debug_backtrace();
+        $file = $def->mungeFilename($backtrace[0]['file']);
+        $line = $backtrace[0]['line'];
+        $def->info_namespace[$namespace]->addDescription($file,$line,$description);
+        $def->defaults[$namespace] = array();
     }
+    
+    /**
+     * Defines a directive value alias.
+     * 
+     * Directive value aliases are convenient for developers because it lets
+     * them set a directive to several values and get the same result.
+     * @param $namespace Directive's namespace
+     * @param $name Name of Directive
+     * @param $alias Name of aliased value
+     * @param $real Value aliased value will be converted into
+     */
+    function defineValueAliases($namespace, $name, $aliases) {
+        $def =& HTMLPurifier_ConfigDef::instance();
+        if (!isset($def->info[$namespace][$name])) {
+            trigger_error('Cannot set value alias for non-existant directive',
+                E_USER_ERROR);
+            return;
+        }
+        foreach ($aliases as $alias => $real) {
+            if (!$def->info[$namespace][$name] !== true &&
+                !isset($def->info[$namespace][$name]->allowed[$real])
+            ) {
+                trigger_error('Cannot define alias to value that is not allowed',
+                    E_USER_ERROR);
+                return;
+            }
+            if (isset($def->info[$namespace][$name]->allowed[$alias])) {
+                trigger_error('Cannot define alias over allowed value',
+                    E_USER_ERROR);
+                return;
+            }
+            $def->info[$namespace][$name]->aliases[$alias] = $real;
+        }
+    }
+    
+    /**
+     * Defines a set of allowed values for a directive.
+     * @param $namespace Namespace of directive
+     * @param $name Name of directive
+     * @param $allowed_values Arraylist of allowed values
+     */
+    function defineAllowedValues($namespace, $name, $allowed_values) {
+        $def =& HTMLPurifier_ConfigDef::instance();
+        if (!isset($def->info[$namespace][$name])) {
+            trigger_error('Cannot define allowed values for undefined directive',
+                E_USER_ERROR);
+            return;
+        }
+        if ($def->info[$namespace][$name]->allowed === true) {
+            $def->info[$namespace][$name]->allowed = array();
+        }
+        foreach ($allowed_values as $value) {
+            $def->info[$namespace][$name]->allowed[$value] = true;
+        }
+    }
+    
+    /**
+     * Validate a variable according to type. Return null if invalid.
+     */
+    function validate($var, $type) {
+        if (!isset($this->types[$type])) {
+            trigger_error('Invalid type', E_USER_ERROR);
+            return;
+        }
+        switch ($type) {
+            case 'mixed':
+                return $var;
+            case 'istring':
+            case 'string':
+                if (!is_string($var)) return;
+                if ($type === 'istring') $var = strtolower($var);
+                return $var;
+            case 'int':
+                if (is_string($var) && ctype_digit($var)) $var = (int) $var;
+                elseif (!is_int($var)) return;
+                return $var;
+            case 'float':
+                if (is_string($var) && is_numeric($var)) $var = (float) $var;
+                elseif (!is_float($var)) return;
+                return $var;
+            case 'bool':
+                if (is_int($var) && ($var === 0 || $var === 1)) {
+                    $var = (bool) $var;
+                } elseif (!is_bool($var)) return;
+                return $var;
+            case 'list':
+            case 'hash':
+            case 'lookup':
+                if (!is_array($var)) return;
+                $keys = array_keys($var);
+                if ($keys === array_keys($keys)) {
+                    if ($type == 'list') return $var;
+                    elseif ($type == 'lookup') {
+                        $new = array();
+                        foreach ($var as $key) {
+                            $new[$key] = true;
+                        }
+                        return $new;
+                    } else return;
+                }
+                if ($type === 'lookup') {
+                    foreach ($var as $key => $value) {
+                        $var[$key] = true;
+                    }
+                }
+                return $var;
+        }
+    }
+    
+    function mungeFilename($filename) {
+        $offset = strrpos($filename, 'HTMLPurifier');
+        $filename = substr($filename, $offset);
+        $filename = str_replace('\\', '/', $filename);
+        return $filename;
+    }
+    
+}
+
+/**
+ * Base class for configuration entity
+ */
+class HTMLPurifier_ConfigEntity
+{
+    /**
+     * Plaintext descriptions of the configuration entity is. Organized by
+     * file and line number, so multiple descriptions are allowed.
+     */
+    var $descriptions = array();
+    
+    /**
+     * Adds a description to the array
+     */
+    function addDescription($file, $line, $description) {
+        if (!isset($this->descriptions[$file])) $this->descriptions[$file] = array();
+        $this->descriptions[$file][$line] = $description;
+    }
+}
+
+/**
+ * Structure object describing of a namespace
+ */
+class HTMLPurifier_ConfigEntity_Namespace extends HTMLPurifier_ConfigEntity {}
+
+/**
+ * Structure object containing definition of a directive.
+ * @note This structure does not contain default values
+ */
+class HTMLPurifier_ConfigEntity_Directive extends HTMLPurifier_ConfigEntity
+{
+    
+    /**
+     * Hash of value aliases, i.e. values that are equivalent.
+     */
+    var $aliases = array();
+    
+    /**
+     * Lookup table of allowed values of the element, bool true if all allowed.
+     */
+    var $allowed = true;
+    
+    /**
+     * Allowed type of the directive. Values are:
+     *      - string
+     *      - istring (case insensitive string)
+     *      - int
+     *      - float
+     *      - bool
+     *      - lookup (array of value => true)
+     *      - list (regular numbered index array)
+     *      - hash (array of key => value)
+     *      - mixed (anything goes)
+     */
+    var $type = 'mixed';
     
 }
 

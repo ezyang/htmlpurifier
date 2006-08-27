@@ -7,7 +7,7 @@ require_once 'HTMLPurifier/ConfigDef.php';
 require_once 'HTMLPurifier/AttrContext.php';
 
 HTMLPurifier_ConfigDef::define(
-    'Attr', 'IDBlacklist', array(),
+    'Attr', 'IDBlacklist', array(), 'list',
     'Array of IDs not allowed in the document.');
 
 /**

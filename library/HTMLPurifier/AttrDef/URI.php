@@ -6,7 +6,7 @@ require_once 'HTMLPurifier/URISchemeRegistry.php';
 require_once 'HTMLPurifier/AttrDef/Host.php';
 
 HTMLPurifier_ConfigDef::define(
-    'URI', 'DefaultScheme', 'http',
+    'URI', 'DefaultScheme', 'http', 'string',
     'Defines through what scheme the output will be served, in order to '.
     'select the proper object validator when no scheme information is present.'
 );

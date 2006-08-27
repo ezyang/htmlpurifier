@@ -28,6 +28,26 @@ require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Strategy/Core.php';
 
+HTMLPurifier_ConfigDef::define(
+    'Core', 'Encoding', 'utf-8', 'istring',
+    'Defines the input and output character encodings to use. HTMLPurifier '.
+    'internally uses UTF-8, making that the painless default choice. Note '.
+    'certain implementations of HTMLPurifier_Lexer are intelligent enough '.
+    'automatically detect encoding, however, output format will always be '.
+    'this value.'
+);
+HTMLPurifier_ConfigDef::defineAllowedValues(
+    'Core', 'Encoding', array(
+        'utf-8',
+        'iso-8859-1'
+    )
+);
+HTMLPurifier_ConfigDef::defineValueAliases(
+    'Core', 'Encoding', array(
+        'iso8859-1' => 'iso-8859-1'
+    )
+);
+
 /**
  * Main library execution class.
  * 

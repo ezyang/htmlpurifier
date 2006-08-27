@@ -21,11 +21,17 @@ class HTMLPurifier_Config
     var $conf;
     
     /**
+     * Reference HTMLPurifier_ConfigDef for value checking
+     */
+    var $def;
+    
+    /**
      * @param $definition HTMLPurifier_ConfigDef that defines what directives
      *                    are allowed.
      */
     function HTMLPurifier_Config(&$definition) {
-        $this->conf = $definition->info; // set up the defaults
+        $this->conf = $definition->defaults; // set up, copy in defaults
+        $this->def  = $definition; // keep a copy around for checking
     }
     
     /**
@@ -46,7 +52,7 @@ class HTMLPurifier_Config
     function get($namespace, $key) {
         if (!isset($this->conf[$namespace][$key])) {
             trigger_error('Cannot retrieve value of undefined directive',
-                E_USER_ERROR);
+                E_USER_WARNING);
             return;
         }
         return $this->conf[$namespace][$key];
@@ -61,7 +67,26 @@ class HTMLPurifier_Config
     function set($namespace, $key, $value) {
         if (!isset($this->conf[$namespace][$key])) {
             trigger_error('Cannot set undefined directive to value',
-                E_USER_ERROR);
+                E_USER_WARNING);
+            return;
+        }
+        if (is_string($value)) {
+            // resolve value alias if defined
+            if (isset($this->def->info[$namespace][$key]->aliases[$value])) {
+                $value = $this->def->info[$namespace][$key]->aliases[$value];
+            }
+            if ($this->def->info[$namespace][$key]->allowed !== true) {
+                // check to see if the value is allowed
+                if (!isset($this->def->info[$namespace][$key]->allowed[$value])) {
+                    trigger_error('Value not supported', E_USER_WARNING);
+                    return;
+                }
+            }
+        }
+        $value = $this->def->validate($value,
+                                      $this->def->info[$namespace][$key]->type);
+        if ($value === null) {
+            trigger_error('Value is of invalid type', E_USER_WARNING);
             return;
         }
         $this->conf[$namespace][$key] = $value;

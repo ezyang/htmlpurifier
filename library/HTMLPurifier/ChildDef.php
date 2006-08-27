@@ -13,7 +13,7 @@
 // in order to make it self correcting
 
 HTMLPurifier_ConfigDef::define(
-    'Core', 'EscapeInvalidChildren', false,
+    'Core', 'EscapeInvalidChildren', false, 'bool',
     'When true, a child is found that is not allowed in the context of the '.
     'parent element will be transformed into text as if it were ASCII. When '.
     'false, that element and all internal tags will be dropped, though text '.
