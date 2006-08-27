@@ -5,6 +5,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fixed broken numeric entity conversion
 - Malformed UTF-8 and non-SGML character detection and cleaning implemented
 - API documentation completed
+- Shorthand CSS properties implemented: font
 
 1.0.0beta, released 2006-08-16
 - First public release, most functionality implemented. Notable omissions are:

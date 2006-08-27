@@ -60,6 +60,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('text-decoration:underline;');
         $this->assertDef('font-family:sans-serif;');
         $this->assertDef('font-family:Gill, \'Times New Roman\', sans-serif;');
+        //$this->assertDef('font:12px serif;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',

@@ -8,6 +8,7 @@ require_once 'HTMLPurifier/AttrDef/Percentage.php';
 require_once 'HTMLPurifier/AttrDef/Multiple.php';
 require_once 'HTMLPurifier/AttrDef/TextDecoration.php';
 require_once 'HTMLPurifier/AttrDef/FontFamily.php';
+require_once 'HTMLPurifier/AttrDef/Font.php';
 
 /**
  * Defines allowed CSS attributes and what their values are.
@@ -164,6 +165,10 @@ class HTMLPurifier_CSSDefinition
         $this->info['font-weight'] = new HTMLPurifier_AttrDef_Enum(
             array('normal', 'bold', 'bolder', 'lighter', '100', '200', '300',
             '400', '500', '600', '700', '800', '900'), false);
+        
+        // MUST be called after other font properties, as it references
+        // a CSSDefinition object
+        $this->info['font'] = new HTMLPurifier_AttrDef_Font();
         
     }
     

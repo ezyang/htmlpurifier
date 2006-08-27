@@ -75,6 +75,7 @@ $test_files[] = 'AttrDef/FontFamilyTest.php';
 $test_files[] = 'AttrDef/HostTest.php';
 $test_files[] = 'AttrDef/IPv4Test.php';
 $test_files[] = 'AttrDef/IPv6Test.php';
+$test_files[] = 'AttrDef/FontTest.php';
 $test_files[] = 'IDAccumulatorTest.php';
 $test_files[] = 'TagTransformTest.php';
 $test_files[] = 'AttrTransform/LangTest.php';
