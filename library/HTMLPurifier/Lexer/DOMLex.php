@@ -37,7 +37,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         
         if ($config->get('Core', 'AcceptFullDocuments')) {
-            $is_full = $this->extractBody($string, true);
+            $string = $this->extractBody($string);
         }
         
         $doc = new DOMDocument();
@@ -55,9 +55,8 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         // clean it into well-formed UTF-8 string
         $string = $this->cleanUTF8($string);
         
-        if (!$is_full) {
         // preprocess string, essential for UTF-8
-          $string =
+        $string =
             '<!DOCTYPE html '.
                 'PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'.
                 '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.
@@ -65,7 +64,6 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             '<meta http-equiv="Content-Type" content="text/html;'.
                 ' charset=utf-8" />'.
             '</head><body><div>'.$string.'</div></body></html>';
-        }
         
         @$doc->loadHTML($string); // mute all errors, handle it transparently
         
