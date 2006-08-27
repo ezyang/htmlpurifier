@@ -8,10 +8,37 @@ require_once 'HTMLPurifier/AttrDef.php';
 class HTMLPurifier_AttrDef_Color extends HTMLPurifier_AttrDef
 {
     
+    /**
+     * Color keyword lookup table.
+     * @todo Extend it to include all usually allowed colors.
+     */
+    var $colors = array(
+        'maroon'    => '#800000',
+        'red'       => '#F00',
+        'orange'    => '#FFA500',
+        'yellow'    => '#FF0',
+        'olive'     => '#808000',
+        'purple'    => '#800080',
+        'fuchsia'   => '#F0F',
+        'white'     => '#FFF',
+        'lime'      => '#0F0',
+        'green'     => '#008000',
+        'navy'      => '#000080',
+        'blue'      => '#00F',
+        'aqua'      => '#0FF',
+        'teal'      => '#008080',
+        'black'     => '#000',
+        'silver'    => '#C0C0C0',
+        'gray'      => '#808080'
+    );
+    
     function validate($color, $config, &$context) {
         
         $color = trim($color);
         if (!$color) return false;
+        
+        $lower = strtolower($color);
+        if (isset($this->colors[$lower])) return $this->colors[$lower];
         
         if ($color[0] === '#') {
             // hexadecimal handling

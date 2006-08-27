@@ -23,6 +23,9 @@ class HTMLPurifier_AttrDef_ColorTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('rgb(200%, -10%, 0%)', 'rgb(100%,0%,0%)');
         $this->assertDef('rgb(256,-23,34)', 'rgb(255,0,34)');
         
+        // color keywords, of course
+        $this->assertDef('red', '#F00');
+        
         // maybe hex transformations would be another nice feature
         // at the very least transform rgb percent to rgb integer
         
