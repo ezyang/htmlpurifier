@@ -191,12 +191,12 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <tbody>
 <tr><th colspan="2">Table</th></tr>
-<tr><td>border-collapse</td><td>ENUM(collapse, seperate)</td></tr>
-<tr><td>caption-side</td><td>ENUM(top, bottom)</td></tr>
-<tr><td>empty-cells</td><td>ENUM(show, hide), No IE support, possible fix
-    with &amp;nbsp;?</td></tr>
-<tr><td>table-layout</td><td>ENUM(auto, fixed)</td></tr>
-<tr class="css1"><td>vertical-align</td><td>COMPOSITE(ENUM(baseline, sub,
+<tr class="impl-yes"><td>border-collapse</td><td>ENUM(collapse, seperate)</td></tr>
+<tr class="impl-yes"><td>caption-side</td><td>ENUM(top, bottom)</td></tr>
+<tr><td>empty-cells</td><td>ENUM(show, hide), No IE support makes this useless,
+    possible fix with &amp;nbsp;?</td></tr>
+<tr class="impl-yes"><td>table-layout</td><td>ENUM(auto, fixed)</td></tr>
+<tr class="impl-yes css1"><td>vertical-align</td><td>COMPOSITE(ENUM(baseline, sub,
     super, top, text-top, middle, bottom, text-bottom), &lt;percentage&gt;,
     &lt;length&gt;) Also applies to others with explicit height</td></tr>
 </tbody>

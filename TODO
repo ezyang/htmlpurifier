@@ -2,7 +2,6 @@ Todo List
 
 Core:
  - Finish table and shorthand CSS attributes
-    - border-collapse, caption-side, empty-cells, table-layout, vertical-align
     - background (and friends)
     - list-style
  - Implement all non-essential attribute transforms
@@ -30,3 +29,5 @@ Enhancements:
    offer default implementation
  - Auto-paragraphing (be sure to leverage fact that we know when things
    shouldn't be paragraphed, such as lists and tables).
+ - Automatically add non-breaking spaces to empty table cells when
+   empty-cells:show is applied to have compatibility with Internet Explorer

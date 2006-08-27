@@ -178,6 +178,22 @@ class HTMLPurifier_CSSDefinition
         $this->info['border-left'] = 
         $this->info['border-right'] = new HTMLPurifier_AttrDef_Border();
         
+        $this->info['border-collapse'] = new HTMLPurifier_AttrDef_Enum(array(
+            'collapse', 'seperate'));
+        
+        $this->info['caption-side'] = new HTMLPurifier_AttrDef_Enum(array(
+            'top', 'bottom'));
+        
+        $this->info['table-layout'] = new HTMLPurifier_AttrDef_Enum(array(
+            'auto', 'fixed'));
+        
+        $this->info['vertical-align'] = new HTMLPurifier_AttrDef_Composite(array(
+            new HTMLPurifier_AttrDef_Enum(array('baseline', 'sub', 'super',
+                'top', 'text-top', 'middle', 'bottom', 'text-bottom')),
+            new HTMLPurifier_AttrDef_CSSLength(),
+            new HTMLPurifier_AttrDef_Percentage()
+        ));
+        
     }
     
 }

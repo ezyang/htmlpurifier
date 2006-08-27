@@ -7,6 +7,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - API documentation completed
 - Shorthand CSS properties implemented: font, border
 - Basic color keywords translated into hexadecimal values
+- Table CSS properties implementeds
 
 1.0.0beta, released 2006-08-16
 - First public release, most functionality implemented. Notable omissions are:

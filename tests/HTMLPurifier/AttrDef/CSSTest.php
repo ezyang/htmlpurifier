@@ -63,6 +63,12 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('font:12px serif;');
         $this->assertDef('border:1px solid #000;');
         $this->assertDef('border-bottom:2em double #FF00FA;');
+        $this->assertDef('border-collapse:collapse;');
+        $this->assertDef('caption-side:top;');
+        $this->assertDef('vertical-align:middle;');
+        $this->assertDef('vertical-align:12px;');
+        $this->assertDef('vertical-align:50%;');
+        $this->assertDef('table-layout:fixed;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',
