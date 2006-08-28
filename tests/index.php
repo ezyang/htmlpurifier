@@ -35,7 +35,7 @@ function generate_mock_once($name) {
 }
 
 // this has to be defined before we do any includes of library files
-require_once 'HTMLPurifier/ConfigDef.php';
+require_once 'HTMLPurifier.php';
 
 // define callable test files
 $test_files = array();
