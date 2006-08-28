@@ -1,33 +1,51 @@
-Todo List
 
-Core:
- - Finish table and shorthand CSS attributes
-    - background (and friends)
+TODO List
+
+Ongoing
+ - Lots of profiling, make it faster!
+ - Plugins for major CMSes (very tricky issue)
+
+1.0 release
+ - Limited shorthand CSS attributes
+    - background
     - list-style
- - Implement all non-essential attribute transforms
- - Microsoft Word HTML cleaning
- - Plugins for major CMSes
- - Rewrite *Definition and Config relationship, add various "levels" of cleaning
- - Support other character encodings out-of-the-box
- - Allow strict HTML 4.01, loose HTML 4.01 and strict XHTML 1.0 output
+ - Revise (HTML|CSS)Definition and Config relationship (groundwork for 2.0)
+ - ISO 8895-1 out-of-the-box support
 
-Code issues:
- - Massive profiling, make it faster!
+1.1 release
+ - Directive documentation generation
+ - Rewrite table's child definition to be faster, smart, and regexp free
+ - Allow HTML 4.01 output (cosmetic changes to the generator)
+
+1.2 release
+ - Additional support for poorly written HTML
+    - Implement all non-essential attribute transforms
+    - Microsoft Word HTML cleaning (i.e. MsoNormal)
+
+1.3 release
  - Make URI validation routines tighter (especially mailto)
  - Distinguish between different types of URIs, for instance, a mailto URI
    in IMG SRC is nonsensical
- - Rewrite table's child definition to be faster, smart, and regexp free
+
+2.0 release
+ - Add various "levels" of cleaning
+    - Related: Allow strict (X)HTML
+
+3.0 release
+ - Extended HTML capabilities based on namespacing and tag transforms
+    - Hooks for adding custom processors to custom namespaced tags and
+      attributes, offer default implementation
+    - Auto-paragraphing (be sure to leverage fact that we know when things
+      shouldn't be paragraphed, such as lists and tables).
+    - Lots of documentation and samples
+
+Unknown release (on a scratch-an-itch basis)
  - Silently drop content inbetween SCRIPT tags (can be generalized to allow
    specification of elements that, when detected as foreign, trigger removal
    of children, although unbalanced tags could wreck havoc (or at least delete
-   the rest of the document).
-
-Enhancements:
+   the rest of the document)).
  - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
- - Pretty-printing HTML
- - Hooks for adding custom processors to custom namespaced tags and attributes,
-   offer default implementation
- - Auto-paragraphing (be sure to leverage fact that we know when things
-   shouldn't be paragraphed, such as lists and tables).
  - Automatically add non-breaking spaces to empty table cells when
    empty-cells:show is applied to have compatibility with Internet Explorer
+ - Pretty-printing HTML (adds dependency of Generator to HTMLDefinition)
+ - Support for lots of character encodings out-of-the-box
