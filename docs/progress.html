@@ -14,11 +14,12 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 .impl-yes {background:#9D9;}
 .impl-partial {background:#FFA;}
-.impl-no {background:#CFC;}
+.impl-no {background:#CCC;}
 
 .danger {color:#600;}
 .css1 {color:#060;}
 .required {font-weight:bold;}
+.feature {color:#999;}
 
 </style>
 
@@ -34,6 +35,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td class="impl-no">Will not implement</td></tr>
 <tr><td class="danger">Dangerous attribute/property</td></tr>
 <tr><td class="css1">Present in CSS1</td></tr>
+<tr><td class="feature">Feature, requires extra work</td></tr>
 </tbody></table>
 
 <h2>Interesting Attributes</h2>
@@ -68,10 +70,10 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td>datetime</td><td>DEL, INS</td><td>No visible effect, ISO format</td></tr>
 <tr><td>rel</td><td>A</td><td>Largely user-defined: nofollow, tag (see microformats)</td></tr>
 <tr><td>rev</td><td>A</td><td>Largely user-defined: vote-*</td></tr>
-<tr class="impl-no"><td>axis</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
-<tr class="impl-no"><td>char</td><td>COL, COLGROUP, TBODY, TD, TFOOT, TH, THEAD, TR</td><td>W3C only: No browser implementation</td></tr>
-<tr class="impl-no"><td>headers</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
-<tr class="impl-no"><td>scope</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
+<tr class="feature"><td>axis</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
+<tr class="feature"><td>char</td><td>COL, COLGROUP, TBODY, TD, TFOOT, TH, THEAD, TR</td><td>W3C only: No browser implementation</td></tr>
+<tr class="feature"><td>headers</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
+<tr class="feature"><td>scope</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
 </tbody>
 
 <tbody class="impl-yes">
@@ -96,7 +98,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     <tr><td>TD, TH</td><td>Equivalent style 'background-color'</td></tr>
 <tr><td>border</td><td>IMG</td><td>Equivalent style 'border-width', only applies when link present</td></tr>
 <tr><td>clear</td><td>BR</td><td>Near-equiv style 'clear', transform 'all' into 'both'</td></tr>
-<tr class="impl-no"><td>compact</td><td>DL, OL, UL</td><td>Boolean, needs custom CSS class</td></tr>
+<tr class="impl-no"><td>compact</td><td>DL, OL, UL</td><td>Boolean, needs custom CSS class; rarely used anyway</td></tr>
 <tr class="required impl-yes"><td>dir</td><td>BDO</td><td>Required, insert ltr (or configuration value) if none</td></tr>
 <tr><td>height</td><td>TD, TH</td><td>Near-equiv style 'height', needs px suffix if original was in pixels</td></tr>
 <tr><td>hspace</td><td>IMG</td><td>Near-equiv styles 'margin-top' and 'margin-bottom', needs px suffix</td></tr>
@@ -193,7 +195,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><th colspan="2">Table</th></tr>
 <tr class="impl-yes"><td>border-collapse</td><td>ENUM(collapse, seperate)</td></tr>
 <tr class="impl-yes"><td>caption-side</td><td>ENUM(top, bottom)</td></tr>
-<tr><td>empty-cells</td><td>ENUM(show, hide), No IE support makes this useless,
+<tr class="feature"><td>empty-cells</td><td>ENUM(show, hide), No IE support makes this useless,
     possible fix with &amp;nbsp;? Unknown release milestone.</td></tr>
 <tr class="impl-yes"><td>table-layout</td><td>ENUM(auto, fixed)</td></tr>
 <tr class="impl-yes css1"><td>vertical-align</td><td>COMPOSITE(ENUM(baseline, sub,
@@ -241,7 +243,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr class="impl-no"><td>quotes</td><td>May be dropped from CSS2, fairly useless for inline context</td></tr>
 <tr class="impl-no"><td>visibility</td><td>ENUM(visible, hidden, collapse),
     Dangerous</td></tr>
-<tr><td class="css1">white-space</td><td>ENUM(normal, pre, nowrap, pre-wrap,
+<tr class="css1 feature"><td>white-space</td><td>ENUM(normal, pre, nowrap, pre-wrap,
     pre-line), Spotty implementation:
     pre (no IE 5/6), nowrap (no IE 5),
     pre-wrap (only Opera), pre-line (no support). Fixable? Unknown target milestone.</td></tr>
