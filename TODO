@@ -10,7 +10,8 @@ Ongoing
     - background
     - list-style
  - Revise (HTML|CSS)Definition and Config relationship (groundwork for 2.0)
- - ISO 8895-1 out-of-the-box support
+ - Lossy alternate character encoding support (characters not in the encoding
+   will get silently dropped).
 
 1.1 release
  - Directive documentation generation
@@ -48,4 +49,8 @@ Unknown release (on a scratch-an-itch basis)
  - Automatically add non-breaking spaces to empty table cells when
    empty-cells:show is applied to have compatibility with Internet Explorer
  - Pretty-printing HTML (adds dependency of Generator to HTMLDefinition)
- - Support for lots of character encodings out-of-the-box
+ - Non-lossy dumb alternate character encoding transformations, achieved by
+   numerically encoding all non-ASCII characters
+
+Wontfix
+ - Non-lossy smart alternate character encoding transformations
