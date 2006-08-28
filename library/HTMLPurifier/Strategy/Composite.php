@@ -6,7 +6,7 @@ require_once 'HTMLPurifier/Config.php';
 /**
  * Composite strategy that runs multiple strategies on tokens.
  */
-class HTMLPurifier_Strategy_Composite
+class HTMLPurifier_Strategy_Composite extends HTMLPurifier_Strategy
 {
     
     /**
