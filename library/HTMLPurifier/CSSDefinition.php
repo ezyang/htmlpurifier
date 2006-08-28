@@ -75,6 +75,15 @@ class HTMLPurifier_CSSDefinition
             array('capitalize', 'uppercase', 'lowercase', 'none'), false);
         $this->info['color'] = new HTMLPurifier_AttrDef_Color();
         
+        // technically speaking, this one should get its own validator, but
+        // since we don't support background images, it effectively is
+        // equivalent to color.  The only trouble is that if the author
+        // specifies an image and a color, they'll both end up getting dropped,
+        // even though we ought to implement it and just discard the image
+        // info.  This will be fixed in a later version (see TODO) when
+        // better URI filtering is implemented.
+        $this->info['background'] = 
+        
         $border_color = 
         $this->info['border-top-color'] = 
         $this->info['border-bottom-color'] = 
