@@ -53,7 +53,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <tbody>
 <tr><th colspan="3">CSS</th></tr>
-<tr class="impl-partial"><td>style</td><td>All</td><td>Needs CSS parser</td></tr>
+<tr class="impl-yes"><td>style</td><td>All</td><td>Not all properties may be implemented, parser is good though.</td></tr>
 </tbody>
 
 <tbody>
@@ -84,7 +84,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 </tbody>
 
 <tbody>
-<tr><th colspan="3">Transform</th></tr>
+<tr><th colspan="3">Transform, target milestone 1.2</th></tr>
 <tr><td rowspan="5">align</td><td>CAPTION</td><td>Near-equiv style 'caption-side', drop left and right</td></tr>
     <tr><td>IMG</td><td rowspan="2">Margin-left and margin-right = auto or parent div</td></tr>
     <tr><td>TABLE</td></tr>
@@ -134,7 +134,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tbody>
 <tr><th colspan="2">Standard</th></tr>
 <tr class="css1 impl-yes"><td>background-color</td><td>COMPOSITE(&lt;color&gt;, transparent)</td></tr>
-<tr class="css1"><td>background</td><td>SHORTHAND</td></tr>
+<tr class="css1 impl-yes"><td>background</td><td>SHORTHAND, only for color, see below for info on background-image and friends</td></tr>
 <tr class="css1 impl-yes"><td>border</td><td>SHORTHAND, MULTIPLE</td></tr>
 <tr class="css1 impl-yes"><td>border-color</td><td>MULTIPLE</td></tr>
 <tr class="css1 impl-yes"><td>border-style</td><td>MULTIPLE</td></tr>
@@ -167,7 +167,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     Well-supported values are: disc, circle, square,
     decimal, lower-roman, upper-roman, lower-alpha and upper-alpha. See also
     CSS 3. Mostly IE lack of support.</td></tr>
-<tr class="css1"><td>list-style</td><td>SHORTHAND</td></tr>
+<tr class="css1"><td>list-style</td><td>SHORTHAND, target milestone 1.0</td></tr>
 <tr class="css1 impl-yes"><td>margin</td><td>MULTIPLE</td></tr>
 <tr class="css1 impl-yes"><td>margin-*</td><td>COMPOSITE(&lt;length&gt;,
     &lt;percentage&gt;, auto)</td></tr>
@@ -194,7 +194,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr class="impl-yes"><td>border-collapse</td><td>ENUM(collapse, seperate)</td></tr>
 <tr class="impl-yes"><td>caption-side</td><td>ENUM(top, bottom)</td></tr>
 <tr><td>empty-cells</td><td>ENUM(show, hide), No IE support makes this useless,
-    possible fix with &amp;nbsp;?</td></tr>
+    possible fix with &amp;nbsp;? Unknown release milestone.</td></tr>
 <tr class="impl-yes"><td>table-layout</td><td>ENUM(auto, fixed)</td></tr>
 <tr class="impl-yes css1"><td>vertical-align</td><td>COMPOSITE(ENUM(baseline, sub,
     super, top, text-top, middle, bottom, text-bottom), &lt;percentage&gt;,
@@ -202,7 +202,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 </tbody>
 
 <tbody>
-<tr><th colspan="2">Absolute positioning</th></tr>
+<tr><th colspan="2">Absolute positioning, unknown release milestone</th></tr>
 <tr class="danger"><td>bottom</td><td rowspan="4">Dangerous, must be non-negative</td></tr>
 <tr class="danger"><td>left</td></tr>
 <tr class="danger"><td>right</td></tr>
@@ -215,36 +215,36 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <tbody>
 <tr><th colspan="2">Unknown</th></tr>
-<tr class="danger css1"><td>background-image</td><td>Dangerous</td></tr>
+<tr class="danger css1"><td>background-image</td><td>Dangerous, target milestone 1.3</td></tr>
 <tr class="css1"><td>background-attachment</td><td>ENUM(scroll, fixed),
     Depends on background-image</td></tr>
 <tr class="css1"><td>background-position</td><td>Depends on background-image</td></tr>
-<tr class="danger"><td>cursor</td><td>Dangerous but fluffy</td></tr>
+<tr class="danger impl-no"><td>cursor</td><td>Dangerous but fluffy</td></tr>
 <tr class="danger css1"><td>display</td><td>ENUM(...), Dangerous but interesting;
     will not implement list-item, run-in (Opera only) or table (no IE);
     inline-block has incomplete IE6 support and requires -moz-inline-box
-    for Mozilla.</td></tr>
-<tr><td class="css1">height</td><td>Interesting, why use it?</td></tr>
-<tr class="danger css1"><td>list-style-image</td><td>Dangerous?</td></tr>
+    for Mozilla. Unknown target milestone.</td></tr>
+<tr><td class="css1">height</td><td>Interesting, why use it? Unknown target milestone.</td></tr>
+<tr class="danger css1"><td>list-style-image</td><td>Dangerous? Target milestone 1.3</td></tr>
 <tr class="impl-no"><td>max-height</td><td rowspan="4">No IE 5/6</td></tr>
 <tr class="impl-no"><td>min-height</td></tr>
 <tr class="impl-no"><td>max-width</td></tr>
 <tr class="impl-no"><td>min-width</td></tr>
 <tr class="impl-no"><td>orphans</td><td>No IE support</td></tr>
 <tr class="impl-no"><td>widows</td><td>No IE support</td></tr>
-<tr><td>overflow</td><td>ENUM, IE 5/6 almost (remove visible if set)</td></tr>
+<tr><td>overflow</td><td>ENUM, IE 5/6 almost (remove visible if set). Unknown target milestone.</td></tr>
 <tr><td>page-break-after</td><td>ENUM(auto, always, avoid, left, right),
-    IE 5.5/6 and Opera</td></tr>
+    IE 5.5/6 and Opera. Unknown target milestone.</td></tr>
 <tr><td>page-break-before</td><td>ENUM(auto, always, avoid, left, right),
-    Mostly supported</td></tr>
-<tr><td>page-break-inside</td><td>ENUM(avoid, auto), Opera only</td></tr>
-<tr class="impl-no"><td>quotes</td><td>May be dropped from CSS2</td></tr>
+    Mostly supported. Unknown target milestone.</td></tr>
+<tr><td>page-break-inside</td><td>ENUM(avoid, auto), Opera only. Unknown target milestone.</td></tr>
+<tr class="impl-no"><td>quotes</td><td>May be dropped from CSS2, fairly useless for inline context</td></tr>
 <tr class="impl-no"><td>visibility</td><td>ENUM(visible, hidden, collapse),
     Dangerous</td></tr>
 <tr><td class="css1">white-space</td><td>ENUM(normal, pre, nowrap, pre-wrap,
     pre-line), Spotty implementation:
     pre (no IE 5/6), nowrap (no IE 5),
-    pre-wrap (only Opera), pre-line (no support). Fixable?</td></tr>
+    pre-wrap (only Opera), pre-line (no support). Fixable? Unknown target milestone.</td></tr>
 </tbody>
 
 <tbody class="impl-no">
