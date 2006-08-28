@@ -90,7 +90,8 @@ EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */tests/* \
                          */benchmarks/* \
                          */docs/phpdoc/* \
-                         */docs/doxygen/*
+                         */docs/doxygen/* \
+                         */test-settings.php
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO

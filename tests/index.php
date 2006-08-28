@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 $GLOBALS['HTMLPurifierTest']['PEAR'] = false; // do PEAR tests
 
 $simpletest_location = 'simpletest/';
-if (file_exists('../config.php')) include_once '../config.php';
+if (file_exists('../test-settings.php')) include_once '../test-settings.php';
 require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
 require_once $simpletest_location . 'mock_objects.php';
