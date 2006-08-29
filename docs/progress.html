@@ -38,89 +38,6 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr><td class="feature">Feature, requires extra work</td></tr>
 </tbody></table>
 
-<h2>Interesting Attributes</h2>
-
-<table cellspacing="0">
-
-<thead>
-<tr><th>Attribute</th><th>Tags</th><th>Notes</th></tr>
-</thead>
-
-<!--
-<tr><th></th></tr>
-<tbody>
-<tr><td>-</td><td>-</td><td>-</td></tr>
-</tbody>
--->
-
-<tbody>
-<tr><th colspan="3">CSS</th></tr>
-<tr class="impl-yes"><td>style</td><td>All</td><td>Not all properties may be implemented, parser is good though.</td></tr>
-</tbody>
-
-<tbody>
-<tr><th colspan="3">Questionable</th></tr>
-<tr class="impl-no"><td>accesskey</td><td>A</td><td>May interfere with main interface</td></tr>
-<tr class="impl-no"><td>tabindex</td><td>A</td><td>May interfere with main interface</td></tr>
-<tr><td>target</td><td>A</td><td>Config enabled, only useful for frame layouts</td></tr>
-</tbody>
-
-<tbody>
-<tr><th colspan="3">Miscellaneous</th></tr>
-<tr><td>datetime</td><td>DEL, INS</td><td>No visible effect, ISO format</td></tr>
-<tr><td>rel</td><td>A</td><td>Largely user-defined: nofollow, tag (see microformats)</td></tr>
-<tr><td>rev</td><td>A</td><td>Largely user-defined: vote-*</td></tr>
-<tr class="feature"><td>axis</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
-<tr class="feature"><td>char</td><td>COL, COLGROUP, TBODY, TD, TFOOT, TH, THEAD, TR</td><td>W3C only: No browser implementation</td></tr>
-<tr class="feature"><td>headers</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
-<tr class="feature"><td>scope</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
-</tbody>
-
-<tbody class="impl-yes">
-<tr><th colspan="3">URI</th></tr>
-<tr><td rowspan="2">cite</td><td>BLOCKQUOTE, Q</td><td>For attribution</td></tr>
-    <tr><td>DEL, INS</td><td>Link to explanation why it changed</td></tr>
-<tr><td>href</td><td>A</td><td>-</td></tr>
-<tr><td>longdesc</td><td>IMG</td><td>-</td></tr>
-<tr class="required"><td>src</td><td>IMG</td><td>Required</td></tr>
-</tbody>
-
-<tbody>
-<tr><th colspan="3">Transform, target milestone 1.2</th></tr>
-<tr><td rowspan="5">align</td><td>CAPTION</td><td>Near-equiv style 'caption-side', drop left and right</td></tr>
-    <tr><td>IMG</td><td rowspan="2">Margin-left and margin-right = auto or parent div</td></tr>
-    <tr><td>TABLE</td></tr>
-    <tr><td>HR</td><td>Equivalent style 'text-align' (IE tested)</td></tr>
-    <tr class="impl-yes"><td>H1, H2, H3, H4, H5, H6, P</td><td>Equivalent style 'text-align'</td></tr>
-<tr class="required impl-yes"><td>alt</td><td>IMG</td><td>Required, insert image filename if src is present or default invalid image text</td></tr>
-<tr><td rowspan="3">bgcolor</td><td>TABLE</td><td>Equivalent style 'background-color' (IE tested)</td></tr>
-    <tr><td>TR</td><td>Equivalent style 'background-color' (IE tested)</td></tr>
-    <tr><td>TD, TH</td><td>Equivalent style 'background-color'</td></tr>
-<tr><td>border</td><td>IMG</td><td>Equivalent style 'border-width', only applies when link present</td></tr>
-<tr><td>clear</td><td>BR</td><td>Near-equiv style 'clear', transform 'all' into 'both'</td></tr>
-<tr class="impl-no"><td>compact</td><td>DL, OL, UL</td><td>Boolean, needs custom CSS class; rarely used anyway</td></tr>
-<tr class="required impl-yes"><td>dir</td><td>BDO</td><td>Required, insert ltr (or configuration value) if none</td></tr>
-<tr><td>height</td><td>TD, TH</td><td>Near-equiv style 'height', needs px suffix if original was in pixels</td></tr>
-<tr><td>hspace</td><td>IMG</td><td>Near-equiv styles 'margin-top' and 'margin-bottom', needs px suffix</td></tr>
-<tr class="impl-yes"><td>lang</td><td>*</td><td>Copy value to xml:lang</td></tr>
-<tr><td rowspan="2">name</td><td>IMG</td><td>Turn into ID</td></tr>
-    <tr><td>A</td><td>Turn into ID? (not deprecated, though in which specs?)</td></tr>
-<tr><td>noshade</td><td>HR</td><td>Boolean, style 'border-style:solid;'</td></tr>
-<tr><td>nowrap</td><td>TD, TH</td><td>Boolean, style 'white-space:nowrap;' (not compat with IE5)</td></tr>
-<tr><td>size</td><td>HR</td><td>Near-equiv 'width', needs px suffix if original was pixels</td></tr>
-<tr class="required impl-yes"><td>src</td><td>IMG</td><td>Required, insert blank or default img if not set</td></tr>
-<tr><td>start</td><td>OL</td><td>Poorly supported 'counter-reset', transform may not be desirable</td></tr>
-<tr><td rowspan="3">type</td><td>LI</td><td rowspan="3">Equivalent style 'list-style-type', different allowed values though. (needs testing)</td></tr>
-    <tr><td>OL</td></tr>
-    <tr><td>UL</td></tr>
-<tr><td>value</td><td>LI</td><td>Poorly supported 'counter-reset', transform may not be desirable, see ol.start. Configurable.</td></tr>
-<tr><td>vspace</td><td>IMG</td><td>Near-equiv styles 'margin-left' and 'margin-right', needs px suffix, see hspace</td></tr>
-<tr><td rowspan="2">width</td><td>HR</td><td rowspan="2">Near-equiv style 'width', needs px suffix if original was pixels</td></tr>
-    <tr><td>TD, TH</td></tr>
-</tbody>
-
-</table>
-
 <h3>CSS</h3>
 
 <table cellspacing="0">
@@ -169,7 +86,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     Well-supported values are: disc, circle, square,
     decimal, lower-roman, upper-roman, lower-alpha and upper-alpha. See also
     CSS 3. Mostly IE lack of support.</td></tr>
-<tr class="css1"><td>list-style</td><td>SHORTHAND, target milestone 1.0</td></tr>
+<tr class="css1 impl-yes"><td>list-style</td><td>SHORTHAND, target milestone 1.0</td></tr>
 <tr class="css1 impl-yes"><td>margin</td><td>MULTIPLE</td></tr>
 <tr class="css1 impl-yes"><td>margin-*</td><td>COMPOSITE(&lt;length&gt;,
     &lt;percentage&gt;, auto)</td></tr>
@@ -285,6 +202,89 @@ Mozilla on inside and needs -moz-outline, no IE support.</td></tr>
     <tr><td>outline-width</td></tr>
     <tr><td>outline</td></tr>
 <tr><td>unicode-bidi</td><td>No support</td></tr>
+</tbody>
+
+</table>
+
+<h2>Interesting Attributes</h2>
+
+<table cellspacing="0">
+
+<thead>
+<tr><th>Attribute</th><th>Tags</th><th>Notes</th></tr>
+</thead>
+
+<!--
+<tr><th></th></tr>
+<tbody>
+<tr><td>-</td><td>-</td><td>-</td></tr>
+</tbody>
+-->
+
+<tbody>
+<tr><th colspan="3">CSS</th></tr>
+<tr class="impl-yes"><td>style</td><td>All</td><td>Not all properties may be implemented, parser is good though.</td></tr>
+</tbody>
+
+<tbody>
+<tr><th colspan="3">Questionable</th></tr>
+<tr class="impl-no"><td>accesskey</td><td>A</td><td>May interfere with main interface</td></tr>
+<tr class="impl-no"><td>tabindex</td><td>A</td><td>May interfere with main interface</td></tr>
+<tr><td>target</td><td>A</td><td>Config enabled, only useful for frame layouts</td></tr>
+</tbody>
+
+<tbody>
+<tr><th colspan="3">Miscellaneous</th></tr>
+<tr><td>datetime</td><td>DEL, INS</td><td>No visible effect, ISO format</td></tr>
+<tr><td>rel</td><td>A</td><td>Largely user-defined: nofollow, tag (see microformats)</td></tr>
+<tr><td>rev</td><td>A</td><td>Largely user-defined: vote-*</td></tr>
+<tr class="feature"><td>axis</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
+<tr class="feature"><td>char</td><td>COL, COLGROUP, TBODY, TD, TFOOT, TH, THEAD, TR</td><td>W3C only: No browser implementation</td></tr>
+<tr class="feature"><td>headers</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
+<tr class="feature"><td>scope</td><td>TD, TH</td><td>W3C only: No browser implementation</td></tr>
+</tbody>
+
+<tbody class="impl-yes">
+<tr><th colspan="3">URI</th></tr>
+<tr><td rowspan="2">cite</td><td>BLOCKQUOTE, Q</td><td>For attribution</td></tr>
+    <tr><td>DEL, INS</td><td>Link to explanation why it changed</td></tr>
+<tr><td>href</td><td>A</td><td>-</td></tr>
+<tr><td>longdesc</td><td>IMG</td><td>-</td></tr>
+<tr class="required"><td>src</td><td>IMG</td><td>Required</td></tr>
+</tbody>
+
+<tbody>
+<tr><th colspan="3">Transform, target milestone 1.2</th></tr>
+<tr><td rowspan="5">align</td><td>CAPTION</td><td>Near-equiv style 'caption-side', drop left and right</td></tr>
+    <tr><td>IMG</td><td rowspan="2">Margin-left and margin-right = auto or parent div</td></tr>
+    <tr><td>TABLE</td></tr>
+    <tr><td>HR</td><td>Equivalent style 'text-align' (IE tested)</td></tr>
+    <tr class="impl-yes"><td>H1, H2, H3, H4, H5, H6, P</td><td>Equivalent style 'text-align'</td></tr>
+<tr class="required impl-yes"><td>alt</td><td>IMG</td><td>Required, insert image filename if src is present or default invalid image text</td></tr>
+<tr><td rowspan="3">bgcolor</td><td>TABLE</td><td>Equivalent style 'background-color' (IE tested)</td></tr>
+    <tr><td>TR</td><td>Equivalent style 'background-color' (IE tested)</td></tr>
+    <tr><td>TD, TH</td><td>Equivalent style 'background-color'</td></tr>
+<tr><td>border</td><td>IMG</td><td>Equivalent style 'border-width', only applies when link present</td></tr>
+<tr><td>clear</td><td>BR</td><td>Near-equiv style 'clear', transform 'all' into 'both'</td></tr>
+<tr class="impl-no"><td>compact</td><td>DL, OL, UL</td><td>Boolean, needs custom CSS class; rarely used anyway</td></tr>
+<tr class="required impl-yes"><td>dir</td><td>BDO</td><td>Required, insert ltr (or configuration value) if none</td></tr>
+<tr><td>height</td><td>TD, TH</td><td>Near-equiv style 'height', needs px suffix if original was in pixels</td></tr>
+<tr><td>hspace</td><td>IMG</td><td>Near-equiv styles 'margin-top' and 'margin-bottom', needs px suffix</td></tr>
+<tr class="impl-yes"><td>lang</td><td>*</td><td>Copy value to xml:lang</td></tr>
+<tr><td rowspan="2">name</td><td>IMG</td><td>Turn into ID</td></tr>
+    <tr><td>A</td><td>Turn into ID? (not deprecated, though in which specs?)</td></tr>
+<tr><td>noshade</td><td>HR</td><td>Boolean, style 'border-style:solid;'</td></tr>
+<tr><td>nowrap</td><td>TD, TH</td><td>Boolean, style 'white-space:nowrap;' (not compat with IE5)</td></tr>
+<tr><td>size</td><td>HR</td><td>Near-equiv 'width', needs px suffix if original was pixels</td></tr>
+<tr class="required impl-yes"><td>src</td><td>IMG</td><td>Required, insert blank or default img if not set</td></tr>
+<tr><td>start</td><td>OL</td><td>Poorly supported 'counter-reset', transform may not be desirable</td></tr>
+<tr><td rowspan="3">type</td><td>LI</td><td rowspan="3">Equivalent style 'list-style-type', different allowed values though. (needs testing)</td></tr>
+    <tr><td>OL</td></tr>
+    <tr><td>UL</td></tr>
+<tr><td>value</td><td>LI</td><td>Poorly supported 'counter-reset', transform may not be desirable, see ol.start. Configurable.</td></tr>
+<tr><td>vspace</td><td>IMG</td><td>Near-equiv styles 'margin-left' and 'margin-right', needs px suffix, see hspace</td></tr>
+<tr><td rowspan="2">width</td><td>HR</td><td rowspan="2">Near-equiv style 'width', needs px suffix if original was pixels</td></tr>
+    <tr><td>TD, TH</td></tr>
 </tbody>
 
 </table>

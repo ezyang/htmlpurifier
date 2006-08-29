@@ -5,8 +5,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fixed broken numeric entity conversion
 - Malformed UTF-8 and non-SGML character detection and cleaning implemented
 - API documentation completed
-- Shorthand CSS properties implemented: font, border
-- A limited version of CSS background implemented, only color is supported
+- Shorthand CSS properties implemented: font, border, background, list-style
 - Basic color keywords translated into hexadecimal values
 - Table CSS properties implemented
 

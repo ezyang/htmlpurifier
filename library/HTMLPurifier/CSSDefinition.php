@@ -10,6 +10,7 @@ require_once 'HTMLPurifier/AttrDef/TextDecoration.php';
 require_once 'HTMLPurifier/AttrDef/FontFamily.php';
 require_once 'HTMLPurifier/AttrDef/Font.php';
 require_once 'HTMLPurifier/AttrDef/Border.php';
+require_once 'HTMLPurifier/AttrDef/ListStyle.php';
 
 /**
  * Defines allowed CSS attributes and what their values are.
@@ -66,11 +67,15 @@ class HTMLPurifier_CSSDefinition
             array('normal', 'italic', 'oblique'), false);
         $this->info['font-variant'] = new HTMLPurifier_AttrDef_Enum(
             array('normal', 'small-caps'), false);
+        
         $this->info['list-style-position'] = new HTMLPurifier_AttrDef_Enum(
             array('inside', 'outside'), false);
         $this->info['list-style-type'] = new HTMLPurifier_AttrDef_Enum(
             array('disc', 'circle', 'square', 'decimal', 'lower-roman',
             'upper-roman', 'lower-alpha', 'upper-alpha'), false);
+        
+        $this->info['list-style'] = new HTMLPurifier_AttrDef_ListStyle();
+        
         $this->info['text-transform'] = new HTMLPurifier_AttrDef_Enum(
             array('capitalize', 'uppercase', 'lowercase', 'none'), false);
         $this->info['color'] = new HTMLPurifier_AttrDef_Color();
