@@ -1,4 +1,8 @@
-<!DOCTYPE html 
+<?php
+
+header('Content-type:text/html;charset=UTF-8');
+
+?><!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -9,8 +13,6 @@
 <body>
 <h1>HTMLPurifier Live Demo</h1>
 <?php
-
-set_time_limit(120);
 
 set_include_path('../../library' . PATH_SEPARATOR . get_include_path());
 require_once 'HTMLPurifier.php';
