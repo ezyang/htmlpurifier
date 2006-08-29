@@ -138,6 +138,31 @@ class HTMLPurifier_Lexer
     }
     
     /**
+     * Takes a piece of HTML and normalizes it by converting entities, fixing
+     * encoding, extracting bits, and other good stuff.
+     */
+    function normalize($html, $config) {
+        
+        // extract body from document if applicable
+        if ($config->get('Core', 'AcceptFullDocuments')) {
+            $html = $this->extractBody($html);
+        }
+        
+        // escape CDATA
+        $html = $this->escapeCDATA($html);
+        
+        // expand entities that aren't the big five
+        $html = $this->_encoder->substituteNonSpecialEntities($html);
+        
+        // clean into wellformed UTF-8 string for an SGML context: this has
+        // to be done after entity expansion because the entities sometimes
+        // represent non-SGML characters (horror, horror!)
+        $html = $this->_encoder->cleanUTF8($html);
+        
+        return $html;
+    }
+    
+    /**
      * Takes a string of HTML (fragment or document) and returns the content
      */
     function extractBody($html) {

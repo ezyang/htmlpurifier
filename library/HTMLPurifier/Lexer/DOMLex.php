@@ -37,24 +37,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     public function tokenizeHTML($string, $config = null) {
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         
-        if ($config->get('Core', 'AcceptFullDocuments')) {
-            $string = $this->extractBody($string);
-        }
-        
-        $doc = new DOMDocument();
-        $doc->encoding = 'UTF-8'; // technically does nothing, but whatever
-        
-        // replace and escape the CDATA sections, since parsing under HTML
-        // mode won't get 'em.
-        $string = $this->escapeCDATA($string);
-        
-        // substitute non-special entities. While DOM is perfectly capable
-        // of doing this, we need to get at the UTF-8 characters in
-        // cleanUTF8
-        $string = $this->_encoder->substituteNonSpecialEntities($string);
-        
-        // clean it into well-formed UTF-8 string
-        $string = $this->_encoder->cleanUTF8($string);
+        $string = $this->normalize($string, $config);
         
         // preprocess string, essential for UTF-8
         $string =
@@ -66,6 +49,8 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
                 ' charset=utf-8" />'.
             '</head><body><div>'.$string.'</div></body></html>';
         
+        $doc = new DOMDocument();
+        $doc->encoding = 'UTF-8'; // technically does nothing, but whatever
         @$doc->loadHTML($string); // mute all errors, handle it transparently
         
         $tokens = array();

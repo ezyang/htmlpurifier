@@ -76,30 +76,15 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
      */
     var $_whitespace = "\x20\x09\x0D\x0A";
     
-    function tokenizeHTML($string, $config = null) {
+    function tokenizeHTML($html, $config = null) {
         
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         
-        // some quick checking (if empty, return empty)
-        $string = @ (string) $string;
-        if ($string == '') return array();
-        
-        if ($config->get('Core', 'AcceptFullDocuments')) {
-            $string = $this->extractBody($string);
-        }
+        $html = $this->normalize($html, $config);
         
         $cursor = 0; // our location in the text
         $inside_tag = false; // whether or not we're parsing the inside of a tag
         $array = array(); // result array
-        
-        // escape CDATA
-        $string = $this->escapeCDATA($string);
-        
-        // expand entities THAT AREN'T THE BIG FIVE
-        $string = $this->_encoder->substituteNonSpecialEntities($string);
-        
-        // clean it into wellformed UTF-8 string
-        $string = $this->_encoder->cleanUTF8($string);
         
         // infinite loop protection
         // has to be pretty big, since html docs can be big
@@ -111,8 +96,8 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             // infinite loop protection
             if (++$loops > 200000) return array();
             
-            $position_next_lt = strpos($string, '<', $cursor);
-            $position_next_gt = strpos($string, '>', $cursor);
+            $position_next_lt = strpos($html, '<', $cursor);
+            $position_next_gt = strpos($html, '>', $cursor);
             
             // triggers on "<b>asdf</b>" but not "asdf <b></b>"
             if ($position_next_lt === $cursor) {
@@ -126,7 +111,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                     HTMLPurifier_Token_Text(
                         $this->parseData(
                             substr(
-                                $string, $cursor, $position_next_lt - $cursor
+                                $html, $cursor, $position_next_lt - $cursor
                             )
                         )
                     );
@@ -136,13 +121,13 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             } elseif (!$inside_tag) {
                 // We are not inside tag but there are no more tags
                 // If we're already at the end, break
-                if ($cursor === strlen($string)) break;
+                if ($cursor === strlen($html)) break;
                 // Create Text of rest of string
                 $array[] = new
                     HTMLPurifier_Token_Text(
                         $this->parseData(
                             substr(
-                                $string, $cursor
+                                $html, $cursor
                             )
                         )
                     );
@@ -151,7 +136,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 // We are in tag and it is well formed
                 // Grab the internals of the tag
                 $strlen_segment = $position_next_gt - $cursor;
-                $segment = substr($string, $cursor, $strlen_segment);
+                $segment = substr($html, $cursor, $strlen_segment);
                 
                 // Check if it's a comment
                 if (
@@ -232,7 +217,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                     HTMLPurifier_Token_Text(
                         '<' .
                         $this->parseData(
-                            substr($string, $cursor)
+                            substr($html, $cursor)
                         )
                     );
                 break;
