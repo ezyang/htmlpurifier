@@ -62,7 +62,7 @@ if (isset($_GET['profile']) || isset($_GET['XDEBUG_PROFILE'])) {
 
 if (isset($html)) {
     echo htmlspecialchars(
-            HTMLPurifier_Lexer::cleanUTF8($html), ENT_COMPAT, 'UTF-8');
+            HTMLPurifier_Encoder::cleanUTF8($html), ENT_COMPAT, 'UTF-8');
 }
         ?></textarea>
         <div>

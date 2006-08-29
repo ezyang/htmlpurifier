@@ -35,8 +35,8 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
         if ($config->get('Core', 'AcceptFullDocuments')) {
             $string = $this->extractBody($string);
         }
-        $string = $this->substituteNonSpecialEntities($string);
-        $string = $this->cleanUTF8($string);
+        $string = $this->_encoder->substituteNonSpecialEntities($string);
+        $string = $this->_encoder->cleanUTF8($string);
         $parser=& new XML_HTMLSax3();
         $parser->set_object($this);
         $parser->set_element_handler('openHandler','closeHandler');

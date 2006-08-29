@@ -21,6 +21,21 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
 {
     
     /**
+     * Most common entity to raw value conversion table for special entities.
+     * @protected
+     */
+    var $_special_entity2str =
+            array(
+                    '&quot;' => '"',
+                    '&amp;'  => '&',
+                    '&lt;'   => '<',
+                    '&gt;'   => '>',
+                    '&#39;'  => "'",
+                    '&#039;' => "'",
+                    '&#x27;' => "'"
+            );
+    
+    /**
      * Parses special entities into the proper characters.
      * 
      * This string will translate escaped versions of the special characters
@@ -51,7 +66,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         if ($num_amp_2 <= $num_esc_amp) return $string;
         
         // hmm... now we have some uncommon entities. Use the callback.
-        $string = $this->substituteSpecialEntities($string);
+        $string = $this->_encoder->substituteSpecialEntities($string);
         return $string;
     }
     
@@ -60,51 +75,6 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
      * @protected
      */
     var $_whitespace = "\x20\x09\x0D\x0A";
-    
-    /**
-     * Substitutes only special entities with their parsed equivalents.
-     * 
-     * @notice We try to avoid calling this function because otherwise, it
-     * would have to be called a lot (for every parsed section).
-     * 
-     * @protected
-     * @param $string String to have non-special entities parsed.
-     * @returns Parsed string.
-     */
-    function substituteSpecialEntities($string) {
-        return preg_replace_callback(
-            $this->_substituteEntitiesRegex,
-            array('HTMLPurifier_Lexer_DirectLex', 'specialEntityCallback'),
-            $string);
-    }
-    
-    /**
-     * Callback function for substituteSpecialEntities() that does the work.
-     * 
-     * This callback has same syntax as nonSpecialEntityCallback().
-     * 
-     * @warning Though this is public in order to let the callback happen,
-     *          calling it directly is not recommended.
-     * @param $matches  PCRE-style matches array, with 0 the entire match, and
-     *                  either index 1, 2 or 3 set with a hex value, dec value,
-     *                  or string (respectively).
-     * @returns Replacement string.
-     */
-    function specialEntityCallback($matches) {
-        $entity = $matches[0];
-        $is_num = (@$matches[0][1] === '#');
-        if ($is_num) {
-            $is_hex = (@$entity[2] === 'x');
-            $int = $is_hex ? hexdec($matches[1]) : (int) $matches[2];
-            return isset($this->_special_dec2str[$int]) ?
-                $this->_special_dec2str[$int] :
-                $entity;
-        } else {
-            return isset($this->_special_ent2dec[$matches[3]]) ?
-                $this->_special_ent2dec[$matches[3]] :
-                $entity;
-        }
-    }
     
     function tokenizeHTML($string, $config = null) {
         
@@ -126,10 +96,10 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         $string = $this->escapeCDATA($string);
         
         // expand entities THAT AREN'T THE BIG FIVE
-        $string = $this->substituteNonSpecialEntities($string);
+        $string = $this->_encoder->substituteNonSpecialEntities($string);
         
         // clean it into wellformed UTF-8 string
-        $string = $this->cleanUTF8($string);
+        $string = $this->_encoder->cleanUTF8($string);
         
         // infinite loop protection
         // has to be pretty big, since html docs can be big

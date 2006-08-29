@@ -11,13 +11,6 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         $this->DirectLex = new HTMLPurifier_Lexer_DirectLex();
     }
     
-    function test_specialEntityCallback() {
-        $HP =& $this->DirectLex;
-        
-        $this->assertIdentical("'",$HP->specialEntityCallback(
-            array('&#39;', null, '39', null) ));
-    }
-    
     function test_parseData() {
         $HP =& $this->DirectLex;
         

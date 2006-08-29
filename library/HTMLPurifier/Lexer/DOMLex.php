@@ -30,6 +30,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     
     public function __construct() {
         // setup the factory
+        parent::HTMLPurifier_Lexer();
         $this->factory = new HTMLPurifier_TokenFactory();
     }
     
@@ -50,10 +51,10 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         // substitute non-special entities. While DOM is perfectly capable
         // of doing this, we need to get at the UTF-8 characters in
         // cleanUTF8
-        $string = $this->substituteNonSpecialEntities($string);
+        $string = $this->_encoder->substituteNonSpecialEntities($string);
         
         // clean it into well-formed UTF-8 string
-        $string = $this->cleanUTF8($string);
+        $string = $this->_encoder->cleanUTF8($string);
         
         // preprocess string, essential for UTF-8
         $string =

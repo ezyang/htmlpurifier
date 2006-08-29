@@ -28,48 +28,6 @@ require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Strategy/Core.php';
 
-/*
-
-// Darn you fellas still using ISO-8859-1!  It would be so easy for me
-// to just drop the characters that can't be expressed this way, but I'm
-// a stickler for code quality, so I won't do that to you.  You'll have
-// to wait for this functionality to be implemented later.
-
-HTMLPurifier_ConfigDef::define(
-    'Core', 'Encoding', 'utf-8', 'istring',
-    'Set this to the encoding your webpages are served as.  This defines '.
-    'the encoding the HTMLPurifier will convert to and from before passing '.
-    'the text back to you.  Note that although we offer full HTML document '.
-    'parsing functionality, we ignore meta tags in such documents, because '.
-    'most modern browsers have already re-encoded the file in the correct '.
-    'encoding (though it did not change the meta tag).  '.
-    'Since browsers do not alter file uploads, '.
-    'HTML from a file will fail fantastically if its real encoding is does '.
-    'match the encoding passed here (which is often the case).'
-);
-
-if ( !function_exists('iconv') ) {
-    
-    // these are the only encodings we offer native PHP support for.
-    // if iconv is enabled, iconv's encoding support dictates what we can
-    // use.
-    
-    HTMLPurifier_ConfigDef::defineAllowedValues(
-        'Core', 'Encoding', array(
-            'utf-8',
-            'iso-8859-1'
-        )
-    );
-    HTMLPurifier_ConfigDef::defineValueAliases(
-        'Core', 'Encoding', array(
-            'iso8859-1' => 'iso-8859-1'
-        )
-    );
-    
-}
-
-*/
-
 /**
  * Main library execution class.
  * 

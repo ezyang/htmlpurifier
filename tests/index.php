@@ -86,6 +86,7 @@ $test_files[] = 'AttrTransform/BdoDirTest.php';
 $test_files[] = 'AttrTransform/ImgRequiredTest.php';
 $test_files[] = 'URISchemeRegistryTest.php';
 $test_files[] = 'URISchemeTest.php';
+$test_files[] = 'EncoderTest.php';
 
 if (version_compare(PHP_VERSION, '5', '>=')) {
     $test_files[] = 'TokenFactoryTest.php';
