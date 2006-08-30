@@ -66,7 +66,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         if ($num_amp_2 <= $num_esc_amp) return $string;
         
         // hmm... now we have some uncommon entities. Use the callback.
-        $string = $this->_encoder->substituteSpecialEntities($string);
+        $string = $this->_entity_parser->substituteSpecialEntities($string);
         return $string;
     }
     

@@ -2,6 +2,7 @@
 
 require_once 'HTMLPurifier/Token.php';
 require_once 'HTMLPurifier/Encoder.php';
+require_once 'HTMLPurifier/EntityParser.php';
 
 HTMLPurifier_ConfigDef::define(
     'Core', 'AcceptFullDocuments', true, 'bool',
@@ -57,6 +58,7 @@ class HTMLPurifier_Lexer
     
     function HTMLPurifier_Lexer() {
         $this->_encoder = new HTMLPurifier_Encoder();
+        $this->_entity_parser = new HTMLPurifier_EntityParser();
     }
     
     var $_encoder;
@@ -152,7 +154,7 @@ class HTMLPurifier_Lexer
         $html = $this->escapeCDATA($html);
         
         // expand entities that aren't the big five
-        $html = $this->_encoder->substituteNonSpecialEntities($html);
+        $html = $this->_entity_parser->substituteNonSpecialEntities($html);
         
         // clean into wellformed UTF-8 string for an SGML context: this has
         // to be done after entity expansion because the entities sometimes
