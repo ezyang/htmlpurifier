@@ -34,6 +34,9 @@ require_once 'HTMLPurifier/Strategy/Core.php';
  * Facade that performs calls to the HTMLPurifier_Lexer,
  * HTMLPurifier_Strategy and HTMLPurifier_Generator subsystems in order to
  * purify HTML.
+ * 
+ * @todo We need an easier way to inject strategies, it'll probably end
+ *       up getting done through config though.
  */
 class HTMLPurifier
 {
@@ -46,14 +49,16 @@ class HTMLPurifier
      * Initializes the purifier.
      * @param $config Optional HTMLPurifier_Config object for all instances of
      *                the purifier, if omitted, a default configuration is
-     *                supplied.
+     *                supplied (which can be overridden on a per-use basis).
      */
     function HTMLPurifier($config = null) {
+        
         $this->config = $config ? $config : HTMLPurifier_Config::createDefault();
         
-        $this->lexer = HTMLPurifier_Lexer::create();
-        $this->strategy = new HTMLPurifier_Strategy_Core();
-        $this->generator = new HTMLPurifier_Generator();
+        $this->lexer        = HTMLPurifier_Lexer::create();
+        $this->strategy     = new HTMLPurifier_Strategy_Core();
+        $this->generator    = new HTMLPurifier_Generator();
+        
     }
     
     /**
