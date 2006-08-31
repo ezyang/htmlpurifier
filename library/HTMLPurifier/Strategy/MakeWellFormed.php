@@ -10,15 +10,9 @@ require_once 'HTMLPurifier/Generator.php';
 class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
 {
     
-    var $generator;
-    var $definition;
-    
-    function HTMLPurifier_Strategy_MakeWellFormed() {
-        $this->generator = new HTMLPurifier_Generator();
-        $this->definition = HTMLPurifier_HTMLDefinition::instance();
-    }
-    
     function execute($tokens, $config) {
+        $definition = $config->getHTMLDefinition();
+        $generator = new HTMLPurifier_Generator();
         $result = array();
         $current_nesting = array();
         $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
@@ -29,7 +23,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             }
             
             // DEFINITION CALL
-            $info = $this->definition->info[$token->name]->child;
+            $info = $definition->info[$token->name]->child;
             
             // test if it claims to be a start tag but is empty
             if ($info->type == 'empty' &&
@@ -66,7 +60,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     
                     $parent = array_pop($current_nesting);
                     $parent_name = $parent->name;
-                    $parent_info = $this->definition->info[$parent_name];
+                    $parent_info = $definition->info[$parent_name];
                     
                     if (isset($parent_info->auto_close[$token->name])) {
                         $result[] = new HTMLPurifier_Token_End($parent_name);
@@ -92,7 +86,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             if (empty($current_nesting)) {
                 if ($escape_invalid_tags) {
                     $result[] = new HTMLPurifier_Token_Text(
-                        $this->generator->generateFromToken($token, $config)
+                        $generator->generateFromToken($token, $config)
                     );
                 }
                 continue;
@@ -129,7 +123,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             if ($skipped_tags === false) {
                 if ($escape_invalid_tags) {
                     $result[] = new HTMLPurifier_Token_Text(
-                        $this->generator->generateFromToken($token, $config)
+                        $generator->generateFromToken($token, $config)
                     );
                 }
                 continue;

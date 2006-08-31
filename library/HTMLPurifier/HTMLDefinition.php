@@ -79,28 +79,9 @@ class HTMLPurifier_HTMLDefinition
     var $info_attr_transform_post = array();
     
     /**
-     * Retrieve sole instance of definition object.
-     * @param $prototype Optional prototype to overload instance with.
-     * @warning Prototype is not passed by reference, so in order to get
-     *          a copy of the real one, you'll have to destroy your copy
-     *          and use instance() to get it.  We strongly recommend modifying
-     *          the default returned definition instead.
-     */
-    function &instance($prototype = null) {
-        static $instance = null;
-        if ($prototype) {
-            $instance = $prototype;
-        } elseif (!$instance) {
-            $instance = new HTMLPurifier_HTMLDefinition();
-            $instance->setup();
-        }
-        return $instance;
-    }
-    
-    /**
      * Initializes the definition, the meat of the class.
      */
-    function setup() {
+    function setup($config) {
         
         // emulates the structure of the DTD
         // these are condensed, however, with bad stuff taken out

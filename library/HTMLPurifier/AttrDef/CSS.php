@@ -16,7 +16,7 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
         
         $css = $this->parseCDATA($css);
         
-        $definition = HTMLPurifier_CSSDefinition::instance();
+        $definition = $config->getCSSDefinition();
         
         // we're going to break the spec and explode by semicolons.
         // This is because semicolon rarely appears in escaped form

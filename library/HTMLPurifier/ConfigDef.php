@@ -26,15 +26,15 @@ class HTMLPurifier_ConfigDef {
      * Lookup table of allowed types.
      */
     var $types = array(
-        'string' => true,
-        'istring' => true,
-        'int' => true,
-        'float' => true,
-        'bool' => true,
-        'lookup' => true,
-        'list' => true,
-        'hash' => true,
-        'mixed' => true
+        'string'    => true,
+        'istring'   => true,
+        'int'       => true,
+        'float'     => true,
+        'bool'      => true,
+        'lookup'    => true,
+        'list'      => true,
+        'hash'      => true,
+        'mixed'     => true
     );
     
     /**
@@ -44,6 +44,8 @@ class HTMLPurifier_ConfigDef {
         $this->defineNamespace('Core', 'Core features that are always available.');
         $this->defineNamespace('Attr', 'Features regarding attribute validation.');
         $this->defineNamespace('URI', 'Features regarding Uniform Resource Identifiers.');
+        $this->defineNamespace('HTML', 'Configuration regarding allowed HTML.');
+        $this->defineNamespace('CSS', 'Configuration regarding allowed CSS.');
     }
     
     /**

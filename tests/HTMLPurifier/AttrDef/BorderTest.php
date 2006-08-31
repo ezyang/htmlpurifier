@@ -7,7 +7,7 @@ class HTMLPurifier_AttrDef_BorderTest extends HTMLPurifier_AttrDef_PixelsTest
     
     function test() {
         
-        $this->def = new HTMLPurifier_AttrDef_Border();
+        $this->def = new HTMLPurifier_AttrDef_Border(HTMLPurifier_Config::createDefault());
         
         $this->assertDef('thick solid red', 'thick solid #F00');
         $this->assertDef('thick solid');

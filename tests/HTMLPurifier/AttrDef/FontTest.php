@@ -8,7 +8,7 @@ class HTMLPurifier_AttrDef_FontTest extends HTMLPurifier_AttrDefHarness
     
     function test() {
         
-        $this->def = new HTMLPurifier_AttrDef_Font();
+        $this->def = new HTMLPurifier_AttrDef_Font(HTMLPurifier_Config::createDefault());
         
         // hodgepodge of usage cases from W3C spec, but " -> '
         $this->assertDef('12px/14px sans-serif');

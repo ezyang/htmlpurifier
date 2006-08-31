@@ -17,13 +17,9 @@ HTMLPurifier_ConfigDef::define(
 class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
 {
     
-    var $definition;
-    
-    function HTMLPurifier_Strategy_ValidateAttributes() {
-        $this->definition = HTMLPurifier_HTMLDefinition::instance();
-    }
-    
     function execute($tokens, $config) {
+        
+        $definition = $config->getHTMLDefinition();
         
         // setup StrategyContext
         $context = new HTMLPurifier_AttrContext();
@@ -36,7 +32,7 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
         
         // create alias to global definition array, see also $defs
         // DEFINITION CALL
-        $d_defs = $this->definition->info_global_attr;
+        $d_defs = $definition->info_global_attr;
         
         foreach ($tokens as $key => $token) {
             
@@ -50,14 +46,14 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             // do global transformations (pre)
             // ex. <ELEMENT lang="fr"> to <ELEMENT lang="fr" xml:lang="fr">
             // DEFINITION CALL
-            foreach ($this->definition->info_attr_transform_pre as $transform) {
+            foreach ($definition->info_attr_transform_pre as $transform) {
                 $attr = $transform->transform($attr, $config);
             }
             
             // do local transformations only applicable to this element (pre)
             // ex. <p align="right"> to <p style="text-align:right;">
             // DEFINITION CALL
-            foreach ($this->definition->info[$token->name]->attr_transform_pre
+            foreach ($definition->info[$token->name]->attr_transform_pre
                 as $transform
             ) {
                 $attr = $transform->transform($attr, $config);
@@ -66,7 +62,7 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             // create alias to this element's attribute definition array, see
             // also $d_defs (global attribute definition array)
             // DEFINITION CALL
-            $defs = $this->definition->info[$token->name]->attr;
+            $defs = $definition->info[$token->name]->attr;
             
             // iterate through all the attribute keypairs
             // Watch out for name collisions: $key has previously been used
@@ -116,10 +112,10 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             }
             
             // post transforms
-            foreach ($this->definition->info_attr_transform_post as $transform) {
+            foreach ($definition->info_attr_transform_post as $transform) {
                 $attr = $transform->transform($attr, $config);
             }
-            foreach ($this->definition->info[$token->name]->attr_transform_post as $transform) {
+            foreach ($definition->info[$token->name]->attr_transform_post as $transform) {
                 $attr = $transform->transform($attr, $config);
             }
             

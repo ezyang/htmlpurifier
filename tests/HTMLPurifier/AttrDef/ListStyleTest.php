@@ -8,7 +8,7 @@ class HTMLPurifier_AttrDef_ListStyleTest extends HTMLPurifier_AttrDefHarness
     
     function test() {
         
-        $this->def = new HTMLPurifier_AttrDef_ListStyle();
+        $this->def = new HTMLPurifier_AttrDef_ListStyle(HTMLPurifier_Config::createDefault());
         
         $this->assertDef('lower-alpha');
         $this->assertDef('upper-roman inside');

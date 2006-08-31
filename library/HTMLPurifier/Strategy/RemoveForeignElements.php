@@ -16,35 +16,28 @@ require_once 'HTMLPurifier/TagTransform.php';
 class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
 {
     
-    var $generator;
-    var $definition;
-    
-    function HTMLPurifier_Strategy_RemoveForeignElements() {
-        $this->generator = new HTMLPurifier_Generator();
-        $this->definition = HTMLPurifier_HTMLDefinition::instance();
-    }
-    
     function execute($tokens, $config) {
+        $definition = $config->getHTMLDefinition();
+        $generator = new HTMLPurifier_Generator();
         $result = array();
         $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
         foreach($tokens as $token) {
             if (!empty( $token->is_tag )) {
                 // DEFINITION CALL
-                if (isset($this->definition->info[$token->name])) {
+                if (isset($definition->info[$token->name])) {
                     // leave untouched
                 } elseif (
-                    isset($this->definition->info_tag_transform[$token->name])
+                    isset($definition->info_tag_transform[$token->name])
                 ) {
                     // there is a transformation for this tag
                     // DEFINITION CALL
-                    $token = $this->
-                                definition->
-                                    info_tag_transform[$token->name]->
-                                        transform($token);
+                    $token = $definition->
+                                info_tag_transform[$token->name]->
+                                    transform($token);
                 } elseif ($escape_invalid_tags) {
                     // invalid tag, generate HTML and insert in
                     $token = new HTMLPurifier_Token_Text(
-                        $this->generator->generateFromToken($token, $config)
+                        $generator->generateFromToken($token, $config)
                     );
                 } else {
                     continue;

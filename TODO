@@ -8,7 +8,6 @@ Ongoing
 1.0 release
  - Lossy alternate character encoding support (characters not in the encoding
    will get silently dropped).
- - Revise (HTML|CSS)Definition and Config relationship (groundwork for 2.0)
 
 1.1 release
  - Directive documentation generation

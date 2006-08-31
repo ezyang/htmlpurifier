@@ -26,6 +26,16 @@ class HTMLPurifier_Config
     var $def;
     
     /**
+     * Instance of HTMLPurifier_HTMLDefinition
+     */
+    var $html_definition;
+    
+    /**
+     * Instance of HTMLPurifier_CSSDefinition
+     */
+    var $css_definition;
+    
+    /**
      * @param $definition HTMLPurifier_ConfigDef that defines what directives
      *                    are allowed.
      */
@@ -90,6 +100,28 @@ class HTMLPurifier_Config
             return;
         }
         $this->conf[$namespace][$key] = $value;
+    }
+    
+    /**
+     * Retrieves a copy of the HTML definition.
+     */
+    function getHTMLDefinition() {
+        if ($this->html_definition === null) {
+            $this->html_definition = new HTMLPurifier_HTMLDefinition();
+            $this->html_definition->setup($this);
+        }
+        return $this->html_definition;
+    }
+    
+    /**
+     * Retrieves a copy of the CSS definition
+     */
+    function getCSSDefinition() {
+        if ($this->css_definition === null) {
+            $this->css_definition = new HTMLPurifier_CSSDefinition();
+            $this->css_definition->setup($this);
+        }
+        return $this->css_definition;
     }
     
 }

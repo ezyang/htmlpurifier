@@ -8,6 +8,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Shorthand CSS properties implemented: font, border, background, list-style
 - Basic color keywords translated into hexadecimal values
 - Table CSS properties implemented
+- (HTML|CSS)Definition de-singleton-ized
 
 1.0.0beta, released 2006-08-16
 - First public release, most functionality implemented. Notable omissions are:

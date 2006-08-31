@@ -34,21 +34,18 @@ require_once 'HTMLPurifier/HTMLDefinition.php';
 class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 {
     
-    var $definition;
-    
-    function HTMLPurifier_Strategy_FixNesting() {
-        $this->definition = HTMLPurifier_HTMLDefinition::instance();
-    }
-    
     function execute($tokens, $config) {
         
         //####################################################################//
         // Pre-processing
         
+        // get a copy of the HTML definition
+        $definition = $config->getHTMLDefinition();
+        
         // insert implicit "parent" node, will be removed at end.
         // ! we might want to move this to configuration
         // DEFINITION CALL
-        $parent_name = $this->definition->info_parent;
+        $parent_name = $definition->info_parent;
         array_unshift($tokens, new HTMLPurifier_Token_Start($parent_name));
         $tokens[] = new HTMLPurifier_Token_End($parent_name);
         
@@ -104,7 +101,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             if ($count = count($stack)) {
                 $parent_index = $stack[$count-1];
                 $parent_name  = $tokens[$parent_index]->name;
-                $parent_def   = $this->definition->info[$parent_name];
+                $parent_def   = $definition->info[$parent_name];
             } else {
                 // unknown info, it won't be used anyway
                 $parent_index = $parent_name = $parent_def = null;
@@ -143,7 +140,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 $result = false;
             } else {
                 // DEFINITION CALL
-                $def = $this->definition->info[$tokens[$i]->name];
+                $def = $definition->info[$tokens[$i]->name];
                 $child_def = $def->child;
                 
                 // have DTD child def validate children
@@ -233,7 +230,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                     array_pop($stack);
                     // pop an exclusion lookup off exclusion stack if
                     // we ended node and that node had exclusions
-                    if ($this->definition->info[$tokens[$i]->name]->excludes) {
+                    if ($definition->info[$tokens[$i]->name]->excludes) {
                         array_pop($exclude_stack);
                     }
                 }

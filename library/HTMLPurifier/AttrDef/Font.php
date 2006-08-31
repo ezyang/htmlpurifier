@@ -30,8 +30,8 @@ class HTMLPurifier_AttrDef_Font extends HTMLPurifier_AttrDef
         'status-bar' => true
     );
     
-    function HTMLPurifier_AttrDef_Font() {
-        $def = HTMLPurifier_CSSDefinition::instance();
+    function HTMLPurifier_AttrDef_Font($config) {
+        $def = $config->getCSSDefinition();
         $this->info['font-style']   = $def->info['font-style'];
         $this->info['font-variant'] = $def->info['font-variant'];
         $this->info['font-weight']  = $def->info['font-weight'];

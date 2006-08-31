@@ -25,26 +25,9 @@ class HTMLPurifier_CSSDefinition
     var $info = array();
     
     /**
-     * Returns sole instance of this definition.
-     * @param $prototype Optional prototype you may pass in to overload
-     *        the sole instance.  Good for replacing an instance of
-     *        the object with your own, custom object.
-     */
-    function &instance($prototype = null) {
-        static $instance = null;
-        if ($prototype) {
-            $instance = $prototype;
-        } elseif (!$instance) {
-            $instance = new HTMLPurifier_CSSDefinition();
-            $instance->setup();
-        }
-        return $instance;
-    }
-    
-    /**
      * Constructs the info array.  The meat of this class.
      */
-    function setup() {
+    function setup($config) {
         
         $this->info['text-align'] = new HTMLPurifier_AttrDef_Enum(
             array('left', 'right', 'center', 'justify'), false);
@@ -74,7 +57,7 @@ class HTMLPurifier_CSSDefinition
             array('disc', 'circle', 'square', 'decimal', 'lower-roman',
             'upper-roman', 'lower-alpha', 'upper-alpha'), false);
         
-        $this->info['list-style'] = new HTMLPurifier_AttrDef_ListStyle();
+        $this->info['list-style'] = new HTMLPurifier_AttrDef_ListStyle($config);
         
         $this->info['text-transform'] = new HTMLPurifier_AttrDef_Enum(
             array('capitalize', 'uppercase', 'lowercase', 'none'), false);
@@ -183,14 +166,14 @@ class HTMLPurifier_CSSDefinition
         
         // MUST be called after other font properties, as it references
         // a CSSDefinition object
-        $this->info['font'] = new HTMLPurifier_AttrDef_Font();
+        $this->info['font'] = new HTMLPurifier_AttrDef_Font($config);
         
         // same here
         $this->info['border'] =
         $this->info['border-bottom'] = 
         $this->info['border-top'] = 
         $this->info['border-left'] = 
-        $this->info['border-right'] = new HTMLPurifier_AttrDef_Border();
+        $this->info['border-right'] = new HTMLPurifier_AttrDef_Border($config);
         
         $this->info['border-collapse'] = new HTMLPurifier_AttrDef_Enum(array(
             'collapse', 'seperate'));
