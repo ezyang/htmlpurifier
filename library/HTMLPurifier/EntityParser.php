@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/EntityLookup.php';
+require_once 'HTMLPurifier/Encoder.php';
 
 /**
  * Handles referencing and derefencing character entities
@@ -9,7 +10,7 @@ class HTMLPurifier_EntityParser
 {
     
     /**
-     * Reference to entity lookup talbe.
+     * Reference to entity lookup table.
      * @protected
      */
     var $_entity_lookup;
@@ -114,40 +115,7 @@ class HTMLPurifier_EntityParser
             // abort for special characters
             if (isset($this->_special_dec2str[$code]))  return $entity;
             
-            if($code > 1114111 or $code < 0 or
-              ($code >= 55296 and $code <= 57343) ) {
-                // bits are set outside the "valid" range as defined
-                // by UNICODE 4.1.0 
-                return '';
-            }
-            
-            $x = $y = $z = $w = 0; 
-            if ($code < 128) {
-                // regular ASCII character
-                $x = $code;
-            } else {
-                // set up bits for UTF-8
-                $x = ($code & 63) | 128;
-                if ($code < 2048) {
-                    $y = (($code & 2047) >> 6) | 192;
-                } else {
-                    $y = (($code & 4032) >> 6) | 128;
-                    if($code < 65536) {
-                        $z = (($code >> 12) & 15) | 224;
-                    } else {
-                        $z = (($code >> 12) & 63) | 128;
-                        $w = (($code >> 18) & 7)  | 240;
-                    }
-                } 
-            }
-            // set up the actual character
-            $ret = '';
-            if($w) $ret .= chr($w);
-            if($z) $ret .= chr($z);
-            if($y) $ret .= chr($y);
-            $ret .= chr($x); 
-            
-            return $ret;
+            return HTMLPurifier_Encoder::unichr($code);
         } else {
             if (isset($this->_special_ent2dec[$matches[3]])) return $entity;
             if (!$this->_entity_lookup) {

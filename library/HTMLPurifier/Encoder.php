@@ -20,20 +20,7 @@ class HTMLPurifier_Encoder
      *       respectively. 128 and above the code points map to multibyte
      *       UTF-8 representations.
      * 
-     * @note The functionality provided by the original function could be
-     *       implemented with iconv using 'UTF-8//IGNORE', mbstring, or
-     *       even the PCRE modifier 'u', these do not allow us to strip
-     *       control characters or disallowed code points, and the latter
-     *       does not allow invalid UTF-8 characters to be ignored.  Once
-     *       PHP 6 appears all our problems magically disappear.
-     * 
-     * @note Decomposing the string into Unicode code points is necessary
-     *       because SGML disallows the use of specific code points, not
-     *       necessarily bytes.  A naive implementation that simply strtr
-     *       disallowed code points as bytes will break other Unicode
-     *       characters in which using such bytes is valid.
-     * 
-     * @note Code adapted from utf8ToUnicode by Henri Sivonen and
+     * @note Fallback code adapted from utf8ToUnicode by Henri Sivonen and
      *       hsivonen@iki.fi at <http://iki.fi/hsivonen/php-utf8/> under the
      *       LGPL license.  Notes on what changed are inside, but in general,
      *       the original code transformed UTF-8 text into an array of integer
@@ -46,7 +33,33 @@ class HTMLPurifier_Encoder
      *       would need that, and I'm probably not going to implement them.
      *       Once again, PHP 6 should solve all our problems.
      */
-    function cleanUTF8($str) {
+    function cleanUTF8($str, $force_php = false) {
+        
+        static $non_sgml_chars = array();
+        static $iconv = null;
+        
+        if (empty($non_sgml_chars)) {
+            for ($i = 0; $i <= 31; $i++) {
+                // non-SGML ASCII chars
+                // save \r, \t and \n
+                if ($i == 9 || $i == 13 || $i == 10) continue;
+                $non_sgml_chars[chr($i)] = '';
+            }
+            for ($i = 127; $i <= 159; $i++) {
+                $non_sgml_chars[HTMLPurifier_Encoder::unichr($i)] = '';
+            }
+        }
+        
+        if ($iconv === null) {
+            $iconv = function_exists('iconv');
+        }
+        
+        if ($iconv && !$force_php) {
+            // do the shortcut way
+            $str = iconv('UTF-8', 'UTF-8//IGNORE', $str);
+            return strtr($str, $non_sgml_chars);;
+        }
+        
         $mState = 0; // cached expected number of octets after the current octet
                      // until the beginning of the next UTF8 character sequence
         $mUcs4  = 0; // cached Unicode character
@@ -177,6 +190,46 @@ class HTMLPurifier_Encoder
             }
         }
         return $out;
+    }
+    
+    /**
+     * Translates a Unicode codepoint into its corresponding UTF-8 character.
+     */
+    function unichr($code) {
+        if($code > 1114111 or $code < 0 or
+          ($code >= 55296 and $code <= 57343) ) {
+            // bits are set outside the "valid" range as defined
+            // by UNICODE 4.1.0 
+            return '';
+        }
+        
+        $x = $y = $z = $w = 0; 
+        if ($code < 128) {
+            // regular ASCII character
+            $x = $code;
+        } else {
+            // set up bits for UTF-8
+            $x = ($code & 63) | 128;
+            if ($code < 2048) {
+                $y = (($code & 2047) >> 6) | 192;
+            } else {
+                $y = (($code & 4032) >> 6) | 128;
+                if($code < 65536) {
+                    $z = (($code >> 12) & 15) | 224;
+                } else {
+                    $z = (($code >> 12) & 63) | 128;
+                    $w = (($code >> 18) & 7)  | 240;
+                }
+            } 
+        }
+        // set up the actual character
+        $ret = '';
+        if($w) $ret .= chr($w);
+        if($z) $ret .= chr($z);
+        if($y) $ret .= chr($y);
+        $ret .= chr($x); 
+        
+        return $ret;
     }
     
     
