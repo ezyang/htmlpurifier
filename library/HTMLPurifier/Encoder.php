@@ -76,7 +76,7 @@ class HTMLPurifier_Encoder
         
         if ($iconv && !$force_php) {
             // do the shortcut way
-            $str = iconv('UTF-8', 'UTF-8//IGNORE', $str);
+            $str = @iconv('UTF-8', 'UTF-8//IGNORE', $str);
             return strtr($str, $non_sgml_chars);;
         }
         
@@ -261,9 +261,9 @@ class HTMLPurifier_Encoder
         $encoding = $config->get('Core', 'Encoding');
         if ($encoding === 'utf-8') return $str;
         if ($iconv) {
-            return iconv($encoding, 'utf-8//IGNORE', $str);
+            return @iconv($encoding, 'utf-8//IGNORE', $str);
         } elseif ($encoding === 'iso-8895-1') {
-            return utf8_encode($str);
+            return @utf8_encode($str);
         }
     }
     
@@ -278,9 +278,9 @@ class HTMLPurifier_Encoder
         $encoding = $config->get('Core', 'Encoding');
         if ($encoding === 'utf-8') return $str;
         if ($iconv) {
-            return iconv('utf-8', $encoding . '//IGNORE', $str);
+            return @iconv('utf-8', $encoding . '//IGNORE', $str);
         } elseif ($encoding === 'iso-8895-1') {
-            return utf8_encode($str);
+            return @utf8_encode($str);
         }
     }
     
