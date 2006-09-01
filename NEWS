@@ -1,7 +1,7 @@
 NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-1.0.0, released 2006-08-31
+1.0.0, released 2006-09-01
 - Fixed broken numeric entity conversion
 - Malformed UTF-8 and non-SGML character detection and cleaning implemented
 - API documentation completed

@@ -1,23 +1,44 @@
 
 Install
-    How to install HTMLPurifier
+    How to install HTML Purifier
 
 Being a library, there's no fancy GUI that will take you step-by-step through
-configuring database credentials and other mumbo-jumbo.  HTMLPurifier is
+configuring database credentials and other mumbo-jumbo.  HTML Purifier is
 designed to run "out of the box."  Regardless, there are still a couple of
 things you should be mindful of.
 
 
 
+0.  Compatibility
+
+HTML Purifier works in both PHP 4 and PHP 5.  I have run the test suite on
+these versions:
+
+  - 4.3.9, 4.3.11
+  - 4.4.0, 4.4.4
+  - 5.0.0, 5.0.4
+  - 5.1.0, 5.1.5
+
+And can confidently say that HTML Purifier should work in all versions
+between and afterwards.  HTML Purifier definitely does not support PHP 4.2,
+and PHP 4.3 branch support may go further back than that, but I haven't tested
+any earlier versions.
+
+I have been unable to get PHP 5.0.5 working on my computer, so if someone
+wants to test that, be my guest.  All tests were done on Windows XP Home,
+but operating system is quite irrelevant in this particular case.
+
+
+
 1.  Including the proper files
 
-The library/ directory must be added to your path: HTMLPurifier will not be
+The library/ directory must be added to your path: HTML Purifier will not be
 able to find the necessary includes otherwise.  This is as simple as:
 
     set_include_path('/path/to/htmlpurifier/library' . PATH_SEPARATOR . get_include_path());
 
 ...replacing /path/to/htmlpurifier with the actual location of the folder. Don't
-worry, HTMLPurifier is namespaced so unless you have another file named
+worry, HTML Purifier is namespaced so unless you have another file named
 HTMLPurifier.php, the files won't collide with any of your includes.
 
 Then, it's a simple matter of including the base file:
@@ -44,7 +65,7 @@ in docs/security.txt, in the meantime, try to change your output so this is
 the case.
 
 If, for some reason, you are unable to switch to UTF-8 immediately, you can
-switch HTMLPurifier's encoding.  Note that the availability of encodings is
+switch HTML Purifier's encoding.  Note that the availability of encodings is
 dependent on iconv, and you'll be missing characters if the charset you
 choose doesn't have them.
 
@@ -66,4 +87,4 @@ Or, if you're using the configuration object:
     $clean_html = $purifier->purify($dirty_html);
 
 That's it.  For more examples, check out docs/examples/.  Also, SLOW gives
-advice on what to do if HTMLPurifier is slowing down your application.
+advice on what to do if HTML Purifier is slowing down your application.
