@@ -23,6 +23,11 @@ if ( !function_exists('iconv') ) {
             'iso-8859-1'
         )
     );
+    HTMLPurifier_ConfigDef::defineValueAliases(
+        'Core', 'Encoding', array(
+            'iso8859-1' => 'iso-8859-1'
+        )
+    );
 }
 
 /**
