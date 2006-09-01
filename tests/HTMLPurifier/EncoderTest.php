@@ -46,6 +46,14 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
             $this->Encoder->convertToUTF8("\xF6", $config),
             "\xC3\xB6"
         );
+        
+        $config->set('Test', 'ForceNoIconv', true);
+        
+        $this->assertIdentical(
+            $this->Encoder->convertToUTF8("\xF6", $config),
+            "\xC3\xB6"
+        );
+        
     }
     
     function test_convertFromUTF8() {
@@ -64,6 +72,14 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
             $this->Encoder->convertFromUTF8("\xC3\xB6", $config),
             "\xF6"
         );
+        
+        $config->set('Test', 'ForceNoIconv', true);
+        
+        $this->assertIdentical(
+            $this->Encoder->convertFromUTF8("\xC3\xB6", $config),
+            "\xF6"
+        );
+        
     }
     
 }

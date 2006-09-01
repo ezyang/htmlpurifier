@@ -32,12 +32,18 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         HTMLPurifier_ConfigDef::define(
             'Extension', 'Pert', 'foo', 'string', 'A string directive.'
         );
+        HTMLPurifier_ConfigDef::define(
+            'Core', 'Encoding', 'utf-8', 'istring', 'Case insensitivity!'
+        );
         
         HTMLPurifier_ConfigDef::defineAllowedValues(
             'Extension', 'Pert', array('foo', 'moo')
         );
         HTMLPurifier_ConfigDef::defineValueAliases(
             'Extension', 'Pert', array('cow' => 'moo')
+        );
+        HTMLPurifier_ConfigDef::defineAllowedValues(
+            'Core', 'Encoding', array('utf-8', 'iso-8859-1')
         );
         
         $config = HTMLPurifier_Config::createDefault();
@@ -79,6 +85,11 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $config->set('Extension', 'Pert', 'cow');
         $this->assertNoErrors();
         $this->assertIdentical($config->get('Extension', 'Pert'), 'moo');
+        
+        // case-insensitive attempt to set value that is allowed
+        $config->set('Core', 'Encoding', 'ISO-8859-1');
+        $this->assertNoErrors();
+        $this->assertIdentical($config->get('Core', 'Encoding'), 'iso-8859-1');
         
     }
     

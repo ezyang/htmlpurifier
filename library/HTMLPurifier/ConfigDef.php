@@ -46,6 +46,7 @@ class HTMLPurifier_ConfigDef {
         $this->defineNamespace('URI', 'Features regarding Uniform Resource Identifiers.');
         $this->defineNamespace('HTML', 'Configuration regarding allowed HTML.');
         $this->defineNamespace('CSS', 'Configuration regarding allowed CSS.');
+        $this->defineNamespace('Test', 'Testing configuration for our unit tests.');
     }
     
     /**
