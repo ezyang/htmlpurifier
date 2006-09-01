@@ -30,6 +30,12 @@ if ( !function_exists('iconv') ) {
     );
 }
 
+HTMLPurifier_ConfigDef::define(
+    'Test', 'ForceNoIconv', false, 'bool', 
+    'When set to true, HTMLPurifier_Encoder will act as if iconv does not '.
+    'exist and use only pure PHP implementations.'
+);
+
 /**
  * A UTF-8 specific character encoder that handles cleaning and transforming.
  */
@@ -265,9 +271,9 @@ class HTMLPurifier_Encoder
         if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');
         if ($encoding === 'utf-8') return $str;
-        if ($iconv) {
+        if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
             return @iconv($encoding, 'utf-8//IGNORE', $str);
-        } elseif ($encoding === 'iso-8895-1') {
+        } elseif ($encoding === 'iso-8859-1') {
             return @utf8_encode($str);
         }
     }
@@ -282,10 +288,10 @@ class HTMLPurifier_Encoder
         if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');
         if ($encoding === 'utf-8') return $str;
-        if ($iconv) {
+        if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
             return @iconv('utf-8', $encoding . '//IGNORE', $str);
-        } elseif ($encoding === 'iso-8895-1') {
-            return @utf8_encode($str);
+        } elseif ($encoding === 'iso-8859-1') {
+            return @utf8_decode($str);
         }
     }
     
