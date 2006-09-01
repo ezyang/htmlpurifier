@@ -54,7 +54,12 @@ class HTMLPurifier_EntityParserTest extends UnitTestCase
                       '&#x' . dechex($arg[0]) . ';'; // hex
             $expect = '';
             if ($arg[1] !== false) {
-                $chars = str_split($arg[1], 2);
+                // this is only for PHP 5, the below is PHP 5 and PHP 4
+                //$chars = str_split($arg[1], 2);
+                $chars = array();
+                for ($i = 0; isset($arg[1][$i]); $i += 2) {
+                    $chars[] = $arg[1][$i] . $arg[1][$i+1];
+                }
                 foreach ($chars as $char) {
                     $expect .= chr(hexdec($char));
                 }
