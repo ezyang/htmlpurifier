@@ -87,19 +87,20 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             return;
         }
         
+        $attr = $node->hasAttributes() ?
+            $this->transformAttrToAssoc($node->attributes) :
+            array();
+        
         // We still have to make sure that the element actually IS empty
         if (!$node->childNodes->length) {
             if ($collect) {
-                $tokens[] = $this->factory->createEmpty(
-                    $node->tagName,
-                    $this->transformAttrToAssoc($node->attributes)
-                );
+                $tokens[] = $this->factory->createEmpty($node->tagName, $attr);
             }
         } else {
             if ($collect) { // don't wrap on first iteration
                 $tokens[] = $this->factory->createStart(
                     $tag_name = $node->tagName, // somehow, it get's dropped
-                    $this->transformAttrToAssoc($node->attributes)
+                    $attr
                 );
             }
             foreach ($node->childNodes as $node) {
