@@ -17,7 +17,7 @@ these versions:
   - 4.3.9, 4.3.11
   - 4.4.0, 4.4.4
   - 5.0.0, 5.0.4
-  - 5.1.0, 5.1.5
+  - 5.1.0, 5.1.6
 
 And can confidently say that HTML Purifier should work in all versions
 between and afterwards.  HTML Purifier definitely does not support PHP 4.2,
