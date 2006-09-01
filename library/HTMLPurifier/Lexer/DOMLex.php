@@ -75,16 +75,15 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     protected function tokenizeDOM($node, &$tokens, $collect = false) {
         // recursive goodness!
         
-        // intercept non element nodes
-        
-        if ( isset($node->data) ) {
-            if ($node->nodeType === XML_TEXT_NODE ||
-                      $node->nodeType === XML_CDATA_SECTION_NODE) {
-                $tokens[] = $this->factory->createText($node->data);
-            } elseif ($node->nodeType === XML_COMMENT_NODE) {
-                $tokens[] = $this->factory->createComment($node->data);
-            }
-            // quite possibly, the object wasn't handled, that's fine
+        // intercept non element nodes. WE MUST catch all of them,
+        // but we're not getting the character reference nodes because
+        // those should have been preprocessed
+        if ($node->nodeType === XML_TEXT_NODE ||
+                  $node->nodeType === XML_CDATA_SECTION_NODE) {
+            $tokens[] = $this->factory->createText($node->data);
+            return;
+        } elseif ($node->nodeType === XML_COMMENT_NODE) {
+            $tokens[] = $this->factory->createComment($node->data);
             return;
         }
         
