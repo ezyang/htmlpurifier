@@ -27,6 +27,7 @@ require_once 'HTMLPurifier/Lexer.php';
 require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Strategy/Core.php';
+require_once 'HTMLPurifier/Encoder.php';
 
 /**
  * Main library execution class.
@@ -58,6 +59,7 @@ class HTMLPurifier
         $this->lexer        = HTMLPurifier_Lexer::create();
         $this->strategy     = new HTMLPurifier_Strategy_Core();
         $this->generator    = new HTMLPurifier_Generator();
+        $this->encoder      = new HTMLPurifier_Encoder();
         
     }
     
@@ -72,14 +74,17 @@ class HTMLPurifier
      */
     function purify($html, $config = null) {
         $config = $config ? $config : $this->config;
-        return
+        $html = $this->encoder->convertToUTF8($html, $config);
+        $html = 
             $this->generator->generateFromTokens(
                 $this->strategy->execute(
                     $this->lexer->tokenizeHTML($html, $config),
+                    $config
+                ),
                 $config
-            ),
-            $config
-        );
+            );
+        $html = $this->encoder->convertFromUTF8($html, $config);
+        return $html;
     }
     
 }

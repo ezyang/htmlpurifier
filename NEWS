@@ -1,7 +1,7 @@
 NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-1.0.0rc1, released 2006-??-??
+1.0.0rc1, released 2006-08-31
 - Fixed broken numeric entity conversion
 - Malformed UTF-8 and non-SGML character detection and cleaning implemented
 - API documentation completed
@@ -9,6 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Basic color keywords translated into hexadecimal values
 - Table CSS properties implemented
 - (HTML|CSS)Definition de-singleton-ized
+- Support for charsets other than UTF-8 (defined by iconv)
 
 1.0.0beta, released 2006-08-16
 - First public release, most functionality implemented. Notable omissions are:

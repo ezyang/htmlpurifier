@@ -5,10 +5,6 @@ Ongoing
  - Lots of profiling, make it faster!
  - Plugins for major CMSes (very tricky issue)
 
-1.0 release
- - Lossy alternate character encoding support (characters not in the encoding
-   will get silently dropped).
-
 1.1 release
  - Directive documentation generation
  - Rewrite table's child definition to be faster, smart, and regexp free

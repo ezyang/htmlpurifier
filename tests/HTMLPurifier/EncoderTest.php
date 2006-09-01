@@ -29,6 +29,43 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         $this->assertCleanUTF8("\xDF\xFF", ''); // malformed UTF8
     }
     
+    function test_convertToUTF8() {
+        $config = HTMLPurifier_Config::createDefault();
+        
+        // UTF-8 means that we don't touch it
+        $this->assertIdentical(
+            $this->Encoder->convertToUTF8("\xF6", $config),
+            "\xF6" // this is invalid
+        );
+        $this->assertNoErrors();
+        
+        $config->set('Core', 'Encoding', 'ISO-8859-1');
+        
+        // Now it gets converted
+        $this->assertIdentical(
+            $this->Encoder->convertToUTF8("\xF6", $config),
+            "\xC3\xB6"
+        );
+    }
+    
+    function test_convertFromUTF8() {
+        $config = HTMLPurifier_Config::createDefault();
+        
+        // UTF-8 means that we don't touch it
+        $this->assertIdentical(
+            $this->Encoder->convertFromUTF8("\xC3\xB6", $config),
+            "\xC3\xB6"
+        );
+        
+        $config->set('Core', 'Encoding', 'ISO-8859-1');
+        
+        // Now it gets converted
+        $this->assertIdentical(
+            $this->Encoder->convertFromUTF8("\xC3\xB6", $config),
+            "\xF6"
+        );
+    }
+    
 }
 
 ?>

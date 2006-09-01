@@ -14,7 +14,7 @@ things you should be mindful of.
 The library/ directory must be added to your path: HTMLPurifier will not be
 able to find the necessary includes otherwise.  This is as simple as:
 
-set_include_path('/path/to/htmlpurifier/library' . PATH_SEPARATOR . get_include_path());
+    set_include_path('/path/to/htmlpurifier/library' . PATH_SEPARATOR . get_include_path());
 
 ...replacing /path/to/htmlpurifier with the actual location of the folder. Don't
 worry, HTMLPurifier is namespaced so unless you have another file named
@@ -22,7 +22,7 @@ HTMLPurifier.php, the files won't collide with any of your includes.
 
 Then, it's a simple matter of including the base file:
 
-require_once 'HTMLPurifier.php';
+    require_once 'HTMLPurifier.php';
 
 ...and you're good to go.
 
@@ -44,18 +44,26 @@ in docs/security.txt, in the meantime, try to change your output so this is
 the case.
 
 If, for some reason, you are unable to switch to UTF-8 immediately, you can
-use iconv to convert the output of HTMLPurifier to your desired encoding.
-We may integrate support for other encodings in later releases, but for now,
-UTF-8 is all you should need.  (If you're not using UTF-8, switch now!)
+switch HTMLPurifier's encoding.  Note that the availability of encodings is
+dependent on iconv, and you'll be missing characters if the charset you
+choose doesn't have them.
+
+    $config = HTMLPurifier_Config::createDefault();
+    $config->set('Core', 'Encoding', $encoding);
 
 
 
 3.   Using the code
 
-The interface is mind-numbingly simple.
+The interface is mind-numbingly simple:
 
-$purifier = new HTMLPurifier();
-$clean_html = $purifier->purify($dirty_html);
+    $purifier = new HTMLPurifier();
+    $clean_html = $purifier->purify($dirty_html);
+
+Or, if you're using the configuration object:
+
+    $purifier = new HTMLPurifier($config);
+    $clean_html = $purifier->purify($dirty_html);
 
 That's it.  For more examples, check out docs/examples/.  Also, SLOW gives
 advice on what to do if HTMLPurifier is slowing down your application.

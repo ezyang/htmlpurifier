@@ -2,6 +2,29 @@
 
 require_once 'HTMLPurifier/EntityLookup.php';
 
+HTMLPurifier_ConfigDef::define(
+    'Core', 'Encoding', 'utf-8', 'istring', 
+    'If for some reason you are unable to convert all webpages to UTF-8, '. 
+    'you can use this directive as a stop-gap compatibility change to '. 
+    'let HTMLPurifier deal with non UTF-8 input.  This technique has '. 
+    'notable deficiencies: absolutely no characters outside of the selected '. 
+    'character encoding will be preserved, not even the ones that have '. 
+    'been ampersand escaped (this is due to a UTF-8 specific <em>feature</em> '.
+    'that automatically resolves all entities), making it pretty useless '.
+    'for anything except the most I18N-blind applications.  This directive '.
+    'only accepts ISO-8859-1 if iconv is not enabled.'
+);
+
+if ( !function_exists('iconv') ) {
+    // only encodings with native PHP support
+    HTMLPurifier_ConfigDef::defineAllowedValues(
+        'Core', 'Encoding', array(
+            'utf-8',
+            'iso-8859-1'
+        )
+    );
+}
+
 /**
  * A UTF-8 specific character encoder that handles cleaning and transforming.
  */
@@ -36,8 +59,6 @@ class HTMLPurifier_Encoder
     function cleanUTF8($str, $force_php = false) {
         
         static $non_sgml_chars = array();
-        static $iconv = null;
-        
         if (empty($non_sgml_chars)) {
             for ($i = 0; $i <= 31; $i++) {
                 // non-SGML ASCII chars
@@ -50,9 +71,8 @@ class HTMLPurifier_Encoder
             }
         }
         
-        if ($iconv === null) {
-            $iconv = function_exists('iconv');
-        }
+        static $iconv = null;
+        if ($iconv === null) $iconv = function_exists('iconv');
         
         if ($iconv && !$force_php) {
             // do the shortcut way
@@ -230,6 +250,38 @@ class HTMLPurifier_Encoder
         $ret .= chr($x); 
         
         return $ret;
+    }
+    
+    /**
+     * Converts a string to UTF-8 based on configuration.
+     */
+    function convertToUTF8($str, $config) {
+        static $iconv = null;
+        if ($iconv === null) $iconv = function_exists('iconv');
+        $encoding = $config->get('Core', 'Encoding');
+        if ($encoding === 'utf-8') return $str;
+        if ($iconv) {
+            return iconv($encoding, 'utf-8//IGNORE', $str);
+        } elseif ($encoding === 'iso-8895-1') {
+            return utf8_encode($str);
+        }
+    }
+    
+    /**
+     * Converts a string from UTF-8 based on configuration.
+     * @note Currently, this is a lossy conversion, with unexpressable
+     *       characters being omitted.
+     */
+    function convertFromUTF8($str, $config) {
+        static $iconv = null;
+        if ($iconv === null) $iconv = function_exists('iconv');
+        $encoding = $config->get('Core', 'Encoding');
+        if ($encoding === 'utf-8') return $str;
+        if ($iconv) {
+            return iconv('utf-8', $encoding . '//IGNORE', $str);
+        } elseif ($encoding === 'iso-8895-1') {
+            return utf8_encode($str);
+        }
     }
     
     
