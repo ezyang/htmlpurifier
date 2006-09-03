@@ -9,6 +9,9 @@ Ongoing
  - Directive documentation generation
  - Rewrite table's child definition to be faster, smart, and regexp free
  - Allow HTML 4.01 output (cosmetic changes to the generator)
+ - Formatters for plaintext
+    - Auto-paragraphing (be sure to leverage fact that we know when things
+      shouldn't be paragraphed, such as lists and tables).
 
 1.2 release
  - Additional support for poorly written HTML
@@ -30,8 +33,6 @@ Ongoing
  - Extended HTML capabilities based on namespacing and tag transforms
     - Hooks for adding custom processors to custom namespaced tags and
       attributes, offer default implementation
-    - Auto-paragraphing (be sure to leverage fact that we know when things
-      shouldn't be paragraphed, such as lists and tables).
     - Lots of documentation and samples
 
 Unknown release (on a scratch-an-itch basis)
