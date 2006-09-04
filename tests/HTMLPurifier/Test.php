@@ -8,7 +8,8 @@ class HTMLPurifier_Test extends UnitTestCase
 {
     var $purifier;
     
-    function assertPurification($input, $expect) {
+    function assertPurification($input, $expect = null) {
+        if ($expect === null) $expect = $input;
         $result = $this->purifier->purify($input);
         $this->assertIdentical($expect, $result);
     }

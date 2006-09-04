@@ -5,6 +5,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fixed slight bug in DOMLex attribute parsing
 - Fixed rejection of case-insensitive configuration values when there is a
   set of allowed values.  This manifested in %Core.Encoding.
+- Fixed rejection of inline style declarations that had lots of extra
+  space in them.  This manifested in TinyMCE.
 
 1.0.0, released 2006-09-01
 - Fixed broken numeric entity conversion
