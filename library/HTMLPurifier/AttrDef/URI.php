@@ -36,13 +36,13 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         // for HTTP and thus won't work for our generic URI parsing
         
         // according to the RFC... (but this cuts corners, i.e. non-validating)
-        $r_URI = '!^'.
-            '(([^:/?#<>]+):)?'. // 2. Scheme
-            '(//([^/?#<>]*))?'. // 4. Authority
-            '([^?#<>]*)'.       // 5. Path
-            '(\?([^#<>]*))?'.   // 7. Query
-            '(#([^<>]*))?'.     // 8. Fragment
-            '$!';
+        $r_URI = '!'.
+            '(([^:/?#<>\'"]+):)?'. // 2. Scheme
+            '(//([^/?#<>\'"]*))?'. // 4. Authority
+            '([^?#<>\'"]*)'.       // 5. Path
+            '(\?([^#<>\'"]*))?'.   // 7. Query
+            '(#([^<>\'"]*))?'.     // 8. Fragment
+            '!';
         
         $matches = array();
         $result = preg_match($r_URI, $uri, $matches);

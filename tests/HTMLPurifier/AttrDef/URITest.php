@@ -158,9 +158,15 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $uri[18] = '/a/b';
         $components[18] = array(null, null, null, '/a/b', null);
         
-        // it's not allowed, so generic URI should get it
-        $uri[19] = '<';
-        $expect_uri[19] = false;
+        // result of malformed tag, gracefully handle error
+        $uri[19] = 'http://www.google.com/\'>"';
+        $components[19] = array(null, 'www.google.com', null, '/', null);
+        $expect_uri[19] = 'http://www.google.com/';
+        
+        // test empty
+        $uri[20] = '';
+        $components[20] = array(null, null, null, '', null);
+        $expect_uri[20] = '';
         
         foreach ($uri as $i => $value) {
             

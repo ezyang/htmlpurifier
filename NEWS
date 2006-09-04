@@ -1,6 +1,10 @@
 NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
+1.1.0, unknown release date
+- Made URI validator more forgiving: will ignore leading and trailing
+  quotes, apostrophes and less than or greater than signs.
+
 1.0.1, unknown release date
 - Fixed slight bug in DOMLex attribute parsing
 - Fixed rejection of case-insensitive configuration values when there is a
