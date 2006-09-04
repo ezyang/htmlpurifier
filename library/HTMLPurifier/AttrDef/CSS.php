@@ -28,6 +28,8 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
             if (!$declaration) continue;
             if (!strpos($declaration, ':')) continue;
             list($property, $value) = explode(':', $declaration, 2);
+            $property = trim($property);
+            $value    = trim($value);
             if (!isset($definition->info[$property])) continue;
             // inefficient call, since the validator will do this again
             if (strtolower(trim($value)) !== 'inherit') {

@@ -92,6 +92,10 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('position:absolute;', false);
         $this->assertDef('background-image:url(javascript:alert\(\));', false);
         
+        // airy input
+        $this->assertDef(' font-weight : bold; color : #ff0000',
+                         'font-weight:bold;color:#ff0000;');
+        
     }
     
 }
