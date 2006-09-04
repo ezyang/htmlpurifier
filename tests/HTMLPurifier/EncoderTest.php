@@ -14,8 +14,8 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
     
     function assertCleanUTF8($string, $expect = null) {
         if ($expect === null) $expect = $string;
-        $this->assertIdentical($this->Encoder->cleanUTF8($string), $expect);
-        $this->assertIdentical($this->Encoder->cleanUTF8($string, true), $expect);
+        $this->assertIdentical($this->Encoder->cleanUTF8($string), $expect, 'iconv: %s');
+        $this->assertIdentical($this->Encoder->cleanUTF8($string, true), $expect, 'PHP: %s');
     }
     
     function test_cleanUTF8() {
