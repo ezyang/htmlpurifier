@@ -231,6 +231,24 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         $this->swallowErrors();
         
         
+        // define a directive with bad characters
+        HTMLPurifier_ConfigDef::define(
+            'Core', 'Core.Attr', 10, 'int',
+            'No periods! >:-('
+        );
+        
+        $this->assertError('Directive name must be alphanumeric');
+        $this->assertNoErrors();
+        $this->swallowErrors();
+        
+        // define a namespace with bad characters
+        HTMLPurifier_ConfigDef::defineNamespace(
+            'Foobar&Gromit', $description
+        );
+        
+        $this->assertError('Namespace name must be alphanumeric');
+        $this->assertNoErrors();
+        $this->swallowErrors();
         
     }
     

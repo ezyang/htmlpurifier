@@ -86,6 +86,11 @@ class HTMLPurifier_ConfigDef {
                 E_USER_ERROR);
             return;
         }
+        if (!ctype_alnum($name)) {
+            trigger_error('Directive name must be alphanumeric',
+                E_USER_ERROR);
+            return;
+        }
         if (isset($def->info[$namespace][$name])) {
             if (
                 $def->info[$namespace][$name]->type !== $type ||
@@ -125,6 +130,11 @@ class HTMLPurifier_ConfigDef {
         $def =& HTMLPurifier_ConfigDef::instance();
         if (isset($def->info[$namespace])) {
             trigger_error('Cannot redefine namespace', E_USER_ERROR);
+            return;
+        }
+        if (!ctype_alnum($namespace)) {
+            trigger_error('Namespace name must be alphanumeric',
+                E_USER_ERROR);
             return;
         }
         $def->info[$namespace] = array();
