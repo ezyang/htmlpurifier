@@ -3,6 +3,21 @@
 /**
  * Configuration definition, defines directives and their defaults.
  * @todo Build documentation generation capabilities.
+ * @todo The ability to define things multiple times is confusing and should
+ *       be factored out to its own function named registerDependency() or 
+ *       addNote(), where only the namespace.name and an extra descriptions
+ *       documenting the nature of the dependency are needed.  Since it's
+ *       possible that the dependency is registered before the configuration
+ *       is defined, deferring it to some sort of cache until it actually
+ *       gets defined would be wise, keeping it opaque until it does get
+ *       defined. We could add a finalize() method which would cause it to
+ *       error out if we get a dangling dependency.  It's difficult, however,
+ *       to know whether or not it's a dependency, or a codependency, that is
+ *       neither of them fully depends on it. Where does the configuration go
+ *       then?  This could be partially resolved by allowing blanket definitions
+ *       and then splitting them up into finer-grained versions, however, there
+ *       might be implementation difficulties in ini files regarding order of
+ *       execution.
  */
 class HTMLPurifier_ConfigDef {
     
