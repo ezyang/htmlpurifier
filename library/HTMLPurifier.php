@@ -39,11 +39,13 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
+// almost every class has an undocumented dependency to these, so make sure
+// they get included
 require_once 'HTMLPurifier/ConfigDef.php';
 require_once 'HTMLPurifier/Config.php';
+
 require_once 'HTMLPurifier/Lexer.php';
-require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Strategy/Core.php';
 require_once 'HTMLPurifier/Encoder.php';
