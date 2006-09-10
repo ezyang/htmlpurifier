@@ -8,8 +8,7 @@ HTMLPurifier_ConfigDef::define(
     'Core', 'AcceptFullDocuments', true, 'bool',
     'This parameter determines whether or not the filter should accept full '.
     'HTML documents, not just HTML fragments.  When on, it will '.
-    'drop all sections except the content between body.  Depending on '.
-    'the implementation in use, this may speed up document parse times.'
+    'drop all sections except the content between body.'
 );
 
 /**
