@@ -10,12 +10,6 @@ TODO:
 - determine how to multilingualize
 */
 
-/*
-if (php_sapi_name() != 'cli') {
-    header('Content-type:text/plain');
-    ini_set('html_errors', '0');
-}
-*/
 if (version_compare('5', PHP_VERSION, '>')) exit('Requires PHP 5 or higher.');
 
 error_reporting(E_ALL);
