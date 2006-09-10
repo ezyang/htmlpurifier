@@ -131,7 +131,7 @@ if (class_exists('Tidy')) {
     $config = array(
         'indent'        => true,
         'output-xhtml'  => true,
-        'wrap'          => 100
+        'wrap'          => 80
     );
     $tidy = new Tidy;
     $tidy->parseString($html_output, $config, 'utf8');
