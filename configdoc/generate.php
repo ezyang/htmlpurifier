@@ -143,6 +143,10 @@ if (class_exists('Tidy')) {
 file_put_contents("$xsl_stylesheet_name.html", $html_output);
 
 // output so you can see the fruits of your work!
-echo $html_output;
+if (php_sapi_name() != 'cli') {
+    echo $html_output;
+} else {
+    echo 'Files generated successfully.'
+}
 
 ?>
