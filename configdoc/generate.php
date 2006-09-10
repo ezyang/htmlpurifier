@@ -84,8 +84,8 @@ foreach($definition->info as $namespace_name => $namespace_info) {
 
 // print_r($dom_document->saveXML());
 
-// save a copy of the raw XML for good measure
-$dom_document->save('output/configdoc.xml');
+// save a copy of the raw XML
+$dom_document->save('configdoc.xml');
 
 // load the stylesheet
 $xsl_stylesheet_name = 'plain';
@@ -104,7 +104,7 @@ $html_output = $xsl_processor->transformToXML($dom_document);
 $html_output = str_replace('/>', ' />', $html_output); // <br /> not <br>
 
 // write it to a file (todo: parse into seperate pages)
-file_put_contents("output/$xsl_stylesheet_name.html", $html_output);
+file_put_contents("$xsl_stylesheet_name.html", $html_output);
 
 // output so you can see the fruits of your work!
 echo $html_output;
