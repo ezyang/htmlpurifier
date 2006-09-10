@@ -88,7 +88,7 @@ foreach($definition->info as $namespace_name => $namespace_info) {
 $dom_document->save('output/configdoc.xml');
 
 // load the stylesheet
-$xsl_stylesheet_name = 'default';
+$xsl_stylesheet_name = 'plain';
 $xsl_stylesheet = "styles/$xsl_stylesheet_name.xsl";
 $xsl_dom_stylesheet = new DOMDocument();
 $xsl_dom_stylesheet->load($xsl_stylesheet);
