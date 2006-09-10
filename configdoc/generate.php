@@ -1,6 +1,16 @@
 <?php
 
 /*
+TODO:
+- make XML format richer (see below)
+- extend XSLT transformation (see the corresponding XSLT file)
+- allow generation of packaged docs that can be easily moved
+- multipage documentation
+- generate string XML file for types
+- determine how to multilingualize
+*/
+
+/*
 if (php_sapi_name() != 'cli') {
     header('Content-type:text/plain');
     ini_set('html_errors', '0');
@@ -27,10 +37,11 @@ $dom_document->formatOutput = true;
 $dom_root->appendChild($dom_document->createElement('title', 'HTML Purifier'));
 
 /*
-TODO:
+TODO for XML format:
 - namespace descriptions
 - enumerated values
 - default values
+- create a definition (DTD or other) once interface stabilizes
 */
 
 foreach($definition->info as $namespace_name => $namespace_info) {

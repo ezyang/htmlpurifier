@@ -13,6 +13,12 @@
         media-type = "text/html"
     />
     
+    <!--
+        TODO:
+        o Table-ize types
+        o Include CSS
+    -->
+    
     <xsl:template match="/">
         <html lang="en" xml:lang="en">
             <head>
