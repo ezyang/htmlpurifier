@@ -28,6 +28,20 @@ $definition = HTMLPurifier_ConfigDef::instance();
 
 $purifier = new HTMLPurifier();
 
+// generate type XML document
+$types_document = new DOMDocument('1.0', 'UTF-8');
+$types_root = $types_document->createElement('types');
+$types_document->appendChild($types_root);
+$types_document->formatOutput = true;
+foreach ($definition->types as $name => $expanded_name) {
+    $types_type = $types_document->createElement('type', $expanded_name);
+    $types_type->setAttribute('id', $name);
+    $types_root->appendChild($types_type);
+}
+$types_document->save('types.xml');
+
+// generate directive XML document
+
 $dom_document = new DOMDocument('1.0', 'UTF-8');
 $dom_root = $dom_document->createElement('configdoc');
 $dom_document->appendChild($dom_root);
@@ -63,7 +77,10 @@ foreach($definition->info as $namespace_name => $namespace_info) {
         $dom_directive->appendChild(
             $dom_document->createElement('name', $name)
         );
-        $dom_directive->appendChild(
+        
+        $dom_constraints = $dom_document->createElement('constraints');
+        $dom_directive->appendChild($dom_constraints);
+        $dom_constraints->appendChild(
             $dom_document->createElement('type', $info->type)
         );
         
@@ -113,6 +130,20 @@ $html_output = $xsl_processor->transformToXML($dom_document);
 
 // some slight fudges to preserve backwards compatibility
 $html_output = str_replace('/>', ' />', $html_output); // <br /> not <br>
+$html_output = str_replace(' xmlns=""', '', $html_output); // rm unnecessary xmlns
+
+if (class_exists('Tidy')) {
+    // cleanup output
+    $config = array(
+        'indent'        => true,
+        'output-xhtml'  => true,
+        'wrap'          => 80
+    );
+    $tidy = new Tidy;
+    $tidy->parseString($html_output, $config, 'utf8');
+    $tidy->cleanRepair();
+    $html_output = (string) $tidy;
+}
 
 // write it to a file (todo: parse into seperate pages)
 file_put_contents("$xsl_stylesheet_name.html", $html_output);

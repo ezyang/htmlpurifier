@@ -39,17 +39,18 @@ class HTMLPurifier_ConfigDef {
     
     /**
      * Lookup table of allowed types.
+     * @todo Add descriptions
      */
     var $types = array(
-        'string'    => true,
-        'istring'   => true,
-        'int'       => true,
-        'float'     => true,
-        'bool'      => true,
-        'lookup'    => true,
-        'list'      => true,
-        'hash'      => true,
-        'mixed'     => true
+        'string'    => 'String',
+        'istring'   => 'Case-insensitive string',
+        'int'       => 'Integer',
+        'float'     => 'Float',
+        'bool'      => 'Boolean',
+        'lookup'    => 'Lookup array',
+        'list'      => 'Array list',
+        'hash'      => 'Associative array',
+        'mixed'     => 'Mixed'
     );
     
     /**

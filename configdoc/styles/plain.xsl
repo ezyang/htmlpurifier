@@ -9,21 +9,18 @@
         encoding    = "UTF-8"
         doctype-public = "-//W3C//DTD XHTML 1.0 Transitional//EN"
         doctype-system = "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
-        indent = "yes"
+        indent = "no"
         media-type = "text/html"
     />
     
-    <!--
-        TODO:
-        o Table-ize types
-        o Include CSS
-    -->
+    <xsl:variable name="typeLookup" select="document('../types.xml')" />
     
     <xsl:template match="/">
         <html lang="en" xml:lang="en">
             <head>
                 <title><xsl:value-of select="/configdoc/title" /> Configuration Documentation</title>
                 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+                <link rel="stylesheet" type="text/css" href="styles/plain.css" />
             </head>
             <body>
                 <xsl:apply-templates />
@@ -51,8 +48,26 @@
     <xsl:template match="directive/name">
         <h3 id="{../@id}"><xsl:value-of select="text()" /></h3>
     </xsl:template>
-    <xsl:template match="directive/type">
-        <div class="type"><xsl:value-of select="text()" /></div>
+    <xsl:template match="directive/constraints">
+        <table class="constraints">
+            <xsl:apply-templates />
+        </table>
+    </xsl:template>
+    <xsl:template match="directive//description">
+        <div class="description">
+            <xsl:copy-of select="div/node()" />
+        </div>
+    </xsl:template>
+    
+    <xsl:template match="constraints/type">
+        <tr>
+            <th>Type:</th>
+            <td>
+                <xsl:variable name="type" select="text()" />
+                <xsl:attribute name="class">type type-<xsl:value-of select="$type" /></xsl:attribute>
+                <xsl:value-of select="$typeLookup/types/type[@id=$type]/text()" />
+            </td>
+        </tr>
     </xsl:template>
     
 </xsl:stylesheet>
