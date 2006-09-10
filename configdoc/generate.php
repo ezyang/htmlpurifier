@@ -146,7 +146,7 @@ file_put_contents("$xsl_stylesheet_name.html", $html_output);
 if (php_sapi_name() != 'cli') {
     echo $html_output;
 } else {
-    echo 'Files generated successfully.'
+    echo 'Files generated successfully.';
 }
 
 ?>
