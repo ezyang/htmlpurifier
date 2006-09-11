@@ -6,7 +6,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   quotes, apostrophes and less than or greater than signs.
 - Enforce alphanumeric namespace and directive names for configuration.
 
-1.0.1, unknown release date
+1.0.2, unknown release date
+(bugfix release may be dropped if no bugs found)
+
+1.0.1, released 2006-09-04
 - Fixed slight bug in DOMLex attribute parsing
 - Fixed rejection of case-insensitive configuration values when there is a
   set of allowed values.  This manifested in %Core.Encoding.
