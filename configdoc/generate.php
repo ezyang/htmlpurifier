@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Generates XML and HTML documents describing configuration.
+ */
+
 /*
 TODO:
 - make XML format richer (see below)
@@ -10,19 +14,31 @@ TODO:
 - determine how to multilingualize
 */
 
-if (version_compare('5', PHP_VERSION, '>')) exit('Requires PHP 5 or higher.');
 
+// ---------------------------------------------------------------------------
+// Check and configure environment
+
+if (version_compare('5', PHP_VERSION, '>')) exit('Requires PHP 5 or higher.');
 error_reporting(E_ALL);
+
+
+// ---------------------------------------------------------------------------
+// Include HTML Purifier library
 
 set_include_path('../library' . PATH_SEPARATOR . get_include_path());
 require_once 'HTMLPurifier.php';
 
-$definition = HTMLPurifier_ConfigDef::instance();
-// print_r($definition);
 
+// ---------------------------------------------------------------------------
+// Load copies of HTMLPurifier_ConfigDef and HTMLPurifier
+
+$definition = HTMLPurifier_ConfigDef::instance();
 $purifier = new HTMLPurifier();
 
-// generate type XML document
+
+// ---------------------------------------------------------------------------
+// Generate types.xml, a document describing the constraint "type"
+
 $types_document = new DOMDocument('1.0', 'UTF-8');
 $types_root = $types_document->createElement('types');
 $types_document->appendChild($types_root);
@@ -34,7 +50,9 @@ foreach ($definition->types as $name => $expanded_name) {
 }
 $types_document->save('types.xml');
 
-// generate directive XML document
+
+// ---------------------------------------------------------------------------
+// Generate configdoc.xml, a document documenting configuration directives
 
 $dom_document = new DOMDocument('1.0', 'UTF-8');
 $dom_root = $dom_document->createElement('configdoc');
@@ -109,6 +127,10 @@ foreach($definition->info as $namespace_name => $namespace_info) {
 // save a copy of the raw XML
 $dom_document->save('configdoc.xml');
 
+
+// ---------------------------------------------------------------------------
+// Generate final output using XSLT
+
 // load the stylesheet
 $xsl_stylesheet_name = 'plain';
 $xsl_stylesheet = "styles/$xsl_stylesheet_name.xsl";
@@ -142,7 +164,10 @@ if (class_exists('Tidy')) {
 // write it to a file (todo: parse into seperate pages)
 file_put_contents("$xsl_stylesheet_name.html", $html_output);
 
-// output so you can see the fruits of your work!
+
+// ---------------------------------------------------------------------------
+// Output for instant feedback
+
 if (php_sapi_name() != 'cli') {
     echo $html_output;
 } else {
