@@ -5,6 +5,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Made URI validator more forgiving: will ignore leading and trailing
   quotes, apostrophes and less than or greater than signs.
 - Enforce alphanumeric namespace and directive names for configuration.
+- Directive documentation generation using XSLT
 
 1.0.2, unknown release date
 (bugfix release may be dropped if no bugs found)

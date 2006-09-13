@@ -6,7 +6,6 @@ Ongoing
  - Plugins for major CMSes (very tricky issue)
 
 1.1 release
- - Directive documentation generation
  - Rewrite table's child definition to be faster, smart, and regexp free
  - Allow HTML 4.01 output (cosmetic changes to the generator)
  - Formatters for plaintext

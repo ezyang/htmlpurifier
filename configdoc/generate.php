@@ -12,6 +12,7 @@ TODO:
 - multipage documentation
 - generate string XML file for types
 - determine how to multilingualize
+- factor out code into classes
 */
 
 
@@ -27,6 +28,23 @@ error_reporting(E_ALL);
 
 set_include_path('../library' . PATH_SEPARATOR . get_include_path());
 require_once 'HTMLPurifier.php';
+
+
+// ---------------------------------------------------------------------------
+// Setup convenience functions
+
+function appendHTMLDiv($document, $node, $html) {
+    global $purifier;
+    $html = $purifier->purify($html);
+    $dom_html = $document->createDocumentFragment();
+    $dom_html->appendXML($html);
+    
+    $dom_div = $document->createElement('div');
+    $dom_div->setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+    $dom_div->appendChild($dom_html);
+    
+    $node->appendChild($dom_div);
+}
 
 
 // ---------------------------------------------------------------------------
@@ -79,6 +97,10 @@ foreach($definition->info as $namespace_name => $namespace_info) {
     $dom_namespace->appendChild(
         $dom_document->createElement('name', $namespace_name)
     );
+    $dom_namespace_description = $dom_document->createElement('description');
+    $dom_namespace->appendChild($dom_namespace_description);
+    appendHTMLDiv($dom_document, $dom_namespace_description,
+        $definition->info_namespace[$namespace_name]->description);
     
     foreach ($namespace_info as $name => $info) {
         
@@ -92,9 +114,19 @@ foreach($definition->info as $namespace_name => $namespace_info) {
         
         $dom_constraints = $dom_document->createElement('constraints');
         $dom_directive->appendChild($dom_constraints);
+        
         $dom_constraints->appendChild(
             $dom_document->createElement('type', $info->type)
         );
+        if ($info->allowed !== true) {
+            $dom_allowed = $dom_document->createElement('allowed');
+            $dom_constraints->appendChild($dom_allowed);
+            foreach ($info->allowed as $allowed => $bool) {
+                $dom_allowed->appendChild(
+                    $dom_document->createElement('value', $allowed)
+                );
+            }
+        }
         
         $dom_descriptions = $dom_document->createElement('descriptions');
         $dom_directive->appendChild($dom_descriptions);
@@ -104,16 +136,7 @@ foreach($definition->info as $namespace_name => $namespace_info) {
                 $dom_description = $dom_document->createElement('description');
                 $dom_description->setAttribute('file', $file);
                 $dom_description->setAttribute('line', $line);
-                
-                $description = $purifier->purify($description);
-                $dom_html = $dom_document->createDocumentFragment();
-                $dom_html->appendXML($description);
-                
-                $dom_div = $dom_document->createElement('div');
-                $dom_div->setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
-                $dom_div->appendChild($dom_html);
-                
-                $dom_description->appendChild($dom_div);
+                appendHTMLDiv($dom_document, $dom_description, $description);
                 $dom_descriptions->appendChild($dom_description);
             }
         }

@@ -41,6 +41,11 @@
     <xsl:template match="namespace/name">
         <h2 id="{../@id}"><xsl:value-of select="text()" /></h2>
     </xsl:template>
+    <xsl:template match="namespace/description">
+        <div class="description">
+            <xsl:copy-of select="div/node()" />
+        </div>
+    </xsl:template>
     
     <xsl:template match="directive">
         <xsl:apply-templates />
@@ -51,6 +56,16 @@
     <xsl:template match="directive/constraints">
         <table class="constraints">
             <xsl:apply-templates />
+            <!-- Calculated other values -->
+            <tr>
+                <th>Used by:</th>
+                <td>
+                    <xsl:for-each select="../descriptions/description">
+                        <xsl:if test="position()&gt;1">, </xsl:if>
+                        <xsl:value-of select="@file" />
+                    </xsl:for-each>
+                </td>
+            </tr>
         </table>
     </xsl:template>
     <xsl:template match="directive//description">
@@ -66,6 +81,17 @@
                 <xsl:variable name="type" select="text()" />
                 <xsl:attribute name="class">type type-<xsl:value-of select="$type" /></xsl:attribute>
                 <xsl:value-of select="$typeLookup/types/type[@id=$type]/text()" />
+            </td>
+        </tr>
+    </xsl:template>
+    <xsl:template match="constraints/allowed">
+        <tr>
+            <th>Allowed values:</th>
+            <td>
+                <xsl:for-each select="value"><!--
+                 --><xsl:if test="position()&gt;1">, </xsl:if>
+                    &quot;<xsl:value-of select="." />&quot;<!--
+             --></xsl:for-each>
             </td>
         </tr>
     </xsl:template>

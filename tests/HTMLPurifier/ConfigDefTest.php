@@ -33,7 +33,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         $description = 'Configuration that is always available.';
         HTMLPurifier_ConfigDef::defineNamespace(
             'Core', $description
-        ); $line = __LINE__;
+        );
         $this->assertIdentical($this->our_copy->defaults, array(
             'Core' => array()
         ));
@@ -41,7 +41,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
             'Core' => array()
         ));
         $namespace = new HTMLPurifier_ConfigEntity_Namespace();
-        $namespace->addDescription($file, $line, $description);
+        $namespace->description = $description;
         $this->assertIdentical($this->our_copy->info_namespace, array(
             'Core' => $namespace
         ));

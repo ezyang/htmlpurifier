@@ -155,10 +155,7 @@ class HTMLPurifier_ConfigDef {
         }
         $def->info[$namespace] = array();
         $def->info_namespace[$namespace] = new HTMLPurifier_ConfigEntity_Namespace();
-        $backtrace = debug_backtrace();
-        $file = $def->mungeFilename($backtrace[0]['file']);
-        $line = $backtrace[0]['line'];
-        $def->info_namespace[$namespace]->addDescription($file,$line,$description);
+        $def->info_namespace[$namespace]->description = $description;
         $def->defaults[$namespace] = array();
     }
     
@@ -282,27 +279,19 @@ class HTMLPurifier_ConfigDef {
 /**
  * Base class for configuration entity
  */
-class HTMLPurifier_ConfigEntity
-{
-    /**
-     * Plaintext descriptions of the configuration entity is. Organized by
-     * file and line number, so multiple descriptions are allowed.
-     */
-    var $descriptions = array();
-    
-    /**
-     * Adds a description to the array
-     */
-    function addDescription($file, $line, $description) {
-        if (!isset($this->descriptions[$file])) $this->descriptions[$file] = array();
-        $this->descriptions[$file][$line] = $description;
-    }
-}
+class HTMLPurifier_ConfigEntity {}
 
 /**
  * Structure object describing of a namespace
  */
-class HTMLPurifier_ConfigEntity_Namespace extends HTMLPurifier_ConfigEntity {}
+class HTMLPurifier_ConfigEntity_Namespace extends HTMLPurifier_ConfigEntity {
+    
+    /**
+     * String description of what kinds of directives go in this namespace.
+     */
+    var $description;
+    
+}
 
 /**
  * Structure object containing definition of a directive.
@@ -334,6 +323,19 @@ class HTMLPurifier_ConfigEntity_Directive extends HTMLPurifier_ConfigEntity
      *      - mixed (anything goes)
      */
     var $type = 'mixed';
+    /**
+     * Plaintext descriptions of the configuration entity is. Organized by
+     * file and line number, so multiple descriptions are allowed.
+     */
+    var $descriptions = array();
+    
+    /**
+     * Adds a description to the array
+     */
+    function addDescription($file, $line, $description) {
+        if (!isset($this->descriptions[$file])) $this->descriptions[$file] = array();
+        $this->descriptions[$file][$line] = $description;
+    }
     
 }
 
