@@ -42,9 +42,29 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
     
     function test_custom() {
         
-        // the table definition
         $this->def = new HTMLPurifier_ChildDef_Custom(
-            '(caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))');
+            '(a, b?, c*, d+, (a, b)*)');
+        
+        $inputs[0] = '';
+        $expect[0] = false;
+        
+        $inputs[1] = '<a /><b /><c /><d /><a /><b />';
+        $expect[1] = true;
+        
+        $inputs[2] = '<a /><d>Dob</d><a /><b>foo</b><a href="moo"><b>foo</b>';
+        $expect[2] = true;
+        
+        $inputs[3] = '<a /><a />';
+        $expect[3] = false;
+        
+    }
+    
+    function atest_table() {
+        
+        // currently inactive, awaiting augmentation
+        
+        // the table definition
+        $this->def = new HTMLPurifier_ChildDef_Table();
         
         $inputs = $expect = $config = array();
         
