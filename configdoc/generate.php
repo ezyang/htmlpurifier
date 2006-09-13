@@ -10,9 +10,9 @@ TODO:
 - extend XSLT transformation (see the corresponding XSLT file)
 - allow generation of packaged docs that can be easily moved
 - multipage documentation
-- generate string XML file for types
 - determine how to multilingualize
 - factor out code into classes
+- generate a table of contents
 */
 
 
