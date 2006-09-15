@@ -54,4 +54,4 @@ HTML Purifier is best suited for documents that require a rich array of
 HTML tags.  Things like blog comments are, in all likelihood, most appropriately
 written in an extremely restrictive set of markup that doesn't require
 all this functionality (or not written in HTML at all), although this may
-be changing in the future.
+be changing in the future with the addition of levels of filtering.

@@ -12,8 +12,6 @@ character encoding explicitly stated" or UTF-7. If you're not using UTF-8 as
 your character encoding, you should switch. Now. Make sure any input is
 properly converted to UTF-8, or the parser will mangle it badly
 (though it won't be a security risk if you're outputting it as UTF-8 though).
-We will be adding out-of-the-box support for the other major character
-encodings shortly.
 
 2. XHTML 1.0 Transitional. This is what the parser is outputting. For the most
 part, it's compatible with HTML 4.01, but XHTML enforces some very nice things
@@ -37,4 +35,5 @@ to protect your pages from being attacked by garish colors and plain old
 bad taste.  A neat feature would be the ability to define acceptable colors
 in a document, but that's not likely to be implemented for a while.  In the
 meantime, be sure to make sure that floated elements (permitted, since they
-can be quite useful) can't mess up your layout.
+can be quite useful) can't mess up your layout. Once again, we may want to
+disable this by default to protect lazy developers.

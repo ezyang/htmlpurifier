@@ -24,8 +24,7 @@ AttrDef
     Number - constructor interface is inconsistent with Integer
 AttrTransform - doesn't accept AttrContext, non-validating
 ChildDef - not-allowed nodes translated to text, likely invalid handling
-Config - "load configuration" hooks missing, rich set* accessors missing,
-    needs redefined relationship with the definitions
+Config - "load configuration" hooks missing, rich set* accessors missing
 Strategy
     FixNesting - cannot bubble nodes out of structures
     MakeWellFormed - insufficient automatic closing definitions (check HTML
