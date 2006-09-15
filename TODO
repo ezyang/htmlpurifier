@@ -7,9 +7,6 @@ Ongoing
 
 1.1 release
  - Allow HTML 4.01 output (cosmetic changes to the generator)
- - Formatters for plaintext
-    - Auto-paragraphing (be sure to leverage fact that we know when things
-      shouldn't be paragraphed, such as lists and tables).
 
 1.2 release
  - Additional support for poorly written HTML
@@ -17,6 +14,9 @@ Ongoing
     - Microsoft Word HTML cleaning (i.e. MsoNormal)
 
 1.3 release
+ - Formatters for plaintext
+    - Auto-paragraphing (be sure to leverage fact that we know when things
+      shouldn't be paragraphed, such as lists and tables).
  - Make URI validation routines tighter (especially mailto)
  - More extensive URI filtering schemes
  - Allow for background-image and list-style-image (see above)
