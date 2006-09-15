@@ -187,6 +187,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 if (!$parent_def->child->allow_empty) {
                     // we need to do a double-check
                     $i = $parent_index;
+                    array_pop($stack);
                 }
                 
                 // PROJECTED OPTIMIZATION: Process all children elements before

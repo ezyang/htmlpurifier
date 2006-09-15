@@ -6,6 +6,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   quotes, apostrophes and less than or greater than signs.
 - Enforce alphanumeric namespace and directive names for configuration.
 - Directive documentation generation using XSLT
+- Table child definition made more flexible, will fix up poorly ordered elements
 
 1.0.2, unknown release date
 (bugfix release may be dropped if no bugs found)

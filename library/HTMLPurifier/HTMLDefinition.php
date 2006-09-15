@@ -209,8 +209,7 @@ class HTMLPurifier_HTMLDefinition
         
         $this->info['a']->child    = $e_a_content;
         
-        $this->info['table']->child = new HTMLPurifier_ChildDef_Custom(
-            '(caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))');
+        $this->info['table']->child = new HTMLPurifier_ChildDef_Table();
         
         // not a real entity, watch the double underscore
         $e__row = new HTMLPurifier_ChildDef_Required('tr');

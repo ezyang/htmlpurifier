@@ -59,7 +59,7 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         
     }
     
-    function atest_table() {
+    function test_table() {
         
         // currently inactive, awaiting augmentation
         
@@ -71,18 +71,32 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         $inputs[0] = '';
         $expect[0] = false;
         
-        // we really don't care what's inside, because if it turns out
-        // this tr is illegal, we'll end up re-evaluating the parent node
-        // anyway.
-        $inputs[1] = '<tr></tr>';
+        // we're using empty tags to compact the tests: under real circumstances
+        // there would be contents in them
+        
+        $inputs[1] = '<tr />';
         $expect[1] = true;
         
-        $inputs[2] = '<caption></caption><col></col><thead></thead>' .
-                     '<tfoot></tfoot><tbody></tbody>';
+        $inputs[2] = '<caption /><col /><thead /><tfoot /><tbody>'.
+            '<tr><td>asdf</td></tr></tbody>';
         $expect[2] = true;
         
-        $inputs[3] = '<col></col><col></col><col></col><tr></tr>';
+        $inputs[3] = '<col /><col /><col /><tr />';
         $expect[3] = true;
+        
+        // mixed up order
+        $inputs[4] = '<col /><colgroup /><tbody /><tfoot /><thead /><tr>1</tr><caption /><tr />';
+        $expect[4] = '<caption /><col /><colgroup /><thead /><tfoot /><tbody /><tr>1</tr><tr />';
+        
+        // duplicates of singles
+        // - first caption serves
+        // - trailing tfoots/theads get turned into tbodys
+        $inputs[5] = '<caption>1</caption><caption /><tbody /><tbody /><tfoot>1</tfoot><tfoot />';
+        $expect[5] = '<caption>1</caption><tfoot>1</tfoot><tbody /><tbody /><tbody />';
+        
+        // errant text dropped (until bubbling is implemented)
+        $inputs[6] = 'foo';
+        $expect[6] = false;
         
         $this->assertSeries($inputs, $expect, $config);
         

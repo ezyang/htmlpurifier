@@ -5,13 +5,6 @@
 // false = delete parent node and all children
 // array(...) = replace children nodes with these
 
-// this is the hardest one to implement. We'll use fancy regexp tricks
-// right now, we only expect it to return TRUE or FALSE (it won't attempt
-// to fix the tree)
-
-// we may end up writing custom code for each HTML case
-// in order to make it self correcting
-
 HTMLPurifier_ConfigDef::define(
     'Core', 'EscapeInvalidChildren', false, 'bool',
     'When true, a child is found that is not allowed in the context of the '.
@@ -62,9 +55,7 @@ class HTMLPurifier_ChildDef
  * Custom validation class, accepts DTD child definitions
  * 
  * @warning Currently this class is an all or nothing proposition, that is,
- *          it will only give a bool return value.  Table is the only
- *          child definition that uses this class, and we ought to give
- *          it a dedicated one.
+ *          it will only give a bool return value.
  */
 class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
 {
@@ -304,6 +295,131 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
                 return false;
         }
         return $result;
+    }
+}
+
+/**
+ * Definition for tables
+ */
+class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
+{
+    var $allow_empty = false;
+    var $type = 'table';
+    function HTMLPurifier_ChildDef_Table() {}
+    function validateChildren($tokens_of_children, $config, $context) {
+        if (empty($tokens_of_children)) return false;
+        
+        // this ensures that the loop gets run one last time before closing
+        // up. It's a little bit of a hack, but it works! Just make sure you
+        // get rid of the token later.
+        $tokens_of_children[] = false;
+        
+        // only one of these elements is allowed in a table
+        $caption = false;
+        $thead   = false;
+        $tfoot   = false;
+        
+        // as many of these as you want
+        $cols    = array();
+        $content = array();
+        
+        $nesting = 0; // current depth so we can determine nodes
+        $is_collecting = false; // are we globbing together tokens to package
+                                // into one of the collectors?
+        $collection = array(); // collected nodes
+        
+        foreach ($tokens_of_children as $token) {
+            $is_child = ($nesting == 0);
+            
+            if ($token === false) {
+                // terminating sequence started
+            } elseif ($token->type == 'start') {
+                $nesting++;
+            } elseif ($token->type == 'end') {
+                $nesting--;
+            }
+            
+            // handle node collection
+            if ($is_collecting) {
+                if ($is_child) {
+                    // okay, let's stash the tokens away
+                    // first token tells us the type of the collection
+                    switch ($collection[0]->name) {
+                        case 'tr':
+                        case 'tbody':
+                            $content[] = $collection;
+                            break;
+                        case 'caption':
+                            if ($caption !== false) break;
+                            $caption = $collection;
+                            break;
+                        case 'thead':
+                        case 'tfoot':
+                            // access the appropriate variable, $thead or $tfoot
+                            $var = $collection[0]->name;
+                            if ($$var === false) {
+                                $$var = $collection;
+                            } else {
+                                // transmutate the first and less entries into
+                                // tbody tags, and then put into content
+                                $collection[0]->name = 'tbody';
+                                $collection[count($collection)-1]->name = 'tbody';
+                                $content[] = $collection;
+                            }
+                            break;
+                         case 'colgroup':
+                            $cols[] = $collection;
+                            break;
+                    }
+                    $collection = array();
+                    $is_collecting = false;
+                } else {
+                    // add the node to the collection
+                    $collection[] = $token;
+                }
+            }
+            
+            // terminate
+            if ($token === false) break;
+            
+            if ($is_child) {
+                // determine what we're dealing with
+                if ($token->name == 'col') {
+                    // the only empty tag in the possie, we can handle it
+                    // immediately
+                    $cols[] = array($token);
+                    continue;
+                }
+                switch($token->name) {
+                    case 'caption':
+                    case 'colgroup':
+                    case 'thead':
+                    case 'tfoot':
+                    case 'tbody':
+                    case 'tr':
+                        $is_collecting = true;
+                        $collection[] = $token;
+                        continue;
+                    default:
+                        // unrecognized, drop silently
+                        continue;
+                }
+            }
+        }
+        
+        if (empty($content)) return false;
+        
+        $ret = array();
+        if ($caption !== false) $ret = array_merge($ret, $caption);
+        if ($cols !== false)    foreach ($cols as $token_array) $ret = array_merge($ret, $token_array);
+        if ($thead !== false)   $ret = array_merge($ret, $thead);
+        if ($tfoot !== false)   $ret = array_merge($ret, $tfoot);
+        foreach ($content as $token_array) $ret = array_merge($ret, $token_array);
+        
+        array_pop($tokens_of_children); // remove phantom token
+        
+        return ($ret === $tokens_of_children) ? true : $ret;
+        
     }
 }
 
