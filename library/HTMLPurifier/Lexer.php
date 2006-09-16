@@ -4,7 +4,7 @@ require_once 'HTMLPurifier/Token.php';
 require_once 'HTMLPurifier/Encoder.php';
 require_once 'HTMLPurifier/EntityParser.php';
 
-HTMLPurifier_ConfigDef::define(
+HTMLPurifier_ConfigSchema::define(
     'Core', 'AcceptFullDocuments', true, 'bool',
     'This parameter determines whether or not the filter should accept full '.
     'HTML documents, not just HTML fragments.  When on, it will '.

@@ -1,8 +1,8 @@
 <?php
 
-require_once 'HTMLPurifier/ConfigDef.php';
+require_once 'HTMLPurifier/ConfigSchema.php';
 
-class HTMLPurifier_ConfigDefTest extends UnitTestCase
+class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
 {
     
     var $old_copy;
@@ -13,16 +13,16 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         // you pay for using Singletons. Good thing we can overload it.
         
         // first, let's get a clean copy to do tests
-        $our_copy = new HTMLPurifier_ConfigDef();
+        $our_copy = new HTMLPurifier_ConfigSchema();
         // get the old copy
-        $this->old_copy = HTMLPurifier_ConfigDef::instance();
+        $this->old_copy = HTMLPurifier_ConfigSchema::instance();
         // put in our copy, and reassign to the REAL reference
-        $this->our_copy =& HTMLPurifier_ConfigDef::instance($our_copy);
+        $this->our_copy =& HTMLPurifier_ConfigSchema::instance($our_copy);
     }
     
     function tearDown() {
         // testing is done, restore the old copy
-        HTMLPurifier_ConfigDef::instance($this->old_copy);
+        HTMLPurifier_ConfigSchema::instance($this->old_copy);
     }
     
     function testNormal() {
@@ -31,7 +31,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         // define a namespace
         $description = 'Configuration that is always available.';
-        HTMLPurifier_ConfigDef::defineNamespace(
+        HTMLPurifier_ConfigSchema::defineNamespace(
             'Core', $description
         );
         $this->assertIdentical($this->our_copy->defaults, array(
@@ -50,7 +50,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         // define a directive
         $description = 'This is a description of the directive.';
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Core', 'Name', 'default value', 'string',
             $description
         ); $line = __LINE__;
@@ -71,7 +71,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // define a directive in an undefined namespace
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Extension', 'Name', false, 'bool',
             'This is for an extension, but we have not defined its namespace!'
         );
@@ -83,7 +83,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         // redefine a value in a valid manner
         $description = 'Alternative configuration definition';
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Core', 'Name', 'default value', 'string',
             $description
         ); $line = __LINE__;
@@ -98,7 +98,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // redefine a directive in an invalid manner
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Core', 'Name', 'different default', 'string',
             'Inconsistent default or type, cannot redefine'
         );
@@ -109,7 +109,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // make an enumeration
-        HTMLPurifier_ConfigDef::defineAllowedValues(
+        HTMLPurifier_ConfigSchema::defineAllowedValues(
             'Core', 'Name', array(
                 'Real Value',
                 'Real Value 2'
@@ -128,7 +128,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // redefinition of enumeration is cumulative
-        HTMLPurifier_ConfigDef::defineAllowedValues(
+        HTMLPurifier_ConfigSchema::defineAllowedValues(
             'Core', 'Name', array(
                 'Real Value 3',
             )
@@ -143,7 +143,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // cannot define enumeration for undefined directive
-        HTMLPurifier_ConfigDef::defineAllowedValues(
+        HTMLPurifier_ConfigSchema::defineAllowedValues(
             'Core', 'Foobar', array(
                 'Real Value 9',
             )
@@ -155,7 +155,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // test defining value aliases for an enumerated value
-        HTMLPurifier_ConfigDef::defineValueAliases(
+        HTMLPurifier_ConfigSchema::defineValueAliases(
             'Core', 'Name', array(
                 'Aliased Value' => 'Real Value'
             )
@@ -170,7 +170,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // redefine should be cumulative
-        HTMLPurifier_ConfigDef::defineValueAliases(
+        HTMLPurifier_ConfigSchema::defineValueAliases(
             'Core', 'Name', array(
                 'Aliased Value 2' => 'Real Value 2'
             )
@@ -185,7 +185,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // cannot create alias to not-allowed value
-        HTMLPurifier_ConfigDef::defineValueAliases(
+        HTMLPurifier_ConfigSchema::defineValueAliases(
             'Core', 'Name', array(
                 'Aliased Value 3' => 'Invalid Value'
             )
@@ -197,7 +197,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // cannot create alias for already allowed value
-        HTMLPurifier_ConfigDef::defineValueAliases(
+        HTMLPurifier_ConfigSchema::defineValueAliases(
             'Core', 'Name', array(
                 'Real Value' => 'Real Value 2'
             )
@@ -209,7 +209,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // define a directive with an invalid type
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Core', 'Foobar', false, 'omen',
             'Omen is not a valid type, so we reject this.'
         );
@@ -221,7 +221,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // define a directive with inconsistent type
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Core', 'Foobaz', 10, 'string',
             'If we say string, we should mean it, not integer 10.'
         );
@@ -232,7 +232,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         
         
         // define a directive with bad characters
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Core', 'Core.Attr', 10, 'int',
             'No periods! >:-('
         );
@@ -242,7 +242,7 @@ class HTMLPurifier_ConfigDefTest extends UnitTestCase
         $this->swallowErrors();
         
         // define a namespace with bad characters
-        HTMLPurifier_ConfigDef::defineNamespace(
+        HTMLPurifier_ConfigSchema::defineNamespace(
             'Foobar&Gromit', $description
         );
         

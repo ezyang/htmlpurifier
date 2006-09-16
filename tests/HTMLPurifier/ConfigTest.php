@@ -8,41 +8,41 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
     var $our_copy, $old_copy;
     
     function setUp() {
-        $our_copy = new HTMLPurifier_ConfigDef();
-        $this->old_copy = HTMLPurifier_ConfigDef::instance();
-        $this->our_copy =& HTMLPurifier_ConfigDef::instance($our_copy);
+        $our_copy = new HTMLPurifier_ConfigSchema();
+        $this->old_copy = HTMLPurifier_ConfigSchema::instance();
+        $this->our_copy =& HTMLPurifier_ConfigSchema::instance($our_copy);
     }
     
     function tearDown() {
-        HTMLPurifier_ConfigDef::instance($this->old_copy);
+        HTMLPurifier_ConfigSchema::instance($this->old_copy);
     }
     
     function test() {
         
-        HTMLPurifier_ConfigDef::defineNamespace('Core', 'Corestuff');
-        HTMLPurifier_ConfigDef::defineNamespace('Attr', 'Attributes');
-        HTMLPurifier_ConfigDef::defineNamespace('Extension', 'Extensible');
+        HTMLPurifier_ConfigSchema::defineNamespace('Core', 'Corestuff');
+        HTMLPurifier_ConfigSchema::defineNamespace('Attr', 'Attributes');
+        HTMLPurifier_ConfigSchema::defineNamespace('Extension', 'Extensible');
         
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Core', 'Key', false, 'bool', 'A boolean directive.'
         );
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Attr', 'Key', 42, 'int', 'An integer directive.'
         );
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Extension', 'Pert', 'foo', 'string', 'A string directive.'
         );
-        HTMLPurifier_ConfigDef::define(
+        HTMLPurifier_ConfigSchema::define(
             'Core', 'Encoding', 'utf-8', 'istring', 'Case insensitivity!'
         );
         
-        HTMLPurifier_ConfigDef::defineAllowedValues(
+        HTMLPurifier_ConfigSchema::defineAllowedValues(
             'Extension', 'Pert', array('foo', 'moo')
         );
-        HTMLPurifier_ConfigDef::defineValueAliases(
+        HTMLPurifier_ConfigSchema::defineValueAliases(
             'Extension', 'Pert', array('cow' => 'moo')
         );
-        HTMLPurifier_ConfigDef::defineAllowedValues(
+        HTMLPurifier_ConfigSchema::defineAllowedValues(
             'Core', 'Encoding', array('utf-8', 'iso-8859-1')
         );
         

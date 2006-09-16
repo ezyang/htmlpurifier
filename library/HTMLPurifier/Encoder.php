@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/EntityLookup.php';
 
-HTMLPurifier_ConfigDef::define(
+HTMLPurifier_ConfigSchema::define(
     'Core', 'Encoding', 'utf-8', 'istring', 
     'If for some reason you are unable to convert all webpages to UTF-8, '. 
     'you can use this directive as a stop-gap compatibility change to '. 
@@ -17,20 +17,20 @@ HTMLPurifier_ConfigDef::define(
 
 if ( !function_exists('iconv') ) {
     // only encodings with native PHP support
-    HTMLPurifier_ConfigDef::defineAllowedValues(
+    HTMLPurifier_ConfigSchema::defineAllowedValues(
         'Core', 'Encoding', array(
             'utf-8',
             'iso-8859-1'
         )
     );
-    HTMLPurifier_ConfigDef::defineValueAliases(
+    HTMLPurifier_ConfigSchema::defineValueAliases(
         'Core', 'Encoding', array(
             'iso8859-1' => 'iso-8859-1'
         )
     );
 }
 
-HTMLPurifier_ConfigDef::define(
+HTMLPurifier_ConfigSchema::define(
     'Test', 'ForceNoIconv', false, 'bool', 
     'When set to true, HTMLPurifier_Encoder will act as if iconv does not '.
     'exist and use only pure PHP implementations.'

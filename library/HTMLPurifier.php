@@ -18,7 +18,7 @@
  * However, most users will only need to interface with the HTMLPurifier
  * class, so this massive amount of infrastructure is usually concealed.
  * If you plan on working with the internals, be sure to include
- * HTMLPurifier_ConfigDef and HTMLPurifier_Config.
+ * HTMLPurifier_ConfigSchema and HTMLPurifier_Config.
  */
 
 /*
@@ -42,7 +42,7 @@
 
 // almost every class has an undocumented dependency to these, so make sure
 // they get included
-require_once 'HTMLPurifier/ConfigDef.php';
+require_once 'HTMLPurifier/ConfigSchema.php';
 require_once 'HTMLPurifier/Config.php';
 
 require_once 'HTMLPurifier/Lexer.php';

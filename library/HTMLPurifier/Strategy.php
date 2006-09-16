@@ -8,7 +8,7 @@
  * features, such as custom tags, custom parsing of text, etc.
  */
 
-HTMLPurifier_ConfigDef::define(
+HTMLPurifier_ConfigSchema::define(
     'Core', 'EscapeInvalidTags', false, 'bool',
     'When true, invalid tags will be written back to the document as plain '.
     'text.  Otherwise, they are silently dropped.'

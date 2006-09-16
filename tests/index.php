@@ -40,7 +40,7 @@ require_once 'HTMLPurifier.php';
 // define callable test files
 $test_files = array();
 $test_files[] = 'ConfigTest.php';
-$test_files[] = 'ConfigDefTest.php';
+$test_files[] = 'ConfigSchemaTest.php';
 $test_files[] = 'LexerTest.php';
 $test_files[] = 'Lexer/DirectLexTest.php';
 $test_files[] = 'TokenTest.php';

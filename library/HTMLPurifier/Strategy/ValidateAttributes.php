@@ -3,10 +3,10 @@
 require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/IDAccumulator.php';
-require_once 'HTMLPurifier/ConfigDef.php';
+require_once 'HTMLPurifier/ConfigSchema.php';
 require_once 'HTMLPurifier/AttrContext.php';
 
-HTMLPurifier_ConfigDef::define(
+HTMLPurifier_ConfigSchema::define(
     'Attr', 'IDBlacklist', array(), 'list',
     'Array of IDs not allowed in the document.');
 

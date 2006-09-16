@@ -8,6 +8,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Directive documentation generation using XSLT
 - Table child definition made more flexible, will fix up poorly ordered elements
 - XHTML generation can now be turned off, allowing things like <br>
+- Renamed ConfigDef to ConfigSchema
 
 1.0.1, released 2006-09-04
 - Fixed slight bug in DOMLex attribute parsing

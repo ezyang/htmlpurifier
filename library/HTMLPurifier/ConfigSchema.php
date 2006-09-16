@@ -19,7 +19,7 @@
  *       might be implementation difficulties in ini files regarding order of
  *       execution.
  */
-class HTMLPurifier_ConfigDef {
+class HTMLPurifier_ConfigSchema {
     
     /**
      * Defaults of the directives and namespaces.
@@ -73,7 +73,7 @@ class HTMLPurifier_ConfigDef {
         if ($prototype !== null) {
             $instance = $prototype;
         } elseif ($instance === null || $prototype === true) {
-            $instance = new HTMLPurifier_ConfigDef();
+            $instance = new HTMLPurifier_ConfigSchema();
             $instance->initialize();
         }
         return $instance;
@@ -96,7 +96,7 @@ class HTMLPurifier_ConfigDef {
         $namespace, $name, $default, $type, 
         $description
     ) {
-        $def =& HTMLPurifier_ConfigDef::instance();
+        $def =& HTMLPurifier_ConfigSchema::instance();
         if (!isset($def->info[$namespace])) {
             trigger_error('Cannot define directive for undefined namespace',
                 E_USER_ERROR);
@@ -143,7 +143,7 @@ class HTMLPurifier_ConfigDef {
      * @param $description Description of the namespace
      */
     function defineNamespace($namespace, $description) {
-        $def =& HTMLPurifier_ConfigDef::instance();
+        $def =& HTMLPurifier_ConfigSchema::instance();
         if (isset($def->info[$namespace])) {
             trigger_error('Cannot redefine namespace', E_USER_ERROR);
             return;
@@ -170,7 +170,7 @@ class HTMLPurifier_ConfigDef {
      * @param $real Value aliased value will be converted into
      */
     function defineValueAliases($namespace, $name, $aliases) {
-        $def =& HTMLPurifier_ConfigDef::instance();
+        $def =& HTMLPurifier_ConfigSchema::instance();
         if (!isset($def->info[$namespace][$name])) {
             trigger_error('Cannot set value alias for non-existant directive',
                 E_USER_ERROR);
@@ -200,7 +200,7 @@ class HTMLPurifier_ConfigDef {
      * @param $allowed_values Arraylist of allowed values
      */
     function defineAllowedValues($namespace, $name, $allowed_values) {
-        $def =& HTMLPurifier_ConfigDef::instance();
+        $def =& HTMLPurifier_ConfigSchema::instance();
         if (!isset($def->info[$namespace][$name])) {
             trigger_error('Cannot define allowed values for undefined directive',
                 E_USER_ERROR);

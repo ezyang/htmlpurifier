@@ -21,7 +21,7 @@ class HTMLPurifier_Config
     var $conf;
     
     /**
-     * Reference HTMLPurifier_ConfigDef for value checking
+     * Reference HTMLPurifier_ConfigSchema for value checking
      */
     var $def;
     
@@ -36,7 +36,7 @@ class HTMLPurifier_Config
     var $css_definition;
     
     /**
-     * @param $definition HTMLPurifier_ConfigDef that defines what directives
+     * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
      */
     function HTMLPurifier_Config(&$definition) {
@@ -49,7 +49,7 @@ class HTMLPurifier_Config
      * @return Default HTMLPurifier_Config object.
      */
     function createDefault() {
-        $definition =& HTMLPurifier_ConfigDef::instance();
+        $definition =& HTMLPurifier_ConfigSchema::instance();
         $config = new HTMLPurifier_Config($definition);
         return $config;
     }

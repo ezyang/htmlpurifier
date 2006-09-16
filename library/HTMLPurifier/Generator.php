@@ -4,7 +4,7 @@
 
 require_once 'HTMLPurifier/Lexer.php';
 
-HTMLPurifier_ConfigDef::define(
+HTMLPurifier_ConfigSchema::define(
     'Core', 'CleanUTF8DuringGeneration', false, 'bool',
     'When true, HTMLPurifier_Generator will also check all strings it '.
     'escapes for UTF-8 well-formedness as a defense in depth measure. '.
@@ -15,7 +15,7 @@ HTMLPurifier_ConfigDef::define(
     'generateFromTokens.'
 );
 
-HTMLPurifier_ConfigDef::define(
+HTMLPurifier_ConfigSchema::define(
     'Core', 'XHTML', true, 'bool',
     'Determines whether or not output is XHTML or not.  When disabled, HTML '.
     'Purifier goes into HTML 4.01 removes XHTML-specific markup constructs, '.

@@ -1,6 +1,6 @@
 <?php
 
-HTMLPurifier_ConfigDef::define(
+HTMLPurifier_ConfigSchema::define(
     'URI', 'AllowedSchemes', array(
         'http'  => true, // "Hypertext Transfer Protocol", nuf' said
         'https' => true, // HTTP over SSL (Secure Socket Layer)
@@ -16,7 +16,7 @@ HTMLPurifier_ConfigDef::define(
     'prevents XSS attacks from using pseudo-schemes like javascript or mocha.'
 );
 
-HTMLPurifier_ConfigDef::define(
+HTMLPurifier_ConfigSchema::define(
     'URI', 'OverrideAllowedSchemes', true, 'bool',
     'If this is set to true (which it is by default), you can override '.
     '%URI.AllowedSchemes by simply registering a HTMLPurifier_URIScheme '.
