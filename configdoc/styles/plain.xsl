@@ -95,5 +95,11 @@
             </td>
         </tr>
     </xsl:template>
+    <xsl:template match="constraints/default">
+        <tr>
+            <th>Default:</th>
+            <td><pre><xsl:value-of select="." xml:space="preserve" /></pre></td>
+        </tr>
+    </xsl:template>
     
 </xsl:stylesheet>

@@ -128,6 +128,20 @@ foreach($definition->info as $namespace_name => $namespace_info) {
             }
         }
         
+        $raw_default = $definition->defaults[$namespace_name][$name];
+        if (is_bool($raw_default)) {
+            $default = $raw_default ? 'true' : 'false';
+        } elseif (is_string($raw_default)) {
+            $default = "\"$raw_default\"";
+        } else {
+            $default = print_r(
+                    $definition->defaults[$namespace_name][$name], true
+                );
+        }
+        $dom_constraints->appendChild(
+            $dom_document->createElement('default', $default)
+        );
+        
         $dom_descriptions = $dom_document->createElement('descriptions');
         $dom_directive->appendChild($dom_descriptions);
         
