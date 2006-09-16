@@ -15,6 +15,14 @@ HTMLPurifier_ConfigDef::define(
     'generateFromTokens.'
 );
 
+HTMLPurifier_ConfigDef::define(
+    'Core', 'XHTML', true, 'bool',
+    'Determines whether or not output is XHTML or not.  When disabled, HTML '.
+    'Purifier goes into HTML 4.01 removes XHTML-specific markup constructs, '.
+    'such as boolean attribute expansion and trailing slashes in empty tags. '.
+    'This directive was available since 1.1.'
+);
+
 /**
  * Generates HTML from tokens.
  */
@@ -22,10 +30,15 @@ class HTMLPurifier_Generator
 {
     
     /**
-     * Bool cache of the CleanUTF8DuringGeneration directive.
+     * Bool cache of %Core.CleanUTF8DuringGeneration
      * @private
      */
     var $_clean_utf8 = false;
+    
+    /**
+     * Bool cache of %Core.XHTML
+     */
+    var $_xhtml = true;
     
     /**
      * Generates HTML from an array of tokens.
@@ -38,6 +51,7 @@ class HTMLPurifier_Generator
         $html = '';
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $this->_clean_utf8 = $config->get('Core', 'CleanUTF8DuringGeneration');
+        $this->_xhtml = $config->get('Core', 'XHTML');
         if (!$tokens) return '';
         foreach ($tokens as $token) {
             $html .= $this->generateFromToken($token);
@@ -61,7 +75,9 @@ class HTMLPurifier_Generator
             
         } elseif ($token->type == 'empty') {
             $attr = $this->generateAttributes($token->attributes);
-             return '<' . $token->name . ($attr ? ' ' : '') . $attr . ' />';
+             return '<' . $token->name . ($attr ? ' ' : '') . $attr .
+                ( $this->_xhtml ? ' /': '' )
+                . '>';
             
         } elseif ($token->type == 'text') {
             return $this->escape($token->data);
@@ -80,6 +96,11 @@ class HTMLPurifier_Generator
     function generateAttributes($assoc_array_of_attributes) {
         $html = '';
         foreach ($assoc_array_of_attributes as $key => $value) {
+            if (!$this->_xhtml) {
+                // remove namespaced attributes
+                if (strpos($key, ':') !== false) continue;
+                // also needed: check for attribute minimization
+            }
             $html .= $key.'="'.$this->escape($value).'" ';
         }
         return rtrim($html);

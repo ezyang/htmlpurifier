@@ -52,10 +52,8 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
         $inputs[7] = new HTMLPurifier_Token_Text($theta_char);
         $expect[7] = $theta_char;
         
-        $default_config = HTMLPurifier_Config::createDefault();
         foreach ($inputs as $i => $input) {
-            if (!isset($config[$i])) $config[$i] = $default_config;
-            $result = $this->gen->generateFromToken($input, $config[$i]);
+            $result = $this->gen->generateFromToken($input);
             $this->assertEqual($result, $expect[$i]);
             paintIf($result, $result != $expect[$i]);
         }
@@ -119,6 +117,34 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
             paintIf($result, $result != $expect[$i]);
         }
         
+        
+    }
+    
+    var $config;
+    function assertGeneration($tokens, $expect) {
+        $result = $this->gen->generateFromTokens($tokens, $this->config);
+        $this->assertEqual($expect, $result);
+    }
+    
+    function test_generateFromTokens_XHTMLoff() {
+        $this->config = HTMLPurifier_Config::createDefault();
+        $this->config->set('Core', 'XHTML', false);
+        
+        // omit trailing slash
+        $this->assertGeneration(
+            array( new HTMLPurifier_Token_Empty('br') ),
+            '<br>'
+        );
+        
+        // there should be a test for attribute minimization, but it is
+        // impossible for something like that to happen due to our current
+        // definitions! fix it later
+        
+        // namespaced attributes must be dropped
+        $this->assertGeneration(
+            array( new HTMLPurifier_Token_Start('p', array('xml:lang'=>'fr')) ),
+            '<p>'
+        );
         
     }
     

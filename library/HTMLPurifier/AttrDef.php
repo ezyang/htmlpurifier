@@ -16,6 +16,12 @@ class HTMLPurifier_AttrDef
 {
     
     /**
+     * Tells us whether or not an HTML attribute is minimized. Only the
+     * boolean attribute vapourware would use this.
+     */
+    var $minimized = false;
+    
+    /**
      * Abstract function defined for functions that validate and clean strings.
      * 
      * This function forms the basis for all the subclasses: they must
