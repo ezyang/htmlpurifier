@@ -2,7 +2,6 @@
 
 /**
  * Configuration definition, defines directives and their defaults.
- * @todo Build documentation generation capabilities.
  * @todo The ability to define things multiple times is confusing and should
  *       be factored out to its own function named registerDependency() or 
  *       addNote(), where only the namespace.name and an extra descriptions
@@ -39,7 +38,6 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Lookup table of allowed types.
-     * @todo Add descriptions
      */
     var $types = array(
         'string'    => 'String',
@@ -82,9 +80,6 @@ class HTMLPurifier_ConfigSchema {
     /**
      * Defines a directive for configuration
      * @warning Will fail of directive's namespace is defined
-     * @todo Collect information on description and allow redefinition
-     *       so that multiple files can register a dependency on a
-     *       configuration directive.
      * @param $namespace Namespace the directive is in
      * @param $name Key of directive
      * @param $default Default value of directive

@@ -88,7 +88,6 @@ class HTMLPurifier_EntityParser
      *                  either index 1, 2 or 3 set with a hex value, dec value,
      *                  or string (respectively).
      * @returns Replacement string.
-     * @todo Implement string translations
      */
     
     // +----------+----------+----------+----------+
