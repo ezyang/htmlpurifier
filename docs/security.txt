@@ -6,30 +6,39 @@ through negligence of people. This class will do its job: no more, no less,
 and it's up to you to provide it the proper information and proper context
 to be effective. Things to remember:
 
-1. UTF-8. Currently, the parser runs under the assumption that it is dealing
+1. Character Encoding: UTF-8.
+Currently, the parser runs under the assumption that it is dealing
 with UTF-8. Not ISO-8859-1 or Windows-1252, UTF-8. And definitely not "no
 character encoding explicitly stated" or UTF-7. If you're not using UTF-8 as
-your character encoding, you should switch. Now. Make sure any input is
-properly converted to UTF-8, or the parser will mangle it badly
-(though it won't be a security risk if you're outputting it as UTF-8 though).
+your character encoding, make sure you configure HTML Purifier or switch
+to UTF-8. Now. Also, make sure any input is properly converted to UTF-8, or
+the parser will mangle it badly (though it won't be a security risk if you're
+outputting it as UTF-8 though).  Character encoding is, in general, a knotty
+issue, but do yourself a favor and learn about it:
+<http://www.joelonsoftware.com/articles/Unicode.html>
 
-2. XHTML 1.0 Transitional. This is what the parser is outputting. For the most
+2. Doctype: XHTML 1.0 Transitional
+This is what the parser is outputting. For the most
 part, it's compatible with HTML 4.01, but XHTML enforces some very nice things
 that all web developers should use. Regardless, NO DOCTYPE is a NO. Quirks mode
 has waaaay too many quirks for a little parser to handle.  We did not select
 strict in order to prevent ourselves from being too draconic on users, but
-this may be configurable in the future.
+this may be configurable in the future.  Do you want standards compliance?
+The doctype is a good place to start.
 
-3. IDs. They need to be unique, but without some knowledge of the
+3. IDs
+They need to be unique, but without some knowledge of the
 rest of the document, it's difficult to know what's unique. %Attr.IDBlacklist
 needs to be set: we may want to consider disallowing IDs by default to
 save lazy programmers.
 
-4. [PROJECTED] Links. We're not going to try for spam protection (although
+4. [PROJECTED] Links
+We're not going to try for spam protection (although
 some hooks for such a module might be nice) but we may offer the ability to
 only accept relative URLs. Pick the one that's right for you.
 
-5. CSS. While we can prevent the most flagrant cases from affecting your
+5. CSS
+While we can prevent the most flagrant cases from affecting your
 layout (such as absolutely positioned elements), no amount of code is going
 to protect your pages from being attacked by garish colors and plain old
 bad taste.  A neat feature would be the ability to define acceptable colors

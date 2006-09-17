@@ -11,24 +11,24 @@ profiling.
 Here we go:
 
 AttrDef
-    Class - doesn't support Unicode characters, uses regular expressions
-    Lang - code duplication, premature optimization, doesn't consult official
-        lists
-    Pixels/Length/MultiLength - implemented according to HTML spec (excludes
-        code reuse in CSS)
-    URI - multiple regular expressions, needs host validation routines factored
-        out for mailto scheme, IPv6 validation is broken (fringe), unintuitive
-        variable overwriting, missing validation for query, fragment and path,
+    Class - doesn't support Unicode characters (fringe); uses regular
+        expressions
+    Lang - code duplication; premature optimization; doesn't consult official
+        lists (fringe)
+    Length - easily mistaken for CSSLength
+    URI - multiple regular expressions; needs host validation routines factored
+        out for mailto scheme; missing validation for query; fragment and path,
         no percent-encode fixing
     CSS - parser doesn't accept advanced CSS (fringe)
     Number - constructor interface is inconsistent with Integer
-AttrTransform - doesn't accept AttrContext, non-validating
-ChildDef - not-allowed nodes translated to text, likely invalid handling
+AttrTransform - doesn't accept AttrContext
 Config - "load configuration" hooks missing, rich set* accessors missing
+ConfigSchema - redefinition is a mess
 Strategy
     FixNesting - cannot bubble nodes out of structures
     MakeWellFormed - insufficient automatic closing definitions (check HTML
-        spec for optional end tags).
+        spec for optional end tags, also, closing based on type (block/inline)
+        might be efficient).
     RemoveForeignElements - should be run in parallel with MakeWellFormed
 URIScheme - needs to have callable generic checks
     ftp - missing typecode check

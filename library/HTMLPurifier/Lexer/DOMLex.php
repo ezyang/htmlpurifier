@@ -12,15 +12,12 @@ require_once 'HTMLPurifier/TokenFactory.php';
  * documents, it performs twenty times faster than
  * HTMLPurifier_Lexer_DirectLex,and is the default choice for PHP 5. 
  * 
- * @notice
- * Any empty elements will have empty tokens associated with them, even if
+ * @note Any empty elements will have empty tokens associated with them, even if
  * this is prohibited by the spec. This is cannot be fixed until the spec
  * comes into play.
  * 
- * @todo Determine DOM's entity parsing behavior, point to local entity files
- *       if necessary.
- * @todo Make div access less fragile, and refrain from preprocessing when
- *       HTML tag and friends are already present.
+ * @note PHP's DOM extension does not actually parse any entities, we use
+ *       our own function to do that.
  */
 
 class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
