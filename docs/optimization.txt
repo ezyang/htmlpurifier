@@ -2,7 +2,8 @@
 Optimization
 
 Here are some possible optimization techniques we can apply to code sections if
-they turn out to be slow.  Be sure not to prematurely optimize though!
+they turn out to be slow.  Be sure not to prematurely optimize: if you get
+that itch, put it here!
 
  - Make Tokens Flyweights (may prove problematic, probably not worth it)
  - Rewrite regexps into PHP code
