@@ -1,7 +1,13 @@
 NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-1.1.0, projected 2006-09-16
+1.2.0, unknown projected release date
+(major feature release)
+
+1.1.1, unknown projected release date
+(bugfix release)
+
+1.1.0, released 2006-09-16
 - Made URI validator more forgiving: will ignore leading and trailing
   quotes, apostrophes and less than or greater than signs.
 - Enforce alphanumeric namespace and directive names for configuration.
