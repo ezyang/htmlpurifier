@@ -15,6 +15,7 @@ Ongoing
  - Formatters for plaintext
     - Auto-paragraphing (be sure to leverage fact that we know when things
       shouldn't be paragraphed, such as lists and tables).
+    - Linkify URLs
  - Make URI validation routines tighter (especially mailto)
  - More extensive URI filtering schemes
  - Allow for background-image and list-style-image (see above)
