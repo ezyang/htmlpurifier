@@ -56,6 +56,7 @@ class HTMLPurifier_HTMLDefinition
     
     /**
      * String name of parent element HTML will be going into.
+     * @todo Allow this to be overloaded by user config
      * @public
      */
     var $info_parent = 'div';
@@ -111,11 +112,18 @@ class HTMLPurifier_HTMLDefinition
         //////////////////////////////////////////////////////////////////////
         // info[]->child : defines allowed children for elements
         
-        // entities: prefixed with e_ and _ replaces .
+        // entities: prefixed with e_ and _ replaces . from DTD
+        // double underlines are entities we made up
         
         // we don't use an array because that complicates interpolation
         // strings are used instead of arrays because if you use arrays,
         // you have to do some hideous manipulation with array_merge()
+        
+        // todo: determine whether or not having allowed children
+        //       that aren't allowed globally affects security (it shouldn't)
+        // if above works out, extend children definitions to include all
+        //       possible elements (allowed elements will dictate which ones
+        //       get dropped
         
         $e_special_extra = 'img';
         $e_special_basic = 'br | span | bdo';
@@ -142,16 +150,18 @@ class HTMLPurifier_HTMLDefinition
         $e_block = "p | $e_heading | div | $e_lists | $e_blocktext | table";
         $e__flow = "#PCDATA | $e_block | $e_inline | $e_misc";
         $e_Flow = new HTMLPurifier_ChildDef_Optional($e__flow);
-        $e_a_content = new HTMLPurifier_ChildDef_Optional("#PCDATA | $e_special".
-          " | $e_fontstyle | $e_phrase | $e_inline_forms | $e_misc_inline");
+        $e_a_content = new HTMLPurifier_ChildDef_Optional("#PCDATA".
+          " | $e_special | $e_fontstyle | $e_phrase | $e_inline_forms".
+          " | $e_misc_inline");
         $e_pre_content = new HTMLPurifier_ChildDef_Optional("#PCDATA | a".
           " | $e_special_basic | $e_fontstyle_basic | $e_phrase_basic".
           " | $e_inline_forms | $e_misc_inline");
-        $e_form_content = new HTMLPurifier_ChildDef_Optional(''); //unused
-        $e_form_button_content = new HTMLPurifier_ChildDef_Optional(''); // unused
+        $e_form_content = new HTMLPurifier_ChildDef_Optional('');//unused
+        $e_form_button_content = new HTMLPurifier_ChildDef_Optional('');//unused
         
         $this->info['ins']->child =
-        $this->info['del']->child = new HTMLPurifier_ChildDef_Chameleon($e__inline, $e__flow);
+        $this->info['del']->child =
+            new HTMLPurifier_ChildDef_Chameleon($e__inline, $e__flow);
         
         $this->info['blockquote']->child=
         $this->info['dd']->child  =
@@ -225,7 +235,7 @@ class HTMLPurifier_HTMLDefinition
         //////////////////////////////////////////////////////////////////////
         // info[]->type : defines the type of the element (block or inline)
         
-        // reuses $e_Inline and $e_block
+        // reuses $e_Inline and $e_Block
         
         foreach ($e_Inline->elements as $name) {
             $this->info[$name]->type = 'inline';
@@ -243,7 +253,7 @@ class HTMLPurifier_HTMLDefinition
         
         $this->info['a']->excludes = array('a' => true);
         $this->info['pre']->excludes = array_flip(array('img', 'big', 'small',
-            // technically in spec, but we don't allow em anyway
+            // technically useless, but good to be indepth
             'object', 'applet', 'font', 'basefont'));
         
         //////////////////////////////////////////////////////////////////////
@@ -252,6 +262,8 @@ class HTMLPurifier_HTMLDefinition
         // this doesn't include REQUIRED declarations, those are handled
         // by the transform classes. It will, however, do simple and slightly
         // complex attribute value substitution
+        
+        // the question of varying allowed attributes is more entangling.
         
         $e_Text = new HTMLPurifier_AttrDef_Text();
         
@@ -297,7 +309,8 @@ class HTMLPurifier_HTMLDefinition
         
         $this->info['table']->attr['summary'] = $e_Text;
         
-        $this->info['table']->attr['border'] = new HTMLPurifier_AttrDef_Pixels();
+        $this->info['table']->attr['border'] =
+            new HTMLPurifier_AttrDef_Pixels();
         
         $e_Length = new HTMLPurifier_AttrDef_Length();
         $this->info['table']->attr['cellpadding'] =
@@ -329,7 +342,7 @@ class HTMLPurifier_HTMLDefinition
         $this->info['q']->attr['cite'] = $e_URI;
         
         //////////////////////////////////////////////////////////////////////
-        // UNIMP : info_tag_transform : transformations of tags
+        // info_tag_transform : transformations of tags
         
         $this->info_tag_transform['font']   = new HTMLPurifier_TagTransform_Font();
         $this->info_tag_transform['menu']   = new HTMLPurifier_TagTransform_Simple('ul');
@@ -338,6 +351,9 @@ class HTMLPurifier_HTMLDefinition
         
         //////////////////////////////////////////////////////////////////////
         // info[]->auto_close : tags that automatically close another
+        
+        // todo: determine whether or not SGML-like modeling based on
+        // mandatory/optional end tags would be a better policy
         
         // make sure you test using isset() not !empty()
         
