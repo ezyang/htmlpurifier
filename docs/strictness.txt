@@ -1,0 +1,25 @@
+
+Is HTML Purifier Strict or Transitional?
+    A little bit of helpful guidance
+
+Despite the fact that HTML Purifier professes only to support transitional
+HTML, it rejects a lot of attributes and elements that are actually, indeed,
+valid. You can investigate progress.html to find out precisely what we
+are doing to these *deprecated* attributes.
+
+However, users have found that Strict HTML imposes some quite unreasonable
+restrictions on certain things. The start and value attributes in ol and
+li (respectively) perhaps are the most contested. There's is currently no
+widely supported browser method short of JavaScript that can replace these
+two deprecated elements. HTML Purifier does not currently support them, but
+it might behoove us to do so while our output is still transitional.
+
+Fortunantely, that's the only real bugger case. The others have near-perfect
+CSS equivalents, and were presentational anyway. However, the other question
+pops up: should we always convert these to the CSS forms when 1. the spec
+allows them anyway and 2. older browsers support them better? After all, the
+whole point about CSS is to seperate styling from content, so inline styling
+doesn't solve that problem.
+
+It's an icky question, and we'll have to deal with it as more and more 
+transforms get implemented.

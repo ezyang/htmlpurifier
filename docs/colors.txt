@@ -1,0 +1,23 @@
+
+Colors
+    Hammering some sense into those content-makers
+
+Your website probably has a color-scheme. Green on white, purple on yellow,
+whatever. When you give users the ability to style their content, you may
+want them to keep in line with your styling. If you're website is all
+about light colors, you don't want a user to come in and vandalize your
+page with a deep maroon.
+
+This is an extremely silly feature proposal, but I'm writing it down anyway.
+
+What if the user could constrain the colors specified in inline styles? You
+are only allowed to use these shades of dark green for text and these shades
+of light yellow for the background. At the very least, you could ensure
+that we did not have pale yellow on white text.
+
+Implementation issues:
+1. Requires the color attribute definition to know, currently, what the text
+and background colors are. This becomes difficult when classes are thrown
+into the mix.
+2. The user still has to define the permissible colors, how does one do
+something like that?
