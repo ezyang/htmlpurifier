@@ -130,6 +130,7 @@ If your website is in UTF-8 and XHTML Transitional, use this code:
     $purifier = new HTMLPurifier();
     
     $clean_html = $purifier->purify($dirty_html);
+?>
 
 If your website is in a different encoding or doctype, use this code:
 
