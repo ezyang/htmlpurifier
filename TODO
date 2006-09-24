@@ -5,10 +5,6 @@ Ongoing
  - Lots of profiling, make it faster!
  - Plugins for major CMSes (very tricky issue)
 
-1.1.1 release
- - Preservation of indentation in tables (tricky since the contents can be
-   shuffled around)
-
 1.2 release
  - Make URI validation routines tighter (especially mailto)
  - More extensive URI filtering schemes
