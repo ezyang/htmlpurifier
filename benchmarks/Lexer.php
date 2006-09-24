@@ -3,13 +3,14 @@
 // emulates inserting a dir called HTMLPurifier into your class dir
 set_include_path(get_include_path() . PATH_SEPARATOR . '../library/');
 
-require_once '../test-settings.php';
+@include_once '../test-settings.php';
 
 require_once 'HTMLPurifier/ConfigSchema.php';
 require_once 'HTMLPurifier/Config.php';
 
 $LEXERS = array();
-$RUNS = 3;
+$RUNS = isset($GLOBALS['HTMLPurifierTest']['Runs'])
+    ? $GLOBALS['HTMLPurifierTest']['Runs'] : 2; 
 
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 $LEXERS['DirectLex'] = new HTMLPurifier_Lexer_DirectLex();
