@@ -88,7 +88,7 @@ class HTMLPurifier_Encoder
         if ($iconv && !$force_php) {
             // do the shortcut way
             $str = @iconv('UTF-8', 'UTF-8//IGNORE', $str);
-            return strtr($str, $non_sgml_chars);;
+            return strtr($str, $non_sgml_chars);
         }
         
         $mState = 0; // cached expected number of octets after the current octet

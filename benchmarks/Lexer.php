@@ -3,15 +3,24 @@
 // emulates inserting a dir called HTMLPurifier into your class dir
 set_include_path(get_include_path() . PATH_SEPARATOR . '../library/');
 
-require_once 'HTMLPurifier/ConfigDef.php';
-require_once 'HTMLPurifier/Config.php';
-require_once 'HTMLPurifier/Lexer/DirectLex.php';
-require_once 'HTMLPurifier/Lexer/PEARSax3.php';
+@include_once '../test-settings.php';
 
-$LEXERS = array(
-    'DirectLex' => new HTMLPurifier_Lexer_DirectLex(),
-    'PEARSax3'  => new HTMLPurifier_Lexer_PEARSax3()
-);
+require_once 'HTMLPurifier/ConfigSchema.php';
+require_once 'HTMLPurifier/Config.php';
+
+$LEXERS = array();
+$RUNS = isset($GLOBALS['HTMLPurifierTest']['Runs'])
+    ? $GLOBALS['HTMLPurifierTest']['Runs'] : 2; 
+
+require_once 'HTMLPurifier/Lexer/DirectLex.php';
+$LEXERS['DirectLex'] = new HTMLPurifier_Lexer_DirectLex();
+
+if (!empty($GLOBALS['HTMLPurifierTest']['PEAR'])) {
+    require_once 'HTMLPurifier/Lexer/PEARSax3.php';
+    $LEXERS['PEARSax3'] = new HTMLPurifier_Lexer_PEARSax3();
+} else {
+    exit('PEAR required to perform benchmark.');
+}
 
 if (version_compare(PHP_VERSION, '5', '>=')) {
     require_once 'HTMLPurifier/Lexer/DOMLex.php';
@@ -56,9 +65,12 @@ class RowTimer extends Benchmark_Timer
             if ($standard == false) $standard = $v['diff'];
             
             $perc = $v['diff'] * 100 / $standard;
+            $bad_run = ($v['diff'] < 0);
             
-            $out .= '<td align="right">' . number_format($perc, 2, '.', '') .
-                   '%</td>';
+            $out .= '<td align="right"'.
+                   ($bad_run ? ' style="color:#AAA;"' : '').
+                   '>' . number_format($perc, 2, '.', '') .
+                   '%</td><td>'.number_format($v['diff'],4,'.','').'</td>';
             
         }
         
@@ -79,13 +91,13 @@ function print_lexers() {
 }
 
 function do_benchmark($name, $document) {
-    global $LEXERS;
+    global $LEXERS, $RUNS;
     
     $timer = new RowTimer($name);
     $timer->start();
     
     foreach($LEXERS as $key => $lexer) {
-        $tokens = $lexer->tokenizeHTML($document);
+        for ($i=0; $i<$RUNS; $i++) $tokens = $lexer->tokenizeHTML($document);
         $timer->setMarker($key);
     }
     
@@ -103,7 +115,7 @@ function do_benchmark($name, $document) {
 <table border="1">
 <tr><th>Case</th><?php
 foreach ($LEXERS as $key => $value) {
-    echo '<th>' . htmlspecialchars($key) . '</th>';
+    echo '<th colspan="2">' . htmlspecialchars($key) . '</th>';
 }
 ?></tr>
 <?php

@@ -1,7 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/ChildDef.php';
-require_once 'HTMLPurifier/Lexer.php';
+require_once 'HTMLPurifier/Lexer/DirectLex.php';
 require_once 'HTMLPurifier/Generator.php';
 
 class HTMLPurifier_ChildDefTest extends UnitTestCase
@@ -12,7 +12,8 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
     var $gen;
     
     function HTMLPurifier_ChildDefTest() {
-        $this->lex = HTMLPurifier_Lexer::create();
+        // it is vital that the tags be treated as literally as possible
+        $this->lex = new HTMLPurifier_Lexer_DirectLex();
         $this->gen = new HTMLPurifier_Generator();
         parent::UnitTestCase();
     }
@@ -97,6 +98,14 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         // errant text dropped (until bubbling is implemented)
         $inputs[6] = 'foo';
         $expect[6] = false;
+        
+        // whitespace sticks to the previous element, last whitespace is
+        // stationary
+        $inputs[7] = "\n   <tr />\n  <tr />\n ";
+        $expect[7] = true;
+        
+        $inputs[8] = "\n\t<tbody />\n\t\t<tfoot />\n\t\t\t";
+        $expect[8] = "\n\t\t<tfoot />\n\t<tbody />\n\t\t\t";
         
         $this->assertSeries($inputs, $expect, $config);
         

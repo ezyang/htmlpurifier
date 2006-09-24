@@ -21,7 +21,9 @@ if (!empty($_POST['html'])) {
     
     $html = get_magic_quotes_gpc() ? stripslashes($_POST['html']) : $_POST['html'];
     
-    $purifier = new HTMLPurifier();
+    $config = HTMLPurifier_Config::createDefault();
+    $config->set('Core', 'TidyFormat', !empty($_POST['tidy']));
+    $purifier = new HTMLPurifier($config);
     $pure_html = $purifier->purify($html);
     
 ?>
@@ -65,6 +67,8 @@ if (isset($html)) {
             HTMLPurifier_Encoder::cleanUTF8($html), ENT_COMPAT, 'UTF-8');
 }
         ?></textarea>
+        <div>Nicely format output with Tidy? <input type="checkbox" value="1"
+        name="tidy"<?php if (!empty($_POST['tidy'])) echo ' checked="checked"'; ?> /></div>
         <div>
             <input type="submit" value="Submit" name="submit" class="button" />
         </div>

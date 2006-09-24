@@ -1,11 +1,15 @@
 NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-1.2.0, unknown projected release date
-(major feature release)
-
 1.1.1, unknown projected release date
-(bugfix release)
+- Various documentation updates
+- Fixed parse error in configuration documentation script
+- Fixed fatal error in benchmark scripts, slightly augmented
+- As far as possible, whitespace is preserved in-between table children
+- Configuration option to optionally Tidy up output for indentation to make up
+  for dropped whitespace by DOMLex (pretty-printing for the entire application
+  should be done by a page-wide Tidy)
+- Sample test-settings.php file included
 
 1.1.0, released 2006-09-16
 - Made URI validator more forgiving: will ignore leading and trailing

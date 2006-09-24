@@ -6,24 +6,28 @@ Ongoing
  - Plugins for major CMSes (very tricky issue)
 
 1.2 release
- - Additional support for poorly written HTML
-    - Implement all non-essential attribute transforms
-    - Microsoft Word HTML cleaning (i.e. MsoNormal)
- - Error logging for filtering and cleanup procedures
-
-1.3 release
- - Formatters for plaintext
-    - Auto-paragraphing (be sure to leverage fact that we know when things
-      shouldn't be paragraphed, such as lists and tables).
  - Make URI validation routines tighter (especially mailto)
  - More extensive URI filtering schemes
  - Allow for background-image and list-style-image (see above)
  - Distinguish between different types of URIs, for instance, a mailto URI
    in IMG SRC is nonsensical
+ - Error logging for filtering/cleanup procedures
 
-2.0 release
+1.3 release
  - Add various "levels" of cleaning
     - Related: Allow strict (X)HTML
+
+1.4 release
+ - Additional support for poorly written HTML
+    - Implement all non-essential attribute transforms
+    - Microsoft Word HTML cleaning (i.e. MsoNormal)
+
+2.0 release
+ - Formatters for plaintext
+    - Auto-paragraphing (be sure to leverage fact that we know when things
+      shouldn't be paragraphed, such as lists and tables).
+    - Linkify URLs
+    - Smileys
 
 3.0 release
  - Extended HTML capabilities based on namespacing and tag transforms
@@ -39,11 +43,9 @@ Unknown release (on a scratch-an-itch basis)
  - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
  - Automatically add non-breaking spaces to empty table cells when
    empty-cells:show is applied to have compatibility with Internet Explorer
- - Pretty-printing HTML (adds dependency of Generator to HTMLDefinition)
  - Non-lossy dumb alternate character encoding transformations, achieved by
    numerically encoding all non-ASCII characters
- - Preservation of indentation in tables (tricky since the contents can be
-   shuffled around)
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations
+ - Pretty-printing HTML, users can use Tidy on the output on entire page

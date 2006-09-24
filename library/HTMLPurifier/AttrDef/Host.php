@@ -11,9 +11,14 @@ class HTMLPurifier_AttrDef_Host extends HTMLPurifier_AttrDef
 {
     
     /**
-     * Instances of HTMLPurifier_AttrDef_IPv4 and HTMLPurifier_AttrDef_IPv6
+     * Instance of HTMLPurifier_AttrDef_IPv4 sub-validator
      */
-    var $ipv4, $ipv6;
+    var $ipv4;
+    
+    /**
+     * Instance of HTMLPurifier_AttrDef_IPv6 sub-validator
+     */
+    var $ipv6;
     
     function HTMLPurifier_AttrDef_Host() {
         $this->ipv4 = new HTMLPurifier_AttrDef_IPv4();

@@ -123,6 +123,9 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
     var $config;
     function assertGeneration($tokens, $expect) {
         $result = $this->gen->generateFromTokens($tokens, $this->config);
+        // normalized newlines, this probably should be put somewhere else
+        $result = str_replace("\r\n", "\n", $result);
+        $result = str_replace("\r", "\n", $result);
         $this->assertEqual($expect, $result);
     }
     
@@ -144,6 +147,25 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
         $this->assertGeneration(
             array( new HTMLPurifier_Token_Start('p', array('xml:lang'=>'fr')) ),
             '<p>'
+        );
+        
+    }
+    
+    function test_generateFromTokens_TidyFormat() {
+        // abort test if tidy isn't loaded
+        if (!extension_loaded('tidy')) return;
+        
+        $this->config = HTMLPurifier_Config::createDefault();
+        $this->config->set('Core', 'TidyFormat', true);
+        
+        // nice wrapping please
+        $this->assertGeneration(
+            array(
+                new HTMLPurifier_Token_Start('div'),
+                new HTMLPurifier_Token_Text('Text'),
+                new HTMLPurifier_Token_End('div')
+            ),
+            "<div>\n  Text\n</div>\n"
         );
         
     }
