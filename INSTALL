@@ -46,7 +46,9 @@ Then, it's a simple matter of including the base file:
 
     require_once 'HTMLPurifier.php';
 
-...and you're good to go.
+...and you're good to go. The library/ folder contains all the files you need,
+so you can get rid of most of everything else when using the library in a
+production environment.
 
 
 
@@ -98,7 +100,8 @@ XHTML output like this:
 
 However, I strongly recommend that you use XHTML. Currently, we can only
 guarantee transitional-complaint output, future versions will also allow strict
-output.
+output. There are more configuration directives which can be read about
+here: http://hp.jpsband.org/live/configdoc/plain.html
 
 
 
