@@ -327,6 +327,8 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
         $is_collecting = false; // are we globbing together tokens to package
                                 // into one of the collectors?
         $collection = array(); // collected nodes
+        $tag_index = 0; // the first node might be whitespace,
+                            // so this tells us where the start tag is
         
         foreach ($tokens_of_children as $token) {
             $is_child = ($nesting == 0);
@@ -344,7 +346,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                 if ($is_child) {
                     // okay, let's stash the tokens away
                     // first token tells us the type of the collection
-                    switch ($collection[0]->name) {
+                    switch ($collection[$tag_index]->name) {
                         case 'tr':
                         case 'tbody':
                             $content[] = $collection;
@@ -356,13 +358,13 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                         case 'thead':
                         case 'tfoot':
                             // access the appropriate variable, $thead or $tfoot
-                            $var = $collection[0]->name;
+                            $var = $collection[$tag_index]->name;
                             if ($$var === false) {
                                 $$var = $collection;
                             } else {
                                 // transmutate the first and less entries into
                                 // tbody tags, and then put into content
-                                $collection[0]->name = 'tbody';
+                                $collection[$tag_index]->name = 'tbody';
                                 $collection[count($collection)-1]->name = 'tbody';
                                 $content[] = $collection;
                             }
@@ -373,6 +375,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                     }
                     $collection = array();
                     $is_collecting = false;
+                    $tag_index = 0;
                 } else {
                     // add the node to the collection
                     $collection[] = $token;
@@ -387,7 +390,9 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                 if ($token->name == 'col') {
                     // the only empty tag in the possie, we can handle it
                     // immediately
-                    $cols[] = array($token);
+                    $cols[] = array_merge($collection, array($token));
+                    $collection = array();
+                    $tag_index = 0;
                     continue;
                 }
                 switch($token->name) {
@@ -401,7 +406,10 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                         $collection[] = $token;
                         continue;
                     default:
-                        // unrecognized, drop silently
+                        if ($token->type == 'text' && $token->is_whitespace) {
+                            $collection[] = $token;
+                            $tag_index++;
+                        }
                         continue;
                 }
             }
@@ -415,6 +423,10 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
         if ($thead !== false)   $ret = array_merge($ret, $thead);
         if ($tfoot !== false)   $ret = array_merge($ret, $tfoot);
         foreach ($content as $token_array) $ret = array_merge($ret, $token_array);
+        if (!empty($collection) && $is_collecting == false){
+            // grab the trailing space
+            $ret = array_merge($ret, $collection);
+        }
         
         array_pop($tokens_of_children); // remove phantom token
         
