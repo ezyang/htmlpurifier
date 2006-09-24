@@ -23,6 +23,19 @@ HTMLPurifier_ConfigSchema::define(
     'This directive was available since 1.1.'
 );
 
+// extension constraints could be factored into ConfigSchema
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'TidyFormat', false, 'bool',
+    'Determines whether or not to run Tidy on the final output for pretty '.
+    'formatting reasons, such as indentation and wrap.  This can greatly '.
+    'improve readability for editors who are hand-editing the HTML, but is '.
+    'by no means necessary as HTML Purifier has already fixed all major '.
+    'errors the HTML may have had and could potentially result in data loss '.
+    'due to bugs in Tidy. Tidy is a non-default extension, and this directive '.
+    'will silently fail if Tidy is not available. This '.
+    'directive was available since 1.1.1.'
+);
+
 /**
  * Generates HTML from tokens.
  */
@@ -55,6 +68,30 @@ class HTMLPurifier_Generator
         if (!$tokens) return '';
         foreach ($tokens as $token) {
             $html .= $this->generateFromToken($token);
+        }
+        if ($config->get('Core', 'TidyFormat') && extension_loaded('tidy')) {
+            
+            $tidy_options = array(
+               'indent'=> true,
+               'output-xhtml' => $this->_xhtml,
+               'show-body-only' => true,
+               'indent-spaces' => 2,
+               'wrap' => 68,
+            );
+            if (version_compare(PHP_VERSION, '5', '<')) {
+                tidy_set_encoding('utf8');
+                foreach ($tidy_options as $key => $value) {
+                    tidy_setopt($key, $value);
+                }
+                tidy_parse_string($html);
+                tidy_clean_repair();
+                $html = tidy_get_output();
+            } else {
+                $tidy = new Tidy;
+                $tidy->parseString($html, $tidy_options, 'utf8');
+                $tidy->cleanRepair();
+                $html = (string) $tidy;
+            }
         }
         return $html;
     }
