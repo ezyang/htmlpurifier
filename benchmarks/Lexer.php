@@ -65,8 +65,11 @@ class RowTimer extends Benchmark_Timer
             if ($standard == false) $standard = $v['diff'];
             
             $perc = $v['diff'] * 100 / $standard;
+            $bad_run = ($v['diff'] < 0);
             
-            $out .= '<td align="right">' . number_format($perc, 2, '.', '') .
+            $out .= '<td align="right"'.
+                   ($bad_run ? ' style="color:#AAA;"' : '').
+                   '>' . number_format($perc, 2, '.', '') .
                    '%</td><td>'.number_format($v['diff'],4,'.','').'</td>';
             
         }
