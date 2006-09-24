@@ -9,6 +9,7 @@ require_once 'HTMLPurifier/ConfigSchema.php';
 require_once 'HTMLPurifier/Config.php';
 
 $LEXERS = array();
+$RUNS = 3;
 
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 $LEXERS['DirectLex'] = new HTMLPurifier_Lexer_DirectLex();
@@ -65,7 +66,7 @@ class RowTimer extends Benchmark_Timer
             $perc = $v['diff'] * 100 / $standard;
             
             $out .= '<td align="right">' . number_format($perc, 2, '.', '') .
-                   '%</td><td>'.$v['diff'].'</td>';
+                   '%</td><td>'.number_format($v['diff'],4,'.','').'</td>';
             
         }
         
@@ -86,13 +87,13 @@ function print_lexers() {
 }
 
 function do_benchmark($name, $document) {
-    global $LEXERS;
+    global $LEXERS, $RUNS;
     
     $timer = new RowTimer($name);
     $timer->start();
     
     foreach($LEXERS as $key => $lexer) {
-        $tokens = $lexer->tokenizeHTML($document);
+        for ($i=0; $i<$RUNS; $i++) $tokens = $lexer->tokenizeHTML($document);
         $timer->setMarker($key);
     }
     
