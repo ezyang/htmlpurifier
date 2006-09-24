@@ -50,7 +50,7 @@ function appendHTMLDiv($document, $node, $html) {
 // ---------------------------------------------------------------------------
 // Load copies of HTMLPurifier_ConfigDef and HTMLPurifier
 
-$definition = HTMLPurifier_ConfigDef::instance();
+$schema = HTMLPurifier_ConfigSchema::instance();
 $purifier = new HTMLPurifier();
 
 
@@ -61,7 +61,7 @@ $types_document = new DOMDocument('1.0', 'UTF-8');
 $types_root = $types_document->createElement('types');
 $types_document->appendChild($types_root);
 $types_document->formatOutput = true;
-foreach ($definition->types as $name => $expanded_name) {
+foreach ($schema->types as $name => $expanded_name) {
     $types_type = $types_document->createElement('type', $expanded_name);
     $types_type->setAttribute('id', $name);
     $types_root->appendChild($types_type);
@@ -88,7 +88,7 @@ TODO for XML format:
 - create a definition (DTD or other) once interface stabilizes
 */
 
-foreach($definition->info as $namespace_name => $namespace_info) {
+foreach($schema->info as $namespace_name => $namespace_info) {
     
     $dom_namespace = $dom_document->createElement('namespace');
     $dom_root->appendChild($dom_namespace);
@@ -100,7 +100,7 @@ foreach($definition->info as $namespace_name => $namespace_info) {
     $dom_namespace_description = $dom_document->createElement('description');
     $dom_namespace->appendChild($dom_namespace_description);
     appendHTMLDiv($dom_document, $dom_namespace_description,
-        $definition->info_namespace[$namespace_name]->description);
+        $schema->info_namespace[$namespace_name]->description);
     
     foreach ($namespace_info as $name => $info) {
         
@@ -128,14 +128,14 @@ foreach($definition->info as $namespace_name => $namespace_info) {
             }
         }
         
-        $raw_default = $definition->defaults[$namespace_name][$name];
+        $raw_default = $schema->defaults[$namespace_name][$name];
         if (is_bool($raw_default)) {
             $default = $raw_default ? 'true' : 'false';
         } elseif (is_string($raw_default)) {
             $default = "\"$raw_default\"";
         } else {
             $default = print_r(
-                    $definition->defaults[$namespace_name][$name], true
+                    $schema->defaults[$namespace_name][$name], true
                 );
         }
         $dom_constraints->appendChild(

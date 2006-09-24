@@ -18,6 +18,13 @@ require_once 'HTMLPurifier/TokenFactory.php';
  * 
  * @note PHP's DOM extension does not actually parse any entities, we use
  *       our own function to do that.
+ * 
+ * @warning DOM tends to drop whitespace, which may wreak havoc on indenting.
+ *          If this is a huge problem, due to the fact that HTML is hand
+ *          edited and youa re unable to get a parser cache that caches the
+ *          the output of HTML Purifier while keeping the original HTML lying
+ *          around, you may want to run Tidy on the resulting output or use
+ *          HTMLPurifier_DirectLex
  */
 
 class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer

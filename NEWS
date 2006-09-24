@@ -5,7 +5,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 (major feature release)
 
 1.1.1, unknown projected release date
-(bugfix release)
+- Various documentation updates
+- Fixed parse error in configuration documentation script
 
 1.1.0, released 2006-09-16
 - Made URI validator more forgiving: will ignore leading and trailing
