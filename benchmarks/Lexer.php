@@ -65,7 +65,7 @@ class RowTimer extends Benchmark_Timer
             $perc = $v['diff'] * 100 / $standard;
             
             $out .= '<td align="right">' . number_format($perc, 2, '.', '') .
-                   '%</td>';
+                   '%</td><td>'.$v['diff'].'</td>';
             
         }
         
@@ -110,7 +110,7 @@ function do_benchmark($name, $document) {
 <table border="1">
 <tr><th>Case</th><?php
 foreach ($LEXERS as $key => $value) {
-    echo '<th>' . htmlspecialchars($key) . '</th>';
+    echo '<th colspan="2">' . htmlspecialchars($key) . '</th>';
 }
 ?></tr>
 <?php
