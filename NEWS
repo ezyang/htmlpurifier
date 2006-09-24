@@ -1,7 +1,7 @@
 NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-1.1.1, unknown projected release date
+1.1.1, released 2006-09-24
 - Various documentation updates
 - Fixed parse error in configuration documentation script
 - Fixed fatal error in benchmark scripts, slightly augmented
