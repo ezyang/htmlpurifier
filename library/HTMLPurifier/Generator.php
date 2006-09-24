@@ -26,14 +26,16 @@ HTMLPurifier_ConfigSchema::define(
 // extension constraints could be factored into ConfigSchema
 HTMLPurifier_ConfigSchema::define(
     'Core', 'TidyFormat', false, 'bool',
-    'Determines whether or not to run Tidy on the final output for pretty '.
-    'formatting reasons, such as indentation and wrap.  This can greatly '.
+    '<p>Determines whether or not to run Tidy on the final output for pretty '.
+    'formatting reasons, such as indentation and wrap.</p><p>This can greatly '.
     'improve readability for editors who are hand-editing the HTML, but is '.
     'by no means necessary as HTML Purifier has already fixed all major '.
-    'errors the HTML may have had and could potentially result in data loss '.
-    'due to bugs in Tidy. Tidy is a non-default extension, and this directive '.
-    'will silently fail if Tidy is not available. This '.
-    'directive was available since 1.1.1.'
+    'errors the HTML may have had. Tidy is a non-default extension, and this directive '.
+    'will silently fail if Tidy is not available.</p><p>If you are looking to make '.
+    'the overall look of your page\'s source better, I recommend running Tidy '.
+    'on the entire page rather than just user-content (after all, the '.
+    'indentation relative to the containing blocks will be incorrect).</p><p>This '.
+    'directive was available since 1.1.1.</p>'
 );
 
 /**
