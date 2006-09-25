@@ -5,7 +5,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 (feature release)
 
 1.1.2, unknown projected release date
-(bugfix release, may be dropped if no bugs found)
+(bugfix release, may be merged with 1.2.0 if new features precede major bugs)
+- Line endings standardized throughout project
 
 1.1.1, released 2006-09-24
 - Various documentation updates
