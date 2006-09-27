@@ -6,10 +6,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 1.1.2, unknown projected release date
 (bugfix release, may be merged with 1.2.0 if new features precede major bugs)
+- Line endings standardized throughout project
 - Documentation updated
 - API docs now exclude more files that are not classes
-- Line endings standardized throughout project
 - Fixed lack of attribute parsing in HTMLPurifier_Lexer_PEARSax3
+- (internal) Refactored parseData() to general Lexer class
 
 1.1.1, released 2006-09-24
 - Various documentation updates
