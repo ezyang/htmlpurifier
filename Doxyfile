@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = HTML Purifier
-PROJECT_NUMBER         = 1.0.0
+PROJECT_NUMBER         = 1.1.1
 OUTPUT_DIRECTORY       = "C:/Documents and Settings/Edward/My Documents/My Webs/htmlpurifier/docs/doxygen"
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -89,9 +89,12 @@ EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */tests/* \
                          */benchmarks/* \
-                         */docs/phpdoc/* \
-                         */docs/doxygen/* \
-                         */test-settings.php
+                         */docs/* \
+                         */test-settings.php \
+                         */configdoc/* \
+                         */test-settings.php \
+                         */maintenance/* \
+                         */smoketests/*
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO

@@ -3,7 +3,7 @@
 /*!
  * @mainpage
  * 
- * HTMLPurifier is an HTML filter that will take an arbitrary snippet of
+ * HTML Purifier is an HTML filter that will take an arbitrary snippet of
  * HTML and rigorously test, validate and filter it into a version that
  * is safe for output onto webpages. It achieves this by:
  * 
@@ -22,7 +22,7 @@
  */
 
 /*
-    HTMLPurifier - Standards Compliant HTML Filtering
+    HTML Purifier - Standards Compliant HTML Filtering
     Copyright (C) 2006 Edward Z. Yang
 
     This library is free software; you can redistribute it and/or

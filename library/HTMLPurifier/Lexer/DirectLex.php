@@ -12,63 +12,11 @@ require_once 'HTMLPurifier/Lexer.php';
  * completely eventually.
  * 
  * @todo Reread XML spec and document differences.
- * @todo Add support for CDATA sections.
- * @todo Determine correct behavior in outputting comment data. (preserve dashes?)
- * @todo Optimize main function tokenizeHTML().
- * @todo Less than sign (<) being prohibited (even as entity) in attr-values?
+ * 
+ * @todo Determine correct behavior in transforming comment data. (preserve dashes?)
  */
 class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
 {
-    
-    /**
-     * Most common entity to raw value conversion table for special entities.
-     * @protected
-     */
-    var $_special_entity2str =
-            array(
-                    '&quot;' => '"',
-                    '&amp;'  => '&',
-                    '&lt;'   => '<',
-                    '&gt;'   => '>',
-                    '&#39;'  => "'",
-                    '&#039;' => "'",
-                    '&#x27;' => "'"
-            );
-    
-    /**
-     * Parses special entities into the proper characters.
-     * 
-     * This string will translate escaped versions of the special characters
-     * into the correct ones.
-     * 
-     * @warning
-     * You should be able to treat the output of this function as
-     * completely parsed, but that's only because all other entities should
-     * have been handled previously in substituteNonSpecialEntities()
-     * 
-     * @param $string String character data to be parsed.
-     * @returns Parsed character data.
-     */
-    function parseData($string) {
-        
-        // subtracts amps that cannot possibly be escaped
-        $num_amp = substr_count($string, '&') - substr_count($string, '& ') -
-            ($string[strlen($string)-1] === '&' ? 1 : 0);
-        
-        if (!$num_amp) return $string; // abort if no entities
-        $num_esc_amp = substr_count($string, '&amp;');
-        $string = strtr($string, $this->_special_entity2str);
-        
-        // code duplication for sake of optimization, see above
-        $num_amp_2 = substr_count($string, '&') - substr_count($string, '& ') -
-            ($string[strlen($string)-1] === '&' ? 1 : 0);
-        
-        if ($num_amp_2 <= $num_esc_amp) return $string;
-        
-        // hmm... now we have some uncommon entities. Use the callback.
-        $string = $this->_entity_parser->substituteSpecialEntities($string);
-        return $string;
-    }
     
     /**
      * Whitespace characters for str(c)spn.

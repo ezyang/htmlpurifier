@@ -18,6 +18,8 @@ require_once 'HTMLPurifier/Lexer.php';
  * whatever it does for poorly formed HTML is up to it.
  * 
  * @todo Generalize so that XML_HTMLSax is also supported.
+ * 
+ * @warning Entity-resolution inside attributes is broken.
  */
 
 class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
@@ -41,6 +43,8 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
         $parser->set_element_handler('openHandler','closeHandler');
         $parser->set_data_handler('dataHandler');
         $parser->set_escape_handler('escapeHandler');
+        
+        // doesn't seem to work correctly for attributes
         $parser->set_option('XML_OPTION_ENTITIES_PARSED', 1);
         
         $parser->parse($string);
@@ -53,6 +57,10 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
      * Open tag event handler, interface is defined by PEAR package.
      */
     function openHandler(&$parser, $name, $attrs, $closed) {
+        // entities are not resolved in attrs
+        foreach ($attrs as $key => $attr) {
+            $attrs[$key] = $this->parseData($attr);
+        }
         if ($closed) {
             $this->tokens[] = new HTMLPurifier_Token_Empty($name, $attrs);
         } else {
