@@ -2,145 +2,183 @@
 Install
     How to install HTML Purifier
 
-Being a library, there's no fancy GUI that will take you step-by-step through
-configuring database credentials and other mumbo-jumbo.  HTML Purifier is
-designed to run "out of the box."  Regardless, there are still a couple of
-things you should be mindful of.
+HTML Purifier is designed to run out of the box,  so actually using the library
+is extremely easy. (Although, if you were looking for a step-by-step
+installation GUI, you've come to the wrong place!)  The impatient can scroll
+down to the bottom of this INSTALL document to see the code, but you really
+should make sure a few things are properly done.
 
 
 
-0.  Compatibility
+1.  Compatibility
 
-HTML Purifier works in both PHP 4 and PHP 5.  I have run the test suite on
-these versions:
+HTML Purifier works in both PHP 4 and PHP 5, from PHP 4.3.9 and up. It has no
+core dependencies with other libraries. (Whoopee!)
 
-  - 4.3.9, 4.3.11
-  - 4.4.0, 4.4.4
-  - 5.0.0, 5.0.4
-  - 5.1.0, 5.1.6
-
-And can confidently say that HTML Purifier should work in all versions
-between and afterwards.  HTML Purifier definitely does not support PHP 4.2,
-and PHP 4.3 branch support may go further back than that, but I haven't tested
-any earlier versions.
-
-I have been unable to get PHP 5.0.5 working on my computer, so if someone
-wants to test that, be my guest.  All tests were done on Windows XP Home,
-but operating system should not be a major factor in the library.
+Optional extensions are iconv (usually installed) and tidy (also common).
+If you use UTF-8 and don't plan on pretty-printing HTML, you can get away with
+not having either of these extensions.
 
 
 
-1.  Including the proper files
+2.  Including the library
 
-The library/ directory must be added to your path: HTML Purifier will not be
-able to find the necessary includes otherwise.  This is as simple as:
+Simply use:
 
-    set_include_path('/path/to/htmlpurifier/library' . PATH_SEPARATOR .
-        get_include_path() );
+	require_once '/path/to/library/HTMLPurifier.auto.php';
 
-...replacing /path/to/htmlpurifier with the actual location of the folder. Don't
-worry, HTML Purifier is namespaced so unless you have another file named
-HTMLPurifier.php, the files won't collide with any of your includes.
+...and you're good to go.  Since HTML Purifier's codebase is fairly
+large, I recommend only including HTML Purifier when you need it.
 
-Then, it's a simple matter of including the base file:
+If you don't like your include_path to be fiddled around with, simply set
+HTML Purifier's library/ directory to the include path yourself and then:
 
-    require_once 'HTMLPurifier.php';
+	require_once 'HTMLPurifier.php';
 
-...and you're good to go. The library/ folder contains all the files you need,
-so you can get rid of most of everything else when using the library in a
-production environment.
+Only the contents in the library/ folder are necessary, so you can remove
+everything else when using HTML Purifier in a production environment.  
 
 
 
-2.  Preparing the proper environment
+3.  Preparing the proper output environment
 
-While no configuration is necessary, you first should take precautions regarding
-the other output HTML that the filtered content will be going along with.  Here
-is a (short) checklist:
+HTML Purifier is all about web-standards, so accordingly your webpages should
+be standards compliant.  HTML Purifier can deal with these doctypes:
 
- * Have I specified XHTML 1.0 Transitional as the doctype?
- * Have I specified UTF-8 as the character encoding?
+* XHTML 1.0 Transitional (default)
+* HTML 4.01 Transitional
 
-To find out what these are, browse to your website and view its source code.
-You can figure out the doctype from the a declaration that looks like
+...and these character encodings:
+
+* UTF-8 (default)
+* Any encoding iconv supports (support is crippled for i18n though)
+
+The defaults are there for a reason: they are best-practice choices that
+should not be changed lightly.  For those of you in the dark, you can determine
+the doctype from this code in your HTML documents:
+
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-or no doctype.  You can figure out the character encoding by looking for
+
+...and the character encoding from this code:
+
     <meta http-equiv="Content-type" content="text/html;charset=ENCODING">
 
-I cannot stress the importance of these two bullets enough.  Omitting either
-of them could have dire consequences not only for security but for plain
-old usability.  You can find a more in-depth discussion of why this is needed
-in docs/security.txt, in the meantime, try to change your output so this is
-the case.  If you can't, well, we might be able to accomodate you (read
-section 3).
+For legacy codebases these declarations may be missing.  If that is the case,
+STOP, and read up on character encodings and doctypes (in that order).  Here
+are some links:
+
+* http://www.joelonsoftware.com/articles/Unicode.html
+* http://alistapart.com/stories/doctype/
+
+You may currently be vulnerable to XSS and other security threats, and HTML
+Purifier won't be able to fix that.
 
 
 
-3. Configuring HTML Purifier
+4. Configuration
 
 HTML Purifier is designed to run out-of-the-box, but occasionally HTML
-Purifier needs to be told what to do.
+Purifier needs to be told what to do.  If you answered no to any of these
+questions, read on, otherwise, you can skip to the next section (or, if you're
+into configuring things just for the heck of it, skip to 4.3).
 
-If, for some reason, you are unable to switch to UTF-8 immediately, you can
-switch HTML Purifier's encoding.  Note that the availability of encodings is
-dependent on iconv, and you'll be missing characters if the charset you
-choose doesn't have them.
+* Am I using UTF-8?
+* Am I using XHTML 1.0 Transitional?
+
+If you answered yes to any of these questions, instantiate a configuration
+object and read on:
+
+    $config = HTMLPurifier_Config::createDefault();
+
+
+
+4.1. Setting a different character encoding
+
+You really shouldn't use any other encoding except UTF-8, especially if you
+plan to support multilingual websites (read section three for more details).
+However, switching to UTF-8 is not always immediately feasible, so we can
+adapt.
+
+HTML Purifier uses iconv to support other character encodings, as such,
+any encoding that iconv supports <http://www.gnu.org/software/libiconv/>
+HTML Purifier supports with this code:
 
     $config->set('Core', 'Encoding', /* put your encoding here */);
 
-An example usage for Latin-1 websites:
+An example usage for Latin-1 websites (the most common encoding for English
+websites):
 
     $config->set('Core', 'Encoding', 'ISO-8859-1');
+
+Note that HTML Purifier's support for non-Unicode encodings is crippled by the
+fact that any character not supported by that encoding will be silently
+dropped, EVEN if it is ampersand escaped.  This is a current limitation of
+HTML Purifier that we are NOT actively working to fix.  Patches are welcome,
+but there are so many other gotchas and problems in I18N for non-Unicode
+encodings that this functionality is low priority.  See
+<http://ppewww.ph.gla.ac.uk/~flavell/charset/form-i18n.html> for a more
+detailed lowdown on the topic.
+
+
+
+4.2. Setting a different doctype
 
 For those of you stuck using HTML 4.01 Transitional, you can disable
 XHTML output like this:
 
     $config->set('Core', 'XHTML', false);
 
-However, I strongly recommend that you use XHTML. Currently, we can only
-guarantee transitional-complaint output, future versions will also allow strict
-output. There are more configuration directives which can be read about
-here: http://hp.jpsband.org/live/configdoc/plain.html
+I recommend that you use XHTML, although not as much as I recommend UTF-8.  If
+your HTML 4.01 page validates, good for you!
+
+Currently, we can only guarantee transitional-complaint output, future
+versions will also allow strict-compliant output.
 
 
 
-3.   Using the code
+4.3. Other settings
+
+There are more configuration directives which can be read about
+here: <http://hp.jpsband.org/live/configdoc/plain.html>  They're a bit boring,
+but they can help out for those of you who like to exert maximum control over
+your code.
+
+
+
+5.   Using the code
 
 The interface is mind-numbingly simple:
 
     $purifier = new HTMLPurifier();
-    $clean_html = $purifier->purify($dirty_html);
+    $clean_html = $purifier->purify( $dirty_html );
 
-Or, if you're using the configuration object:
+...or, if you're using the configuration object:
 
     $purifier = new HTMLPurifier($config);
-    $clean_html = $purifier->purify($dirty_html);
+    $clean_html = $purifier->purify( $dirty_html );
 
-That's it.  For more examples, check out docs/examples/.  Also, SLOW gives
-advice on what to do if HTML Purifier is slowing down your application.
+That's it!  For more examples, check out docs/examples/ (they aren't very
+different though).  Also, SLOW gives advice on what to do if HTML Purifier
+is slowing down your application.
 
 
 
-4.   Quick install
+6.   Quick install
 
 If your website is in UTF-8 and XHTML Transitional, use this code:
 
 <?php
-    set_include_path('/path/to/htmlpurifier/library'
-         . PATH_SEPARATOR . get_include_path() );
-    require_once 'HTMLPurifier.php';
-    $purifier = new HTMLPurifier();
+    require_once '/path/to/htmlpurifier/library/HTMLPurifier.auto.php';
     
+    $purifier = new HTMLPurifier();
     $clean_html = $purifier->purify($dirty_html);
 ?>
 
 If your website is in a different encoding or doctype, use this code:
 
 <?php
-    set_include_path('/path/to/htmlpurifier/library'
-         . PATH_SEPARATOR . get_include_path() );
-    require_once 'HTMLPurifier.php';
+    require_once '/path/to/htmlpurifier/library/HTMLPurifier.auto.php';
     
     $config = HTMLPurifier_Config::createDefault();
     $config->set('Core', 'Encoding', 'ISO-8859-1'); //replace with your encoding
