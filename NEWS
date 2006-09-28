@@ -1,35 +1,45 @@
 NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
+= KEY ====================
+    ! Feature
+    - Bugfix
+      + Sub-comment
+    . Internal change
+==========================
+
 1.2.0, unknown projected release date
 (feature release)
 
 1.1.2, unknown projected release date
 (bugfix release, may be merged with 1.2.0 if new features precede major bugs)
-- Line endings standardized throughout project
+! Add HTMLPurifier.auto.php stub file that automatically configures path
 - Documentation updated
-- API docs now exclude more files that are not classes
+  + INSTALL document rewritten
+  + TODO added semi-lossy conversion
+  + API Doxygen docs' file exclusions updated
 - Fixed lack of attribute parsing in HTMLPurifier_Lexer_PEARSax3
-- (internal) Refactored parseData() to general Lexer class
+. Line endings standardized throughout project (svn:eol-style standardized)
+. Refactored parseData() to general Lexer class
 
 1.1.1, released 2006-09-24
+! Configuration option to optionally Tidy up output for indentation to make up
+  for dropped whitespace by DOMLex (pretty-printing for the entire application
+  should be done by a page-wide Tidy)
 - Various documentation updates
 - Fixed parse error in configuration documentation script
 - Fixed fatal error in benchmark scripts, slightly augmented
 - As far as possible, whitespace is preserved in-between table children
-- Configuration option to optionally Tidy up output for indentation to make up
-  for dropped whitespace by DOMLex (pretty-printing for the entire application
-  should be done by a page-wide Tidy)
 - Sample test-settings.php file included
 
 1.1.0, released 2006-09-16
+! Directive documentation generation using XSLT
+! XHTML can now be turned off, output becomes <br>
 - Made URI validator more forgiving: will ignore leading and trailing
   quotes, apostrophes and less than or greater than signs.
 - Enforce alphanumeric namespace and directive names for configuration.
-- Directive documentation generation using XSLT
 - Table child definition made more flexible, will fix up poorly ordered elements
-- XHTML generation can now be turned off, allowing things like <br>
-- Renamed ConfigDef to ConfigSchema
+. Renamed ConfigDef to ConfigSchema
 
 1.0.1, released 2006-09-04
 - Fixed slight bug in DOMLex attribute parsing
@@ -39,17 +49,17 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   space in them.  This manifested in TinyMCE.
 
 1.0.0, released 2006-09-01
+! Shorthand CSS properties implemented: font, border, background, list-style
+! Basic color keywords translated into hexadecimal values
+! Table CSS properties implemented
+! Support for charsets other than UTF-8 (defined by iconv)
+! Malformed UTF-8 and non-SGML character detection and cleaning implemented
 - Fixed broken numeric entity conversion
-- Malformed UTF-8 and non-SGML character detection and cleaning implemented
 - API documentation completed
-- Shorthand CSS properties implemented: font, border, background, list-style
-- Basic color keywords translated into hexadecimal values
-- Table CSS properties implemented
-- (HTML|CSS)Definition de-singleton-ized
-- Support for charsets other than UTF-8 (defined by iconv)
+. (HTML|CSS)Definition de-singleton-ized
 
 1.0.0beta, released 2006-08-16
-- First public release, most functionality implemented. Notable omissions are:
-  . Shorthand CSS properties
-  . Table CSS properties
-  . Deprecated attribute transformations
+! First public release, most functionality implemented. Notable omissions are:
+  + Shorthand CSS properties
+  + Table CSS properties
+  + Deprecated attribute transformations
