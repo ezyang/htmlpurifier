@@ -24,6 +24,16 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Refactored parseData() to general Lexer class
 . Tester named "HTML Purifier" not "HTMLPurifier"
 
+1.1.1, released 2006-09-24
+! Configuration option to optionally Tidy up output for indentation to make up
+  for dropped whitespace by DOMLex (pretty-printing for the entire application
+  should be done by a page-wide Tidy)
+- Various documentation updates
+- Fixed parse error in configuration documentation script
+- Fixed fatal error in benchmark scripts, slightly augmented
+- As far as possible, whitespace is preserved in-between table children
+- Sample test-settings.php file included
+
 1.1.0, released 2006-09-16
 ! Directive documentation generation using XSLT
 ! XHTML can now be turned off, output becomes <br>
