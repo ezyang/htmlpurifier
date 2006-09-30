@@ -38,6 +38,25 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $this->assertIdentical($extract, $result);
     }
     
+    function test_parseData() {
+        $HP =& $this->Lexer;
+        
+        $this->assertIdentical('asdf', $HP->parseData('asdf'));
+        $this->assertIdentical('&', $HP->parseData('&amp;'));
+        $this->assertIdentical('"', $HP->parseData('&quot;'));
+        $this->assertIdentical("'", $HP->parseData('&#039;'));
+        $this->assertIdentical("'", $HP->parseData('&#39;'));
+        $this->assertIdentical('&&&', $HP->parseData('&amp;&amp;&amp;'));
+        $this->assertIdentical('&&', $HP->parseData('&amp;&')); // [INVALID]
+        $this->assertIdentical('Procter & Gamble',
+                $HP->parseData('Procter & Gamble')); // [INVALID]
+        
+        // This is not special, thus not converted. Test of fault tolerance,
+        // realistically speaking, this should never happen
+        $this->assertIdentical('&#x2D;', $HP->parseData('&#x2D;'));
+    }
+    
+    
     function test_extractBody() {
         $this->assertExtractBody('<b>Bold</b>');
         $this->assertExtractBody('<html><body><b>Bold</b></body></html>', '<b>Bold</b>');
@@ -249,12 +268,15 @@ class HTMLPurifier_LexerTest extends UnitTestCase
                ,new HTMLPurifier_Token_Text('Link')
                ,new HTMLPurifier_Token_End('a')
             );
-        $sax_expect[16] = false; // PEARSax doesn't support it!
         
         // test that UTF-8 is preserved
         $char_hearts = $this->_entity_lookup->table['hearts'];
         $input[17] = $char_hearts;
         $expect[17] = array( new HTMLPurifier_Token_Text($char_hearts) );
+        
+        // test weird characters in attributes
+        $input[18] = '<br test="x &lt; 6" />';
+        $expect[18] = array( new HTMLPurifier_Token_Empty('br', array('test' => 'x < 6')) );
         
         $default_config = HTMLPurifier_Config::createDefault();
         foreach($input as $i => $discard) {

@@ -26,12 +26,12 @@ class HTMLPurifier_Config
     var $def;
     
     /**
-     * Instance of HTMLPurifier_HTMLDefinition
+     * Cached instance of HTMLPurifier_HTMLDefinition
      */
     var $html_definition;
     
     /**
-     * Instance of HTMLPurifier_CSSDefinition
+     * Cached instance of HTMLPurifier_CSSDefinition
      */
     var $css_definition;
     

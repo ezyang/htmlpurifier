@@ -54,10 +54,32 @@ class HTMLPurifier_URISchemeTest extends UnitTestCase
         
         $scheme = new HTMLPurifier_URIScheme_ftp();
         $config = HTMLPurifier_Config::createDefault();
+        
         $this->assertIdentical(
           $scheme->validateComponents(
                 'user', 'www.example.com', 21, '/', 's=foobar', $config),
           array('user', 'www.example.com', null, '/', null)
+        );
+        
+        // valid typecode
+        $this->assertIdentical(
+          $scheme->validateComponents(
+                null, 'www.example.com', null, '/file.txt;type=a', null, $config),
+          array(null, 'www.example.com', null, '/file.txt;type=a', null)
+        );
+        
+        // remove invalid typecode
+        $this->assertIdentical(
+          $scheme->validateComponents(
+                null, 'www.example.com', null, '/file.txt;type=z', null, $config),
+          array(null, 'www.example.com', null, '/file.txt', null)
+        );
+        
+        // encode errant semicolons
+        $this->assertIdentical(
+          $scheme->validateComponents(
+                null, 'www.example.com', null, '/too;many;semicolons=1', null, $config),
+          array(null, 'www.example.com', null, '/too%3Bmany%3Bsemicolons=1', null)
         );
         
     }

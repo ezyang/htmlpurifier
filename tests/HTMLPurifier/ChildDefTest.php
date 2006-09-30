@@ -46,18 +46,23 @@ class HTMLPurifier_ChildDefTest extends UnitTestCase
         $this->def = new HTMLPurifier_ChildDef_Custom(
             '(a, b?, c*, d+, (a, b)*)');
         
+        $inputs = array();
+        $expect = array();
+        $config = array();
+        
         $inputs[0] = '';
         $expect[0] = false;
         
         $inputs[1] = '<a /><b /><c /><d /><a /><b />';
         $expect[1] = true;
         
-        $inputs[2] = '<a /><d>Dob</d><a /><b>foo</b><a href="moo"><b>foo</b>';
+        $inputs[2] = '<a /><d>Dob</d><a /><b>foo</b><a href="moo" /><b>foo</b>';
         $expect[2] = true;
         
         $inputs[3] = '<a /><a />';
         $expect[3] = false;
         
+        $this->assertSeries($inputs, $expect, $config);
     }
     
     function test_table() {

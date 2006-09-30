@@ -11,24 +11,6 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         $this->DirectLex = new HTMLPurifier_Lexer_DirectLex();
     }
     
-    function test_parseData() {
-        $HP =& $this->DirectLex;
-        
-        $this->assertIdentical('asdf', $HP->parseData('asdf'));
-        $this->assertIdentical('&', $HP->parseData('&amp;'));
-        $this->assertIdentical('"', $HP->parseData('&quot;'));
-        $this->assertIdentical("'", $HP->parseData('&#039;'));
-        $this->assertIdentical("'", $HP->parseData('&#39;'));
-        $this->assertIdentical('&&&', $HP->parseData('&amp;&amp;&amp;'));
-        $this->assertIdentical('&&', $HP->parseData('&amp;&')); // [INVALID]
-        $this->assertIdentical('Procter & Gamble',
-                $HP->parseData('Procter & Gamble')); // [INVALID]
-        
-        // This is not special, thus not converted. Test of fault tolerance,
-        // realistically speaking, this should never happen
-        $this->assertIdentical('&#x2D;', $HP->parseData('&#x2D;'));
-    }
-    
     // internals testing
     function test_parseAttributeString() {
         

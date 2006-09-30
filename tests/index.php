@@ -114,14 +114,14 @@ if (isset($_GET['file']) && isset($test_file_lookup[$_GET['file']])) {
     // execute only one test
     $test_file = $_GET['file'];
     
-    $test = new GroupTest('HTMLPurifier - ' . $test_file);
+    $test = new GroupTest('HTML Purifier - ' . $test_file);
     $path = 'HTMLPurifier/' . $test_file;
     require_once $path;
     $test->addTestClass(htmlpurifier_path2class($path));
     
 } else {
     
-    $test = new GroupTest('HTMLPurifier');
+    $test = new GroupTest('HTML Purifier');
 
     foreach ($test_files as $test_file) {
         $path = 'HTMLPurifier/' . $test_file;
