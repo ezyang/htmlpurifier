@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 1.1.2, released 2006-09-30
-! Add HTMLPurifier.auto.php stub file that automatically configures pathx
+! Add HTMLPurifier.auto.php stub file that configures include_path
 - Documentation updated
   + INSTALL document rewritten
   + TODO added semi-lossy conversion
