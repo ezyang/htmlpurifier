@@ -48,7 +48,16 @@ class HTMLPurifier_AttrDef
      * 
      * @note This method is not entirely standards compliant, as trim() removes
      *       more types of whitespace than specified in the spec. In practice,
-     *       this is rarely a problem.
+     *       this is rarely a problem, as those extra characters usually have
+     *       already been removed by HTMLPurifier_Encoder.
+     * 
+     * @warning This processing is inconsistent with XML's whitespace handling
+     *          as specified by section 3.3.3 and referenced XHTML 1.0 section
+     *          4.7.  Compliant processing requires all line breaks normalized
+     *          to "\n", so the fix is not as simple as fixing it in this
+     *          function.  Trim and whitespace collapsing are supposed to only
+     *          occur in NMTOKENs.  However, note that we are NOT necessarily
+     *          parsing XML, thus, this behavior may still be correct.
      * 
      * @public
      */

@@ -8,6 +8,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
     var $our_copy, $old_copy;
     
     function setUp() {
+        // set up a dummy schema object for testing
         $our_copy = new HTMLPurifier_ConfigSchema();
         $this->old_copy = HTMLPurifier_ConfigSchema::instance();
         $this->our_copy =& HTMLPurifier_ConfigSchema::instance($our_copy);
@@ -90,6 +91,17 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $config->set('Core', 'Encoding', 'ISO-8859-1');
         $this->assertNoErrors();
         $this->assertIdentical($config->get('Core', 'Encoding'), 'iso-8859-1');
+        
+    }
+    
+    function test_getDefinition() {
+        
+        $config = HTMLPurifier_Config::createDefault();
+        $def = $config->getHTMLDefinition();
+        $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
+        
+        $def = $config->getCSSDefinition();
+        $this->assertIsA($def, 'HTMLPurifier_CSSDefinition');
         
     }
     
