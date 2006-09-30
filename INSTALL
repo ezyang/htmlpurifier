@@ -25,7 +25,7 @@ not having either of these extensions.
 
 Simply use:
 
-	require_once '/path/to/library/HTMLPurifier.auto.php';
+    require_once '/path/to/library/HTMLPurifier.auto.php';
 
 ...and you're good to go.  Since HTML Purifier's codebase is fairly
 large, I recommend only including HTML Purifier when you need it.
@@ -33,7 +33,7 @@ large, I recommend only including HTML Purifier when you need it.
 If you don't like your include_path to be fiddled around with, simply set
 HTML Purifier's library/ directory to the include path yourself and then:
 
-	require_once 'HTMLPurifier.php';
+    require_once 'HTMLPurifier.php';
 
 Only the contents in the library/ folder are necessary, so you can remove
 everything else when using HTML Purifier in a production environment.  

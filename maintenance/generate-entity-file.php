@@ -13,7 +13,7 @@ chdir( dirname(__FILE__) );
 $entity_dir = '../docs/entities/';
 
 // defines the output file for the serialized content.
-$output_file = '../library/HTMLPurifier/EntityLookup/data.txt';
+$output_file = '../library/HTMLPurifier/EntityLookup/entities.ser';
 
 // courtesy of a PHP manual comment
 function unichr($dec) {
