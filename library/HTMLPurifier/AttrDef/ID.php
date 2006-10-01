@@ -20,7 +20,9 @@ class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
         $id = trim($id); // trim it first
         
         if ($id === '') return false;
-        if (isset($context->id_accumulator->ids[$id])) return false;
+        
+        $id_accumulator = $context->get('IDAccumulator');
+        if (isset($id_accumulator->ids[$id])) return false;
         
         // we purposely avoid using regex, hopefully this is faster
         
@@ -35,7 +37,7 @@ class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
             $result = ($trim === '');
         }
         
-        if ($result) $context->id_accumulator->add($id);
+        if ($result) $id_accumulator->add($id);
         
         // if no change was made to the ID, return the result
         // else, return the new id if stripping whitespace made it

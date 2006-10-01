@@ -1,5 +1,7 @@
 <?php
 
+require_once 'HTMLPurifier/Lexer/DirectLex.php';
+
 /**
  * General-purpose test-harness that makes testing functions that require
  * configuration and context objects easier when those two parameters are

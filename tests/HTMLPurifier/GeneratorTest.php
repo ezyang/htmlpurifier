@@ -3,7 +3,9 @@
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/EntityLookup.php';
 
-class HTMLPurifier_GeneratorTest extends UnitTestCase
+require_once 'HTMLPurifier/Harness.php';
+
+class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
 {
     
     var $gen;
@@ -15,11 +17,16 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
     }
     
+    function setUp() {
+        $this->obj       = new HTMLPurifier_Generator();
+        $this->func      = null;
+        $this->to_tokens = false;
+        $this->to_html   = false;
+    }
+    
     function test_generateFromToken() {
         
-        $inputs = array();
-        $expect = array();
-        $config = array();
+        $inputs = $expect = array();
         
         $inputs[0] = new HTMLPurifier_Token_Text('Foobar.<>');
         $expect[0] = 'Foobar.&lt;&gt;';
@@ -53,7 +60,7 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
         $expect[7] = $theta_char;
         
         foreach ($inputs as $i => $input) {
-            $result = $this->gen->generateFromToken($input);
+            $result = $this->obj->generateFromToken($input);
             $this->assertEqual($result, $expect[$i]);
             paintIf($result, $result != $expect[$i]);
         }
@@ -62,9 +69,7 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
     
     function test_generateAttributes() {
         
-        $inputs = array();
-        $expect = array();
-        $config = array();
+        $inputs = $expect = array();
         
         $inputs[0] = array();
         $expect[0] = '';
@@ -83,10 +88,8 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
         $inputs[4] = array('title' => 'Theta is ' . $theta_char);
         $expect[4] = 'title="Theta is ' . $theta_char . '"';
         
-        $default_config = HTMLPurifier_Config::createDefault();
         foreach ($inputs as $i => $input) {
-            if (!isset($config[$i])) $config[$i] = $default_config;
-            $result = $this->gen->generateAttributes($input, $config[$i]);
+            $result = $this->obj->generateAttributes($input);
             $this->assertEqual($result, $expect[$i]);
             paintIf($result, $result != $expect[$i]);
         }
@@ -95,34 +98,26 @@ class HTMLPurifier_GeneratorTest extends UnitTestCase
     
     function test_generateFromTokens() {
         
-        $inputs = array();
-        $expect = array();
-        $config = array();
+        $this->func = 'generateFromTokens';
         
-        $inputs[0] = array(
-            new HTMLPurifier_Token_Start('b'),
-            new HTMLPurifier_Token_Text('Foobar!'),
-            new HTMLPurifier_Token_End('b')
-            );
-        $expect[0] = '<b>Foobar!</b>';
+        $this->assertResult(
+            array(
+                new HTMLPurifier_Token_Start('b'),
+                new HTMLPurifier_Token_Text('Foobar!'),
+                new HTMLPurifier_Token_End('b')
+            ),
+            '<b>Foobar!</b>'
+        );
         
-        $inputs[1] = array();
-        $expect[1] = '';
-        
-        $default_config = HTMLPurifier_Config::createDefault();
-        foreach ($inputs as $i => $input) {
-            if (!isset($config[$i])) $config[$i] = $default_config;
-            $result = $this->gen->generateFromTokens($input, $config[$i]);
-            $this->assertEqual($expect[$i], $result);
-            paintIf($result, $result != $expect[$i]);
-        }
-        
+        $this->assertResult(array(), '');
         
     }
     
     var $config;
     function assertGeneration($tokens, $expect) {
-        $result = $this->gen->generateFromTokens($tokens, $this->config);
+        $context = new HTMLPurifier_Context();
+        $result = $this->gen->generateFromTokens(
+          $tokens, $this->config, $context);
         // normalized newlines, this probably should be put somewhere else
         $result = str_replace("\r\n", "\n", $result);
         $result = str_replace("\r", "\n", $result);

@@ -9,8 +9,9 @@ class HTMLPurifier_AttrDef_IDTest extends HTMLPurifier_AttrDefHarness
     
     function test() {
         
-        $this->context = new HTMLPurifier_AttrContext();
-        $this->context->id_accumulator = new HTMLPurifier_IDAccumulator();
+        $this->context = new HTMLPurifier_Context();
+        $id_accumulator = new HTMLPurifier_IDAccumulator();
+        $this->context->register('IDAccumulator', $id_accumulator);
         $this->def = new HTMLPurifier_AttrDef_ID();
         
         // valid ID names

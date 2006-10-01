@@ -1,8 +1,8 @@
 <?php
 
-require_once('HTMLPurifier/Strategy.php');
-require_once('HTMLPurifier/Strategy/Composite.php');
-require_once('HTMLPurifier/Config.php');
+require_once 'HTMLPurifier/Strategy.php';
+require_once 'HTMLPurifier/Strategy/Composite.php';
+require_once 'HTMLPurifier/Config.php';
 
 class HTMLPurifier_Strategy_Composite_Test
     extends HTMLPurifier_Strategy_Composite
@@ -22,13 +22,13 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
         
         generate_mock_once('HTMLPurifier_Strategy');
         generate_mock_once('HTMLPurifier_Config');
+        generate_mock_once('HTMLPurifier_Context');
         
         // setup a bunch of mock strategies to inject into our composite test
         
         $mock_1 = new HTMLPurifier_StrategyMock($this);
         $mock_2 = new HTMLPurifier_StrategyMock($this);
         $mock_3 = new HTMLPurifier_StrategyMock($this);
-        $context = new HTMLPurifier_Context();
         
         // setup the object
         
@@ -42,7 +42,8 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
         $input_3 = 'Processed by 1 and 2';
         $input_4 = 'Processed by 1, 2 and 3'; // expected output
         
-        $config = new HTMLPurifier_ConfigMock();
+        $config  = new HTMLPurifier_ConfigMock();
+        $context = new HTMLPurifier_ContextMock();
         
         $params_1 = array($input_1, $config, $context);
         $params_2 = array($input_2, $config, $context);

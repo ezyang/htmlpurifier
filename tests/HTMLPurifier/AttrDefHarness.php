@@ -11,7 +11,7 @@ class HTMLPurifier_AttrDefHarness extends UnitTestCase
     function assertDef($string, $expect = true, $ini = false, $message = '%s') {
         // $expect can be a string or bool
         if (!$this->config) $this->config = HTMLPurifier_Config::createDefault();
-        if (!$this->context) $this->context = new HTMLPurifier_AttrContext();
+        if (!$this->context) $this->context = new HTMLPurifier_Context();
         if ($ini) $this->setUpAssertDef();
         $result = $this->def->validate($string, $this->config, $this->context);
         if ($expect === true) {

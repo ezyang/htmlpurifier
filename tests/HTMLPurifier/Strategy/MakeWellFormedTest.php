@@ -3,53 +3,62 @@
 require_once 'HTMLPurifier/StrategyHarness.php';
 require_once 'HTMLPurifier/Strategy/MakeWellFormed.php';
 
-class HTMLPurifier_Strategy_MakeWellFormedTest
-    extends HTMLPurifier_StrategyHarness
+class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarness
 {
+    
+    function setUp() {
+        parent::setUp();
+        $this->obj = new HTMLPurifier_Strategy_MakeWellFormed();
+    }
     
     function test() {
         
-        $strategy = new HTMLPurifier_Strategy_MakeWellFormed();
+        $this->assertResult('');
+        $this->assertResult('This is <b>bold text</b>.');
         
-        $inputs = array();
-        $expect = array();
+        $this->assertResult(
+            '<b>Unclosed tag, gasp!',
+            '<b>Unclosed tag, gasp!</b>'
+        );
         
-        $inputs[0] = '';
-        $expect[0] = $inputs[0];
+        $this->assertResult(
+            '<b><i>Bold and italic?</b>',
+            '<b><i>Bold and italic?</i></b>'
+        );
         
-        $inputs[1] = 'This is <b>bold text</b>.';
-        $expect[1] = $inputs[1];
+        $this->assertResult(
+            'Unused end tags... recycle!</b>',
+            'Unused end tags... recycle!'
+        );
         
-        $inputs[2] = '<b>Unclosed tag, gasp!';
-        $expect[2] = '<b>Unclosed tag, gasp!</b>';
+        $this->assertResult(
+            '<br style="clear:both;">',
+            '<br style="clear:both;" />'
+        );
         
-        $inputs[3] = '<b><i>Bold and italic?</b>';
-        $expect[3] = '<b><i>Bold and italic?</i></b>';
-        
-        // CHANGE THIS BEHAVIOR!
-        $inputs[4] = 'Unused end tags... recycle!</b>';
-        $expect[4] = 'Unused end tags... recycle!';
-        
-        $inputs[5] = '<br style="clear:both;">';
-        $expect[5] = '<br style="clear:both;" />';
-        
-        $inputs[6] = '<div style="clear:both;" />';
-        $expect[6] = '<div style="clear:both;"></div>';
+        $this->assertResult(
+            '<div style="clear:both;" />',
+            '<div style="clear:both;"></div>'
+        );
         
         // test automatic paragraph closing
         
-        $inputs[7] = '<p>Paragraph 1<p>Paragraph 2';
-        $expect[7] = '<p>Paragraph 1</p><p>Paragraph 2</p>';
+        $this->assertResult(
+            '<p>Paragraph 1<p>Paragraph 2',
+            '<p>Paragraph 1</p><p>Paragraph 2</p>'
+        );
         
-        $inputs[8] = '<div><p>Paragraphs<p>In<p>A<p>Div</div>';
-        $expect[8] = '<div><p>Paragraphs</p><p>In</p><p>A</p><p>Div</p></div>';
+        $this->assertResult(
+            '<div><p>Paragraphs<p>In<p>A<p>Div</div>',
+            '<div><p>Paragraphs</p><p>In</p><p>A</p><p>Div</p></div>'
+        );
         
         // automatic list closing
         
-        $inputs[9] = '<ol><li>Item 1<li>Item 2</ol>';
-        $expect[9] = '<ol><li>Item 1</li><li>Item 2</li></ol>';
-        
-        $this->assertStrategyWorks($strategy, $inputs, $expect);
+        $this->assertResult(
+            '<ol><li>Item 1<li>Item 2</ol>',
+            '<ol><li>Item 1</li><li>Item 2</li></ol>'
+        );
     }
     
 }

@@ -23,7 +23,7 @@ class HTMLPurifier_AttrDef_CompositeTest extends HTMLPurifier_AttrDefHarness
         generate_mock_once('HTMLPurifier_AttrDef');
         
         $config = HTMLPurifier_Config::createDefault();
-        $context = new HTMLPurifier_AttrContext();
+        $context = new HTMLPurifier_Context();
         
         // first test: value properly validates on first definition
         // so second def is never called

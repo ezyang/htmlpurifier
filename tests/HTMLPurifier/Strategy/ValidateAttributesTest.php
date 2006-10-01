@@ -8,71 +8,83 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
       HTMLPurifier_StrategyHarness
 {
     
+    function setUp() {
+        parent::setUp();
+        $this->obj = new HTMLPurifier_Strategy_ValidateAttributes();
+    }
+    
     function test() {
-        
-        $strategy = new HTMLPurifier_Strategy_ValidateAttributes();
         
         // attribute order is VERY fragile, perhaps we should define
         // an ordering scheme!
         
-        $inputs = array();
-        $expect = array();
-        $config = array();
-        
-        $inputs[0] = '';
-        $expect[0] = '';
+        $this->assertResult('');
         
         // test ids
+        $this->assertResult('<div id="valid">Preserve the ID.</div>');
         
-        $inputs[1] = '<div id="valid">Preserve the ID.</div>';
-        $expect[1] = $inputs[1];
-        
-        $inputs[2] = '<div id="0invalid">Kill the ID.</div>';
-        $expect[2] = '<div>Kill the ID.</div>';
+        $this->assertResult(
+            '<div id="0invalid">Kill the ID.</div>',
+            '<div>Kill the ID.</div>'
+        );
         
         // test id accumulator
-        $inputs[3] = '<div id="valid">Valid</div><div id="valid">Invalid</div>';
-        $expect[3] = '<div id="valid">Valid</div><div>Invalid</div>';
+        $this->assertResult(
+            '<div id="valid">Valid</div><div id="valid">Invalid</div>',
+            '<div id="valid">Valid</div><div>Invalid</div>'
+        );
         
-        $inputs[4] = '<span dir="up-to-down">Bad dir.</span>';
-        $expect[4] = '<span>Bad dir.</span>';
+        $this->assertResult(
+            '<span dir="up-to-down">Bad dir.</span>',
+            '<span>Bad dir.</span>'
+        );
         
-        // test attribute case sensitivity
-        $inputs[5] = '<div ID="valid">Convert ID to lowercase.</div>';
-        $expect[5] = '<div id="valid">Convert ID to lowercase.</div>';
+        // test attribute key case sensitivity
+        $this->assertResult(
+            '<div ID="valid">Convert ID to lowercase.</div>',
+            '<div id="valid">Convert ID to lowercase.</div>'
+        );
         
         // test simple attribute substitution
-        $inputs[6] = '<div id=" valid ">Trim whitespace.</div>';
-        $expect[6] = '<div id="valid">Trim whitespace.</div>';
+        $this->assertResult(
+            '<div id=" valid ">Trim whitespace.</div>',
+            '<div id="valid">Trim whitespace.</div>'
+        );
         
         // test configuration id blacklist
-        $inputs[7] = '<div id="invalid">Invalid</div>';
-        $expect[7] = '<div>Invalid</div>';
-        $config[7] = HTMLPurifier_Config::createDefault();
-        $config[7]->set('Attr', 'IDBlacklist', array('invalid'));
+        $this->assertResult(
+            '<div id="invalid">Invalid</div>',
+            '<div>Invalid</div>',
+            array('Attr.IDBlacklist' => array('invalid'))
+        );
         
         // test classes
-        $inputs[8] = '<div class="valid">Valid</div>';
-        $expect[8] = $inputs[8];
+        $this->assertResult('<div class="valid">Valid</div>');
         
-        $inputs[9] = '<div class="valid 0invalid">Keep valid.</div>';
-        $expect[9] = '<div class="valid">Keep valid.</div>';
+        $this->assertResult(
+            '<div class="valid 0invalid">Keep valid.</div>',
+            '<div class="valid">Keep valid.</div>'
+        );
         
         // test title
-        $inputs[10] = '<acronym title="PHP: Hypertext Preprocessor">PHP</acronym>';
-        $expect[10] = $inputs[10];
+        $this->assertResult(
+            '<acronym title="PHP: Hypertext Preprocessor">PHP</acronym>'
+        );
         
         // test lang
-        $inputs[11] = '<span lang="fr">La soupe.</span>';
-        $expect[11] = '<span lang="fr" xml:lang="fr">La soupe.</span>';
+        $this->assertResult(
+            '<span lang="fr">La soupe.</span>',
+            '<span lang="fr" xml:lang="fr">La soupe.</span>'
+        );
         
-        // test align (won't work till CSS validation is implemented)
-        $inputs[12] = '<h1 align="center">Centered Headline</h1>';
-        $expect[12] = '<h1 style="text-align:center;">Centered Headline</h1>';
+        // test align
+        $this->assertResult(
+            '<h1 align="center">Centered Headline</h1>',
+            '<h1 style="text-align:center;">Centered Headline</h1>'
+        );
         
         // test table
-        $inputs[13] = 
-        
+        $this->assertResult(
 '<table frame="above" rules="rows" summary="A test table" border="2" cellpadding="5%" cellspacing="3" width="100%">
     <col align="right" width="4*" />
     <col charoff="5" align="char" width="1*" />
@@ -87,44 +99,56 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     <tr>
         <td colspan="2">Taken off the market</td>
     </tr>
-</table>';
-        
-        $expect[13] = $inputs[13];
+</table>'
+        );
         
         // test URI
-        $inputs[14] = '<a href="http://www.google.com/">Google</a>';
-        $expect[14] = $inputs[14];
+        $this->assertResult('<a href="http://www.google.com/">Google</a>');
         
         // test invalid URI
-        $inputs[15] = '<a href="javascript:badstuff();">Google</a>';
-        $expect[15] = '<a>Google</a>';
+        $this->assertResult(
+            '<a href="javascript:badstuff();">Google</a>',
+            '<a>Google</a>'
+        );
         
         // test required attributes for img
-        $inputs[16] = '<img />';
-        $expect[16] = '<img src="" alt="Invalid image" />';
+        $this->assertResult(
+            '<img />',
+            '<img src="" alt="Invalid image" />'
+        );
         
-        $inputs[17] = '<img src="foobar.jpg" />';
-        $expect[17] = '<img src="foobar.jpg" alt="foobar.jpg" />';
+        $this->assertResult(
+            '<img src="foobar.jpg" />',
+            '<img src="foobar.jpg" alt="foobar.jpg" />'
+        );
         
-        $inputs[18] = '<img alt="pretty picture" />';
-        $expect[18] = '<img alt="pretty picture" src="" />';
+        $this->assertResult(
+            '<img alt="pretty picture" />',
+            '<img alt="pretty picture" src="" />'
+        );
         
         // test required attributes for bdo
-        $inputs[19] = '<bdo>Go left.</bdo>';
-        $expect[19] = '<bdo dir="ltr">Go left.</bdo>';
+        $this->assertResult(
+            '<bdo>Go left.</bdo>',
+            '<bdo dir="ltr">Go left.</bdo>'
+        );
         
-        $inputs[20] = '<bdo dir="blahblah">Invalid value!</bdo>';
-        $expect[20] = '<bdo dir="ltr">Invalid value!</bdo>';
+        $this->assertResult(
+            '<bdo dir="blahblah">Invalid value!</bdo>',
+            '<bdo dir="ltr">Invalid value!</bdo>'
+        );
         
         // comparison check for test 20
-        $inputs[21] = '<span dir="blahblah">Invalid value!</span>';
-        $expect[21] = '<span>Invalid value!</span>';
+        $this->assertResult(
+            '<span dir="blahblah">Invalid value!</span>',
+            '<span>Invalid value!</span>'
+        );
         
         // test col.span is non-zero
-        $inputs[22] = '<col span="0" />';
-        $expect[22] = '<col />';
-        
-        $this->assertStrategyWorks($strategy, $inputs, $expect, $config);
+        $this->assertResult(
+            '<col span="0" />',
+            '<col />'
+        );
         
     }
     

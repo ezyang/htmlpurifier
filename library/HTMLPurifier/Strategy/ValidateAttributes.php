@@ -3,8 +3,6 @@
 require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/IDAccumulator.php';
-require_once 'HTMLPurifier/ConfigSchema.php';
-require_once 'HTMLPurifier/AttrContext.php';
 
 HTMLPurifier_ConfigSchema::define(
     'Attr', 'IDBlacklist', array(), 'list',
@@ -21,14 +19,10 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
         
         $definition = $config->getHTMLDefinition();
         
-        // setup StrategyContext
-        $attr_context = new HTMLPurifier_AttrContext();
-        
-        // setup ID accumulator and load it with blacklisted IDs
-        //     eventually, we'll have a dedicated context object to hold
-        //     all these accumulators and caches. For now, just an IDAccumulator
-        $attr_context->id_accumulator = new HTMLPurifier_IDAccumulator();
-        $attr_context->id_accumulator->load($config->get('Attr', 'IDBlacklist'));
+        // setup id_accumulator context
+        $id_accumulator = new HTMLPurifier_IDAccumulator();
+        $id_accumulator->load($config->get('Attr', 'IDBlacklist'));
+        $context->register('IDAccumulator', $id_accumulator);
         
         // create alias to global definition array, see also $defs
         // DEFINITION CALL
@@ -81,14 +75,14 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
                     } else {
                         // validate according to the element's definition
                         $result = $defs[$attr_key]->validate(
-                                        $value, $config, $attr_context
+                                        $value, $config, $context
                                    );
                     }
                 } elseif ( isset($d_defs[$attr_key]) ) {
                     // there is a global definition defined, validate according
                     // to the global definition
                     $result = $d_defs[$attr_key]->validate(
-                                    $value, $config, $attr_context
+                                    $value, $config, $context
                                );
                 } else {
                     // system never heard of the attribute? DELETE!
@@ -123,6 +117,8 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             // could interfere with flyweight implementation
             $tokens[$key]->attributes = $attr;
         }
+        $context->destroy('IDAccumulator');
+        
         return $tokens;
     }
     

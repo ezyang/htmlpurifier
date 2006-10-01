@@ -60,9 +60,8 @@ class HTMLPurifier_Generator
      * @param $tokens Array of HTMLPurifier_Token
      * @param $config HTMLPurifier_Config object
      * @return Generated HTML
-     * @note Only unit tests may omit configuration: internals MUST pass config
      */
-    function generateFromTokens($tokens, $config = null) {
+    function generateFromTokens($tokens, $config, &$context) {
         $html = '';
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $this->_clean_utf8 = $config->get('Core', 'CleanUTF8DuringGeneration');

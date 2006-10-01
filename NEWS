@@ -10,6 +10,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 1.2.0, unknown projected release date
 . Switched to purify()-wide Context object registry
+. Refactored unit tests to minimize duplication
 
 1.1.3, unknown projected release date
 (bugfix release, may be dropped if no major bugs are found before features)
