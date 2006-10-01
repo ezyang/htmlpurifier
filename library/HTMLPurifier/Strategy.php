@@ -24,7 +24,7 @@ class HTMLPurifier_Strategy
      * @param $config Configuration options
      * @returns Processed array of token objects.
      */
-    function execute($tokens, $config = null) {
+    function execute($tokens, $config, &$context) {
         trigger_error('Cannot call abstract function', E_USER_ERROR);
     }
     

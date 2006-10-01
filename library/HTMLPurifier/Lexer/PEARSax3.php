@@ -31,12 +31,11 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
      */
     var $tokens = array();
     
-    function tokenizeHTML($string, $config = null) {
+    function tokenizeHTML($string, $config, &$context) {
         
         $this->tokens = array();
         
-        if (!$config) $config = HTMLPurifier_Config::createDefault();
-        $string = $this->normalize($string, $config);
+        $string = $this->normalize($string, $config, $context);
         
         $parser=& new XML_HTMLSax3();
         $parser->set_object($this);

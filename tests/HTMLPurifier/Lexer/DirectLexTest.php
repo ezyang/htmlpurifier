@@ -53,9 +53,11 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         $input[10] = 'name="input" selected';
         $expect[10] = array('name' => 'input', 'selected' => 'selected');
         
+        $config = HTMLPurifier_Config::createDefault();
+        $context = new HTMLPurifier_Context();
         $size = count($input);
         for($i = 0; $i < $size; $i++) {
-            $result = $this->DirectLex->parseAttributeString($input[$i]);
+            $result = $this->DirectLex->parseAttributeString($input[$i], $config, $context);
             $this->assertEqual($expect[$i], $result, 'Test ' . $i . ': %s');
             paintIf($result, $expect[$i] != $result);
         }

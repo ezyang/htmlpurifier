@@ -44,6 +44,7 @@
 // they get included
 require_once 'HTMLPurifier/ConfigSchema.php';
 require_once 'HTMLPurifier/Config.php';
+require_once 'HTMLPurifier/Context.php';
 
 require_once 'HTMLPurifier/Lexer.php';
 require_once 'HTMLPurifier/Generator.php';
@@ -95,16 +96,17 @@ class HTMLPurifier
      */
     function purify($html, $config = null) {
         $config = $config ? $config : $this->config;
-        $html = $this->encoder->convertToUTF8($html, $config);
+        $context =& new HTMLPurifier_Context();
+        $html = $this->encoder->convertToUTF8($html, $config, $context);
         $html = 
             $this->generator->generateFromTokens(
                 $this->strategy->execute(
-                    $this->lexer->tokenizeHTML($html, $config),
-                    $config
+                    $this->lexer->tokenizeHTML($html, $config, $context),
+                    $config, $context
                 ),
-                $config
+                $config, $context
             );
-        $html = $this->encoder->convertFromUTF8($html, $config);
+        $html = $this->encoder->convertFromUTF8($html, $config, $context);
         return $html;
     }
     

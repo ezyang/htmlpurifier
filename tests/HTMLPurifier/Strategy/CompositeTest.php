@@ -28,6 +28,7 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
         $mock_1 = new HTMLPurifier_StrategyMock($this);
         $mock_2 = new HTMLPurifier_StrategyMock($this);
         $mock_3 = new HTMLPurifier_StrategyMock($this);
+        $context = new HTMLPurifier_Context();
         
         // setup the object
         
@@ -43,9 +44,9 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
         
         $config = new HTMLPurifier_ConfigMock();
         
-        $params_1 = array($input_1, $config);
-        $params_2 = array($input_2, $config);
-        $params_3 = array($input_3, $config);
+        $params_1 = array($input_1, $config, $context);
+        $params_2 = array($input_2, $config, $context);
+        $params_3 = array($input_3, $config, $context);
         
         $mock_1->expectOnce('execute', $params_1);
         $mock_1->setReturnValue('execute', $input_2, $params_1);
@@ -58,7 +59,7 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
         
         // perform test
         
-        $output = $composite->execute($input_1, $config);
+        $output = $composite->execute($input_1, $config, $context);
         $this->assertIdentical($input_4, $output);
         
         // tally the calls

@@ -24,11 +24,9 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
      */
     var $_whitespace = "\x20\x09\x0D\x0A";
     
-    function tokenizeHTML($html, $config = null) {
+    function tokenizeHTML($html, $config, &$context) {
         
-        if (!$config) $config = HTMLPurifier_Config::createDefault();
-        
-        $html = $this->normalize($html, $config);
+        $html = $this->normalize($html, $config, $context);
         
         $cursor = 0; // our location in the text
         $inside_tag = false; // whether or not we're parsing the inside of a tag
@@ -147,6 +145,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 if ($attribute_string) {
                     $attributes = $this->parseAttributeString(
                                         $attribute_string
+                                      , $config, $context
                                   );
                 } else {
                     $attributes = array();
@@ -181,7 +180,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
      * @param $string Inside of tag excluding name.
      * @returns Assoc array of attributes.
      */
-    function parseAttributeString($string) {
+    function parseAttributeString($string, $config, &$context) {
         $string = (string) $string; // quick typecast
         
         if ($string == '') return array(); // no attributes

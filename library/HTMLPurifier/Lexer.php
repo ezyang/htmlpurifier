@@ -122,7 +122,7 @@ class HTMLPurifier_Lexer
      * @param $string String HTML.
      * @return HTMLPurifier_Token array representation of HTML.
      */
-    function tokenizeHTML($string, $config = null) {
+    function tokenizeHTML($string, $config, &$context) {
         trigger_error('Call to abstract class', E_USER_ERROR);
     }
     
@@ -196,7 +196,7 @@ class HTMLPurifier_Lexer
      * Takes a piece of HTML and normalizes it by converting entities, fixing
      * encoding, extracting bits, and other good stuff.
      */
-    function normalize($html, $config) {
+    function normalize($html, $config, &$context) {
         
         // extract body from document if applicable
         if ($config->get('Core', 'AcceptFullDocuments')) {

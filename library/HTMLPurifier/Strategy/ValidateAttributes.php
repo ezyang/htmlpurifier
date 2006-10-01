@@ -17,18 +17,18 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
 {
     
-    function execute($tokens, $config) {
+    function execute($tokens, $config, &$context) {
         
         $definition = $config->getHTMLDefinition();
         
         // setup StrategyContext
-        $context = new HTMLPurifier_AttrContext();
+        $attr_context = new HTMLPurifier_AttrContext();
         
         // setup ID accumulator and load it with blacklisted IDs
         //     eventually, we'll have a dedicated context object to hold
         //     all these accumulators and caches. For now, just an IDAccumulator
-        $context->id_accumulator = new HTMLPurifier_IDAccumulator();
-        $context->id_accumulator->load($config->get('Attr', 'IDBlacklist'));
+        $attr_context->id_accumulator = new HTMLPurifier_IDAccumulator();
+        $attr_context->id_accumulator->load($config->get('Attr', 'IDBlacklist'));
         
         // create alias to global definition array, see also $defs
         // DEFINITION CALL
@@ -81,14 +81,14 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
                     } else {
                         // validate according to the element's definition
                         $result = $defs[$attr_key]->validate(
-                                        $value, $config, $context
+                                        $value, $config, $attr_context
                                    );
                     }
                 } elseif ( isset($d_defs[$attr_key]) ) {
                     // there is a global definition defined, validate according
                     // to the global definition
                     $result = $d_defs[$attr_key]->validate(
-                                    $value, $config, $context
+                                    $value, $config, $attr_context
                                );
                 } else {
                     // system never heard of the attribute? DELETE!

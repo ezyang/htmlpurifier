@@ -31,10 +31,11 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
     
     function test_convertToUTF8() {
         $config = HTMLPurifier_Config::createDefault();
+        $context = new HTMLPurifier_Context();
         
         // UTF-8 means that we don't touch it
         $this->assertIdentical(
-            $this->Encoder->convertToUTF8("\xF6", $config),
+            $this->Encoder->convertToUTF8("\xF6", $config, $context),
             "\xF6" // this is invalid
         );
         $this->assertNoErrors();
@@ -43,14 +44,14 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         
         // Now it gets converted
         $this->assertIdentical(
-            $this->Encoder->convertToUTF8("\xF6", $config),
+            $this->Encoder->convertToUTF8("\xF6", $config, $context),
             "\xC3\xB6"
         );
         
         $config->set('Test', 'ForceNoIconv', true);
         
         $this->assertIdentical(
-            $this->Encoder->convertToUTF8("\xF6", $config),
+            $this->Encoder->convertToUTF8("\xF6", $config, $context),
             "\xC3\xB6"
         );
         
@@ -58,10 +59,11 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
     
     function test_convertFromUTF8() {
         $config = HTMLPurifier_Config::createDefault();
+        $context = new HTMLPurifier_Context();
         
         // UTF-8 means that we don't touch it
         $this->assertIdentical(
-            $this->Encoder->convertFromUTF8("\xC3\xB6", $config),
+            $this->Encoder->convertFromUTF8("\xC3\xB6", $config, $context),
             "\xC3\xB6"
         );
         
@@ -69,14 +71,14 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         
         // Now it gets converted
         $this->assertIdentical(
-            $this->Encoder->convertFromUTF8("\xC3\xB6", $config),
+            $this->Encoder->convertFromUTF8("\xC3\xB6", $config, $context),
             "\xF6"
         );
         
         $config->set('Test', 'ForceNoIconv', true);
         
         $this->assertIdentical(
-            $this->Encoder->convertFromUTF8("\xC3\xB6", $config),
+            $this->Encoder->convertFromUTF8("\xC3\xB6", $config, $context),
             "\xF6"
         );
         

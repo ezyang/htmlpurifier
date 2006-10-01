@@ -38,10 +38,9 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         $this->factory = new HTMLPurifier_TokenFactory();
     }
     
-    public function tokenizeHTML($string, $config = null) {
-        if (!$config) $config = HTMLPurifier_Config::createDefault();
+    public function tokenizeHTML($string, $config, &$context) {
         
-        $string = $this->normalize($string, $config);
+        $string = $this->normalize($string, $config, $context);
         
         // preprocess string, essential for UTF-8
         $string =

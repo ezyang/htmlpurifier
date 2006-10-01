@@ -10,7 +10,7 @@ require_once 'HTMLPurifier/Generator.php';
 class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
 {
     
-    function execute($tokens, $config) {
+    function execute($tokens, $config, &$context) {
         $definition = $config->getHTMLDefinition();
         $generator = new HTMLPurifier_Generator();
         $result = array();
@@ -86,7 +86,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             if (empty($current_nesting)) {
                 if ($escape_invalid_tags) {
                     $result[] = new HTMLPurifier_Token_Text(
-                        $generator->generateFromToken($token, $config)
+                        $generator->generateFromToken($token, $config, $context)
                     );
                 }
                 continue;
@@ -123,7 +123,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             if ($skipped_tags === false) {
                 if ($escape_invalid_tags) {
                     $result[] = new HTMLPurifier_Token_Text(
-                        $generator->generateFromToken($token, $config)
+                        $generator->generateFromToken($token, $config, $context)
                     );
                 }
                 continue;

@@ -18,9 +18,9 @@ class HTMLPurifier_Strategy_Composite extends HTMLPurifier_Strategy
         trigger_error('Attempt to instantiate abstract object', E_USER_ERROR);
     }
     
-    function execute($tokens, $config) {
+    function execute($tokens, $config, &$context) {
         foreach ($this->strategies as $strategy) {
-            $tokens = $strategy->execute($tokens, $config);
+            $tokens = $strategy->execute($tokens, $config, $context);
         }
         return $tokens;
     }

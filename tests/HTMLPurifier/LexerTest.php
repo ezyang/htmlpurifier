@@ -279,16 +279,17 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $expect[18] = array( new HTMLPurifier_Token_Empty('br', array('test' => 'x < 6')) );
         
         $default_config = HTMLPurifier_Config::createDefault();
+        $default_context = new HTMLPurifier_Context();
         foreach($input as $i => $discard) {
             if (!isset($config[$i])) $config[$i] = $default_config;
             
-            $result = $this->DirectLex->tokenizeHTML($input[$i], $config[$i]);
+            $result = $this->DirectLex->tokenizeHTML($input[$i], $config[$i], $default_context);
             $this->assertEqual($expect[$i], $result, 'DirectLexTest '.$i.': %s');
             paintIf($result, $expect[$i] != $result);
             
             if ($this->_has_pear) {
                 // assert unless I say otherwise
-                $sax_result = $this->PEARSax3->tokenizeHTML($input[$i], $config[$i]);
+                $sax_result = $this->PEARSax3->tokenizeHTML($input[$i], $config[$i], $default_context);
                 if (!isset($sax_expect[$i])) {
                     // by default, assert with normal result
                     $this->assertEqual($expect[$i], $sax_result, 'PEARSax3Test '.$i.': %s');
@@ -304,7 +305,7 @@ class HTMLPurifier_LexerTest extends UnitTestCase
             }
             
             if ($this->_has_dom) {
-                $dom_result = $this->DOMLex->tokenizeHTML($input[$i], $config[$i]);
+                $dom_result = $this->DOMLex->tokenizeHTML($input[$i], $config[$i], $default_context);
                 // same structure as SAX
                 if (!isset($dom_expect[$i])) {
                     $this->assertEqual($expect[$i], $dom_result, 'DOMLexTest '.$i.': %s');

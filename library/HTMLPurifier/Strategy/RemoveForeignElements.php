@@ -16,7 +16,7 @@ require_once 'HTMLPurifier/TagTransform.php';
 class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
 {
     
-    function execute($tokens, $config) {
+    function execute($tokens, $config, &$context) {
         $definition = $config->getHTMLDefinition();
         $generator = new HTMLPurifier_Generator();
         $result = array();
@@ -37,7 +37,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                 } elseif ($escape_invalid_tags) {
                     // invalid tag, generate HTML and insert in
                     $token = new HTMLPurifier_Token_Text(
-                        $generator->generateFromToken($token, $config)
+                        $generator->generateFromToken($token, $config, $context)
                     );
                 } else {
                     continue;

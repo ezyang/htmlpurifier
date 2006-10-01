@@ -34,8 +34,7 @@ require_once 'HTMLPurifier/HTMLDefinition.php';
 class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 {
     
-    function execute($tokens, $config) {
-        
+    function execute($tokens, $config, &$context) {
         //####################################################################//
         // Pre-processing
         
@@ -48,6 +47,10 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
         $parent_name = $definition->info_parent;
         array_unshift($tokens, new HTMLPurifier_Token_Start($parent_name));
         $tokens[] = new HTMLPurifier_Token_End($parent_name);
+        
+        // setup the context variables
+        $parent_type = 'unknown'; // reference var that we alter
+        $context->register('ParentType', $parent_type);
         
         //####################################################################//
         // Loop initialization
@@ -109,10 +112,10 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             
             // calculate context
             if (isset($parent_def)) {
-                $context = $parent_def->type;
+                $parent_type = $parent_def->type;
             } else {
                 // generally found in specialized elements like UL
-                $context = 'unknown';
+                $parent_type = 'unknown';
             }
             
             //################################################################//
@@ -145,7 +148,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 
                 // have DTD child def validate children
                 $result = $child_def->validateChildren(
-                    $child_tokens, $config,$context);
+                    $child_tokens, $config, $context);
                 
                 // determine whether or not this element has any exclusions
                 $excludes = $def->excludes;
@@ -246,6 +249,9 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
         // remove implicit parent tokens at the beginning and end
         array_shift($tokens);
         array_pop($tokens);
+        
+        // remove context variables
+        $context->destroy('ParentType');
         
         //####################################################################//
         // Return

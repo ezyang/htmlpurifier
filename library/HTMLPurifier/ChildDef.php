@@ -38,15 +38,14 @@ class HTMLPurifier_ChildDef
     /**
      * Validates nodes according to definition and returns modification.
      * 
-     * @warning $context is NOT HTMLPurifier_AttrContext
      * @param $tokens_of_children Array of HTMLPurifier_Token
      * @param $config HTMLPurifier_Config object
-     * @param $context String context indicating inline, block or unknown
+     * @param $context HTMLPurifier_Context object
      * @return bool true to leave nodes as is
      * @return bool false to remove parent node
      * @return array of replacement child tokens
      */
-    function validateChildren($tokens_of_children, $config, $context) {
+    function validateChildren($tokens_of_children, $config, &$context) {
         trigger_error('Call to abstract function', E_USER_ERROR);
     }
 }
@@ -91,7 +90,7 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
         $reg = preg_replace('/([#a-zA-Z0-9_.-]+)/', '(,?\\0)', $reg);
         $this->_pcre_regex = $reg;
     }
-    function validateChildren($tokens_of_children, $config, $context) {
+    function validateChildren($tokens_of_children, $config, &$context) {
         $list_of_children = '';
         $nesting = 0; // depth into the nest
         foreach ($tokens_of_children as $token) {
@@ -145,7 +144,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
     }
     var $allow_empty = false;
     var $type = 'required';
-    function validateChildren($tokens_of_children, $config, $context) {
+    function validateChildren($tokens_of_children, $config, &$context) {
         // if there are no tokens, delete parent node
         if (empty($tokens_of_children)) return false;
         
@@ -227,7 +226,7 @@ class HTMLPurifier_ChildDef_Optional extends HTMLPurifier_ChildDef_Required
 {
     var $allow_empty = true;
     var $type = 'optional';
-    function validateChildren($tokens_of_children, $config, $context) {
+    function validateChildren($tokens_of_children, $config, &$context) {
         $result = parent::validateChildren($tokens_of_children, $config, $context);
         if ($result === false) return array();
         return $result;
@@ -246,7 +245,7 @@ class HTMLPurifier_ChildDef_Empty extends HTMLPurifier_ChildDef
     var $allow_empty = true;
     var $type = 'empty';
     function HTMLPurifier_ChildDef_Empty() {}
-    function validateChildren($tokens_of_children, $config, $context) {
+    function validateChildren($tokens_of_children, $config, &$context) {
         return array();
     }
 }
@@ -281,8 +280,9 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
         $this->block  = new HTMLPurifier_ChildDef_Optional($block);
     }
     
-    function validateChildren($tokens_of_children, $config, $context) {
-        switch ($context) {
+    function validateChildren($tokens_of_children, $config, &$context) {
+        $parent_type = $context->get('ParentType');
+        switch ($parent_type) {
             case 'unknown':
             case 'inline':
                 $result = $this->inline->validateChildren(
@@ -308,7 +308,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
     var $allow_empty = false;
     var $type = 'table';
     function HTMLPurifier_ChildDef_Table() {}
-    function validateChildren($tokens_of_children, $config, $context) {
+    function validateChildren($tokens_of_children, $config, &$context) {
         if (empty($tokens_of_children)) return false;
         
         // this ensures that the loop gets run one last time before closing

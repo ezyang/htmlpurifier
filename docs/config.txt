@@ -10,12 +10,9 @@ Directives are divided into namespaces, indicating the major portion of
 functionality they cover (although there may be overlaps.  Please consult
 the documentation in ConfigDef for more information on these namespaces.
 
-Since configuration is dependent on context, most of the internal classes
-require a configuration object to be passed as a parameter.  However, a few
-make this optional: they will supply a default configuration object if none
-are passed.  These classes are: HTMLPurifier::*, Generator::generateFromTokens
-and Lexer::tokenizeHTML.  However, whenever a valid configuration object
-is defined, that object should be used.
+Since configuration is dependant on context, internal classes require a
+configuration object to be passed as a parameter.  (They also require a
+Context object).
 
 In relation to HTMLDefinition and CSSDefinition, there is a special class
 of directives that influence the *construction* of the Definition object.

@@ -25,12 +25,13 @@ class HTMLPurifier_StrategyHarness extends UnitTestCase
     }
     
     function assertStrategyWorks($strategy, $inputs, $expect, $config = array()) {
+        $context = new HTMLPurifier_Context();
         foreach ($inputs as $i => $input) {
-            $tokens = $this->lex->tokenizeHTML($input);
             if (!isset($config[$i])) {
                 $config[$i] = HTMLPurifier_Config::createDefault();
             }
-            $result_tokens = $strategy->execute($tokens, $config[$i]);
+            $tokens = $this->lex->tokenizeHTML($input, $config[$i], $context);
+            $result_tokens = $strategy->execute($tokens, $config[$i], $context);
             $result = $this->gen->generateFromTokens($result_tokens, $config[$i]);
             $this->assertEqual($expect[$i], $result, "Test $i: %s");
             paintIf($result, $result != $expect[$i]);

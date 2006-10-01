@@ -266,7 +266,7 @@ class HTMLPurifier_Encoder
     /**
      * Converts a string to UTF-8 based on configuration.
      */
-    function convertToUTF8($str, $config) {
+    function convertToUTF8($str, $config, &$context) {
         static $iconv = null;
         if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');
@@ -283,7 +283,7 @@ class HTMLPurifier_Encoder
      * @note Currently, this is a lossy conversion, with unexpressable
      *       characters being omitted.
      */
-    function convertFromUTF8($str, $config) {
+    function convertFromUTF8($str, $config, &$context) {
         static $iconv = null;
         if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');
