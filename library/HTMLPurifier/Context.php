@@ -52,6 +52,14 @@ class HTMLPurifier_Context
         unset($this->_storage[$name]);
     }
     
+    /**
+     * Checks whether or not the variable exists.
+     * @param $name String name
+     */
+    function exists($name) {
+        return isset($this->_storage[$name]);
+    }
+    
 }
 
 ?>

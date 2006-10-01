@@ -18,13 +18,17 @@ class HTMLPurifier_ContextTest extends UnitTestCase
         
         generate_mock_once('HTMLPurifier_IDAccumulator');
         
+        $this->assertFalse($this->context->exists('IDAccumulator'));
+        
         $accumulator =& new HTMLPurifier_IDAccumulatorMock($this);
         $this->context->register('IDAccumulator', $accumulator);
-        // ...
+        $this->assertTrue($this->context->exists('IDAccumulator'));
+        
         $accumulator_2 =& $this->context->get('IDAccumulator');
         $this->assertReference($accumulator, $accumulator_2);
         
         $this->context->destroy('IDAccumulator');
+        $this->assertFalse($this->context->exists('IDAccumulator'));
         $accumulator_3 =& $this->context->get('IDAccumulator');
         $this->assertError('Attempted to retrieve non-existent variable');
         $this->assertNull($accumulator_3);
