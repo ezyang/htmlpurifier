@@ -89,6 +89,7 @@ $test_files[] = 'URISchemeTest.php';
 $test_files[] = 'EncoderTest.php';
 $test_files[] = 'EntityParserTest.php';
 $test_files[] = 'Test.php';
+$test_files[] = 'ContextTest.php';
 
 if (version_compare(PHP_VERSION, '5', '>=')) {
     $test_files[] = 'TokenFactoryTest.php';
