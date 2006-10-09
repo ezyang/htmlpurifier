@@ -1,7 +1,5 @@
 <?php
 
-// pretty-printing with indentation would be pretty cool
-
 require_once 'HTMLPurifier/Lexer.php';
 
 HTMLPurifier_ConfigSchema::define(
@@ -52,6 +50,7 @@ class HTMLPurifier_Generator
     
     /**
      * Bool cache of %Core.XHTML
+     * @private
      */
     var $_xhtml = true;
     

@@ -225,7 +225,30 @@ class HTMLPurifier_Encoder
     
     /**
      * Translates a Unicode codepoint into its corresponding UTF-8 character.
+     * @note Based on Feyd's function at
+     *       <http://forums.devnetwork.net/viewtopic.php?p=191404#191404>,
+     *       which is in public domain.
+     * @note While we're going to do code point parsing anyway, a good
+     *       optimization would be to refuse to translate code points that
+     *       are non-SGML characters.  However, this could lead to duplication.
+     * @note This is very similar to the unichr function in
+     *       maintenance/generate-entity-file.php (although this is superior,
+     *       due to its sanity checks).
      */
+    
+    // +----------+----------+----------+----------+
+    // | 33222222 | 22221111 | 111111   |          |
+    // | 10987654 | 32109876 | 54321098 | 76543210 | bit
+    // +----------+----------+----------+----------+
+    // |          |          |          | 0xxxxxxx | 1 byte 0x00000000..0x0000007F
+    // |          |          | 110yyyyy | 10xxxxxx | 2 byte 0x00000080..0x000007FF
+    // |          | 1110zzzz | 10yyyyyy | 10xxxxxx | 3 byte 0x00000800..0x0000FFFF
+    // | 11110www | 10wwzzzz | 10yyyyyy | 10xxxxxx | 4 byte 0x00010000..0x0010FFFF
+    // +----------+----------+----------+----------+
+    // | 00000000 | 00011111 | 11111111 | 11111111 | Theoretical upper limit of legal scalars: 2097151 (0x001FFFFF)
+    // | 00000000 | 00010000 | 11111111 | 11111111 | Defined upper limit of legal scalar codes
+    // +----------+----------+----------+----------+ 
+    
     function unichr($code) {
         if($code > 1114111 or $code < 0 or
           ($code >= 55296 and $code <= 57343) ) {
