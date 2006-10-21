@@ -26,7 +26,8 @@ class HTMLPurifier_AttrDef_IDTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('.asa', false);
         
         // test duplicate detection
-        $this->assertDef('a', false);
+        $this->assertDef('once');
+        $this->assertDef('once', false);
         
         // valid once whitespace stripped, but needs to be amended
         $this->assertDef(' whee ', 'whee');

@@ -188,8 +188,8 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
             }
             
             // the read in values
-            $this->config  = isset($config[$i])  ? $config[$i]  : null;
-            $this->context = isset($context[$i]) ? $context[$i] : null;
+            $this->config  = isset($config[$i])  ? $config[$i]  : HTMLPurifier_Config::createDefault();
+            $this->context = isset($context[$i]) ? $context[$i] : new HTMLPurifier_Context();
             
             $this->assertDef($value, $expect_uri[$i], true, "Test $i: %s");
             

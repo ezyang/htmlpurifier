@@ -105,6 +105,48 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
     }
     
+    function test_loadArray() {
+        // setup a few dummy namespaces/directives for our testing
+        HTMLPurifier_ConfigSchema::defineNamespace('Zoo', 'Animals we have.');
+        HTMLPurifier_ConfigSchema::define('Zoo', 'Aadvark', 0, 'int', 'Have?');
+        HTMLPurifier_ConfigSchema::define('Zoo', 'Boar',    0, 'int', 'Have?');
+        HTMLPurifier_ConfigSchema::define('Zoo', 'Camel',   0, 'int', 'Have?');
+        HTMLPurifier_ConfigSchema::define(
+            'Zoo', 'Others', array(), 'list', 'Other animals we have one of.'
+        );
+        
+        $config_manual = HTMLPurifier_Config::createDefault();
+        $config_loadabbr = HTMLPurifier_Config::createDefault();
+        $config_loadfull = HTMLPurifier_Config::createDefault();
+        
+        $config_manual->set('Zoo', 'Aadvark', 3);
+        $config_manual->set('Zoo', 'Boar', 5);
+        $config_manual->set('Zoo', 'Camel', 2000); // that's a lotta camels!
+        $config_manual->set('Zoo', 'Others', array('Peacock', 'Dodo')); // wtf!
+        
+        // condensed form
+        $config_loadabbr->loadArray(array(
+            'Zoo.Aadvark' => 3,
+            'Zoo.Boar' => 5,
+            'Zoo.Camel' => 2000,
+            'Zoo.Others' => array('Peacock', 'Dodo')
+        ));
+        
+        // fully expanded form
+        $config_loadfull->loadArray(array(
+            'Zoo' => array(
+                'Aadvark' => 3,
+                'Boar' => 5,
+                'Camel' => 2000,
+                'Others' => array('Peacock', 'Dodo')
+            )
+        ));
+        
+        $this->assertEqual($config_manual, $config_loadabbr);
+        $this->assertEqual($config_manual, $config_loadfull);
+        
+    }
+    
 }
 
 ?>

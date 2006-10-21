@@ -57,6 +57,36 @@ class HTMLPurifier_ContextTest extends UnitTestCase
         
     }
     
+    function test_loadArray() {
+        
+        // references can be *really* wonky!
+        
+        $context_manual = new HTMLPurifier_Context();
+        $context_load   = new HTMLPurifier_Context();
+        
+        $var1 = 1;
+        $var2 = 2;
+        
+        $context_manual->register('var1', $var1);
+        $context_manual->register('var2', $var2);
+        
+        // you MUST set up the references when constructing the array,
+        // otherwise the registered version will be a copy
+        $array = array(
+            'var1' => &$var1,
+            'var2' => &$var2
+        );
+        
+        $context_load->loadArray($array);
+        $this->assertIdentical($context_manual, $context_load);
+        
+        $var1 = 10;
+        $var2 = 20;
+        
+        $this->assertIdentical($context_manual, $context_load);
+        
+    }
+    
 }
 
 ?>

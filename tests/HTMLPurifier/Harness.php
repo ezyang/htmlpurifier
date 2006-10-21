@@ -64,16 +64,13 @@ class HTMLPurifier_Harness extends UnitTestCase
         
         // setup config object
         $config  = HTMLPurifier_Config::createDefault();
-        foreach ($config_array as $key => $value) {
-            list($namespace, $directive) = explode('.', $key);
-            $config->set($namespace, $directive, $value);
-        }
+        $config->loadArray($config_array);
         
-        // setup context object
+        // setup context object. Note that we are operating on a copy of it!
+        // We will extend the test harness to allow you to do post-tests
+        // on the context object
         $context = new HTMLPurifier_Context();
-        foreach ($context_array as $key => $value) {
-            $context->register($key, $value);
-        }
+        $context->loadArray($context_array);
         
         if ($this->to_tokens && is_string($input)) {
             $input = $this->lexer->tokenizeHTML($input, $config, $context);

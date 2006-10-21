@@ -21,7 +21,7 @@ class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
         
         if ($id === '') return false;
         
-        $id_accumulator = $context->get('IDAccumulator');
+        $id_accumulator =& $context->get('IDAccumulator');
         if (isset($id_accumulator->ids[$id])) return false;
         
         // we purposely avoid using regex, hopefully this is faster

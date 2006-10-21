@@ -124,6 +124,27 @@ class HTMLPurifier_Config
         return $this->css_definition;
     }
     
+    /**
+     * Loads configuration values from an array with the following structure:
+     * Namespace.Directive => Value
+     * @param $config_array Configuration associative array
+     */
+    function loadArray($config_array) {
+        foreach ($config_array as $key => $value) {
+            if (strpos($key, '.') !== false) {
+                // condensed form
+                list($namespace, $directive) = explode('.', $key);
+                $this->set($namespace, $directive, $value);
+            } else {
+                $namespace = $key;
+                $namespace_values = $value;
+                foreach ($namespace_values as $directive => $value) {
+                    $this->set($namespace, $directive, $value);
+                }
+            }
+        }
+    }
+    
 }
 
 ?>
