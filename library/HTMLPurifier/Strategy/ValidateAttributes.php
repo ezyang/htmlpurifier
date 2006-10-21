@@ -38,19 +38,17 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             $attr = $token->attributes;
             
             // do global transformations (pre)
-            // ex. <ELEMENT lang="fr"> to <ELEMENT lang="fr" xml:lang="fr">
-            // DEFINITION CALL
+            // nothing currently utilizes this
             foreach ($definition->info_attr_transform_pre as $transform) {
-                $attr = $transform->transform($attr, $config);
+                $attr = $transform->transform($attr, $config, $context);
             }
             
             // do local transformations only applicable to this element (pre)
             // ex. <p align="right"> to <p style="text-align:right;">
-            // DEFINITION CALL
             foreach ($definition->info[$token->name]->attr_transform_pre
                 as $transform
             ) {
-                $attr = $transform->transform($attr, $config);
+                $attr = $transform->transform($attr, $config, $context);
             }
             
             // create alias to this element's attribute definition array, see
@@ -106,11 +104,15 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             }
             
             // post transforms
+            
+            // ex. <x lang="fr"> to <x lang="fr" xml:lang="fr">
             foreach ($definition->info_attr_transform_post as $transform) {
-                $attr = $transform->transform($attr, $config);
+                $attr = $transform->transform($attr, $config, $context);
             }
+            
+            // ex. <bdo> to <bdo dir="ltr">
             foreach ($definition->info[$token->name]->attr_transform_post as $transform) {
-                $attr = $transform->transform($attr, $config);
+                $attr = $transform->transform($attr, $config, $context);
             }
             
             // commit changes

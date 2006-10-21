@@ -23,9 +23,10 @@ class HTMLPurifier_AttrTransform
      * @param $attr Assoc array of attributes, usually from
      *              HTMLPurifier_Token_Tag::$attributes
      * @param $config Mandatory HTMLPurifier_Config object.
+     * @param $context Mandatory HTMLPurifier_Context object
      * @returns Processed attribute array.
      */
-    function transform($attr, $config) {
+    function transform($attr, $config, $context) {
         trigger_error('Cannot call abstract function', E_USER_ERROR);
     }
 }
