@@ -26,7 +26,7 @@ class HTMLPurifier_AttrTransform
      * @param $context Mandatory HTMLPurifier_Context object
      * @returns Processed attribute array.
      */
-    function transform($attr, $config, $context) {
+    function transform($attr, $config, &$context) {
         trigger_error('Cannot call abstract function', E_USER_ERROR);
     }
 }

@@ -3,6 +3,9 @@
 /**
  * Component of HTMLPurifier_AttrContext that accumulates IDs to prevent dupes
  * @note In Slashdot-speak, dupe means duplicate.
+ * @note This class does not accept $config or $context, thus, it is the
+ *       burden of the callee to register the appropriate errors or
+ *       configuration.
  */
 class HTMLPurifier_IDAccumulator
 {
