@@ -5,44 +5,83 @@ require_once 'HTMLPurifier/TagTransform.php';
 class HTMLPurifier_TagTransformTest extends UnitTestCase
 {
     
+    /**
+     * Asserts that a transformation happens
+     * 
+     * This assertion performs several tests on the transform:
+     * 
+     * -# Transforms a start tag with only $name and no attributes
+     * -# Transforms a start tag with $name and $attributes
+     * -# Transform an end tag
+     * -# Transform an empty tag with only $name and no attributes
+     * -# Transform an empty tag with $name and $attributes
+     * 
+     * In its current form, it assumes that start and empty tags would be
+     * treated the same, and is really ensuring that the tag transform doesn't
+     * do anything wonky to the tag type.
+     * 
+     * @param $transformer      HTMLPurifier_TagTransform class to test
+     * @param $name             Name of the original tag
+     * @param $attributes       Attributes of the original tag
+     * @param $expect_name      Name of output tag
+     * @param $expect_attributes Attributes of output tag when $attributes 
+     *                          is included.
+     * @param $expect_added_attributes Attributes of output tag when $attributes
+     *                          are omitted.
+     * @param $config_array     Configuration array for HTMLPurifier_Config
+     * @param $context_array    Context array for HTMLPurifier_Context
+     */
     function assertTransformation($transformer,
                                          $name,        $attributes,
                                   $expect_name, $expect_attributes,
-                                  $expect_added_attributes = array()) {
+                                  $expect_added_attributes = array(),
+                                  $config_array = array(), $context_array = array()) {
         
+        $config = HTMLPurifier_Config::createDefault();
+        $config->loadArray($config_array);
+        
+        $context = new HTMLPurifier_Context();
+        $context->loadArray($context_array);
         
         // start tag transform
         $this->assertEqual(
                 new HTMLPurifier_Token_Start($expect_name, $expect_added_attributes),
                 $transformer->transform(
-                  new HTMLPurifier_Token_Start($name))
+                    new HTMLPurifier_Token_Start($name), $config, $context)
             );
         
         // start tag transform with attributes
         $this->assertEqual(
                 new HTMLPurifier_Token_Start($expect_name, $expect_attributes),
                 $transformer->transform(
-                    new HTMLPurifier_Token_Start($name, $attributes)
+                    new HTMLPurifier_Token_Start($name, $attributes),
+                    $config, $context
                 )
             );
         
         // end tag transform
         $this->assertEqual(
                 new HTMLPurifier_Token_End($expect_name),
-                $transformer->transform(new HTMLPurifier_Token_End($name))
+                $transformer->transform(
+                    new HTMLPurifier_Token_End($name), $config, $context
+                )
             );
         
         // empty tag transform
         $this->assertEqual(
                 new HTMLPurifier_Token_Empty($expect_name, $expect_added_attributes),
-                $transformer->transform(new HTMLPurifier_Token_Empty($name))
+                $transformer->transform(
+                    new HTMLPurifier_Token_Empty($name), $config, $context
+                )
             );
         
         // empty tag transform with attributes
         $this->assertEqual(
                 new HTMLPurifier_Token_Empty($expect_name, $expect_attributes),
                 $transformer->transform(
-                    new HTMLPurifier_Token_Empty($name, $attributes))
+                    new HTMLPurifier_Token_Empty($name, $attributes),
+                    $config, $context
+                )
             );
         
         

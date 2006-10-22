@@ -33,7 +33,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     // DEFINITION CALL
                     $token = $definition->
                                 info_tag_transform[$token->name]->
-                                    transform($token);
+                                    transform($token, $config, $context);
                 } elseif ($escape_invalid_tags) {
                     // invalid tag, generate HTML and insert in
                     $token = new HTMLPurifier_Token_Text(

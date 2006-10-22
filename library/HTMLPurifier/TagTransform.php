@@ -17,8 +17,10 @@ class HTMLPurifier_TagTransform
     /**
      * Transforms the obsolete tag into the valid tag.
      * @param $tag Tag to be transformed.
+     * @param $config Mandatory HTMLPurifier_Config object
+     * @param $context Mandatory HTMLPurifier_Context object
      */
-    function transform($tag) {
+    function transform($tag, $config, &$context) {
         trigger_error('Call to abstract function', E_USER_ERROR);
     }
     
@@ -37,7 +39,7 @@ class HTMLPurifier_TagTransform_Simple extends HTMLPurifier_TagTransform
         $this->transform_to = $transform_to;
     }
     
-    function transform($tag) {
+    function transform($tag, $config, &$context) {
         $new_tag = $tag->copy();
         $new_tag->name = $this->transform_to;
         return $new_tag;
@@ -55,7 +57,7 @@ class HTMLPurifier_TagTransform_Center extends HTMLPurifier_TagTransform
 {
     var $transform_to = 'div';
     
-    function transform($tag) {
+    function transform($tag, $config, &$context) {
         if ($tag->type == 'end') {
             $new_tag = new HTMLPurifier_Token_End($this->transform_to);
             return $new_tag;
@@ -106,7 +108,7 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
         '+4' => '300%'
     );
     
-    function transform($tag) {
+    function transform($tag, $config, &$context) {
         
         if ($tag->type == 'end') {
             $new_tag = new HTMLPurifier_Token_End($this->transform_to);
