@@ -170,6 +170,10 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         
         foreach ($uri as $i => $value) {
             
+            // the read in values
+            $this->config  = isset($config[$i])  ? $config[$i]  : HTMLPurifier_Config::createDefault();
+            $this->context = isset($context[$i]) ? $context[$i] : new HTMLPurifier_Context();
+            
             // setUpAssertDef
             if ( isset($components[$i]) ) {
                 $this->components = $components[$i];
@@ -187,10 +191,6 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
                 $expect_uri[$i] = $value; // untouched
             }
             
-            // the read in values
-            $this->config  = isset($config[$i])  ? $config[$i]  : HTMLPurifier_Config::createDefault();
-            $this->context = isset($context[$i]) ? $context[$i] : new HTMLPurifier_Context();
-            
             $this->assertDef($value, $expect_uri[$i], true, "Test $i: %s");
             
         }
@@ -207,20 +207,21 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $fake_registry = new HTMLPurifier_URISchemeRegistryMock($this);
         $registry =& HTMLPurifier_URISchemeRegistry::instance($fake_registry);
         
-        // now, let's at a pseudo-scheme to the registry
+        // now, let's add a pseudo-scheme to the registry
         $this->scheme =& new HTMLPurifier_URISchemeMock($this);
         
         // here are the schemes we will support with overloaded mocks
-        $registry->setReturnReference('getScheme', $this->scheme, array('http', $this->config));
-        $registry->setReturnReference('getScheme', $this->scheme, array('mailto', $this->config));
+        $registry->setReturnReference('getScheme', $this->scheme, array('http', $this->config, $this->context));
+        $registry->setReturnReference('getScheme', $this->scheme, array('mailto', $this->config, $this->context));
         
         // default return value is false (meaning no scheme defined: reject)
-        $registry->setReturnValue('getScheme', false, array('*', $this->config));
+        $registry->setReturnValue('getScheme', false, array('*', $this->config, $this->context));
         
         if ($this->components === false) {
             $this->scheme->expectNever('validateComponents');
         } else {
             $this->components[] = $this->config; // append the configuration
+            $this->components[] =& $this->context; // append context
             $this->scheme->setReturnValue(
                 'validateComponents', $this->return_components, $this->components);
             $this->scheme->expectOnce('validateComponents', $this->components);

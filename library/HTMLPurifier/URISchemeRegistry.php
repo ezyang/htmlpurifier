@@ -63,8 +63,9 @@ class HTMLPurifier_URISchemeRegistry
      * Retrieves a scheme validator object
      * @param $scheme String scheme name like http or mailto
      * @param $config HTMLPurifier_Config object
+     * @param $config HTMLPurifier_Context object
      */
-    function &getScheme($scheme, $config = null) {
+    function &getScheme($scheme, $config, &$context) {
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $null = null; // for the sake of passing by reference
         

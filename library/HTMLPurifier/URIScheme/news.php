@@ -8,11 +8,11 @@ require_once 'HTMLPurifier/URIScheme.php';
 class HTMLPurifier_URIScheme_news extends HTMLPurifier_URIScheme {
     
     function validateComponents(
-        $userinfo, $host, $port, $path, $query, $config
+        $userinfo, $host, $port, $path, $query, $config, &$context
     ) {
         list($userinfo, $host, $port, $path, $query) = 
             parent::validateComponents(
-                $userinfo, $host, $port, $path, $query, $config );
+                $userinfo, $host, $port, $path, $query, $config, $context );
         // typecode check needed on path
         return array(null, null, null, $path, null);
     }

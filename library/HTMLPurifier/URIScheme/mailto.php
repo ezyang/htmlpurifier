@@ -14,11 +14,11 @@ require_once 'HTMLPurifier/URIScheme.php';
 class HTMLPurifier_URIScheme_mailto extends HTMLPurifier_URIScheme {
     
     function validateComponents(
-        $userinfo, $host, $port, $path, $query, $config
+        $userinfo, $host, $port, $path, $query, $config, &$context
     ) {
         list($userinfo, $host, $port, $path, $query) = 
             parent::validateComponents(
-                $userinfo, $host, $port, $path, $query, $config );
+                $userinfo, $host, $port, $path, $query, $config, $context );
         // we need to validate path against RFC 2368's addr-spec
         return array(null, null, null, $path, $query);
     }

@@ -10,11 +10,11 @@ class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme {
     var $default_port = 21;
     
     function validateComponents(
-        $userinfo, $host, $port, $path, $query, $config
+        $userinfo, $host, $port, $path, $query, $config, &$context
     ) {
         list($userinfo, $host, $port, $path, $query) = 
             parent::validateComponents(
-                $userinfo, $host, $port, $path, $query, $config );
+                $userinfo, $host, $port, $path, $query, $config, $context );
         $semicolon_pos = strrpos($path, ';'); // reverse
         if ($semicolon_pos !== false) {
             // typecode check

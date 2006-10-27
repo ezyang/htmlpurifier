@@ -63,11 +63,11 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             // no need to validate the scheme's fmt since we do that when we
             // retrieve the specific scheme object from the registry
             $scheme = ctype_lower($scheme) ? $scheme : strtolower($scheme);
-            $scheme_obj =& $registry->getScheme($scheme, $config);
+            $scheme_obj =& $registry->getScheme($scheme, $config, $context);
             if (!$scheme_obj) return false; // invalid scheme, clean it out
         } else {
             $scheme_obj =& $registry->getScheme(
-                $config->get('URI', 'DefaultScheme'), $config
+                $config->get('URI', 'DefaultScheme'), $config, $context
             );
         }
         
@@ -120,7 +120,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         // note that $fragment is omitted
         list($userinfo, $host, $port, $path, $query) = 
             $scheme_obj->validateComponents(
-                $userinfo, $host, $port, $path, $query, $config
+                $userinfo, $host, $port, $path, $query, $config, $context
             );
         
         

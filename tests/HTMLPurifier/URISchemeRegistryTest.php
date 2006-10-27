@@ -12,9 +12,10 @@ class HTMLPurifier_URISchemeRegistryTest extends UnitTestCase
         $config = HTMLPurifier_Config::createDefault();
         $config->set('URI', 'AllowedSchemes', array('http' => true, 'telnet' => true));
         $config->set('URI', 'OverrideAllowedSchemes', true);
+        $context = new HTMLPurifier_Context();
         
         $registry = new HTMLPurifier_URISchemeRegistry();
-        $this->assertIsA($registry->getScheme('http'), 'HTMLPurifier_URIScheme_http');
+        $this->assertIsA($registry->getScheme('http', $config, $context), 'HTMLPurifier_URIScheme_http');
         
         $scheme_http = new HTMLPurifier_URISchemeMock($this);
         $scheme_telnet = new HTMLPurifier_URISchemeMock($this);
@@ -22,22 +23,22 @@ class HTMLPurifier_URISchemeRegistryTest extends UnitTestCase
         
         // register a new scheme
         $registry->register('telnet', $scheme_telnet);
-        $this->assertIdentical($registry->getScheme('telnet', $config), $scheme_telnet);
+        $this->assertIdentical($registry->getScheme('telnet', $config, $context), $scheme_telnet);
         
         // overload a scheme, this is FINAL (forget about defaults)
         $registry->register('http', $scheme_http);
-        $this->assertIdentical($registry->getScheme('http', $config), $scheme_http);
+        $this->assertIdentical($registry->getScheme('http', $config, $context), $scheme_http);
         
         // when we register a scheme, it's automatically allowed
         $registry->register('foobar', $scheme_foobar);
-        $this->assertIdentical($registry->getScheme('foobar', $config), $scheme_foobar);
+        $this->assertIdentical($registry->getScheme('foobar', $config, $context), $scheme_foobar);
         
         // now, test when overriding is not allowed
         $config->set('URI', 'OverrideAllowedSchemes', false);
-        $this->assertNull($registry->getScheme('foobar', $config));
+        $this->assertNull($registry->getScheme('foobar', $config, $context));
         
         // scheme not allowed and never registered
-        $this->assertNull($registry->getScheme('ftp', $config));
+        $this->assertNull($registry->getScheme('ftp', $config, $context));
         
     }
     

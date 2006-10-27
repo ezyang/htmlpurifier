@@ -23,9 +23,10 @@ class HTMLPurifier_URIScheme
      * @param $path Path of URI
      * @param $query Query of URI, found after question mark
      * @param $config HTMLPurifier_Config object
+     * @param $context HTMLPurifier_Context object
      */
     function validateComponents(
-        $userinfo, $host, $port, $path, $query, $config
+        $userinfo, $host, $port, $path, $query, $config, &$context
     ) {
         if ($this->default_port == $port) $port = null;
         return array($userinfo, $host, $port, $path, $query);
