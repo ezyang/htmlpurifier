@@ -47,6 +47,12 @@ Unknown release (on a scratch-an-itch basis)
    numerically encoding all non-ASCII characters
  - Semi-lossy dumb alternate character encoding transformations, achieved by
    encoding all characters that have string entity equivalents
+ - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
+   Also, enable disabling of directionality
+
+Requested
+ - Native content compression, whitespace stripping (don't rely on Tidy, make
+   sure we don't remove from pre tags)
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations
