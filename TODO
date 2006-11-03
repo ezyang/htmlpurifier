@@ -53,6 +53,7 @@ Unknown release (on a scratch-an-itch basis)
 Requested
  - Native content compression, whitespace stripping (don't rely on Tidy, make
    sure we don't remove from pre tags)
+ - Win32 Phalanger C# binaries
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations

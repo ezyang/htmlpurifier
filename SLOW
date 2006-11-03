@@ -2,13 +2,13 @@
 SLOW
   also known as the HELP ME LIBRARY IS TOO SLOW MY PAGE TAKE TOO LONG LOAD page
 
-HTMLPurifier is a very powerful library.  But with power comes great
+HTML Purifier is a very powerful library.  But with power comes great
 responsibility, or, at least, longer execution times.  Remember, this
 library isn't lightly grazing over submitted HTML: it's deconstructing
 the whole thing, rigorously checking the parts, and then putting it
 back together.
 
-So, if it so turns out that HTMLPurifier is kinda too slow for outbound
+So, if it so turns out that HTML Purifier is kinda too slow for outbound
 filtering, you've got a few options:
 
 1. Inbound filtering - perform filtering of HTML when it's submitted by the
@@ -19,7 +19,7 @@ it directly from your database/filesystem.  The trouble with this method is
 that your user loses the original text, and when doing edits, will be
 handling the filtered text.  While this may be a good thing, especially if
 you're using a WYSIWYG editor, it can also result in data-loss if a user
-expects a certain to be available but it doesn't.
+makes a typo.
 
 2. Caching the filtered output - accept the submitted text and put it
 unaltered into the database, but then also generate a filtered version and
@@ -36,4 +36,5 @@ it has some drawbacks which cannot be fixed unless you save both the original
 and the filtered versions.
 
 There is a third option: profile and optimize HTMLPurifier yourself.  Be sure
-to tell me if you decide to do that!  ;-)
+to report back your results if you decide to do that!  Especially if you
+port HTML Purifier to C++.  ;-)
