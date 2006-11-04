@@ -236,13 +236,12 @@ class HTMLPurifier_HTMLDefinition
         // info[]->type : defines the type of the element (block or inline)
         
         // reuses $e_Inline and $e_Block
-        
-        foreach ($e_Inline->elements as $name) {
+        foreach ($e_Inline->elements as $name => $bool) {
             $this->info[$name]->type = 'inline';
         }
         
         $e_Block = new HTMLPurifier_ChildDef_Optional($e_block);
-        foreach ($e_Block->elements as $name) {
+        foreach ($e_Block->elements as $name => $bool) {
             $this->info[$name]->type = 'block';
         }
         
