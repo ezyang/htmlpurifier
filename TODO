@@ -1,10 +1,6 @@
 
 TODO List
 
-Ongoing
- - Lots of profiling, make it faster!
- - Plugins for major CMSes (very tricky issue)
-
 1.2 release
  - Make URI validation routines tighter (especially mailto)
  - More extensive URI filtering schemes
@@ -16,6 +12,11 @@ Ongoing
 1.3 release
  - Add various "levels" of cleaning
     - Related: Allow strict (X)HTML
+ - More fine-grained control over escaping behavior
+    - Silently drop content inbetween SCRIPT tags (can be generalized to allow
+      specification of elements that, when detected as foreign, trigger removal
+      of children, although unbalanced tags could wreck havoc (or at least
+      delete the rest of the document)).
 
 1.4 release
  - Additional support for poorly written HTML
@@ -35,26 +36,35 @@ Ongoing
       attributes, offer default implementation
     - Lots of documentation and samples
 
+Ongoing
+ - Lots of profiling, make it faster!
+ - Plugins for major CMSes (very tricky issue)
+
 Unknown release (on a scratch-an-itch basis)
- - Silently drop content inbetween SCRIPT tags (can be generalized to allow
-   specification of elements that, when detected as foreign, trigger removal
-   of children, although unbalanced tags could wreck havoc (or at least delete
-   the rest of the document)).
  - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
  - Automatically add non-breaking spaces to empty table cells when
    empty-cells:show is applied to have compatibility with Internet Explorer
+ - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
+   Also, enable disabling of directionality
+
+Encoding workarounds
  - Non-lossy dumb alternate character encoding transformations, achieved by
    numerically encoding all non-ASCII characters
  - Semi-lossy dumb alternate character encoding transformations, achieved by
    encoding all characters that have string entity equivalents
- - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
-   Also, enable disabling of directionality
 
 Requested
  - Native content compression, whitespace stripping (don't rely on Tidy, make
-   sure we don't remove from pre tags)
- - Win32 Phalanger C# binaries
+   sure we don't remove from <pre> or related tags)
+ - Win32 Phalanger C# binaries (?)
+ - Remove redundant tags, ex. <u><u>Underlined</u></u>. Implementation notes:
+    1. Analyzing which tags to remove duplicants
+    2. Ensure attributes are merged into the parent tag
+    3. Extend the tag exclusion system to specify whether or not the
+    contents should be dropped or not (currently, there's code that could do
+    something like this if it didn't drop the inner text too.)
 
 Wontfix
- - Non-lossy smart alternate character encoding transformations
+ - Non-lossy smart alternate character encoding transformations (unless
+   patch provided)
  - Pretty-printing HTML, users can use Tidy on the output on entire page

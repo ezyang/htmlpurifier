@@ -13,6 +13,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Documentation updated
   + TODO added request Phalanger
   + TODO added request Native compression
+  + TODO added request Remove redundant tags
 . Switched to purify()-wide Context object registry
 . Refactored unit tests to minimize duplication
 . XSS attack sheet updated
