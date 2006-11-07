@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class that handles operations involving percent-encoding in URIs.
+ */
 class HTMLPurifier_PercentEncoder
 {
     
