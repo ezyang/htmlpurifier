@@ -10,6 +10,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 1.2.0, unknown projected release date
 ! Added MODx plugin <http://modxcms.com/forums/index.php/topic,6604.0.html>
+! Added percent encoding normalization
 - Documentation updated
   + TODO added request Phalanger
   + TODO added request Native compression

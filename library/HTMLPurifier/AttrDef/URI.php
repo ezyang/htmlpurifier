@@ -4,6 +4,7 @@ require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/URIScheme.php';
 require_once 'HTMLPurifier/URISchemeRegistry.php';
 require_once 'HTMLPurifier/AttrDef/Host.php';
+require_once 'HTMLPurifier/PercentEncoder.php';
 
 HTMLPurifier_ConfigSchema::define(
     'URI', 'DefaultScheme', 'http', 'string',
@@ -19,9 +20,11 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
 {
     
     var $host;
+    var $PercentEncoder;
     
     function HTMLPurifier_AttrDef_URI() {
         $this->host = new HTMLPurifier_AttrDef_Host();
+        $this->PercentEncoder = new HTMLPurifier_PercentEncoder();
     }
     
     function validate($uri, $config, &$context) {
@@ -31,6 +34,9 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         
         // parse as CDATA
         $uri = $this->parseCDATA($uri);
+        
+        // fix up percent-encoding
+        $uri = $this->PercentEncoder->normalize($uri);
         
         // while it would be nice to use parse_url(), that's specifically
         // for HTTP and thus won't work for our generic URI parsing

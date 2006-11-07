@@ -4,7 +4,6 @@ require_once 'HTMLPurifier/AttrDefHarness.php';
 require_once 'HTMLPurifier/AttrDef/URI.php';
 
 // WARNING: INCOMPLETE UNIT TESTS!
-// we are currently abstaining percent-encode fixing unit tests
 // we also need to test all the configuration directives defined by this class
 
 // http: is returned quite often when a URL is invalid. We have to change
@@ -83,10 +82,11 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         // %5 - prematurely terminated, encode %
         // %FC - u with umlaut, correct
         // note that Apache doesn't do such fixing, rather, it just claims
-        // that the browser sent a "Bad Request".
-        //$uri[6] = 'http://www.example.com/%56%fc%GJ%5%FC';
-        //$components[6] = array('www.example.com', '/V%FC%25GJ%255%FC', null, null);
-        //$expect_uri[6] = 'http://www.example.com/V%FC%25GJ%255%FC';
+        // that the browser sent a "Bad Request".  See PercentEncoder.php
+        // for more details
+        $uri[6] = 'http://www.example.com/%56%fc%GJ%5%FC';
+        $components[6] = array(null, 'www.example.com', null, '/V%FC%25GJ%255%FC', null);
+        $expect_uri[6] = 'http://www.example.com/V%FC%25GJ%255%FC';
         
         // test IPv4 address (behavior may vary with configuration)
         $uri[7] = 'http://192.0.34.166/';
