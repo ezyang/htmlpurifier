@@ -237,6 +237,7 @@ class HTMLPurifier_HTMLDefinition
         
         // reuses $e_Inline and $e_Block
         foreach ($e_Inline->elements as $name => $bool) {
+            if ($name == '#PCDATA' || $name == '') continue;
             $this->info[$name]->type = 'inline';
         }
         
