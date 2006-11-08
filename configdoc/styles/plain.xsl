@@ -23,23 +23,41 @@
                 <link rel="stylesheet" type="text/css" href="styles/plain.css" />
             </head>
             <body>
+                <h1><xsl:value-of select="/configdoc/title" /> Configuration Documentation</h1>
+                <h2>Table of Contents</h2>
+                <ul id="toc">
+                    <xsl:apply-templates mode="toc" />
+                </ul>
                 <xsl:apply-templates />
             </body>
         </html>
     </xsl:template>
     
-    <xsl:template match="title">
-        <h1><xsl:value-of select="/configdoc/title" /> Configuration Documentation</h1>
+    <xsl:template match="title" mode="toc" />
+    <xsl:template match="namespace" mode="toc">
+        <xsl:if test="count(directive)&gt;0">
+            <li>
+                <a href="#{@id}"><xsl:value-of select="name" /></a>
+                <ul>
+                    <xsl:apply-templates select="directive" mode="toc" />
+                </ul>
+            </li>
+        </xsl:if>
     </xsl:template>
+    <xsl:template match="directive" mode="toc">
+        <li><a href="#{@id}"><xsl:value-of select="name" /></a></li>
+    </xsl:template>
+    
+    <xsl:template match="title" />
     
     <xsl:template match="namespace">
         <xsl:apply-templates />
-        <xsl:if test="count(child::directive)=0">
+        <xsl:if test="count(directive)=0">
             <p>No configuration directives defined for this namespace.</p>
         </xsl:if>
     </xsl:template>
     <xsl:template match="namespace/name">
-        <h2 id="{../@id}"><xsl:value-of select="text()" /></h2>
+        <h2 id="{../@id}"><xsl:value-of select="." /></h2>
     </xsl:template>
     <xsl:template match="namespace/description">
         <div class="description">
@@ -51,7 +69,7 @@
         <xsl:apply-templates />
     </xsl:template>
     <xsl:template match="directive/name">
-        <h3 id="{../@id}"><xsl:value-of select="text()" /></h3>
+        <h3 id="{../@id}"><xsl:value-of select="." /></h3>
     </xsl:template>
     <xsl:template match="directive/constraints">
         <table class="constraints">

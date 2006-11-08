@@ -12,6 +12,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added MODx plugin <http://modxcms.com/forums/index.php/topic,6604.0.html>
 ! Added percent encoding normalization
 ! XSS attacks smoketest given facelift
+! Configuration documentation now has table of contents
 - Documentation updated
   + TODO added request Phalanger
   + TODO added request Native compression

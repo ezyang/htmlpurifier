@@ -5,3 +5,6 @@ table.constraints {margin:0 0 1em;}
 table.constraints th {text-align:left;padding-left:0.4em;}
 table.constraints td {padding-right:0.4em;}
 table.constraints td pre {margin:0;}
+
+#toc {list-style-type:none; font-weight:bold;}
+#toc ul {list-style-type:disc; font-weight:normal;}
