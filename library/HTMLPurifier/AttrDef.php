@@ -20,10 +20,7 @@ class HTMLPurifier_AttrDef
     var $minimized = false;
     
     /**
-     * Abstract function defined for functions that validate and clean strings.
-     * 
-     * This function forms the basis for all the subclasses: they must
-     * define this method.
+     * Validates and cleans passed string according to a definition.
      * 
      * @public
      * @param $string String to be validated and cleaned.
