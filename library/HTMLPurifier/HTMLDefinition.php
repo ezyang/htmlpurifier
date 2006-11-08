@@ -397,6 +397,13 @@ class HTMLPurifier_HTMLDefinition
         
         $this->info_attr_transform_post[] = new HTMLPurifier_AttrTransform_Lang();
         
+        // protect against stdclasses floating around
+        foreach ($this->info as $key => $obj) {
+            if (is_a($obj, 'stdclass')) {
+                unset($this->info[$key]);
+            }
+        }
+        
     }
     
     function setAttrForTableElements($attr, $def) {
