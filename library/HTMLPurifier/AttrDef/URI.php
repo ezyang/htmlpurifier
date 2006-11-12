@@ -12,6 +12,28 @@ HTMLPurifier_ConfigSchema::define(
     'select the proper object validator when no scheme information is present.'
 );
 
+HTMLPurifier_ConfigSchema::define(
+    'URI', 'Host', null, 'string/null',
+    'Defines the domain name of the server, so we can determine whether or '.
+    'an absolute URI is from your website or not.  Not strictly necessary, '.
+    'as users should be using relative URIs to reference resources on your '.
+    'website.  It will, however, let you use absolute URIs to link to '.
+    'subdomains of the domain you post here: i.e. example.com will allow '.
+    'sub.example.com.  However, higher up domains will still be excluded: '.
+    'if you set %URI.Host to sub.example.com, example.com will be blocked. '.
+    'This directive has been available since 1.2.0.'
+);
+
+HTMLPurifier_ConfigSchema::Define(
+    'URI', 'DisableExternal', false, 'bool',
+    'Disables links to external websites.  This is a highly effective '.
+    'anti-spam and anti-pagerank-leech measure, but comes at a hefty price: no'.
+    'links or images outside of your domain will be allowed.  Non-linkified '.
+    'URIs will still be preserved.  If you want to be able to link to '.
+    'subdomains or use absolute URIs, specify %URI.Host for your website. '.
+    'This directive has been available since 1.2.0.'
+);
+
 /**
  * Validates a URI as defined by RFC 3986.
  * @note Scheme-specific mechanics deferred to HTMLPurifier_URIScheme
@@ -81,6 +103,13 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         
         if ($authority !== null) {
             
+            // remove URI if it's absolute and we disallow externals
+            unset($our_host);
+            if ($config->get('URI', 'DisableExternal')) {
+                $our_host = $config->get('URI', 'Host');
+                if ($our_host === null) return false;
+            }
+            
             $HEXDIG = '[A-Fa-f0-9]';
             $unreserved = 'A-Za-z0-9-._~'; // make sure you wrap with []
             $sub_delims = '!$&\'()'; // needs []
@@ -102,6 +131,17 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             
             $host = $this->host->validate($host, $config, $context);
             if ($host === false) $host = null;
+            
+            // more lenient absolute checking
+            if (isset($our_host)) {
+                $host_parts = array_reverse(explode('.', $host));
+                // could be cached
+                $our_host_parts = array_reverse(explode('.', $our_host));
+                foreach ($our_host_parts as $i => $discard) {
+                    if (!isset($host_parts[$i])) return false;
+                    if ($host_parts[$i] != $our_host_parts[$i]) return false;
+                }
+            }
             
             // userinfo and host are validated within the regexp
             

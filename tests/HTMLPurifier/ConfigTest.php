@@ -37,6 +37,10 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
             'Core', 'Encoding', 'utf-8', 'istring', 'Case insensitivity!'
         );
         
+        HTMLPurifier_ConfigSchema::define(
+            'Extension', 'CanBeNull', null, 'string/null', 'Null or string!'
+        );
+        
         HTMLPurifier_ConfigSchema::defineAllowedValues(
             'Extension', 'Pert', array('foo', 'moo')
         );
@@ -91,6 +95,21 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $config->set('Core', 'Encoding', 'ISO-8859-1');
         $this->assertNoErrors();
         $this->assertIdentical($config->get('Core', 'Encoding'), 'iso-8859-1');
+        
+        // set null to directive that allows null
+        $config->set('Extension', 'CanBeNull', null);
+        $this->assertNoErrors();
+        $this->assertIdentical($config->get('Extension', 'CanBeNull'), null);
+        
+        $config->set('Extension', 'CanBeNull', 'foobar');
+        $this->assertNoErrors();
+        $this->assertIdentical($config->get('Extension', 'CanBeNull'), 'foobar');
+        
+        // set null to directive that doesn't allow null
+        $config->set('Extension', 'Pert', null);
+        $this->assertError('Value is of invalid type');
+        $this->assertNoErrors();
+        $this->swallowErrors();
         
     }
     

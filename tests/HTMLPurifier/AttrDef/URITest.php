@@ -233,7 +233,6 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
     function testIntegration() {
         
         $this->def = new HTMLPurifier_AttrDef_URI();
-        $this->config = $this->context = null;
         
         $this->assertDef('http://www.google.com/');
         $this->assertDef('javascript:bad_stuff();', false);
@@ -241,6 +240,24 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('news:rec.alt');
         $this->assertDef('nntp://news.example.com/324234');
         $this->assertDef('mailto:bob@example.com');
+        
+    }
+    
+    function testDisableExternal() {
+        
+        $this->def = new HTMLPurifier_AttrDef_URI();
+        $this->config->set('URI', 'DisableExternal', true);
+        
+        $this->assertDef('/foobar.txt');
+        $this->assertDef('http://google.com/', false);
+        $this->assertDef('http://sub.example.com/alas?foo=asd', false);
+        
+        $this->config->set('URI', 'Host', 'sub.example.com');
+        
+        $this->assertDef('http://sub.example.com/alas?foo=asd');
+        $this->assertDef('http://example.com/teehee', false);
+        $this->assertDef('http://www.example.com/#man', false);
+        $this->assertDef('http://go.sub.example.com/perhaps?p=foo');
         
     }
     

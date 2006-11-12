@@ -39,8 +39,4 @@ time.  Note the naming convention: %Namespace.Directive
 %URI.AddRelNofollow - will add rel="nofollow" to all links, preventing the
     spread of ill-gotten pagerank
 
-%URI.Host - host of website, for external link checks
-
 %URI.RelativeToAbsolute - transforms all relative URIs to absolute form
-
-%URI.DisableExternal - disable external links

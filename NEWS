@@ -13,6 +13,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added percent encoding normalization
 ! XSS attacks smoketest given facelift
 ! Configuration documentation now has table of contents
+! Added %URI.DisableExternal, which prevents links to external websites.  You
+  can also use %URI.Host to permit absolute linking to subdomains
 - Documentation updated
   + TODO added request Phalanger
   + TODO added request Native compression

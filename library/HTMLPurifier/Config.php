@@ -60,7 +60,7 @@ class HTMLPurifier_Config
      * @param $key String key
      */
     function get($namespace, $key) {
-        if (!isset($this->conf[$namespace][$key])) {
+        if (!isset($this->def->info[$namespace][$key])) {
             trigger_error('Cannot retrieve value of undefined directive',
                 E_USER_WARNING);
             return;
@@ -75,7 +75,7 @@ class HTMLPurifier_Config
      * @param $value Mixed value
      */
     function set($namespace, $key, $value) {
-        if (!isset($this->conf[$namespace][$key])) {
+        if (!isset($this->def->info[$namespace][$key])) {
             trigger_error('Cannot set undefined directive to value',
                 E_USER_WARNING);
             return;
