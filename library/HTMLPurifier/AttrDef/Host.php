@@ -5,7 +5,7 @@ require_once 'HTMLPurifier/AttrDef/IPv4.php';
 require_once 'HTMLPurifier/AttrDef/IPv6.php';
 
 /**
- * Validates a host according to the IPv4, IPv6 and DNS specifications.
+ * Validates a host according to the IPv4, IPv6 and DNS (future) specifications.
  */
 class HTMLPurifier_AttrDef_Host extends HTMLPurifier_AttrDef
 {
@@ -35,6 +35,8 @@ class HTMLPurifier_AttrDef_Host extends HTMLPurifier_AttrDef
             if ($valid === false) return false;
             return '['. $valid . ']';
         }
+        
+        // need to do checks on unusual encodings too
         $ipv4 = $this->ipv4->validate($string, $config, $context);
         if ($ipv4 !== false) return $ipv4;
         

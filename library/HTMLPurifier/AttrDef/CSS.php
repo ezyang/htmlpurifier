@@ -43,6 +43,7 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
             $propvalues[$property] = $result;
         }
         
+        // procedure does not write the new CSS simultaneously, so it's
         // slightly inefficient, but it's the only way of getting rid of
         // duplicates. Perhaps config to optimize it, but not now.
         

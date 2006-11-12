@@ -4,11 +4,8 @@ Code Quality Issues
 Okay, face it.  Programmers can get lazy, cut corners, or make mistakes. They
 also can do quick prototypes, and then forget to rewrite them later.  Well,
 while I can't list mistakes in here, I can list prototype-like segments
-of code that should be aggressively refactored after the beta is released.
-This does not list optimization issues, that needs to be done after intense
-profiling.
-
-Here we go:
+of code that should be aggressively refactored.  This does not list
+optimization issues, that needs to be done after intense profiling.
 
 AttrDef
     Class - doesn't support Unicode characters (fringe); uses regular
@@ -16,12 +13,10 @@ AttrDef
     Lang - code duplication; premature optimization; doesn't consult official
         lists (fringe)
     Length - easily mistaken for CSSLength
-    URI - multiple regular expressions; needs host validation routines factored
-        out for mailto scheme; missing validation for query; fragment and path,
-        no percent-encode fixing
+    URI - multiple regular expressions; missing validation for query,
+        fragment and path
     CSS - parser doesn't accept advanced CSS (fringe)
-    Number - constructor interface is inconsistent with Integer
-AttrTransform - doesn't accept AttrContext
+    Number - constructor interface inconsistent with Integer
 Config - "load configuration" hooks missing, rich set* accessors missing
 ConfigSchema - redefinition is a mess
 Strategy
@@ -31,8 +26,7 @@ Strategy
         might be efficient).
     RemoveForeignElements - should be run in parallel with MakeWellFormed
 URIScheme - needs to have callable generic checks
-    ftp - missing typecode check
-    mailto - doesn't validate emails
+    mailto - doesn't validate emails, doesn't validate querystring
     news - doesn't validate opaque path
     nntp - doesn't constrain path
 EOL

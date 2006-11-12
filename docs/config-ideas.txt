@@ -17,24 +17,17 @@ time.  Note the naming convention: %Namespace.Directive
     %Attr.ClassBlacklist. When it's Whitelist, only allow those in
     %Attr.ClassWhitelist.
 
-%Attr.LangAlphaOnly - designate whether or not to allow numerals in language
-    code subtags
-    * RFC 1766, the current standard referenced by XML, does not permit
-        numbers, but,
-    * RFC 3066, the superseding best practice standard since January 2001,
-        permits them.
-    We allow numbers by default, but you generally never see them
-    at all, which makes this a little more sane.
-
 %Attr.MaxWidth, 
 %Attr.MaxHeight - caps for width and height related checks.
-    (a hack in Pixels for an image crashing attack could be replaced by this)
+    (the hack in Pixels for an image crashing attack could be replaced by this)
 
-%URI.Munge - will munge all URIs to a different URI, which should redirect
+%URI.Munge - will munge all external URIs to a different URI, which redirects
     the user to the applicable page. A urlencoded version of the URI
     will replace any instances of %s in the string. One possible
     string is 'http://www.google.com/url?q=%s'. Useful for preventing
-    pagerank from being sent to other sites
+    pagerank from being sent to other sites, but can also be used to
+    redirect to a splash page notifying user that they are leaving your
+    website.
 
 %URI.AddRelNofollow - will add rel="nofollow" to all links, preventing the
     spread of ill-gotten pagerank
@@ -49,7 +42,16 @@ time.  Note the naming convention: %Namespace.Directive
     'DenyAll' or 'AllowAll' (default)
 
 %URI.DisableIPHosts - URIs that have IP addresses for hosts are disallowed.
-    Be sure to also grab unusual encodings (dword, hex and octal)
+    Be sure to also grab unusual encodings (dword, hex and octal), which may
+    be currently be caught by regular DNS
+%URI.DisableAbsoluteDNS - Remove extra dots after host names that trigger
+    absolute DNS.  While this is actually the preferred method according to
+    the RFC, most people opt to use a relative domain name relative to . (root).
+%URI.DisableIDN - Disallow raw internationalized domain names. Punycode
+    will still be permitted.
+
+%URI.ConvertUnusualIPHosts - transform dword/hex/octal IP addresses to the
+    regular form
 
 %URI.DisableExternalResources - disallow resource links (i.e. URIs that result
     in immediate requests, such as src in IMG) to external websites

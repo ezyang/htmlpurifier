@@ -19,7 +19,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   + TODO added request Phalanger
   + TODO added request Native compression
   + TODO added request Remove redundant tags
+  + TODO added possible plaintext formatter for HTML Purifier documentation
   + Updated ConfigDoc TODO
+  + Updated code-quality.txt, removing issues that have been resolved
+  + Improved inline comments in AttrDef/Class.php, AttrDef/CSS.php
+    and AttrDef/Host.php
 . Switched to purify()-wide Context object registry
 . Refactored unit tests to minimize duplication
 . XSS attack sheet updated

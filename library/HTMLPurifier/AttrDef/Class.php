@@ -24,13 +24,14 @@ class HTMLPurifier_AttrDef_Class extends HTMLPurifier_AttrDef
         // and plus it would complicate optimization efforts (you never
         // see that anyway).
         $matches = array();
-        $pattern = '/(?:(?<=\s)|\A)'.
+        $pattern = '/(?:(?<=\s)|\A)'. // look behind for space or string start
                    '((?:--|-?[A-Za-z_])[A-Za-z_\-0-9]*)'.
-                   '(?:(?=\s)|\z)/';
+                   '(?:(?=\s)|\z)/'; // look ahead for space or string end
         preg_match_all($pattern, $string, $matches);
         
         if (empty($matches[1])) return false;
         
+        // reconstruct class string
         $new_string = '';
         foreach ($matches[1] as $class_names) {
             $new_string .= $class_names . ' ';
