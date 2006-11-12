@@ -152,9 +152,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $uri[17] = 'javascript:alert("moo");';
         $expect_uri[17] = false;
         
-        // relative URIs
-        
-        // test basic case
+        // relative URIs - basic case
         $uri[18] = '/a/b';
         $components[18] = array(null, null, null, '/a/b', null);
         
