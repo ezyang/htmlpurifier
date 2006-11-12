@@ -12,9 +12,7 @@ TODO:
 - multipage documentation
 - determine how to multilingualize
 - factor out code into classes
-- generate a table of contents
 */
-
 
 // ---------------------------------------------------------------------------
 // Check and configure environment
@@ -82,9 +80,6 @@ $dom_root->appendChild($dom_document->createElement('title', 'HTML Purifier'));
 
 /*
 TODO for XML format:
-- namespace descriptions
-- enumerated values
-- default values
 - create a definition (DTD or other) once interface stabilizes
 */
 
@@ -138,9 +133,13 @@ foreach($schema->info as $namespace_name => $namespace_info) {
                     $schema->defaults[$namespace_name][$name], true
                 );
         }
-        $dom_constraints->appendChild(
-            $dom_document->createElement('default', $default)
-        );
+        
+        $dom_default = $dom_document->createElement('default', $default);
+        
+        // remove this once we get a DTD
+        $dom_default->setAttribute('xml:space', 'preserve');
+        
+        $dom_constraints->appendChild($dom_default);
         
         $dom_descriptions = $dom_document->createElement('descriptions');
         $dom_directive->appendChild($dom_descriptions);
