@@ -80,8 +80,11 @@ class HTMLPurifier_Config
                 E_USER_WARNING);
             return;
         }
-        $value = $this->def->validate($value,
-                                      $this->def->info[$namespace][$key]->type);
+        $value = $this->def->validate(
+                    $value,
+                    $this->def->info[$namespace][$key]->type,
+                    $this->def->info[$namespace][$key]->allow_null
+                 );
         if (is_string($value)) {
             // resolve value alias if defined
             if (isset($this->def->info[$namespace][$key]->aliases[$value])) {
@@ -95,7 +98,7 @@ class HTMLPurifier_Config
                 }
             }
         }
-        if ($value === null) {
+        if ($this->def->isError($value)) {
             trigger_error('Value is of invalid type', E_USER_WARNING);
             return;
         }

@@ -231,6 +231,17 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         $this->swallowErrors();
         
         
+        
+        // define a directive that allows null
+        HTMLPurifier_ConfigSchema::define(
+            'Core', 'Foobaz', null, 'string/null',
+            'Nulls are allowed if you add on /null, cool huh?'
+        );
+        
+        $this->assertNoErrors();
+        $this->swallowErrors();
+        
+        
         // define a directive with bad characters
         HTMLPurifier_ConfigSchema::define(
             'Core', 'Core.Attr', 10, 'int',
@@ -258,7 +269,11 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
     }
     
     function assertInvalid($var, $type) {
-        $this->assertIdentical($this->our_copy->validate($var, $type), null);
+        $this->assertTrue(
+            $this->our_copy->isError(
+                $this->our_copy->validate($var, $type)
+            )
+        );
     }
     
     function testValidate() {
@@ -271,6 +286,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         $this->assertValid(0, 'bool', false);
         $this->assertValid(1, 'bool', true);
         $this->assertInvalid(34, 'bool');
+        $this->assertInvalid(null, 'bool');
         $this->assertValid(array('1', '2', '3'), 'list');
         $this->assertValid(array('1' => true, '2' => true), 'lookup');
         $this->assertValid(array('1', '2'), 'lookup', array('1' => true, '2' => true));
@@ -278,6 +294,22 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         $this->assertInvalid(array(0 => 'moo'), 'hash');
         $this->assertValid(array(1 => 'moo'), 'hash');
         $this->assertValid(23, 'mixed');
+        
+    }
+    
+    function testValidate_null() {
+        
+        $this->assertTrue(
+            $this->our_copy->isError(
+                $this->our_copy->validate(null, 'string', false)
+            )
+        );
+        
+        $this->assertFalse(
+            $this->our_copy->isError(
+                $this->our_copy->validate(null, 'string', true)
+            )
+        );
         
     }
     

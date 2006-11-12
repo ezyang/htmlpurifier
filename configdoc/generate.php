@@ -110,9 +110,12 @@ foreach($schema->info as $namespace_name => $namespace_info) {
         $dom_constraints = $dom_document->createElement('constraints');
         $dom_directive->appendChild($dom_constraints);
         
-        $dom_constraints->appendChild(
-            $dom_document->createElement('type', $info->type)
-        );
+        $dom_type = $dom_document->createElement('type', $info->type);
+        if ($info->allow_null) {
+            $dom_type->setAttribute('allow-null', 'yes');
+        }
+        $dom_constraints->appendChild($dom_type);
+        
         if ($info->allowed !== true) {
             $dom_allowed = $dom_document->createElement('allowed');
             $dom_constraints->appendChild($dom_allowed);
@@ -128,6 +131,8 @@ foreach($schema->info as $namespace_name => $namespace_info) {
             $default = $raw_default ? 'true' : 'false';
         } elseif (is_string($raw_default)) {
             $default = "\"$raw_default\"";
+        } elseif (is_null($raw_default)) {
+            $default = 'null';
         } else {
             $default = print_r(
                     $schema->defaults[$namespace_name][$name], true

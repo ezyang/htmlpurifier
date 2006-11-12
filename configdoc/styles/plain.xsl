@@ -69,7 +69,7 @@
         <xsl:apply-templates />
     </xsl:template>
     <xsl:template match="directive/name">
-        <h3 id="{../@id}"><xsl:value-of select="." /></h3>
+        <h3 id="{../@id}"><xsl:value-of select="../@id" /></h3>
     </xsl:template>
     <xsl:template match="directive/constraints">
         <table class="constraints">
@@ -99,6 +99,9 @@
                 <xsl:variable name="type" select="text()" />
                 <xsl:attribute name="class">type type-<xsl:value-of select="$type" /></xsl:attribute>
                 <xsl:value-of select="$typeLookup/types/type[@id=$type]/text()" />
+                <xsl:if test="@allow-null='yes'">
+                    (or null)
+                </xsl:if>
             </td>
         </tr>
     </xsl:template>

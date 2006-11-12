@@ -1,5 +1,7 @@
 <?php
 
+require_once 'HTMLPurifier/Error.php';
+
 /**
  * Configuration definition, defines directives and their defaults.
  * @todo The ability to define things multiple times is confusing and should
@@ -111,12 +113,19 @@ class HTMLPurifier_ConfigSchema {
                 return;
             }
         } else {
+            // process modifiers
+            $type_values = explode('/', $type, 2);
+            $type = $type_values[0];
+            $modifier = isset($type_values[1]) ? $type_values[1] : false;
+            $allow_null = ($modifier === 'null');
+            
             if (!isset($def->types[$type])) {
                 trigger_error('Invalid type for configuration directive',
                     E_USER_ERROR);
                 return;
             }
-            if ($def->validate($default, $type) === null) {
+            $default = $def->validate($default, $type, $allow_null);
+            if ($def->isError($default)) {
                 trigger_error('Default value does not match directive type',
                     E_USER_ERROR);
                 return;
@@ -124,6 +133,7 @@ class HTMLPurifier_ConfigSchema {
             $def->info[$namespace][$name] =
                 new HTMLPurifier_ConfigEntity_Directive();
             $def->info[$namespace][$name]->type = $type;
+            $def->info[$namespace][$name]->allow_null = $allow_null;
             $def->defaults[$namespace][$name]   = $default;
         }
         $backtrace = debug_backtrace();
@@ -212,36 +222,37 @@ class HTMLPurifier_ConfigSchema {
     /**
      * Validate a variable according to type. Return null if invalid.
      */
-    function validate($var, $type) {
+    function validate($var, $type, $allow_null = false) {
         if (!isset($this->types[$type])) {
             trigger_error('Invalid type', E_USER_ERROR);
             return;
         }
+        if ($allow_null && $var === null) return null;
         switch ($type) {
             case 'mixed':
                 return $var;
             case 'istring':
             case 'string':
-                if (!is_string($var)) return;
+                if (!is_string($var)) break;
                 if ($type === 'istring') $var = strtolower($var);
                 return $var;
             case 'int':
                 if (is_string($var) && ctype_digit($var)) $var = (int) $var;
-                elseif (!is_int($var)) return;
+                elseif (!is_int($var)) break;
                 return $var;
             case 'float':
                 if (is_string($var) && is_numeric($var)) $var = (float) $var;
-                elseif (!is_float($var)) return;
+                elseif (!is_float($var)) break;
                 return $var;
             case 'bool':
                 if (is_int($var) && ($var === 0 || $var === 1)) {
                     $var = (bool) $var;
-                } elseif (!is_bool($var)) return;
+                } elseif (!is_bool($var)) break;
                 return $var;
             case 'list':
             case 'hash':
             case 'lookup':
-                if (!is_array($var)) return;
+                if (!is_array($var)) break;
                 $keys = array_keys($var);
                 if ($keys === array_keys($keys)) {
                     if ($type == 'list') return $var;
@@ -251,7 +262,7 @@ class HTMLPurifier_ConfigSchema {
                             $new[$key] = true;
                         }
                         return $new;
-                    } else return;
+                    } else break;
                 }
                 if ($type === 'lookup') {
                     foreach ($var as $key => $value) {
@@ -260,8 +271,13 @@ class HTMLPurifier_ConfigSchema {
                 }
                 return $var;
         }
+        $error = new HTMLPurifier_Error();
+        return $error;
     }
     
+    /**
+     * Takes an absolute path and munges it into a more manageable relative path
+     */
     function mungeFilename($filename) {
         $offset = strrpos($filename, 'HTMLPurifier');
         $filename = substr($filename, $offset);
@@ -269,6 +285,14 @@ class HTMLPurifier_ConfigSchema {
         return $filename;
     }
     
+    /**
+     * Checks if var is an HTMLPurifier_Error object
+     */
+    function isError($var) {
+        if (!is_object($var)) return false;
+        if (!is_a($var, 'HTMLPurifier_Error')) return false;
+        return true;
+    }
 }
 
 /**
@@ -318,6 +342,13 @@ class HTMLPurifier_ConfigEntity_Directive extends HTMLPurifier_ConfigEntity
      *      - mixed (anything goes)
      */
     var $type = 'mixed';
+    
+    /**
+     * Is null allowed? Has no affect for mixed type.
+     * @bool
+     */
+    var $allow_null = false;
+    
     /**
      * Plaintext descriptions of the configuration entity is. Organized by
      * file and line number, so multiple descriptions are allowed.
