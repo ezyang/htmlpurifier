@@ -12,8 +12,8 @@ time.  Note the naming convention: %Namespace.Directive
 
 %Attr.ClassBlacklist,
 %Attr.ClassWhitelist,
-%Attr.ClassListMode - determines what classes are allowed. When
-    %Attr.ClassListMode is set to Blacklist, only allow those not in
+%Attr.ClassPolicy - determines what classes are allowed. When
+    %Attr.ClassPolicy is set to Blacklist, only allow those not in
     %Attr.ClassBlacklist. When it's Whitelist, only allow those in
     %Attr.ClassWhitelist.
 
@@ -40,3 +40,17 @@ time.  Note the naming convention: %Namespace.Directive
     spread of ill-gotten pagerank
 
 %URI.RelativeToAbsolute - transforms all relative URIs to absolute form
+
+%URI.HostBlacklist - strings that if found in the host of a URI are disallowed
+%URI.HostBlacklistRegex - regexes that if matching the host are disallowed
+%URI.HostWhitelist - domain names that are excluded from the host blacklist
+%URI.HostPolicy - determines whether or not its reject all and then whitelist
+    or allow all in then do specific blacklists with whitelist intervening.
+    'DenyAll' or 'AllowAll' (default)
+
+%URI.DisableIPHosts - URIs that have IP addresses for hosts are disallowed.
+    Be sure to also grab unusual encodings (dword, hex and octal)
+
+%URI.DisableExternalResources - disallow resource links (i.e. URIs that result
+    in immediate requests, such as src in IMG) to external websites
+
