@@ -32,11 +32,9 @@ class HTMLPurifier_ContextTest extends UnitTestCase
         $accumulator_3 =& $this->context->get('IDAccumulator');
         $this->assertError('Attempted to retrieve non-existent variable');
         $this->assertNull($accumulator_3);
-        $this->swallowErrors();
         
         $this->context->destroy('IDAccumulator');
         $this->assertError('Attempted to destroy non-existent variable');
-        $this->swallowErrors();
         
     }
     
@@ -48,7 +46,6 @@ class HTMLPurifier_ContextTest extends UnitTestCase
         
         $this->context->register('OnceOnly', $var);
         $this->assertError('Name collision, cannot re-register');
-        $this->swallowErrors();
         
         // destroy it, now registration is okay
         $this->context->destroy('OnceOnly');

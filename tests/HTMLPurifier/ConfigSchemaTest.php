@@ -77,7 +77,6 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         );
         $this->assertError('Cannot define directive for undefined namespace');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         
         
@@ -104,7 +103,6 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         );
         $this->assertError('Inconsistent default or type, cannot redefine');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         
         
@@ -150,7 +148,6 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         );
         $this->assertError('Cannot define allowed values for undefined directive');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         
         
@@ -192,7 +189,6 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         );
         $this->assertError('Cannot define alias to value that is not allowed');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         
         
@@ -204,7 +200,6 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         );
         $this->assertError('Cannot define alias over allowed value');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         
         
@@ -216,7 +211,6 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         $this->assertError('Invalid type for configuration directive');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         
         
@@ -228,7 +222,6 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         $this->assertError('Default value does not match directive type');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         
         
@@ -239,7 +232,6 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         );
         
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         
         // define a directive with bad characters
@@ -250,7 +242,6 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         $this->assertError('Directive name must be alphanumeric');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         // define a namespace with bad characters
         HTMLPurifier_ConfigSchema::defineNamespace(
@@ -259,7 +250,6 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         $this->assertError('Namespace name must be alphanumeric');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
     }
     

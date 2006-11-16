@@ -34,7 +34,8 @@ class HTMLPurifier_Context
         if (!isset($this->_storage[$name])) {
             trigger_error('Attempted to retrieve non-existent variable',
                           E_USER_ERROR);
-            return;
+            $var = null; // so we can return by reference
+            return $var;
         }
         return $this->_storage[$name];
     }

@@ -66,25 +66,21 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $config->get('Core', 'NotDefined');
         $this->assertError('Cannot retrieve value of undefined directive');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         // try to set undefined value
         $config->set('Foobar', 'Key', 'foobar');
         $this->assertError('Cannot set undefined directive to value');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         // try to set not allowed value
         $config->set('Extension', 'Pert', 'wizard');
         $this->assertError('Value not supported');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         // try to set not allowed value
         $config->set('Extension', 'Pert', 34);
         $this->assertError('Value is of invalid type');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
         // set aliased value
         $config->set('Extension', 'Pert', 'cow');
@@ -109,11 +105,15 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $config->set('Extension', 'Pert', null);
         $this->assertError('Value is of invalid type');
         $this->assertNoErrors();
-        $this->swallowErrors();
         
     }
     
     function test_getDefinition() {
+        
+        // we actually want to use the old copy, because the definition
+        // generation routines have dependencies on configuration values
+        
+        $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
         
         $config = HTMLPurifier_Config::createDefault();
         $def = $config->getHTMLDefinition();
