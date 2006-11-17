@@ -163,6 +163,12 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<col />'
         );
         
+        // mailto in image is not allowed
+        $this->assertResult(
+            '<img src="mailto:foo@example.com" />',
+            '<img src="" alt="Invalid image" />'
+        );
+        
     }
     
 }

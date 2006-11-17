@@ -351,11 +351,13 @@ class HTMLPurifier_HTMLDefinition
         $e_URI = new HTMLPurifier_AttrDef_URI();
         $this->info['a']->attr['href'] =
         $this->info['img']->attr['longdesc'] =
-        $this->info['img']->attr['src'] =
         $this->info['del']->attr['cite'] =
         $this->info['ins']->attr['cite'] =
         $this->info['blockquote']->attr['cite'] =
         $this->info['q']->attr['cite'] = $e_URI;
+        
+        // URI that causes HTTP request
+        $this->info['img']->attr['src'] = new HTMLPurifier_AttrDef_URI(true);
         
         //////////////////////////////////////////////////////////////////////
         // info_tag_transform : transformations of tags

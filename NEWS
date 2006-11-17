@@ -23,6 +23,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Configuration documentation now has table of contents
 ! Added %URI.DisableExternal, which prevents links to external websites.  You
   can also use %URI.Host to permit absolute linking to subdomains
+! Non-accessible resources (ex. mailto) blocked from embedded URIs (img src)
 - Documentation updated
   + TODO added request Phalanger
   + TODO added request Native compression

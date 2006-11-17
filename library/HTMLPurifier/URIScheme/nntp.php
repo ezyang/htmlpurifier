@@ -8,6 +8,7 @@ require_once 'HTMLPurifier/URIScheme.php';
 class HTMLPurifier_URIScheme_nntp extends HTMLPurifier_URIScheme {
     
     var $default_port = 119;
+    var $browsable = false;
     
     function validateComponents(
         $userinfo, $host, $port, $path, $query, $config, &$context

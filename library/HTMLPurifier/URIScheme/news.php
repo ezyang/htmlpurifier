@@ -7,6 +7,8 @@ require_once 'HTMLPurifier/URIScheme.php';
  */
 class HTMLPurifier_URIScheme_news extends HTMLPurifier_URIScheme {
     
+    var $browsable = false;
+    
     function validateComponents(
         $userinfo, $host, $port, $path, $query, $config, &$context
     ) {

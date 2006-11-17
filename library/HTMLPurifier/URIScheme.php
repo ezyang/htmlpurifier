@@ -13,6 +13,13 @@ class HTMLPurifier_URIScheme
     var $default_port = null;
     
     /**
+     * Whether or not URIs of this schem are locatable by a browser
+     * http and ftp are accessible, while mailto and news are not.
+     * @public
+     */
+    var $browsable = false;
+    
+    /**
      * Validates the components of a URI
      * @note This implementation should be called by children if they define
      *       a default port, as it does port processing.

@@ -43,10 +43,15 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
     
     var $host;
     var $PercentEncoder;
+    var $embeds;
     
-    function HTMLPurifier_AttrDef_URI() {
+    /**
+     * @param $embeds Does the URI here result in an extra HTTP request?
+     */
+    function HTMLPurifier_AttrDef_URI($embeds = false) {
         $this->host = new HTMLPurifier_AttrDef_Host();
         $this->PercentEncoder = new HTMLPurifier_PercentEncoder();
+        $this->embeds = (bool) $embeds;
     }
     
     function validate($uri, $config, &$context) {
@@ -99,6 +104,12 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             );
         }
         
+        
+        // the URI we're processing embeds a resource in the page, but the URI
+        // it references cannot be located
+        if ($this->embeds && !$scheme_obj->browsable) {
+            return false;
+        }
         
         
         if ($authority !== null) {

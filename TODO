@@ -5,8 +5,6 @@ TODO List
  - Make URI validation routines tighter (especially mailto)
  - More extensive URI filtering schemes (see URI in config-ideas.txt)
  - Allow for background-image and list-style-image (see above)
- - Distinguish between different types of URIs, for instance, a mailto URI
-   in IMG SRC is nonsensical
  - Error logging for filtering/cleanup procedures
  - Rich set* methods and config file loaders for HTMLPurifier_Config
 

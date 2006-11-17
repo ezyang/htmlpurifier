@@ -8,6 +8,7 @@ require_once 'HTMLPurifier/URIScheme.php';
 class HTMLPurifier_URIScheme_http extends HTMLPurifier_URIScheme {
     
     var $default_port = 80;
+    var $browsable = true;
     
     function validateComponents(
         $userinfo, $host, $port, $path, $query, $config, &$context

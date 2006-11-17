@@ -261,6 +261,16 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         
     }
     
+    function testEmbeds() {
+        
+        // embedded URI
+        $this->def = new HTMLPurifier_AttrDef_URI(true);
+        
+        $this->assertDef('http://sub.example.com/alas?foo=asd');
+        $this->assertDef('mailto:foo@example.com', false);
+        
+    }
+    
 }
 
 ?>
