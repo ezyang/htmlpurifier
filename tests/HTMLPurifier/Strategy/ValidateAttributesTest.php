@@ -21,17 +21,25 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $this->assertResult('');
         
         // test ids
-        $this->assertResult('<div id="valid">Preserve the ID.</div>');
+        $this->assertResult(
+            '<div id="valid">Kill the ID.</div>',
+            '<div>Kill the ID.</div>'
+        );
+            
+        $this->assertResult('<div id="valid">Preserve the ID.</div>', true,
+            array('HTML.EnableAttrID' => true));
         
         $this->assertResult(
             '<div id="0invalid">Kill the ID.</div>',
-            '<div>Kill the ID.</div>'
+            '<div>Kill the ID.</div>',
+            array('HTML.EnableAttrID' => true)
         );
         
         // test id accumulator
         $this->assertResult(
             '<div id="valid">Valid</div><div id="valid">Invalid</div>',
-            '<div id="valid">Valid</div><div>Invalid</div>'
+            '<div id="valid">Valid</div><div>Invalid</div>',
+            array('HTML.EnableAttrID' => true)
         );
         
         $this->assertResult(
@@ -42,20 +50,25 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         // test attribute key case sensitivity
         $this->assertResult(
             '<div ID="valid">Convert ID to lowercase.</div>',
-            '<div id="valid">Convert ID to lowercase.</div>'
+            '<div id="valid">Convert ID to lowercase.</div>',
+            array('HTML.EnableAttrID' => true)
         );
         
         // test simple attribute substitution
         $this->assertResult(
             '<div id=" valid ">Trim whitespace.</div>',
-            '<div id="valid">Trim whitespace.</div>'
+            '<div id="valid">Trim whitespace.</div>',
+            array('HTML.EnableAttrID' => true)
         );
         
         // test configuration id blacklist
         $this->assertResult(
             '<div id="invalid">Invalid</div>',
             '<div>Invalid</div>',
-            array('Attr.IDBlacklist' => array('invalid'))
+            array(
+                'Attr.IDBlacklist' => array('invalid'),
+                'HTML.EnableAttrID' => true
+            )
         );
         
         // test classes

@@ -1,0 +1,124 @@
+
+IDs
+    What they are, why you should(n't) wear them, and how to deal with it
+
+Prior to HTML Purifier 1.2.0, this library blithely accepted user input that
+looked like this:
+
+    <a id="fragment">Anchor</a>
+
+...presenting an attractive vector for those that would destroy standards
+compliance: simply set the ID to one that is already used elsewhere in the
+document and voila: validation breaks.  There was a half-hearted attempt to
+prevent this by allowing users to blacklist IDs, but I suspect that no one
+really bothered, and thus, with the release of 1.2.0, IDs are now *removed*
+by default.
+
+IDs, however, are quite useful functionality to have, so if users start
+complaining about broken anchors you'll probably want to turn them back on
+with %HTML.EnableAttrID. But before you go mucking around with the config
+object, it's probably worth to take some precautions to keep your page
+validating. Why?
+
+1. Standards-compliant pages are good
+2. Duplicated IDs interfere with anchors.  If there are two id="foobar"s in a
+   document, which spot does a browser presented with the fragment #foobar go
+   to? Most browsers opt for the first appearing ID, making it impossible
+   to references the second section. Similarly, duplicated IDs can hijack
+   client-side scripting that relies on the IDs of elements.
+
+You have (currently) four ways of dealing with the problem.
+
+
+
+Road #1: Blacklisting IDs 
+    Good for pages with single content source and stable templates
+
+Keeping in terms with the KISS (Keep It Simple, Stupid) principle, let us
+deal with the most obvious solution: preventing users from using any IDs that
+appear elsewhere on the document.  The method is simple:
+
+    $config->set('HTML', 'EnableAttrID', true);
+    $config->set('Attr', 'IDBlacklist' array(
+        'list', 'of', 'attributes', 'that', 'are', 'forbidden'
+    ));
+
+That being said, there are some notable drawbacks.  First of all, you have to
+know precisely which IDs are being used by the HTML surrounding the user code.
+This is easier said than done: quite often the page designer and the system
+coder work separately, so the designer has to constantly be talking with the
+coder whenever he decides to add a new anchor.  Miss one and you open yourself
+to possible standards-compliance issues.
+
+Furthermore, this position becomes untenable when a single web page must hold
+multiple portions of user-submitted content.  Since there's obviously no way
+to find out before-hand what IDs users will use, the blacklist is helpless.
+And even since HTML Purifier validates each segment seperately, perhaps doing
+so at different times, it would be extremely difficult to dynamically update
+the blacklist inbetween runs.
+
+Finally, simply destroying the ID is extremely un-userfriendly behavior: after
+all, they might have simply specified a duplicate ID by accident.
+
+Thus, we get to our second method.
+
+
+
+Road #2: Namespacing IDs
+    Lazy developer's way, but needs user education
+
+This method, too, is quite simple: add a prefix to all user IDs. With this
+code:
+
+    $config->set('HTML', 'EnableAttrID', true);
+    $config->set('Attr', 'IDPrefix', 'user_');
+
+...this:
+
+    <a id="foobar">Anchor!</a>
+
+...turns into:
+
+    <a id="user_foobar">Anchor!</a>
+
+As long as you don't have any IDs that start with user_, collisions are
+guaranteed not to happen.  The drawback is obvious: if a user submits
+id="foobar", they probably expect to be able to reference their page with
+#foobar. You'll have to tell them, "No, that doesn't work, you have to add
+user_ to the beginning."
+
+And yes, things get hairier.  Even with a nice prefix, we still have done
+nothing about multiple HTML Purifier outputs on one page.  Thus, we have
+a second configuration value to piggy-back off of: %Attr.IDPrefixLocal:
+
+    $config->set('Attr', 'IDPrefixLocal', 'comment' . $id . '_');
+
+This new attributes does nothing but append on to regular IDPrefix, but is
+special in that it is volatile: it's value is determined at run-time and
+cannot possibly be cordoned into, say, a .ini config file.  As for what to
+put into the directive, is up to you, but I would recommend the ID number
+the text has been assigned in the database.  Whatever you pick, however, it
+has to be unique and stable for the text you are validating.  Note, however,
+that we require that %Attr.IDPrefix be set before you use this directive.
+
+And also remember: the user has to know what this prefix is too!
+
+
+
+Path #3: Abstinence
+
+You may not want to bother. That's okay too, just don't enable IDs.
+
+Personally, I would take this road whenever user-submitted content would be
+possibly be shown together on one page.  Why a blog comment would need to use
+anchors is beyond me.
+
+
+
+Path #4: Denial
+
+To revert back to pre-1.2.0 behavior, simply:
+
+    $config->set('HTML', 'EnableAttrID', true);
+
+Don't come crying to me when your page mysteriously stops validating, though.

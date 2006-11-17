@@ -48,6 +48,8 @@ Unknown release (on a scratch-an-itch basis)
    empty-cells:show is applied to have compatibility with Internet Explorer
  - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
    Also, enable disabling of directionality
+ - Append something to duplicate IDs so they're still usable (impl. note: the
+   dupe detector would also need to detect the suffix as well)
 
 Encoding workarounds
  - Non-lossy dumb alternate character encoding transformations, achieved by

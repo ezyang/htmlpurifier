@@ -2,6 +2,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 = KEY ====================
+    # Breaks back-compat
     ! Feature
     - Bugfix
       + Sub-comment
@@ -9,6 +10,13 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 1.2.0, unknown projected release date
+# ID attributes now disabled by default. New directives:
+  + %HTML.EnableAttrID - restores old behavior by allowing IDs
+  + %Attr.IDPrefix - %Attr.IDBlacklist alternative that munges all user IDs
+    so that they don't collide with your IDs
+  + %Attr.IDPrefixLocal - Same as above, but for when there are multiple
+    instances of user content on the page
+  + Profuse documentation on how to use these available in id.txt
 ! Added MODx plugin <http://modxcms.com/forums/index.php/topic,6604.0.html>
 ! Added percent encoding normalization
 ! XSS attacks smoketest given facelift

@@ -22,6 +22,19 @@ require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Token.php';
 require_once 'HTMLPurifier/TagTransform.php';
 
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'EnableAttrID', false, 'bool',
+    'Allows the ID attribute in HTML.  This is disabled by default '.
+    'due to the fact that without proper configuration user input can '.
+    'easily break the validation of a webpage by specifying an ID that is '.
+    'already on the surrounding HTML.  If you don\'t mind throwing caution to '.
+    'the wind, enable this directive, but I strongly recommend you also '.
+    'consider blacklisting IDs you use (%Attr.IDBlacklist) or prefixing all '.
+    'user supplied IDs (%Attr.IDPrefix).  This directive has been available '.
+    'since 1.2.0, and when set to true reverts to the behavior of pre-1.2.0 '.
+    'versions.'
+);
+
 /**
  * Defines the purified HTML type with large amounts of objects.
  * 
@@ -271,7 +284,6 @@ class HTMLPurifier_HTMLDefinition
         // which manually override these in their local definitions
         $this->info_global_attr = array(
             // core attrs
-            'id'    => new HTMLPurifier_AttrDef_ID(),
             'class' => new HTMLPurifier_AttrDef_Class(),
             'title' => $e_Text,
             'style' => new HTMLPurifier_AttrDef_CSS(),
@@ -280,6 +292,10 @@ class HTMLPurifier_HTMLDefinition
             'lang'  => new HTMLPurifier_AttrDef_Lang(),
             'xml:lang' => new HTMLPurifier_AttrDef_Lang(),
             );
+        
+        if ($config->get('HTML', 'EnableAttrID')) {
+            $this->info_global_attr['id'] = new HTMLPurifier_AttrDef_ID();
+        }
         
         // required attribute stipulation handled in attribute transformation
         $this->info['bdo']->attr = array(); // nothing else
