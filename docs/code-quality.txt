@@ -10,14 +10,11 @@ optimization issues, that needs to be done after intense profiling.
 AttrDef
     Class - doesn't support Unicode characters (fringe); uses regular
         expressions
-    Lang - code duplication; premature optimization; doesn't consult official
-        lists (fringe)
+    Lang - code duplication; premature optimization
     Length - easily mistaken for CSSLength
-    URI - multiple regular expressions; missing validation for query,
-        fragment and path
+    URI - multiple regular expressions; missing validation for parts (?)
     CSS - parser doesn't accept advanced CSS (fringe)
     Number - constructor interface inconsistent with Integer
-Config - "load configuration" hooks missing, rich set* accessors missing
 ConfigSchema - redefinition is a mess
 Strategy
     FixNesting - cannot bubble nodes out of structures

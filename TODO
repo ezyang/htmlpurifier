@@ -8,6 +8,7 @@ TODO List
  - Distinguish between different types of URIs, for instance, a mailto URI
    in IMG SRC is nonsensical
  - Error logging for filtering/cleanup procedures
+ - Rich set* methods and config file loaders for HTMLPurifier_Config
 
 1.3 release
  - Add various "levels" of cleaning
@@ -50,6 +51,7 @@ Unknown release (on a scratch-an-itch basis)
    Also, enable disabling of directionality
  - Append something to duplicate IDs so they're still usable (impl. note: the
    dupe detector would also need to detect the suffix as well)
+ - Have 'lang' attribute be checked against official lists
 
 Encoding workarounds
  - Non-lossy dumb alternate character encoding transformations, achieved by
