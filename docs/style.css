@@ -29,5 +29,11 @@ h4 {font-family:sans-serif; font-size:0.9em; font-weight:bold; }
 .table thead th:first-child {-moz-border-radius-topleft:1em;}
 .table tbody td {border-bottom:1px solid #CCC; padding-right:0.6em;padding-left:0.6em;}
 
+/* Category of the file */
+#filing {font-weight:bold; font-size:smaller; }
+
+/* Contains, without exception, Return to index. */
+#index {font-size:smaller; }
+
 /* Contains, without exception, $Id$, for SVN version info. */
 #version {text-align:right; font-style:italic; margin:2em 0;}
