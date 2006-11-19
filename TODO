@@ -3,7 +3,7 @@ TODO List
 
 1.2 release
  - Make URI validation routines tighter (especially mailto)
- - More extensive URI filtering schemes (see URI in config-ideas.txt)
+ - More extensive URI filtering schemes (see docs/proposal-new-directives.txt)
  - Allow for background-image and list-style-image (see above)
  - Error logging for filtering/cleanup procedures
  - Rich set* methods and config file loaders for HTMLPurifier_Config

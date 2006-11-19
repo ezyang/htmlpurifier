@@ -16,7 +16,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     so that they don't collide with your IDs
   + %Attr.IDPrefixLocal - Same as above, but for when there are multiple
     instances of user content on the page
-  + Profuse documentation on how to use these available in id.txt
+  + Profuse documentation on how to use these available in docs/enduser-id.txt
 ! Added MODx plugin <http://modxcms.com/forums/index.php/topic,6604.0.html>
 ! Added percent encoding normalization
 ! XSS attacks smoketest given facelift
@@ -30,9 +30,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   + TODO added request Remove redundant tags
   + TODO added possible plaintext formatter for HTML Purifier documentation
   + Updated ConfigDoc TODO
-  + Updated code-quality.txt, removing issues that have been resolved
   + Improved inline comments in AttrDef/Class.php, AttrDef/CSS.php
     and AttrDef/Host.php
+  + Revamped documentation into HTML, along with misc updates
 - HTMLPurifier_Context doesn't throw a variable reference error if you attempt
   to retrieve a non-existent variable
 . Switched to purify()-wide Context object registry
