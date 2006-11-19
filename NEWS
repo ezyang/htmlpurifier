@@ -24,6 +24,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added %URI.DisableExternal, which prevents links to external websites.  You
   can also use %URI.Host to permit absolute linking to subdomains
 ! Non-accessible resources (ex. mailto) blocked from embedded URIs (img src)
+- Type variable in HTMLDefinition was not being set properly, fixed
 - Documentation updated
   + TODO added request Phalanger
   + TODO added request Native compression
@@ -41,11 +42,6 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . configdoc.xml now has xml:space attached to default value nodes
 . Allow configuration directives to permit null values
 . Cleaned up test-cases to remove unnecessary swallowErrors()
-
-1.1.3, unknown projected release date
-(bugfix release, may be dropped if no major bugs are found before features)
-- Documentation updated
-- Type variable in HTMLDefinition was not being set properly, fixed
 
 1.1.2, released 2006-09-30
 ! Add HTMLPurifier.auto.php stub file that configures include_path
