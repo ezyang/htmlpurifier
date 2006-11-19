@@ -1,0 +1,28 @@
+html {font-size:1em; font-family:serif; }
+body {margin-left:4em; margin-right:4em; }
+
+dt {font-weight:bold; }
+pre {margin-left:2em; }
+pre, code, tt {font-family:monospace; font-size:1em; }
+
+h1 {text-align:center; font-family:Garamond, serif;
+  font-variant:small-caps;}
+h2 {border-bottom:1px solid #CCC; font-family:sans-serif; font-weight:normal;
+    font-size:1.3em;}
+h3 {font-family:sans-serif; font-size:1.1em; font-weight:bold; }
+h4 {font-family:sans-serif; font-size:0.9em; font-weight:bold; }
+
+/* Used for special "See also" links. */
+.reference {font-style:italic;margin-left:2em;}
+
+/* Marks off asides, discussions on why something is the way it is */
+.aside {margin-left:2em; font-family:sans-serif; font-size:0.9em; }
+
+/* A regular table */
+.table {border-collapse:collapse; border-bottom:2px solid #888; margin-left:2em; }
+.table thead th {margin:0; background:#888; color:#FFF; }
+.table thead th:first-child {-moz-border-radius-topleft:1em;}
+.table tbody td {border-bottom:1px solid #CCC; padding-right:0.6em;padding-left:0.6em;}
+
+/* Contains, without exception, $Id$, for SVN version info. */
+#version {text-align:right; font-style:italic; }
