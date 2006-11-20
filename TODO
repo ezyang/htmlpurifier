@@ -1,14 +1,14 @@
 
 TODO List
 
-1.2 release
+1.3 release
  - Make URI validation routines tighter (especially mailto)
  - More extensive URI filtering schemes (see docs/proposal-new-directives.txt)
  - Allow for background-image and list-style-image (see above)
  - Error logging for filtering/cleanup procedures
  - Rich set* methods and config file loaders for HTMLPurifier_Config
 
-1.3 release
+1.4 release
  - Add various "levels" of cleaning
     - Related: Allow strict (X)HTML
  - More fine-grained control over escaping behavior
@@ -17,7 +17,7 @@ TODO List
       of children, although unbalanced tags could wreck havoc (or at least
       delete the rest of the document)).
 
-1.4 release
+1.5 release
  - Additional support for poorly written HTML
     - Implement all non-essential attribute transforms
     - Microsoft Word HTML cleaning (i.e. MsoNormal)
