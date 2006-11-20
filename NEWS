@@ -9,6 +9,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+1.3.0, unknown release date
+(major feature release)
+
+1.2.1, unknown release date
+(bugfix/minor feature release, may be dropped if 1.2.0 is stable)
+
 1.2.0, released 2006-11-19
 # ID attributes now disabled by default. New directives:
   + %HTML.EnableAttrID - restores old behavior by allowing IDs
