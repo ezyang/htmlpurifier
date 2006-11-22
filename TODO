@@ -2,6 +2,7 @@
 TODO List
 
 1.3 release
+ - Enable strict-compliant (X)HTML output
  - Make URI validation routines tighter (especially mailto)
  - More extensive URI filtering schemes (see docs/proposal-new-directives.txt)
  - Allow for background-image and list-style-image (see above)
@@ -10,7 +11,6 @@ TODO List
 
 1.4 release
  - Add various "levels" of cleaning
-    - Related: Allow strict (X)HTML
  - More fine-grained control over escaping behavior
     - Silently drop content inbetween SCRIPT tags (can be generalized to allow
       specification of elements that, when detected as foreign, trigger removal
