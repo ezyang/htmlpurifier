@@ -35,6 +35,11 @@ HTMLPurifier_ConfigSchema::define(
     'versions.'
 );
 
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'Strict', false, 'bool',
+    'Determines whether or not to use Transitional (loose) or Strict rulesets.'
+);
+
 /**
  * Defines the purified HTML type with large amounts of objects.
  * 
@@ -111,12 +116,18 @@ class HTMLPurifier_HTMLDefinition
             array(
                 'ins', 'del', 'blockquote', 'dd', 'li', 'div', 'em', 'strong',
                 'dfn', 'code', 'samp', 'kbd', 'var', 'cite', 'abbr', 'acronym',
-                'q', 'sub', 'tt', 'sup', 'i', 'b', 'big', 'small', 'u', 's',
-                'strike', 'bdo', 'span', 'dt', 'p', 'h1', 'h2', 'h3', 'h4',
+                'q', 'sub', 'tt', 'sup', 'i', 'b', 'big', 'small',
+                'bdo', 'span', 'dt', 'p', 'h1', 'h2', 'h3', 'h4',
                 'h5', 'h6', 'ol', 'ul', 'dl', 'address', 'img', 'br', 'hr',
                 'pre', 'a', 'table', 'caption', 'thead', 'tfoot', 'tbody',
                 'colgroup', 'col', 'td', 'th', 'tr'
             );
+        
+        if (!$config->get('HTML', 'Strict')) {
+            $allowed_tags[] = 'u';
+            $allowed_tags[] = 's';
+            $allowed_tags[] = 'strike';
+        }
         
         foreach ($allowed_tags as $tag) {
             $this->info[$tag] = new HTMLPurifier_ElementDef();
@@ -161,6 +172,7 @@ class HTMLPurifier_HTMLDefinition
         $e_lists = 'ul | ol | dl';
         $e_blocktext = 'pre | hr | blockquote | address';
         $e_block = "p | $e_heading | div | $e_lists | $e_blocktext | table";
+        $e_Block = new HTMLPurifier_ChildDef_Optional($e_block);
         $e__flow = "#PCDATA | $e_block | $e_inline | $e_misc";
         $e_Flow = new HTMLPurifier_ChildDef_Optional($e__flow);
         $e_a_content = new HTMLPurifier_ChildDef_Optional("#PCDATA".
@@ -176,10 +188,15 @@ class HTMLPurifier_HTMLDefinition
         $this->info['del']->child =
             new HTMLPurifier_ChildDef_Chameleon($e__inline, $e__flow);
         
-        $this->info['blockquote']->child=
         $this->info['dd']->child  =
         $this->info['li']->child  =
         $this->info['div']->child = $e_Flow;
+        
+        if ($config->get('HTML', 'Strict')) {
+            $this->info['blockquote']->child = $e_Block;
+        } else {
+            $this->info['blockquote']->child = $e_Flow;
+        }
         
         $this->info['caption']->child   = 
         $this->info['em']->child   =
@@ -220,9 +237,13 @@ class HTMLPurifier_HTMLDefinition
         
         $this->info['dl']->child   = new HTMLPurifier_ChildDef_Required('dt|dd');
         
-        $this->info['address']->child =
-          new HTMLPurifier_ChildDef_Optional("#PCDATA | p | $e_inline".
-              " | $e_misc_inline");
+        if ($config->get('HTML', 'Strict')) {
+            $this->info['address']->child = $e_Inline
+        } else {
+            $this->info['address']->child =
+              new HTMLPurifier_ChildDef_Optional("#PCDATA | p | $e_inline".
+                  " | $e_misc_inline");
+        }
         
         $this->info['img']->child  =
         $this->info['br']->child   =
@@ -254,7 +275,6 @@ class HTMLPurifier_HTMLDefinition
             $this->info[$name]->type = 'inline';
         }
         
-        $e_Block = new HTMLPurifier_ChildDef_Optional($e_block);
         foreach ($e_Block->elements as $name => $bool) {
             $this->info[$name]->type = 'block';
         }

@@ -14,11 +14,28 @@ class HTMLPurifier_Test extends UnitTestCase
         $this->assertIdentical($expect, $result);
     }
     
-    function test() {
-        $config = HTMLPurifier_Config::createDefault();
-        $this->purifier = new HTMLPurifier($config);
+    function testNull() {
+        $this->purifier = new HTMLPurifier();
         $this->assertPurification("Null byte\0", "Null byte");
     }
+    
+    function testStrict() {
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML', 'Strict', true);
+        $this->purifier = new HTMLPurifier($config);
+        
+        $this->assertPurification(
+            '<u>Illegal underline</u>',
+            'Illegal underline'
+        );
+        
+        $this->assertPurification(
+            '<blockquote>Illegal contents</blockquote>',
+            '<blockquote></blockquote>'
+        );
+        
+    }
+    
 }
 
 ?>

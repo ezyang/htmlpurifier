@@ -12,7 +12,7 @@ BLOCKQUOTE changes from 'flow' to 'block'
 U, S, STRIKE cut
     behavior: replace with appropriate inline span + CSS
 ADDRESS from potpourri to Inline (removes p tags)
-    behavior: p tags silently dropped or replaced with something
+    behavior: p tags silently dropped or replaced with something (<br>)
 
 == Things we can loosen up ==
 
