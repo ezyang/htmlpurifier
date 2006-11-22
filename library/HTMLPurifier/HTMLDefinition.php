@@ -238,7 +238,7 @@ class HTMLPurifier_HTMLDefinition
         $this->info['dl']->child   = new HTMLPurifier_ChildDef_Required('dt|dd');
         
         if ($config->get('HTML', 'Strict')) {
-            $this->info['address']->child = $e_Inline
+            $this->info['address']->child = $e_Inline;
         } else {
             $this->info['address']->child =
               new HTMLPurifier_ChildDef_Optional("#PCDATA | p | $e_inline".
