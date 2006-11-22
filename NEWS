@@ -14,6 +14,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 1.2.1, unknown release date
 (bugfix/minor feature release, may be dropped if 1.2.0 is stable)
+. Refactored ChildDef classes into their own files
 
 1.2.0, released 2006-11-19
 # ID attributes now disabled by default. New directives:
