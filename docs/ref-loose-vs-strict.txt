@@ -1,0 +1,42 @@
+
+Loose versus Strict
+    Changes from one doctype to another
+
+There are changes.  Wow, how insightful.  Not everything changed is relevant
+to HTML Purifier, though, so let's take a look:
+
+== Major incompatibilities ==
+
+BLOCKQUOTE changes from 'flow' to 'block'
+    behavior: inline inner contents should not be nuked, paragraph as necessary
+U, S, STRIKE cut
+    behavior: replace with appropriate inline span + CSS
+ADDRESS from potpourri to Inline (removes p tags)
+    behavior: p tags silently dropped or replaced with something
+
+== Things we can loosen up ==
+
+Tags DIR, MENU, CENTER, ISINDEX, FONT, BASEFONT? allowed in loose
+Attributes allowed in loose:
+    div,p,h#.align
+    ul,ol.type
+    ul,ol,dl.compact
+    ol.start
+    li.type,value
+    hr.align,noshade,size,width
+    pre.width
+    img.name?,align,border,hspace,vspace
+    table.align,bgcolor
+    caption.align
+    tr.bgcolor
+    th,td.nowrap,bgcolor,width,height
+
+== Periphery issues ==
+
+A tag's attribute 'target' (for selecting frames) cut
+    behavior: shouldn't be needed, use loose doctype if needed
+OL/LI tag's attribute 'start' (for renumbering lists) cut
+    behavior: no substitute, just delete
+Attribute 'name' deprecated in favor of 'id'
+    behavior: create proper AttrTransform
+PRE tag allows SUB/SUP? (strict dtd comment vs syntax, loose disallows)
