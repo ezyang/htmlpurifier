@@ -9,6 +9,8 @@ TODO List
  - Allow for background-image and list-style-image (see above)
  - Error logging for filtering/cleanup procedures
  - Rich set* methods and config file loaders for HTMLPurifier_Config
+ - Caching of everything
+ - Configuration profiles: sets of directives that get set with one func call
 
 1.4 release
  - Add various "levels" of cleaning
