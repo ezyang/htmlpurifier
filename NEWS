@@ -11,6 +11,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 1.3.0, unknown release date
 (major feature release)
+# Invalid images are now removed, rather than replaced with a dud
+  <img src="" alt="Invalid image" />. Previous behavior can be restored
+  with new directive %Core.RemoveInvalidImg set to false.
 ! (X)HTML Strict now supported
   + Transparently handles inline elements in block context (blockquote)
 ! Added GET method to demo for easier validation, added 50kb max input size
@@ -19,6 +22,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! New directives %HTML.AllowedElements and %HTML.AllowedAttributes to let
   users narrow the set of allowed tags
 ! <li value="4"> and <ul start="2"> now allowed in loose mode
+! New directives %URI.DisableExternalResources and %URI.DisableResources
+! New directive %Attr.DisableURI, which eliminates all hyperlinking
 - Added missing type to ChildDef_Chameleon
 - Remove Tidy option from demo if there is not Tidy available
 . ChildDef_Required guards against empty tags

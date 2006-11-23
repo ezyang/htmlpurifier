@@ -271,6 +271,20 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         
     }
     
+    function testDisableExternalResources() {
+        
+        $this->config->set('URI', 'DisableExternalResources', true);
+        
+        $this->def = new HTMLPurifier_AttrDef_URI();
+        $this->assertDef('http://sub.example.com/alas?foo=asd');
+        $this->assertDef('/img.png');
+        
+        $this->def = new HTMLPurifier_AttrDef_URI(true);
+        $this->assertDef('http://sub.example.com/alas?foo=asd', false);
+        $this->assertDef('/img.png');
+        
+    }
+    
 }
 
 ?>

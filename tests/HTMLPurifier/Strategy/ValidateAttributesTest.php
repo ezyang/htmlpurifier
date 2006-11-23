@@ -125,6 +125,9 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         );
         
         // test required attributes for img
+        
+        // (this should never happen, as RemoveForeignElements
+        //  should have removed the offending image tag)
         $this->assertResult(
             '<img />',
             '<img src="" alt="Invalid image" />'

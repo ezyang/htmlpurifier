@@ -24,7 +24,7 @@ HTMLPurifier_ConfigSchema::define(
     'This directive has been available since 1.2.0.'
 );
 
-HTMLPurifier_ConfigSchema::Define(
+HTMLPurifier_ConfigSchema::define(
     'URI', 'DisableExternal', false, 'bool',
     'Disables links to external websites.  This is a highly effective '.
     'anti-spam and anti-pagerank-leech measure, but comes at a hefty price: no'.
@@ -32,6 +32,26 @@ HTMLPurifier_ConfigSchema::Define(
     'URIs will still be preserved.  If you want to be able to link to '.
     'subdomains or use absolute URIs, specify %URI.Host for your website. '.
     'This directive has been available since 1.2.0.'
+);
+
+HTMLPurifier_ConfigSchema::define(
+    'URI', 'DisableExternalResources', false, 'bool',
+    'Disables the embedding of external resources, preventing users from '.
+    'embedding things like images from other hosts. This prevents '.
+    'access tracking (good for email viewers), bandwidth leeching, '.
+    'cross-site request forging, goatse.cx posting, and '.
+    'other nasties, but also results in '.
+    'a loss of end-user functionality (they can\'t directly post a pic '.
+    'they posted from Flickr anymore). Use it if you don\'t have a '.
+    'robust user-content moderation team. This directive has been '.
+    'available since 1.3.0.'
+);
+
+HTMLPurifier_ConfigSchema::define(
+    'URI', 'DisableResources', false, 'bool',
+    'Disables embedding resources, essentially meaning no pictures. You can '.
+    'still link to them though. See %URI.DisableExternalResources for why '.
+    'this might be a good idea. This directive has been available since 1.3.0.'
 );
 
 /**
@@ -43,15 +63,15 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
     
     var $host;
     var $PercentEncoder;
-    var $embeds;
+    var $embeds_resource;
     
     /**
-     * @param $embeds Does the URI here result in an extra HTTP request?
+     * @param $embeds_resource_resource Does the URI here result in an extra HTTP request?
      */
-    function HTMLPurifier_AttrDef_URI($embeds = false) {
+    function HTMLPurifier_AttrDef_URI($embeds_resource = false) {
         $this->host = new HTMLPurifier_AttrDef_Host();
         $this->PercentEncoder = new HTMLPurifier_PercentEncoder();
-        $this->embeds = (bool) $embeds;
+        $this->embeds_resource = (bool) $embeds_resource;
     }
     
     function validate($uri, $config, &$context) {
@@ -105,18 +125,25 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         }
         
         
-        // the URI we're processing embeds a resource in the page, but the URI
+        // the URI we're processing embeds_resource a resource in the page, but the URI
         // it references cannot be located
-        if ($this->embeds && !$scheme_obj->browsable) {
+        if ($this->embeds_resource && !$scheme_obj->browsable) {
             return false;
         }
         
         
         if ($authority !== null) {
             
-            // remove URI if it's absolute and we disallow externals
+            // remove URI if it's absolute and we disabled externals or
+            // if it's absolute and embedded and we disabled external resources
             unset($our_host);
-            if ($config->get('URI', 'DisableExternal')) {
+            if (
+                $config->get('URI', 'DisableExternal') ||
+                (
+                    $config->get('URI', 'DisableExternalResources') &&
+                    $this->embeds_resource
+                )
+            ) {
                 $our_host = $config->get('URI', 'Host');
                 if ($our_host === null) return false;
             }

@@ -8,6 +8,10 @@ class HTMLPurifier_Test extends UnitTestCase
 {
     var $purifier;
     
+    function setUp() {
+        $this->purifier = new HTMLPurifier();
+    }
+    
     function assertPurification($input, $expect = null) {
         if ($expect === null) $expect = $input;
         $result = $this->purifier->purify($input);
@@ -15,7 +19,6 @@ class HTMLPurifier_Test extends UnitTestCase
     }
     
     function testNull() {
-        $this->purifier = new HTMLPurifier();
         $this->assertPurification("Null byte\0", "Null byte");
     }
     
@@ -49,6 +52,19 @@ class HTMLPurifier_Test extends UnitTestCase
         $this->assertPurification(
             '<span>Not allowed</span><a class="mef" id="foobar">Foobar</a>',
             'Not allowed<a>Foobar</a>' // no ID!!!
+        );
+        
+    }
+    
+    function testDisableURI() {
+        
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('Attr', 'DisableURI', true);
+        $this->purifier = new HTMLPurifier($config);
+        
+        $this->assertPurification(
+            '<img src="foobar"/>',
+            ''
         );
         
     }

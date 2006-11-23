@@ -42,6 +42,12 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
               ' Warning!</span>'
         );
         
+        // test removal of img tag
+        $this->assertResult(
+            '<img />',
+            ''
+        );
+        
     }
     
 }

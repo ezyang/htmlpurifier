@@ -43,7 +43,8 @@ HTMLPurifier_ConfigSchema::define(
 
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'Strict', false, 'bool',
-    'Determines whether or not to use Transitional (loose) or Strict rulesets.'
+    'Determines whether or not to use Transitional (loose) or Strict rulesets. '.
+    'This directive has been available since 1.3.0.'
 );
 
 HTMLPurifier_ConfigSchema::define(
@@ -53,14 +54,16 @@ HTMLPurifier_ConfigSchema::define(
     'Example: by default value, <code>&lt;blockquote&gt;Foo&lt;/blockquote&gt;</code> '.
     'would become <code>&lt;blockquote&gt;&lt;p&gt;Foo&lt;/p&gt;&lt;/blockquote&gt;</code>. The '.
     '<code>&lt;p&gt;</code> tags can be replaced '.
-    'with whatever you desire, as long as it is a block level element.'
+    'with whatever you desire, as long as it is a block level element. '.
+    'This directive has been available since 1.3.0.'
 );
 
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'Parent', 'div', 'string',
     'String name of element that HTML fragment passed to library will be '.
     'inserted in.  An interesting variation would be using span as the '.
-    'parent element, meaning that only inline tags would be allowed.'
+    'parent element, meaning that only inline tags would be allowed. '.
+    'This directive has been available since 1.3.0.'
 );
 
 HTMLPurifier_ConfigSchema::define(
@@ -72,7 +75,8 @@ HTMLPurifier_ConfigSchema::define(
     'supported in the first place (like embed).  If you change this, you '.
     'probably also want to change %HTML.AllowedAttributes. '.
     '<strong>Warning:</strong> If another directive conflicts with the '.
-    'elements here, <em>that</em> directive will win and override.'
+    'elements here, <em>that</em> directive will win and override. '.
+    'This directive has been available since 1.3.0.'
 );
 
 HTMLPurifier_ConfigSchema::define(
@@ -84,7 +88,14 @@ HTMLPurifier_ConfigSchema::define(
     'elements here, <em>that</em> directive will win and override. For '.
     'example, %HTML.EnableAttrID will take precedence over *.id in this '.
     'directive.  You must set that directive to true before you can use '.
-    'IDs at all.'
+    'IDs at all. This directive has been available since 1.3.0.'
+);
+
+HTMLPurifier_ConfigSchema::define(
+    'Attr', 'DisableURI', false, 'bool',
+    'Disables all URIs in all forms. Not sure why you\'d want to do that '.
+    '(after all, the Internet\'s founded on the notion of a hyperlink). '.
+    'This directive has been available since 1.3.0.'
 );
 
 /**
@@ -444,16 +455,18 @@ class HTMLPurifier_HTMLDefinition
         $this->info['td']->attr['colspan'] =
         $this->info['th']->attr['colspan'] = $e__NumberSpan;
         
-        $e_URI = new HTMLPurifier_AttrDef_URI();
-        $this->info['a']->attr['href'] =
-        $this->info['img']->attr['longdesc'] =
-        $this->info['del']->attr['cite'] =
-        $this->info['ins']->attr['cite'] =
-        $this->info['blockquote']->attr['cite'] =
-        $this->info['q']->attr['cite'] = $e_URI;
-        
-        // URI that causes HTTP request
-        $this->info['img']->attr['src'] = new HTMLPurifier_AttrDef_URI(true);
+        if (!$config->get('Attr', 'DisableURI')) {
+            $e_URI = new HTMLPurifier_AttrDef_URI();
+            $this->info['a']->attr['href'] =
+            $this->info['img']->attr['longdesc'] =
+            $this->info['del']->attr['cite'] =
+            $this->info['ins']->attr['cite'] =
+            $this->info['blockquote']->attr['cite'] =
+            $this->info['q']->attr['cite'] = $e_URI;
+            
+            // URI that causes HTTP request
+            $this->info['img']->attr['src'] = new HTMLPurifier_AttrDef_URI(true);
+        }
         
         if (!$this->strict) {
             $this->info['li']->attr['value'] = new HTMLPurifier_AttrDef_Integer();

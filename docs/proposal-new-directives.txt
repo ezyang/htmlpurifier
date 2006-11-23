@@ -53,7 +53,3 @@ time.  Note the naming convention: %Namespace.Directive
     absolute DNS.  While this is actually the preferred method according to
     the RFC, most people opt to use a relative domain name relative to . (root).
 
-%URI.DisableExternalResources - disallow resource links (i.e. URIs that result
-    in immediate requests, such as src in IMG) to external websites
-
-%HTML.DisableImg - disables all images
