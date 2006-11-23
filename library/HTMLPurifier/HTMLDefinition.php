@@ -63,6 +63,30 @@ HTMLPurifier_ConfigSchema::define(
     'parent element, meaning that only inline tags would be allowed.'
 );
 
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'AllowedElements', null, 'lookup/null',
+    'If HTML Purifier\'s tag set is unsatisfactory for your needs, you '.
+    'can overload it with your own list of tags to allow.  Note that this '.
+    'method is subtractive: it does its job by taking away from HTML Purifier '.
+    'usual feature set, so you cannot add a tag that HTML Purifier never '.
+    'supported in the first place (like embed).  If you change this, you '.
+    'probably also want to change %HTML.AllowedAttributes. '.
+    '<strong>Warning:</strong> If another directive conflicts with the '.
+    'elements here, <em>that</em> directive will win and override.'
+);
+
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'AllowedAttributes', null, 'lookup/null',
+    'IF HTML Purifier\'s attribute set is unsatisfactory, overload it! '.
+    'The syntax is \'tag.attr\' or \'*.attr\' for the global attributes '.
+    '(style, id, class, dir, lang, xml:lang).'.
+    '<strong>Warning:</strong> If another directive conflicts with the '.
+    'elements here, <em>that</em> directive will win and override. For '.
+    'example, %HTML.EnableAttrID will take precedence over *.id in this '.
+    'directive.  You must set that directive to true before you can use '.
+    'IDs at all.'
+);
+
 /**
  * Defines the purified HTML type with large amounts of objects.
  * 
@@ -100,6 +124,13 @@ class HTMLPurifier_HTMLDefinition
      * @public
      */
     var $info_parent = 'div';
+    
+    /**
+     * Definition for parent element, allows parent element to be a
+     * tag that's not allowed inside the HTML fragment.
+     * @public
+     */
+    var $info_parent_def;
     
     /**
      * String name of element used to wrap inline elements in block context
@@ -498,7 +529,32 @@ class HTMLPurifier_HTMLDefinition
             trigger_error('Cannot use unrecognized element as parent.',
                 E_USER_ERROR);
         }
+        $this->info_parent_def = $this->info[$this->info_parent];
         
+        //////////////////////////////////////////////////////////////////////
+        // %HTML.Allowed(Elements|Attributes) : cut non-allowed elements
+        $allowed_elements = $config->get('HTML', 'AllowedElements');
+        if (is_array($allowed_elements)) {
+            // $allowed_elements[$this->info_parent] = true; // allow parent element
+            foreach ($this->info as $name => $d) {
+                if(!isset($allowed_elements[$name])) unset($this->info[$name]);
+            }
+        }
+        $allowed_attributes = $config->get('HTML', 'AllowedAttributes');
+        if (is_array($allowed_attributes)) {
+            foreach ($this->info_global_attr as $attr => $info) {
+                if (!isset($allowed_attributes["*.$attr"])) {
+                    unset($this->info_global_attr[$attr]);
+                }
+            }
+            foreach ($this->info as $tag => $info) {
+                foreach ($info->attr as $attr => $attr_info) {
+                    if (!isset($allowed_attributes["$tag.$attr"])) {
+                        unset($this->info[$tag]->attr[$attr]);
+                    }
+                }
+            }
+        }
     }
     
     function setAttrForTableElements($attr, $def) {

@@ -104,7 +104,11 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             if ($count = count($stack)) {
                 $parent_index = $stack[$count-1];
                 $parent_name  = $tokens[$parent_index]->name;
-                $parent_def   = $definition->info[$parent_name];
+                if ($parent_index == 0) {
+                    $parent_def   = $definition->info_parent_def;
+                } else {
+                    $parent_def   = $definition->info[$parent_name];
+                }
             } else {
                 // unknown info, it won't be used anyway
                 $parent_index = $parent_name = $parent_def = null;
@@ -144,7 +148,14 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 $excludes = array(); // not used, but good to initialize anyway
             } else {
                 // DEFINITION CALL
-                $def = $definition->info[$tokens[$i]->name];
+                if ($i === 0) {
+                    // special processing for the first node
+                    $def = $definition->info_parent_def;
+                } else {
+                    $def = $definition->info[$tokens[$i]->name];
+                    
+                }
+                
                 $child_def = $def->child;
                 
                 // have DTD child def validate children
@@ -229,13 +240,20 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             
             // Test if the token indeed is a start tag, if not, move forward
             // and test again.
+            $size = count($tokens);
             while ($i < $size and $tokens[$i]->type != 'start') {
                 if ($tokens[$i]->type == 'end') {
                     // pop a token index off the stack if we ended a node
                     array_pop($stack);
                     // pop an exclusion lookup off exclusion stack if
                     // we ended node and that node had exclusions
-                    if ($definition->info[$tokens[$i]->name]->excludes) {
+                    if ($i == 0 || $i == $size - 1) {
+                        // use specialized var if it's the super-parent
+                        $s_excludes = $definition->info_parent_def->excludes;
+                    } else {
+                        $s_excludes = $definition->info[$tokens[$i]->name]->excludes;
+                    }
+                    if ($s_excludes) {
                         array_pop($exclude_stack);
                     }
                 }

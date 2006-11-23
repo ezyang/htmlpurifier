@@ -36,6 +36,23 @@ class HTMLPurifier_Test extends UnitTestCase
         
     }
     
+    function testDifferentAllowedElements() {
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML', 'AllowedElements', array('b', 'i', 'p', 'a'));
+        $config->set('HTML', 'AllowedAttributes', array('a.href', '*.id'));
+        $this->purifier = new HTMLPurifier($config);
+        
+        $this->assertPurification(
+            '<p>Par.</p><p>Para<a href="http://google.com/">gr</a>aph</p>Text<b>Bol<i>d</i></b>'
+        );
+        
+        $this->assertPurification(
+            '<span>Not allowed</span><a class="mef" id="foobar">Foobar</a>',
+            'Not allowed<a>Foobar</a>' // no ID!!!
+        );
+        
+    }
+    
 }
 
 ?>

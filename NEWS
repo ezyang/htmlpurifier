@@ -16,11 +16,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added GET method to demo for easier validation, added 50kb max input size
 ! New directive %HTML.BlockWrapper, for block-ifying inline elements
 ! New directive %HTML.Parent, allows you to only allow inline content
+! New directives %HTML.AllowedElements and %HTML.AllowedAttributes to let
+  users narrow the set of allowed tags
 - Added missing type to ChildDef_Chameleon
 - Remove Tidy option from demo if there is not Tidy available
 . ChildDef_Required guards against empty tags
 . Lookup table HTMLDefinition->info_flow_elements added
 . Added peace-of-mind variable initialization to Strategy_FixNesting
+. Added HTMLPurifier->info_parent_def, parent child processing made special
 
 1.2.1, unknown release date
 (bugfix/minor feature release, may be dropped if 1.2.0 is stable)
