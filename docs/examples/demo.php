@@ -115,8 +115,10 @@ if (isset($html)) {
                 approximately 2000 characters.  If you need to test anything
                 larger than that, try the <a href="demo.php?post">POST form</a>.</p>
         <?php } ?>
-        <div>Nicely format output with Tidy? <input type="checkbox" value="1"
-        name="tidy"<?php if (!empty($_REQUEST['tidy'])) echo ' checked="checked"'; ?> /></div>
+        <?php if (extension_loaded('tidy')) { ?>
+            <div>Nicely format output with Tidy? <input type="checkbox" value="1"
+            name="tidy"<?php if (!empty($_REQUEST['tidy'])) echo ' checked="checked"'; ?> /></div>
+        <?php } ?>
         <div>XHTML 1.0 Strict output? <input type="checkbox" value="1"
         name="strict"<?php if (!empty($_REQUEST['strict'])) echo ' checked="checked"'; ?> /></div>
         <div>Serve as application/xhtml+xml? (not for IE) <input type="checkbox" value="1"

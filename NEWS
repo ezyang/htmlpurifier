@@ -17,6 +17,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! New directive %HTML.BlockWrapper, for block-ifying inline elements
 ! New directive %HTML.Parent, allows you to only allow inline content
 - Added missing type to ChildDef_Chameleon
+- Remove Tidy option from demo if there is not Tidy available
 . ChildDef_Required guards against empty tags
 . Lookup table HTMLDefinition->info_flow_elements added
 . Added peace-of-mind variable initialization to Strategy_FixNesting
