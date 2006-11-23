@@ -8,10 +8,13 @@ HTML Purifier context.
 
 <align>, block element that aligns (extremely rare)
 <blackface>, inline that double-bolds text (extremely rare)
-<multicol>, multiple columns
+<comment>, hidden comment for IE and WebTV
+<multicol cols=number gutter=pixels width=pixels>, multiple columns
 <nobr>, no linebreaks
-<spacer>, whitespace in doc
-<wbr>, allows linebreaks
+<spacer align=* type="vertical|horizontal|block">, whitespace in doc,
+    use width/height for block and size for vertical/horizontal (attributes)
+    (extremely rare)
+<wbr>, potential word break point: allows linebreaks. Only works in <nobr>
 
 <listing>, monospace pre-variant (extremely rare)
 <plaintext>, escapes all tags to the end of document
