@@ -54,6 +54,13 @@ if (!empty($_REQUEST['html'])) { // start result
 ?>
 <p>Here is your purified HTML:</p>
 <div style="border:5px solid #CCC;margin:0 10%;padding:1em;">
+<?php if(getFormMethod() == 'get') { ?>
+<div style="float:right;">
+    <a href="http://validator.w3.org/check?uri=referer"><img
+        src="http://www.w3.org/Icons/valid-xhtml10"
+        alt="Valid XHTML 1.0 Transitional" height="31" width="88" style="border:0;" /></a>
+</div>
+<?php } ?>
 <?php
 
 echo $pure_html;
@@ -121,13 +128,6 @@ if (isset($html)) {
 </form>
 <p>Return to <a href="http://hp.jpsband.org/">HTMLPurifier's home page</a>.
 Try the form in <a href="demo.php?get">GET</a> and <a href="demo.php?post">POST</a> request
-flavors (GET is easy to validate, but POST allows larger inputs).</p>
-<?php if(getFormMethod() == 'get') { ?>
-<p>
-    <a href="http://validator.w3.org/check?uri=referer"><img
-        src="http://www.w3.org/Icons/valid-xhtml10"
-        alt="Valid XHTML 1.0 Transitional" height="31" width="88" style="border:0;" /></a>
-</p>
-<?php } ?>
+flavors (GET is easy to validate with W3C, but POST allows larger inputs).</p>
 </body>
 </html>
