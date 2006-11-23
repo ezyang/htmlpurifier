@@ -83,6 +83,20 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
           '<a><span></span></a>'
         );
         
+        // test inline parent
+        $this->assertResult(
+            '<b>Bold</b>', true, array('HTML.Parent' => 'span')
+        );
+        $this->assertResult(
+            '<div>Reject</div>', 'Reject', array('HTML.Parent' => 'span')
+        );
+        
+        $this->assertResult(
+            '<div>Accept</div>', true, array('HTML.Parent' => 'script')
+        );
+        $this->assertError('Cannot use unrecognized element as parent.');
+        $this->assertNoErrors();
+        
     }
     
 }

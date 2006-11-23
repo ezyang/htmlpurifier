@@ -1,11 +1,30 @@
 <?php
 
-header('Content-type:text/html;charset=UTF-8');
+// using _REQUEST because we accept GET and POST requests
 
-?><!DOCTYPE html 
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+$content = empty($_REQUEST['xml']) ? 'text/html' : 'application/xhtml+xml';
+header("Content-type:$content;charset=UTF-8");
+
+// prevent PHP versions with shorttags from barfing
+echo '<?xml version="1.0" encoding="UTF-8" ?>
+';
+
+function getFormMethod() {
+    return (isset($_REQUEST['post'])) ? 'post' : 'get';
+}
+
+if (empty($_REQUEST['strict'])) {
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+<?php
+} else {
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?php
+}
+?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>HTMLPurifier Live Demo</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -14,15 +33,21 @@ header('Content-type:text/html;charset=UTF-8');
 <h1>HTMLPurifier Live Demo</h1>
 <?php
 
-set_include_path('../../library' . PATH_SEPARATOR . get_include_path());
-require_once 'HTMLPurifier.php';
+require_once '../../library/HTMLPurifier.auto.php';
 
-if (!empty($_POST['html'])) {
+if (!empty($_REQUEST['html'])) { // start result
     
-    $html = get_magic_quotes_gpc() ? stripslashes($_POST['html']) : $_POST['html'];
+    if (strlen($_REQUEST['html']) > 50000) {
+        ?>
+        <p>Request exceeds maximum allowed text size of 50kb.</p>
+        <?php
+    } else { // start main processing
+    
+    $html = get_magic_quotes_gpc() ? stripslashes($_REQUEST['html']) : $_REQUEST['html'];
     
     $config = HTMLPurifier_Config::createDefault();
-    $config->set('Core', 'TidyFormat', !empty($_POST['tidy']));
+    $config->set('Core', 'TidyFormat', !empty($_REQUEST['tidy']));
+    $config->set('HTML', 'Strict',     !empty($_REQUEST['strict']));
     $purifier = new HTMLPurifier($config);
     $pure_html = $purifier->purify($html);
     
@@ -43,7 +68,17 @@ echo htmlspecialchars($pure_html, ENT_COMPAT, 'UTF-8');
 
 ?></pre>
 <?php
-    
+if (getFormMethod() == 'post') { // start POST validation notice
+?>
+<p>If you would like to validate the code with
+<a href="http://validator.w3.org/#validate-by-input">W3C's
+validator</a>, copy and paste the <em>entire</em> demo page's source.</p>
+<?php
+} // end POST validation notice
+
+} // end main processing
+
+// end result
 } else {
 
 ?>
@@ -54,12 +89,13 @@ will filter it.</p>
 }
 
 ?>
-<form name="filter" action="demo.php<?php
-if (isset($_GET['profile']) || isset($_GET['XDEBUG_PROFILE'])) {
-    echo '?XDEBUG_PROFILE=1';
-} ?>" method="post">
+<form id="filter" action="demo.php<?php
+echo '?' . getFormMethod();
+if (isset($_REQUEST['profile']) || isset($_REQUEST['XDEBUG_PROFILE'])) {
+    echo '&amp;XDEBUG_PROFILE=1';
+} ?>" method="<?php echo getFormMethod();  ?>">
     <fieldset>
-        <legend>HTML</legend>
+        <legend>HTML Purifier Input (<?php echo getFormMethod(); ?>)</legend>
         <textarea name="html" cols="60" rows="15"><?php
 
 if (isset($html)) {
@@ -67,13 +103,31 @@ if (isset($html)) {
             HTMLPurifier_Encoder::cleanUTF8($html), ENT_COMPAT, 'UTF-8');
 }
         ?></textarea>
+        <?php if (getFormMethod() == 'get') { ?>
+            <p><strong>Warning:</strong> GET request method can only hold
+                approximately 2000 characters.  If you need to test anything
+                larger than that, try the <a href="demo.php?post">POST form</a>.</p>
+        <?php } ?>
         <div>Nicely format output with Tidy? <input type="checkbox" value="1"
-        name="tidy"<?php if (!empty($_POST['tidy'])) echo ' checked="checked"'; ?> /></div>
+        name="tidy"<?php if (!empty($_REQUEST['tidy'])) echo ' checked="checked"'; ?> /></div>
+        <div>XHTML 1.0 Strict output? <input type="checkbox" value="1"
+        name="strict"<?php if (!empty($_REQUEST['strict'])) echo ' checked="checked"'; ?> /></div>
+        <div>Serve as application/xhtml+xml? (not for IE) <input type="checkbox" value="1"
+        name="xml"<?php if (!empty($_REQUEST['xml'])) echo ' checked="checked"'; ?> /></div>
         <div>
             <input type="submit" value="Submit" name="submit" class="button" />
         </div>
     </fieldset>
 </form>
-<p>Return to <a href="http://hp.jpsband.org/">HTMLPurifier's home page</a>.</p>
+<p>Return to <a href="http://hp.jpsband.org/">HTMLPurifier's home page</a>.
+Try the form in <a href="demo.php?get">GET</a> and <a href="demo.php?post">POST</a> request
+flavors (GET is easy to validate, but POST allows larger inputs).</p>
+<?php if(getFormMethod() == 'get') { ?>
+<p>
+    <a href="http://validator.w3.org/check?uri=referer"><img
+        src="http://www.w3.org/Icons/valid-xhtml10"
+        alt="Valid XHTML 1.0 Transitional" height="31" width="88" style="border:0;" /></a>
+</p>
+<?php } ?>
 </body>
 </html>

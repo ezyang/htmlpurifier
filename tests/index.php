@@ -49,6 +49,7 @@ $test_files[] = 'ChildDef/OptionalTest.php';
 $test_files[] = 'ChildDef/ChameleonTest.php';
 $test_files[] = 'ChildDef/CustomTest.php';
 $test_files[] = 'ChildDef/TableTest.php';
+$test_files[] = 'ChildDef/StrictBlockquoteTest.php';
 $test_files[] = 'GeneratorTest.php';
 $test_files[] = 'EntityLookupTest.php';
 $test_files[] = 'Strategy/RemoveForeignElementsTest.php';

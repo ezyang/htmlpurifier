@@ -7,11 +7,11 @@ to HTML Purifier, though, so let's take a look:
 
 == Major incompatibilities ==
 
-BLOCKQUOTE changes from 'flow' to 'block'
+[done] BLOCKQUOTE changes from 'flow' to 'block'
     behavior: inline inner contents should not be nuked, paragraph as necessary
-U, S, STRIKE cut
+[partially-done] U, S, STRIKE cut
     behavior: replace with appropriate inline span + CSS
-ADDRESS from potpourri to Inline (removes p tags)
+[partially-done] ADDRESS from potpourri to Inline (removes p tags) (lower importance)
     behavior: p tags silently dropped or replaced with something (<br>)
 
 == Things we can loosen up ==
@@ -38,5 +38,6 @@ A tag's attribute 'target' (for selecting frames) cut
 OL/LI tag's attribute 'start' (for renumbering lists) cut
     behavior: no substitute, just delete
 Attribute 'name' deprecated in favor of 'id'
-    behavior: create proper AttrTransform
+    behavior: not allowed in first place, but create proper AttrTransform
 PRE tag allows SUB/SUP? (strict dtd comment vs syntax, loose disallows)
+    behavior: disallow as usual

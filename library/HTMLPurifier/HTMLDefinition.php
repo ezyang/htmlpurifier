@@ -23,6 +23,7 @@ require_once 'HTMLPurifier/ChildDef.php';
     require_once 'HTMLPurifier/ChildDef/Required.php';
     require_once 'HTMLPurifier/ChildDef/Optional.php';
     require_once 'HTMLPurifier/ChildDef/Table.php';
+    require_once 'HTMLPurifier/ChildDef/StrictBlockquote.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Token.php';
 require_once 'HTMLPurifier/TagTransform.php';
@@ -43,6 +44,23 @@ HTMLPurifier_ConfigSchema::define(
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'Strict', false, 'bool',
     'Determines whether or not to use Transitional (loose) or Strict rulesets.'
+);
+
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'BlockWrapper', 'p', 'string',
+    'String name of element to wrap inline elements that are inside a block '.
+    'context.  This only occurs in the children of blockquote in strict mode. '.
+    'Example: by default value, <code>&lt;blockquote&gt;Foo&lt;/blockquote&gt;</code> '.
+    'would become <code>&lt;blockquote&gt;&lt;p&gt;Foo&lt;/p&gt;&lt;/blockquote&gt;</code>. The '.
+    '<code>&lt;p&gt;</code> tags can be replaced '.
+    'with whatever you desire, as long as it is a block level element.'
+);
+
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'Parent', 'div', 'string',
+    'String name of element that HTML fragment passed to library will be '.
+    'inserted in.  An interesting variation would be using span as the '.
+    'parent element, meaning that only inline tags would be allowed.'
 );
 
 /**
@@ -79,10 +97,16 @@ class HTMLPurifier_HTMLDefinition
     
     /**
      * String name of parent element HTML will be going into.
-     * @todo Allow this to be overloaded by user config
      * @public
      */
     var $info_parent = 'div';
+    
+    /**
+     * String name of element used to wrap inline elements in block context
+     * @note This is rarely used except for BLOCKQUOTEs in strict mode
+     * @public
+     */
+    var $info_block_wrapper = 'p';
     
     /**
      * Associative array of deprecated tag name to HTMLPurifier_TagTransform
@@ -101,6 +125,11 @@ class HTMLPurifier_HTMLDefinition
      * @public
      */
     var $info_attr_transform_post = array();
+    
+    /**
+     * Lookup table of flow elements
+     */
+    var $info_flow_elements = array();
     
     /**
      * Initializes the definition, the meat of the class.
@@ -164,11 +193,9 @@ class HTMLPurifier_HTMLDefinition
         $e_phrase_basic = 'em | strong | dfn | code | q | samp | kbd | var'.
           ' | cite | abbr | acronym';
         $e_phrase = "$e_phrase_basic | $e_phrase_extra";
-        $e_inline_forms = ''; // humor the dtd
         $e_misc_inline = 'ins | del';
         $e_misc = "$e_misc_inline";
-        $e_inline = "a | $e_special | $e_fontstyle | $e_phrase".
-          " | $e_inline_forms";
+        $e_inline = "a | $e_special | $e_fontstyle | $e_phrase";
         // pseudo-property we created for convenience, see later on
         $e__inline = "#PCDATA | $e_inline | $e_misc_inline";
         // note the casing
@@ -181,11 +208,10 @@ class HTMLPurifier_HTMLDefinition
         $e__flow = "#PCDATA | $e_block | $e_inline | $e_misc";
         $e_Flow = new HTMLPurifier_ChildDef_Optional($e__flow);
         $e_a_content = new HTMLPurifier_ChildDef_Optional("#PCDATA".
-          " | $e_special | $e_fontstyle | $e_phrase | $e_inline_forms".
-          " | $e_misc_inline");
+          " | $e_special | $e_fontstyle | $e_phrase | $e_misc_inline");
         $e_pre_content = new HTMLPurifier_ChildDef_Optional("#PCDATA | a".
           " | $e_special_basic | $e_fontstyle_basic | $e_phrase_basic".
-          " | $e_inline_forms | $e_misc_inline");
+          " | $e_misc_inline");
         $e_form_content = new HTMLPurifier_ChildDef_Optional('');//unused
         $e_form_button_content = new HTMLPurifier_ChildDef_Optional('');//unused
         
@@ -198,7 +224,7 @@ class HTMLPurifier_HTMLDefinition
         $this->info['div']->child = $e_Flow;
         
         if ($config->get('HTML', 'Strict')) {
-            $this->info['blockquote']->child = $e_Block;
+            $this->info['blockquote']->child = new HTMLPurifier_ChildDef_StrictBlockquote();
         } else {
             $this->info['blockquote']->child = $e_Flow;
         }
@@ -276,12 +302,16 @@ class HTMLPurifier_HTMLDefinition
         
         // reuses $e_Inline and $e_Block
         foreach ($e_Inline->elements as $name => $bool) {
-            if ($name == '#PCDATA' || $name == '') continue;
+            if ($name == '#PCDATA') continue;
             $this->info[$name]->type = 'inline';
         }
         
         foreach ($e_Block->elements as $name => $bool) {
             $this->info[$name]->type = 'block';
+        }
+        
+        foreach ($e_Flow->elements as $name => $bool) {
+            $this->info_flow_elements[$name] = true;
         }
         
         //////////////////////////////////////////////////////////////////////
@@ -445,6 +475,28 @@ class HTMLPurifier_HTMLDefinition
             if (is_a($obj, 'stdclass')) {
                 unset($this->info[$key]);
             }
+        }
+        
+        //////////////////////////////////////////////////////////////////////
+        // info_block_wrapper : wraps inline elements in block context
+        
+        $block_wrapper = $config->get('HTML', 'BlockWrapper');
+        if (isset($e_Block->elements[$block_wrapper])) {
+            $this->info_block_wrapper = $block_wrapper;
+        } else {
+            trigger_error('Cannot use non-block element as block wrapper.',
+                E_USER_ERROR);
+        }
+        
+        //////////////////////////////////////////////////////////////////////
+        // info_parent : parent element of the HTML fragment
+        
+        $parent = $config->get('HTML', 'Parent');
+        if (isset($this->info[$parent])) {
+            $this->info_parent = $parent;
+        } else {
+            trigger_error('Cannot use unrecognized element as parent.',
+                E_USER_ERROR);
         }
         
     }

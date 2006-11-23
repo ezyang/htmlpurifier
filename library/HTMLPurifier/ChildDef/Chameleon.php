@@ -23,6 +23,8 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
      */
     var $block;
     
+    var $type = 'chameleon';
+    
     /**
      * @param $inline List of elements to allow when inline.
      * @param $block List of elements to allow when block.

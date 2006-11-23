@@ -31,7 +31,7 @@ class HTMLPurifier_Test extends UnitTestCase
         
         $this->assertPurification(
             '<blockquote>Illegal contents</blockquote>',
-            '<blockquote></blockquote>'
+            '<blockquote><p>Illegal contents</p></blockquote>'
         );
         
     }

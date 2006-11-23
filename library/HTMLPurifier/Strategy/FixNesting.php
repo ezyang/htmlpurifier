@@ -141,6 +141,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
             if ($excluded) {
                 // there is an exclusion, remove the entire node
                 $result = false;
+                $excludes = array(); // not used, but good to initialize anyway
             } else {
                 // DEFINITION CALL
                 $def = $definition->info[$tokens[$i]->name];
