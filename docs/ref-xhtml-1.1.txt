@@ -1,0 +1,20 @@
+
+Getting XHTML 1.1 Working
+
+It's quite simple, according to <http://www.w3.org/TR/xhtml11/changes.html>
+
+1. Scratch lang entirely in favor of xml:lang
+2. Scratch name entirely in favor of id (partially-done)
+3. Support Ruby <http://www.w3.org/TR/2001/REC-ruby-20010531/>
+
+...but that's only an informative section. More things to do:
+
+1. Scratch style attribute (it's deprecated)
+2. Be module-aware
+3. Cross-reference minimal content models with existing DTDs and determine
+   changes (todo)
+4. Watch out for the Legacy Module
+<http://www.w3.org/TR/2001/REC-xhtml-modularization-20010410/abstract_modules.html#s_legacymodule>
+5. Let users specify their own custom modules
+6. Study Modularization document
+<http://www.w3.org/TR/2001/REC-xhtml-modularization-20010410/>

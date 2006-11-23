@@ -25,6 +25,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Lookup table HTMLDefinition->info_flow_elements added
 . Added peace-of-mind variable initialization to Strategy_FixNesting
 . Added HTMLPurifier->info_parent_def, parent child processing made special
+. Added internal documents briefly summarizing future progression of HTML
 
 1.2.1, unknown release date
 (bugfix/minor feature release, may be dropped if 1.2.0 is stable)

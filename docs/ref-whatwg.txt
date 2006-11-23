@@ -1,0 +1,9 @@
+
+Web Hypertext Application Technology Working Group
+    WHATWG
+
+I don't think we need to worry about them.  Untrusted users shouldn't be
+submitting applications, eh?  But if some interesting attribute pops up in
+their spec, and might be worth supporting, stick it here.
+
+(none so far, as you can see)
