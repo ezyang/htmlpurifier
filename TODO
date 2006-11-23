@@ -39,6 +39,7 @@ TODO List
     - Hooks for adding custom processors to custom namespaced tags and
       attributes, offer default implementation
     - Lots of documentation and samples
+ - XHTML 1.1 support
 
 Ongoing
  - Lots of profiling, make it faster!

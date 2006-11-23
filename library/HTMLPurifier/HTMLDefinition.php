@@ -159,17 +159,23 @@ class HTMLPurifier_HTMLDefinition
     
     /**
      * Lookup table of flow elements
+     * @public
      */
     var $info_flow_elements = array();
+    
+    /**
+     * Boolean is a strict definition?
+     * @public
+     */
+    var $strict;
     
     /**
      * Initializes the definition, the meat of the class.
      */
     function setup($config) {
         
-        // emulates the structure of the DTD
-        // these are condensed, however, with bad stuff taken out
-        // screening process was done by hand
+        // some cached config values
+        $this->strict = $config->get('HTML', 'Strict');
         
         //////////////////////////////////////////////////////////////////////
         // info[] : initializes the definition objects
@@ -188,7 +194,7 @@ class HTMLPurifier_HTMLDefinition
                 'colgroup', 'col', 'td', 'th', 'tr'
             );
         
-        if (!$config->get('HTML', 'Strict')) {
+        if (!$this->strict) {
             $allowed_tags[] = 'u';
             $allowed_tags[] = 's';
             $allowed_tags[] = 'strike';
@@ -200,6 +206,10 @@ class HTMLPurifier_HTMLDefinition
         
         //////////////////////////////////////////////////////////////////////
         // info[]->child : defines allowed children for elements
+        
+        // emulates the structure of the DTD
+        // however, these are condensed, with bad stuff taken out
+        // screening process was done by hand
         
         // entities: prefixed with e_ and _ replaces . from DTD
         // double underlines are entities we made up
@@ -254,7 +264,7 @@ class HTMLPurifier_HTMLDefinition
         $this->info['li']->child  =
         $this->info['div']->child = $e_Flow;
         
-        if ($config->get('HTML', 'Strict')) {
+        if ($this->strict) {
             $this->info['blockquote']->child = new HTMLPurifier_ChildDef_StrictBlockquote();
         } else {
             $this->info['blockquote']->child = $e_Flow;
@@ -299,7 +309,7 @@ class HTMLPurifier_HTMLDefinition
         
         $this->info['dl']->child   = new HTMLPurifier_ChildDef_Required('dt|dd');
         
-        if ($config->get('HTML', 'Strict')) {
+        if ($this->strict) {
             $this->info['address']->child = $e_Inline;
         } else {
             $this->info['address']->child =
@@ -444,6 +454,11 @@ class HTMLPurifier_HTMLDefinition
         
         // URI that causes HTTP request
         $this->info['img']->attr['src'] = new HTMLPurifier_AttrDef_URI(true);
+        
+        if (!$this->strict) {
+            $this->info['li']->attr['value'] = new HTMLPurifier_AttrDef_Integer();
+            $this->info['ol']->attr['start'] = new HTMLPurifier_AttrDef_Integer();
+        }
         
         //////////////////////////////////////////////////////////////////////
         // info_tag_transform : transformations of tags

@@ -22,4 +22,15 @@ whole point about CSS is to seperate styling from content, so inline styling
 doesn't solve that problem.
 
 It's an icky question, and we'll have to deal with it as more and more 
-transforms get implemented.
+transforms get implemented.  As of right now, however, we currently support
+these loose-only constructs in loose mode:
+
+- <ul start="1">, <li value="1"> attributes
+- <u>, <strike>, <s> tags
+- flow children in <blockquote>
+- mixed children in <address>
+
+The changed child definitions as well as the ul.start li.value are the most
+compelling reasons why loose should be used.  We may want offer disabling <u>,
+<strike> and <s> by themselves.
+

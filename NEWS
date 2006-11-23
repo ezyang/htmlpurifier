@@ -18,6 +18,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! New directive %HTML.Parent, allows you to only allow inline content
 ! New directives %HTML.AllowedElements and %HTML.AllowedAttributes to let
   users narrow the set of allowed tags
+! <li value="4"> and <ul start="2"> now allowed in loose mode
 - Added missing type to ChildDef_Chameleon
 - Remove Tidy option from demo if there is not Tidy available
 . ChildDef_Required guards against empty tags

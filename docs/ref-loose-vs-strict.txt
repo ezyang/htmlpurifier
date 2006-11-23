@@ -8,36 +8,30 @@ to HTML Purifier, though, so let's take a look:
 == Major incompatibilities ==
 
 [done] BLOCKQUOTE changes from 'flow' to 'block'
-    behavior: inline inner contents should not be nuked, paragraph as necessary
+    current behavior: inline inner contents should not be nuked, block-ify as necessary
 [partially-done] U, S, STRIKE cut
-    behavior: replace with appropriate inline span + CSS
-[partially-done] ADDRESS from potpourri to Inline (removes p tags) (lower importance)
-    behavior: p tags silently dropped or replaced with something (<br>)
+    current behavior: removed completely
+    projected behavior: replace with appropriate inline span + CSS
+[done] ADDRESS from potpourri to Inline (removes p tags)
+    current behavior: block tags silently dropped
+    ideal behavior: replace tags with something like <br>. (not high priority)
 
 == Things we can loosen up ==
 
 Tags DIR, MENU, CENTER, ISINDEX, FONT, BASEFONT? allowed in loose
-Attributes allowed in loose:
-    div,p,h#.align
-    ul,ol.type
-    ul,ol,dl.compact
-    ol.start
-    li.type,value
-    hr.align,noshade,size,width
-    pre.width
-    img.name?,align,border,hspace,vspace
-    table.align,bgcolor
-    caption.align
-    tr.bgcolor
-    th,td.nowrap,bgcolor,width,height
+    current behavior: transform to strict-valid forms
+Attributes allowed in loose (see attribute transforms in 'dev-progress.html')
+    current behavior: projected to transform into strict-valid forms
 
 == Periphery issues ==
 
 A tag's attribute 'target' (for selecting frames) cut
-    behavior: shouldn't be needed, use loose doctype if needed
-OL/LI tag's attribute 'start' (for renumbering lists) cut
-    behavior: no substitute, just delete
+    current behavior: not allowed at all
+    projected behavior: use loose doctype if needed, needs valid values
+[done] OL/LI tag's attribute 'start'/'value' (for renumbering lists) cut
+    current behavior: no substitute, just delete when in strict, allow in loose
 Attribute 'name' deprecated in favor of 'id'
-    behavior: not allowed in first place, but create proper AttrTransform
-PRE tag allows SUB/SUP? (strict dtd comment vs syntax, loose disallows)
-    behavior: disallow as usual
+    current behavior: dropped silently
+    projected behavior: create proper AttrTransform (currently not allowed at all)
+[done] PRE tag allows SUB/SUP? (strict dtd comment vs syntax, loose disallows)
+    current behavior: disallow as usual
