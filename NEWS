@@ -26,6 +26,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! New directive %Attr.DisableURI, which eliminates all hyperlinking
 ! New directive %URI.Munge, munges URI so you can use some sort of redirector
   service to avoid PageRank leaks or warn users that they are exiting your site.
+! Added spiffy new smoketest printDefinition.php, which lets you twiddle with
+  the configuration settings and see how the internal rules are affected.
 - Added missing type to ChildDef_Chameleon
 - Remove Tidy option from demo if there is not Tidy available
 . ChildDef_Required guards against empty tags
@@ -33,6 +35,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Added peace-of-mind variable initialization to Strategy_FixNesting
 . Added HTMLPurifier->info_parent_def, parent child processing made special
 . Added internal documents briefly summarizing future progression of HTML
+. HTMLPurifier_Config->getBatch($namespace) added
+. More lenient casting to bool from string in HTMLPurifier_ConfigSchema
 
 1.2.1, unknown release date
 (bugfix/minor feature release, may be dropped if 1.2.0 is stable)

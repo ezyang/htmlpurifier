@@ -20,7 +20,7 @@ function formatCode($string) {
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-    <title>HTMLPurifier XSS Attacks Smoketest</title>
+    <title>HTML Purifier XSS Attacks Smoketest</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style type="text/css">
         .scroll {overflow:auto; width:100%;}
@@ -31,7 +31,7 @@ function formatCode($string) {
     </style>
 </head>
 <body>
-<h1>HTMLPurifier XSS Attacks Smoketest</h1>
+<h1>HTML Purifier XSS Attacks Smoketest</h1>
 <p>XSS attacks are from
 <a href="http://ha.ckers.org/xss.html">http://ha.ckers.org/xss.html</a>.</p>
 <p><strong>Caveats:</strong>

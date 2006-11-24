@@ -2,16 +2,17 @@
 
 require_once 'common.php';
 
+echo '<?xml version="1.0" encoding="UTF-8" ?>';
 ?><!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>HTMLPurifier Variable Width Attack Smoketest</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>HTML Purifier Variable Width Attack Smoketest</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<h1>HTMLPurifier Variable Width Attack Smoketest</h1>
+<h1>HTML Purifier Variable Width Attack Smoketest</h1>
 <p>For more information, see
 <a href="http://applesoup.googlepages.com/bypass_filter.txt">Cheng Peng Su's
 original advisory.</a>  This particular exploit code appears only to work

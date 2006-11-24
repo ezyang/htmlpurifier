@@ -2,16 +2,17 @@
 
 require_once 'common.php';
 
+echo '<?xml version="1.0" encoding="UTF-8" ?>';
 ?><!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>HTMLPurifier UTF-8 Smoketest</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>HTML Purifier UTF-8 Smoketest</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<h1>HTMLPurifier UTF-8 Smoketest</h1>
+<h1>HTML Purifier UTF-8 Smoketest</h1>
 <?php
 
 $purifier = new HTMLPurifier();

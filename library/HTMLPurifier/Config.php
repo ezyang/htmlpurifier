@@ -69,6 +69,19 @@ class HTMLPurifier_Config
     }
     
     /**
+     * Retreives an array of directives to values from a given namespace
+     * @param $namespace String namespace
+     */
+    function getBatch($namespace) {
+        if (!isset($this->def->info[$namespace])) {
+            trigger_error('Cannot retrieve undefined namespace',
+                E_USER_WARNING);
+            return;
+        }
+        return $this->conf[$namespace];
+    }
+    
+    /**
      * Sets a value to configuration.
      * @param $namespace String namespace
      * @param $key String key
@@ -134,6 +147,7 @@ class HTMLPurifier_Config
      */
     function loadArray($config_array) {
         foreach ($config_array as $key => $value) {
+            $key = str_replace('_', '.', $key);
             if (strpos($key, '.') !== false) {
                 // condensed form
                 list($namespace, $directive) = explode('.', $key);

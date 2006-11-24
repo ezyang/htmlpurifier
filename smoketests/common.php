@@ -2,8 +2,7 @@
 
 header('Content-type: text/html; charset=UTF-8');
 
-set_include_path('../library' . PATH_SEPARATOR . get_include_path());
-require_once 'HTMLPurifier.php';
+require_once '../library/HTMLPurifier.auto.php';
 
 function escapeHTML($string) {
     $string = HTMLPurifier_Encoder::cleanUTF8($string);

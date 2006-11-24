@@ -26,11 +26,11 @@ if (empty($_REQUEST['strict'])) {
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>HTMLPurifier Live Demo</title>
+<title>HTML Purifier Live Demo</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<h1>HTMLPurifier Live Demo</h1>
+<h1>HTML Purifier Live Demo</h1>
 <?php
 
 require_once '../../library/HTMLPurifier.auto.php';
@@ -89,7 +89,7 @@ validator</a>, copy and paste the <em>entire</em> demo page's source.</p>
 } else {
 
 ?>
-<p>Welcome to the live demo.  Enter some HTML and see how HTMLPurifier
+<p>Welcome to the live demo.  Enter some HTML and see how HTML Purifier
 will filter it.</p>
 <?php
 
@@ -128,7 +128,7 @@ if (isset($html)) {
         </div>
     </fieldset>
 </form>
-<p>Return to <a href="http://hp.jpsband.org/">HTMLPurifier's home page</a>.
+<p>Return to <a href="http://hp.jpsband.org/">HTML Purifier's home page</a>.
 Try the form in <a href="demo.php?get">GET</a> and <a href="demo.php?post">POST</a> request
 flavors (GET is easy to validate with W3C, but POST allows larger inputs).</p>
 </body>
