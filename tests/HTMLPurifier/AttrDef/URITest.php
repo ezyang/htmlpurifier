@@ -285,6 +285,21 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         
     }
     
+    function testMunge() {
+        
+        $this->config->set('URI', 'Munge', 'http://www.google.com/url?q=%s');
+        $this->def = new HTMLPurifier_AttrDef_URI();
+        
+        $this->assertDef(
+            'http://www.example.com/',
+            'http://www.google.com/url?q=http%3A%2F%2Fwww.example.com%2F'
+        );
+        
+        $this->assertDef('index.html');
+        $this->assertDef('javascript:foobar();', false);
+        
+    }
+    
 }
 
 ?>

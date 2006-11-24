@@ -24,6 +24,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! <li value="4"> and <ul start="2"> now allowed in loose mode
 ! New directives %URI.DisableExternalResources and %URI.DisableResources
 ! New directive %Attr.DisableURI, which eliminates all hyperlinking
+! New directive %URI.Munge, munges URI so you can use some sort of redirector
+  service to avoid PageRank leaks or warn users that they are exiting your site.
 - Added missing type to ChildDef_Chameleon
 - Remove Tidy option from demo if there is not Tidy available
 . ChildDef_Required guards against empty tags

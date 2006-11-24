@@ -54,6 +54,21 @@ HTMLPurifier_ConfigSchema::define(
     'this might be a good idea. This directive has been available since 1.3.0.'
 );
 
+HTMLPurifier_ConfigSchema::define(
+    'URI', 'Munge', null, 'string/null',
+    'Munges all browsable (usually http, https and ftp) URI\'s into some URL '.
+    'redirection service. Pass this directive a URI, with %s inserted where '.
+    'the url-encoded original URI should be inserted (sample: '.
+    '<code>http://www.google.com/url?q=%s</code>). '.
+    'This prevents PageRank leaks, while being as transparent as possible '.
+    'to users (you may also want to add some client side JavaScript to '.
+    'override the text in the statusbar). Warning: many security experts '.
+    'believe that this form of protection does not deter spam-bots. '.
+    'You can also use this directive to redirect users to a splash page '.
+    'telling them they are leaving your website. '.
+    'This directive has been available since 1.3.0.'
+);
+
 /**
  * Validates a URI as defined by RFC 3986.
  * @note Scheme-specific mechanics deferred to HTMLPurifier_URIScheme
@@ -224,6 +239,14 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         $result .= $path;
         if ($query !== null) $result .= "?$query";
         if ($fragment !== null) $result .= "#$fragment";
+        
+        // munge if necessary
+        $munge = $config->get('URI', 'Munge');
+        if (!empty($scheme_obj->browsable) && $munge !== null) {
+            if ($authority !== null) {
+                $result = str_replace('%s', rawurlencode($result), $munge);
+            }
+        }
         
         return $result;
         

@@ -21,14 +21,6 @@ time.  Note the naming convention: %Namespace.Directive
 %Attr.MaxHeight - caps for width and height related checks.
     (the hack in Pixels for an image crashing attack could be replaced by this)
 
-%URI.Munge - will munge all external URIs to a different URI, which redirects
-    the user to the applicable page. A urlencoded version of the URI
-    will replace any instances of %s in the string. One possible
-    string is 'http://www.google.com/url?q=%s'. Useful for preventing
-    pagerank from being sent to other sites, but can also be used to
-    redirect to a splash page notifying user that they are leaving your
-    website.
-
 %URI.AddRelNofollow - will add rel="nofollow" to all links, preventing the
     spread of ill-gotten pagerank
 
