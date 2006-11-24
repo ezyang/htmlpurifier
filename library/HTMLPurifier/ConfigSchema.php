@@ -260,7 +260,13 @@ class HTMLPurifier_ConfigSchema {
             case 'list':
             case 'hash':
             case 'lookup':
-                if (is_string($var)) $var = explode(',',$var);
+                if (is_string($var)) {
+                    // simplistic string to array method that only works
+                    // for simple lists of tag names or alphanumeric characters
+                    $var = explode(',',$var);
+                    // remove spaces
+                    foreach ($var as $i => $j) $var[$i] = trim($j);
+                }
                 if (!is_array($var)) break;
                 $keys = array_keys($var);
                 if ($keys === array_keys($keys)) {

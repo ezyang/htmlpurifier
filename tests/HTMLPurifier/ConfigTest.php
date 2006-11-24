@@ -106,6 +106,20 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $this->assertError('Value is of invalid type');
         $this->assertNoErrors();
         
+        // grab a namespace
+        $config->set('Attr', 'Key', 0xBEEF);
+        $this->assertIdentical(
+            $config->getBatch('Attr'),
+            array(
+                'Key' => 0xBEEF
+            )
+        );
+        
+        // grab a non-existant namespace
+        $config->getBatch('FurnishedGoods');
+        $this->assertError('Cannot retrieve undefined namespace');
+        $this->assertNoErrors();
+        
     }
     
     function test_getDefinition() {

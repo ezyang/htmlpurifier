@@ -23,7 +23,7 @@ foreach ($_GET as $key => $value) {
 @$config->loadArray($get);
 
 $printer_html_definition = new HTMLPurifier_Printer_HTMLDefinition();
-$printer_css_definition = new HTMLPurifier_Printer_CSSDefinition();
+$printer_css_definition  = new HTMLPurifier_Printer_CSSDefinition();
 
 echo '<?xml version="1.0" encoding="UTF-8" ?>';
 ?>
@@ -54,8 +54,17 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
 </head>
 <body>
 <h1>HTML Purifier Printer Smoketest</h1>
-<p>Pretty-print an object and see how it turns out.</p>
+<p>Pretty-print a definition and check out its contents. You can
+also twiddle with the configuration settings to see how a directive
+influences the internal behavior of the object.</p>
 <h2>Modify configuration</h2>
+
+<p>You can specify an array by typing in a comma-separated
+list of items, HTML Purifier will take care of the rest (including
+transformation into a real array list or a lookup table). If a
+directive can be set to null, that usually means that the feature
+is disabled when it is null (not that, say, no tags are allowed).</p>
+
 <form id="edit-config" method="get" action="printDefinition.php">
 <table>
 <?php
@@ -79,19 +88,24 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
         $allow_null = $config->def->info['HTML'][$key]->allow_null;
 ?>
 <tr>
-<th>%<?php echo $directive; ?></th>
+<th>
+    <a href="http://hp.jpsband.org/live/configdoc/plain.html#<?php echo $directive ?>">
+        %<?php echo $directive; ?>
+    </a>
+</th>
 <td>
 <?php if (is_bool($value)) { ?>
-    <input type="checkbox" name="<?php echo $directive; ?>" value="1"<?php if ($value) { ?> checked="checked"<?php } ?> />
+    Yes <input type="radio" name="<?php echo $directive; ?>" value="1"<?php if ($value) { ?> checked="checked"<?php } ?> /> &nbsp;
+    No <input type="radio" name="<?php echo $directive; ?>" value="0"<?php if (!$value) { ?> checked="checked"<?php } ?> />
 <?php } else { ?>
     <?php if($allow_null) { ?>
-        Null <input
+        Null/Disabled <input
                 type="checkbox"
                 value="1"
                 onclick="toggleWriteability('<?php echo $directive ?>',checked)"
                 name="Null_<?php echo $directive; ?>"
                 <?php if ($value === null) { ?> checked="checked"<?php } ?>
-              /> or 
+              /> or <br />
     <?php } ?>
     <input
         type="text"
