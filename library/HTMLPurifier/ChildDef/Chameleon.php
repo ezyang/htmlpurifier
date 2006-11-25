@@ -16,10 +16,13 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
     
     /**
      * Instance of the definition object to use when inline. Usually stricter.
+     * @public
      */
     var $inline;
+    
     /**
      * Instance of the definition object to use when block.
+     * @public
      */
     var $block;
     

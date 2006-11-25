@@ -20,10 +20,9 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_ChildDef
 {
     /**
-     * Type of child definition, usually right-most part of class name lowercase
-     * 
-     * Used occasionally in terms of context.  Possible values include
-     * custom, required, optional and empty.
+     * Type of child definition, usually right-most part of class name lowercase.
+     * Used occasionally in terms of context.
+     * @public
      */
     var $type;
     
@@ -32,12 +31,15 @@ class HTMLPurifier_ChildDef
      * 
      * This is necessary for redundant checking when changes affecting
      * a child node may cause a parent node to now be disallowed.
+     * 
+     * @public
      */
     var $allow_empty;
     
     /**
      * Validates nodes according to definition and returns modification.
      * 
+     * @public
      * @param $tokens_of_children Array of HTMLPurifier_Token
      * @param $config HTMLPurifier_Config object
      * @param $context HTMLPurifier_Context object

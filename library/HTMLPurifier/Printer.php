@@ -108,16 +108,40 @@ class HTMLPurifier_Printer
     }
     
     /**
-     * Retrieves the class of an object without prefixes
+     * Retrieves the class of an object without prefixes, as well as metadata
      * @param $obj Object to determine class of
      * @param $prefix Further prefix to remove
      */
-    function getClass($obj, $prefix = '') {
+    function getClass($obj, $sec_prefix = '') {
         static $five = null;
         if ($five === null) $five = version_compare(PHP_VERSION, '5', '>=');
-        $prefix = 'HTMLPurifier_' . $prefix;
+        $prefix = 'HTMLPurifier_' . $sec_prefix;
         if (!$five) $prefix = strtolower($prefix);
-        return str_replace($prefix, '', get_class($obj));
+        $class = str_replace($prefix, '', get_class($obj));
+        $lclass = strtolower($class);
+        $class .= '(';
+        switch ($lclass) {
+            case 'enum':
+                $values = array();
+                foreach ($obj->valid_values as $value => $bool) {
+                    $values[] = $value;
+                }
+                $class .= implode(', ', $values);
+                break;
+            case 'composite':
+                $values = array();
+                foreach ($obj->defs as $def) {
+                    $values[] = $this->getClass($def, $sec_prefix);
+                }
+                $class .= implode(', ', $values);
+                break;
+            case 'multiple':
+                $class .= $this->getClass($obj->single, $sec_prefix) . ', ';
+                $class .= $obj->max;
+                break;
+        }
+        $class .= ')';
+        return $class;
     }
     
 }

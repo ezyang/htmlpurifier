@@ -9,6 +9,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
 {
     /**
      * Lookup table of allowed elements.
+     * @public
      */
     var $elements = array();
     /**
