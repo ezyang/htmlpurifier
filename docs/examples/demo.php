@@ -112,7 +112,8 @@ if (isset($html)) {
         ?></textarea>
         <?php if (getFormMethod() == 'get') { ?>
             <p><strong>Warning:</strong> GET request method can only hold
-                approximately 2000 characters.  If you need to test anything
+                8129 characters (probably less depending on your browser).
+                If you need to test anything
                 larger than that, try the <a href="demo.php?post">POST form</a>.</p>
         <?php } ?>
         <?php if (extension_loaded('tidy')) { ?>
