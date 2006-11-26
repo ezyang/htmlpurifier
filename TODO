@@ -7,22 +7,20 @@ TODO List
     ? At-risk
 ==========================
 
-1.3 release
+1.4 release
  # More extensive URI filtering schemes (see docs/proposal-new-directives.txt)
  # Allow for background-image and list-style-image (intrinsically tied to above)
  - Aggressive caching
- - Pretty-printer of *Definition, allowing users to see at a glance what is
-   allowed and what isn't
  ? Rich set* methods and config file loaders for HTMLPurifier_Config
  ? Configuration profiles: sets of directives that get set with one func call
  ? ConfigSchema directive aliases (so we can rename some of them)
  ? URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
 
-1.4 release
+1.5 release
  # Error logging for filtering/cleanup procedures
     - Requires I18N facilities to be created first (COMPLEX)
 
-1.5 release
+1.6 release
  # Add pre-packaged "levels" of cleaning (custom behavior already done)
  - More fine-grained control over escaping behavior
     - Silently drop content inbetween SCRIPT tags (can be generalized to allow
@@ -30,7 +28,7 @@ TODO List
       of children, although unbalanced tags could wreck havoc (or at least
       delete the rest of the document)).
 
-1.6 release
+1.7 release
  # Additional support for poorly written HTML
     - Implement all non-essential attribute transforms (BIG!)
     - Microsoft Word HTML cleaning (i.e. MsoNormal, but research essential!)
