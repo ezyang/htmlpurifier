@@ -9,8 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-1.3.0, unknown release date
-(major feature release)
+1.3.0, released 2006-11-26
 # Invalid images are now removed, rather than replaced with a dud
   <img src="" alt="Invalid image" />. Previous behavior can be restored
   with new directive %Core.RemoveInvalidImg set to false.
@@ -39,9 +38,6 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Added internal documents briefly summarizing future progression of HTML
 . HTMLPurifier_Config->getBatch($namespace) added
 . More lenient casting to bool from string in HTMLPurifier_ConfigSchema
-
-1.2.1, unknown release date
-(bugfix/minor feature release, may be dropped if 1.2.0 is stable)
 . Refactored ChildDef classes into their own files
 
 1.2.0, released 2006-11-19

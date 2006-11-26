@@ -22,7 +22,7 @@
  */
 
 /*
-    HTML Purifier 1.2.0 - Standards Compliant HTML Filtering
+    HTML Purifier 1.3.0 - Standards Compliant HTML Filtering
     Copyright (C) 2006 Edward Z. Yang
 
     This library is free software; you can redistribute it and/or
