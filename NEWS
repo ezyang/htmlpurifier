@@ -28,6 +28,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   service to avoid PageRank leaks or warn users that they are exiting your site.
 ! Added spiffy new smoketest printDefinition.php, which lets you twiddle with
   the configuration settings and see how the internal rules are affected.
+! New directive %URI.HostBlacklist for blocking links to bad hosts.
+  xssAttacks.php smoketest updated accordingly.
 - Added missing type to ChildDef_Chameleon
 - Remove Tidy option from demo if there is not Tidy available
 . ChildDef_Required guards against empty tags

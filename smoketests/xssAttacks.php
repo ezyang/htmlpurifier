@@ -35,9 +35,9 @@ function formatCode($string) {
 <p>XSS attacks are from
 <a href="http://ha.ckers.org/xss.html">http://ha.ckers.org/xss.html</a>.</p>
 <p><strong>Caveats:</strong>
-The last segment of tests regarding blacklisted websites is not
-applicable at the moment, but when we add that functionality they'll be
-relevant. Most XSS broadcasts its presence by spawning an alert dialogue.
+<tt>Google.com</tt> has been programatically disallowed, but as you can
+see, there are ways of getting around that, so coverage in this area
+is not complete. Most XSS broadcasts its presence by spawning an alert dialogue.
 The displayed code is not strictly correct, as linebreaks have been forced for
 readability. Linewraps have been marked with <tt>»</tt>.  Some tests are
 omitted for your convenience. Not all control characters are displayed.</p>
@@ -48,7 +48,12 @@ omitted for your convenience. Not all control characters are displayed.</p>
 if (version_compare(PHP_VERSION, '5', '<')) exit('<p>Requires PHP 5.</p>');
 
 $xml = simplexml_load_file('xssAttacks.xml');
-$purifier = new HTMLPurifier();
+
+// programatically disallow google.com for URI evasion tests
+// not complete
+$config = HTMLPurifier_Config::createDefault();
+$config->set('URI', 'HostBlacklist', array('google.com'));
+$purifier = new HTMLPurifier($config);
 
 ?>
 <table cellspacing="0" cellpadding="2">

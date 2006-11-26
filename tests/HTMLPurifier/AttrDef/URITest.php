@@ -300,6 +300,32 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         
     }
     
+    function testBlacklist() {
+        
+        $this->config->set('URI', 'HostBlacklist', array('example.com', 'moo'));
+        
+        $this->assertDef('foo.txt');
+        $this->assertDef('http://www.google.com/example.com/moo');
+        
+        $this->assertDef('http://example.com/#23', false);
+        $this->assertDef('https://sub.domain.example.com/foobar', false);
+        $this->assertDef('http://example.com.example.net/?whoo=foo', false);
+        $this->assertDef('ftp://moo-moo.net/foo/foo/', false);
+        
+    }
+    
+    function testWhitelist() {
+        /*
+        $this->config->set('URI', 'HostPolicy', 'DenyAll');
+        $this->config->set('URI', 'HostWhitelist', array(null, 'google.com'));
+        
+        $this->assertDef('http://example.com/fo/google.com', false);
+        $this->assertDef('server.txt');
+        $this->assertDef('ftp://www.google.com/?t=a');
+        $this->assertDef('http://google.com.tricky.spamsite.net', false);
+        */
+    }
+    
 }
 
 ?>

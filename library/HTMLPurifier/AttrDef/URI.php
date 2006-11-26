@@ -69,6 +69,14 @@ HTMLPurifier_ConfigSchema::define(
     'This directive has been available since 1.3.0.'
 );
 
+HTMLPurifier_ConfigSchema::define(
+    'URI', 'HostBlacklist', array(), 'list',
+    'List of strings that are forbidden in the host of any URI. Use it to '.
+    'kill domain names of spam, etc. Note that it will catch anything in '.
+    'the domain, so <tt>moo.com</tt> will catch <tt>moo.com.example.com</tt>. '.
+    'This directive has been available since 1.3.0.'
+);
+
 /**
  * Validates a URI as defined by RFC 3986.
  * @note Scheme-specific mechanics deferred to HTMLPurifier_URIScheme
@@ -185,6 +193,8 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             $host = $this->host->validate($host, $config, $context);
             if ($host === false) $host = null;
             
+            if ($this->checkBlacklist($host, $config, $context)) return false;
+            
             // more lenient absolute checking
             if (isset($our_host)) {
                 $host_parts = array_reverse(explode('.', $host));
@@ -250,6 +260,25 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         
         return $result;
         
+    }
+    
+    /**
+     * Checks a host against an array blacklist
+     * @param $host Host to check
+     * @param $config HTMLPurifier_Config instance
+     * @param $context HTMLPurifier_Context instance
+     * @return bool Is spam?
+     */
+    function checkBlacklist($host, &$config, &$context) {
+        $blacklist = $config->get('URI', 'HostBlacklist');
+        if (!empty($blacklist)) {
+            foreach($blacklist as $blacklisted_host_fragment) {
+                if (strpos($host, $blacklisted_host_fragment) !== false) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
 }

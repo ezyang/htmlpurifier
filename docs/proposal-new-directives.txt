@@ -26,7 +26,6 @@ time.  Note the naming convention: %Namespace.Directive
 
 %URI.RelativeToAbsolute - transforms all relative URIs to absolute form
 
-%URI.HostBlacklist - strings that if found in the host of a URI are disallowed
 %URI.HostBlacklistRegex - regexes that if matching the host are disallowed
 %URI.HostWhitelist - domain names that are excluded from the host blacklist
 %URI.HostPolicy - determines whether or not its reject all and then whitelist
