@@ -84,6 +84,7 @@ Requested
     3. Extend the tag exclusion system to specify whether or not the
     contents should be dropped or not (currently, there's code that could do
     something like this if it didn't drop the inner text too.)
+ - Accept array input, by iterating and purifying all of the items
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations (unless
