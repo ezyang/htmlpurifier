@@ -37,12 +37,12 @@ class HTMLPurifier_TokenFactory
     /**
      * Creates a HTMLPurifier_Token_Start.
      * @param $name Tag name
-     * @param $attribute Associative array of attributes
+     * @param $attr Associative array of attributes
      * @return Generated HTMLPurifier_Token_Start
      */
-    public function createStart($name, $attributes = array()) {
+    public function createStart($name, $attr = array()) {
         $p = clone $this->p_start;
-        $p->HTMLPurifier_Token_Tag($name, $attributes);
+        $p->HTMLPurifier_Token_Tag($name, $attr);
         return $p;
     }
     
@@ -60,12 +60,12 @@ class HTMLPurifier_TokenFactory
     /**
      * Creates a HTMLPurifier_Token_Empty.
      * @param $name Tag name
-     * @param $attribute Associative array of attributes
+     * @param $attr Associative array of attributes
      * @return Generated HTMLPurifier_Token_Empty
      */
-    public function createEmpty($name, $attributes = array()) {
+    public function createEmpty($name, $attr = array()) {
         $p = clone $this->p_empty;
-        $p->HTMLPurifier_Token_Tag($name, $attributes);
+        $p->HTMLPurifier_Token_Tag($name, $attr);
         return $p;
     }
     

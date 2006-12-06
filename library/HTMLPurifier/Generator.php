@@ -104,14 +104,14 @@ class HTMLPurifier_Generator
     function generateFromToken($token) {
         if (!isset($token->type)) return '';
         if ($token->type == 'start') {
-            $attr = $this->generateAttributes($token->attributes);
+            $attr = $this->generateAttributes($token->attr);
             return '<' . $token->name . ($attr ? ' ' : '') . $attr . '>';
             
         } elseif ($token->type == 'end') {
             return '</' . $token->name . '>';
             
         } elseif ($token->type == 'empty') {
-            $attr = $this->generateAttributes($token->attributes);
+            $attr = $this->generateAttributes($token->attr);
              return '<' . $token->name . ($attr ? ' ' : '') . $attr .
                 ( $this->_xhtml ? ' /': '' )
                 . '>';

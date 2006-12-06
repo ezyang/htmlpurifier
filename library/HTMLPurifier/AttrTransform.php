@@ -21,7 +21,7 @@ class HTMLPurifier_AttrTransform
      * Abstract: makes changes to the attributes dependent on multiple values.
      * 
      * @param $attr Assoc array of attributes, usually from
-     *              HTMLPurifier_Token_Tag::$attributes
+     *              HTMLPurifier_Token_Tag::$attr
      * @param $config Mandatory HTMLPurifier_Config object.
      * @param $context Mandatory HTMLPurifier_Context object
      * @returns Processed attribute array.

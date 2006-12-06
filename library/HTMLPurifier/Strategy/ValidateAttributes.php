@@ -35,7 +35,7 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             if ($token->type !== 'start' && $token->type !== 'empty') continue;
             
             // copy out attributes for easy manipulation
-            $attr = $token->attributes;
+            $attr = $token->attr;
             
             // do global transformations (pre)
             // nothing currently utilizes this
@@ -117,7 +117,7 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             
             // commit changes
             // could interfere with flyweight implementation
-            $tokens[$key]->attributes = $attr;
+            $tokens[$key]->attr = $attr;
         }
         $context->destroy('IDAccumulator');
         

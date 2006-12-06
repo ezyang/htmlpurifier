@@ -570,9 +570,9 @@ class HTMLPurifier_HTMLDefinition
         }
         $allowed_attributes = $config->get('HTML', 'AllowedAttributes');
         if (is_array($allowed_attributes)) {
-            foreach ($this->info_global_attr as $attr => $info) {
-                if (!isset($allowed_attributes["*.$attr"])) {
-                    unset($this->info_global_attr[$attr]);
+            foreach ($this->info_global_attr as $attr_key => $info) {
+                if (!isset($allowed_attributes["*.$attr_key"])) {
+                    unset($this->info_global_attr[$attr_key]);
                 }
             }
             foreach ($this->info as $tag => $info) {
