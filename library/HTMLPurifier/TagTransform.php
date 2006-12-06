@@ -62,16 +62,16 @@ class HTMLPurifier_TagTransform_Center extends HTMLPurifier_TagTransform
             $new_tag = new HTMLPurifier_Token_End($this->transform_to);
             return $new_tag;
         }
-        $attributes = $tag->attributes;
+        $attr = $tag->attr;
         $prepend_css = 'text-align:center;';
-        if (isset($attributes['style'])) {
-            $attributes['style'] = $prepend_css . $attributes['style'];
+        if (isset($attr['style'])) {
+            $attr['style'] = $prepend_css . $attr['style'];
         } else {
-            $attributes['style'] = $prepend_css;
+            $attr['style'] = $prepend_css;
         }
         $new_tag = $tag->copy();
         $new_tag->name = $this->transform_to;
-        $new_tag->attributes = $attributes;
+        $new_tag->attr = $attr;
         return $new_tag;
     }
 }
@@ -115,39 +115,39 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
             return $new_tag;
         }
         
-        $attributes = $tag->attributes;
+        $attr = $tag->attr;
         $prepend_style = '';
         
         // handle color transform
-        if (isset($attributes['color'])) {
-            $prepend_style .= 'color:' . $attributes['color'] . ';';
-            unset($attributes['color']);
+        if (isset($attr['color'])) {
+            $prepend_style .= 'color:' . $attr['color'] . ';';
+            unset($attr['color']);
         }
         
         // handle face transform
-        if (isset($attributes['face'])) {
-            $prepend_style .= 'font-family:' . $attributes['face'] . ';';
-            unset($attributes['face']);
+        if (isset($attr['face'])) {
+            $prepend_style .= 'font-family:' . $attr['face'] . ';';
+            unset($attr['face']);
         }
         
         // handle size transform
-        if (isset($attributes['size'])) {
-            if (isset($this->_size_lookup[$attributes['size']])) {
+        if (isset($attr['size'])) {
+            if (isset($this->_size_lookup[$attr['size']])) {
                 $prepend_style .= 'font-size:' .
-                  $this->_size_lookup[$attributes['size']] . ';';
+                  $this->_size_lookup[$attr['size']] . ';';
             }
-            unset($attributes['size']);
+            unset($attr['size']);
         }
         
         if ($prepend_style) {
-            $attributes['style'] = isset($attributes['style']) ?
-                $prepend_style . $attributes['style'] :
+            $attr['style'] = isset($attr['style']) ?
+                $prepend_style . $attr['style'] :
                 $prepend_style;
         }
         
         $new_tag = $tag->copy();
         $new_tag->name = $this->transform_to;
-        $new_tag->attributes = $attributes;
+        $new_tag->attr = $attr;
         
         return $new_tag;
         

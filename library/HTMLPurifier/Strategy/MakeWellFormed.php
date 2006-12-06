@@ -30,7 +30,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 $token->type == 'start' ) {
                 
                 $result[] = new HTMLPurifier_Token_Empty($token->name,
-                                                         $token->attributes);
+                                                         $token->attr);
                 continue;
             }
             
@@ -39,7 +39,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 $token->type == 'empty' ) {
                 
                 $result[] = new HTMLPurifier_Token_Start($token->name,
-                                                         $token->attributes);
+                                                         $token->attr);
                 $result[] = new HTMLPurifier_Token_End($token->name);
                 
                 continue;

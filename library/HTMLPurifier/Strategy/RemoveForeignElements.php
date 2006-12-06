@@ -38,7 +38,9 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     // hard-coded image special case, pre-emptively drop
                     // if not available. Probably not abstract-able
                     if ( $token->name == 'img' ) {
-                        if (!isset($token->attr['src'])) continue;
+                        if (!isset($token->attr['src'])) {
+                            continue;
+                        }
                         if (!isset($definition->info['img']->attr['src'])) {
                             continue;
                         }
@@ -46,7 +48,8 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                             $definition->
                                 info['img']->
                                     attr['src']->
-                                        validate($token->attr['src']);
+                                        validate($token->attr['src'],
+                                            $config, $context);
                         if ($token->attr['src'] === false) continue;
                     }
                     

@@ -50,30 +50,29 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token // abstract
     /**
      * Associative array of the tag's attributes.
      */
-    var $attributes = array();
+    var $attr = array();
     
     /**
      * Non-overloaded constructor, which lower-cases passed tag name.
      * 
-     * @param $name         String name.
-     * @param $attributes   Associative array of attributes.
+     * @param $name String name.
+     * @param $attr Associative array of attributes.
      */
-    function HTMLPurifier_Token_Tag($name, $attributes = array()) {
-        //if ($attributes === null) var_dump(debug_backtrace());
+    function HTMLPurifier_Token_Tag($name, $attr = array()) {
         $this->name = ctype_lower($name) ? $name : strtolower($name);
-        foreach ($attributes as $key => $value) {
+        foreach ($attr as $key => $value) {
             // normalization only necessary when key is not lowercase
             if (!ctype_lower($key)) {
                 $new_key = strtolower($key);
-                if (!isset($attributes[$new_key])) {
-                    $attributes[$new_key] = $attributes[$key];
+                if (!isset($attr[$new_key])) {
+                    $attr[$new_key] = $attr[$key];
                 }
                 if ($new_key !== $key) {
-                    unset($attributes[$key]);
+                    unset($attr[$key]);
                 }
             }
         }
-        $this->attributes = $attributes;
+        $this->attr = $attr;
     }
 }
 
@@ -84,7 +83,7 @@ class HTMLPurifier_Token_Start extends HTMLPurifier_Token_Tag
 {
     var $type = 'start';
     function copy() {
-        return new HTMLPurifier_Token_Start($this->name, $this->attributes);
+        return new HTMLPurifier_Token_Start($this->name, $this->attr);
     }
 }
 
@@ -95,7 +94,7 @@ class HTMLPurifier_Token_Empty extends HTMLPurifier_Token_Tag
 {
     var $type = 'empty';
     function copy() {
-        return new HTMLPurifier_Token_Empty($this->name, $this->attributes);
+        return new HTMLPurifier_Token_Empty($this->name, $this->attr);
     }
 }
 

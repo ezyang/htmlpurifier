@@ -5,15 +5,15 @@ require_once 'HTMLPurifier/Token.php';
 class HTMLPurifier_TokenTest extends UnitTestCase
 {
     
-    function assertTokenConstruction($name, $attributes,
-        $expect_name = null, $expect_attributes = null
+    function assertTokenConstruction($name, $attr,
+        $expect_name = null, $expect_attr = null
     ) {
         if ($expect_name === null) $expect_name = $name;
-        if ($expect_attributes === null) $expect_attributes = $attributes;
-        $token = new HTMLPurifier_Token_Start($name, $attributes);
+        if ($expect_attr === null) $expect_attr = $attr;
+        $token = new HTMLPurifier_Token_Start($name, $attr);
         
-        $this->assertEqual($expect_name,       $token->name);
-        $this->assertEqual($expect_attributes, $token->attributes);
+        $this->assertEqual($expect_name, $token->name);
+        $this->assertEqual($expect_attr, $token->attr);
     }
     
     function testConstruct() {

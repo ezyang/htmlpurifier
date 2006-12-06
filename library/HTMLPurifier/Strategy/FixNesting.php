@@ -156,11 +156,14 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                     
                 }
                 
-                $child_def = $def->child;
-                
-                // have DTD child def validate children
-                $result = $child_def->validateChildren(
-                    $child_tokens, $config, $context);
+                if (!empty($def->child)) {
+                    // have DTD child def validate children
+                    $result = $def->child->validateChildren(
+                        $child_tokens, $config, $context);
+                } else {
+                    // weird, no child definition, get rid of everything
+                    $result = false;
+                }
                 
                 // determine whether or not this element has any exclusions
                 $excludes = $def->excludes;

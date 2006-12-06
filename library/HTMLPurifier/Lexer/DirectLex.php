@@ -143,18 +143,18 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                         )
                     );
                 if ($attribute_string) {
-                    $attributes = $this->parseAttributeString(
-                                        $attribute_string
-                                      , $config, $context
-                                  );
+                    $attr = $this->parseAttributeString(
+                                    $attribute_string
+                                  , $config, $context
+                              );
                 } else {
-                    $attributes = array();
+                    $attr = array();
                 }
                 
                 if ($is_self_closing) {
-                    $array[] = new HTMLPurifier_Token_Empty($type, $attributes);
+                    $array[] = new HTMLPurifier_Token_Empty($type, $attr);
                 } else {
-                    $array[] = new HTMLPurifier_Token_Start($type, $attributes);
+                    $array[] = new HTMLPurifier_Token_Start($type, $attr);
                 }
                 $cursor = $position_next_gt + 1;
                 $inside_tag = false;
