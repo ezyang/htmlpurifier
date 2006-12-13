@@ -36,6 +36,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
     <style type="text/css">
         form table {margin:1em auto;}
         form th {text-align:right;padding-right:1em;}
+        form .c {display:none;}
         .HTMLPurifier_Printer table {border-collapse:collapse;
             border:1px solid #000; width:600px;
             margin:1em auto;font-family:sans-serif;font-size:75%;}
@@ -62,11 +63,9 @@ influences the internal workings of the definition objects.</p>
 
 <p>You can specify an array by typing in a comma-separated
 list of items, HTML Purifier will take care of the rest (including
-transformation into a real array list or a lookup table). If a
-directive can be set to null, that usually means that the feature
-is disabled when it is null (not that, say, no tags are allowed).</p>
+transformation into a real array list or a lookup table).</p>
 
-<form id="edit-config" method="get" action="printDefinition.php">
+<form id="edit-config" name="edit-config" method="get" action="printDefinition.php">
 <table>
 <?php
     $directives = $config->getBatch('HTML');
@@ -91,27 +90,31 @@ is disabled when it is null (not that, say, no tags are allowed).</p>
 <tr>
 <th>
     <a href="http://hp.jpsband.org/live/configdoc/plain.html#<?php echo $directive ?>">
-        %<?php echo $directive; ?>
+        <label for="<?php echo $directive; ?>">%<?php echo $directive; ?></label>
     </a>
 </th>
 <td>
 <?php if (is_bool($value)) { ?>
-    Yes <input type="radio" name="<?php echo $directive; ?>" value="1"<?php if ($value) { ?> checked="checked"<?php } ?> /> &nbsp;
-    No <input type="radio" name="<?php echo $directive; ?>" value="0"<?php if (!$value) { ?> checked="checked"<?php } ?> />
+    <label for="Yes_<?php echo $directive; ?>"><span class="c">%<?php echo $directive; ?>:</span> Yes</label>
+    <input type="radio" name="<?php echo $directive; ?>" id="Yes_<?php echo $directive; ?>" value="1"<?php if ($value) { ?> checked="checked"<?php } ?> /> &nbsp;
+    <label for="No_<?php echo $directive; ?>"><span class="c">%<?php echo $directive; ?>:</span> No</label>
+    <input type="radio" name="<?php echo $directive; ?>" id="No_<?php echo $directive; ?>" value="0"<?php if (!$value) { ?> checked="checked"<?php } ?> />
 <?php } else { ?>
     <?php if($allow_null) { ?>
-        Null/Disabled <input
-                type="checkbox"
-                value="1"
-                onclick="toggleWriteability('<?php echo $directive ?>',checked)"
-                name="Null_<?php echo $directive; ?>"
-                <?php if ($value === null) { ?> checked="checked"<?php } ?>
-              /> or <br />
+        <label for="Null_<?php echo $directive; ?>"><span class="c">%<?php echo $directive; ?>:</span> Null/Disabled*</label>
+        <input
+            type="checkbox"
+            value="1"
+            onclick="toggleWriteability('<?php echo $directive ?>',checked)"
+            name="Null_<?php echo $directive; ?>"
+            id="Null_<?php echo $directive; ?>"
+            <?php if ($value === null) { ?> checked="checked"<?php } ?>
+          /> or <br />
     <?php } ?>
     <input
         type="text"
-        id="<?php echo $directive; ?>"
         name="<?php echo $directive; ?>"
+        id="<?php echo $directive; ?>"
         value="<?php echo escapeHTML($value); ?>"
         <?php if($value === null) {echo 'disabled="disabled"';} ?>
     />
@@ -128,6 +131,10 @@ is disabled when it is null (not that, say, no tags are allowed).</p>
     </td>
 </tr>
 </table>
+<p>* Some configuration directives make a distinction between an empty
+variable and a null variable. A whitelist, for example, will take an
+empty array as meaning <em>no</em> allowed elements, while checking
+Null/Disabled will mean that user whitelisting functionality is disabled.</p>
 </form>
 <h2>HTMLDefinition</h2>
 <?php echo $printer_html_definition->render($config) ?>

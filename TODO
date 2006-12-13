@@ -85,6 +85,12 @@ Requested
     contents should be dropped or not (currently, there's code that could do
     something like this if it didn't drop the inner text too.)
  - Accept array input, by iterating and purifying all of the items
+ - More user-friendly warnings when %HTML.Allow* attempts to specify a
+   tag or attribute that is not supported
+ - Allow specifying global attributes on a tag-by-tag basis in
+   %HTML.AllowAttributes
+ - Parse TinyMCE whitelist into our %HTML.Allow whitelists
+ - XSS-attempt detection
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations (unless
