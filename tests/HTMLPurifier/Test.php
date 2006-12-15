@@ -25,7 +25,7 @@ class HTMLPurifier_Test extends UnitTestCase
     function testStrict() {
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML', 'Strict', true);
-        $this->purifier = new HTMLPurifier($config);
+        $this->purifier = new HTMLPurifier( $config ); // verbose syntax
         
         $this->assertPurification(
             '<u>Illegal underline</u>',
@@ -40,10 +40,11 @@ class HTMLPurifier_Test extends UnitTestCase
     }
     
     function testDifferentAllowedElements() {
-        $config = HTMLPurifier_Config::createDefault();
-        $config->set('HTML', 'AllowedElements', array('b', 'i', 'p', 'a'));
-        $config->set('HTML', 'AllowedAttributes', array('a.href', '*.id'));
-        $this->purifier = new HTMLPurifier($config);
+        
+        $this->purifier = new HTMLPurifier(array(
+            'HTML.AllowedElements' => array('b', 'i', 'p', 'a'),
+            'HTML.AllowedAttributes' => array('a.href', '*.id')
+        ));
         
         $this->assertPurification(
             '<p>Par.</p><p>Para<a href="http://google.com/">gr</a>aph</p>Text<b>Bol<i>d</i></b>'
@@ -58,9 +59,7 @@ class HTMLPurifier_Test extends UnitTestCase
     
     function testDisableURI() {
         
-        $config = HTMLPurifier_Config::createDefault();
-        $config->set('Attr', 'DisableURI', true);
-        $this->purifier = new HTMLPurifier($config);
+        $this->purifier = new HTMLPurifier( array('Attr.DisableURI' => true) );
         
         $this->assertPurification(
             '<img src="foobar"/>',
