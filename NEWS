@@ -17,6 +17,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! HTMLPurifier object now accepts configuration arrays, no need to manually
   instantiate a configuration object
 ! Context object now accessible to outside
+! Added enduser-youtube.html, explains how to embed YouTube videos. See
+  also corresponding smoketest preserveYouTube.php.
 - printDefinition.php: added labels, added better clarification
 . HTMLPurifier_Config::create() added, takes mixed variable and converts into
   a HTMLPurifier_Config object.
