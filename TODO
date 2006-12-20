@@ -10,6 +10,7 @@ TODO List
 1.4 release
  # More extensive URI filtering schemes (see docs/proposal-new-directives.txt)
  # Allow for background-image and list-style-image (intrinsically tied to above)
+ # Add hooks for custom behavior (for instance, YouTube preservation)
  - Aggressive caching
  ? Rich set* methods and config file loaders for HTMLPurifier_Config
  ? Configuration profiles: sets of directives that get set with one func call
