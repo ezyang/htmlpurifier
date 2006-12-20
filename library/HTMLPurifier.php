@@ -107,7 +107,6 @@ class HTMLPurifier
         
         $config = $config ? HTMLPurifier_Config::create($config) : $this->config;
         
-        
         $context =& new HTMLPurifier_Context();
         $html = $this->encoder->convertToUTF8($html, $config, $context);
         
@@ -130,6 +129,23 @@ class HTMLPurifier
         $this->context =& $context;
         return $html;
     }
+    
+    /**
+     * Filters an array of HTML snippets
+     * @param $config Optional HTMLPurifier_Config object for this operation.
+     *                See HTMLPurifier::purify() for more details.
+     * @return Array of purified HTML
+     */
+    function purifyArray($array_of_html, $config = null) {
+        $context_array = array();
+        foreach ($array_of_html as $key => $html) {
+            $array_of_html[$key] = $this->purify($html, $config);
+            $context_array[$key] = $this->context;
+        }
+        $this->context = $context_array;
+        return $array_of_html;
+    }
+    
     
 }
 

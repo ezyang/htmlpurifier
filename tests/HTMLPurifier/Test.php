@@ -68,6 +68,21 @@ class HTMLPurifier_Test extends UnitTestCase
         
     }
     
+    function test_purifyArray() {
+        
+        $this->purifier = new HTMLPurifier();
+        
+        $this->assertEqual(
+            $this->purifier->purifyArray(
+                array('Good', '<b>Sketchy', 'foo' => '<script>bad</script>')
+            ),
+            array('Good', '<b>Sketchy</b>', 'foo' => 'bad')
+        );
+        
+        $this->assertIsA($this->purifier->context, 'array');
+        
+    }
+    
 }
 
 ?>
