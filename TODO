@@ -67,7 +67,6 @@ Unknown release (on a scratch-an-itch basis)
  - Append something to duplicate IDs so they're still usable (impl. note: the
    dupe detector would also need to detect the suffix as well)
  - Have 'lang' attribute be checked against official lists
- - Docs on how to embed YouTube videos (and friends) without patches
 
 Encoding workarounds
  - Non-lossy dumb alternate character encoding transformations, achieved by
@@ -89,7 +88,7 @@ Requested
    tag or attribute that is not supported
  - Allow specifying global attributes on a tag-by-tag basis in
    %HTML.AllowAttributes
- - Parse TinyMCE whitelist into our %HTML.Allow whitelists
+ - Parse TinyMCE whitelist into our %HTML.Allow* whitelists
  - XSS-attempt detection
 
 Wontfix
