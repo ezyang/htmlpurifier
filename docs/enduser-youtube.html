@@ -26,9 +26,9 @@ content in their pages is something that a lot of people like.</p>
 you will definitely be slammed by a manner of nasties that can be
 embedded in things from your run of the mill Flash movie to
 <a href="http://blog.spywareguide.com/2006/12/myspace_phish_attack_leads_use.html">Quicktime movies</a>.
-Allowing users to tell the browser to load content from other websites
-is intrinsically dangerous: there already security risks associated with
-letting users include images from other sites!</p>
+Even <code>img</code> tags, which HTML Purifier allows by default, can be
+dangerous. Be distrustful of anything that tells a browser to load content
+from another website automatically.</p>
 
 <p>Luckily for us, however, whitelisting saves the day. Sure, letting users
 include any old random flash file could be dangerous, but if it's
@@ -147,13 +147,18 @@ the user's operating system/browser. You need to either cap it by limiting
 the amount of digits allowed in the regex or using a callback to check the
 number.</p>
 
-<h3>Trusts YouTube's security</h3>
+<h3>Trusts media's host's security</h3>
 
 <p>By allowing this code onto our website, we are trusting that YouTube has
 tech-savvy enough people not to allow their users to inject malicious
-code into the Flash files. An exploit on YouTube means an exploit on your
-site, and when you start allowing shadier sites, remember that trust
-is important.</p>
+code into the Flash files.  An exploit on YouTube means an exploit on your
+site.  Even though YouTube is run by the reputable Google, it
+<a href="http://ha.ckers.org/blog/20061213/google-xss-vuln/">doesn't</a>
+mean they are
+<a href="http://ha.ckers.org/blog/20061208/xss-in-googles-orkut/">invulnerable.</a>
+You're putting a certain measure of the job on an external provider (just as
+you have by entrusting your user input to HTML Purifier), and
+it is important that you are cognizant of the risk.</p>
 
 <h3>Poorly written adaptations compromise security</h3>
 
