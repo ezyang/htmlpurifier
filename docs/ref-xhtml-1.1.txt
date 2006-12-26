@@ -10,7 +10,8 @@ It's quite simple, according to <http://www.w3.org/TR/xhtml11/changes.html>
 ...but that's only an informative section. More things to do:
 
 1. Scratch style attribute (it's deprecated)
-2. Be module-aware
+2. Be module-aware (this might entail intelligent grouping in the definition
+   and allowing users to specifically remove certain modules (see 5))
 3. Cross-reference minimal content models with existing DTDs and determine
    changes (todo)
 4. Watch out for the Legacy Module
