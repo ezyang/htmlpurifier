@@ -17,6 +17,9 @@ class HTMLPurifier_AttrDef_LangTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef(' en ', 'en'); // trim
         $this->assertDef('EN', 'en'); // case insensitivity
         
+        // (thanks Eugen Pankratz for noticing the typos!)
+        $this->assertDef('En-Us-Edison', 'en-us-edison'); // complex ci
+        
         $this->assertDef('fr en', false); // multiple languages
         $this->assertDef('%', false); // bad character
         
@@ -26,7 +29,7 @@ class HTMLPurifier_AttrDef_LangTest extends HTMLPurifier_AttrDefHarness
         // primary subtag rules
             // I'm somewhat hesitant to allow x and i as primary language codes,
             // because they usually are never used in real life. However,
-            // theoretically speaking, having them alone is permissble, so
+            // theoretically speaking, having them alone is permissable, so
             // I'll be lenient. No XML parser is going to complain anyway.
         $this->assertDef('x');
         $this->assertDef('i');

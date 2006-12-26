@@ -45,6 +45,20 @@ class HTMLPurifier_Config
     }
     
     /**
+     * Convenience constructor that creates a config object based on a mixed var
+     * @param mixed $config Variable that defines the state of the config
+     *                      object. Can be: a HTMLPurifier_Config() object or
+     *                      an array of directives based on loadArray().
+     * @return Configured HTMLPurifier_Config object
+     */
+    function create($config) {
+        if (is_a($config, 'HTMLPurifier_Config')) return $config;
+        $ret = HTMLPurifier_Config::createDefault();
+        if (is_array($config)) $ret->loadArray($config);
+        return $ret;
+    }
+    
+    /**
      * Convenience constructor that creates a default configuration object.
      * @return Default HTMLPurifier_Config object.
      */

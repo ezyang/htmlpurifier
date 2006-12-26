@@ -180,6 +180,25 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
     }
     
+    function test_create() {
+        
+        HTMLPurifier_ConfigSchema::defineNamespace('Cake', 'Properties of it.');
+        HTMLPurifier_ConfigSchema::define('Cake', 'Sprinkles', 666, 'int', 'Number of.');
+        HTMLPurifier_ConfigSchema::define('Cake', 'Flavor', 'vanilla', 'string', 'Flavor of the batter.');
+        
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('Cake', 'Sprinkles', 42);
+        
+        // test flat pass-through
+        $created_config = HTMLPurifier_Config::create($config);
+        $this->assertEqual($config, $created_config);
+        
+        // test loadArray
+        $created_config = HTMLPurifier_Config::create(array('Cake.Sprinkles' => 42));
+        $this->assertEqual($config, $created_config);
+        
+    }
+    
 }
 
 ?>
