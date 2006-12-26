@@ -20,6 +20,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added enduser-youtube.html, explains how to embed YouTube videos. See
   also corresponding smoketest preserveYouTube.php.
 ! Added purifyArray(), which takes a list of HTML and purifies it all
+- Fixed fatal error thrown by upper-cased language attributes
 - printDefinition.php: added labels, added better clarification
 . HTMLPurifier_Config::create() added, takes mixed variable and converts into
   a HTMLPurifier_Config object.
