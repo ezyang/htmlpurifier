@@ -11,7 +11,6 @@
 function HTMLPurifier($html, $config = null) {
     static $purifier = false;
     if (!$purifier) {
-        $init = true;
         require_once 'HTMLPurifier.php';
         $purifier = new HTMLPurifier();
     }
