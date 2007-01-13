@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="Describes the rationale for using UTF-8, the ramifications otherwise, and how to make the switch." />
+<link rel="stylesheet" type="text/css" href="./style.css" />
+<style type="text/css">
+    .minor td {font-style:italic;}
+</style>
+
+<title>UTF-8 - HTML Purifier</title>
+
+</head><body>
+
+<h1>UTF-8</h1>
+
+<div id="filing">Filed under End-User</div>
+<div id="index">Return to the <a href="index.html">index</a>.</div>
+
+<p>Character encoding and character sets, in truth, are not that
+difficult to understand. But if you don't understand them, you are going
+to be caught by surprise by some of HTML Purifier's behavior, namely
+the fact that it operates UTF-8 or the limitations of the character
+encoding transformations it does. This document will walk you through
+determining the encoding of your system and how you should handle
+this information.</p>
+
+<blockquote class="aside">Text in this formatting is an <strong>aside</strong>,
+    interesting tidbits for the curious but not strictly necessary material to
+    do the tutorial. If you read this text, you'll come out
+    with a greater understanding of the underlying issues.</blockquote>
+
+<h2>Finding the real encoding</h2>
+
+<p>In the beginning, there was ASCII, and things were simple. But they
+weren't good, for no one could write in Cryllic or Thai. So there
+exploded a proliferation of character encodings to remedy the problem
+by extending the characters ASCII could express. This is ridiculously
+simplified version of the history of character encodings shows us that
+there are now many character encodings floating around.</p>
+
+<blockquote class="aside">
+    <p>A <strong>character encoding</strong> tells the computer how to
+    interpret raw zeroes and ones into real characters. It
+    usually does this by pairing numbers with characters.</p>
+    <p>There are many different types of character encodings floating
+    around, but the ones we deal most frequently with are ASCII, 
+    8-bit encodings, and Unicode-based encodings.</p>
+    <ul>
+        <li><strong>ASCII</strong> is a 7-bit encoding based on the
+            English alphabet.</li>
+        <li><strong>8-bit encodings</strong> are extensions to ASCII
+            that add a potpourri of useful, non-standard characters
+            like &eacute; and &aelig;. They can only add 127 characters,
+            so usually only support one script at a time. When you
+            see a page on the web, chances are it's encoded in one
+            of these encodings.</li>
+        <li><strong>Unicode-based encodings</strong> implement the
+            Unicode standard and include UTF-8, UCS-2 and UTF-16.
+            They go beyond 8-bits (the first two are variable length,
+            while the second one uses 16-bits), and support almost
+            every language in the world. UTF-8 is gaining traction
+            as the dominant international encoding of the web.</li>
+    </ul>
+</blockquote>
+
+<p>The first step of our journey is to find out what the encoding of
+<em>insert-application-here</em> is. The most reliable way is to ask your
+browser:</p>
+
+<dl>
+    <dt>Mozilla Firefox</dt>
+    <dd>Tools &gt; Page Info: Encoding</dd>
+    <dt>Internet Explorer</dt>
+    <dd>View &gt; Encoding: bulleted item is unofficial name</dd>
+</dl>
+
+<p>Internet Explorer won't give you the mime (i.e. useful/real) name of the
+character encoding, so you'll have to look it up using their description.
+Some common ones:</p>
+
+<table class="table">
+    <thead><tr>
+        <th>IE's Description</th>
+        <th>Mime Name</th>
+    </tr></thead>
+    <tr><th colspan="2">Windows</th></td>
+    <tbody>
+        <tr><td>Arabic (Windows)</td><td>Windows-1256</td></tr>
+        <tr><td>Baltic (Windows)</td><td>Windows-1257</td></tr>
+        <tr><td>Central European (Windows)</td><td>Windows-1250</td></tr>
+        <tr><td>Cyrillic (Windows)</td><td>Windows-1251</td></tr>
+        <tr><td>Greek (Windows)</td><td>Windows-1253</td></tr>
+        <tr><td>Hebrew (Windows)</td><td>Windows-1255</td></tr>
+        <tr><td>Thai (Windows)</td><td>TIS-620</td></tr>
+        <tr><td>Turkish (Windows)</td><td>Windows-1254</td></tr>
+        <tr><td>Vietnamese (Windows)</td><td>Windows-1258</td></tr>
+        <tr><td>Western European (Windows)</td><td>Windows-1252</td></tr>
+    </tbody>
+    <tr><th colspan="2">ISO</th></td>
+    <tbody>
+        <tr><td>Arabic (ISO)</td><td>ISO-8859-6</td><td>
+        <tr><td>Baltic (ISO)</td><td>ISO-8859-4</td><td>
+        <tr><td>Central European (ISO)</td><td>ISO-8859-2</td><td>
+        <tr><td>Cyrillic (ISO)</td><td>ISO-8859-5</td><td>
+        <tr class="minor"><td>Estonian (ISO)</td><td>ISO-8859-13</td><td>
+        <tr class="minor"><td>Greek (ISO)</td><td>ISO-8859-7</td><td>
+        <tr><td>Hebrew (ISO-Logical)</td><td>ISO-8859-8-l</td><td>
+        <tr><td>Hebrew (ISO-Visual)</td><td>ISO-8859-8</td><td>
+        <tr class="minor"><td>Latin 9 (ISO)</td><td>ISO-8859-15</td><td>
+        <tr class="minor"><td>Turkish (ISO)</td><td>ISO-8859-9</td><td>
+        <tr><td>Western European (ISO)</td><td>ISO-8859-1</td><td>
+    </tbody>
+    <tr><th colspan="2">Other</th></td>
+    </tbody>
+        <tr><td>Chinese Simplified (GB18030)</td><td>GB18030</td></tr>
+        <tr><td>Chinese Simplified (GB2312)</td><td>GB2312</td></tr>
+        <tr><td>Chinese Simplified (HZ)</td><td>HZ</td></tr>
+        <tr><td>Chinese Traditional (Big5)</td><td>Big5</td></tr>
+        <tr><td>Japanese (Shift-JIS)</td><td>Shift_JIS</td></tr>
+        <tr><td>Japanese (EUC)</td><td>EUC-JP</td></tr>
+        <tr><td>Korean</td><td>EUC-KR</td></tr>
+        <tr><td>Unicode (UTF-8)</td><td>UTF-8</td></tr>
+    </tbody>
+</table>
+
+<p>Internet Explorer does not recognize some of the more obscure
+character encodings, and having to lookup the real names with a table
+is a pain, so I recommend using Mozilla Firefox to find out your
+character encoding.</p>
+
+<h2>Finding the embedded encoding</h2>
+
+<p>At this point, you may be asking, &quot;Didn't we already find out our
+encoding?&quot; Well, as it turns out, there are multiple places where
+a web developer can specify a character encoding, and one such place
+is in a <code>META</code> tag:</p>
+
+<pre>&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;</pre>
+
+<p>You'll find this in the <code>HEAD</code> section of an HTML document.
+The text to the right of <code>charset=</code> is the &quot;claimed&quot;
+encoding: the HTML claims to be this encoding, but whether or not this
+is actually the case depends on other factors. For now, take note
+if your <code>META</code> tag claims that either:</p>
+
+<ol>
+    <li>The character encoding is the same as the one reported by the
+        browser,</li>
+    <li>The character encoding is different from the browser's, or</li>
+    <li>There is no <code>META</code> tag at all! (horror, horror!)</li>
+</ol>
+
+<h2>Fixing the embedded encoding</h2>
+
+<p>If your <code>META</code> encoding and your real encoding match,
+savvy! You can skip this section. If they don't...</p>
+
+<h3>I have no embedded encoding!</h3>
+
+<p>If this is the case, you'll want to add in the appropriate
+<code>META</code> tag to your website. It's as simple as copy-pasting
+the code snippet above and replacing UTF-8 with whatever is the mime name
+of your real encoding.</p>
+
+<blockquote class="aside">
+    <p>For all those skeptics out there, there is a very good reason
+    why the character encoding should be explicitly stated. When the
+    browser isn't told what the character encoding of a text is, it
+    has to guess: and sometimes the guess is wrong. Hackers can manipulate
+    this guess in order to slip XSS pass filters and then fool the
+    browser into executing it as active code. A great example of this
+    is the <a href="http://shiflett.org/archive/177">Google UTF-7
+    exploit</a>.</p>
+    <p>You might be able to get away with not specifying a character
+    encoding with the <code>META</code> tag as long as your webserver
+    sends the right Content-Type header, but why risk it?</p>
+</blockquote>
+
+<h3>Huh? The embedded encoding disagrees!</h3>
+
+<h2>Further Reading</h2>
+
+<p>Many other developers have already discussed the subject of Unicode,
+UTF-8 and internationalization, and I would like to defer to them for
+a more in-depth look into character sets and encodings.</p>
+
+<ul>
+    <li><a href="http://www.joelonsoftware.com/articles/Unicode.html">
+        The Absolute Minimum Every Software Developer Absolutely,
+        Positively Must Know About Unicode and Character Sets
+        (No Excuses!)</a> by Joel Spolsky, provides a <em>very</em>
+        good high-level look at Unicode and character sets in general.</li>
+    <li><a href="http://en.wikipedia.org/wiki/UTF-8">UTF-8 on Wikipedia</a>,
+        provides a lot of useful details into the innards of UTF-8, although
+        it may be a little off-putting to people who don't know much
+        about Unicode to begin with.</li>
+    <li><a href="http://ppewww.physics.gla.ac.uk/~flavell/charset/form-i18n.html">
+        <code>FORM</code> submission and i18n</a> by A.J. Flavell,
+        discusses the pitfalls of attempting to create an internationalized
+        application without using UTF-8.</li>
+</ul>
+
+</body>
+</html>
