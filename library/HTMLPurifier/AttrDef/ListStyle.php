@@ -20,6 +20,7 @@ class HTMLPurifier_AttrDef_ListStyle extends HTMLPurifier_AttrDef
         $def = $config->getCSSDefinition();
         $this->info['list-style-type']     = $def->info['list-style-type'];
         $this->info['list-style-position'] = $def->info['list-style-position'];
+        $this->info['list-style-image'] = $def->info['list-style-image'];
     }
     
     function validate($string, $config, &$context) {
@@ -32,13 +33,14 @@ class HTMLPurifier_AttrDef_ListStyle extends HTMLPurifier_AttrDef
         
         $caught_type = false;
         $caught_position = false;
+        $caught_image = false;
         $caught_none = false; // as in keyword none, which is in all of them
         
         $ret = '';
         
         foreach ($bits as $bit) {
-            if ($caught_none && ($caught_type || $caught_position)) break;
-            if ($caught_type && $caught_position) break;
+            if ($caught_none && ($caught_type || $caught_position || $caught_image)) break;
+            if ($caught_type && $caught_position && $caught_image) break;
             
             if ($bit === '') continue;
             
@@ -63,6 +65,14 @@ class HTMLPurifier_AttrDef_ListStyle extends HTMLPurifier_AttrDef
             if ($r !== false) {
                 if ($caught_position) continue;
                 $caught_position = true;
+                $ret .= $r . ' ';
+                continue;
+            }
+            
+            $r = $this->info['list-style-image']->validate($bit, $config, $context);
+            if ($r !== false) {
+                if ($caught_image) continue;
+                $caught_image = true;
                 $ret .= $r . ' ';
                 continue;
             }

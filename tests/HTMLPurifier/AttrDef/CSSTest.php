@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/AttrDef/CSS.php';
+require_once 'HTMLPurifier/AttrDefHarness.php';
 
 class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
 {
@@ -71,6 +72,8 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('vertical-align:12px;');
         $this->assertDef('vertical-align:50%;');
         $this->assertDef('table-layout:fixed;');
+        $this->assertDef('list-style-image:url(nice.jpg);');
+        $this->assertDef('list-style:inside url(nice.jpg) disc;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',

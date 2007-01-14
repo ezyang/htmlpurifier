@@ -11,6 +11,7 @@ require_once 'HTMLPurifier/AttrDef/FontFamily.php';
 require_once 'HTMLPurifier/AttrDef/Font.php';
 require_once 'HTMLPurifier/AttrDef/Border.php';
 require_once 'HTMLPurifier/AttrDef/ListStyle.php';
+require_once 'HTMLPurifier/AttrDef/CSSURI.php';
 
 /**
  * Defines allowed CSS attributes and what their values are.
@@ -56,6 +57,7 @@ class HTMLPurifier_CSSDefinition
         $this->info['list-style-type'] = new HTMLPurifier_AttrDef_Enum(
             array('disc', 'circle', 'square', 'decimal', 'lower-roman',
             'upper-roman', 'lower-alpha', 'upper-alpha'), false);
+        $this->info['list-style-image'] = new HTMLPurifier_AttrDef_CSSURI();
         
         $this->info['list-style'] = new HTMLPurifier_AttrDef_ListStyle($config);
         
