@@ -5,11 +5,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="description" content="Describes the rationale for using UTF-8, the ramifications otherwise, and how to make the switch." />
 <link rel="stylesheet" type="text/css" href="./style.css" />
+<script defer="defer" type="text/javascript" src="./toc-gen.js"></script>
 <style type="text/css">
     .minor td {font-style:italic;}
 </style>
 
 <title>UTF-8 - HTML Purifier</title>
+
+<!-- Note to users: this document, though professing to be UTF-8, attempts
+to use only ASCII characters, because most webservers are configured
+to send HTML as ISO-8859-1  -->
 
 </head><body>
 
@@ -24,19 +29,24 @@ to be caught by surprise by some of HTML Purifier's behavior, namely
 the fact that it operates UTF-8 or the limitations of the character
 encoding transformations it does. This document will walk you through
 determining the encoding of your system and how you should handle
-this information.</p>
+this information. It will stay away from excessive discussion on
+the internals of character encoding, but offer the information in
+asides that can easily be skipped.</p>
 
-<blockquote class="aside">Text in this formatting is an <strong>aside</strong>,
+<blockquote class="aside">
+<div class="label">Asides</div>
+    <p>Text in this formatting is an <strong>aside</strong>,
     interesting tidbits for the curious but not strictly necessary material to
     do the tutorial. If you read this text, you'll come out
-    with a greater understanding of the underlying issues.</blockquote>
+    with a greater understanding of the underlying issues.</p>
+</blockquote>
 
-<h2>Finding the real encoding</h2>
+<h2 id="findcharset">Finding the real encoding</h2>
 
 <p>In the beginning, there was ASCII, and things were simple. But they
 weren't good, for no one could write in Cryllic or Thai. So there
 exploded a proliferation of character encodings to remedy the problem
-by extending the characters ASCII could express. This is ridiculously
+by extending the characters ASCII could express. This ridiculously
 simplified version of the history of character encodings shows us that
 there are now many character encodings floating around.</p>
 
@@ -85,8 +95,8 @@ Some common ones:</p>
         <th>IE's Description</th>
         <th>Mime Name</th>
     </tr></thead>
-    <tr><th colspan="2">Windows</th></td>
     <tbody>
+        <tr><th colspan="2">Windows</th></tr>
         <tr><td>Arabic (Windows)</td><td>Windows-1256</td></tr>
         <tr><td>Baltic (Windows)</td><td>Windows-1257</td></tr>
         <tr><td>Central European (Windows)</td><td>Windows-1250</td></tr>
@@ -98,22 +108,22 @@ Some common ones:</p>
         <tr><td>Vietnamese (Windows)</td><td>Windows-1258</td></tr>
         <tr><td>Western European (Windows)</td><td>Windows-1252</td></tr>
     </tbody>
-    <tr><th colspan="2">ISO</th></td>
     <tbody>
-        <tr><td>Arabic (ISO)</td><td>ISO-8859-6</td><td>
-        <tr><td>Baltic (ISO)</td><td>ISO-8859-4</td><td>
-        <tr><td>Central European (ISO)</td><td>ISO-8859-2</td><td>
-        <tr><td>Cyrillic (ISO)</td><td>ISO-8859-5</td><td>
-        <tr class="minor"><td>Estonian (ISO)</td><td>ISO-8859-13</td><td>
-        <tr class="minor"><td>Greek (ISO)</td><td>ISO-8859-7</td><td>
-        <tr><td>Hebrew (ISO-Logical)</td><td>ISO-8859-8-l</td><td>
-        <tr><td>Hebrew (ISO-Visual)</td><td>ISO-8859-8</td><td>
-        <tr class="minor"><td>Latin 9 (ISO)</td><td>ISO-8859-15</td><td>
-        <tr class="minor"><td>Turkish (ISO)</td><td>ISO-8859-9</td><td>
-        <tr><td>Western European (ISO)</td><td>ISO-8859-1</td><td>
+        <tr><th colspan="2">ISO</th></tr>
+        <tr><td>Arabic (ISO)</td><td>ISO-8859-6</td></tr>
+        <tr><td>Baltic (ISO)</td><td>ISO-8859-4</td></tr>
+        <tr><td>Central European (ISO)</td><td>ISO-8859-2</td></tr>
+        <tr><td>Cyrillic (ISO)</td><td>ISO-8859-5</td></tr>
+        <tr class="minor"><td>Estonian (ISO)</td><td>ISO-8859-13</td></tr>
+        <tr class="minor"><td>Greek (ISO)</td><td>ISO-8859-7</td></tr>
+        <tr><td>Hebrew (ISO-Logical)</td><td>ISO-8859-8-l</td></tr>
+        <tr><td>Hebrew (ISO-Visual)</td><td>ISO-8859-8</td></tr>
+        <tr class="minor"><td>Latin 9 (ISO)</td><td>ISO-8859-15</td></tr>
+        <tr class="minor"><td>Turkish (ISO)</td><td>ISO-8859-9</td></tr>
+        <tr><td>Western European (ISO)</td><td>ISO-8859-1</td></tr>
     </tbody>
-    <tr><th colspan="2">Other</th></td>
-    </tbody>
+    <tbody>
+        <tr><th colspan="2">Other</th></tr>
         <tr><td>Chinese Simplified (GB18030)</td><td>GB18030</td></tr>
         <tr><td>Chinese Simplified (GB2312)</td><td>GB2312</td></tr>
         <tr><td>Chinese Simplified (HZ)</td><td>HZ</td></tr>
@@ -130,7 +140,7 @@ character encodings, and having to lookup the real names with a table
 is a pain, so I recommend using Mozilla Firefox to find out your
 character encoding.</p>
 
-<h2>Finding the embedded encoding</h2>
+<h2 id="findmetacharset">Finding the embedded encoding</h2>
 
 <p>At this point, you may be asking, &quot;Didn't we already find out our
 encoding?&quot; Well, as it turns out, there are multiple places where
@@ -152,12 +162,12 @@ if your <code>META</code> tag claims that either:</p>
     <li>There is no <code>META</code> tag at all! (horror, horror!)</li>
 </ol>
 
-<h2>Fixing the embedded encoding</h2>
+<h2 id="fixcharset">Fixing the encoding</h2>
 
 <p>If your <code>META</code> encoding and your real encoding match,
 savvy! You can skip this section. If they don't...</p>
 
-<h3>I have no embedded encoding!</h3>
+<h3 id="fixcharset-none">No embedded encoding</h3>
 
 <p>If this is the case, you'll want to add in the appropriate
 <code>META</code> tag to your website. It's as simple as copy-pasting
@@ -175,12 +185,242 @@ of your real encoding.</p>
     exploit</a>.</p>
     <p>You might be able to get away with not specifying a character
     encoding with the <code>META</code> tag as long as your webserver
-    sends the right Content-Type header, but why risk it?</p>
+    sends the right Content-Type header, but why risk it? Besides, if
+    the user downloads the HTML file, there is no longer any webserver
+    to define the character encoding.</p>
 </blockquote>
 
-<h3>Huh? The embedded encoding disagrees!</h3>
+<h3 id="fixcharset-diff">Embedded encoding disagrees</h3>
 
-<h2>Further Reading</h2>
+<p>This is an extremely common mistake: another source is telling
+the browser what the
+character encoding is and is overriding the embedded encoding. This
+source usually is the Content-Type HTTP header that the webserver (i.e.
+Apache) sends. A usual Content-Type header sent with a page might
+look like this:</p>
+
+<pre>Content-Type: text/html; charset=ISO-8859-1</pre>
+
+<p>Notice how there is a charset parameter: this is the webserver's
+way of telling a browser what the character encoding is, much like
+the <code>META</code> tags we touched upon previously.</p>
+
+<blockquote class="aside"><p>In fact, the <code>META</code> tag is
+designed as a substitute for the HTTP header for contexts where
+sending headers is impossible (such as locally stored files without
+a webserver). Thus the name <code>http-equiv</code> (HTTP equivalent).
+</p></blockquote>
+
+<p>There are two ways to go about fixing this: changing the <code>META</code>
+tag to match the HTTP header, or changing the HTTP header to match
+the <code>META</code> tag. How do we know which to do? It depends
+on the website's content: after all, headers and tags are only ways of
+describing the actual characters on the web page.</p>
+
+<p>If your website:</p>
+
+<dl>
+    <dt>...only uses ASCII characters,</dt>
+    <dd>Either way is fine, but I recommend switching both to
+        UTF-8 (more on this later).</dd>
+    <dt>...uses special characters, and they display
+        properly,</dt>
+    <dd>Change the embedded encoding to the server encoding.</dd>
+    <dt>...uses special characters, but users often complain that
+        they come out garbled,</dt>
+    <dd>Change the server encoding to the embedded encoding.</dd>
+</dl>
+
+<p>Changing a META tag is easy: just swap out the old encoding
+for the new. Changing the server (HTTP header) encoding, however,
+is slightly more difficult.</p>
+
+<h3 id="fixcharset-server">Changing the server encoding</h3>
+
+<h4 id="fixcharset-server-php">PHP header() function</h4>
+
+<p>The simplest way to handle this problem is to send the encoding
+yourself, via your programming language. Since you're using HTML
+Purifier, I'll assume PHP, although it's not too difficult to do
+similar things in
+<a href="http://www.w3.org/International/O-HTTP-charset#scripting">other
+languages</a>. The appropriate code is:</p>
+
+<pre><a href="http://php.net/header">header</a>('Content-Type:text/html; charset=UTF-8');</pre>
+
+<p>...replacing UTF-8 with whatever your embedded encoding is.
+This code must come before any output, so be careful about
+stray whitespace in your application.</p>
+
+<h4 id="fixcharset-server-nophp">Non-PHP</h4>
+
+<p>You may, for whatever reason, may need to set the character encoding
+on non-PHP files, usually plain ol' HTML files. Doing this
+is more of a hit-or-miss process: depending on the software being
+used as a webserver and the configuration of that software, certain
+techniques may work, or may not work.</p>
+
+<h4 id="fixcharset-server-htaccess">.htaccess</h4>
+
+<p>On Apache, you can use an .htaccess file to change the character
+encoding. I'll defer to
+<a href="http://www.w3.org/International/questions/qa-htaccess-charset">W3C</a>
+for the in-depth explanation, but it boils down to creating a file
+named .htaccess with the contents:</p>
+
+<pre><a href="http://httpd.apache.org/docs/1.3/mod/mod_mime.html#addcharset">AddCharset</a> UTF-8 .html</pre>
+
+<p>Where UTF-8 is replaced with the character encoding you want to
+use and .html is a file extension that this will be applied to. This
+character encoding will then be set for any file directly in
+or in the subdirectories of directory you place this file in.</p>
+
+<p>If you're feeling particularly courageous, you can use:</p>
+
+<pre><a href="http://httpd.apache.org/docs/1.3/mod/core.html#adddefaultcharset">AddDefaultCharset</a> UTF-8</pre>
+
+<p>...which changes the character set Apache adds to any document that
+doesn't have any Content-Type parameters. This directive, which the
+default configuration file sets to iso-8859-1 for security
+reasons, is probably why your headers mismatch
+with the <code>META</code> tag. If you would prefer Apache not to be
+butting in on your character encodings, you can tell it not
+to send anything at all:</p>
+
+<pre><a href="http://httpd.apache.org/docs/1.3/mod/core.html#adddefaultcharset">AddDefaultCharset</a> Off</pre>
+
+<p>...making your <code>META</code> tags the sole source of
+character encoding information. In these cases, it is
+<em>especially</em> important to make sure you have valid <code>META</code>
+tags on your pages and all the text before them is ASCII.</p>
+
+<blockquote class="aside"><p>These directives can also be
+placed in httpd.conf file for Apache, but
+in most shared hosting situations you won't be able to edit this file.
+</p></blockquote>
+
+<h4 id="fixcharset-server-ext">File extensions</h4>
+
+<p>If you're not allowed to use .htaccess files, you can often
+piggy-back off of Apache's default AddCharset declarations to get
+your files in the proper extension. Here are Apache's default
+character set declarations:</p>
+
+<table class="table">
+    <thead><tr>
+        <th>Charset</th>
+        <th>File extension(s)</th>
+    </tr></thead>
+    <tbody>
+        <tr><td>ISO-8859-1</td><td>.iso8859-1 .latin1</td></tr>
+        <tr><td>ISO-8859-2</td><td>.iso8859-2 .latin2 .cen</td></tr>
+        <tr><td>ISO-8859-3</td><td>.iso8859-3 .latin3</td></tr>
+        <tr><td>ISO-8859-4</td><td>.iso8859-4 .latin4</td></tr>
+        <tr><td>ISO-8859-5</td><td>.iso8859-5 .latin5 .cyr .iso-ru</td></tr>
+        <tr><td>ISO-8859-6</td><td>.iso8859-6 .latin6 .arb</td></tr>
+        <tr><td>ISO-8859-7</td><td>.iso8859-7 .latin7 .grk</td></tr>
+        <tr><td>ISO-8859-8</td><td>.iso8859-8 .latin8 .heb</td></tr>
+        <tr><td>ISO-8859-9</td><td>.iso8859-9 .latin9 .trk</td></tr>
+        <tr><td>ISO-2022-JP</td><td>.iso2022-jp .jis</td></tr>
+        <tr><td>ISO-2022-KR</td><td>.iso2022-kr .kis</td></tr>
+        <tr><td>ISO-2022-CN</td><td>.iso2022-cn .cis</td></tr>
+        <tr><td>Big5</td><td>.Big5 .big5 .b5</td></tr>
+        <tr><td>WINDOWS-1251</td><td>.cp-1251 .win-1251</td></tr>
+        <tr><td>CP866</td><td>.cp866</td></tr>
+        <tr><td>KOI8-r</td><td>.koi8-r .koi8-ru</td></tr>
+        <tr><td>KOI8-ru</td><td>.koi8-uk .ua</td></tr>
+        <tr><td>ISO-10646-UCS-2</td><td>.ucs2</td></tr>
+        <tr><td>ISO-10646-UCS-4</td><td>.ucs4</td></tr>
+        <tr><td>UTF-8</td><td>.utf8</td></tr>
+        <tr><td>GB2312</td><td>.gb2312 .gb </td></tr>
+        <tr><td>utf-7</td><td>.utf7</td></tr>
+        <tr><td>EUC-TW</td><td>.euc-tw</td></tr>
+        <tr><td>EUC-JP</td><td>.euc-jp</td></tr>
+        <tr><td>EUC-KR</td><td>.euc-kr</td></tr>
+        <tr><td>shift_jis</td><td>.sjis</td></tr>
+    </tbody>
+</table>
+
+<p>So, for example, a file named <code>page.utf8.html</code> or
+<code>page.html.utf8</code> will probably be sent with the UTF-8 charset
+attached, the difference being that if there is an
+<code>AddCharset charset .html</code> declaration, it will override
+the .utf8 extension in <code>page.utf8.html</code> (precedence moves
+from right to left). By default, Apache has no such declaration.</p>
+
+<h4 id="fixcharset-server-iis">Microsoft IIS</h4>
+
+<p>If anyone can contribute information on how to configure Microsoft
+IIS to change character encodings, I'd be grateful.</p>
+
+<h3 id="fixcharset-xml">XML</h3>
+
+<p><code>META</code> tags are the most common source of embedded
+encodings, but they can also come from somewhere else: XML
+processing instructions. They look like:</p>
+
+<pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</pre>
+
+<p>...and are most often found in XML documents (including XHTML).</p>
+
+<p>For XHTML, this processing instruction theoretically
+overrides the <code>META</code> tag. In reality, this happens only when the
+XHTML is actually served as legit XML and not HTML, which is almost
+always never due to Internet Explorer's lack of support for 
+<code>application/xhtml+xml</code> (even though doing so is often
+argued to be <a href="http://www.hixie.ch/advocacy/xhtml">good practice</a>).</p>
+
+<p>For XML, however, this processing instruction is extremely important.
+Since most webservers are not configured to send charsets for .xml files,
+this is the only thing a parser has to go on. Furthermore, the default
+for XML files is UTF-8, which often butts heads with more common
+ISO-8859-1 encoding (you see this in garbled RSS feeds).</p>
+
+<p>In short, if you use XHTML and have gone through the
+trouble of adding the XML header, be sure to make sure it jives
+with your <code>META</code> tags and HTTP headers.</p>
+
+<h3>Inside the process</h3>
+
+<p>This section is not required reading,
+but may answer some of your questions on what's going on in all
+this character encoding hocus pocus. If you're interested in
+moving on to the next phase, skip this section.</p>
+
+<p>A logical question that follows all of our wheeling and dealing
+with multiple sources of character encodings is &quot;Why are there
+so many options?&quot; To answer this question, we have to turn
+back our definition of character encodings: they allow a program
+to interpret bytes into human-readable characters.</p>
+
+<p>Thus, a chicken-egg problem: a character encoding
+is necessary to interpret the
+text of a document. A <code>META</code> tag is in the text of a document.
+The <code>META</code> tag gives the character encoding. How can we
+determine the contents of a <code>META</code> tag, inside the text,
+if we don't know it's character encoding? And how do we figure out
+the character encoding, if we don't know the contents of the
+<code>META</code> tag?</p>
+
+<p>Fortunantely for us, the characters we need to write the
+<code>META</code> are in ASCII, which is pretty much universal
+over every character encoding that is in common use today. So,
+all the web-browser has to do is parse all the way down until
+it gets to the Content-Type tag, extract the character encoding
+tag, then re-parse the document according to this new information.</p>
+
+<p>Obviously this is complicated, so browsers prefer the simpler
+and more efficient solution: get the character encoding from a 
+somewhere other than the document itself, i.e. the HTTP headers,
+much to the chagrin of HTML authors who can't set these headers.</p>
+
+<h2 id="whyutf8">Why UTF-8?</h2>
+
+<p>So, you've gone through all the trouble of ensuring that...</p>
+
+<blockquote class="aside"><p>Needs completion!</p></blockquote>
+
+<h2 id="externallinks">Further Reading</h2>
 
 <p>Many other developers have already discussed the subject of Unicode,
 UTF-8 and internationalization, and I would like to defer to them for
