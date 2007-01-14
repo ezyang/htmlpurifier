@@ -20,6 +20,9 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
         
         // we're going to break the spec and explode by semicolons.
         // This is because semicolon rarely appears in escaped form
+        // Doing this is generally flaky but fast
+        // IT MIGHT APPEAR IN URIs, see HTMLPurifier_AttrDef_CSSURI
+        // for details
         
         $declarations = explode(';', $css);
         $propvalues = array();
