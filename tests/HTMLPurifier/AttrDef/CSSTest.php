@@ -74,6 +74,10 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('table-layout:fixed;');
         $this->assertDef('list-style-image:url(nice.jpg);');
         $this->assertDef('list-style:disc url(nice.jpg) inside;');
+        $this->assertDef('background-image:url(foo.jpg);');
+        $this->assertDef('background-image:none;');
+        $this->assertDef('background-repeat:repeat-y;');
+        $this->assertDef('background-attachment:fixed;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',

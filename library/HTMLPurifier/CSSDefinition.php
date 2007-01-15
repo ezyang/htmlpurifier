@@ -52,12 +52,19 @@ class HTMLPurifier_CSSDefinition
         $this->info['font-variant'] = new HTMLPurifier_AttrDef_Enum(
             array('normal', 'small-caps'), false);
         
+        $uri_or_none = new HTMLPurifier_AttrDef_Composite(
+            array(
+                new HTMLPurifier_AttrDef_Enum(array('none')),
+                new HTMLPurifier_AttrDef_CSSURI()
+            )
+        );
+        
         $this->info['list-style-position'] = new HTMLPurifier_AttrDef_Enum(
             array('inside', 'outside'), false);
         $this->info['list-style-type'] = new HTMLPurifier_AttrDef_Enum(
             array('disc', 'circle', 'square', 'decimal', 'lower-roman',
-            'upper-roman', 'lower-alpha', 'upper-alpha'), false);
-        $this->info['list-style-image'] = new HTMLPurifier_AttrDef_CSSURI();
+            'upper-roman', 'lower-alpha', 'upper-alpha', 'none'), false);
+        $this->info['list-style-image'] = $uri_or_none;
         
         $this->info['list-style'] = new HTMLPurifier_AttrDef_ListStyle($config);
         
@@ -65,13 +72,15 @@ class HTMLPurifier_CSSDefinition
             array('capitalize', 'uppercase', 'lowercase', 'none'), false);
         $this->info['color'] = new HTMLPurifier_AttrDef_Color();
         
-        // technically speaking, this one should get its own validator, but
-        // since we don't support background images, it effectively is
-        // equivalent to color.  The only trouble is that if the author
-        // specifies an image and a color, they'll both end up getting dropped,
-        // even though we ought to implement it and just discard the image
-        // info.  This will be fixed in a later version (see TODO) when
-        // better URI filtering is implemented.
+        $this->info['background-image'] = $uri_or_none;
+        $this->info['background-repeat'] = new HTMLPurifier_AttrDef_Enum(
+            array('repeat', 'repeat-x', 'repeat-y', 'no-repeat')
+        );
+        $this->info['background-attachment'] = new HTMLPurifier_AttrDef_Enum(
+            array('scroll', 'fixed')
+        );
+        
+        // pending its own validator as a shorthand
         $this->info['background'] = 
         
         $border_color = 

@@ -37,20 +37,20 @@ class HTMLPurifier_AttrDef_ListStyle extends HTMLPurifier_AttrDef
         $caught['image']    = false;
         
         $i = 0; // number of catches
+        $none = false;
         
         foreach ($bits as $bit) {
             if ($i >= 3) return; // optimization bit
             if ($bit === '') continue;
             foreach ($caught as $key => $status) {
                 if ($status !== false) continue;
-                if ($key == 'type' && $bit == 'none') {
-                    // there's no none for image, since you simply
-                    // omit it if you don't want to use it.
-                    $r = 'none';
-                } else {
-                    $r = $this->info['list-style-' . $key]->validate($bit, $config, $context);
-                }
+                $r = $this->info['list-style-' . $key]->validate($bit, $config, $context);
                 if ($r === false) continue;
+                if ($r === 'none') {
+                    if ($none) continue;
+                    else $none = true;
+                    if ($key == 'image') continue;
+                }
                 $caught[$key] = $r;
                 $i++;
             }
