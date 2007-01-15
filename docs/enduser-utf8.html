@@ -14,7 +14,8 @@
 
 <!-- Note to users: this document, though professing to be UTF-8, attempts
 to use only ASCII characters, because most webservers are configured
-to send HTML as ISO-8859-1  -->
+to send HTML as ISO-8859-1. So I will, many times, go against my
+own advice for sake of portability.  -->
 
 </head><body>
 
@@ -76,7 +77,7 @@ there are now many character encodings floating around.</p>
 </blockquote>
 
 <p>The first step of our journey is to find out what the encoding of
-<em>insert-application-here</em> is. The most reliable way is to ask your
+your website is. The most reliable way is to ask your
 browser:</p>
 
 <dl>
@@ -246,11 +247,30 @@ similar things in
 <a href="http://www.w3.org/International/O-HTTP-charset#scripting">other
 languages</a>. The appropriate code is:</p>
 
-<pre><a href="http://php.net/header">header</a>('Content-Type:text/html; charset=UTF-8');</pre>
+<pre><a href="http://php.net/function.header">header</a>('Content-Type:text/html; charset=UTF-8');</pre>
 
 <p>...replacing UTF-8 with whatever your embedded encoding is.
 This code must come before any output, so be careful about
 stray whitespace in your application.</p>
+
+<h4 id="fixcharset-server-php">PHP ini directive</h4>
+
+<p>PHP also has a neat little ini directive that can save you a
+header call: <code><a href="http://php.net/ini.core#ini.default-charset">default_charset</a></code>. Using this code:</p>
+
+<pre><a href="http://php.net/function.ini_set">ini_set</a>('default_charset', 'UTF-8');</pre>
+
+<p>...will also do the trick. If PHP is running as an Apache module (and
+not as FastCGI, consult
+<a href="http://php.net/phpinfo">phpinfo</a>() for details), you can even use htaccess do apply this property
+globally:</p>
+
+<pre><a href="http://php.net/configuration.changes#configuration.changes.apache">php_value</a> default_charset &quot;UTF-8&quot;</pre>
+
+<blockquote class="aside"><p>As with all INI directives, this can
+also go in your php.ini file. Some hosting providers allow you to customize
+your own php.ini file, ask your support for details. Use:</p>
+<pre>default_charset = &quot;utf-8&quot;</pre></blockquote>
 
 <h4 id="fixcharset-server-nophp">Non-PHP</h4>
 
@@ -416,9 +436,170 @@ much to the chagrin of HTML authors who can't set these headers.</p>
 
 <h2 id="whyutf8">Why UTF-8?</h2>
 
-<p>So, you've gone through all the trouble of ensuring that...</p>
+<p>So, you've gone through all the trouble of ensuring that your
+server and embedded characters all line up properly and are
+present.  Good job: at
+this point, you could quit and rest easy knowing that your pages
+are not vulnerable to character encoding style XSS attacks.
+However, just as having a character encoding is better than
+having no character encoding at all, having UTF-8 as your
+character encoding is better than having some other random
+character encoding, and the next step is to convert to UTF-8.
+But why?</p>
 
-<blockquote class="aside"><p>Needs completion!</p></blockquote>
+<h3 id="whyutf8-i18n">Internationalization</h3>
+
+<p>Many software projects, at one point or another, suddenly realize
+that they should be supporting more than one language. Even regular
+usage in one language sometimes requires the occasional special character
+that, without surprise, is not available in your character set. Sometimes
+developers get around this by adding support for multiple encodings: when
+using Chinese, use Big5, when using Japanese, use Shift-JIS, when
+using Greek, etc. Other times, they use character entities with great
+zeal.</p>
+
+<p>UTF-8, however, obviates the need for any of these complicated
+measures. After getting the system to use UTF-8 and adjusting for
+sources that are outside the hand of the browser (more on this later),
+UTF-8 just works. You can use it for any language, even many languages
+at once, you don't have to worry about managing multiple encodings,
+you don't have to use those user-unfriendly entities.</p>
+
+<h3 id="whyutf8-user">User-friendly</h3>
+
+<p>Websites encoded in Latin-1 (ISO-8859-1) which ocassionally need
+a special character outside of their scope often will use a character
+entity to achieve the desired effect. For instance, &theta; can be
+written <code>&amp;theta;</code>, regardless of the character encoding's
+support of Greek letters.</p>
+
+<p>This works nicely for limited use of special characters, but
+say you wanted this sentence of Chinese text: &#28608;&#20809;,
+&#36889;&#20841;&#20491;&#23383;&#26159;&#29978;&#40636;&#24847;&#24605;.
+The entity-ized version would look like this:</p>
+
+<pre>&amp;#28608;&amp;#20809;, &amp;#36889;&amp;#20841;&amp;#20491;&amp;#23383;&amp;#26159;&amp;#29978;&amp;#40636;&amp;#24847;&amp;#24605;</pre>
+
+<p>Extremely inconvenient for those of us who actually know what
+character entities are, totally unintelligible to poor users who don't!
+Even the slightly more user-friendly, &quot;intelligible&quot; character
+entities like <code>&amp;theta;</code> will leave users who are
+uninterested in learning HTML scratching their heads. On the other
+hand, if they see &theta; in an edit box, they'll know that it's a
+special character, and treat it accordingly, even if they don't know
+how to write that character themselves.</p>
+
+<blockquote class="aside"><p>Wikipedia is a great case study for
+an application that originally used ISO-8859-1 but switched to UTF-8
+when it became far to cumbersome to support foreign languages. Bots
+will now actually go through articles and convert character entities
+to their corresponding real characters for the sake of user-friendliness
+and searcheability. See
+<a href="http://meta.wikimedia.org/wiki/Help:Special_characters">Meta's
+page on special characters</a> for more details.
+</p></blockquote>
+
+<h3 id="whyutf8-forms">Forms</h3>
+
+<p>While we're on the tack of users, how do non-UTF-8 web forms deal
+with characters that our outside of their character set? Rather than
+discuss what UTF-8 does right, we're going to show what could go wrong
+if you didn't use UTF-8 and people tried to use characters outside
+of your character encoding.</p>
+
+<p>The troubles are large, extensive, and extremely difficult to fix (or,
+at least, difficult enough that if you had the time and resources to invest
+in doing the fix, you would be probably better off migrating to UTF-8).
+There are two types of form submission: <code>application/x-www-form-urlencoded</code>
+which is used for GET and by default for POST, and <code>multipart/form-data</code>
+which may be used by POST, and is required when you want to upload
+files.</p>
+
+<p>The following is a summarization of notes from
+<a href="http://ppewww.physics.gla.ac.uk/~flavell/charset/form-i18n.html">
+<code>FORM</code> submission and i18n</a>. That document contains lots
+of useful information, but is written in a rambly manner, so
+here I try to get right to the point.</p>
+
+<h4 id="whyutf8-forms-urlencoded"><code>application/x-www-form-urlencoded</code></h4>
+
+<p>This is the Content-Type that GET requests must use, and POST requests
+use by default. It involves the ubiquituous percent encoding format that
+looks something like: <code>%C3%86</code>. There is no official way of
+determining the character encoding of such a request, since the percent
+encoding operates on a byte level, so it is usually assumed that it
+is the same as the encoding the page containing the form was submitted
+in. You'll run into very few problems if you only use characters in
+the character encoding you chose.</p>
+
+<p>However, once you start adding characters outside of your encoding
+(and this is a lot more common than you may think: take curly
+&quot;smart&quot; quotes from Microsoft as an example),
+a whole manner of strange things start to happen. Depending on the
+browser you're using, they might:</p>
+
+<ul>
+    <li>Replace the unsupported characters with useless question marks,</li>
+    <li>Attempt to fix the characters (example: smart quotes to regular quotes),</li>
+    <li>Replace the character with a character entity, or</li>
+    <li>Send it anyway as a different character encoding mixed in
+        with the original encoding (usually Windows-1252 rather than
+        iso-8859-1 or UTF-8 interspersed in 8-bit)</li>
+</ul>
+
+<p>To properly guard against these behaviors, you'd have to sniff out
+the browser agent, compile a database of different behaviors, and
+take appropriate conversion action against the string (disregarding
+a spate of extremely mysterious, random and devastating bugs Internet
+Explorer manifests every once in a while). Or you could
+use UTF-8 and rest easy knowing that none of this could possibly happen
+since UTF-8 supports every character.</p>
+
+<h4 id="whyutf8-forms-multipart"><code>multipart/form-data</code></h4>
+
+<p>Multipart form submission takes a way a lot of the ambiguity
+that percent-encoding had: the server now can explicitly ask for
+certain encodings, and the client can explicitly tell the server
+during the form submission what encoding the fields are in.</p>
+
+<p>There are two ways you go with this functionality: leave it
+unset and have the browser send in the same encoding as the page,
+or set it to UTF-8 and then do another conversion server-side.
+Each method has deficiencies, especially the former.</p>
+
+<p>If you tell the browser to send the form in the same encoding as
+the page, you still have the trouble of what to do with characters
+that are outside of the character encoding's range. The behavior, once
+again, varies: Firefox 2.0 entity-izes them while Internet Explorer
+7.0 mangles them beyond intelligibility. For serious I18N purposes,
+this is not an option.</p>
+
+<p>The other possibility is to set Accept-Encoding to UTF-8, which
+begs the question: Why aren't you using UTF-8 for everything then?
+This route is more palatable, but there's a notable caveat: your data
+will come in as UTF-8, so you will have to explicitly convert it into
+your favored local character encoding.</p>
+
+<p>I object to this approach on idealogical grounds: you're
+digging yourself deeper into
+the hole when you could have been converting to UTF-8
+instead. And, of course, you can't use this method for GET requests.</p>
+
+<h3 id="whyutf8-support">Well supported</h2>
+
+<h3 id="whyutf8-htmlpurifier">HTML Purifier</h2>
+
+<h2 id="migrate">Migrate to UTF-8</h2>
+
+<h3 id="migrate-editor">Text editor</h2>
+
+<h3 id="migrate-db">Configuring your database</h2>
+
+<h3 id="migrate-convert">Convert old text</h2>
+
+<h3 id="migrate-bom">Byte Order Mark (headers already sent!)</h2>
+
+<h3 id="migrate-variablewidth">Dealing with variable width in functions</h2>
 
 <h2 id="externallinks">Further Reading</h2>
 
@@ -436,10 +617,6 @@ a more in-depth look into character sets and encodings.</p>
         provides a lot of useful details into the innards of UTF-8, although
         it may be a little off-putting to people who don't know much
         about Unicode to begin with.</li>
-    <li><a href="http://ppewww.physics.gla.ac.uk/~flavell/charset/form-i18n.html">
-        <code>FORM</code> submission and i18n</a> by A.J. Flavell,
-        discusses the pitfalls of attempting to create an internationalized
-        application without using UTF-8.</li>
 </ul>
 
 </body>
