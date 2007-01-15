@@ -4,8 +4,7 @@ require_once 'HTMLPurifier/AttrDef.php';
 
 /**
  * Validates shorthand CSS property list-style.
- * @note This currently does not support list-style-image, as that functionality
- *       is not implemented yet elsewhere.
+ * @warning Does not support url tokens that have internal spaces.
  */
 class HTMLPurifier_AttrDef_ListStyle extends HTMLPurifier_AttrDef
 {
@@ -29,57 +28,49 @@ class HTMLPurifier_AttrDef_ListStyle extends HTMLPurifier_AttrDef
         $string = $this->parseCDATA($string);
         if ($string === '') return false;
         
+        // assumes URI doesn't have spaces in it
         $bits = explode(' ', strtolower($string)); // bits to process
         
-        $caught_type = false;
-        $caught_position = false;
-        $caught_image = false;
-        $caught_none = false; // as in keyword none, which is in all of them
+        $caught = array();
+        $caught['type']     = false;
+        $caught['position'] = false;
+        $caught['image']    = false;
         
-        $ret = '';
+        $i = 0; // number of catches
         
         foreach ($bits as $bit) {
-            if ($caught_none && ($caught_type || $caught_position || $caught_image)) break;
-            if ($caught_type && $caught_position && $caught_image) break;
-            
+            if ($i >= 3) return; // optimization bit
             if ($bit === '') continue;
-            
-            if ($bit === 'none') {
-                if ($caught_none) continue;
-                $caught_none = true;
-                $ret .= 'none ';
-                continue;
-            }
-            
-            // if we add anymore, roll it into a loop
-            
-            $r = $this->info['list-style-type']->validate($bit, $config, $context);
-            if ($r !== false) {
-                if ($caught_type) continue;
-                $caught_type = true;
-                $ret .= $r . ' ';
-                continue;
-            }
-            
-            $r = $this->info['list-style-position']->validate($bit, $config, $context);
-            if ($r !== false) {
-                if ($caught_position) continue;
-                $caught_position = true;
-                $ret .= $r . ' ';
-                continue;
-            }
-            
-            $r = $this->info['list-style-image']->validate($bit, $config, $context);
-            if ($r !== false) {
-                if ($caught_image) continue;
-                $caught_image = true;
-                $ret .= $r . ' ';
-                continue;
+            foreach ($caught as $key => $status) {
+                if ($status !== false) continue;
+                if ($key == 'type' && $bit == 'none') {
+                    // there's no none for image, since you simply
+                    // omit it if you don't want to use it.
+                    $r = 'none';
+                } else {
+                    $r = $this->info['list-style-' . $key]->validate($bit, $config, $context);
+                }
+                if ($r === false) continue;
+                $caught[$key] = $r;
+                $i++;
             }
         }
         
-        $ret = rtrim($ret);
-        return $ret ? $ret : false;
+        if (!$i) return false;
+        
+        $ret = array();
+        
+        // construct type
+        if ($caught['type']) $ret[] = $caught['type'];
+        
+        // construct image
+        if ($caught['image']) $ret[] = $caught['image'];
+        
+        // construct position
+        if ($caught['position']) $ret[] = $caught['position'];
+        
+        if (empty($ret)) return false;
+        return implode(' ', $ret);
         
     }
     

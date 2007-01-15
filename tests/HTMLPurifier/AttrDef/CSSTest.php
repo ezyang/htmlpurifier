@@ -73,7 +73,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('vertical-align:50%;');
         $this->assertDef('table-layout:fixed;');
         $this->assertDef('list-style-image:url(nice.jpg);');
-        $this->assertDef('list-style:inside url(nice.jpg) disc;');
+        $this->assertDef('list-style:disc url(nice.jpg) inside;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',
