@@ -28,10 +28,10 @@ class HTMLPurifier_AttrDef_CompositeTest extends HTMLPurifier_AttrDefHarness
         // first test: value properly validates on first definition
         // so second def is never called
         
-        $def1 =& new HTMLPurifier_AttrDefMock($this);
-        $def2 =& new HTMLPurifier_AttrDefMock($this);
+        $def1 = new HTMLPurifier_AttrDefMock($this);
+        $def2 = new HTMLPurifier_AttrDefMock($this);
         $defs = array(&$def1, &$def2);
-        $def =& new HTMLPurifier_AttrDef_Composite_Testable($defs);
+        $def = new HTMLPurifier_AttrDef_Composite_Testable($defs);
         $input = 'FOOBAR';
         $output = 'foobar';
         $def1_params = array($input, $config, $context);
@@ -47,10 +47,10 @@ class HTMLPurifier_AttrDef_CompositeTest extends HTMLPurifier_AttrDefHarness
         
         // second test, first def fails, second def works
         
-        $def1 =& new HTMLPurifier_AttrDefMock($this);
-        $def2 =& new HTMLPurifier_AttrDefMock($this);
+        $def1 = new HTMLPurifier_AttrDefMock($this);
+        $def2 = new HTMLPurifier_AttrDefMock($this);
         $defs = array(&$def1, &$def2);
-        $def =& new HTMLPurifier_AttrDef_Composite_Testable($defs);
+        $def = new HTMLPurifier_AttrDef_Composite_Testable($defs);
         $input = 'BOOMA';
         $output = 'booma';
         $def_params = array($input, $config, $context);
@@ -67,10 +67,10 @@ class HTMLPurifier_AttrDef_CompositeTest extends HTMLPurifier_AttrDefHarness
         
         // third test, all fail, so composite faiils
         
-        $def1 =& new HTMLPurifier_AttrDefMock($this);
-        $def2 =& new HTMLPurifier_AttrDefMock($this);
+        $def1 = new HTMLPurifier_AttrDefMock($this);
+        $def2 = new HTMLPurifier_AttrDefMock($this);
         $defs = array(&$def1, &$def2);
-        $def =& new HTMLPurifier_AttrDef_Composite_Testable($defs);
+        $def = new HTMLPurifier_AttrDef_Composite_Testable($defs);
         $input = 'BOOMA';
         $output = false;
         $def_params = array($input, $config, $context);

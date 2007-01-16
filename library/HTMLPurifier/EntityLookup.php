@@ -26,6 +26,7 @@ class HTMLPurifier_EntityLookup {
     
     /**
      * Retrieves sole instance of the object.
+     * @static
      * @param Optional prototype of custom lookup table to overload with.
      */
     function instance($prototype = false) {

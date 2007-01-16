@@ -300,9 +300,6 @@ class HTMLPurifier_HTMLDefinition
         $this->info['b']->child    =
         $this->info['big']->child  =
         $this->info['small']->child=
-        $this->info['u']->child    =
-        $this->info['s']->child    =
-        $this->info['strike']->child    =
         $this->info['bdo']->child  =
         $this->info['span']->child =
         $this->info['dt']->child   =
@@ -313,6 +310,12 @@ class HTMLPurifier_HTMLDefinition
         $this->info['h4']->child   = 
         $this->info['h5']->child   = 
         $this->info['h6']->child   = $e_Inline;
+        
+        if (!$this->strict) {
+            $this->info['u']->child    =
+            $this->info['s']->child    =
+            $this->info['strike']->child    = $e_Inline;
+        }
         
         // the only three required definitions, besides custom table code
         $this->info['ol']->child   =
@@ -355,10 +358,12 @@ class HTMLPurifier_HTMLDefinition
         // reuses $e_Inline and $e_Block
         foreach ($e_Inline->elements as $name => $bool) {
             if ($name == '#PCDATA') continue;
+            if (!isset($this->info[$name])) continue;
             $this->info[$name]->type = 'inline';
         }
         
         foreach ($e_Block->elements as $name => $bool) {
+            if (!isset($this->info[$name])) continue;
             $this->info[$name]->type = 'block';
         }
         

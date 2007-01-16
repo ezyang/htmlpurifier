@@ -37,7 +37,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
         
         $string = $this->normalize($string, $config, $context);
         
-        $parser=& new XML_HTMLSax3();
+        $parser = new XML_HTMLSax3();
         $parser->set_object($this);
         $parser->set_element_handler('openHandler','closeHandler');
         $parser->set_data_handler('dataHandler');

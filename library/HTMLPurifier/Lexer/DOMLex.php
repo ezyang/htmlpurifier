@@ -88,6 +88,11 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         } elseif ($node->nodeType === XML_COMMENT_NODE) {
             $tokens[] = $this->factory->createComment($node->data);
             return;
+        } elseif (
+            // not-well tested: there may be other nodes we have to grab
+            $node->nodeType !== XML_ELEMENT_NODE
+        ) {
+            return;
         }
         
         $attr = $node->hasAttributes() ?

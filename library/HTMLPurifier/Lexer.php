@@ -138,6 +138,8 @@ class HTMLPurifier_Lexer
      * default with your own implementation.  A copy/reference of the prototype
      * lexer will now be returned when you request a new lexer.
      * 
+     * @static
+     * 
      * @note
      * Though it is possible to call this factory method from subclasses,
      * such usage is not recommended.
@@ -166,6 +168,7 @@ class HTMLPurifier_Lexer
     /**
      * Translates CDATA sections into regular sections (through escaping).
      * 
+     * @static
      * @protected
      * @param $string HTML string to process.
      * @returns HTML with CDATA sections escaped.
@@ -181,6 +184,7 @@ class HTMLPurifier_Lexer
     /**
      * Callback function for escapeCDATA() that does the work.
      * 
+     * @static
      * @warning Though this is public in order to let the callback happen,
      *          calling it directly is not recommended.
      * @params $matches PCRE matches array, with index 0 the entire match

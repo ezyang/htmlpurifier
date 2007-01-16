@@ -109,7 +109,7 @@ class HTMLPurifier
         
         $config = $config ? HTMLPurifier_Config::create($config) : $this->config;
         
-        $context =& new HTMLPurifier_Context();
+        $context = new HTMLPurifier_Context();
         $html = $this->encoder->convertToUTF8($html, $config, $context);
         
         // purified HTML

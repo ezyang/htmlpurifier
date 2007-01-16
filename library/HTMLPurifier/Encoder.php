@@ -48,6 +48,7 @@ class HTMLPurifier_Encoder
      * It will parse according to UTF-8 and return a valid UTF8 string, with
      * non-SGML codepoints excluded.
      * 
+     * @static
      * @note Just for reference, the non-SGML code points are 0 to 31 and
      *       127 to 159, inclusive.  However, we allow code points 9, 10
      *       and 13, which are the tab, line feed and carriage return
@@ -225,6 +226,7 @@ class HTMLPurifier_Encoder
     
     /**
      * Translates a Unicode codepoint into its corresponding UTF-8 character.
+     * @static
      * @note Based on Feyd's function at
      *       <http://forums.devnetwork.net/viewtopic.php?p=191404#191404>,
      *       which is in public domain.

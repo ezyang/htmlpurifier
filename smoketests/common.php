@@ -3,6 +3,7 @@
 header('Content-type: text/html; charset=UTF-8');
 
 require_once '../library/HTMLPurifier.auto.php';
+error_reporting(E_ALL);
 
 function escapeHTML($string) {
     $string = HTMLPurifier_Encoder::cleanUTF8($string);

@@ -16,7 +16,10 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         
         $this->DirectLex = new HTMLPurifier_Lexer_DirectLex();
         
-        if ( $GLOBALS['HTMLPurifierTest']['PEAR'] ) {
+        // E_STRICT = 2048, int used for PHP4 compat
+        if ( $GLOBALS['HTMLPurifierTest']['PEAR'] && 
+             ((error_reporting() & 2048) != 2048)
+        ) {
             $this->_has_pear = true;
             require_once 'HTMLPurifier/Lexer/PEARSax3.php';
             $this->PEARSax3  = new HTMLPurifier_Lexer_PEARSax3();

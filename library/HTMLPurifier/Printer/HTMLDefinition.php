@@ -10,10 +10,10 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
      */
     var $def;
     
-    function render(&$config) {
+    function render($config) {
         $ret = '';
         $this->config =& $config;
-        $this->def =& $config->getHTMLDefinition();
+        $this->def = $config->getHTMLDefinition();
         $def =& $this->def;
         
         $ret .= $this->start('div', array('class' => 'HTMLPurifier_Printer'));
