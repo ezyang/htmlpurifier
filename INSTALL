@@ -8,6 +8,7 @@ installation GUI, you've come to the wrong place!)  The impatient can scroll
 down to the bottom of this INSTALL document to see the code, but you really
 should make sure a few things are properly done.
 
+Todo: Convert to using the array syntax for configuration.
 
 
 1.  Compatibility

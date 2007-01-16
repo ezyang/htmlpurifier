@@ -25,7 +25,7 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_AttrTransform_ImgRequired extends HTMLPurifier_AttrTransform
 {
     
-    function transform($attr, $config, $context) {
+    function transform($attr, $config, &$context) {
         
         $src = true;
         if (!isset($attr['src'])) {

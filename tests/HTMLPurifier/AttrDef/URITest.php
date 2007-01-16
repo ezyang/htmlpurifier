@@ -206,7 +206,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $registry =& HTMLPurifier_URISchemeRegistry::instance($fake_registry);
         
         // now, let's add a pseudo-scheme to the registry
-        $this->scheme =& new HTMLPurifier_URISchemeMock($this);
+        $this->scheme = new HTMLPurifier_URISchemeMock($this);
         
         // here are the schemes we will support with overloaded mocks
         $registry->setReturnReference('getScheme', $this->scheme, array('http', $this->config, $this->context));

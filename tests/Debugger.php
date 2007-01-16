@@ -70,7 +70,7 @@ class Debugger
         $this->add_pre = !extension_loaded('xdebug');
     }
     
-    function &instance() {
+    static function &instance() {
         static $soleInstance = false;
         if (!$soleInstance) $soleInstance = new Debugger();
         return $soleInstance;

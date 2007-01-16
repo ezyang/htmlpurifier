@@ -6,12 +6,12 @@
  *       this is efficient for instances when you only use HTML Purifier
  *       on a few of your pages, it murders bytecode caching. You still
  *       need to add HTML Purifier to your path.
+ * @note ''HTMLPurifier()'' is NOT the same as ''new HTMLPurifier()''
  */
 
 function HTMLPurifier($html, $config = null) {
     static $purifier = false;
     if (!$purifier) {
-        $init = true;
         require_once 'HTMLPurifier.php';
         $purifier = new HTMLPurifier();
     }

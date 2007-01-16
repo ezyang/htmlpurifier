@@ -67,7 +67,7 @@ class HTMLPurifier_Encoder
      *       would need that, and I'm probably not going to implement them.
      *       Once again, PHP 6 should solve all our problems.
      */
-    function cleanUTF8($str, $force_php = false) {
+    static function cleanUTF8($str, $force_php = false) {
         
         static $non_sgml_chars = array();
         if (empty($non_sgml_chars)) {
@@ -249,7 +249,7 @@ class HTMLPurifier_Encoder
     // | 00000000 | 00010000 | 11111111 | 11111111 | Defined upper limit of legal scalar codes
     // +----------+----------+----------+----------+ 
     
-    function unichr($code) {
+    static function unichr($code) {
         if($code > 1114111 or $code < 0 or
           ($code >= 55296 and $code <= 57343) ) {
             // bits are set outside the "valid" range as defined

@@ -54,11 +54,15 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
     </script>
 </head>
 <body>
+
 <h1>HTML Purifier Printer Smoketest</h1>
-<p>This page will allow you to see precisely what HTML Purifier's internal
+
+<p>HTML Purifier claims to have a robust yet permissive whitelist: this
+page will allow you to see precisely what HTML Purifier's internal
 whitelist is. You can
 also twiddle with the configuration settings to see how a directive
 influences the internal workings of the definition objects.</p>
+
 <h2>Modify configuration</h2>
 
 <p>You can specify an array by typing in a comma-separated

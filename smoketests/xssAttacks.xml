@@ -978,8 +978,6 @@ alert(a.source)&lt;/SCRIPT&gt;</code>
 
 -onErrorUpdate() (fires on a databound object when an error occurs while updating the associated data in the data source object)
 
--onExit() (fires when someone clicks on a link or presses the back button)
-
 -onFilterChange() (fires when a visual filter completes state change)
 
 -onFinish() (attacker could create the exploit when marquee is finished looping)

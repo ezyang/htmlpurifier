@@ -1,5 +1,7 @@
 <?php
 
+// this file is encoded in UTF-8, please don't let your editor mangle it
+
 require_once 'common.php';
 
 echo '<?xml version="1.0" encoding="UTF-8" ?>';

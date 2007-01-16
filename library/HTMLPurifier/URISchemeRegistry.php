@@ -37,7 +37,7 @@ class HTMLPurifier_URISchemeRegistry
      * @note Pass a registry object $prototype with a compatible interface and
      *       the function will copy it and return it all further times.
      */
-    function &instance($prototype = null) {
+    static function &instance($prototype = null) {
         static $instance = null;
         if ($prototype !== null) {
             $instance = $prototype;

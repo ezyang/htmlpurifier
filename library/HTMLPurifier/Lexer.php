@@ -145,7 +145,7 @@ class HTMLPurifier_Lexer
      * @param $prototype Optional prototype lexer.
      * @return Concrete lexer.
      */
-    function create($prototype = null) {
+    static function create($prototype = null) {
         // we don't really care if it's a reference or a copy
         static $lexer = null;
         if ($prototype) {
@@ -170,7 +170,7 @@ class HTMLPurifier_Lexer
      * @param $string HTML string to process.
      * @returns HTML with CDATA sections escaped.
      */
-    function escapeCDATA($string) {
+    static function escapeCDATA($string) {
         return preg_replace_callback(
             '/<!\[CDATA\[(.+?)\]\]>/',
             array('HTMLPurifier_Lexer', 'CDATACallback'),
@@ -187,7 +187,7 @@ class HTMLPurifier_Lexer
      *                  and 1 the inside of the CDATA section.
      * @returns Escaped internals of the CDATA section.
      */
-    function CDATACallback($matches) {
+    static function CDATACallback($matches) {
         // not exactly sure why the character set is needed, but whatever
         return htmlspecialchars($matches[1], ENT_COMPAT, 'UTF-8');
     }

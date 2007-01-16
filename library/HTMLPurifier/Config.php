@@ -51,8 +51,8 @@ class HTMLPurifier_Config
      *                      an array of directives based on loadArray().
      * @return Configured HTMLPurifier_Config object
      */
-    function create($config) {
-        if (is_a($config, 'HTMLPurifier_Config')) return $config;
+    static function create($config) {
+        if ($config instanceof HTMLPurifier_Config) return $config;
         $ret = HTMLPurifier_Config::createDefault();
         if (is_array($config)) $ret->loadArray($config);
         return $ret;
@@ -62,7 +62,7 @@ class HTMLPurifier_Config
      * Convenience constructor that creates a default configuration object.
      * @return Default HTMLPurifier_Config object.
      */
-    function createDefault() {
+    static function createDefault() {
         $definition =& HTMLPurifier_ConfigSchema::instance();
         $config = new HTMLPurifier_Config($definition);
         return $config;

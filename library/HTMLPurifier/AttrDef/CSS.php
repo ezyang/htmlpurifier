@@ -8,6 +8,11 @@ require_once 'HTMLPurifier/CSSDefinition.php';
  * @note We don't implement the whole CSS specification, so it might be
  *       difficult to reuse this component in the context of validating
  *       actual stylesheet declarations.
+ * @note If we were really serious about validating the CSS, we would
+ *       tokenize the styles and then parse the tokens. Obviously, we
+ *       are not doing that. Doing that could seriously harm performance,
+ *       but would make these components a lot more viable for a CSS
+ *       filtering solution.
  */
 class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
 {
@@ -20,6 +25,9 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
         
         // we're going to break the spec and explode by semicolons.
         // This is because semicolon rarely appears in escaped form
+        // Doing this is generally flaky but fast
+        // IT MIGHT APPEAR IN URIs, see HTMLPurifier_AttrDef_CSSURI
+        // for details
         
         $declarations = explode(';', $css);
         $propvalues = array();
