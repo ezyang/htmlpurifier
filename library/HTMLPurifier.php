@@ -91,7 +91,6 @@ class HTMLPurifier
         $this->lexer        = HTMLPurifier_Lexer::create();
         $this->strategy     = new HTMLPurifier_Strategy_Core();
         $this->generator    = new HTMLPurifier_Generator();
-        $this->encoder      = new HTMLPurifier_Encoder();
         
     }
     
@@ -110,7 +109,7 @@ class HTMLPurifier
         $config = $config ? HTMLPurifier_Config::create($config) : $this->config;
         
         $context = new HTMLPurifier_Context();
-        $html = $this->encoder->convertToUTF8($html, $config, $context);
+        $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);
         
         // purified HTML
         $html = 
@@ -127,7 +126,7 @@ class HTMLPurifier
                 $config, $context
             );
         
-        $html = $this->encoder->convertFromUTF8($html, $config, $context);
+        $html = HTMLPurifier_Encoder::convertFromUTF8($html, $config, $context);
         $this->context =& $context;
         return $html;
     }

@@ -56,7 +56,6 @@ class HTMLPurifier_Lexer
 {
     
     function HTMLPurifier_Lexer() {
-        $this->_encoder = new HTMLPurifier_Encoder();
         $this->_entity_parser = new HTMLPurifier_EntityParser();
     }
     
@@ -113,8 +112,6 @@ class HTMLPurifier_Lexer
         $string = $this->_entity_parser->substituteSpecialEntities($string);
         return $string;
     }
-    
-    var $_encoder;
     
     /**
      * Lexes an HTML string into tokens.
@@ -216,7 +213,7 @@ class HTMLPurifier_Lexer
         // clean into wellformed UTF-8 string for an SGML context: this has
         // to be done after entity expansion because the entities sometimes
         // represent non-SGML characters (horror, horror!)
-        $html = $this->_encoder->cleanUTF8($html);
+        $html = HTMLPurifier_Encoder::cleanUTF8($html);
         
         return $html;
     }

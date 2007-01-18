@@ -38,9 +38,17 @@ HTMLPurifier_ConfigSchema::define(
 
 /**
  * A UTF-8 specific character encoder that handles cleaning and transforming.
+ * @note All functions in this class should be static.
  */
 class HTMLPurifier_Encoder
 {
+    
+    /**
+     * Constructor throws fatal error if you attempt to instantiate class
+     */
+    function HTMLPurifier_Encoder() {
+        trigger_error('Cannot instantiate encoder, call methods statically', E_USER_ERROR);
+    }
     
     /**
      * Cleans a UTF-8 string for well-formedness and SGML validity
@@ -290,6 +298,7 @@ class HTMLPurifier_Encoder
     
     /**
      * Converts a string to UTF-8 based on configuration.
+     * @static
      */
     function convertToUTF8($str, $config, &$context) {
         static $iconv = null;
@@ -305,6 +314,7 @@ class HTMLPurifier_Encoder
     
     /**
      * Converts a string from UTF-8 based on configuration.
+     * @static
      * @note Currently, this is a lossy conversion, with unexpressable
      *       characters being omitted.
      */

@@ -8,14 +8,13 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
     var $Encoder;
     
     function setUp() {
-        $this->Encoder = new HTMLPurifier_Encoder();
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
     }
     
     function assertCleanUTF8($string, $expect = null) {
         if ($expect === null) $expect = $string;
-        $this->assertIdentical($this->Encoder->cleanUTF8($string), $expect, 'iconv: %s');
-        $this->assertIdentical($this->Encoder->cleanUTF8($string, true), $expect, 'PHP: %s');
+        $this->assertIdentical(HTMLPurifier_Encoder::cleanUTF8($string), $expect, 'iconv: %s');
+        $this->assertIdentical(HTMLPurifier_Encoder::cleanUTF8($string, true), $expect, 'PHP: %s');
     }
     
     function test_cleanUTF8() {
@@ -35,7 +34,7 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         
         // UTF-8 means that we don't touch it
         $this->assertIdentical(
-            $this->Encoder->convertToUTF8("\xF6", $config, $context),
+            HTMLPurifier_Encoder::convertToUTF8("\xF6", $config, $context),
             "\xF6" // this is invalid
         );
         $this->assertNoErrors();
@@ -44,14 +43,14 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         
         // Now it gets converted
         $this->assertIdentical(
-            $this->Encoder->convertToUTF8("\xF6", $config, $context),
+            HTMLPurifier_Encoder::convertToUTF8("\xF6", $config, $context),
             "\xC3\xB6"
         );
         
         $config->set('Test', 'ForceNoIconv', true);
         
         $this->assertIdentical(
-            $this->Encoder->convertToUTF8("\xF6", $config, $context),
+            HTMLPurifier_Encoder::convertToUTF8("\xF6", $config, $context),
             "\xC3\xB6"
         );
         
@@ -63,7 +62,7 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         
         // UTF-8 means that we don't touch it
         $this->assertIdentical(
-            $this->Encoder->convertFromUTF8("\xC3\xB6", $config, $context),
+            HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
             "\xC3\xB6"
         );
         
@@ -71,14 +70,14 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         
         // Now it gets converted
         $this->assertIdentical(
-            $this->Encoder->convertFromUTF8("\xC3\xB6", $config, $context),
+            HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
             "\xF6"
         );
         
         $config->set('Test', 'ForceNoIconv', true);
         
         $this->assertIdentical(
-            $this->Encoder->convertFromUTF8("\xC3\xB6", $config, $context),
+            HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
             "\xF6"
         );
         
