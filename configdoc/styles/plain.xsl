@@ -18,12 +18,13 @@
     <xsl:template match="/">
         <html lang="en" xml:lang="en">
             <head>
-                <title><xsl:value-of select="/configdoc/title" /> Configuration Documentation</title>
+                <title>Configuration Documentation - <xsl:value-of select="/configdoc/title" /></title>
                 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
                 <link rel="stylesheet" type="text/css" href="styles/plain.css" />
             </head>
             <body>
-                <h1><xsl:value-of select="/configdoc/title" /> Configuration Documentation</h1>
+                <div id="library"><xsl:value-of select="/configdoc/title" /></div>
+                <h1>Configuration Documentation</h1>
                 <h2>Table of Contents</h2>
                 <ul id="toc">
                     <xsl:apply-templates mode="toc" />
