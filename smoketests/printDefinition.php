@@ -46,6 +46,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
         .HTMLPurifier_Printer caption {font-size:1.5em; font-weight:bold;
             width:100%;}
         .HTMLPurifier_Printer .heavy {background:#99C;text-align:center;}
+        dt {font-weight:bold;}
     </style>
     <script type="text/javascript">
         function toggleWriteability(id_of_patient, checked) {
@@ -97,13 +98,14 @@ transformation into a real array list or a lookup table).</p>
         <label for="<?php echo $directive; ?>">%<?php echo $directive; ?></label>
     </a>
 </th>
-<td>
 <?php if (is_bool($value)) { ?>
+<td id="<?php echo $directive; ?>">
     <label for="Yes_<?php echo $directive; ?>"><span class="c">%<?php echo $directive; ?>:</span> Yes</label>
     <input type="radio" name="<?php echo $directive; ?>" id="Yes_<?php echo $directive; ?>" value="1"<?php if ($value) { ?> checked="checked"<?php } ?> /> &nbsp;
     <label for="No_<?php echo $directive; ?>"><span class="c">%<?php echo $directive; ?>:</span> No</label>
     <input type="radio" name="<?php echo $directive; ?>" id="No_<?php echo $directive; ?>" value="0"<?php if (!$value) { ?> checked="checked"<?php } ?> />
 <?php } else { ?>
+<td>
     <?php if($allow_null) { ?>
         <label for="Null_<?php echo $directive; ?>"><span class="c">%<?php echo $directive; ?>:</span> Null/Disabled*</label>
         <input
@@ -140,6 +142,40 @@ variable and a null variable. A whitelist, for example, will take an
 empty array as meaning <em>no</em> allowed elements, while checking
 Null/Disabled will mean that user whitelisting functionality is disabled.</p>
 </form>
+
+<h2>Definitions</h2>
+
+<dl>
+    <dt>Parent of Fragment</dt>
+    <dd>HTML that HTML Purifier does not live in a void: when it's
+        output, it has to be placed in another element by means of
+        something like <code>&lt;element&gt; &lt;?php echo $html
+        ?&gt; &lt;/element&gt;</code>. The parent in this example
+        is <code>element</code>.</dd>
+    <dt>Strict mode</dt>
+    <dd>Whether or not HTML Purifier's output is Transitional or
+        Strict compliant. Non-strict mode still actually a little strict
+        and converts many deprecated elements.</dd>
+    <dt>#PCDATA</dt>
+    <dd>Literally <strong>Parsed Character Data</strong>, it is regular
+        text. Tags like <code>ul</code> don't allow text in them, so
+        #PCDATA is missing.</dd>
+    <dt>Tag transform</dt>
+    <dd>A tag transform will change one tag to another. Example: <code>font</code>
+        turns into a <code>span</code> tag with appropriate CSS.</dd>
+    <dt>Attr Transform</dt>
+    <dd>An attribute transform changes a group of attributes based on one
+        another. Currently, only <code>lang</code> and <code>xml:lang</code>
+        use this hook, to synchronize each other's values. Pre/Post indicates
+        whether or not the transform is done before/after validation.</dd>
+    <dt>Excludes</dt>
+    <dd>Tags that an element excludes are excluded for all descendants of
+        that element, and not just the children of them.</dd>
+    <dt>Name(Param1, Param2)</dt>
+    <dd>Represents an internal data-structure. You'll have to check out
+        the corresponding classes in HTML Purifier to find out more.</dd>
+</dl>
+
 <h2>HTMLDefinition</h2>
 <?php echo $printer_html_definition->render($config) ?>
 <h2>CSSDefinition</h2>
