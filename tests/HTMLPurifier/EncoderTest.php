@@ -5,7 +5,7 @@ require_once 'HTMLPurifier/Encoder.php';
 class HTMLPurifier_EncoderTest extends UnitTestCase
 {
     
-    var $Encoder;
+    var $_entity_lookup;
     
     function setUp() {
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
@@ -60,6 +60,9 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         $config = HTMLPurifier_Config::createDefault();
         $context = new HTMLPurifier_Context();
         
+        // zhong-wen
+        $chinese = "\xE4\xB8\xAD\xE6\x96\x87 (Chinese)";
+        
         // UTF-8 means that we don't touch it
         $this->assertIdentical(
             HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
@@ -74,11 +77,53 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
             "\xF6"
         );
         
-        $config->set('Test', 'ForceNoIconv', true);
+        if (function_exists('iconv')) {
+            // iconv has it's own way
+            $this->assertIdentical(
+                HTMLPurifier_Encoder::convertFromUTF8($chinese, $config, $context),
+                " (Chinese)"
+            );
+        }
         
+        // Plain PHP implementation has slightly different behavior
+        $config->set('Test', 'ForceNoIconv', true);
         $this->assertIdentical(
             HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
             "\xF6"
+        );
+        
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::convertFromUTF8($chinese, $config, $context),
+            "?? (Chinese)"
+        );
+        
+        // Preserve the characters!
+        
+        $config->set('Core', 'EscapeNonASCIICharacters', true);
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::convertFromUTF8($chinese, $config, $context),
+            "&#20013;&#25991; (Chinese)"
+        );
+        
+    }
+    
+    function test_convertToASCIIDumbLossless() {
+        
+        // Uppercase thorn letter
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::convertToASCIIDumbLossless("\xC3\x9Eorn"),
+            "&#222;orn"
+        );
+        
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::convertToASCIIDumbLossless("an"),
+            "an"
+        );
+        
+        // test up to four bytes
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::convertToASCIIDumbLossless("\xF3\xA0\x80\xA0"),
+            "&#917536;"
         );
         
     }

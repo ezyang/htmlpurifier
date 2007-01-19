@@ -1,5 +1,8 @@
 <?php
 
+// call one file using /?f=FileTest.php , see $test_files array for
+// valid values
+
 error_reporting(E_ALL);
 
 // wishlist: automated calling of this file from multiple PHP versions so we
@@ -118,19 +121,19 @@ function htmlpurifier_path2class($path) {
 
 // we can't use addTestFile because SimpleTest chokes on E_STRICT warnings
 
-if (isset($_GET['file']) && isset($test_file_lookup[$_GET['file']])) {
+if (isset($_GET['f']) && isset($test_file_lookup[$_GET['f']])) {
     
     // execute only one test
-    $test_file = $_GET['file'];
+    $test_file = $_GET['f'];
     
-    $test = new GroupTest('HTML Purifier - ' . $test_file);
+    $test = new GroupTest($test_file . ' - HTML Purifier');
     $path = 'HTMLPurifier/' . $test_file;
     require_once $path;
     $test->addTestClass(htmlpurifier_path2class($path));
     
 } else {
     
-    $test = new GroupTest('HTML Purifier');
+    $test = new GroupTest('All Tests - HTML Purifier');
 
     foreach ($test_files as $test_file) {
         $path = 'HTMLPurifier/' . $test_file;
