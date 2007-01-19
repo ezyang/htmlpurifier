@@ -19,6 +19,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added %Core.EscapeNonASCIICharacters to workaround loss of Unicode
   characters while %Core.Encoding is set to a non-UTF-8 encoding.
 . Implemented AttrDef_CSSURI for url(http://google.com) style declarations
+. Added convenient single test selector form on test runner
 
 1.3.3, unknown release date, likely to be dropped
 ! Moved SLOW to docs/enduser-slow.html and added code examples

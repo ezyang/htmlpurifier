@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/AttrDef/CSSLength.php';
+require_once 'HTMLPurifier/AttrDefHarness.php';
 
 class HTMLPurifier_AttrDef_CSSLengthTest extends HTMLPurifier_AttrDefHarness
 {

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/AttrDef/Border.php';
+require_once 'HTMLPurifier/AttrDef/PixelsTest.php';
 
 class HTMLPurifier_AttrDef_BorderTest extends HTMLPurifier_AttrDef_PixelsTest
 {

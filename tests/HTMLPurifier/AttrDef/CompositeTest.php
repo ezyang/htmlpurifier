@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/AttrDef/Composite.php';
+require_once 'HTMLPurifier/AttrDefHarness.php';
 
 class HTMLPurifier_AttrDef_Composite_Testable extends
       HTMLPurifier_AttrDef_Composite

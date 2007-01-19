@@ -8,6 +8,8 @@ error_reporting(E_ALL);
 // wishlist: automated calling of this file from multiple PHP versions so we
 // don't have to constantly switch around
 
+$GLOBALS['HTMLPurifierTest'] = array();
+
 // configuration
 $GLOBALS['HTMLPurifierTest']['PEAR'] = false; // do PEAR tests
 
@@ -106,6 +108,9 @@ if (version_compare(PHP_VERSION, '5', '>=')) {
     $test_files[] = 'TokenFactoryTest.php';
 }
 
+sort($test_files);
+$GLOBALS['HTMLPurifierTest']['Files'] = $test_files;
+
 $test_file_lookup = array_flip($test_files);
 
 function htmlpurifier_path2class($path) {
@@ -119,12 +124,48 @@ function htmlpurifier_path2class($path) {
     return $temp;
 }
 
-// we can't use addTestFile because SimpleTest chokes on E_STRICT warnings
+// use a customized reporter with some helpful UI widgets
 
 if (isset($_GET['f']) && isset($test_file_lookup[$_GET['f']])) {
+    $GLOBALS['HTMLPurifierTest']['File'] = $_GET['f'];
+} else {
+    $GLOBALS['HTMLPurifierTest']['File'] = false;
+}
+
+class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
+{
     
-    // execute only one test
-    $test_file = $_GET['f'];
+    function paintHeader($test_name) {
+        parent::paintHeader($test_name);
+        $test_file = $GLOBALS['HTMLPurifierTest']['File'];
+?>
+<form action="" method="get" id="select">
+    <select name="f">
+        <option value="" style="font-weight:bold;"<?php if(!$test_file) {echo ' selected';} ?>>All Tests</option>
+        <?php foreach($GLOBALS['HTMLPurifierTest']['Files'] as $file) { ?>
+            <option value="<?php echo $file ?>"<?php
+                if ($test_file == $file) echo ' selected';
+            ?>><?php echo $file ?></option>
+        <?php } ?>
+    </select>
+    <input type="submit" value="Go">
+</form>
+<?php
+        flush();
+    }
+    
+    function _getCss() {
+        $css = parent::_getCss();
+        $css .= '
+        #select {position:absolute;top:0.2em;right:0.2em;}
+        ';
+        return $css;
+    }
+    
+}
+
+// we can't use addTestFile because SimpleTest chokes on E_STRICT warnings
+if ($test_file = $GLOBALS['HTMLPurifierTest']['File']) {
     
     $test = new GroupTest($test_file . ' - HTML Purifier');
     $path = 'HTMLPurifier/' . $test_file;
@@ -144,7 +185,7 @@ if (isset($_GET['f']) && isset($test_file_lookup[$_GET['f']])) {
 }
 
 if (SimpleReporter::inCli()) $reporter = new TextReporter();
-else $reporter = new HTMLReporter('UTF-8');
+else $reporter = new HTMLPurifier_SimpleTest_Reporter('UTF-8');
 
 $test->run($reporter);
 

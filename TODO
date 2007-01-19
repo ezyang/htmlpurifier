@@ -36,6 +36,8 @@ TODO List
     - Friendly strict handling of <address> (block -> <br>)
 
 2.0 release
+ # Legit token based CSS parsing (will require revamping almost every
+   AttrDef class)
  # Formatters for plaintext (COMPLEX)
     - Auto-paragraphing (be sure to leverage fact that we know when things
       shouldn't be paragraphed, such as lists and tables).
