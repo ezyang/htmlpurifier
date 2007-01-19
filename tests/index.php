@@ -4,164 +4,54 @@
 // valid values
 
 error_reporting(E_ALL);
+define('HTMLPurifierTest', 1);
 
 // wishlist: automated calling of this file from multiple PHP versions so we
 // don't have to constantly switch around
 
+// default settings (protect against register_globals)
 $GLOBALS['HTMLPurifierTest'] = array();
-
-// configuration
 $GLOBALS['HTMLPurifierTest']['PEAR'] = false; // do PEAR tests
+$simpletest_location = 'simpletest/'; // reasonable guess
 
-$simpletest_location = 'simpletest/';
-if (file_exists('../test-settings.php')) include_once '../test-settings.php';
+// load SimpleTest
+@include '../test-settings.php'; // don't mind if it isn't there
 require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
 require_once $simpletest_location . 'mock_objects.php';
+require_once 'HTMLPurifier/SimpleTest/Reporter.php';
 
-// configure PEAR if necessary
+// load Debugger
+require_once 'Debugger.php';
+
+// load convenience functions
+require_once 'generate_mock_once.func.php';
+require_once 'path2class.func.php';
+
+// initialize PEAR (optional)
 if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {
+    // if PEAR is true, we assume that there's no need to
+    // add it to the path
     set_include_path($GLOBALS['HTMLPurifierTest']['PEAR'] . PATH_SEPARATOR .
         get_include_path());
 }
 
-// debugger
-require_once 'Debugger.php';
-
-// emulates inserting a dir called HTMLPurifier into your class dir
+// initialize and load HTML Purifier
 set_include_path('../library' . PATH_SEPARATOR . get_include_path());
-
-// since Mocks can't be called from within test files, we need to do
-// a little jumping through hoops to generate them
-function generate_mock_once($name) {
-    $mock_name = $name . 'Mock';
-    if (class_exists($mock_name)) return false;
-    Mock::generate($name, $mock_name);
-}
-
-// this has to be defined before we do any includes of library files
 require_once 'HTMLPurifier.php';
 
-// define callable test files
+// load tests
 $test_files = array();
-$test_files[] = 'ConfigTest.php';
-$test_files[] = 'ConfigSchemaTest.php';
-$test_files[] = 'LexerTest.php';
-$test_files[] = 'Lexer/DirectLexTest.php';
-$test_files[] = 'TokenTest.php';
-$test_files[] = 'ChildDef/RequiredTest.php';
-$test_files[] = 'ChildDef/OptionalTest.php';
-$test_files[] = 'ChildDef/ChameleonTest.php';
-$test_files[] = 'ChildDef/CustomTest.php';
-$test_files[] = 'ChildDef/TableTest.php';
-$test_files[] = 'ChildDef/StrictBlockquoteTest.php';
-$test_files[] = 'GeneratorTest.php';
-$test_files[] = 'EntityLookupTest.php';
-$test_files[] = 'Strategy/RemoveForeignElementsTest.php';
-$test_files[] = 'Strategy/MakeWellFormedTest.php';
-$test_files[] = 'Strategy/FixNestingTest.php';
-$test_files[] = 'Strategy/CompositeTest.php';
-$test_files[] = 'Strategy/CoreTest.php';
-$test_files[] = 'Strategy/ValidateAttributesTest.php';
-$test_files[] = 'AttrDefTest.php';
-$test_files[] = 'AttrDef/EnumTest.php';
-$test_files[] = 'AttrDef/IDTest.php';
-$test_files[] = 'AttrDef/ClassTest.php';
-$test_files[] = 'AttrDef/TextTest.php';
-$test_files[] = 'AttrDef/LangTest.php';
-$test_files[] = 'AttrDef/PixelsTest.php';
-$test_files[] = 'AttrDef/LengthTest.php';
-$test_files[] = 'AttrDef/URITest.php';
-$test_files[] = 'AttrDef/CSSTest.php';
-$test_files[] = 'AttrDef/CompositeTest.php';
-$test_files[] = 'AttrDef/ColorTest.php';
-$test_files[] = 'AttrDef/IntegerTest.php';
-$test_files[] = 'AttrDef/NumberTest.php';
-$test_files[] = 'AttrDef/CSSLengthTest.php';
-$test_files[] = 'AttrDef/PercentageTest.php';
-$test_files[] = 'AttrDef/MultipleTest.php';
-$test_files[] = 'AttrDef/TextDecorationTest.php';
-$test_files[] = 'AttrDef/FontFamilyTest.php';
-$test_files[] = 'AttrDef/HostTest.php';
-$test_files[] = 'AttrDef/IPv4Test.php';
-$test_files[] = 'AttrDef/IPv6Test.php';
-$test_files[] = 'AttrDef/FontTest.php';
-$test_files[] = 'AttrDef/BorderTest.php';
-$test_files[] = 'AttrDef/ListStyleTest.php';
-$test_files[] = 'AttrDef/Email/SimpleCheckTest.php';
-$test_files[] = 'AttrDef/CSSURITest.php';
-$test_files[] = 'IDAccumulatorTest.php';
-$test_files[] = 'TagTransformTest.php';
-$test_files[] = 'AttrTransform/LangTest.php';
-$test_files[] = 'AttrTransform/TextAlignTest.php';
-$test_files[] = 'AttrTransform/BdoDirTest.php';
-$test_files[] = 'AttrTransform/ImgRequiredTest.php';
-$test_files[] = 'URISchemeRegistryTest.php';
-$test_files[] = 'URISchemeTest.php';
-$test_files[] = 'EncoderTest.php';
-$test_files[] = 'EntityParserTest.php';
-$test_files[] = 'Test.php';
-$test_files[] = 'ContextTest.php';
-$test_files[] = 'PercentEncoderTest.php';
-
-if (version_compare(PHP_VERSION, '5', '>=')) {
-    $test_files[] = 'TokenFactoryTest.php';
-}
-
-sort($test_files);
-$GLOBALS['HTMLPurifierTest']['Files'] = $test_files;
-
+require 'test_files.php'; // populates $test_files array
+sort($test_files); // for the SELECT
+$GLOBALS['HTMLPurifierTest']['Files'] = $test_files; // for the reporter
 $test_file_lookup = array_flip($test_files);
 
-function htmlpurifier_path2class($path) {
-    $temp = $path;
-    $temp = str_replace('./', '',  $temp); // remove leading './'
-    $temp = str_replace('.\\', '',  $temp); // remove leading '.\'
-    $temp = str_replace('\\', '_', $temp); // normalize \ to _
-    $temp = str_replace('/',  '_', $temp); // normalize / to _
-    while(strpos($temp, '__') !== false) $temp = str_replace('__', '_', $temp);
-    $temp = str_replace('.php', '', $temp);
-    return $temp;
-}
-
-// use a customized reporter with some helpful UI widgets
-
+// determine test file
 if (isset($_GET['f']) && isset($test_file_lookup[$_GET['f']])) {
     $GLOBALS['HTMLPurifierTest']['File'] = $_GET['f'];
 } else {
     $GLOBALS['HTMLPurifierTest']['File'] = false;
-}
-
-class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
-{
-    
-    function paintHeader($test_name) {
-        parent::paintHeader($test_name);
-        $test_file = $GLOBALS['HTMLPurifierTest']['File'];
-?>
-<form action="" method="get" id="select">
-    <select name="f">
-        <option value="" style="font-weight:bold;"<?php if(!$test_file) {echo ' selected';} ?>>All Tests</option>
-        <?php foreach($GLOBALS['HTMLPurifierTest']['Files'] as $file) { ?>
-            <option value="<?php echo $file ?>"<?php
-                if ($test_file == $file) echo ' selected';
-            ?>><?php echo $file ?></option>
-        <?php } ?>
-    </select>
-    <input type="submit" value="Go">
-</form>
-<?php
-        flush();
-    }
-    
-    function _getCss() {
-        $css = parent::_getCss();
-        $css .= '
-        #select {position:absolute;top:0.2em;right:0.2em;}
-        ';
-        return $css;
-    }
-    
 }
 
 // we can't use addTestFile because SimpleTest chokes on E_STRICT warnings
@@ -170,7 +60,7 @@ if ($test_file = $GLOBALS['HTMLPurifierTest']['File']) {
     $test = new GroupTest($test_file . ' - HTML Purifier');
     $path = 'HTMLPurifier/' . $test_file;
     require_once $path;
-    $test->addTestClass(htmlpurifier_path2class($path));
+    $test->addTestClass(path2class($path));
     
 } else {
     
@@ -179,7 +69,7 @@ if ($test_file = $GLOBALS['HTMLPurifierTest']['File']) {
     foreach ($test_files as $test_file) {
         $path = 'HTMLPurifier/' . $test_file;
         require_once $path;
-        $test->addTestClass(htmlpurifier_path2class($path));
+        $test->addTestClass(path2class($path));
     }
     
 }
