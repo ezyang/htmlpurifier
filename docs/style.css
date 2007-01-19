@@ -38,5 +38,7 @@ blockquote .label {font-weight:bold; font-size:1em; margin:0 0 .1em;
 /* Contains, without exception, Return to index. */
 #index {font-size:smaller; }
 
+#home {font-size:smaller;}
+
 /* Contains, without exception, $Id$, for SVN version info. */
 #version {text-align:right; font-style:italic; margin:2em 0;}

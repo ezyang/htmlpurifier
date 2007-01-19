@@ -23,6 +23,7 @@ own advice for sake of portability.  -->
 
 <div id="filing">Filed under End-User</div>
 <div id="index">Return to the <a href="index.html">index</a>.</div>
+<div id="home"><a href="http://hp.jpsband.org/">HTML Purifier</a> End-User Documentation</div>
 
 <p>Character encoding and character sets, in truth, are not that
 difficult to understand. But if you don't understand them, you are going
@@ -587,7 +588,23 @@ instead. And, of course, you can't use this method for GET requests.</p>
 
 <h3 id="whyutf8-support">Well supported</h3>
 
+<p>Almost every modern browser in the wild today has full UTF-8 and Unicode
+support: the number of troublesome cases can be counted with the
+fingers of one hand, and these browsers usually have trouble with
+other character encodings too. Problems users usually encounter stem
+from the lack of appropriate fonts to display the characters (once
+again, this applies to all character encodings and HTML entities) or
+Internet Explorer's lack of intelligent font picking (which can be
+worked around).</p>
+
+<p>We will go into more detail about how to deal with edge cases in
+the browser world in the Migration section, but rest assured that
+converting to UTF-8, if done correctly, will not result in users
+hounding you about broken pages.</p>
+
 <h3 id="whyutf8-htmlpurifier">HTML Purifier</h3>
+
+<p>And finally, we get to HTML Purifier.</p>
 
 <h2 id="migrate">Migrate to UTF-8</h2>
 

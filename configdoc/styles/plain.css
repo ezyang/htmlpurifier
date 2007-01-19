@@ -1,3 +1,6 @@
+
+body {margin:1em 4em;}
+
 table {border-collapse:collapse;}
 table td, table th {padding:0.2em;}
 
@@ -8,3 +11,14 @@ table.constraints td pre {margin:0;}
 
 #toc {list-style-type:none; font-weight:bold;}
 #toc ul {list-style-type:disc; font-weight:normal;}
+
+.description p {margin-top:0;margin-bottom:1em;}
+
+#library, h1 {text-align:center; font-family:Garamond, serif;
+  font-variant:small-caps;}
+#library {font-size:1em;}
+h1 {margin-top:0;}
+h2 {border-bottom:1px solid #CCC; font-family:sans-serif; font-weight:normal;
+    font-size:1.3em;}
+h3 {font-family:sans-serif; font-size:1.1em; font-weight:bold; }
+h4 {font-family:sans-serif; font-size:0.9em; font-weight:bold; }

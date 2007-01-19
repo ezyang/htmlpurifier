@@ -38,9 +38,17 @@ HTMLPurifier_ConfigSchema::define(
 
 /**
  * A UTF-8 specific character encoder that handles cleaning and transforming.
+ * @note All functions in this class should be static.
  */
 class HTMLPurifier_Encoder
 {
+    
+    /**
+     * Constructor throws fatal error if you attempt to instantiate class
+     */
+    function HTMLPurifier_Encoder() {
+        trigger_error('Cannot instantiate encoder, call methods statically', E_USER_ERROR);
+    }
     
     /**
      * Cleans a UTF-8 string for well-formedness and SGML validity
@@ -48,6 +56,7 @@ class HTMLPurifier_Encoder
      * It will parse according to UTF-8 and return a valid UTF8 string, with
      * non-SGML codepoints excluded.
      * 
+     * @static
      * @note Just for reference, the non-SGML code points are 0 to 31 and
      *       127 to 159, inclusive.  However, we allow code points 9, 10
      *       and 13, which are the tab, line feed and carriage return
@@ -225,6 +234,7 @@ class HTMLPurifier_Encoder
     
     /**
      * Translates a Unicode codepoint into its corresponding UTF-8 character.
+     * @static
      * @note Based on Feyd's function at
      *       <http://forums.devnetwork.net/viewtopic.php?p=191404#191404>,
      *       which is in public domain.
@@ -288,8 +298,9 @@ class HTMLPurifier_Encoder
     
     /**
      * Converts a string to UTF-8 based on configuration.
+     * @static
      */
-    function convertToUTF8($str, $config, &$context) {
+    static function convertToUTF8($str, $config, &$context) {
         static $iconv = null;
         if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');
@@ -303,10 +314,11 @@ class HTMLPurifier_Encoder
     
     /**
      * Converts a string from UTF-8 based on configuration.
+     * @static
      * @note Currently, this is a lossy conversion, with unexpressable
      *       characters being omitted.
      */
-    function convertFromUTF8($str, $config, &$context) {
+    static function convertFromUTF8($str, $config, &$context) {
         static $iconv = null;
         if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');

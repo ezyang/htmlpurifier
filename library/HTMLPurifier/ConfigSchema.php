@@ -67,6 +67,7 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Retrieves an instance of the application-wide configuration definition.
+     * @static
      */
     static function &instance($prototype = null) {
         static $instance;
@@ -81,6 +82,7 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Defines a directive for configuration
+     * @static
      * @warning Will fail of directive's namespace is defined
      * @param $namespace Namespace the directive is in
      * @param $name Key of directive
@@ -144,6 +146,7 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Defines a namespace for directives to be put into.
+     * @static
      * @param $namespace Namespace's name
      * @param $description Description of the namespace
      */
@@ -169,6 +172,7 @@ class HTMLPurifier_ConfigSchema {
      * 
      * Directive value aliases are convenient for developers because it lets
      * them set a directive to several values and get the same result.
+     * @static
      * @param $namespace Directive's namespace
      * @param $name Name of Directive
      * @param $alias Name of aliased value
@@ -200,6 +204,7 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Defines a set of allowed values for a directive.
+     * @static
      * @param $namespace Namespace of directive
      * @param $name Name of directive
      * @param $allowed_values Arraylist of allowed values

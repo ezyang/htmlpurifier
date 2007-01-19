@@ -32,6 +32,7 @@ class HTMLPurifier_URISchemeRegistry
     
     /**
      * Retrieve sole instance of the registry.
+     * @static
      * @param $prototype Optional prototype to overload sole instance with,
      *                   or bool true to reset to default registry.
      * @note Pass a registry object $prototype with a compatible interface and

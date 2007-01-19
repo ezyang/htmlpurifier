@@ -46,6 +46,7 @@ class HTMLPurifier_Config
     
     /**
      * Convenience constructor that creates a config object based on a mixed var
+     * @static
      * @param mixed $config Variable that defines the state of the config
      *                      object. Can be: a HTMLPurifier_Config() object or
      *                      an array of directives based on loadArray().
@@ -60,6 +61,7 @@ class HTMLPurifier_Config
     
     /**
      * Convenience constructor that creates a default configuration object.
+     * @static
      * @return Default HTMLPurifier_Config object.
      */
     static function createDefault() {

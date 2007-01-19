@@ -14,6 +14,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Implemented background-image, background-repeat and background-attachment
   CSS properties. background shorthand property HAS NOT been extended
   to allow these, and background-position IS NOT implemented yet.
+! Configuration documentation looks nicer
+! Added smoketest 'all.php', which loads all other smoketests via frames
 . Implemented AttrDef_CSSURI for url(http://google.com) style declarations
 
 1.3.3, unknown release date, likely to be dropped
