@@ -63,48 +63,39 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $this->assertIdentical($config->get('Core', 'Key'), true);
         
         // try to retrieve undefined value
+        $this->expectError('Cannot retrieve value of undefined directive');
         $config->get('Core', 'NotDefined');
-        $this->assertError('Cannot retrieve value of undefined directive');
-        $this->assertNoErrors();
         
         // try to set undefined value
+        $this->expectError('Cannot set undefined directive to value');
         $config->set('Foobar', 'Key', 'foobar');
-        $this->assertError('Cannot set undefined directive to value');
-        $this->assertNoErrors();
         
         // try to set not allowed value
+        $this->expectError('Value not supported');
         $config->set('Extension', 'Pert', 'wizard');
-        $this->assertError('Value not supported');
-        $this->assertNoErrors();
         
         // try to set not allowed value
+        $this->expectError('Value is of invalid type');
         $config->set('Extension', 'Pert', 34);
-        $this->assertError('Value is of invalid type');
-        $this->assertNoErrors();
         
         // set aliased value
         $config->set('Extension', 'Pert', 'cow');
-        $this->assertNoErrors();
         $this->assertIdentical($config->get('Extension', 'Pert'), 'moo');
         
         // case-insensitive attempt to set value that is allowed
         $config->set('Core', 'Encoding', 'ISO-8859-1');
-        $this->assertNoErrors();
         $this->assertIdentical($config->get('Core', 'Encoding'), 'iso-8859-1');
         
         // set null to directive that allows null
         $config->set('Extension', 'CanBeNull', null);
-        $this->assertNoErrors();
         $this->assertIdentical($config->get('Extension', 'CanBeNull'), null);
         
         $config->set('Extension', 'CanBeNull', 'foobar');
-        $this->assertNoErrors();
         $this->assertIdentical($config->get('Extension', 'CanBeNull'), 'foobar');
         
         // set null to directive that doesn't allow null
+        $this->expectError('Value is of invalid type');
         $config->set('Extension', 'Pert', null);
-        $this->assertError('Value is of invalid type');
-        $this->assertNoErrors();
         
         // grab a namespace
         $config->set('Attr', 'Key', 0xBEEF);
@@ -116,9 +107,8 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         );
         
         // grab a non-existant namespace
+        $this->expectError('Cannot retrieve undefined namespace');
         $config->getBatch('FurnishedGoods');
-        $this->assertError('Cannot retrieve undefined namespace');
-        $this->assertNoErrors();
         
     }
     

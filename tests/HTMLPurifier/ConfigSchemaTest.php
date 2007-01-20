@@ -71,12 +71,11 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         
         // define a directive in an undefined namespace
+        $this->expectError('Cannot define directive for undefined namespace');
         HTMLPurifier_ConfigSchema::define(
             'Extension', 'Name', false, 'bool',
             'This is for an extension, but we have not defined its namespace!'
         );
-        $this->assertError('Cannot define directive for undefined namespace');
-        $this->assertNoErrors();
         
         
         
@@ -86,7 +85,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
             'Core', 'Name', 'default value', 'string',
             $description
         ); $line = __LINE__;
-        $this->assertNoErrors();
+        
         $directive->addDescription($file, $line, $description);
         $this->assertIdentical($this->our_copy->info, array(
             'Core' => array(
@@ -97,12 +96,11 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         
         // redefine a directive in an invalid manner
+        $this->expectError('Inconsistent default or type, cannot redefine');
         HTMLPurifier_ConfigSchema::define(
             'Core', 'Name', 'different default', 'string',
             'Inconsistent default or type, cannot redefine'
         );
-        $this->assertError('Inconsistent default or type, cannot redefine');
-        $this->assertNoErrors();
         
         
         
@@ -141,13 +139,12 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         
         // cannot define enumeration for undefined directive
+        $this->expectError('Cannot define allowed values for undefined directive');
         HTMLPurifier_ConfigSchema::defineAllowedValues(
             'Core', 'Foobar', array(
                 'Real Value 9',
             )
         );
-        $this->assertError('Cannot define allowed values for undefined directive');
-        $this->assertNoErrors();
         
         
         
@@ -182,46 +179,40 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         
         // cannot create alias to not-allowed value
+        $this->expectError('Cannot define alias to value that is not allowed');
         HTMLPurifier_ConfigSchema::defineValueAliases(
             'Core', 'Name', array(
                 'Aliased Value 3' => 'Invalid Value'
             )
         );
-        $this->assertError('Cannot define alias to value that is not allowed');
-        $this->assertNoErrors();
         
         
         
         // cannot create alias for already allowed value
+        $this->expectError('Cannot define alias over allowed value');
         HTMLPurifier_ConfigSchema::defineValueAliases(
             'Core', 'Name', array(
                 'Real Value' => 'Real Value 2'
             )
         );
-        $this->assertError('Cannot define alias over allowed value');
-        $this->assertNoErrors();
         
         
         
         // define a directive with an invalid type
+        $this->expectError('Invalid type for configuration directive');
         HTMLPurifier_ConfigSchema::define(
             'Core', 'Foobar', false, 'omen',
             'Omen is not a valid type, so we reject this.'
         );
         
-        $this->assertError('Invalid type for configuration directive');
-        $this->assertNoErrors();
-        
         
         
         // define a directive with inconsistent type
+        $this->expectError('Default value does not match directive type');
         HTMLPurifier_ConfigSchema::define(
             'Core', 'Foobaz', 10, 'string',
             'If we say string, we should mean it, not integer 10.'
         );
-        
-        $this->assertError('Default value does not match directive type');
-        $this->assertNoErrors();
         
         
         
@@ -231,25 +222,22 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
             'Nulls are allowed if you add on /null, cool huh?'
         );
         
-        $this->assertNoErrors();
         
         
         // define a directive with bad characters
+        $this->expectError('Directive name must be alphanumeric');
         HTMLPurifier_ConfigSchema::define(
             'Core', 'Core.Attr', 10, 'int',
             'No periods! >:-('
         );
         
-        $this->assertError('Directive name must be alphanumeric');
-        $this->assertNoErrors();
         
         // define a namespace with bad characters
+        $this->expectError('Namespace name must be alphanumeric');
         HTMLPurifier_ConfigSchema::defineNamespace(
             'Foobar&Gromit', $description
         );
         
-        $this->assertError('Namespace name must be alphanumeric');
-        $this->assertNoErrors();
         
         // alias related tests
         

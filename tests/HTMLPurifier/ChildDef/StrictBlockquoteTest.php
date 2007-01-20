@@ -38,10 +38,9 @@ extends HTMLPurifier_ChildDefHarness
         $this->assertResult('Needs wrap', '<div>Needs wrap</div>',
             array('HTML.BlockWrapper' => 'div'));
         
+        $this->expectError('Cannot use non-block element as block wrapper.');
         $this->assertResult('Needs wrap', '<p>Needs wrap</p>',
             array('HTML.BlockWrapper' => 'dav'));
-        $this->assertError('Cannot use non-block element as block wrapper.');
-        $this->assertNoErrors();
         
     }
     

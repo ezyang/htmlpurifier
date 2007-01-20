@@ -66,13 +66,11 @@ class HTMLPurifier_AttrDef_IDTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('user_story95_alas');
         $this->assertDef('user_alas', 'user_story95_user_alas'); // !
         
+        // no effect when IDPrefix isn't set
         $this->config->set('Attr', 'IDPrefix', '');
-        $this->assertDef('amherst'); // no affect when IDPrefix isn't set
-        $this->assertError('%Attr.IDPrefixLocal cannot be used unless '.
+        $this->expectError('%Attr.IDPrefixLocal cannot be used unless '.
             '%Attr.IDPrefix is set');
-        // SimpleTest has a bug and throws a sprintf error
-        // $this->assertNoErrors();
-        $this->swallowErrors();
+        $this->assertDef('amherst');
         
     }
     
