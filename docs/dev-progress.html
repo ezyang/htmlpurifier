@@ -266,13 +266,13 @@ Mozilla on inside and needs -moz-outline, no IE support.</td></tr>
 <tr><td rowspan="5">align</td><td>CAPTION</td><td>Near-equiv style 'caption-side', drop left and right</td></tr>
     <tr><td>IMG</td><td rowspan="2">Margin-left and margin-right = auto or parent div</td></tr>
     <tr><td>TABLE</td></tr>
-    <tr><td>HR</td><td>Equivalent style 'text-align' (IE tested)</td></tr>
+    <tr><td>HR</td><td>Near-equivalent style 'text-align' (Works for IE and Opera, but not Firefox). Also try <code>margin-right:auto; margin-left:0;</code> for left or <code>margin-right:0; margin-left:auto;</code> for right (optionally replacing 0 with the original margin for that side)</td></tr>
     <tr class="impl-yes"><td>H1, H2, H3, H4, H5, H6, P</td><td>Equivalent style 'text-align'</td></tr>
 <tr class="required impl-yes"><td>alt</td><td>IMG</td><td>Required, insert image filename if src is present or default invalid image text</td></tr>
-<tr><td rowspan="3">bgcolor</td><td>TABLE</td><td>Equivalent style 'background-color' (IE tested)</td></tr>
-    <tr><td>TR</td><td>Equivalent style 'background-color' (IE tested)</td></tr>
+<tr><td rowspan="3">bgcolor</td><td>TABLE</td><td>Equivalent style 'background-color'</td></tr>
+    <tr><td>TR</td><td>Equivalent style 'background-color'</td></tr>
     <tr><td>TD, TH</td><td>Equivalent style 'background-color'</td></tr>
-<tr><td>border</td><td>IMG</td><td>Equivalent style 'border-width', only applies when link present</td></tr>
+<tr><td>border</td><td>IMG</td><td>Near equivalent style 'border-width', as it only applies when link present</td></tr>
 <tr><td>clear</td><td>BR</td><td>Near-equiv style 'clear', transform 'all' into 'both'</td></tr>
 <tr class="impl-no"><td>compact</td><td>DL, OL, UL</td><td>Boolean, needs custom CSS class; rarely used anyway</td></tr>
 <tr class="required impl-yes"><td>dir</td><td>BDO</td><td>Required, insert ltr (or configuration value) if none</td></tr>
