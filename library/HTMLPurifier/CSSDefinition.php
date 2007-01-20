@@ -79,6 +79,7 @@ class HTMLPurifier_CSSDefinition
         $this->info['background-attachment'] = new HTMLPurifier_AttrDef_Enum(
             array('scroll', 'fixed')
         );
+        $this->info['background-position'] = new HTMLPurifier_AttrDef_BackgroundPosition();
         
         // pending its own validator as a shorthand
         $this->info['background'] = 

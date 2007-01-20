@@ -78,6 +78,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('background-image:none;');
         $this->assertDef('background-repeat:repeat-y;');
         $this->assertDef('background-attachment:fixed;');
+        $this->assertDef('background-position:left 90%;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',

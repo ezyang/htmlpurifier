@@ -11,9 +11,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 1.4.0, unknown release date
 ! Implemented list-style-image, URIs now allowed in list-style
-! Implemented background-image, background-repeat and background-attachment
-  CSS properties. background shorthand property HAS NOT been extended
-  to allow these, and background-position IS NOT implemented yet.
+! Implemented background-image, background-repeat, background-attachment
+  and background-position CSS properties. Background shorthand property is
+  currently equivalent to background-image and does not support the
+  new properties.
 ! Configuration documentation looks nicer
 ! Added smoketest 'all.php', which loads all other smoketests via frames
 ! Added %Core.EscapeNonASCIICharacters to workaround loss of Unicode
