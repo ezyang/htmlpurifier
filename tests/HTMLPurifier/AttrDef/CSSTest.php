@@ -25,7 +25,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('text-transform:capitalize;');
         $this->assertDef('background-color:rgb(0,0,255);');
         $this->assertDef('background-color:transparent;');
-        $this->assertDef('background:#FF9;');
+        $this->assertDef('background:#333 url(chess.png) repeat fixed 50% top;');
         $this->assertDef('color:#F00;');
         $this->assertDef('border-top-color:#F00;');
         $this->assertDef('border-color:#F00 #FF0;');
