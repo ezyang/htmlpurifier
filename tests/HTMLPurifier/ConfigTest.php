@@ -199,6 +199,24 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
     }
     
+    function testAliases() {
+        
+        HTMLPurifier_ConfigSchema::defineNamespace('Home', 'Sweet home.');
+        HTMLPurifier_ConfigSchema::define('Home', 'Rug', 3, 'int', 'ID.');
+        HTMLPurifier_ConfigSchema::defineAlias('Home', 'Carpet', 'Home', 'Rug');
+        
+        $config = HTMLPurifier_Config::createDefault();
+        
+        $this->assertEqual($config->get('Home', 'Rug'), 3);
+        
+        $this->expectError('Cannot get value from aliased directive, use real name');
+        $config->get('Home', 'Carpet');
+        
+        $config->set('Home', 'Carpet', 999);
+        $this->assertEqual($config->get('Home', 'Rug'), 999);
+        
+    }
+    
 }
 
 ?>

@@ -17,7 +17,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Configuration documentation looks nicer
 ! Added %Core.EscapeNonASCIICharacters to workaround loss of Unicode
   characters while %Core.Encoding is set to a non-UTF-8 encoding.
-- Replaced version check with functionality check for DOM
+! Support for configuration directive aliases added
+- Replaced version check with functionality check for DOM (thanks Stephen
+  Khoo)
 . Added smoketest 'all.php', which loads all other smoketests via frames
 . Implemented AttrDef_CSSURI for url(http://google.com) style declarations
 . Added convenient single test selector form on test runner

@@ -225,6 +225,46 @@ class HTMLPurifier_ConfigSchema {
     }
     
     /**
+     * Defines a directive alias for backwards compatibility
+     * @static
+     * @param $namespace
+     * @param $name Directive that will be aliased
+     * @param $new_namespace
+     * @param $new_name Directive that the alias will be to
+     */
+    function defineAlias($namespace, $name, $new_namespace, $new_name) {
+        $def =& HTMLPurifier_ConfigSchema::instance();
+        if (!isset($def->info[$namespace])) {
+            trigger_error('Cannot define directive alias for undefined namespace',
+                E_USER_ERROR);
+            return;
+        }
+        if (!ctype_alnum($name)) {
+            trigger_error('Directive name must be alphanumeric',
+                E_USER_ERROR);
+            return;
+        }
+        if (isset($def->info[$namespace][$name])) {
+            trigger_error('Cannot define alias over directive',
+                E_USER_ERROR);
+            return;
+        }
+        if (!isset($def->info[$new_namespace][$new_name])) {
+            trigger_error('Cannot define alias to undefined directive',
+                E_USER_ERROR);
+            return;
+        }
+        if ($def->info[$new_namespace][$new_name]->class == 'alias') {
+            trigger_error('Cannot define alias to alias',
+                E_USER_ERROR);
+            return;
+        }
+        $def->info[$namespace][$name] = new HTMLPurifier_ConfigEntity_DirectiveAlias();
+        $def->info[$namespace][$name]->namespace = $new_namespace;
+        $def->info[$namespace][$name]->name = $new_name;
+    }
+    
+    /**
      * Validate a variable according to type. Return null if invalid.
      */
     function validate($var, $type, $allow_null = false) {
@@ -318,12 +358,16 @@ class HTMLPurifier_ConfigSchema {
 /**
  * Base class for configuration entity
  */
-class HTMLPurifier_ConfigEntity {}
+class HTMLPurifier_ConfigEntity {
+    var $class = false;
+}
 
 /**
  * Structure object describing of a namespace
  */
 class HTMLPurifier_ConfigEntity_Namespace extends HTMLPurifier_ConfigEntity {
+    
+    var $class = 'namespace';
     
     /**
      * String description of what kinds of directives go in this namespace.
@@ -338,6 +382,8 @@ class HTMLPurifier_ConfigEntity_Namespace extends HTMLPurifier_ConfigEntity {
  */
 class HTMLPurifier_ConfigEntity_Directive extends HTMLPurifier_ConfigEntity
 {
+    
+    var $class = 'directive';
     
     /**
      * Hash of value aliases, i.e. values that are equivalent.
@@ -383,6 +429,23 @@ class HTMLPurifier_ConfigEntity_Directive extends HTMLPurifier_ConfigEntity
         $this->descriptions[$file][$line] = $description;
     }
     
+}
+
+/**
+ * Structure object describing a directive alias
+ */
+class HTMLPurifier_ConfigEntity_DirectiveAlias extends HTMLPurifier_ConfigEntity
+{
+    var $class = 'alias';
+    
+    /**
+     * Namespace being aliased to
+     */
+    var $namespace;
+    /**
+     * Directive being aliased to
+     */
+    var $name;
 }
 
 ?>

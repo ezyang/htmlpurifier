@@ -99,6 +99,8 @@ foreach($schema->info as $namespace_name => $namespace_info) {
     
     foreach ($namespace_info as $name => $info) {
         
+        if ($info->class == 'alias') continue;
+        
         $dom_directive = $dom_document->createElement('directive');
         $dom_namespace->appendChild($dom_directive);
         

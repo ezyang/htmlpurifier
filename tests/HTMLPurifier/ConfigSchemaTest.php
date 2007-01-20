@@ -251,6 +251,30 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         $this->assertError('Namespace name must be alphanumeric');
         $this->assertNoErrors();
         
+        // alias related tests
+        
+        HTMLPurifier_ConfigSchema::defineNamespace('Home', 'Sweet home.');
+        HTMLPurifier_ConfigSchema::define('Home', 'Rug', 3, 'int', 'ID.');
+        HTMLPurifier_ConfigSchema::defineAlias('Home', 'Carpet', 'Home', 'Rug');
+        
+        $this->expectError('Cannot define directive alias for undefined namespace');
+        HTMLPurifier_ConfigSchema::defineAlias('Store', 'Rug', 'Home', 'Rug');
+        
+        $this->expectError('Directive name must be alphanumeric');
+        HTMLPurifier_ConfigSchema::defineAlias('Home', 'R.g', 'Home', 'Rug');
+        
+        HTMLPurifier_ConfigSchema::define('Home', 'Rugger', 'Bob Max', 'string', 'Name of.');
+        $this->expectError('Cannot define alias over directive');
+        HTMLPurifier_ConfigSchema::defineAlias('Home', 'Rugger', 'Home', 'Rug');
+        
+        $this->expectError('Cannot define alias to undefined directive');
+        HTMLPurifier_ConfigSchema::defineAlias('Home', 'Rug2', 'Home', 'Rugavan');
+        
+        $this->expectError('Cannot define alias to alias');
+        HTMLPurifier_ConfigSchema::defineAlias('Home', 'Rug2', 'Home', 'Carpet');
+        
+        
+        
     }
     
     function assertValid($var, $type, $ret = null) {

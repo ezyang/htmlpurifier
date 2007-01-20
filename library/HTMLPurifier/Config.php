@@ -75,10 +75,15 @@ class HTMLPurifier_Config
      * @param $namespace String namespace
      * @param $key String key
      */
-    function get($namespace, $key) {
+    function get($namespace, $key, $from_alias = false) {
         if (!isset($this->def->info[$namespace][$key])) {
             trigger_error('Cannot retrieve value of undefined directive',
                 E_USER_WARNING);
+            return;
+        }
+        if ($this->def->info[$namespace][$key]->class == 'alias') {
+            trigger_error('Cannot get value from aliased directive, use real name',
+                E_USER_ERROR);
             return;
         }
         return $this->conf[$namespace][$key];
@@ -103,10 +108,20 @@ class HTMLPurifier_Config
      * @param $key String key
      * @param $value Mixed value
      */
-    function set($namespace, $key, $value) {
+    function set($namespace, $key, $value, $from_alias = false) {
         if (!isset($this->def->info[$namespace][$key])) {
             trigger_error('Cannot set undefined directive to value',
                 E_USER_WARNING);
+            return;
+        }
+        if ($this->def->info[$namespace][$key]->class == 'alias') {
+            if ($from_alias) {
+                trigger_error('Double-aliases not allowed, please fix '.
+                    'ConfigSchema bug');
+            }
+            $this->set($this->def->info[$namespace][$key]->namespace,
+                       $this->def->info[$namespace][$key]->name,
+                       $value, true);
             return;
         }
         $value = $this->def->validate(
