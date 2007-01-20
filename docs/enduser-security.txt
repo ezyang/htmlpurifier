@@ -7,6 +7,7 @@ and it's up to you to provide it the proper information and proper context
 to be effective. Things to remember:
 
 1. Character Encoding: UTF-8.
+    This segment will soon be obsoleted by enduser-utf8.html
 Currently, the parser runs under the assumption that it is dealing
 with UTF-8. Not ISO-8859-1 or Windows-1252, UTF-8. And definitely not "no
 character encoding explicitly stated" or UTF-7. If you're not using UTF-8 as
@@ -27,6 +28,7 @@ this may be configurable in the future.  Do you want standards compliance?
 The doctype is a good place to start.
 
 3. IDs
+    This segment is obsoleted by enduser-id.html
 They need to be unique, but without some knowledge of the
 rest of the document, it's difficult to know what's unique. %Attr.IDBlacklist
 needs to be set: we may want to consider disallowing IDs by default to
