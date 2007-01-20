@@ -8,16 +8,16 @@ TODO List
 ==========================
 
 1.4 release
- # More extensive URI filtering schemes (see docs/proposal-new-directives.txt)
- # Allow for background-image and list-style-image (intrinsically tied to above)
  # Add hooks for custom behavior (for instance, YouTube preservation)
+ # Implement all non-essential attribute transforms
  - Aggressive caching
  ? Rich set* methods and config file loaders for HTMLPurifier_Config
  ? Configuration profiles: sets of directives that get set with one func call
  ? ConfigSchema directive aliases (so we can rename some of them)
- ? URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
 
 1.5 release
+ # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
+ # Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
  # Error logging for filtering/cleanup procedures
     - Requires I18N facilities to be created first (COMPLEX)
 
@@ -31,7 +31,6 @@ TODO List
 
 1.7 release
  # Additional support for poorly written HTML
-    - Implement all non-essential attribute transforms (BIG!)
     - Microsoft Word HTML cleaning (i.e. MsoNormal, but research essential!)
     - Friendly strict handling of <address> (block -> <br>)
 
@@ -55,7 +54,6 @@ TODO List
 Ongoing
  - Lots of profiling, make it faster!
  - Plugins for major CMSes (COMPLEX)
-    - Drupal
     - WordPress
     - eFiction
     - more! (look for ones that use WYSIWYGs)
@@ -69,29 +67,27 @@ Unknown release (on a scratch-an-itch basis)
  - Append something to duplicate IDs so they're still usable (impl. note: the
    dupe detector would also need to detect the suffix as well)
  - Have 'lang' attribute be checked against official lists
-
-Encoding workarounds
- - Non-lossy dumb alternate character encoding transformations, achieved by
-   numerically encoding all non-ASCII characters
- - Semi-lossy dumb alternate character encoding transformations, achieved by
+ ? Semi-lossy dumb alternate character encoding transformations, achieved by
    encoding all characters that have string entity equivalents
 
 Requested
- - Native content compression, whitespace stripping (don't rely on Tidy, make
+ ? Native content compression, whitespace stripping (don't rely on Tidy, make
    sure we don't remove from <pre> or related tags)
- - Win32 Phalanger C# binaries (?)
+ ? Win32 Phalanger C# binaries
  - Remove redundant tags, ex. <u><u>Underlined</u></u>. Implementation notes:
     1. Analyzing which tags to remove duplicants
     2. Ensure attributes are merged into the parent tag
     3. Extend the tag exclusion system to specify whether or not the
     contents should be dropped or not (currently, there's code that could do
     something like this if it didn't drop the inner text too.)
- - More user-friendly warnings when %HTML.Allow* attempts to specify a
+ ? More user-friendly warnings when %HTML.Allow* attempts to specify a
    tag or attribute that is not supported
  - Allow specifying global attributes on a tag-by-tag basis in
    %HTML.AllowAttributes
  - Parse TinyMCE whitelist into our %HTML.Allow* whitelists
  - XSS-attempt detection
+ - Remove <span> tags that don't do anything (no attributes)
+ - Remove empty inline tags<i></i>
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations (unless
