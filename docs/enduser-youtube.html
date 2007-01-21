@@ -37,7 +37,7 @@ from a specific website, it probably is okay. If no amount of pleading will
 convince the people upstairs that they should just settle with just linking
 to their movies, you may find this technique very useful.</p>
 
-<h2>Sample</h2>
+<h2>Looking in</h2>
 
 <p>Below is custom code that allows users to embed
 YouTube videos. This is not favoritism: this trick can easily be adapted for
@@ -69,55 +69,27 @@ into your documents. YouTube's code goes like this:</p>
 <p>What point 2 means is that if we have code like <code>&lt;span
 class=&quot;embed-youtube&quot;&gt;AyPzM5WK8ys&lt;/span&gt;</code> your
 application can reconstruct the full object from this small snippet that
-passes through HTML Purifier <em>unharmed</em>.</p>
+passes through HTML Purifier <em>unharmed</em>.
+<a href="http://hp.jpsband.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/Filter/YouTube.php">Show me the code!</a></p>
 
-<pre>
-&lt;?php
+<p>And the corresponding usage:</p>
 
-class HTMLPurifierX_PreserveYouTube extends HTMLPurifier
-{
-    function purify($html, $config = null) {
-        $pre_regex = '#&lt;object[^&gt;]+&gt;.+?'.
-            'http://www.youtube.com/v/([A-Za-z0-9]+).+?&lt;/object&gt;#';
-        $pre_replace = '&lt;span class=&quot;youtube-embed&quot;&gt;\1&lt;/span&gt;';
-        $html = preg_replace($pre_regex, $pre_replace, $html);
-        $html = parent::purify($html, $config);
-        $post_regex = '#&lt;span class=&quot;youtube-embed&quot;&gt;([A-Za-z0-9]+)&lt;/span&gt;#';
-        $post_replace = '&lt;object width=&quot;425&quot; height=&quot;350&quot; '.
-            'data=&quot;http://www.youtube.com/v/\1&quot;&gt;'.
-            '&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/\1&quot;&gt;&lt;/param&gt;'.
-            '&lt;param name=&quot;wmode&quot; value=&quot;transparent&quot;&gt;&lt;/param&gt;'.
-            '&lt;!--[if IE]&gt;'.
-            '&lt;embed src=&quot;http://www.youtube.com/v/\1&quot;'.
-            'type=&quot;application/x-shockwave-flash&quot;'.
-            'wmode=&quot;transparent&quot; width=&quot;425&quot; height=&quot;350&quot; /&gt;'.
-            '&lt;![endif]--&gt;'.
-            '&lt;/object&gt;';
-        $html = preg_replace($post_regex, $post_replace, $html);
-        return $html;
-    }
-}
+<pre>&lt;?php
+    // assuming $purifier is an instance of HTMLPurifier
+    require_once 'HTMLPurifier/Filter/YouTube.php';
+    $purifier-&gt;addFilter(new HTMLPurifier_Filter_YouTube());
+?&gt;</pre>
 
-$purifier = new HTMLPurifierX_PreserveYouTube();
-$html_still_with_youtube = $purifier->purify($html_with_youtube);
-
-?&gt;
-</pre>
-
-<p>There is a bit going on here, so let's explain.</p>
+<p>There is a bit going in the two code snippets, so let's explain.</p>
 
 <ol>
-    <li>The class uses the prefix <code>HTMLPurifierX</code> because it's
-        userspace code. Don't use <code>HTMLPurifier</code> in front of your
-        class, since it might clobber another class in the library.</li>
-    <li>In order to keep the interface compatible, we've extended HTMLPurifier
-        into a new class that preserves the YouTube videos. This means that
-        all you have to do is replace all instances of
-        <code>new HTMLPurifier</code> to <code>new
-        HTMLPurifierX_PreserveYouTube</code>. There's other ways to go about
-        doing this: if you were calling a function that wrapped HTML Purifier,
-        you could paste the PHP right there. If you wanted to be really
-        fancy, you could make a decorator for HTMLPurifier.</li>
+    <li>This is a Filter object, which intercepts the HTML that is
+        coming into and out of the purifier. You can add as many
+        filter objects as you like. <code>preFilter()</code>
+        processes the code before it gets purified, and <code>postFilter()</code>
+        processes the code afterwards. So, we'll use <code>preFilter()</code> to
+        replace the object tag with a <code>span</code>, and <code>postFilter()</code>
+        to restore it.</li>
     <li>The first preg_replace call replaces any YouTube code users may have
         embedded into the benign span tag. Span is used because it is inline,
         and objects are inline too. We are very careful to be extremely
@@ -165,17 +137,16 @@ it is important that you are cognizant of the risk.</p>
 
 <p>This should go without saying, but if you're going to adapt this code
 for Google Video or the like, make sure you do it <em>right</em>. It's
-extremely easy to allow a character too many in the final section and
+extremely easy to allow a character too many in <code>postFilter()</code> and
 suddenly you're introducing XSS into HTML Purifier's XSS free output. HTML
 Purifier may be well written, but it cannot guard against vulnerabilities
 introduced after it has finished.</p>
 
-<h2>Future plans</h2>
+<h2>Help out!</h2>
 
-<p>This functionality is part of the core library, using the
-HTMLPurifier_Filter class to acheive the desired effect. Our implementation
-is slightly different, and this page will be updated to reflect that
-once 1.4.0 is released.</p>
+<p>If you write a filter for your favorite video destination (or anything
+like that, for that matter), send it over and it might get included
+with the core!</p>
 
 </body>
 </html>
