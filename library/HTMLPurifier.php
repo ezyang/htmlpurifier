@@ -67,6 +67,7 @@ class HTMLPurifier
     var $version = '1.3.2';
     
     var $config;
+    var $filters;
     
     var $lexer, $strategy, $generator;
     
@@ -95,6 +96,14 @@ class HTMLPurifier
     }
     
     /**
+     * Adds a filter to process the output. First come first serve
+     * @param $filter HTMLPurifier_Filter object
+     */
+    function addFilter($filter) {
+        $this->filters[] = $filter;
+    }
+    
+    /**
      * Filters an HTML snippet/document to be XSS-free and standards-compliant.
      * 
      * @param $html String of HTML to purify
@@ -111,6 +120,10 @@ class HTMLPurifier
         $context = new HTMLPurifier_Context();
         $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);
         
+        for ($i = 0, $size = count($this->filters); $i < $size; $i++) {
+            $html = $this->filters[$i]->preFilter($html, $config, $context);
+        }
+        
         // purified HTML
         $html = 
             $this->generator->generateFromTokens(
@@ -125,6 +138,10 @@ class HTMLPurifier
                 ),
                 $config, $context
             );
+        
+        for ($i = $size - 1; $i >= 0; $i--) {
+            $html = $this->filters[$i]->postFilter($html, $config, $context);
+        }
         
         $html = HTMLPurifier_Encoder::convertFromUTF8($html, $config, $context);
         $this->context =& $context;

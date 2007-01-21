@@ -19,6 +19,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   characters while %Core.Encoding is set to a non-UTF-8 encoding.
 ! Support for configuration directive aliases added
 ! Config object can now be instantiated from ini files
+! YouTube preservation code added to the core, with two lines of code
+  you can add it as a filter to your code. See smoketests/preserveYouTube.php
+  for sample code.
 - Replaced version check with functionality check for DOM (thanks Stephen
   Khoo)
 . Added smoketest 'all.php', which loads all other smoketests via frames
