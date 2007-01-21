@@ -11,12 +11,22 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 1.4.0, unknown release date
 ! Implemented list-style-image, URIs now allowed in list-style
-! Implemented background-image, background-repeat and background-attachment
-  CSS properties. background shorthand property HAS NOT been extended
-  to allow these, and background-position IS NOT implemented yet.
+! Implemented background-image, background-repeat, background-attachment
+  and background-position CSS properties. Shorthand property background
+  supports all of these properties.
 ! Configuration documentation looks nicer
-! Added smoketest 'all.php', which loads all other smoketests via frames
+! Added %Core.EscapeNonASCIICharacters to workaround loss of Unicode
+  characters while %Core.Encoding is set to a non-UTF-8 encoding.
+! Support for configuration directive aliases added
+! Config object can now be instantiated from ini files
+! YouTube preservation code added to the core, with two lines of code
+  you can add it as a filter to your code. See smoketests/preserveYouTube.php
+  for sample code.
+- Replaced version check with functionality check for DOM (thanks Stephen
+  Khoo)
+. Added smoketest 'all.php', which loads all other smoketests via frames
 . Implemented AttrDef_CSSURI for url(http://google.com) style declarations
+. Added convenient single test selector form on test runner
 
 1.3.3, unknown release date, likely to be dropped
 ! Moved SLOW to docs/enduser-slow.html and added code examples

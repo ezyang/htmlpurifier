@@ -25,7 +25,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('text-transform:capitalize;');
         $this->assertDef('background-color:rgb(0,0,255);');
         $this->assertDef('background-color:transparent;');
-        $this->assertDef('background:#FF9;');
+        $this->assertDef('background:#333 url(chess.png) repeat fixed 50% top;');
         $this->assertDef('color:#F00;');
         $this->assertDef('border-top-color:#F00;');
         $this->assertDef('border-color:#F00 #FF0;');
@@ -78,6 +78,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('background-image:none;');
         $this->assertDef('background-repeat:repeat-y;');
         $this->assertDef('background-attachment:fixed;');
+        $this->assertDef('background-position:left 90%;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',

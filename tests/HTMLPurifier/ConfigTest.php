@@ -2,6 +2,10 @@
 
 require_once 'HTMLPurifier/Config.php';
 
+if (!class_exists('CS')) {
+    class CS extends HTMLPurifier_ConfigSchema {}
+}
+
 class HTMLPurifier_ConfigTest extends UnitTestCase
 {
     
@@ -16,109 +20,199 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
     
     function tearDown() {
         HTMLPurifier_ConfigSchema::instance($this->old_copy);
+        tally_errors();
     }
     
-    function test() {
+    // test functionality based on ConfigSchema
+    
+    function testNormal() {
+        CS::defineNamespace('Element', 'Chemical substances that cannot be further decomposed');
         
-        HTMLPurifier_ConfigSchema::defineNamespace('Core', 'Corestuff');
-        HTMLPurifier_ConfigSchema::defineNamespace('Attr', 'Attributes');
-        HTMLPurifier_ConfigSchema::defineNamespace('Extension', 'Extensible');
-        
-        HTMLPurifier_ConfigSchema::define(
-            'Core', 'Key', false, 'bool', 'A boolean directive.'
-        );
-        HTMLPurifier_ConfigSchema::define(
-            'Attr', 'Key', 42, 'int', 'An integer directive.'
-        );
-        HTMLPurifier_ConfigSchema::define(
-            'Extension', 'Pert', 'foo', 'string', 'A string directive.'
-        );
-        HTMLPurifier_ConfigSchema::define(
-            'Core', 'Encoding', 'utf-8', 'istring', 'Case insensitivity!'
-        );
-        
-        HTMLPurifier_ConfigSchema::define(
-            'Extension', 'CanBeNull', null, 'string/null', 'Null or string!'
-        );
-        
-        HTMLPurifier_ConfigSchema::defineAllowedValues(
-            'Extension', 'Pert', array('foo', 'moo')
-        );
-        HTMLPurifier_ConfigSchema::defineValueAliases(
-            'Extension', 'Pert', array('cow' => 'moo')
-        );
-        HTMLPurifier_ConfigSchema::defineAllowedValues(
-            'Core', 'Encoding', array('utf-8', 'iso-8859-1')
-        );
+        CS::define('Element', 'Abbr', 'H', 'string', 'Abbreviation of element name.');
+        CS::define('Element', 'Name', 'hydrogen', 'istring', 'Full name of atoms.');
+        CS::define('Element', 'Number', 1, 'int', 'Atomic number, is identity.');
+        CS::define('Element', 'Mass', 1.00794, 'float', 'Atomic mass.');
+        CS::define('Element', 'Radioactive', false, 'bool', 'Does it have rapid decay?');
+        CS::define('Element', 'Isotopes', array(1 => true, 2 => true, 3 => true), 'lookup',
+            'What numbers of neutrons for this element have been observed?');
+        CS::define('Element', 'Traits', array('nonmetallic', 'odorless', 'flammable'), 'list',
+            'What are general properties of the element?');
+        CS::define('Element', 'IsotopeNames', array(1 => 'protium', 2 => 'deuterium', 3 => 'tritium'), 'hash',
+            'Lookup hash of neutron counts to formal names.');
+        CS::define('Element', 'Object', new stdClass(), 'mixed', 'Model representation.');
         
         $config = HTMLPurifier_Config::createDefault();
         
         // test default value retrieval
-        $this->assertIdentical($config->get('Core', 'Key'), false);
-        $this->assertIdentical($config->get('Attr', 'Key'), 42);
-        $this->assertIdentical($config->get('Extension', 'Pert'), 'foo');
+        $this->assertIdentical($config->get('Element', 'Abbr'), 'H');
+        $this->assertIdentical($config->get('Element', 'Name'), 'hydrogen');
+        $this->assertIdentical($config->get('Element', 'Number'), 1);
+        $this->assertIdentical($config->get('Element', 'Mass'), 1.00794);
+        $this->assertIdentical($config->get('Element', 'Radioactive'), false);
+        $this->assertIdentical($config->get('Element', 'Isotopes'), array(1 => true, 2 => true, 3 => true));
+        $this->assertIdentical($config->get('Element', 'Traits'), array('nonmetallic', 'odorless', 'flammable'));
+        $this->assertIdentical($config->get('Element', 'IsotopeNames'), array(1 => 'protium', 2 => 'deuterium', 3 => 'tritium'));
+        $this->assertIdentical($config->get('Element', 'Object'), new stdClass());
         
-        // set some values
-        $config->set('Core', 'Key', true);
-        $this->assertIdentical($config->get('Core', 'Key'), true);
+        // test setting values
+        $config->set('Element', 'Abbr', 'Pu');
+        $config->set('Element', 'Name', 'PLUTONIUM'); // test decaps
+        $config->set('Element', 'Number', '94'); // test parsing
+        $config->set('Element', 'Mass', '244.'); // test parsing
+        $config->set('Element', 'Radioactive', true);
+        $config->set('Element', 'Isotopes', array(238, 239)); // test inversion
+        $config->set('Element', 'Traits', 'nuclear, heavy, actinide'); // test parsing
+        $config->set('Element', 'IsotopeNames', array(238 => 'Plutonium-238', 239 => 'Plutonium-239'));
+        $config->set('Element', 'Object', false); // unmodeled
         
-        // try to retrieve undefined value
-        $config->get('Core', 'NotDefined');
-        $this->assertError('Cannot retrieve value of undefined directive');
-        $this->assertNoErrors();
+        // test value retrieval
+        $this->assertIdentical($config->get('Element', 'Abbr'), 'Pu');
+        $this->assertIdentical($config->get('Element', 'Name'), 'plutonium');
+        $this->assertIdentical($config->get('Element', 'Number'), 94);
+        $this->assertIdentical($config->get('Element', 'Mass'), 244.);
+        $this->assertIdentical($config->get('Element', 'Radioactive'), true);
+        $this->assertIdentical($config->get('Element', 'Isotopes'), array(238 => true, 239 => true));
+        $this->assertIdentical($config->get('Element', 'Traits'), array('nuclear', 'heavy', 'actinide'));
+        $this->assertIdentical($config->get('Element', 'IsotopeNames'), array(238 => 'Plutonium-238', 239 => 'Plutonium-239'));
+        $this->assertIdentical($config->get('Element', 'Object'), false);
         
-        // try to set undefined value
-        $config->set('Foobar', 'Key', 'foobar');
-        $this->assertError('Cannot set undefined directive to value');
-        $this->assertNoErrors();
+        // errors
         
-        // try to set not allowed value
-        $config->set('Extension', 'Pert', 'wizard');
-        $this->assertError('Value not supported');
-        $this->assertNoErrors();
+        $this->expectError('Cannot retrieve value of undefined directive');
+        $config->get('Element', 'Metal');
         
-        // try to set not allowed value
-        $config->set('Extension', 'Pert', 34);
-        $this->assertError('Value is of invalid type');
-        $this->assertNoErrors();
+        $this->expectError('Cannot set undefined directive to value');
+        $config->set('Element', 'Metal', true);
         
-        // set aliased value
-        $config->set('Extension', 'Pert', 'cow');
-        $this->assertNoErrors();
-        $this->assertIdentical($config->get('Extension', 'Pert'), 'moo');
+        $this->expectError('Value is of invalid type');
+        $config->set('Element', 'Radioactive', 'very');
         
-        // case-insensitive attempt to set value that is allowed
-        $config->set('Core', 'Encoding', 'ISO-8859-1');
-        $this->assertNoErrors();
-        $this->assertIdentical($config->get('Core', 'Encoding'), 'iso-8859-1');
+    }
+    
+    function testEnumerated() {
         
-        // set null to directive that allows null
-        $config->set('Extension', 'CanBeNull', null);
-        $this->assertNoErrors();
-        $this->assertIdentical($config->get('Extension', 'CanBeNull'), null);
+        CS::defineNamespace('Instrument', 'Of the musical type.');
         
-        $config->set('Extension', 'CanBeNull', 'foobar');
-        $this->assertNoErrors();
-        $this->assertIdentical($config->get('Extension', 'CanBeNull'), 'foobar');
+        // case sensitive
+        CS::define('Instrument', 'Manufacturer', 'Yamaha', 'string', 'Who made it?');
+        CS::defineAllowedValues('Instrument', 'Manufacturer', array(
+            'Yamaha', 'Conn-Selmer', 'Vandoren', 'Laubin', 'Buffet', 'other'));
+        CS::defineValueAliases('Instrument', 'Manufacturer', array(
+            'Selmer' => 'Conn-Selmer'));
         
-        // set null to directive that doesn't allow null
-        $config->set('Extension', 'Pert', null);
-        $this->assertError('Value is of invalid type');
-        $this->assertNoErrors();
+        // case insensitive
+        CS::define('Instrument', 'Family', 'woodwind', 'istring', 'What family is it?');
+        CS::defineAllowedValues('Instrument', 'Family', array(
+            'brass', 'woodwind', 'percussion', 'string', 'keyboard', 'electronic'));
+        CS::defineValueAliases('Instrument', 'Family', array(
+            'synth' => 'electronic'));
+        
+        $config = HTMLPurifier_Config::createDefault();
+        
+        // case sensitive
+        
+        $config->set('Instrument', 'Manufacturer', 'Vandoren');
+        $this->assertIdentical($config->get('Instrument', 'Manufacturer'), 'Vandoren');
+        
+        $config->set('Instrument', 'Manufacturer', 'Selmer');
+        $this->assertIdentical($config->get('Instrument', 'Manufacturer'), 'Conn-Selmer');
+        
+        $this->expectError('Value not supported');
+        $config->set('Instrument', 'Manufacturer', 'buffet');
+        
+        // case insensitive
+        
+        $config->set('Instrument', 'Family', 'brass');
+        $this->assertIdentical($config->get('Instrument', 'Family'), 'brass');
+        
+        $config->set('Instrument', 'Family', 'PERCUSSION');
+        $this->assertIdentical($config->get('Instrument', 'Family'), 'percussion');
+        
+        $config->set('Instrument', 'Family', 'synth');
+        $this->assertIdentical($config->get('Instrument', 'Family'), 'electronic');
+        
+        $config->set('Instrument', 'Family', 'Synth');
+        $this->assertIdentical($config->get('Instrument', 'Family'), 'electronic');
+        
+    }
+    
+    function testNull() {
+        
+        CS::defineNamespace('ReportCard', 'It is for grades.');
+        CS::define('ReportCard', 'English', null, 'string/null', 'Grade from English class.');
+        CS::define('ReportCard', 'Absences', 0, 'int', 'How many times missing from school?');
+        
+        $config = HTMLPurifier_Config::createDefault();
+        
+        $config->set('ReportCard', 'English', 'B-');
+        $this->assertIdentical($config->get('ReportCard', 'English'), 'B-');
+        
+        $config->set('ReportCard', 'English', null); // not yet graded
+        $this->assertIdentical($config->get('ReportCard', 'English'), null);
+        
+        // error
+        $this->expectError('Value is of invalid type');
+        $config->set('ReportCard', 'Absences', null);
+        
+    }
+    
+    function testAliases() {
+        
+        HTMLPurifier_ConfigSchema::defineNamespace('Home', 'Sweet home.');
+        HTMLPurifier_ConfigSchema::define('Home', 'Rug', 3, 'int', 'ID.');
+        HTMLPurifier_ConfigSchema::defineAlias('Home', 'Carpet', 'Home', 'Rug');
+        
+        $config = HTMLPurifier_Config::createDefault();
+        
+        $this->assertEqual($config->get('Home', 'Rug'), 3);
+        
+        $this->expectError('Cannot get value from aliased directive, use real name');
+        $config->get('Home', 'Carpet');
+        
+        $config->set('Home', 'Carpet', 999);
+        $this->assertEqual($config->get('Home', 'Rug'), 999);
+        
+    }
+    
+    // test functionality based on method
+    
+    function test_getBatch() {
+        
+        CS::defineNamespace('Variables', 'Changing quantities in equation.');
+        CS::define('Variables', 'TangentialAcceleration', 'a_tan', 'string', 'In m/s^2');
+        CS::define('Variables', 'AngularAcceleration', 'alpha', 'string', 'In rad/s^2');
+        
+        $config = HTMLPurifier_Config::createDefault();
         
         // grab a namespace
-        $config->set('Attr', 'Key', 0xBEEF);
         $this->assertIdentical(
-            $config->getBatch('Attr'),
+            $config->getBatch('Variables'),
             array(
-                'Key' => 0xBEEF
+                'TangentialAcceleration' => 'a_tan',
+                'AngularAcceleration' => 'alpha'
             )
         );
         
         // grab a non-existant namespace
-        $config->getBatch('FurnishedGoods');
-        $this->assertError('Cannot retrieve undefined namespace');
-        $this->assertNoErrors();
+        $this->expectError('Cannot retrieve undefined namespace');
+        $config->getBatch('Constants');
+        
+    }
+    
+    function test_loadIni() {
+        
+        CS::defineNamespace('Shortcut', 'Keyboard shortcuts for commands');
+        CS::define('Shortcut', 'Copy', 'c', 'istring', 'Copy text');
+        CS::define('Shortcut', 'Paste', 'v', 'istring', 'Paste clipboard');
+        CS::define('Shortcut', 'Cut', 'x', 'istring', 'Cut text');
+        
+        $config = HTMLPurifier_Config::createDefault();
+        
+        $config->loadIni(dirname(__FILE__) . '/ConfigTest-loadIni.ini');
+        
+        $this->assertIdentical($config->get('Shortcut', 'Copy'), 'q');
+        $this->assertIdentical($config->get('Shortcut', 'Paste'), 'p');
+        $this->assertIdentical($config->get('Shortcut', 'Cut'), 't');
         
     }
     
@@ -148,7 +242,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
             'Zoo', 'Others', array(), 'list', 'Other animals we have one of.'
         );
         
-        $config_manual = HTMLPurifier_Config::createDefault();
+        $config_manual   = HTMLPurifier_Config::createDefault();
         $config_loadabbr = HTMLPurifier_Config::createDefault();
         $config_loadfull = HTMLPurifier_Config::createDefault();
         
@@ -195,6 +289,10 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
         // test loadArray
         $created_config = HTMLPurifier_Config::create(array('Cake.Sprinkles' => 42));
+        $this->assertEqual($config, $created_config);
+        
+        // test loadIni
+        $created_config = HTMLPurifier_Config::create(dirname(__FILE__) . '/ConfigTest-create.ini');
         $this->assertEqual($config, $created_config);
         
     }

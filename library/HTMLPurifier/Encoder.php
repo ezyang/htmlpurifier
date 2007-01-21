@@ -6,13 +6,27 @@ HTMLPurifier_ConfigSchema::define(
     'Core', 'Encoding', 'utf-8', 'istring', 
     'If for some reason you are unable to convert all webpages to UTF-8, '. 
     'you can use this directive as a stop-gap compatibility change to '. 
-    'let HTMLPurifier deal with non UTF-8 input.  This technique has '. 
+    'let HTML Purifier deal with non UTF-8 input.  This technique has '. 
     'notable deficiencies: absolutely no characters outside of the selected '. 
     'character encoding will be preserved, not even the ones that have '. 
     'been ampersand escaped (this is due to a UTF-8 specific <em>feature</em> '.
     'that automatically resolves all entities), making it pretty useless '.
-    'for anything except the most I18N-blind applications.  This directive '.
+    'for anything except the most I18N-blind applications, although '.
+    '%Core.EscapeNonASCIICharacters offers fixes this trouble with '.
+    'another tradeoff. This directive '.
     'only accepts ISO-8859-1 if iconv is not enabled.'
+);
+
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'EscapeNonASCIICharacters', false, 'bool',
+    'This directive overcomes a deficiency in %Core.Encoding by blindly '.
+    'converting all non-ASCII characters into decimal numeric entities before '.
+    'converting it to its native encoding. This means that even '.
+    'characters that can be expressed in the non-UTF-8 encoding will '.
+    'be entity-ized, which can be a real downer for encodings like Big5. '.
+    'It also assumes that the ASCII repetoire is available, although '.
+    'this is the case for almost all encodings. Anyway, use UTF-8! This '.
+    'directive has been available since 1.4.0.'
 );
 
 if ( !function_exists('iconv') ) {
@@ -310,6 +324,7 @@ class HTMLPurifier_Encoder
         } elseif ($encoding === 'iso-8859-1') {
             return @utf8_encode($str);
         }
+        trigger_error('Encoding not supported', E_USER_ERROR);
     }
     
     /**
@@ -323,11 +338,63 @@ class HTMLPurifier_Encoder
         if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');
         if ($encoding === 'utf-8') return $str;
+        if ($config->get('Core', 'EscapeNonASCIICharacters')) {
+            $str = HTMLPurifier_Encoder::convertToASCIIDumbLossless($str);
+        }
         if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
             return @iconv('utf-8', $encoding . '//IGNORE', $str);
         } elseif ($encoding === 'iso-8859-1') {
             return @utf8_decode($str);
         }
+        trigger_error('Encoding not supported', E_USER_ERROR);
+    }
+    
+    /**
+     * Lossless (character-wise) conversion of HTML to ASCII
+     * @static
+     * @param $str UTF-8 string to be converted to ASCII
+     * @returns ASCII encoded string with non-ASCII character entity-ized
+     * @warning Adapted from MediaWiki, claiming fair use: this is a common
+     *       algorithm. If you disagree with this license fudgery,
+     *       implement it yourself.
+     * @note Uses decimal numeric entities since they are best supported.
+     * @note This is a DUMB function: it has no concept of keeping
+     *       character entities that the projected character encoding
+     *       can allow. We could possibly implement a smart version
+     *       but that would require it to also know which Unicode
+     *       codepoints the charset supported (not an easy task).
+     * @note Sort of with cleanUTF8() but it assumes that $str is
+     *       well-formed UTF-8
+     */
+    static function convertToASCIIDumbLossless($str) {
+        $bytesleft = 0;
+        $result = '';
+        $working = 0;
+        $len = strlen($str);
+        for( $i = 0; $i < $len; $i++ ) {
+            $bytevalue = ord( $str[$i] );
+            if( $bytevalue <= 0x7F ) { //0xxx xxxx
+                $result .= chr( $bytevalue );
+                $bytesleft = 0;
+            } elseif( $bytevalue <= 0xBF ) { //10xx xxxx
+                $working = $working << 6;
+                $working += ($bytevalue & 0x3F);
+                $bytesleft--;
+                if( $bytesleft <= 0 ) {
+                    $result .= "&#" . $working . ";";
+                }
+            } elseif( $bytevalue <= 0xDF ) { //110x xxxx
+                $working = $bytevalue & 0x1F;
+                $bytesleft = 1;
+            } elseif( $bytevalue <= 0xEF ) { //1110 xxxx
+                $working = $bytevalue & 0x0F;
+                $bytesleft = 2;
+            } else { //1111 0xxx
+                $working = $bytevalue & 0x07;
+                $bytesleft = 3;
+            }
+        }
+        return $result;
     }
     
     

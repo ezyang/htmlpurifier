@@ -15,7 +15,10 @@ and properties to allow. HTMLDefinition makes a big part of what HTMLPurifier
 is. 
 
 The idea, then, is to setup fundamentally different set of definitions, which
-can further be customized using simpler configuration options.
+can further be customized using simpler configuration options.  Alternatively,
+they could be implemented as configuration profiles, which simply load
+a set of recommended directives to acheive a desired affect (no simpler
+config options though).
 
 Here are some fuzzy levels you could set:
 

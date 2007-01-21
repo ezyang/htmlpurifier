@@ -40,6 +40,7 @@ class HTMLPurifier_AttrDef_CSSLength extends HTMLPurifier_AttrDef
         
         // we assume all units are two characters
         $unit = substr($length, $strlen - 2);
+        if (!ctype_lower($unit)) $unit = strtolower($unit);
         $number = substr($length, 0, $strlen - 2);
         
         if (!isset($this->units[$unit])) return false;

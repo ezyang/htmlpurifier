@@ -2,8 +2,8 @@
 Is HTML Purifier Strict or Transitional?
     A little bit of helpful guidance
 
-Despite the fact that HTML Purifier professes only to support transitional
-HTML, it rejects a lot of attributes and elements that are actually, indeed,
+Despite the fact that HTML Purifier professes to support both transitional and
+strict HTML, it rejects a lot of attributes and elements that are actually, indeed,
 valid. You can investigate progress.html to find out precisely what we
 are doing to these *deprecated* attributes.
 
@@ -11,8 +11,8 @@ However, users have found that Strict HTML imposes some quite unreasonable
 restrictions on certain things. The start and value attributes in ol and
 li (respectively) perhaps are the most contested. There's is currently no
 widely supported browser method short of JavaScript that can replace these
-two deprecated elements. HTML Purifier does not currently support them, but
-it might behoove us to do so while our output is still transitional.
+two deprecated elements. It behooves us to allow these deprecated
+attributes when the output is transitional.
 
 Fortunantely, that's the only real bugger case. The others have near-perfect
 CSS equivalents, and were presentational anyway. However, the other question
@@ -32,5 +32,6 @@ these loose-only constructs in loose mode:
 
 The changed child definitions as well as the ul.start li.value are the most
 compelling reasons why loose should be used.  We may want offer disabling <u>,
-<strike> and <s> by themselves.
+<strike> and <s> by themselves. We may also want to offer no pre-emptive
+deprecated conversions. This all must be unified.
 

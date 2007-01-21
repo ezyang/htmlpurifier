@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/AttrDef/CSSLength.php';
+require_once 'HTMLPurifier/AttrDefHarness.php';
 
 class HTMLPurifier_AttrDef_CSSLengthTest extends HTMLPurifier_AttrDefHarness
 {
@@ -20,6 +21,8 @@ class HTMLPurifier_AttrDef_CSSLengthTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('3mm');
         $this->assertDef('3pt');
         $this->assertDef('3pc');
+        
+        $this->assertDef('3PX', '3px');
         
         $this->assertDef('3', false);
         $this->assertDef('3miles', false);

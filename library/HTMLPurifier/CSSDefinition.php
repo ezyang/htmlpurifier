@@ -12,6 +12,8 @@ require_once 'HTMLPurifier/AttrDef/Font.php';
 require_once 'HTMLPurifier/AttrDef/Border.php';
 require_once 'HTMLPurifier/AttrDef/ListStyle.php';
 require_once 'HTMLPurifier/AttrDef/CSSURI.php';
+require_once 'HTMLPurifier/AttrDef/BackgroundPosition.php';
+require_once 'HTMLPurifier/AttrDef/Background.php';
 
 /**
  * Defines allowed CSS attributes and what their values are.
@@ -79,9 +81,7 @@ class HTMLPurifier_CSSDefinition
         $this->info['background-attachment'] = new HTMLPurifier_AttrDef_Enum(
             array('scroll', 'fixed')
         );
-        
-        // pending its own validator as a shorthand
-        $this->info['background'] = 
+        $this->info['background-position'] = new HTMLPurifier_AttrDef_BackgroundPosition();
         
         $border_color = 
         $this->info['border-top-color'] = 
@@ -92,6 +92,8 @@ class HTMLPurifier_CSSDefinition
             new HTMLPurifier_AttrDef_Enum(array('transparent')),
             new HTMLPurifier_AttrDef_Color()
         ));
+        
+        $this->info['background'] = new HTMLPurifier_AttrDef_Background($config);
         
         $this->info['border-color'] = new HTMLPurifier_AttrDef_Multiple($border_color);
         

@@ -106,6 +106,11 @@ class HTMLPurifier_ConfigSchema {
                 E_USER_ERROR);
             return;
         }
+        if (empty($description)) {
+            trigger_error('Description must be non-empty',
+                E_USER_ERROR);
+            return;
+        }
         if (isset($def->info[$namespace][$name])) {
             if (
                 $def->info[$namespace][$name]->type !== $type ||
@@ -158,6 +163,11 @@ class HTMLPurifier_ConfigSchema {
         }
         if (!ctype_alnum($namespace)) {
             trigger_error('Namespace name must be alphanumeric',
+                E_USER_ERROR);
+            return;
+        }
+        if (empty($description)) {
+            trigger_error('Description must be non-empty',
                 E_USER_ERROR);
             return;
         }
@@ -216,12 +226,66 @@ class HTMLPurifier_ConfigSchema {
                 E_USER_ERROR);
             return;
         }
-        if ($def->info[$namespace][$name]->allowed === true) {
-            $def->info[$namespace][$name]->allowed = array();
+        $directive =& $def->info[$namespace][$name];
+        $type = $directive->type;
+        if ($type != 'string' && $type != 'istring') {
+            trigger_error('Cannot define allowed values for directive whose type is not string',
+                E_USER_ERROR);
+            return;
+        }
+        if ($directive->allowed === true) {
+            $directive->allowed = array();
         }
         foreach ($allowed_values as $value) {
-            $def->info[$namespace][$name]->allowed[$value] = true;
+            $directive->allowed[$value] = true;
         }
+        if ($def->defaults[$namespace][$name] !== null &&
+            !isset($directive->allowed[$def->defaults[$namespace][$name]])) {
+            trigger_error('Default value must be in allowed range of variables',
+                E_USER_ERROR);
+            $directive->allowed = true; // undo undo!
+            return;
+        }
+    }
+    
+    /**
+     * Defines a directive alias for backwards compatibility
+     * @static
+     * @param $namespace
+     * @param $name Directive that will be aliased
+     * @param $new_namespace
+     * @param $new_name Directive that the alias will be to
+     */
+    static function defineAlias($namespace, $name, $new_namespace, $new_name) {
+        $def =& HTMLPurifier_ConfigSchema::instance();
+        if (!isset($def->info[$namespace])) {
+            trigger_error('Cannot define directive alias in undefined namespace',
+                E_USER_ERROR);
+            return;
+        }
+        if (!ctype_alnum($name)) {
+            trigger_error('Directive name must be alphanumeric',
+                E_USER_ERROR);
+            return;
+        }
+        if (isset($def->info[$namespace][$name])) {
+            trigger_error('Cannot define alias over directive',
+                E_USER_ERROR);
+            return;
+        }
+        if (!isset($def->info[$new_namespace][$new_name])) {
+            trigger_error('Cannot define alias to undefined directive',
+                E_USER_ERROR);
+            return;
+        }
+        if ($def->info[$new_namespace][$new_name]->class == 'alias') {
+            trigger_error('Cannot define alias to alias',
+                E_USER_ERROR);
+            return;
+        }
+        $def->info[$namespace][$name] =
+            new HTMLPurifier_ConfigEntity_DirectiveAlias(
+                $new_namespace, $new_name);
     }
     
     /**
@@ -318,12 +382,20 @@ class HTMLPurifier_ConfigSchema {
 /**
  * Base class for configuration entity
  */
-class HTMLPurifier_ConfigEntity {}
+class HTMLPurifier_ConfigEntity {
+    var $class = false;
+}
 
 /**
  * Structure object describing of a namespace
  */
 class HTMLPurifier_ConfigEntity_Namespace extends HTMLPurifier_ConfigEntity {
+    
+    function HTMLPurifier_ConfigEntity_Namespace($description = null) {
+        $this->description = $description;
+    }
+    
+    var $class = 'namespace';
     
     /**
      * String description of what kinds of directives go in this namespace.
@@ -339,15 +411,21 @@ class HTMLPurifier_ConfigEntity_Namespace extends HTMLPurifier_ConfigEntity {
 class HTMLPurifier_ConfigEntity_Directive extends HTMLPurifier_ConfigEntity
 {
     
-    /**
-     * Hash of value aliases, i.e. values that are equivalent.
-     */
-    var $aliases = array();
+    var $class = 'directive';
     
-    /**
-     * Lookup table of allowed values of the element, bool true if all allowed.
-     */
-    var $allowed = true;
+    function HTMLPurifier_ConfigEntity_Directive(
+        $type = null,
+        $descriptions = null,
+        $allow_null = null,
+        $allowed = null,
+        $aliases = null
+    ) {
+        if (        $type !== null)         $this->type = $type;
+        if ($descriptions !== null) $this->descriptions = $descriptions;
+        if (  $allow_null !== null)   $this->allow_null = $allow_null;
+        if (     $allowed !== null)      $this->allowed = $allowed;
+        if (     $aliases !== null)      $this->aliases = $aliases;
+    }
     
     /**
      * Allowed type of the directive. Values are:
@@ -364,16 +442,26 @@ class HTMLPurifier_ConfigEntity_Directive extends HTMLPurifier_ConfigEntity
     var $type = 'mixed';
     
     /**
-     * Is null allowed? Has no affect for mixed type.
+     * Plaintext descriptions of the configuration entity is. Organized by
+     * file and line number, so multiple descriptions are allowed.
+     */
+    var $descriptions = array();
+    
+    /**
+     * Is null allowed? Has no effect for mixed type.
      * @bool
      */
     var $allow_null = false;
     
     /**
-     * Plaintext descriptions of the configuration entity is. Organized by
-     * file and line number, so multiple descriptions are allowed.
+     * Lookup table of allowed values of the element, bool true if all allowed.
      */
-    var $descriptions = array();
+    var $allowed = true;
+    
+    /**
+     * Hash of value aliases, i.e. values that are equivalent.
+     */
+    var $aliases = array();
     
     /**
      * Adds a description to the array
@@ -383,6 +471,28 @@ class HTMLPurifier_ConfigEntity_Directive extends HTMLPurifier_ConfigEntity
         $this->descriptions[$file][$line] = $description;
     }
     
+}
+
+/**
+ * Structure object describing a directive alias
+ */
+class HTMLPurifier_ConfigEntity_DirectiveAlias extends HTMLPurifier_ConfigEntity
+{
+    var $class = 'alias';
+    
+    /**
+     * Namespace being aliased to
+     */
+    var $namespace;
+    /**
+     * Directive being aliased to
+     */
+    var $name;
+    
+    function HTMLPurifier_ConfigEntity_DirectiveAlias($namespace, $name) {
+        $this->namespace = $namespace;
+        $this->name = $name;
+    }
 }
 
 ?>

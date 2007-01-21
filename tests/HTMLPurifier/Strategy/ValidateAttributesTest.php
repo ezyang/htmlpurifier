@@ -154,7 +154,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<bdo dir="ltr">Invalid value!</bdo>'
         );
         
-        // comparison check for test 20
+        // see above, behavior is subtly different
         $this->assertResult(
             '<span dir="blahblah">Invalid value!</span>',
             '<span>Invalid value!</span>'

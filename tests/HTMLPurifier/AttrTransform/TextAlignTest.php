@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
+require_once 'HTMLPurifier/AttrTransformHarness.php';
 
 class HTMLPurifier_AttrTransform_TextAlignTest extends HTMLPurifier_AttrTransformHarness
 {

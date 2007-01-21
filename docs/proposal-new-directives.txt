@@ -4,8 +4,6 @@ Configuration Ideas
 Here are some theoretical configuration ideas that we could implement some
 time.  Note the naming convention: %Namespace.Directive
 
-%Attr.IDPrefix - prefix all ids with this
-
 %Attr.RewriteFragments - if there's %Attr.IDPrefix we may want to transparently
     rewrite the URLs we parse too.  However, we can only do it when it's a pure
     anchor link, so it's not foolproof
