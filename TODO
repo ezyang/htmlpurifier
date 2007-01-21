@@ -7,16 +7,14 @@ TODO List
     ? At-risk
 ==========================
 
-1.4 release
- - Aggressive caching
- ? Configuration profiles: sets of directives that get set with one func call
-
 1.5 release
  # Implement all non-essential attribute transforms
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
  # Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
  # Error logging for filtering/cleanup procedures
     - Requires I18N facilities to be created first (COMPLEX)
+ ? Configuration profiles: sets of directives that get set with one func call
+ - XSS-attempt detection
 
 1.6 release
  # Add pre-packaged "levels" of cleaning (custom behavior already done)
@@ -25,11 +23,26 @@ TODO List
       specification of elements that, when detected as foreign, trigger removal
       of children, although unbalanced tags could wreck havoc (or at least
       delete the rest of the document)).
+ - Allow specifying global attributes on a tag-by-tag basis in
+   %HTML.AllowAttributes
+ ? More user-friendly warnings when %HTML.Allow* attempts to specify a
+   tag or attribute that is not supported
+ - Parse TinyMCE whitelist into our %HTML.Allow* whitelists
 
 1.7 release
  # Additional support for poorly written HTML
     - Microsoft Word HTML cleaning (i.e. MsoNormal, but research essential!)
     - Friendly strict handling of <address> (block -> <br>)
+ - Remove redundant tags, ex. <u><u>Underlined</u></u>. Implementation notes:
+    1. Analyzing which tags to remove duplicants
+    2. Ensure attributes are merged into the parent tag
+    3. Extend the tag exclusion system to specify whether or not the
+    contents should be dropped or not (currently, there's code that could do
+    something like this if it didn't drop the inner text too.)
+ - Remove <span> tags that don't do anything (no attributes)
+ - Remove empty inline tags<i></i>
+ - Append something to duplicate IDs so they're still usable (impl. note: the
+   dupe detector would also need to detect the suffix as well)
 
 2.0 release
  # Legit token based CSS parsing (will require revamping almost every
@@ -46,6 +59,8 @@ TODO List
     - Hooks for adding custom processors to custom namespaced tags and
       attributes, offer default implementation
     - Lots of documentation and samples
+ - Allow tags to be "armored", an internal flag that protects them
+   from validation and passes them out unharmed
  - XHTML 1.1 support
 
 Ongoing
@@ -56,38 +71,20 @@ Ongoing
     - more! (look for ones that use WYSIWYGs)
 
 Unknown release (on a scratch-an-itch basis)
+ - Upgrade SimpleTest testing code to newest versions
  - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
  - Automatically add non-breaking spaces to empty table cells when
    empty-cells:show is applied to have compatibility with Internet Explorer
  - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
    Also, enable disabling of directionality
- - Append something to duplicate IDs so they're still usable (impl. note: the
-   dupe detector would also need to detect the suffix as well)
  - Have 'lang' attribute be checked against official lists
  ? Semi-lossy dumb alternate character encoding transformations, achieved by
    encoding all characters that have string entity equivalents
- - Upgrade SimpleTest testing code to newest version
- - Allow tags to be "armored", an internal flag that protects them
-   from validation and passes them out unharmed
 
 Requested
  ? Native content compression, whitespace stripping (don't rely on Tidy, make
    sure we don't remove from <pre> or related tags)
  ? Win32 Phalanger C# binaries
- - Remove redundant tags, ex. <u><u>Underlined</u></u>. Implementation notes:
-    1. Analyzing which tags to remove duplicants
-    2. Ensure attributes are merged into the parent tag
-    3. Extend the tag exclusion system to specify whether or not the
-    contents should be dropped or not (currently, there's code that could do
-    something like this if it didn't drop the inner text too.)
- ? More user-friendly warnings when %HTML.Allow* attempts to specify a
-   tag or attribute that is not supported
- - Allow specifying global attributes on a tag-by-tag basis in
-   %HTML.AllowAttributes
- - Parse TinyMCE whitelist into our %HTML.Allow* whitelists
- - XSS-attempt detection
- - Remove <span> tags that don't do anything (no attributes)
- - Remove empty inline tags<i></i>
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations (unless
