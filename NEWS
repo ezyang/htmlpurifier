@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+1.4.1, released 2007-01-21
+! docs/enduser-youtube.html updated according to new functionality
+- YouTube IDs can have underscores and dashes
+
 1.4.0, released 2007-01-21
 ! Implemented list-style-image, URIs now allowed in list-style
 ! Implemented background-image, background-repeat, background-attachment
