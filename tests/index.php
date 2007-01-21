@@ -27,6 +27,7 @@ require_once 'Debugger.php';
 // load convenience functions
 require_once 'generate_mock_once.func.php';
 require_once 'path2class.func.php';
+require_once 'tally_errors.func.php'; // compat
 
 // initialize PEAR (optional)
 if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {

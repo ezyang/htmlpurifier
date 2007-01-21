@@ -2,7 +2,9 @@
 
 require_once 'HTMLPurifier/ConfigSchema.php';
 
-class CS extends HTMLPurifier_ConfigSchema {} // alias for less keystrokes
+if (!class_exists('CS')) {
+    class CS extends HTMLPurifier_ConfigSchema {}
+}
 
 class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
 {
@@ -39,22 +41,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
     function tearDown() {
         // testing is done, restore the old copy
         HTMLPurifier_ConfigSchema::instance($this->old_copy);
-        $this->tallyErrors();
-    }
-    
-    function tallyErrors() {
-        // BRITTLE: relies on private code to work
-        $context = &SimpleTest::getContext();
-        $queue = &$context->get('SimpleErrorQueue');
-        if (!isset($queue->_expectation_queue)) return; // fut-compat
-        foreach ($queue->_expectation_queue as $e) {
-            if (count($e) != 2) return; // fut-compat
-            if (!isset($e[0])) return; // fut-compat
-            $e[0]->_dumper = &new SimpleDumper();
-            $this->fail('Error expectation not fulfilled: ' .
-                $e[0]->testMessage(null));
-        }
-        $queue->_expectation_queue = array();
+        tally_errors();
     }
     
     function test_defineNamespace() {
