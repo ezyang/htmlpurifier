@@ -88,14 +88,14 @@ class HTMLPurifier_AttrDef_BackgroundPosition extends HTMLPurifier_AttrDef
             }
             
             // test for length
-            $r = $this->length->validate($bit, $config, &$context);
+            $r = $this->length->validate($bit, $config, $context);
             if ($r !== false) {
                 $measures[] = $r;
                 $i++;
             }
             
             // test for percentage
-            $r = $this->percentage->validate($bit, $config, &$context);
+            $r = $this->percentage->validate($bit, $config, $context);
             if ($r !== false) {
                 $measures[] = $r;
                 $i++;
