@@ -18,6 +18,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added %Core.EscapeNonASCIICharacters to workaround loss of Unicode
   characters while %Core.Encoding is set to a non-UTF-8 encoding.
 ! Support for configuration directive aliases added
+! Config object can now be instantiated from ini files
 - Replaced version check with functionality check for DOM (thanks Stephen
   Khoo)
 . Added smoketest 'all.php', which loads all other smoketests via frames

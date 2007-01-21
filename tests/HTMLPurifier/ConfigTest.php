@@ -199,6 +199,23 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
     }
     
+    function test_loadIni() {
+        
+        CS::defineNamespace('Shortcut', 'Keyboard shortcuts for commands');
+        CS::define('Shortcut', 'Copy', 'c', 'istring', 'Copy text');
+        CS::define('Shortcut', 'Paste', 'v', 'istring', 'Paste clipboard');
+        CS::define('Shortcut', 'Cut', 'x', 'istring', 'Cut text');
+        
+        $config = HTMLPurifier_Config::createDefault();
+        
+        $config->loadIni(dirname(__FILE__) . '/ConfigTest-loadIni.ini');
+        
+        $this->assertIdentical($config->get('Shortcut', 'Copy'), 'q');
+        $this->assertIdentical($config->get('Shortcut', 'Paste'), 'p');
+        $this->assertIdentical($config->get('Shortcut', 'Cut'), 't');
+        
+    }
+    
     function test_getDefinition() {
         
         // we actually want to use the old copy, because the definition
@@ -272,6 +289,10 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
         // test loadArray
         $created_config = HTMLPurifier_Config::create(array('Cake.Sprinkles' => 42));
+        $this->assertEqual($config, $created_config);
+        
+        // test loadIni
+        $created_config = HTMLPurifier_Config::create(dirname(__FILE__) . '/ConfigTest-create.ini');
         $this->assertEqual($config, $created_config);
         
     }

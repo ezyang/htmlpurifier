@@ -10,8 +10,6 @@ TODO List
 1.4 release
  # Add hooks for custom behavior (for instance, YouTube preservation)
  - Aggressive caching
- - Upgrade SimpleTest testing code to newest version
- ? Rich set* methods and config file loaders for HTMLPurifier_Config
  ? Configuration profiles: sets of directives that get set with one func call
 
 1.5 release
@@ -69,6 +67,9 @@ Unknown release (on a scratch-an-itch basis)
  - Have 'lang' attribute be checked against official lists
  ? Semi-lossy dumb alternate character encoding transformations, achieved by
    encoding all characters that have string entity equivalents
+ - Upgrade SimpleTest testing code to newest version
+ - Allow tags to be "armored", an internal flag that protects them
+   from validation and passes them out unharmed
 
 Requested
  ? Native content compression, whitespace stripping (don't rely on Tidy, make

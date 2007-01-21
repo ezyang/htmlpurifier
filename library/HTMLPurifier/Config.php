@@ -48,14 +48,16 @@ class HTMLPurifier_Config
      * Convenience constructor that creates a config object based on a mixed var
      * @static
      * @param mixed $config Variable that defines the state of the config
-     *                      object. Can be: a HTMLPurifier_Config() object or
-     *                      an array of directives based on loadArray().
+     *                      object. Can be: a HTMLPurifier_Config() object,
+     *                      an array of directives based on loadArray(),
+     *                      or a string filename of an ini file.
      * @return Configured HTMLPurifier_Config object
      */
     function create($config) {
         if (is_a($config, 'HTMLPurifier_Config')) return $config;
         $ret = HTMLPurifier_Config::createDefault();
-        if (is_array($config)) $ret->loadArray($config);
+        if (is_string($config)) $ret->loadIni($config);
+        elseif (is_array($config)) $ret->loadArray($config);
         return $ret;
     }
     
@@ -191,6 +193,15 @@ class HTMLPurifier_Config
                 }
             }
         }
+    }
+    
+    /**
+     * Loads configuration values from an ini file
+     * @param $filename Name of ini file
+     */
+    function loadIni($filename) {
+        $array = parse_ini_file($filename, true);
+        $this->loadArray($array);
     }
     
 }
