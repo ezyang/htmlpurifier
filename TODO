@@ -8,7 +8,7 @@ TODO List
 ==========================
 
 1.5 release
- # Implement all non-essential attribute transforms
+ # Implement all non-essential attribute transforms, configurable
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
  # Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
  # Error logging for filtering/cleanup procedures
@@ -62,6 +62,11 @@ TODO List
  - Allow tags to be "armored", an internal flag that protects them
    from validation and passes them out unharmed
  - XHTML 1.1 support
+ - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
+ - Automatically add non-breaking spaces to empty table cells when
+   empty-cells:show is applied to have compatibility with Internet Explorer
+ - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
+   Also, enable disabling of directionality
 
 Ongoing
  - Lots of profiling, make it faster!
@@ -72,11 +77,6 @@ Ongoing
 
 Unknown release (on a scratch-an-itch basis)
  - Upgrade SimpleTest testing code to newest versions
- - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
- - Automatically add non-breaking spaces to empty table cells when
-   empty-cells:show is applied to have compatibility with Internet Explorer
- - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
-   Also, enable disabling of directionality
  - Have 'lang' attribute be checked against official lists
  ? Semi-lossy dumb alternate character encoding transformations, achieved by
    encoding all characters that have string entity equivalents
@@ -84,7 +84,6 @@ Unknown release (on a scratch-an-itch basis)
 Requested
  ? Native content compression, whitespace stripping (don't rely on Tidy, make
    sure we don't remove from <pre> or related tags)
- ? Win32 Phalanger C# binaries
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations (unless
