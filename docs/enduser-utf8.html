@@ -604,7 +604,75 @@ hounding you about broken pages.</p>
 
 <h3 id="whyutf8-htmlpurifier">HTML Purifier</h3>
 
-<p>And finally, we get to HTML Purifier.</p>
+<p>And finally, we get to HTML Purifier.  HTML Purifier is built to
+deal with UTF-8: any indications otherwise are the result of an
+encoder that converts text from your preferred encoding to UTF-8, and
+back again.  HTML Purifier never touches anything else, and leaves
+it up to the module iconv to do the dirty work.</p>
+
+<p>This approach, however, is not perfect. iconv is blithely unaware
+of HTML character entities. HTML Purifier, in order to
+protect against sophisticated escaping schemes, normalizes all character
+and numeric entities before processing the text. This leads to
+one important ramification:</p>
+
+<p><strong>Any character that is not supported by the target character
+set, regardless of whether or not it is in the form of a character
+entity or a raw character, will be silently ignored.</strong></p>
+
+<p>Example of this principle at work: say you have <code>&amp;theta;</code>
+in your HTML, but the output is in Latin-1 (which, understandably,
+does not understand Greek), the following process will occur (assuming you've
+set the encoding correctly using %Core.Encoding):</p>
+
+<ul>
+    <li>The <code>Encoder</code> will transform the text from ISO 8859-1 to UTF-8
+        (note that theta is preserved since it doesn't actually use
+        any non-ASCII characters): <code>&amp;theta;</code></li>
+    <li>The <code>EntityParser</code> will transform all named and numeric
+        character entities to their corresponding raw UTF-8 equivalents:
+        <code>&theta;</code></li>
+    <li>HTML Purifier processes the code: <code>&theta;</code></li>
+    <li>The <code>Encoder</code> now transforms the text back from UTF-8
+        to ISO 8859-1. Since Greek is not supported by ISO 8859-1, it
+        will be either ignored or replaced with a question mark:
+        <code>?</code></li>
+</ul>
+
+<p>This behaviour is quite unsatisfactory. It is a deal-breaker for
+I18N applications, and it can be mildly annoying for the provincial
+soul who occasionally needs a special character. Since 1.4.0, HTML
+Purifier has provided a slightly more palatable workaround using
+%Core.EscapeNonASCIICharacters. The process now looks like:</p>
+
+<ul>
+    <li>The <code>Encoder</code> transforms encoding to UTF-8: <code>&amp;theta;</code></li>
+    <li>The <code>EntityParser</code> transforms entities: <code>&theta;</code></li>
+    <li>HTML Purifier processes the code: <code>&theta;</code></li>
+    <li>The <code>Encoder</code> replaces all non-ASCII characters
+        with numeric entities: <code>&amp;#952;</code></li>
+    <li>For good measure, <code>Encoder</code> transforms encoding back to
+        original (which is strictly unnecessary for 99% of encodings
+        out there): <code>&amp;#952;</code> (remember, it's all ASCII!)</li>
+</ul>
+
+<p>...which means that this is only good for an occasional foray into
+the land of Unicode characters, and is totally unacceptable for Chinese
+or Japanese texts. The even bigger kicker is that, supposing the
+input encoding was actually ISO-8859-7, which <em>does</em> support
+theta, the character would get entity-ized anyway! (The Encoder does
+not discriminate).</p>
+
+<p>The current functionality is about where HTML Purifier will be for
+the rest of eternity. HTML Purifier could attempt to preserve the original
+form of the entities so that they could be substituted back in, only the
+DOM extension kills them off irreversibly. HTML Purifier could also attempt
+to be smart and only convert non-ASCII characters that weren't supported
+by the target encoding, but that would require reimplementing iconv
+with HTML awareness, something I will not do.</p>
+
+<p>So there: either it's UTF-8 or crippled I18N support. Your pick! (and I'm
+not being sarcastic here: some people could care less about other languages)</p>
 
 <h2 id="migrate">Migrate to UTF-8</h2>
 
@@ -617,6 +685,8 @@ hounding you about broken pages.</p>
 <h3 id="migrate-bom">Byte Order Mark (headers already sent!)</h3>
 
 <h3 id="migrate-variablewidth">Dealing with variable width in functions</h3>
+
+<h3 id="migrate-fonts">Fonts</h3>
 
 <h2 id="externallinks">Further Reading</h2>
 
