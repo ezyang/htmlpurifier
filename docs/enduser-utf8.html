@@ -572,7 +572,7 @@ Each method has deficiencies, especially the former.</p>
 the page, you still have the trouble of what to do with characters
 that are outside of the character encoding's range. The behavior, once
 again, varies: Firefox 2.0 entity-izes them while Internet Explorer
-7.0 mangles them beyond intelligibility. For serious I18N purposes,
+7.0 mangles them beyond intelligibility. For serious internationalization purposes,
 this is not an option.</p>
 
 <p>The other possibility is to set Accept-Encoding to UTF-8, which
@@ -640,7 +640,7 @@ set the encoding correctly using %Core.Encoding):</p>
 </ul>
 
 <p>This behaviour is quite unsatisfactory. It is a deal-breaker for
-I18N applications, and it can be mildly annoying for the provincial
+international applications, and it can be mildly annoying for the provincial
 soul who occasionally needs a special character. Since 1.4.0, HTML
 Purifier has provided a slightly more palatable workaround using
 %Core.EscapeNonASCIICharacters. The process now looks like:</p>
@@ -671,7 +671,7 @@ to be smart and only convert non-ASCII characters that weren't supported
 by the target encoding, but that would require reimplementing iconv
 with HTML awareness, something I will not do.</p>
 
-<p>So there: either it's UTF-8 or crippled I18N support. Your pick! (and I'm
+<p>So there: either it's UTF-8 or crippled international support. Your pick! (and I'm
 not being sarcastic here: some people could care less about other languages)</p>
 
 <h2 id="migrate">Migrate to UTF-8</h2>
@@ -746,7 +746,7 @@ Doing so can save you some huge headaches:</p>
         and attempting to convert your text when you don't want it to.</li>
 </ul>
 
-<p>MediaWiki, a very prominent I18N application, uses binary fields
+<p>MediaWiki, a very prominent international application, uses binary fields
 for storing their data because of point three.</p>
 
 <p>There are drawbacks, of course:</p>
