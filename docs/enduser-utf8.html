@@ -676,17 +676,161 @@ not being sarcastic here: some people could care less about other languages)</p>
 
 <h2 id="migrate">Migrate to UTF-8</h2>
 
-<h3 id="migrate-editor">Text editor</h3>
+<p>So, you've decided to bite the bullet, and want to migrate to UTF-8.
+Note that this is not for the faint-hearted, and you should expect
+the process to take longer than you think it will take.</p>
+
+<p>The general idea is that you convert all existing text to UTF-8,
+and then you set all the headers and META tags we discussed earlier
+to UTF-8. There are many ways going about doing this: you could
+write a conversion script that runs through the database and re-encodes
+everything as UTF-8 or you could do the conversion on the fly when someone
+reads the page. The details depend on your system, but I will cover
+some of the more subtle points of migration that may trip you up.</p>
 
 <h3 id="migrate-db">Configuring your database</h3>
 
-<h3 id="migrate-convert">Convert old text</h3>
+<p>Most modern databases, the most prominent open-source ones being MySQL
+4.1+ and PostgreSQL, support character encodings. If you're switching
+to UTF-8, logically speaking, you'd want to make sure your database
+knows about the change too. There are some caveats though:</p>
+
+<h4 id="migrate-db-legit">Legit method</h4>
+
+<p>Standardization in terms of SQL syntax for specifying character
+encodings is notoriously spotty. Refer to your respective database's
+documentation on how to do this properly.</p>
+
+<p>For <a href="http://dev.mysql.com/doc/refman/5.0/en/charset-conversion.html">MySQL</a>, <code>ALTER</code> will magically perform the
+character encoding conversion for you. However, you have
+to make sure that the text inside the column is what is says it is:
+if you had put Shift-JIS in an ISO 8859-1 column, MySQL will irreversibly mangle
+the text when you try to convert it to UTF-8. You'll have to convert
+it to a binary field, convert it to a Shift-JIS field (the real encoding),
+and then finally to UTF-8. Many a website had pages irreversibly mangled
+because they didn't realize that they'd been deluding themselves about
+the character encoding all along, don't become the next victim.</p>
+
+<p>For <a href="http://www.postgresql.org/docs/8.2/static/multibyte.html">PostgreSQL</a>, there appears to be no direct way to change the
+encoding of a database (as of 8.2). You will have to dump the data, and then reimport
+it into a new table. Make sure that your client encoding is set properly:
+this is how PostgreSQL knows to perform an encoding conversion.</p>
+
+<p>Many times, you will be also asked about the &quot;collation&quot; of
+the new column. Collation is how a DBMS sorts text, like ordering
+B, C and A into A, B and C (the problem gets surprisingly complicated
+when you get to languages like Thai and Japanese). If in doubt,
+going with the default setting is usually a safe bet.</p>
+
+<p>Once the conversion is all said and done, you still have to remember
+to set the client encoding (your encoding) properly on each database
+connection using <code>SET NAMES</code> (which is standard SQL and is
+usually supported).</p>
+
+<h4 id="migrate-db-binary">Binary</h4>
+
+<p>Due to the abovementioned compatibility issues, a more interoperable
+way of storing UTF-8 text is to stuff it in a binary datatype.
+<code>CHAR</code> becomes <code>BINARY</code>, <code>VARCHAR</code> becomes
+<code>VARBINARY</code> and <code>TEXT</code> becomes <code>BLOB</code>.
+Doing so can save you some huge headaches:</p>
+
+<ul>
+    <li>The syntax for binary data types is very portable,</li>
+    <li>MySQL 4.0 has <em>no</em> support for character encodings, so
+        if you want to support it you <em>have</em> to use binary,</li>
+    <li>MySQL, as of 5.1, has no support for four byte UTF-8 characters,
+        which represent characters beyond the basic multilingual
+        plane, and</li>
+    <li>You will never have to worry about your DBMS being too smart
+        and attempting to convert your text when you don't want it to.</li>
+</ul>
+
+<p>MediaWiki, a very prominent I18N application, uses binary fields
+for storing their data because of point three.</p>
+
+<p>There are drawbacks, of course:</p>
+
+<ul>
+    <li>Database tools like PHPMyAdmin won't be able to offer you inline
+        text editing, since it is declared as binary,</li>
+    <li>It's not semantically correct: it's really text not binary
+        (lying to the database),</li>
+    <li>Unless you use the not-very-portable wizardry mentioned above,
+        you have to change the encoding yourself (usually, you'd do
+        it on the fly), and</li>
+    <li>You will not have collation.</li>
+</ul>
+
+<p>Choose based on your circumstances.</p>
+
+<h3 id="migrate-editor">Text editor</h3>
+
+<p>For more flat-file oriented systems, you will often be tasked with
+converting reams of existing text and HTML files into UTF-8, as well as
+making sure that all new files uploaded are properly encoded. Once again,
+I can only point vaguely in the right direction for converting your
+existing files: make sure you backup, make sure you use
+<a href="http://php.net/ref.iconv">iconv</a>(), and
+make sure you know what the original character encoding of the files
+is (or are, depending on the tidiness of your system).</p>
+
+<p>However, I can proffer more specific advice on the subject of
+text editors. Many text editors have notoriously spotty Unicode support.
+To find out how your editor is doing, you can check out <a
+href="http://www.alanwood.net/unicode/utilities_editors.html">this list</a>
+or <a href="http://en.wikipedia.org/wiki/Comparison_of_text_editors#Encoding_support">Wikipedia's list.</a>
+I personally use Notepad++, which works like a charm when it comes to UTF-8.
+You will usually have to <strong>explicitly</strong> tell the editor through some dialogue
+(usually Save as or Format) what encoding you want it to use. An editor
+will often offer &quot;Unicode&quot; as a method of saving, which is
+ambiguous. Make sure you know whether or not they really mean UTF-8
+or UTF-16 (which is another flavor of Unicode).</p>
+
+<p>The two things to look out for are whether or not the editor
+supports <strong>font mixing</strong> (multiple
+fonts in one document) and whether or not it adds a <strong>BOM</strong>.
+Font mixing is important because fonts rarely have support for every
+language known to mankind: in order to be flexible, an editor must
+be able to take a little from here and a little from there, otherwise
+all your Chinese characters will come as nice boxes. We'll discuss
+BOM below.</p>
 
 <h3 id="migrate-bom">Byte Order Mark (headers already sent!)</h3>
 
-<h3 id="migrate-variablewidth">Dealing with variable width in functions</h3>
+<p>The BOM, or <a href="http://en.wikipedia.org/wiki/Byte_Order_Mark">Byte
+Order Mark</a>, is a magical, invisible character placed at
+the beginning of UTF-8 files to tell people what the encoding is and
+what the endianness of the text is. It is also unnecessary.</p>
+
+<p>Because it's invisible, it often
+catches people by surprise when it starts doing things it shouldn't
+be doing. For example, this PHP file:</p>
+
+<pre><strong>BOM</strong>&lt;?php
+header('Location: index.php');
+?&gt;</pre>
+
+<p>...will fail with the all too familiar <strong>Headers already sent</strong>
+PHP error. And because the BOM is invisible, this culprit will go unnoticed.
+My suggestion is to only use ASCII in PHP pages, but if you must, make
+sure the page is saved WITHOUT the BOM.</p>
+
+<blockquote class="aside">
+    <p>The headers the error is referring to are <strong>HTTP headers</strong>,
+       which are sent to the browser before any HTML to tell it various
+       information. The moment any regular text (and yes, a BOM counts as
+       ordinary text) is output, the headers must be sent, and you are
+       not allowed to send anymore. Thus, the error.</p>
+</blockquote>
+
+<p>If you are reading in text files to insert into the middle of another
+page, it is strongly advised that you replace out the UTF-8 byte 
+sequence for BOM <code>&quot;\xEF\xBB\xBF&quot;</code> before inserting it in.</p>
 
 <h3 id="migrate-fonts">Fonts</h3>
+
+<h3 id="migrate-variablewidth">Dealing with variable width in functions</h3>
 
 <h2 id="externallinks">Further Reading</h2>
 
