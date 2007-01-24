@@ -9,6 +9,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+1.4.2, unknown release date
+! docs/enduser-utf8.html explains how to use UTF-8 and HTML Purifier
+
 1.4.1, released 2007-01-21
 ! docs/enduser-youtube.html updated according to new functionality
 - YouTube IDs can have underscores and dashes

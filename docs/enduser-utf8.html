@@ -32,8 +32,14 @@ the fact that it operates UTF-8 or the limitations of the character
 encoding transformations it does. This document will walk you through
 determining the encoding of your system and how you should handle
 this information. It will stay away from excessive discussion on
-the internals of character encoding, but offer the information in
-asides that can easily be skipped.</p>
+the internals of character encoding.</p>
+
+<p>This document is not designed to be read from top to bottom: it will
+slowly introduce concepts that build on each other: you need not get to
+the bottom to have learned something new. However, I strongly
+recommend you read all the way to <strong>Why UTF-8?</strong>, because at least
+at that point you'd have made a conscious decision not to migrate,
+which can be a difficult but rewarding task.</p>
 
 <blockquote class="aside">
 <div class="label">Asides</div>
@@ -42,6 +48,50 @@ asides that can easily be skipped.</p>
     do the tutorial. If you read this text, you'll come out
     with a greater understanding of the underlying issues.</p>
 </blockquote>
+
+<h2>Table of Contents</h2>
+
+<ol id="toc">
+    <li><a href="#findcharset">Finding the real encoding</a></li>
+    <li><a href="#findmetacharset">Finding the embedded encoding</a></li>
+    <li><a href="#fixcharset">Fixing the encoding</a><ol>
+        <li><a href="#fixcharset-none">No embedded encoding</a></li>
+        <li><a href="#fixcharset-diff">Embedded encoding disagrees</a></li>
+        <li><a href="#fixcharset-server">Changing the server encoding</a><ol>
+            <li><a href="#fixcharset-server-php">PHP header() function</a></li>
+            <li><a href="#fixcharset-server-phpini">PHP ini directive</a></li>
+            <li><a href="#fixcharset-server-nophp">Non-PHP</a></li>
+            <li><a href="#fixcharset-server-htaccess">.htaccess</a></li>
+            <li><a href="#fixcharset-server-ext">File extensions</a></li>
+        </ol></li>
+        <li><a href="#fixcharset-xml">XML</a></li>
+        <li><a href="#fixcharset-internals">Inside the process</a></li>
+    </ol></li>
+    <li><a href="#whyutf8">Why UTF-8?</a><ol>
+        <li><a href="#whyutf8-i18n">Internationalization</a></li>
+        <li><a href="#whyutf8-user">User-friendly</a></li>
+        <li><a href="#whyutf8-forms">Forms</a><ol>
+            <li><a href="#whyutf8-forms-urlencoded">application/x-www-form-urlencoded</a></li>
+            <li><a href="#whyutf8-forms-multipart">multipart/form-data</a></li>
+        </ol></li>
+        <li><a href="#whyutf8-support">Well supported</a></li>
+        <li><a href="#whyutf8-htmlpurifier">HTML Purifiers</a></li>
+    </ol></li>
+    <li><a href="#migrate">Migrate to UTF-8</a><ol>
+        <li><a href="#migrate-db">Configuring your database</a><ol>
+            <li><a href="#migrate-db-legit">Legit method</a></li>
+            <li><a href="#migrate-db-binary">Binary</a></li>
+        </ol></li>
+        <li><a href="#migrate-editor">Text editor</a></li>
+        <li><a href="#migrate-bom">Byte Order Mark (headers already sent!)</a></li>
+        <li><a href="#migrate-fonts">Fonts</a><ol>
+            <li><a href="#migrate-fonts-obscure">Obscure scripts</a></li>
+            <li><a href="#migrate-fonts-occasional">Occasional use</a></li>
+        </ol></li>
+        <li><a href="#migrate-variablewidth">Dealing with variable width in functions</a></li>
+    </ol></li>
+    <li><a href="#externallinks">Further Reading</a></li>
+</ol>
 
 <h2 id="findcharset">Finding the real encoding</h2>
 
@@ -401,7 +451,7 @@ ISO-8859-1 encoding (you see this in garbled RSS feeds).</p>
 trouble of adding the XML header, make sure it jives
 with your <code>META</code> tags and HTTP headers.</p>
 
-<h3>Inside the process</h3>
+<h3 id="fixcharset-internals">Inside the process</h3>
 
 <p>This section is not required reading,
 but may answer some of your questions on what's going on in all
@@ -781,7 +831,7 @@ To find out how your editor is doing, you can check out <a
 href="http://www.alanwood.net/unicode/utilities_editors.html">this list</a>
 or <a href="http://en.wikipedia.org/wiki/Comparison_of_text_editors#Encoding_support">Wikipedia's list.</a>
 I personally use Notepad++, which works like a charm when it comes to UTF-8.
-You will usually have to <strong>explicitly</strong> tell the editor through some dialogue
+Usually, you will have to <strong>explicitly</strong> tell the editor through some dialogue
 (usually Save as or Format) what encoding you want it to use. An editor
 will often offer &quot;Unicode&quot; as a method of saving, which is
 ambiguous. Make sure you know whether or not they really mean UTF-8
@@ -825,14 +875,152 @@ sure the page is saved WITHOUT the BOM.</p>
 </blockquote>
 
 <p>If you are reading in text files to insert into the middle of another
-page, it is strongly advised that you replace out the UTF-8 byte 
-sequence for BOM <code>&quot;\xEF\xBB\xBF&quot;</code> before inserting it in.</p>
+page, it is strongly advised (but not strictly necessary) that you replace out the UTF-8 byte 
+sequence for BOM <code>&quot;\xEF\xBB\xBF&quot;</code> before inserting it in,
+via:</p>
+
+<pre>$text = str_replace(&quot;\xEF\xBB\xBF&quot;, '', $text);</pre>
 
 <h3 id="migrate-fonts">Fonts</h3>
 
+<p>Generally speaking, people who are having trouble with fonts fall
+into two categories:</p>
+
+<ul>
+<li>Those who want to
+use an extremely obscure language for which there is very little
+support even among native speakers of the language, and</li>
+<li>Those where the primary language of the text is
+well-supported but there are occasional characters
+that aren't supported.</li>
+</ul>
+
+<p>Yes, there's always a chance where an English user happens across
+a Sinhalese website and doesn't have the right font. But an English user
+who happens not to have the right fonts probably has no business reading Sinhalese
+anyway. So we'll deal with the other two edge cases.</p>
+
+<h4 id="migrate-fonts-obscure">Obscure scripts</h4>
+
+<p>If you run a Bengali website, you may get comments from users who
+would like to read your website but get heaps of question marks or
+other meaningless characters. Fixing this problem requires the
+installation of a font or language pack which is often highly
+dependent on what the language is. <a href="http://bn.wikipedia.org/wiki/%E0%A6%89%E0%A6%87%E0%A6%95%E0%A6%BF%E0%A6%AA%E0%A7%87%E0%A6%A1%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE:Bangla_script_display_help">Here is an example</a>
+of such a help file for the Bengali language, I am sure there are
+others out there too. You just have to point users to the appropriate
+help file.</p>
+
+<h4 id="migrate-fonts-occasional">Occasional use</h4>
+
+<p>A prime example of when you'll see some very obscure Unicode
+characters embedded in what otherwise would be very bland ASCII are
+letters of the
+<a href="http://en.wikipedia.org/wiki/International_Phonetic_Alphabet">International
+Phonetic Alphabet (IPA)</a>, use to designate pronounciations in a very standard
+manner (you probably see them all the time in your dictionary). Your
+average font probably won't have support for all of the IPA characters
+like &#664; (bilabial click) or &#658; (voiced postalveolar fricative).
+So what's a poor browser to do? Font mix! Smart browsers like Mozilla Firefox
+and Internet Explorer 7 will borrow glyphs from other fonts in order
+to make sure that all the characters display properly.</p>
+
+<p>But what happens when the browser isn't smart and happens to be the
+most widely used browser in the entire world? Microsoft IE 6
+is not smart enough to borrow from other fonts when a character isn't
+present, so more often than not you'll be slapped with a nice big &#65533;.
+To get things to work, MSIE 6 needs a little nudge. You could configure it
+to use a different font to render the text, but you can acheive the same
+effect by selectively changing the font for blocks of special characters
+to known good Unicode fonts.</p>
+
+<p>Fortunantely, the folks over at Wikipedia have already done all the
+heavy lifting for you. Get the CSS from the horses mouth here:
+<a href="http://en.wikipedia.org/wiki/MediaWiki:Common.css">Common.css</a>,
+and search for &quot;.IPA&quot; There are also a smattering of
+other classes you can use for other purposes, check out 
+<a href="http://meta.wikimedia.org/wiki/Help:Special_characters#Displaying_Special_Characters">this page</a>
+for more details. For you lazy ones, this should work:</p>
+
+<pre>.Unicode {
+        font-family: Code2000, &quot;TITUS Cyberbit Basic&quot;, &quot;Doulos SIL&quot;,
+            &quot;Chrysanthi Unicode&quot;, &quot;Bitstream Cyberbit&quot;,
+            &quot;Bitstream CyberBase&quot;, Thryomanes, Gentium, GentiumAlt,
+            &quot;Lucida Grande&quot;, &quot;Arial Unicode MS&quot;, &quot;Microsoft Sans Serif&quot;,
+            &quot;Lucida Sans Unicode&quot;;
+        font-family /**/:inherit; /* resets fonts for everyone but IE6 */
+}</pre>
+
+<p>The standard usage goes along the lines of <code>&lt;span class=&quot;Unicode&quot;&gt;Crazy
+Unicode stuff here&lt;/span&gt;</code>. Characters in the
+<a href="http://en.wikipedia.org/wiki/Windows_Glyph_List_4">Windows Glyph List</a>
+usually don't need to be fixed, but for anything else you probably
+want to play it safe. Unless, of course, you don't care about IE6
+users.</p>
+
 <h3 id="migrate-variablewidth">Dealing with variable width in functions</h3>
 
+<p>When people claim that PHP6 will solve all our Unicode problems, they're
+misinformed. It will not fix any of the abovementioned troubles. It will,
+however, fix the problem we are about to discuss: processing UTF-8 text
+in PHP.</p>
+
+<p>PHP (as of PHP5) is blithely unaware of the existence of UTF-8 (with a few
+notable exceptions). Sometimes, this will cause problems, other times,
+this won't. So far, we've avoided discussing the architecture of
+UTF-8, so, we must first ask, what is UTF-8? Yes, it supports Unicode,
+and yes, it is variable width. Other traits:</p>
+
+<ul>
+    <li>Every character's byte sequence is unique and will never be found
+        inside the byte sequence of another character,</li>
+    <li>UTF-8 may use up to four bytes to encode a character,</li>
+    <li>UTF-8 text must be checked for well-formedness,</li>
+    <li>Pure ASCII is also valid UTF-8, and</li>
+    <li>Binary sorting will sort UTF-8 in the same order as Unicode.</li>
+</ul>
+
+<p>Each of these traits affect different domains of text processing
+in different ways. It is beyond the scope of this document to explain
+what precisely these implications are. PHPWact provides
+a very good <a href="http://www.phpwact.org/php/i18n/utf-8">reference document</a>
+on what to expect from each functions, although coverage is spotty in
+some areas. Their more general notes on
+<a href="http://www.phpwact.org/php/i18n/charsets">character sets</a>
+are also worth looking at for information on UTF-8. Some rules of thumb
+when dealing with Unicode text:</p>
+
+<ul>
+    <li>Do not EVER use functions that:<ul>
+        <li>...convert case (strtolower, strtoupper, ucfirst, ucwords)</li>
+        <li>...claim to be case-insensitive (str_ireplace, stristr, strcasecmp)</li>
+    </ul></li>
+    <li>Think twice before using functions that:<ul>
+        <li>...count characters (strlen will return bytes, not characters;
+            str_split and word_wrap may corrupt)</li>
+        <li>...entity-ize things (UTF-8 doesn't need entities)</li>
+        <li>...do very complex string processing (*printf)</li>
+    </ul></li>
+</ul>
+
+<p>...and always think in bytes, not characters. If you use strpos()
+to find the position of a character, it will be in bytes, but this
+usually won't matter since substr() also operates with byte indices!</p>
+
+<p>You'll also need to make sure your UTF-8 is well-formed and will
+probably need replacements for some of these functions. I recommend
+using Harry Fuecks' <a href="http://phputf8.sourceforge.net/">PHP
+UTF-8</a> library, rather than use mb_string directly. HTML Purifier
+also defines a few useful UTF-8 compatible functions: check out
+<code>Encoder.php</code> in the <code>/library/HTMLPurifier/</code>
+directory.</p>
+
 <h2 id="externallinks">Further Reading</h2>
+
+<p>Well, that's it. Hopefully this document has served as a very
+practical springboard into knowledge of how UTF-8 works.  You may have
+decided that you don't want to migrate yet: that's fine, just know
+what will happen to your output and what bug reports you may recieve.</p>
 
 <p>Many other developers have already discussed the subject of Unicode,
 UTF-8 and internationalization, and I would like to defer to them for
