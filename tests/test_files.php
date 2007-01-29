@@ -64,6 +64,8 @@ $test_files[] = 'EntityParserTest.php';
 $test_files[] = 'Test.php';
 $test_files[] = 'ContextTest.php';
 $test_files[] = 'PercentEncoderTest.php';
+$test_files[] = 'LanguageFactoryTest.php';
+$test_files[] = 'LanguageTest.php';
 
 if (version_compare(PHP_VERSION, '5', '>=')) {
     $test_files[] = 'TokenFactoryTest.php';

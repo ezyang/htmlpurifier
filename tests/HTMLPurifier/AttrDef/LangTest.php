@@ -54,6 +54,8 @@ class HTMLPurifier_AttrDef_LangTest extends HTMLPurifier_AttrDefHarness
             // Also note that this test-case tests fix-behavior: chop
             // off subtags until you get a valid language code.
         $this->assertDef('en-a', 'en');
+            // however, x is a reserved single-letter subtag that is allowed
+        $this->assertDef('en-x', 'en-x');
             // 2-8 chars are permitted, but have special meaning that cannot
             // be checked without maintaining country code lookup tables (for
             // two characters) or special registration tables (for all above).

@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+1.5.0, unknown release date
+! Added a rudimentary I18N and L10N system modeled off MediaWiki
+- Allow 'x' subtag in language codes
+
 1.4.2, unknown release date
 ! docs/enduser-utf8.html explains how to use UTF-8 and HTML Purifier
 
