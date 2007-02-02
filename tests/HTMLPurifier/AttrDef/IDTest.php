@@ -74,6 +74,25 @@ class HTMLPurifier_AttrDef_IDTest extends HTMLPurifier_AttrDefHarness
         
     }
     
+    function testIDReference() {
+        
+        $this->def = new HTMLPurifier_AttrDef_ID(true);
+        
+        $this->assertDef('good_id');
+        $this->assertDef('good_id'); // duplicates okay
+        $this->assertDef('<b>', false);
+        
+        $this->def = new HTMLPurifier_AttrDef_ID();
+        
+        $this->assertDef('good_id');
+        $this->assertDef('good_id', false); // duplicate now not okay
+        
+        $this->def = new HTMLPurifier_AttrDef_ID(true);
+        
+        $this->assertDef('good_id'); // reference still okay
+        
+    }
+    
 }
 
 ?>

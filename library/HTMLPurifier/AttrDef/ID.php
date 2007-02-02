@@ -39,6 +39,20 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
 {
     
+    /**
+     * Is the ID an actual ID, or a reference to one?
+     * @note IDAccumulator checking is disabled for references
+     * @bool
+     */
+    var $ref = false;
+    
+    /**
+     * @param $ref bool indication if it's ID or IDREF
+     */
+    function HTMLPurifier_AttrDef_ID($ref = false) {
+        $this->ref = $ref;
+    }
+    
     function validate($id, $config, &$context) {
         
         $id = trim($id); // trim it first
@@ -55,8 +69,10 @@ class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
                 '%Attr.IDPrefix is set', E_USER_WARNING);
         }
         
-        $id_accumulator =& $context->get('IDAccumulator');
-        if (isset($id_accumulator->ids[$id])) return false;
+        if (!$this->ref) {
+            $id_accumulator =& $context->get('IDAccumulator');
+            if (isset($id_accumulator->ids[$id])) return false;
+        }
         
         // we purposely avoid using regex, hopefully this is faster
         
@@ -71,7 +87,7 @@ class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
             $result = ($trim === '');
         }
         
-        if ($result) $id_accumulator->add($id);
+        if (!$this->ref && $result) $id_accumulator->add($id);
         
         // if no change was made to the ID, return the result
         // else, return the new id if stripping whitespace made it
