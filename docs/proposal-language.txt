@@ -1,42 +1,6 @@
 We are going to model our I18N/L10N off of MediaWiki's system.  Their's is
 obviously quite complicated, so we're going to simplify it a bit for our needs.
 
-== Structure ==
-
-First, you have a Language object.  This object contains all the localisable
-message strings, as well as other important language-specific settings and
-custom behavior (uppercasing, lowercasing, printing dates, formatting
-numbers, etc.)
-
-The object is constructed from two sources: subclassed versions of itself
-(classes) and Message files (messages).
-
-== General use ==
-
-You load a language object by calling the Language::factory() function. 
-This function the class file for the object (taking in account fallback 
-languages by using the fallback langauge's object but overloading the 
-language key) and returns that object. Nothing else happens.
-
-When a message/etc is requested, a lazy load initializor is called.  Now the
-real work starts.  We're first going to take the scenario that the language
-is not cached.  The system loads the Messages file by:
-
-    require( $filename );
-    $cache = compact( self::$mLocalisationKeys );	
-
-...where self::$mLocalisationKeys is the name of variables that could be used
-in the localization file. This lets you use things like:
-
-    $fallback = false;
-    $rtl = false;
-
-...and easily siphon them into arrays.
-
-Then, we load the $fallback language (if not set, English) to fill in the gaps in
-the messages.  There is specialized behavior for certain keys, as they can be
-mergeable maps, lists or alias lists (not sure what the last one is).
-
 == Caching ==
 
 MediaWiki has lots of caching mechanisms built in, which make the code somewhat

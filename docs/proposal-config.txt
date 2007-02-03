@@ -36,4 +36,5 @@ the definition, you'd have to force reconstruction.
 
 In practice, the pulling directives from the config object are
 solely need-based, and the flex points are littered throughout the
-setup() function.  Some sort of refactoring is likely in order.
+setup() function.  Some sort of refactoring is likely in order. See
+ref-xhtml-1.1.txt for more info.

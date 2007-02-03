@@ -7,15 +7,138 @@ It's quite simple, according to <http://www.w3.org/TR/xhtml11/changes.html>
 2. Scratch name entirely in favor of id (partially-done)
 3. Support Ruby <http://www.w3.org/TR/2001/REC-ruby-20010531/>
 
-...but that's only an informative section. More things to do:
-
-1. Scratch style attribute (it's deprecated)
-2. Be module-aware (this might entail intelligent grouping in the definition
-   and allowing users to specifically remove certain modules (see 5))
-3. Cross-reference minimal content models with existing DTDs and determine
-   changes (todo)
-4. Watch out for the Legacy Module
-<http://www.w3.org/TR/2001/REC-xhtml-modularization-20010410/abstract_modules.html#s_legacymodule>
-5. Let users specify their own custom modules
-6. Study Modularization document
+...but that's only an informative section. The true power of XHTML 1.1
+is its modularization, defined at:
 <http://www.w3.org/TR/2001/REC-xhtml-modularization-20010410/>
+
+Modularization may very well be the next-generation implementation
+of HTMLDefinition. The current, XHTML 1.0 DTD-based approach is
+extremely brittle and doesn't lend well to extension by others, but
+modularization fixes all that. The modules W3C defines that we
+should take a look at are:
+
+    * 5.1. Attribute Collections
+    * 5.2. Core Modules
+          o 5.2.2. Text Module
+          o 5.2.3. Hypertext Module
+          o 5.2.4. List Module
+    * 5.4. Text Extension Modules
+          o 5.4.1. Presentation Module
+          o 5.4.2. Edit Module
+          o 5.4.3. Bi-directional Text Module
+    * 5.6. Table Modules
+          o 5.6.1. Basic Tables Module [?]
+          o 5.6.2. Tables Module
+    * 5.7. Image Module
+    * 5.8. Client-side Image Map Module [?]
+    * 5.9. Server-side Image Map Module [?]
+    * 5.12. Target Module [?]
+    * 5.18. Style Attribute Module
+    * 5.21. Name Identification Module [deprecated]
+    * 5.22. Legacy Module [deprecated]
+
+We exclude these modules due to their dangerousness or inapplicability
+as a XHTML fragment:
+
+    * 5.2. Core Modules
+          o 5.2.1. Structure Module
+    * 5.3. Applet Module
+    * 5.5. Forms Modules
+          o 5.5.1. Basic Forms Module
+          o 5.5.2. Forms Module
+    * 5.10. Object Module
+    * 5.11. Frames Module
+    * 5.13. Iframe Module
+    * 5.14. Intrinsic Events Module
+    * 5.15. Metainformation Module
+    * 5.16. Scripting Module
+    * 5.17. Style Sheet Module
+    * 5.19. Link Module
+    * 5.20. Base Module
+
+Modularization also defines content sets:
+
+    * Heading
+    * Block
+    * Inline
+    * Flow {Heading | Block | Inline}
+    * List
+    * Form [x]
+    * Formctrl [x]
+
+Which may have elements dynamically added to them as more modules get
+added.
+
+== Implementation Details ==
+
+We will not be using the XML Schemas or DTDs directly due to the lack
+of robust tools in the area.
+
+Since we will be performing a lot of abstracting, caching would be nice. Cache
+invalidation could be done by comparing the HTML and Attr config namespaces
+with a copy that was packaged along with this (we have no files to mtime)
+
+We also have the trouble of preserving the current interface, which is
+quite nice in terms of speed but not so good in terms of OO-ness. This
+is fine: we may need to have a two-tiered setup approach, that goes
+like this:
+
+1. When getHTMLDefinition() is initially called, we prepare the default
+   environment of content-sets, loaded modules, and allowed content-sets.
+   This, while good for developers seeking to customize the tagset, is
+   unusable by HTML Purifier internals. It represents the XML schema
+2. When HTMLPurifier needs to use the definition, it calls a second setup
+   function, which now performs any substitutions needed and instantiates
+   all the objects which the internals will use.
+
+In this manner, complicated observers are not necessary, you just
+specify a content module like:
+
+    $flow = '%Heading | %Block | %Inline';
+
+And the second setup will perform the substitutions magically for you.
+
+A module will have certain properties:
+
+ - Elements
+    - Attributes
+    - Content model
+ - Content sets
+ - Content set extensions
+ - Content model extensions [x] (seen only on structural elements)
+ - Attribute collection extensions
+
+In our case, the content model does a lot more than just define what
+allowed children are: they also define exclusions. Also, if we refrain
+from directly instantiating objects, we are posed with the problem of
+how to signify which ChildDef to use. Remember: our specialized cases of
+content models are proprietary optimizations that allow us to deal with
+elements that don't belong rather than spit them out. Possible solutions:
+
+1. Factory method that analyzes the definition and figures out who
+   to defer to. It would also be responsible for parsing out omissions.
+2. Don't use their content model syntax, just enumerate items and give
+   the class-name of which one to use. If a complex definition is truly
+   needed, then use content model syntax. A definition, then, would
+   be composed of multiple parts:
+    - True content-model definition, OR
+    - Simple content-model definition
+        - List of items in the definition (may be multiple if dealing
+          with Chameleon)
+        - Name of the type (optional, required, etc)
+
+Flexibility is absolutely essential, so the API of some of these
+ChildDefs may need to change to lend them better to uniform treatment.
+
+Attributes are somewhat easier to manage, because we would be using
+associative arrays of elements => attributes => AttrDef names, and there
+would be an Attribute Types lookup array to get the appropriate AttrDef
+(if the objects are stateful, they will need to be cloned). Attributes
+for just one element can be specifically overridden through some mechanism
+(probably a config lookup array as well as an internal counter, because
+of HTML 4.01 semantics concerns.) An attribute set will also optionally
+have an array at index 0 which defines what attribute collections to
+agglutinate on when parsing. This may allow us to get rid of global
+attributes, which were also a proprietary implementation detail.
+
+Alright: let's get to work!
