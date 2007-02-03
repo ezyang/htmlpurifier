@@ -4,9 +4,13 @@ require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/Config.php';
 
 /**
- * Validates the contents of the global HTML attribute class.
+ * Validates contents based on NMTOKENS attribute type.
+ * @note The only current use for this is the class attribute in HTML
+ * @note Could have some functionality factored out into Nmtoken class
+ * @warning We cannot assume this class will be used only for 'class'
+ *          attributes. Not sure how to hook in magic behavior, then.
  */
-class HTMLPurifier_AttrDef_Class extends HTMLPurifier_AttrDef
+class HTMLPurifier_AttrDef_Nmtokens extends HTMLPurifier_AttrDef
 {
     
     function validate($string, $config, &$context) {
@@ -31,10 +35,10 @@ class HTMLPurifier_AttrDef_Class extends HTMLPurifier_AttrDef
         
         if (empty($matches[1])) return false;
         
-        // reconstruct class string
+        // reconstruct string
         $new_string = '';
-        foreach ($matches[1] as $class_names) {
-            $new_string .= $class_names . ' ';
+        foreach ($matches[1] as $token) {
+            $new_string .= $token . ' ';
         }
         $new_string = rtrim($new_string);
         

@@ -1,15 +1,15 @@
 <?php
 
 require_once 'HTMLPurifier/AttrDefHarness.php';
-require_once 'HTMLPurifier/AttrDef/Class.php';
+require_once 'HTMLPurifier/AttrDef/Nmtokens.php';
 require_once 'HTMLPurifier/Config.php';
 
-class HTMLPurifier_AttrDef_ClassTest extends HTMLPurifier_AttrDefHarness
+class HTMLPurifier_AttrDef_NmtokensTest extends HTMLPurifier_AttrDefHarness
 {
     
     function testDefault() {
         
-        $this->def = new HTMLPurifier_AttrDef_Class();
+        $this->def = new HTMLPurifier_AttrDef_Nmtokens();
         
         $this->assertDef('valid');
         $this->assertDef('a0-_');

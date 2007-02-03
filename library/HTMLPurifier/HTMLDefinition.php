@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/AttrDef.php';
     require_once 'HTMLPurifier/AttrDef/Enum.php';
     require_once 'HTMLPurifier/AttrDef/ID.php';
-    require_once 'HTMLPurifier/AttrDef/Class.php';
+    require_once 'HTMLPurifier/AttrDef/Nmtokens.php';
     require_once 'HTMLPurifier/AttrDef/Text.php';
     require_once 'HTMLPurifier/AttrDef/Lang.php';
     require_once 'HTMLPurifier/AttrDef/Pixels.php';
@@ -398,7 +398,7 @@ class HTMLPurifier_HTMLDefinition
         // which manually override these in their local definitions
         $this->info_global_attr = array(
             // core attrs
-            'class' => new HTMLPurifier_AttrDef_Class(),
+            'class' => new HTMLPurifier_AttrDef_Nmtokens(),
             'title' => $e_Text,
             'style' => new HTMLPurifier_AttrDef_CSS(),
             // i18n

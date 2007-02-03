@@ -13,6 +13,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added a rudimentary I18N and L10N system modeled off MediaWiki
 - Allow 'x' subtag in language codes
 . Added support for IDREF attributes (i.e. for)
+. Renamed HTMLPurifier_AttrDef_Class to HTMLPurifier_AttrDef_Nmtokens
 
 1.4.2, unknown release date
 ! docs/enduser-utf8.html explains how to use UTF-8 and HTML Purifier
