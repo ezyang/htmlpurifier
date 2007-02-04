@@ -14,6 +14,7 @@ require_once 'HTMLPurifier/HTMLModule/Edit.php';
 require_once 'HTMLPurifier/HTMLModule/Bdo.php';
 require_once 'HTMLPurifier/HTMLModule/Tables.php';
 require_once 'HTMLPurifier/HTMLModule/Image.php';
+require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 
 /**
  * Next-generation HTML definition that will supplant HTMLPurifier_HTMLDefinition
@@ -36,6 +37,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         $this->modules['Bdo']           = new HTMLPurifier_HTMLModule_Bdo();
         $this->modules['Tables']        = new HTMLPurifier_HTMLModule_Tables();
         $this->modules['Image']         = new HTMLPurifier_HTMLModule_Image();
+        $this->modules['StyleAttribute']= new HTMLPurifier_HTMLModule_StyleAttribute();
         
         $this->attr_types = new HTMLPurifier_AttrTypes();
         $this->attr_collection = new HTMLPurifier_AttrCollection();

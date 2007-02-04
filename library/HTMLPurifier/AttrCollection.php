@@ -12,6 +12,7 @@ class HTMLPurifier_AttrCollection
     
     var $info = array(
         'Core' => array(
+            0 => array('Style'),
             // 'xml:space' => false,
             'class' => 'NMTOKENS',
             'id' => 'ID',
@@ -21,10 +22,8 @@ class HTMLPurifier_AttrCollection
             'xml:lang' => false, // see constructor
             'lang' => false, // see constructor
         ),
-        'Events' => array(),
-        'Style' => array(), // specifically empty
         'Common' => array(
-            0 => array('Core', 'Events', 'I18N', 'Style')
+            0 => array('Core', 'I18N')
         )
     );
     
@@ -39,6 +38,12 @@ class HTMLPurifier_AttrCollection
         foreach ($modules as $module) {
             foreach ($module->attr_collection as $coll_i => $coll) {
                 foreach ($coll as $attr_i => $attr) {
+                    if ($attr_i === 0) {
+                        // merge in includes
+                        $info[$coll_i][$attr_i] = array_merge(
+                            $info[$coll_i][$attr_i], $attr);
+                        continue;
+                    }
                     $info[$coll_i][$attr_i] = $attr;
                 }
             }

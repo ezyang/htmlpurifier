@@ -22,7 +22,9 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
         $this->info['bdo'] = new HTMLPurifier_ElementDef();
         $this->info['bdo']->attr = array(
             0 => array('Core'),
-            'dir' => $dir
+            'dir' => $dir, // required
+            'lang' => 'Lang',
+            'xml:lang' => 'Lang'
         );
         $this->info['bdo']->content_model = '#PCDATA | Inline';
         $this->info['bdo']->content_model_type = 'optional';
