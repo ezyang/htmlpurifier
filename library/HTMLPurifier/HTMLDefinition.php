@@ -626,9 +626,23 @@ class HTMLPurifier_ElementDef
      */
     var $child;
     
+    /**
+     * Abstract string representation of internal ChildDef rules
+     * @public
+     */
     var $content_model;
+    
+    /**
+     * Value of $child->type, used to determine which ChildDef to use
+     * @public
+     */
     var $content_model_type;
     
+    /**
+     * Does the element have a content model (#PCDATA | Inline)*? This
+     * is important for chameleon ins and del processing.
+     * @public
+     */
     var $descendants_are_inline;
     
     /**

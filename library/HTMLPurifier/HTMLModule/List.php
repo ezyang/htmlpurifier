@@ -33,6 +33,7 @@ class HTMLPurifier_HTMLModule_List extends HTMLPurifier_HTMLModule
         $this->info['dt']->content_model_type = 'optional';
         $this->info['dl']->content_model = 'dt | dd';
         $this->info['dl']->content_model_type = 'required';
+        $this->info['li']->auto_close = array('li' => true);
     }
     
 }

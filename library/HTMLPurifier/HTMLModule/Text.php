@@ -47,6 +47,11 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
                 $this->info[$element]->content_model_type = 'optional';
             }
         }
+        $this->info['p']->auto_close = array_flip(array(
+                'address', 'blockquote', 'dd', 'dir', 'div', 'dl', 'dt',
+                'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'ol', 'p', 'pre',
+                'table', 'ul'
+            ));
     }
     
 }

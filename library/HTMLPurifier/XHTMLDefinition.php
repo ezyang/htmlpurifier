@@ -11,6 +11,7 @@ require_once 'HTMLPurifier/HTMLModule/Hypertext.php';
 require_once 'HTMLPurifier/HTMLModule/List.php';
 require_once 'HTMLPurifier/HTMLModule/Presentation.php';
 require_once 'HTMLPurifier/HTMLModule/Edit.php';
+require_once 'HTMLPurifier/HTMLModule/Bdo.php';
 
 /**
  * Next-generation HTML definition that will supplant HTMLPurifier_HTMLDefinition
@@ -30,6 +31,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         $this->modules['List']          = new HTMLPurifier_HTMLModule_List();
         $this->modules['Presentation']  = new HTMLPurifier_HTMLModule_Presentation();
         $this->modules['Edit']          = new HTMLPurifier_HTMLModule_Edit();
+        $this->modules['Bdo']           = new HTMLPurifier_HTMLModule_Bdo();
         
         $this->attr_types = new HTMLPurifier_AttrTypes();
         $this->attr_collection = new HTMLPurifier_AttrCollection();
@@ -102,6 +104,35 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
             }
         }
         
+        $this->setupAttrTransform($config);
+        $this->setupBlockWrapper($config);
+        $this->setupParent($config);
+        
+    }
+    
+    function setupAttrTransform($config) {
+        $this->info_attr_transform_post[] = new HTMLPurifier_AttrTransform_Lang();
+    }
+    
+    function setupBlockWrapper($config) {
+        $block_wrapper = $config->get('HTML', 'BlockWrapper');
+        if (isset($this->content_sets['Block'][$block_wrapper])) {
+            $this->info_block_wrapper = $block_wrapper;
+        } else {
+            trigger_error('Cannot use non-block element as block wrapper.',
+                E_USER_ERROR);
+        }
+    }
+    
+    function setupParent($config) {
+        $parent = $config->get('HTML', 'Parent');
+        if (isset($this->info[$parent])) {
+            $this->info_parent = $parent;
+        } else {
+            trigger_error('Cannot use unrecognized element as parent.',
+                E_USER_ERROR);
+        }
+        $this->info_parent_def = $this->info[$this->info_parent];
     }
     
     function getChildDef($def) {
@@ -130,10 +161,11 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
     
     function convertToLookup($string) {
         $array = explode('|', str_replace(' ', '', $string));
+        $ret = array();
         foreach ($array as $i => $k) {
-            $array[$i] = true;
+            $ret[$k] = true;
         }
-        return $array;
+        return $ret;
     }
     
 }

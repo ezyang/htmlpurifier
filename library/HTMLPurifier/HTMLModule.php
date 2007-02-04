@@ -15,6 +15,7 @@ class HTMLPurifier_HTMLModule
     var $elements = array();
     var $info = array();
     var $content_sets = array();
+    var $attr_collection = array();
 }
 
 ?>

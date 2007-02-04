@@ -36,6 +36,13 @@ class HTMLPurifier_AttrCollection
     
     function setup($attr_types, $modules) {
         $info =& $this->info;
+        foreach ($modules as $module) {
+            foreach ($module->attr_collection as $coll_i => $coll) {
+                foreach ($coll as $attr_i => $attr) {
+                    $info[$coll_i][$attr_i] = $attr;
+                }
+            }
+        }
         foreach ($info as $name => $attr) {
             // merge attribute collections that include others
             $this->performInclusions($info[$name]);
