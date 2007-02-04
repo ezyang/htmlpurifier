@@ -93,6 +93,9 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
           '<h1><ins><del><div>Not allowed!</div></del></ins></h1>',
           '<h1><ins><del>Not allowed!</del></ins></h1>'
         );
+        $this->assertResult(
+          '<div><ins><del><div>Allowed!</div></del></ins></div>'
+        );
         
         // test inline parent
         $this->assertResult(
