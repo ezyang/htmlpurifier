@@ -143,8 +143,8 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
             } elseif ($def->type == 'empty') {
                 $elements = array();
             } elseif ($def->type == 'table') {
-                $elements = array('col', 'caption', 'colgroup', 'thead',
-                    'tfoot', 'tbody', 'tr');
+                $elements = array_flip(array('col', 'caption', 'colgroup', 'thead',
+                    'tfoot', 'tbody', 'tr'));
             }
             $ret .= $this->element('th', 'Allowed children', $attr);
             

@@ -47,7 +47,7 @@ class HTMLPurifier_AttrCollection
             // merge attribute collections that include others
             $this->performInclusions($info[$name]);
             // replace string identifiers with actual attribute objects
-            $this->expandStringIdentifiers($info[$name], $attr_types);
+            $this->expandIdentifiers($info[$name], $attr_types);
         }
     }
     
@@ -69,7 +69,7 @@ class HTMLPurifier_AttrCollection
         unset($attr[0]);
     }
     
-    function expandStringIdentifiers(&$attr, $attr_types) {
+    function expandIdentifiers(&$attr, $attr_types) {
         foreach ($attr as $def_i => $def) {
             if ($def_i === 0) continue;
             if (!is_string($def)) continue;

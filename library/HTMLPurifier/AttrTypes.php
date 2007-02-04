@@ -14,8 +14,11 @@ class HTMLPurifier_AttrTypes
     function HTMLPurifier_AttrTypes() {
         $this->info['NMTOKENS'] = new HTMLPurifier_AttrDef_Nmtokens();
         $this->info['CDATA'] = new HTMLPurifier_AttrDef_Text();
+        $this->info['Text'] = new HTMLPurifier_AttrDef_Text();
         $this->info['ID'] = new HTMLPurifier_AttrDef_ID();
         $this->info['URI'] = new HTMLPurifier_AttrDef_URI();
+        $this->info['Pixels'] = new HTMLPurifier_AttrDef_Pixels();
+        $this->info['Length'] = new HTMLPurifier_AttrDef_Length();
     }
 }
 
