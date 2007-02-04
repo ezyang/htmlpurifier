@@ -70,17 +70,28 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
           '<span><ins>Not allowed!</ins></span>'
         );
         
-        // block in inline ins not allowed
-        $this->assertResult(
+        $this->assertResult( // alt config
           '<span><ins><div>Not allowed!</div></ins></span>',
           '<span><ins>&lt;div&gt;Not allowed!&lt;/div&gt;</ins></span>',
           array('Core.EscapeInvalidChildren' => true)
+        );
+        
+        // test block element that has inline content
+        $this->assertResult(
+          '<h1><ins><div>Not allowed!</div></ins></h1>',
+          '<h1><ins>Not allowed!</ins></h1>'
         );
         
         // test exclusions
         $this->assertResult(
           '<a><span><a>Not allowed</a></span></a>',
           '<a><span></span></a>'
+        );
+        
+        // stacked ins/del
+        $this->assertResult(
+          '<h1><ins><del><div>Not allowed!</div></del></ins></h1>',
+          '<h1><ins><del>Not allowed!</del></ins></h1>'
         );
         
         // test inline parent

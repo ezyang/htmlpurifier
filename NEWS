@@ -12,8 +12,21 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 1.5.0, unknown release date
 ! Added a rudimentary I18N and L10N system modeled off MediaWiki
 - Allow 'x' subtag in language codes
+- Fixed buggy chameleon-support for ins and del
 . Added support for IDREF attributes (i.e. for)
 . Renamed HTMLPurifier_AttrDef_Class to HTMLPurifier_AttrDef_Nmtokens
+. Removed context variable ParentType, replaced with IsInline, which
+  is false when you're not inline and an integer of the parent that
+  caused you to become inline when you are (so possibly zero)
+. Removed ElementDef->type in favor of ElementDef->descendants_are_inline
+  and HTMLDefinition->content_sets
+. StrictBlockquote now reports what elements its supposed to allow,
+  rather than what it does allow
+. Removed HTMLDefinition->info_flow_elements in favor of
+  HTMLDefinition->content_sets['Flow']
+. Removed redundant "exclusionary" definitions from DTD roster
+. StrictBlockquote now requires a construction parameter as if it
+  were an Required ChildDef, this is the "real" set of allowed elements
 
 1.4.2, unknown release date
 ! docs/enduser-utf8.html explains how to use UTF-8 and HTML Purifier

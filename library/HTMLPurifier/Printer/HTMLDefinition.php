@@ -16,8 +16,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
         $this->config =& $config;
         
         if (isset($_GET['x'])) { // hidden settings
-            $this->def = new HTMLPurifier_XHTMLDefinition();
-            $this->def->initialize($config);
+            $this->def = new HTMLPurifier_XHTMLDefinition($config);
             $this->def->setup($config);
         } else {
             $this->def = $config->getHTMLDefinition();
@@ -88,8 +87,8 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
                 $ret .= $this->element('th', "<$name>", array('class'=>'heavy', 'colspan' => 2));
             $ret .= $this->end('tr');
             $ret .= $this->start('tr');
-                $ret .= $this->element('th', 'Type');
-                $ret .= $this->element('td', ucfirst($def->type));
+                $ret .= $this->element('th', 'Inline content');
+                $ret .= $this->element('td', $def->descendants_are_inline ? 'Yes' : 'No');
             $ret .= $this->end('tr');
             if (!empty($def->excludes)) {
                 $ret .= $this->start('tr');

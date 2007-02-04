@@ -19,8 +19,9 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
     var $modules = array();
     var $attr_types;
     var $attr_collection;
+    var $content_sets;
     
-    function initialize($config) {
+    function HTMLPurifier_XHTMLDefinition($config) {
         
         $this->modules['Text'] = new HTMLPurifier_HTMLModule_Text();
         $this->modules['Hypertext'] = new HTMLPurifier_HTMLModule_Hypertext();
@@ -48,6 +49,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
                 }
             }
         }
+        
         // perform content_set expansions
         foreach ($content_sets as $i => $set) {
             // only performed once, so infinite recursion is not
@@ -59,41 +61,48 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
                     array_values($content_sets),
                 $set);
         }
+        // define convenient variables
         $content_sets_keys   = array_keys($content_sets);
         $content_sets_values = array_values($content_sets);
+        foreach ($content_sets as $name => $set) {
+            $this->content_sets[$name] = $this->convertToLookup($set);
+        }
         
         foreach ($this->modules as $module_i => $module) {
-            foreach ($module->info as $element_i => $element) {
-                $element =& $this->modules[$module_i]->info[$element_i];
+            foreach ($module->info as $name => $def) {
+                $def =& $this->modules[$module_i]->info[$name];
                 
                 // attribute value expansions
-                $this->attr_collection->performInclusions($element->attr);
+                $this->attr_collection->performInclusions($def->attr);
                 $this->attr_collection->expandStringIdentifiers(
-                    $element->attr, $this->attr_types);
+                    $def->attr, $this->attr_types);
                 
                 // perform content model expansions
-                $content_model = $element->content_model;
+                $content_model = $def->content_model;
                 if (is_string($content_model)) {
-                    $element->content_model = str_replace(
+                    if (strpos($content_model, 'Inline') !== false) {
+                        $def->descendants_are_inline = true;
+                    }
+                    $def->content_model = str_replace(
                         $content_sets_keys, $content_sets_values, $content_model);
                 }
                 
                 // get child def from content model
-                $element->child = $this->getChildDef($element);
+                $def->child = $this->getChildDef($def);
                 
                 // setup info
-                $this->info[$element_i] = $element;
-                if ($this->info_parent == $element_i) {
-                    $this->info_parent_def = $this->info[$element_i];
+                $this->info[$name] = $def;
+                if ($this->info_parent == $name) {
+                    $this->info_parent_def = $this->info[$name];
                 }
             }
         }
         
     }
     
-    function getChildDef($element) {
-        $value = $element->content_model;
-        $type  = $element->content_model_type;
+    function getChildDef($def) {
+        $value = $def->content_model;
+        $type  = $def->content_model_type;
         switch ($type) {
             case 'required':
                 return new HTMLPurifier_ChildDef_Required($value);
@@ -102,7 +111,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
             case 'empty':
                 return new HTMLPurifier_ChildDef_Empty();
             case 'strictblockquote':
-                return new HTMLPurifier_ChildDef_StrictBlockquote();
+                return new HTMLPurifier_ChildDef_StrictBlockquote($value);
             case 'table':
                 return new HTMLPurifier_ChildDef_Table();
             case 'chameleon':
@@ -112,6 +121,14 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         }
         if ($value) return new HTMLPurifier_ChildDef_Optional($value);
         return HTMLPurifier_ChildDef_Empty();
+    }
+    
+    function convertToLookup($string) {
+        $array = explode('|', str_replace(' ', '', $string));
+        foreach ($array as $i => $k) {
+            $array[$i] = true;
+        }
+        return $array;
     }
     
 }

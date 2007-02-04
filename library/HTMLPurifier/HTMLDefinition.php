@@ -163,22 +163,18 @@ class HTMLPurifier_HTMLDefinition
     var $info_attr_transform_pre = array();
     
     /**
-     * List of HTMLPurifier_AttrTransform to be performed after validation/
+     * List of HTMLPurifier_AttrTransform to be performed after validation.
      * @public
      */
     var $info_attr_transform_post = array();
-    
-    /**
-     * Lookup table of flow elements
-     * @public
-     */
-    var $info_flow_elements = array();
     
     /**
      * Boolean is a strict definition?
      * @public
      */
     var $strict;
+    
+    var $content_sets = array();
     
     /**
      * Initializes the definition, the meat of the class.
@@ -258,11 +254,6 @@ class HTMLPurifier_HTMLDefinition
         $e_Block = new HTMLPurifier_ChildDef_Optional($e_block);
         $e__flow = "#PCDATA | $e_block | form | $e_inline | $e_misc";
         $e_Flow = new HTMLPurifier_ChildDef_Optional($e__flow);
-        $e_a_content = new HTMLPurifier_ChildDef_Optional("#PCDATA".
-          " | $e_special | $e_fontstyle | $e_phrase | $e_inline_forms | $e_misc_inline");
-        $e_pre_content = new HTMLPurifier_ChildDef_Optional("#PCDATA | a".
-          " | $e_special_basic | $e_fontstyle_basic | $e_phrase_basic | $e_inline_forms".
-          " | $e_misc_inline");
         $e_form_content = new HTMLPurifier_ChildDef_Optional("#PCDATA | $e_block | $e_inline | $e_misc");//unused
         $e_form_button_content = new HTMLPurifier_ChildDef_Optional(
             "#PCDATA | p | $e_heading | div | $e_lists | $e_blocktext |".
@@ -278,7 +269,7 @@ class HTMLPurifier_HTMLDefinition
         $this->info['div']->child = $e_Flow;
         
         if ($this->strict) {
-            $this->info['blockquote']->child = new HTMLPurifier_ChildDef_StrictBlockquote();
+            $this->info['blockquote']->child = new HTMLPurifier_ChildDef_StrictBlockquote($e_block);
         } else {
             $this->info['blockquote']->child = $e_Flow;
         }
@@ -337,9 +328,9 @@ class HTMLPurifier_HTMLDefinition
         $this->info['br']->child   =
         $this->info['hr']->child   = new HTMLPurifier_ChildDef_Empty();
         
-        $this->info['pre']->child  = $e_pre_content;
-        
-        $this->info['a']->child    = $e_a_content;
+        // exclusionary
+        $this->info['pre']->child  = $e_Inline;
+        $this->info['a']->child    = $e_Inline;
         
         $this->info['table']->child = new HTMLPurifier_ChildDef_Table();
         
@@ -355,27 +346,16 @@ class HTMLPurifier_HTMLDefinition
         $this->info['td']->child = $e_Flow;
         
         //////////////////////////////////////////////////////////////////////
-        // info[]->type : defines the type of the element (block or inline)
+        // misc compat stuff with XHTMLDefinition
         
-        // unknown until proven inline/block
-        foreach ($this->info as $i => $x) {
-            $this->info[$i]->type = 'unknown';
-        }
-        
-        // reuses $e_Inline and $e_Block
-        foreach ($e_Inline->elements as $name => $bool) {
-            if ($name == '#PCDATA') continue;
-            if (!isset($this->info[$name])) continue;
-            $this->info[$name]->type = 'inline';
-        }
-        
-        foreach ($e_Block->elements as $name => $bool) {
-            if (!isset($this->info[$name])) continue;
-            $this->info[$name]->type = 'block';
+        foreach ($this->info as $key => $def) {
+            if ($this->info[$key]->child == $e_Inline) {
+                $this->info[$key]->descendants_are_inline = true;
+            }
         }
         
         foreach ($e_Flow->elements as $name => $bool) {
-            $this->info_flow_elements[$name] = true;
+            $this->content_sets['Flow'][$name] = true;
         }
         
         //////////////////////////////////////////////////////////////////////
@@ -649,11 +629,7 @@ class HTMLPurifier_ElementDef
     var $content_model;
     var $content_model_type;
     
-    /**
-     * Type of the tag: inline or block or unknown?
-     * @public
-     */
-    var $type;
+    var $descendants_are_inline;
     
     /**
      * Lookup table of tags excluded from all descendants of this tag.

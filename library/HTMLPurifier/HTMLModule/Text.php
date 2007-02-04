@@ -37,6 +37,7 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
             if ($element == 'br') {
                 $this->info[$element]->content_model_type = 'empty';
             } elseif ($element == 'blockquote') {
+                $this->info[$element]->content_model = 'Heading | Block | List';
                 $this->info[$element]->content_model_type = 'strictblockquote';
             } elseif ($element == 'div') {
                 $this->info[$element]->content_model = '#PCDATA | Flow';

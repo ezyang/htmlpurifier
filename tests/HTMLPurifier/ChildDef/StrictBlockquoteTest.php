@@ -9,7 +9,7 @@ extends HTMLPurifier_ChildDefHarness
     
     function test() {
         
-        $this->obj = new HTMLPurifier_ChildDef_StrictBlockquote();
+        $this->obj = new HTMLPurifier_ChildDef_StrictBlockquote('div | p');
         
         $this->assertResult('');
         $this->assertResult('<p>Valid</p>');

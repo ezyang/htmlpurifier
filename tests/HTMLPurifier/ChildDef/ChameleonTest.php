@@ -15,17 +15,17 @@ class HTMLPurifier_ChildDef_ChameleonTest extends HTMLPurifier_ChildDefHarness
         
         $this->assertResult(
             '<b>Allowed.</b>', true,
-            array(), array('ParentType' => 'inline')
+            array(), array('IsInline' => true)
         );
         
         $this->assertResult(
             '<div>Not allowed.</div>', '',
-            array(), array('ParentType' => 'inline')
+            array(), array('IsInline' => true)
         );
         
         $this->assertResult(
             '<div>Allowed.</div>', true,
-            array(), array('ParentType' => 'block')
+            array(), array('IsInline' => false)
         );
         
     }

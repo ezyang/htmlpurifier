@@ -38,22 +38,13 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
     }
     
     function validateChildren($tokens_of_children, $config, &$context) {
-        $parent_type = $context->get('ParentType');
-        switch ($parent_type) {
-            case 'unknown':
-            case 'inline':
-                $result = $this->inline->validateChildren(
-                    $tokens_of_children, $config, $context);
-                break;
-            case 'block':
-                $result = $this->block->validateChildren(
-                    $tokens_of_children, $config, $context);
-                break;
-            default:
-                trigger_error('Invalid context', E_USER_ERROR);
-                return false;
+        if ($context->get('IsInline') === false) {
+            return $this->block->validateChildren(
+                $tokens_of_children, $config, $context);
+        } else {
+            return $this->inline->validateChildren(
+                $tokens_of_children, $config, $context);
         }
-        return $result;
     }
 }
 
