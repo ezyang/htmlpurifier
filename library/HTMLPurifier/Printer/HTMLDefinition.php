@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/Printer.php';
+require_once 'HTMLPurifier/XHTMLDefinition.php';
 
 class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
 {
@@ -13,7 +14,14 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
     function render($config) {
         $ret = '';
         $this->config =& $config;
-        $this->def = $config->getHTMLDefinition();
+        
+        if (isset($_GET['x'])) { // hidden settings
+            $this->def = new HTMLPurifier_XHTMLDefinition();
+            $this->def->initialize($config);
+            $this->def->setup($config);
+        } else {
+            $this->def = $config->getHTMLDefinition();
+        }
         $def =& $this->def;
         
         $ret .= $this->start('div', array('class' => 'HTMLPurifier_Printer'));
