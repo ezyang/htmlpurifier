@@ -10,6 +10,7 @@ require_once 'HTMLPurifier/HTMLModule/Text.php';
 require_once 'HTMLPurifier/HTMLModule/Hypertext.php';
 require_once 'HTMLPurifier/HTMLModule/List.php';
 require_once 'HTMLPurifier/HTMLModule/Presentation.php';
+require_once 'HTMLPurifier/HTMLModule/Edit.php';
 
 /**
  * Next-generation HTML definition that will supplant HTMLPurifier_HTMLDefinition
@@ -24,10 +25,11 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
     
     function HTMLPurifier_XHTMLDefinition($config) {
         
-        $this->modules['Text'] = new HTMLPurifier_HTMLModule_Text();
-        $this->modules['Hypertext'] = new HTMLPurifier_HTMLModule_Hypertext();
-        $this->modules['List'] = new HTMLPurifier_HTMLModule_List();
-        $this->modules['Presentation'] = new HTMLPurifier_HTMLModule_Presentation();
+        $this->modules['Text']          = new HTMLPurifier_HTMLModule_Text();
+        $this->modules['Hypertext']     = new HTMLPurifier_HTMLModule_Hypertext();
+        $this->modules['List']          = new HTMLPurifier_HTMLModule_List();
+        $this->modules['Presentation']  = new HTMLPurifier_HTMLModule_Presentation();
+        $this->modules['Edit']          = new HTMLPurifier_HTMLModule_Edit();
         
         $this->attr_types = new HTMLPurifier_AttrTypes();
         $this->attr_collection = new HTMLPurifier_AttrCollection();
@@ -117,6 +119,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
             case 'table':
                 return new HTMLPurifier_ChildDef_Table();
             case 'chameleon':
+                $value = explode('!', $value);
                 return new HTMLPurifier_ChildDef_Chameleon($value[0], $value[1]);
             case 'custom':
                 return new HTMLPurifier_ChildDef_Custom($value);
