@@ -54,13 +54,6 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
     var $attr_collection;
     
     /**
-     * Nested lookup array of content set name (Block, Inline) to
-     * element name to whether or not it belongs in that content set.
-     * @public
-     */
-    var $content_sets;
-    
-    /**
      * Performs low-cost, preliminary initialization.
      * @param $config Instance of HTMLPurifier_Config
      */
@@ -120,7 +113,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         $content_sets_keys   = array_keys($content_sets);
         $content_sets_values = array_values($content_sets);
         foreach ($content_sets as $name => $set) {
-            $this->content_sets[$name] = $this->convertToLookup($set);
+            $this->info_content_sets[$name] = $this->convertToLookup($set);
         }
         
         foreach ($this->modules as $module_i => $module) {

@@ -19,7 +19,7 @@ extends HTMLPurifier_ChildDef_Required
         if (!$this->init) {
             // allow all inline elements
             $this->real_elements = $this->elements;
-            $this->fake_elements = $def->content_sets['Flow'];
+            $this->fake_elements = $def->info_content_sets['Flow'];
             $this->fake_elements['#PCDATA'] = true;
             $this->init = true;
         }

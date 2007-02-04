@@ -99,20 +99,25 @@ HTMLPurifier_ConfigSchema::define(
 );
 
 /**
- * Defines the purified HTML type with large amounts of objects.
+ * Definition of the purified HTML that describes allowed children,
+ * attributes, and many other things.
  * 
- * The main function of this object is its $info array, which is an 
- * associative array of all the child and attribute definitions for
- * each allowed element. It also contains special use information (always
- * prefixed by info) for intelligent tag closing and global attributes.
+ * Conventions:
  * 
- * For optimization, the definition generation may be moved to
- * a maintenance script and stipulate that definition be created
- * by a factory method that unserializes a serialized version of Definition.
- * Customization would entail copying the maintenance script, making the
- * necessary changes, generating the serialized object, and then hooking it
- * in via the factory method. We would also offer a LiveDefinition for
- * automatic recompilation, suggesting that we would have a DefinitionGenerator.
+ * All member variables that are prefixed with info
+ * (including the main $info array) are used by HTML Purifier internals
+ * and should not be directly edited when customizing the HTMLDefinition.
+ * They can usually be set via configuration directives or custom
+ * modules.
+ * 
+ * On the other hand, member variables without the info prefix are used
+ * internally by the HTMLDefinition and MUST NOT be used by other HTML
+ * Purifier internals. Many of them, however, are public, and may be
+ * edited by userspace code to tweak the behavior of HTMLDefinition.
+ * In practice, there will not be too many of them.
+ * 
+ * HTMLPurifier_Printer_HTMLDefinition is a notable exception to this
+ * rule: in the interest of comprehensiveness, it will sniff everything.
  */
 
 class HTMLPurifier_HTMLDefinition
@@ -169,12 +174,17 @@ class HTMLPurifier_HTMLDefinition
     var $info_attr_transform_post = array();
     
     /**
+     * Nested lookup array of content set name (Block, Inline) to
+     * element name to whether or not it belongs in that content set.
+     * @public
+     */
+    var $info_content_sets = array();
+    
+    /**
      * Boolean is a strict definition?
      * @public
      */
     var $strict;
-    
-    var $content_sets = array();
     
     /**
      * Initializes the definition, the meat of the class.
@@ -355,7 +365,7 @@ class HTMLPurifier_HTMLDefinition
         }
         
         foreach ($e_Flow->elements as $name => $bool) {
-            $this->content_sets['Flow'][$name] = true;
+            $this->info_content_sets['Flow'][$name] = true;
         }
         
         //////////////////////////////////////////////////////////////////////
