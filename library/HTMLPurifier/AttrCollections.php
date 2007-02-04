@@ -107,6 +107,10 @@ class HTMLPurifier_AttrCollections
         foreach ($attr as $def_i => $def) {
             if ($def_i === 0) continue;
             if (!is_string($def)) continue;
+            if ($def === false) {
+                unset($attr[$def_i]);
+                continue;
+            }
             if (isset($attr_types->info[$def])) {
                 $attr[$def_i] = $attr_types->info[$def];
             } else {

@@ -152,20 +152,32 @@ class HTMLPurifier_Config
     }
     
     /**
-     * Retrieves a copy of the HTML definition.
+     * Retrieves reference to the HTML definition.
+     * @param $raw Return a copy that has not been setup yet. Must be
+     *             called before it's been setup, otherwise won't work.
      */
-    function getHTMLDefinition() {
+    function &getHTMLDefinition($raw = false) {
         if ($this->html_definition === null) {
-            $this->html_definition = new HTMLPurifier_HTMLDefinition();
+            $this->html_definition = new HTMLPurifier_HTMLDefinition($this);
+            if ($raw) {
+                return $this->html_definition; // no setup!
+            }
             $this->html_definition->setup($this);
+        }
+        if ($raw && $this->html_definition->setup) {
+            trigger_error('HTMLDefinition already setup, overwriting old '.
+            'definition (set $config->definition manually to null '.
+            'if this is desired behavior).', E_USER_NOTICE);
+            $this->html_definition = new HTMLPurifier_HTMLDefinition($this);
+            return $this->html_definition;
         }
         return $this->html_definition;
     }
     
     /**
-     * Retrieves a copy of the CSS definition
+     * Retrieves reference to the CSS definition
      */
-    function getCSSDefinition() {
+    function &getCSSDefinition() {
         if ($this->css_definition === null) {
             $this->css_definition = new HTMLPurifier_CSSDefinition();
             $this->css_definition->setup($this);

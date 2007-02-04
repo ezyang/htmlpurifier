@@ -4,6 +4,10 @@ require_once 'HTMLPurifier/AttrDef/Nmtokens.php';
 require_once 'HTMLPurifier/AttrDef/Text.php';
 require_once 'HTMLPurifier/AttrDef/ID.php';
 require_once 'HTMLPurifier/AttrDef/URI.php';
+require_once 'HTMLPurifier/AttrDef/Pixels.php';
+require_once 'HTMLPurifier/AttrDef/Length.php';
+require_once 'HTMLPurifier/AttrDef/MultiLength.php';
+require_once 'HTMLPurifier/AttrDef/Integer.php';
 
 /**
  * Provides lookup array of attribute types to HTMLPurifier_AttrDef objects
