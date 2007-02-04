@@ -5,6 +5,19 @@ require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/AttrTypes.php';
 require_once 'HTMLPurifier/AttrCollection.php';
 
+// we'll manage loading extremely commonly used attr definitions
+require_once 'HTMLPurifier/AttrDef.php';
+require_once 'HTMLPurifier/AttrDef/Enum.php';
+
+// technically speaking, these includes would be more appropriate for
+// other modules, but we're going to include all the common ones. A
+// custom one would have to be fed in as an actual object
+require_once 'HTMLPurifier/ChildDef.php';
+require_once 'HTMLPurifier/ChildDef/Empty.php';
+require_once 'HTMLPurifier/ChildDef/Required.php';
+require_once 'HTMLPurifier/ChildDef/Optional.php';
+require_once 'HTMLPurifier/ChildDef/StrictBlockquote.php';
+
 require_once 'HTMLPurifier/HTMLModule.php';
 require_once 'HTMLPurifier/HTMLModule/Text.php';
 require_once 'HTMLPurifier/HTMLModule/Hypertext.php';
@@ -22,11 +35,35 @@ require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
 {
     
+    /**
+     * Array of HTMLPurifier_Module instances, indexed by module name
+     * @public
+     */
     var $modules = array();
+    
+    /**
+     * Instance of HTMLPurifier_AttrTypes
+     * @public
+     */
     var $attr_types;
+    
+    /**
+     * Instance of HTMLPurifier_AttrCollection
+     * @public
+     */
     var $attr_collection;
+    
+    /**
+     * Nested lookup array of content set name (Block, Inline) to
+     * element name to whether or not it belongs in that content set.
+     * @public
+     */
     var $content_sets;
     
+    /**
+     * Performs low-cost, preliminary initialization.
+     * @param $config Instance of HTMLPurifier_Config
+     */
     function HTMLPurifier_XHTMLDefinition($config) {
         
         $this->modules['Text']          = new HTMLPurifier_HTMLModule_Text();
@@ -44,6 +81,12 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         
     }
     
+    /**
+     * Processes internals into form usable by HTMLPurifier internals. 
+     * Modifying the definition after calling this function should not
+     * be done.
+     * @param $config Instance of HTMLPurifier_Config
+     */
     function setup($config) {
         
         // perform attribute collection substitutions
@@ -93,7 +136,10 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
                 $content_model = $def->content_model;
                 if (is_string($content_model)) {
                     if (strpos($content_model, 'Inline') !== false) {
-                        $def->descendants_are_inline = true;
+                        if ($name != 'del' && $name != 'ins') {
+                            // this is for you, ins/del
+                            $def->descendants_are_inline = true;
+                        }
                     }
                     $def->content_model = str_replace(
                         $content_sets_keys, $content_sets_values, $content_model);
@@ -116,10 +162,18 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         
     }
     
+    /**
+     * Sets up attribute transformations
+     * @param $config Instance of HTMLPurifier_Config
+     */
     function setupAttrTransform($config) {
         $this->info_attr_transform_post[] = new HTMLPurifier_AttrTransform_Lang();
     }
     
+    /**
+     * Sets up block wrapper based on config
+     * @param $config Instance of HTMLPurifier_Config
+     */
     function setupBlockWrapper($config) {
         $block_wrapper = $config->get('HTML', 'BlockWrapper');
         if (isset($this->content_sets['Block'][$block_wrapper])) {
@@ -130,6 +184,10 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         }
     }
     
+    /**
+     * Sets up parent of fragment based on config
+     * @param $config Instance of HTMLPurifier_Config
+     */
     function setupParent($config) {
         $parent = $config->get('HTML', 'Parent');
         if (isset($this->info[$parent])) {
@@ -141,10 +199,18 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         $this->info_parent_def = $this->info[$this->info_parent];
     }
     
+    /**
+     * Instantiates a ChildDef based on content_model and content_model_type
+     * member variables in HTMLPurifier_ElementDef
+     * @note This will also defer to modules for custom HTMLPurifier_ChildDef
+     *       subclasses that need content set expansion
+     * @param $def HTMLPurifier_ElementDef to have ChildDef extracted
+     * @return HTMLPurifier_ChildDef corresponding to ElementDef
+     */
     function getChildDef($def) {
         $value = $def->content_model;
-        $type  = $def->content_model_type;
-        switch ($type) {
+        if (is_object($value)) return $value; // direct object, return
+        switch ($def->content_model_type) {
             case 'required':
                 return new HTMLPurifier_ChildDef_Required($value);
             case 'optional':
@@ -153,18 +219,29 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
                 return new HTMLPurifier_ChildDef_Empty();
             case 'strictblockquote':
                 return new HTMLPurifier_ChildDef_StrictBlockquote($value);
-            case 'table':
-                return new HTMLPurifier_ChildDef_Table();
-            case 'chameleon':
-                $value = explode('!', $value);
-                return new HTMLPurifier_ChildDef_Chameleon($value[0], $value[1]);
             case 'custom':
                 return new HTMLPurifier_ChildDef_Custom($value);
         }
-        if ($value) return new HTMLPurifier_ChildDef_Optional($value);
-        return new HTMLPurifier_ChildDef_Empty();
+        // defer to modules, see if they know what child_def to use
+        foreach ($this->modules as $module) {
+            if (!$module->defines_child_def) continue; // save a func call
+            $return = $module->getChildDef($def);
+            if ($return !== false) return $return;
+        }
+        // error-out
+        trigger_error(
+            'Could not determine which ChildDef class to instantiate',
+            E_USER_ERROR
+        );
+        return false;
     }
     
+    /**
+     * Converts a string list of elements separated by pipes into
+     * a lookup array.
+     * @param $string List of elements
+     * @return Lookup array of elements
+     */
     function convertToLookup($string) {
         $array = explode('|', str_replace(' ', '', $string));
         $ret = array();

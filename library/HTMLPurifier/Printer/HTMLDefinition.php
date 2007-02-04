@@ -173,6 +173,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
      * @param $array Tag lookup array in form of array('tagname' => true)
      */
     function listifyTagLookup($array) {
+        ksort($array);
         $list = array();
         foreach ($array as $name => $discard) {
             if ($name !== '#PCDATA' && !isset($this->def->info[$name])) continue;
@@ -187,6 +188,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
      * @todo Also add information about internal state
      */
     function listifyObjectList($array) {
+        ksort($array);
         $list = array();
         foreach ($array as $discard => $obj) {
             $list[] = $this->getClass($obj, 'AttrTransform_');
@@ -199,6 +201,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
      * @param $array Array hash in form of array('attrname' => HTMLPurifier_AttrDef)
      */
     function listifyAttr($array) {
+        ksort($array);
         $list = array();
         foreach ($array as $name => $obj) {
             if ($obj === false) continue;

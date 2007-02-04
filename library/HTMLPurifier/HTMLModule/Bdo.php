@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/HTMLModule.php';
+require_once 'HTMLPurifier/AttrTransform/BdoDir.php';
 
 /**
  * XHTML 1.1 Bi-directional Text Module, defines elements that
@@ -23,13 +24,19 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
         $this->info['bdo']->attr = array(
             0 => array('Core'),
             'dir' => $dir, // required
+            // The Abstract Module specification has the attribute
+            // inclusions wrong for bdo: bdo allows
+            // xml:lang too (and we'll toss in lang for good measure,
+            // though it is not allowed for XHTML 1.1, this will
+            // be managed with a global attribute transform)
             'lang' => 'Lang',
             'xml:lang' => 'Lang'
         );
         $this->info['bdo']->content_model = '#PCDATA | Inline';
         $this->info['bdo']->content_model_type = 'optional';
-        $this->info['bdo']->content_model_type = 'optional';
-        $this->info['bdo']->attr_transform_post[] = new HTMLPurifier_AttrTransform_BdoDir();
+        // provides fallback behavior if dir's missing (dir is required)
+        $this->info['bdo']->attr_transform_post[] =
+            new HTMLPurifier_AttrTransform_BdoDir();
     }
     
 }

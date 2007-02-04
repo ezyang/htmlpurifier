@@ -10,6 +10,11 @@ require_once 'HTMLPurifier/AttrDef/Lang.php';
 class HTMLPurifier_AttrCollection
 {
     
+    /**
+     * Associative array of attribute collections, indexed by name
+     * @note Technically, the composition of these is more complicated,
+     *       but we bypass it using our own excludes property
+     */
     var $info = array(
         'Core' => array(
             0 => array('Style'),
@@ -27,18 +32,29 @@ class HTMLPurifier_AttrCollection
         )
     );
     
+    /**
+     * Sets up direct objects not registered to HTMLPurifier_AttrTypes
+     */
     function HTMLPurifier_AttrCollection() {
         // setup direct objects
         $this->info['I18N']['xml:lang'] =
         $this->info['I18N']['lang'] = new HTMLPurifier_AttrDef_Lang();
     }
     
+    /**
+     * Performs all expansions on internal data for use by other inclusions
+     * It also collects all attribute collection extensions from
+     * modules
+     * @param $attr_types HTMLPurifier_AttrTypes instance
+     * @param $modules Hash array of HTMLPurifier_HTMLModule members
+     */
     function setup($attr_types, $modules) {
         $info =& $this->info;
+        // load extensions from the modules
         foreach ($modules as $module) {
             foreach ($module->attr_collection as $coll_i => $coll) {
                 foreach ($coll as $attr_i => $attr) {
-                    if ($attr_i === 0) {
+                    if ($attr_i === 0 && isset($info[$coll_i][$attr_i])) {
                         // merge in includes
                         $info[$coll_i][$attr_i] = array_merge(
                             $info[$coll_i][$attr_i], $attr);
@@ -48,6 +64,7 @@ class HTMLPurifier_AttrCollection
                 }
             }
         }
+        // perform internal expansions and inclusions
         foreach ($info as $name => $attr) {
             // merge attribute collections that include others
             $this->performInclusions($info[$name]);
@@ -56,6 +73,11 @@ class HTMLPurifier_AttrCollection
         }
     }
     
+    /**
+     * Takes a reference to an attribute associative array and performs
+     * all inclusions specified by the zero index.
+     * @param &$attr Reference to attribute array
+     */
     function performInclusions(&$attr) {
         if (!isset($attr[0])) return;
         $merge = $attr[0];
@@ -74,6 +96,12 @@ class HTMLPurifier_AttrCollection
         unset($attr[0]);
     }
     
+    /**
+     * Expands all string identifiers in an attribute array by replacing
+     * them with the appropriate values inside HTMLPurifier_AttrTypes
+     * @param &$attr Reference to attribute array
+     * @param $attr_types HTMLPurifier_AttrTypes instance
+     */
     function expandIdentifiers(&$attr, $attr_types) {
         foreach ($attr as $def_i => $def) {
             if ($def_i === 0) continue;

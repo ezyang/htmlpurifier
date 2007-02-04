@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/HTMLModule.php';
+require_once 'HTMLPurifier/ChildDef/Table.php';
 
 /**
  * XHTML 1.1 Tables Module, fully defines accessible table elements.
@@ -34,7 +35,15 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
                 $attr['width'] = 'Length';
                 continue;
             }
-            if ($e == 'td' || $e == 'th') $attr['abbr'] = 'Text';
+            if ($e == 'col' || $e == 'colgroup') {
+                $attr['span'] = 'Number';
+                $attr['width'] = 'MultiLength';
+            }
+            if ($e == 'td' || $e == 'th') {
+                $attr['abbr'] = 'Text';
+                $attr['colspan'] = 'Number';
+                $attr['rowspan'] = 'Number';
+            }
             $attr['align'] = new HTMLPurifier_AttrDef_Enum(array(
                 'left', 'center', 'right', 'justify', 'char'
             ), false);
@@ -46,7 +55,10 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
         $this->info['caption']->content_model = '#PCDATA | Inline';
         $this->info['caption']->content_model_type = 'optional';
         
-        $this->info['table']->content_model = 'caption?, ( col* | colgroup* ), (( thead?, tfoot?, tbody+ ) | ( tr+ ))';
+        // Is done directly because it doesn't leverage substitution
+        // mechanisms. True model is:
+        // 'caption?, ( col* | colgroup* ), (( thead?, tfoot?, tbody+ ) | ( tr+ ))'
+        $this->info['table']->content_model = new HTMLPurifier_ChildDef_Table();
         $this->info['table']->content_model_type = 'table';
         
         $this->info['td']->content_model = 

@@ -54,11 +54,21 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
                 $this->info[$element]->content_model_type = 'optional';
             }
         }
+        // SGML permits exclusions for all descendants, but this is
+        // not possible with DTDs or XML Schemas. W3C has elected to
+        // use complicated compositions of content_models to simulate
+        // exclusion for children, but we go the simpler, SGML-style
+        // route of flat-out exclusions. Note that the Abstract Module
+        // is blithely unaware of such distinctions.
+        $this->info['pre']->excludes = array_flip(array(
+            'img', 'big', 'small',
+            'object', 'applet', 'font', 'basefont' // generally not allowed
+        ));
         $this->info['p']->auto_close = array_flip(array(
-                'address', 'blockquote', 'dd', 'dir', 'div', 'dl', 'dt',
-                'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'ol', 'p', 'pre',
-                'table', 'ul'
-            ));
+            'address', 'blockquote', 'dd', 'dir', 'div', 'dl', 'dt',
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'ol', 'p', 'pre',
+            'table', 'ul'
+        ));
     }
     
 }
