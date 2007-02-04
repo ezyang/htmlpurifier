@@ -11,6 +11,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 1.5.0, unknown release date
 ! Added a rudimentary I18N and L10N system modeled off MediaWiki
+! Newly structured HTMLDefinition modeled off of XHTML 1.1 modules.
+  Tutorials upcoming!
 - Allow 'x' subtag in language codes
 - Fixed buggy chameleon-support for ins and del
 . Added support for IDREF attributes (i.e. for)
