@@ -26,6 +26,7 @@ class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
             //'type' => 'ContentType',
         );
         $this->info['a']->content_model = '#PCDATA | Inline';
+        $this->info['a']->content_model_type = 'optional';
         $this->info['a']->excludes = array('a' => true);
     }
     

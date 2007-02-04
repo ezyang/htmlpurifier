@@ -357,6 +357,11 @@ class HTMLPurifier_HTMLDefinition
         //////////////////////////////////////////////////////////////////////
         // info[]->type : defines the type of the element (block or inline)
         
+        // unknown until proven inline/block
+        foreach ($this->info as $i => $x) {
+            $this->info[$i]->type = 'unknown';
+        }
+        
         // reuses $e_Inline and $e_Block
         foreach ($e_Inline->elements as $name => $bool) {
             if ($name == '#PCDATA') continue;
@@ -642,13 +647,13 @@ class HTMLPurifier_ElementDef
     var $child;
     
     var $content_model;
-    var $content_model_type = 'optional';
+    var $content_model_type;
     
     /**
      * Type of the tag: inline or block or unknown?
      * @public
      */
-    var $type = 'unknown';
+    var $type;
     
     /**
      * Lookup table of tags excluded from all descendants of this tag.

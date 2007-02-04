@@ -29,6 +29,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
         $ret .= $this->element('caption', 'Environment');
         
         $ret .= $this->row('Parent of fragment', $def->info_parent);
+        $ret .= $this->renderChildren($def->info_parent_def->child);
         $ret .= $this->row('Strict mode', $def->strict);
         if ($def->strict) $ret .= $this->row('Block wrap name', $def->info_block_wrapper);
         
@@ -36,8 +37,6 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
             $ret .= $this->element('th', 'Global attributes');
             $ret .= $this->element('td', $this->listifyAttr($def->info_global_attr),0,0);
         $ret .= $this->end('tr');
-        
-        $ret .= $this->renderChildren($def->info_parent_def->child);
         
         $ret .= $this->start('tr');
             $ret .= $this->element('th', 'Tag transforms');

@@ -40,8 +40,10 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
                 $this->info[$element]->content_model_type = 'strictblockquote';
             } elseif ($element == 'div') {
                 $this->info[$element]->content_model = '#PCDATA | Flow';
+                $this->info[$element]->content_model_type = 'optional';
             } else {
                 $this->info[$element]->content_model = '#PCDATA | Inline';
+                $this->info[$element]->content_model_type = 'optional';
             }
         }
     }

@@ -4,9 +4,11 @@ require_once 'HTMLPurifier/HTMLDefinition.php';
 
 require_once 'HTMLPurifier/AttrTypes.php';
 require_once 'HTMLPurifier/AttrCollection.php';
+
 require_once 'HTMLPurifier/HTMLModule.php';
 require_once 'HTMLPurifier/HTMLModule/Text.php';
 require_once 'HTMLPurifier/HTMLModule/Hypertext.php';
+require_once 'HTMLPurifier/HTMLModule/List.php';
 
 /**
  * Next-generation HTML definition that will supplant HTMLPurifier_HTMLDefinition
@@ -22,6 +24,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         
         $this->modules['Text'] = new HTMLPurifier_HTMLModule_Text();
         $this->modules['Hypertext'] = new HTMLPurifier_HTMLModule_Hypertext();
+        $this->modules['List'] = new HTMLPurifier_HTMLModule_List();
         
         $this->attr_types = new HTMLPurifier_AttrTypes();
         $this->attr_collection = new HTMLPurifier_AttrCollection();
@@ -107,6 +110,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
             case 'custom':
                 return new HTMLPurifier_ChildDef_Custom($value);
         }
+        if ($value) return new HTMLPurifier_ChildDef_Optional($value);
         return HTMLPurifier_ChildDef_Empty();
     }
     
