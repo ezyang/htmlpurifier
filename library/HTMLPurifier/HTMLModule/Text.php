@@ -24,7 +24,7 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
     
     function HTMLPurifier_HTMLModule_Text() {
         foreach ($this->elements as $element) {
-            $this->info[$element] = new HTMLPurifier_HTMLModuleElement();
+            $this->info[$element] = new HTMLPurifier_ElementDef();
             // attributes
             if ($element == 'br') {
                 $this->info[$element]->attr = array(0 => array('Core'));

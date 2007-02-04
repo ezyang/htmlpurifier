@@ -3,6 +3,7 @@
 require_once 'HTMLPurifier/AttrDef/Nmtokens.php';
 require_once 'HTMLPurifier/AttrDef/Text.php';
 require_once 'HTMLPurifier/AttrDef/ID.php';
+require_once 'HTMLPurifier/AttrDef/URI.php';
 
 /**
  * Provides lookup array of attribute types to HTMLPurifier_AttrDef objects

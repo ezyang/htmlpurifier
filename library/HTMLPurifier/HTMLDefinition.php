@@ -641,6 +641,9 @@ class HTMLPurifier_ElementDef
      */
     var $child;
     
+    var $content_model;
+    var $content_model_type = 'optional';
+    
     /**
      * Type of the tag: inline or block or unknown?
      * @public

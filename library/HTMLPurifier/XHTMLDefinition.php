@@ -6,6 +6,7 @@ require_once 'HTMLPurifier/AttrTypes.php';
 require_once 'HTMLPurifier/AttrCollection.php';
 require_once 'HTMLPurifier/HTMLModule.php';
 require_once 'HTMLPurifier/HTMLModule/Text.php';
+require_once 'HTMLPurifier/HTMLModule/Hypertext.php';
 
 /**
  * Next-generation HTML definition that will supplant HTMLPurifier_HTMLDefinition
@@ -20,6 +21,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
     function initialize($config) {
         
         $this->modules['Text'] = new HTMLPurifier_HTMLModule_Text();
+        $this->modules['Hypertext'] = new HTMLPurifier_HTMLModule_Hypertext();
         
         $this->attr_types = new HTMLPurifier_AttrTypes();
         $this->attr_collection = new HTMLPurifier_AttrCollection();
@@ -63,6 +65,8 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
                 
                 // attribute value expansions
                 $this->attr_collection->performInclusions($element->attr);
+                $this->attr_collection->expandStringIdentifiers(
+                    $element->attr, $this->attr_types);
                 
                 // perform content model expansions
                 $content_model = $element->content_model;
@@ -71,14 +75,14 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
                         $content_sets_keys, $content_sets_values, $content_model);
                 }
                 
+                // get child def from content model
+                $element->child = $this->getChildDef($element);
+                
                 // setup info
-                $this->info[$element_i] = new HTMLPurifier_ElementDef();
-                $this->info[$element_i]->attr = $element->attr;
-                $this->info[$element_i]->child = $this->getChildDef($element);
+                $this->info[$element_i] = $element;
                 if ($this->info_parent == $element_i) {
                     $this->info_parent_def = $this->info[$element_i];
                 }
-                
             }
         }
         

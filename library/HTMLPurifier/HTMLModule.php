@@ -17,11 +17,4 @@ class HTMLPurifier_HTMLModule
     var $content_sets = array();
 }
 
-class HTMLPurifier_HTMLModuleElement
-{
-    var $attr = array();
-    var $content_model;
-    var $content_model_type = 'optional';
-}
-
 ?>

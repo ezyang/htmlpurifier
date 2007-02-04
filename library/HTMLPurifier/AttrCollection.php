@@ -22,7 +22,7 @@ class HTMLPurifier_AttrCollection
             'lang' => false, // see constructor
         ),
         'Events' => array(),
-        'Style' => array(),
+        'Style' => array(), // specifically empty
         'Common' => array(
             0 => array('Core', 'Events', 'I18N', 'Style')
         )
@@ -36,25 +36,12 @@ class HTMLPurifier_AttrCollection
     
     function setup($attr_types, $modules) {
         $info =& $this->info;
-        
-        // replace string identifiers with actual attribute objects
-        foreach ($info as $collection_i => $collection) {
-            foreach ($collection as $attr_i => $attr) {
-                if ($attr_i === 0) continue;
-                if (!is_string($attr)) continue;
-                if (isset($attr_types->info[$attr])) {
-                    $info[$collection_i][$attr_i] = $attr_types->info[$attr];
-                } else {
-                    unset($info[$collection_i][$attr_i]);
-                }
-            }
-        }
-        
-        // merge attribute collections that include others
         foreach ($info as $name => $attr) {
+            // merge attribute collections that include others
             $this->performInclusions($info[$name]);
+            // replace string identifiers with actual attribute objects
+            $this->expandStringIdentifiers($info[$name], $attr_types);
         }
-        
     }
     
     function performInclusions(&$attr) {
@@ -73,6 +60,18 @@ class HTMLPurifier_AttrCollection
             }
         }
         unset($attr[0]);
+    }
+    
+    function expandStringIdentifiers(&$attr, $attr_types) {
+        foreach ($attr as $def_i => $def) {
+            if ($def_i === 0) continue;
+            if (!is_string($def)) continue;
+            if (isset($attr_types->info[$def])) {
+                $attr[$def_i] = $attr_types->info[$def];
+            } else {
+                unset($attr[$def_i]);
+            }
+        }
     }
     
 }
