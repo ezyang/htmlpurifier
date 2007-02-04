@@ -9,6 +9,7 @@ require_once 'HTMLPurifier/HTMLModule.php';
 require_once 'HTMLPurifier/HTMLModule/Text.php';
 require_once 'HTMLPurifier/HTMLModule/Hypertext.php';
 require_once 'HTMLPurifier/HTMLModule/List.php';
+require_once 'HTMLPurifier/HTMLModule/Presentation.php';
 
 /**
  * Next-generation HTML definition that will supplant HTMLPurifier_HTMLDefinition
@@ -26,6 +27,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         $this->modules['Text'] = new HTMLPurifier_HTMLModule_Text();
         $this->modules['Hypertext'] = new HTMLPurifier_HTMLModule_Hypertext();
         $this->modules['List'] = new HTMLPurifier_HTMLModule_List();
+        $this->modules['Presentation'] = new HTMLPurifier_HTMLModule_Presentation();
         
         $this->attr_types = new HTMLPurifier_AttrTypes();
         $this->attr_collection = new HTMLPurifier_AttrCollection();

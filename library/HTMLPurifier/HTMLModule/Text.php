@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/HTMLModule.php';
 
 /**
- * XHTML 1.1 Text Module, defines basic text containers. Core module.
+ * XHTML 1.1 Text Module, defines basic text containers. Core Module.
  */
 class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
 {

@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/HTMLModule.php';
 
 /**
- * XHTML 1.1 List Module, defines list-oriented elements.
+ * XHTML 1.1 List Module, defines list-oriented elements. Core Module.
  */
 class HTMLPurifier_HTMLModule_List extends HTMLPurifier_HTMLModule
 {
