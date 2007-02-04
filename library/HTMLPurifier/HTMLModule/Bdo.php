@@ -13,24 +13,22 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
     var $elements = array('bdo');
     var $info = array();
     var $content_sets = array('Inline' => 'bdo');
-    var $attr_collection = array(
+    var $attr_collections_info = array(
         'I18N' => array('dir' => false)
     );
     
     function HTMLPurifier_HTMLModule_Bdo() {
         $dir = new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false);
-        $this->attr_collection['I18N']['dir'] = $dir;
+        $this->attr_collections_info['I18N']['dir'] = $dir;
         $this->info['bdo'] = new HTMLPurifier_ElementDef();
         $this->info['bdo']->attr = array(
-            0 => array('Core'),
+            0 => array('Core', 'Lang'),
             'dir' => $dir, // required
             // The Abstract Module specification has the attribute
             // inclusions wrong for bdo: bdo allows
             // xml:lang too (and we'll toss in lang for good measure,
             // though it is not allowed for XHTML 1.1, this will
             // be managed with a global attribute transform)
-            'lang' => 'Lang',
-            'xml:lang' => 'Lang'
         );
         $this->info['bdo']->content_model = '#PCDATA | Inline';
         $this->info['bdo']->content_model_type = 'optional';

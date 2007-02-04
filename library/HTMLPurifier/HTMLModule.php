@@ -8,6 +8,10 @@
  *       way to represent the internals of HTMLDefinition, and our
  *       implementation is by no means conforming and does not directly
  *       use the normative DTDs or XML schemas.
+ * @note The public variables in a module should almost directly
+ *       correspond to the variables in HTMLPurifier_HTMLDefinition.
+ *       However, the prefix info carries no special meaning in these
+ *       objects (include it anyway if that's the correspondence though).
  */
 
 class HTMLPurifier_HTMLModule
@@ -32,7 +36,8 @@ class HTMLPurifier_HTMLModule
     /**
      * Associative array of content set names to content set additions.
      * This is commonly used to, say, add an A element to the Inline
-     * content set.
+     * content set. This corresponds to an internal variable $content_sets
+     * and NOT info_content_sets member variable of HTMLDefinition.
      * @public
      */
     var $content_sets = array();
@@ -41,10 +46,12 @@ class HTMLPurifier_HTMLModule
      * Associative array of attribute collection names to attribute
      * collection additions. More rarely used for adding attributes to
      * the global collections. Example is the StyleAttribute module adding
-     * the style attribute to the Core.
+     * the style attribute to the Core. Corresponds to attr_collections
+     * attr_collections->info, as only one object with behavior is
+     * necessary.
      * @public
      */
-    var $attr_collection = array();
+    var $attr_collections_info = array();
     
     /**
      * Boolean flag that indicates whether or not getChildDef is implemented.

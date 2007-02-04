@@ -7,7 +7,7 @@ require_once 'HTMLPurifier/AttrDef/Lang.php';
  * Defines common attribute collections that modules reference
  */
 
-class HTMLPurifier_AttrCollection
+class HTMLPurifier_AttrCollections
 {
     
     /**
@@ -23,9 +23,11 @@ class HTMLPurifier_AttrCollection
             'id' => 'ID',
             'title' => 'CDATA',
         ),
-        'I18N' => array(
+        'Lang' => array(
             'xml:lang' => false, // see constructor
-            'lang' => false, // see constructor
+        ),
+        'I18N' => array(
+            0 => array('Lang'), // proprietary, for xml:lang/lang
         ),
         'Common' => array(
             0 => array('Core', 'I18N')
@@ -35,10 +37,9 @@ class HTMLPurifier_AttrCollection
     /**
      * Sets up direct objects not registered to HTMLPurifier_AttrTypes
      */
-    function HTMLPurifier_AttrCollection() {
+    function HTMLPurifier_AttrCollections() {
         // setup direct objects
-        $this->info['I18N']['xml:lang'] =
-        $this->info['I18N']['lang'] = new HTMLPurifier_AttrDef_Lang();
+        $this->info['Lang']['xml:lang'] = new HTMLPurifier_AttrDef_Lang();
     }
     
     /**
@@ -52,7 +53,7 @@ class HTMLPurifier_AttrCollection
         $info =& $this->info;
         // load extensions from the modules
         foreach ($modules as $module) {
-            foreach ($module->attr_collection as $coll_i => $coll) {
+            foreach ($module->attr_collections_info as $coll_i => $coll) {
                 foreach ($coll as $attr_i => $attr) {
                     if ($attr_i === 0 && isset($info[$coll_i][$attr_i])) {
                         // merge in includes
@@ -109,6 +110,7 @@ class HTMLPurifier_AttrCollection
             if (isset($attr_types->info[$def])) {
                 $attr[$def_i] = $attr_types->info[$def];
             } else {
+                trigger_error('Attempted to reference undefined attribute type', E_USER_ERROR);
                 unset($attr[$def_i]);
             }
         }

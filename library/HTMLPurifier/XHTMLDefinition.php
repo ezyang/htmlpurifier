@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/HTMLDefinition.php';
 
 require_once 'HTMLPurifier/AttrTypes.php';
-require_once 'HTMLPurifier/AttrCollection.php';
+require_once 'HTMLPurifier/AttrCollections.php';
 
 // we'll manage loading extremely commonly used attr definitions
 require_once 'HTMLPurifier/AttrDef.php';
@@ -48,10 +48,10 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
     var $attr_types;
     
     /**
-     * Instance of HTMLPurifier_AttrCollection
+     * Instance of HTMLPurifier_AttrCollections
      * @public
      */
-    var $attr_collection;
+    var $attr_collections;
     
     /**
      * Performs low-cost, preliminary initialization.
@@ -70,7 +70,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
         $this->modules['StyleAttribute']= new HTMLPurifier_HTMLModule_StyleAttribute();
         
         $this->attr_types = new HTMLPurifier_AttrTypes();
-        $this->attr_collection = new HTMLPurifier_AttrCollection();
+        $this->attr_collections = new HTMLPurifier_AttrCollections();
         
     }
     
@@ -83,7 +83,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
     function setup($config) {
         
         // perform attribute collection substitutions
-        $this->attr_collection->setup($this->attr_types, $this->modules);
+        $this->attr_collections->setup($this->attr_types, $this->modules);
         
         // populate content_sets based on module hints
         $content_sets = array();
@@ -121,8 +121,9 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
                 $def =& $this->modules[$module_i]->info[$name];
                 
                 // attribute value expansions
-                $this->attr_collection->performInclusions($def->attr);
-                $this->attr_collection->expandIdentifiers(
+                
+                $this->attr_collections->performInclusions($def->attr);
+                $this->attr_collections->expandIdentifiers(
                     $def->attr, $this->attr_types);
                 
                 // perform content model expansions
@@ -169,7 +170,7 @@ class HTMLPurifier_XHTMLDefinition extends HTMLPurifier_HTMLDefinition
      */
     function setupBlockWrapper($config) {
         $block_wrapper = $config->get('HTML', 'BlockWrapper');
-        if (isset($this->content_sets['Block'][$block_wrapper])) {
+        if (isset($this->info_content_sets['Block'][$block_wrapper])) {
             $this->info_block_wrapper = $block_wrapper;
         } else {
             trigger_error('Cannot use non-block element as block wrapper.',
