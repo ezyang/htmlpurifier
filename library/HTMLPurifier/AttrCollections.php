@@ -53,7 +53,7 @@ class HTMLPurifier_AttrCollections
         $info =& $this->info;
         // load extensions from the modules
         foreach ($modules as $module) {
-            foreach ($module->attr_collections_info as $coll_i => $coll) {
+            foreach ($module->attr_collections as $coll_i => $coll) {
                 foreach ($coll as $attr_i => $attr) {
                     if ($attr_i === 0 && isset($info[$coll_i][$attr_i])) {
                         // merge in includes

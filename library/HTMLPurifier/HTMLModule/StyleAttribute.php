@@ -9,7 +9,7 @@ require_once 'HTMLPurifier/AttrDef/CSS.php';
  */
 class HTMLPurifier_HTMLModule_StyleAttribute extends HTMLPurifier_HTMLModule
 {
-    var $attr_collections_info = array(
+    var $attr_collections = array(
         // The inclusion routine differs from the Abstract Modules but
         // is in line with the DTD and XML Schemas.
         'Style' => array('style' => false), // see constructor
@@ -17,7 +17,7 @@ class HTMLPurifier_HTMLModule_StyleAttribute extends HTMLPurifier_HTMLModule
     );
     
     function HTMLPurifier_HTMLModule_StyleAttribute() {
-        $this->attr_collections_info['Style']['style'] = new HTMLPurifier_AttrDef_CSS();
+        $this->attr_collections['Style']['style'] = new HTMLPurifier_AttrDef_CSS();
     }
     
 }
