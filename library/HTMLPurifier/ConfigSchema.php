@@ -1,6 +1,10 @@
 <?php
 
 require_once 'HTMLPurifier/Error.php';
+require_once 'HTMLPurifier/ConfigDef.php';
+require_once 'HTMLPurifier/ConfigDef/Namespace.php';
+require_once 'HTMLPurifier/ConfigDef/Directive.php';
+require_once 'HTMLPurifier/ConfigDef/DirectiveAlias.php';
 
 /**
  * Configuration definition, defines directives and their defaults.
@@ -138,7 +142,7 @@ class HTMLPurifier_ConfigSchema {
                 return;
             }
             $def->info[$namespace][$name] =
-                new HTMLPurifier_ConfigEntity_Directive();
+                new HTMLPurifier_ConfigDef_Directive();
             $def->info[$namespace][$name]->type = $type;
             $def->info[$namespace][$name]->allow_null = $allow_null;
             $def->defaults[$namespace][$name]   = $default;
@@ -172,7 +176,7 @@ class HTMLPurifier_ConfigSchema {
             return;
         }
         $def->info[$namespace] = array();
-        $def->info_namespace[$namespace] = new HTMLPurifier_ConfigEntity_Namespace();
+        $def->info_namespace[$namespace] = new HTMLPurifier_ConfigDef_Namespace();
         $def->info_namespace[$namespace]->description = $description;
         $def->defaults[$namespace] = array();
     }
@@ -284,7 +288,7 @@ class HTMLPurifier_ConfigSchema {
             return;
         }
         $def->info[$namespace][$name] =
-            new HTMLPurifier_ConfigEntity_DirectiveAlias(
+            new HTMLPurifier_ConfigDef_DirectiveAlias(
                 $new_namespace, $new_name);
     }
     
@@ -376,122 +380,6 @@ class HTMLPurifier_ConfigSchema {
         if (!is_object($var)) return false;
         if (!is_a($var, 'HTMLPurifier_Error')) return false;
         return true;
-    }
-}
-
-/**
- * Base class for configuration entity
- */
-class HTMLPurifier_ConfigEntity {
-    var $class = false;
-}
-
-/**
- * Structure object describing of a namespace
- */
-class HTMLPurifier_ConfigEntity_Namespace extends HTMLPurifier_ConfigEntity {
-    
-    function HTMLPurifier_ConfigEntity_Namespace($description = null) {
-        $this->description = $description;
-    }
-    
-    var $class = 'namespace';
-    
-    /**
-     * String description of what kinds of directives go in this namespace.
-     */
-    var $description;
-    
-}
-
-/**
- * Structure object containing definition of a directive.
- * @note This structure does not contain default values
- */
-class HTMLPurifier_ConfigEntity_Directive extends HTMLPurifier_ConfigEntity
-{
-    
-    var $class = 'directive';
-    
-    function HTMLPurifier_ConfigEntity_Directive(
-        $type = null,
-        $descriptions = null,
-        $allow_null = null,
-        $allowed = null,
-        $aliases = null
-    ) {
-        if (        $type !== null)         $this->type = $type;
-        if ($descriptions !== null) $this->descriptions = $descriptions;
-        if (  $allow_null !== null)   $this->allow_null = $allow_null;
-        if (     $allowed !== null)      $this->allowed = $allowed;
-        if (     $aliases !== null)      $this->aliases = $aliases;
-    }
-    
-    /**
-     * Allowed type of the directive. Values are:
-     *      - string
-     *      - istring (case insensitive string)
-     *      - int
-     *      - float
-     *      - bool
-     *      - lookup (array of value => true)
-     *      - list (regular numbered index array)
-     *      - hash (array of key => value)
-     *      - mixed (anything goes)
-     */
-    var $type = 'mixed';
-    
-    /**
-     * Plaintext descriptions of the configuration entity is. Organized by
-     * file and line number, so multiple descriptions are allowed.
-     */
-    var $descriptions = array();
-    
-    /**
-     * Is null allowed? Has no effect for mixed type.
-     * @bool
-     */
-    var $allow_null = false;
-    
-    /**
-     * Lookup table of allowed values of the element, bool true if all allowed.
-     */
-    var $allowed = true;
-    
-    /**
-     * Hash of value aliases, i.e. values that are equivalent.
-     */
-    var $aliases = array();
-    
-    /**
-     * Adds a description to the array
-     */
-    function addDescription($file, $line, $description) {
-        if (!isset($this->descriptions[$file])) $this->descriptions[$file] = array();
-        $this->descriptions[$file][$line] = $description;
-    }
-    
-}
-
-/**
- * Structure object describing a directive alias
- */
-class HTMLPurifier_ConfigEntity_DirectiveAlias extends HTMLPurifier_ConfigEntity
-{
-    var $class = 'alias';
-    
-    /**
-     * Namespace being aliased to
-     */
-    var $namespace;
-    /**
-     * Directive being aliased to
-     */
-    var $name;
-    
-    function HTMLPurifier_ConfigEntity_DirectiveAlias($namespace, $name) {
-        $this->namespace = $namespace;
-        $this->name = $name;
     }
 }
 
