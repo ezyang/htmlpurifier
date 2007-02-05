@@ -10,12 +10,33 @@ require_once 'HTMLPurifier/ChildDef/StrictBlockquote.php'; // transform
 class HTMLPurifier_ContentSets
 {
     
+    /**
+     * List of content set strings (pipe seperators) indexed by name.
+     * @public
+     */
     var $info = array();
+    
+    /**
+     * List of content set lookups (element => true) indexed by name.
+     * @note This is in HTMLPurifier_HTMLDefinition->info_content_sets
+     * @public
+     */
     var $lookup = array();
     
+    /**
+     * Synchronized list of defined content sets (keys of info)
+     */
     var $keys = array();
+    /**
+     * Synchronized list of defined content values (values of info)
+     */
     var $values = array();
     
+    /**
+     * Merges in module's content sets, expands identifiers in the content
+     * sets and populates the keys, values and lookup member variables.
+     * @param $modules List of HTMLPurifier_HTMLModule
+     */
     function setup($modules) {
         // populate content_sets based on module hints
         foreach ($modules as $module_i => $module) {
@@ -50,6 +71,11 @@ class HTMLPurifier_ContentSets
         }
     }
     
+    /**
+     * Accepts a definition; generates and assigns a ChildDef for it
+     * @param $def HTMLPurifier_ElementDef reference
+     * @param $module Module that defined the ElementDef
+     */
     function generateChildDef(&$def, $module) {
         $content_model = $def->content_model;
         if (is_string($content_model)) {

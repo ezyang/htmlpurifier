@@ -284,7 +284,11 @@ class HTMLPurifier_HTMLDefinition
         
     }
     
-    function setupInfo() {
+    /**
+     * Sets up the info array.
+     * @param $config Instance of HTMLPurifier_Config
+     */
+    function setupInfo($config) {
         $this->attr_collections->setup($this->attr_types, $this->modules);
         $this->content_sets->setup($this->modules);
         $this->info_content_sets = $this->content_sets->lookup;
