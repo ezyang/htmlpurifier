@@ -18,6 +18,9 @@ require_once 'HTMLPurifier/AttrTransform/ImgRequired.php';
 
 // temporary: tag transformations
 require_once 'HTMLPurifier/TagTransform.php';
+require_once 'HTMLPurifier/TagTransform/Simple.php';
+require_once 'HTMLPurifier/TagTransform/Center.php';
+require_once 'HTMLPurifier/TagTransform/Font.php';
 
 // default modules
 require_once 'HTMLPurifier/HTMLModule.php';
