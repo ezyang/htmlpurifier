@@ -77,6 +77,7 @@ class HTMLPurifier_ContentSets
      * @param $module Module that defined the ElementDef
      */
     function generateChildDef(&$def, $module) {
+        if (!empty($def->child)) return; // already done!
         $content_model = $def->content_model;
         if (is_string($content_model)) {
             $def->content_model = str_replace(
@@ -95,7 +96,14 @@ class HTMLPurifier_ContentSets
      */
     function getChildDef($def, $module) {
         $value = $def->content_model;
-        if (is_object($value)) return $value; // direct object, return
+        if (is_object($value)) {
+            trigger_error(
+                'Literal object child definitions should be stored in '.
+                'ElementDef->child not ElementDef->content_model',
+                E_USER_NOTICE
+            );
+            return $value;
+        }
         switch ($def->content_model_type) {
             case 'required':
                 return new HTMLPurifier_ChildDef_Required($value);
@@ -109,8 +117,10 @@ class HTMLPurifier_ContentSets
                 return new HTMLPurifier_ChildDef_Custom($value);
         }
         // defer to its module
-        if (!$module->defines_child_def) continue; // save a func call
-        $return = $module->getChildDef($def);
+        $return = false;
+        if ($module->defines_child_def) { // save a func call
+            $return = $module->getChildDef($def);
+        }
         if ($return !== false) return $return;
         // error-out
         trigger_error(

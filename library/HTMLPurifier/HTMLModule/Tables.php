@@ -58,8 +58,7 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
         // Is done directly because it doesn't leverage substitution
         // mechanisms. True model is:
         // 'caption?, ( col* | colgroup* ), (( thead?, tfoot?, tbody+ ) | ( tr+ ))'
-        $this->info['table']->content_model = new HTMLPurifier_ChildDef_Table();
-        $this->info['table']->content_model_type = 'table';
+        $this->info['table']->child = new HTMLPurifier_ChildDef_Table();
         
         $this->info['td']->content_model = 
         $this->info['th']->content_model = '#PCDATA | Flow';

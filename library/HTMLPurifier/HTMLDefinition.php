@@ -168,19 +168,19 @@ class HTMLPurifier_HTMLDefinition
     /**
      * Associative array of deprecated tag name to HTMLPurifier_TagTransform
      * @public
-     */
+     */ // use + operator
     var $info_tag_transform = array();
     
     /**
      * List of HTMLPurifier_AttrTransform to be performed before validation.
      * @public
-     */
+     */ // use array_merge or a foreach loop
     var $info_attr_transform_pre = array();
     
     /**
      * List of HTMLPurifier_AttrTransform to be performed after validation.
      * @public
-     */
+     */ // use array_merge or a foreach loop
     var $info_attr_transform_post = array();
     
     /**
