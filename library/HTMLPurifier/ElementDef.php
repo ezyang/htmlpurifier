@@ -8,6 +8,12 @@ class HTMLPurifier_ElementDef
 {
     
     /**
+     * Does the definition work by itself, or is it created solely
+     * for the purpose of merging into another definition?
+     */
+    var $standalone = true;
+    
+    /**
      * Associative array of attribute name to HTMLPurifier_AttrDef
      * @note Before being processed by HTMLPurifier_AttrCollections
      *       when modules are finalized during
@@ -22,13 +28,13 @@ class HTMLPurifier_ElementDef
     var $attr = array();
     
     /**
-     * List of tag's HTMLPurifier_AttrTransform to be done before validation
+     * Indexed list of tag's HTMLPurifier_AttrTransform to be done before validation
      * @public
      */
     var $attr_transform_pre = array();
     
     /**
-     * List of tag's HTMLPurifier_AttrTransform to be done after validation
+     * Indexed list of tag's HTMLPurifier_AttrTransform to be done after validation
      * @public
      */
     var $attr_transform_post = array();
@@ -78,6 +84,27 @@ class HTMLPurifier_ElementDef
      * @public
      */
     var $excludes = array();
+    
+    /**
+     * Merges the values of another element definition into this one.
+     * Values from the new element def take precedence if a value is
+     * not mergeable.
+     */
+    function mergeIn($def) {
+        
+        // later keys takes precedence
+        foreach($def->attr                  as $k => $v) $this->attr[$k]                = $v;
+        foreach($def->attr_transform_pre    as $k => $v) $this->attr_transform_pre[$k]  = $v;
+        foreach($def->attr_transform_post   as $k => $v) $this->attr_transform_post[$k] = $v;
+        foreach($def->auto_close            as $k => $v) $this->auto_close[$k]          = $v;
+        foreach($def->excludes              as $k => $v) $this->excludes[$k]            = $v;
+        
+        if(!is_null($def->child)) $this->child = $def->child;
+        if(!empty($def->content_model)) $this->content_model .= ' | ' . $def->content_model;
+        if(!empty($def->content_model_type)) $this->content_model_type = $def->content_model_type;
+        if(!is_null($def->descendants_are_inline)) $this->descendants_are_inline = $def->descendants_are_inline;
+        
+    }
     
 }
 

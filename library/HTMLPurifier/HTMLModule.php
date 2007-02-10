@@ -54,6 +54,24 @@ class HTMLPurifier_HTMLModule
     var $attr_collections = array();
     
     /**
+     * Associative array of deprecated tag name to HTMLPurifier_TagTransform
+     * @public
+     */
+    var $info_tag_transform = array();
+    
+    /**
+     * List of HTMLPurifier_AttrTransform to be performed before validation.
+     * @public
+     */
+    var $info_attr_transform_pre = array();
+    
+    /**
+     * List of HTMLPurifier_AttrTransform to be performed after validation.
+     * @public
+     */
+    var $info_attr_transform_post = array();
+    
+    /**
      * Boolean flag that indicates whether or not getChildDef is implemented.
      * For optimization reasons: may save a call to a function. Be sure
      * to set it if you do implement getChildDef(), otherwise it will have
@@ -72,6 +90,7 @@ class HTMLPurifier_HTMLModule
      * @public
      */
     function getChildDef($def) {return false;}
+    
 }
 
 ?>

@@ -5,7 +5,6 @@ require_once 'HTMLPurifier/ChildDef.php';
 require_once 'HTMLPurifier/ChildDef/Empty.php';
 require_once 'HTMLPurifier/ChildDef/Required.php';
 require_once 'HTMLPurifier/ChildDef/Optional.php';
-require_once 'HTMLPurifier/ChildDef/StrictBlockquote.php'; // transform
 
 class HTMLPurifier_ContentSets
 {
@@ -111,8 +110,6 @@ class HTMLPurifier_ContentSets
                 return new HTMLPurifier_ChildDef_Optional($value);
             case 'empty':
                 return new HTMLPurifier_ChildDef_Empty();
-            case 'strictblockquote':
-                return new HTMLPurifier_ChildDef_StrictBlockquote($value);
             case 'custom':
                 return new HTMLPurifier_ChildDef_Custom($value);
         }

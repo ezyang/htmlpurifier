@@ -13,13 +13,13 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
     var $elements = array('bdo');
     var $info = array();
     var $content_sets = array('Inline' => 'bdo');
-    var $attr_collections_info = array(
+    var $attr_collections = array(
         'I18N' => array('dir' => false)
     );
     
     function HTMLPurifier_HTMLModule_Bdo() {
         $dir = new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false);
-        $this->attr_collections_info['I18N']['dir'] = $dir;
+        $this->attr_collections['I18N']['dir'] = $dir;
         $this->info['bdo'] = new HTMLPurifier_ElementDef();
         $this->info['bdo']->attr = array(
             0 => array('Core', 'Lang'),
@@ -33,7 +33,7 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
         $this->info['bdo']->content_model = '#PCDATA | Inline';
         $this->info['bdo']->content_model_type = 'optional';
         // provides fallback behavior if dir's missing (dir is required)
-        $this->info['bdo']->attr_transform_post[] =
+        $this->info['bdo']->attr_transform_post['required-dir'] =
             new HTMLPurifier_AttrTransform_BdoDir();
     }
     

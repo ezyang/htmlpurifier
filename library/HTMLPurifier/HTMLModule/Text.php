@@ -45,7 +45,7 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
                 $this->info[$element]->content_model_type = 'empty';
             } elseif ($element == 'blockquote') {
                 $this->info[$element]->content_model = 'Heading | Block | List';
-                $this->info[$element]->content_model_type = 'strictblockquote';
+                $this->info[$element]->content_model_type = 'optional';
             } elseif ($element == 'div') {
                 $this->info[$element]->content_model = '#PCDATA | Flow';
                 $this->info[$element]->content_model_type = 'optional';

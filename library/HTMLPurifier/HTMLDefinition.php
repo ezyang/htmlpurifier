@@ -34,6 +34,9 @@ require_once 'HTMLPurifier/HTMLModule/Tables.php';
 require_once 'HTMLPurifier/HTMLModule/Image.php';
 require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 
+// compat modules
+require_once 'HTMLPurifier/HTMLModule/TransformToStrict.php';
+
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'EnableAttrID', false, 'bool',
     'Allows the ID attribute in HTML.  This is disabled by default '.
@@ -168,19 +171,19 @@ class HTMLPurifier_HTMLDefinition
     /**
      * Associative array of deprecated tag name to HTMLPurifier_TagTransform
      * @public
-     */ // use + operator
+     */
     var $info_tag_transform = array();
     
     /**
-     * List of HTMLPurifier_AttrTransform to be performed before validation.
+     * Indexed list of HTMLPurifier_AttrTransform to be performed before validation.
      * @public
-     */ // use array_merge or a foreach loop
+     */
     var $info_attr_transform_pre = array();
     
     /**
-     * List of HTMLPurifier_AttrTransform to be performed after validation.
+     * Indexed list of HTMLPurifier_AttrTransform to be performed after validation.
      * @public
-     */ // use array_merge or a foreach loop
+     */
     var $info_attr_transform_post = array();
     
     /**
@@ -241,6 +244,7 @@ class HTMLPurifier_HTMLDefinition
         // this will eventually influence module loading
         $this->strict = $config->get('HTML', 'Strict');
         
+        // order is important!
         $this->modules['Text']          = new HTMLPurifier_HTMLModule_Text();
         $this->modules['Hypertext']     = new HTMLPurifier_HTMLModule_Hypertext();
         $this->modules['List']          = new HTMLPurifier_HTMLModule_List();
@@ -250,6 +254,8 @@ class HTMLPurifier_HTMLDefinition
         $this->modules['Tables']        = new HTMLPurifier_HTMLModule_Tables();
         $this->modules['Image']         = new HTMLPurifier_HTMLModule_Image();
         $this->modules['StyleAttribute']= new HTMLPurifier_HTMLModule_StyleAttribute();
+        
+        $this->modules['TransformToStrict'] = new HTMLPurifier_HTMLModule_TransformToStrict($config);
         
         $this->attr_types       = new HTMLPurifier_AttrTypes();
         $this->attr_collections = new HTMLPurifier_AttrCollections();
@@ -279,7 +285,7 @@ class HTMLPurifier_HTMLDefinition
         
         // would be nice if we could put each of these in their
         // own object, would make this hookable too!
-        $this->setupInfo($config);
+        $this->processModules($config);
         $this->setupAttrTransform($config);
         $this->setupBlockWrapper($config);
         $this->setupParent($config);
@@ -288,24 +294,39 @@ class HTMLPurifier_HTMLDefinition
     }
     
     /**
-     * Sets up the info array.
+     * Processes the modules, setting up related info variables
      * @param $config Instance of HTMLPurifier_Config
      */
-    function setupInfo($config) {
+    function processModules($config) {
         $this->attr_collections->setup($this->attr_types, $this->modules);
         $this->content_sets->setup($this->modules);
         $this->info_content_sets = $this->content_sets->lookup;
         
         foreach ($this->modules as $module_i => $module) {
+            // process element-wise definitions
             foreach ($module->info as $name => $def) {
-                $def =& $this->modules[$module_i]->info[$name];
+                // setup info
+                if (!isset($this->info[$name])) {
+                    if ($def->standalone) {
+                        $this->info[$name] = $this->modules[$module_i]->info[$name];
+                    } else {
+                        // attempting to merge into an element that doesn't
+                        // exist, ignore it
+                        continue;
+                    }
+                } else {
+                    $this->info[$name]->mergeIn($this->modules[$module_i]->info[$name]);
+                }
+                
+                // process info
+                $def = $this->info[$name];
                 
                 // attribute value expansions
                 $this->attr_collections->performInclusions($def->attr);
                 $this->attr_collections->expandIdentifiers(
                     $def->attr, $this->attr_types);
                 
-                // chameleon data, set descendants_are_inline
+                // descendants_are_inline, for ChildDef_Chameleon
                 if (is_string($def->content_model) &&
                 strpos($def->content_model, 'Inline') !== false) {
                     if ($name != 'del' && $name != 'ins') {
@@ -317,13 +338,16 @@ class HTMLPurifier_HTMLDefinition
                 // set child def from content model
                 $this->content_sets->generateChildDef($def, $module);
                 
-                // setup info
                 $this->info[$name] = $def;
-                if ($this->info_parent == $name) {
-                    $this->info_parent_def = $this->info[$name];
-                }
+                
             }
+            
+            // merge in global info variables from module
+            foreach($module->info_tag_transform         as $k => $v) $this->info_tag_transform[$k]      = $v;
+            foreach($module->info_attr_transform_pre    as $k => $v) $this->info_attr_transform_pre[$k] = $v;
+            foreach($module->info_attr_transform_post   as $k => $v) $this->info_attr_transform_post[$k]= $v;
         }
+        
     }
     
     /**
@@ -369,17 +393,13 @@ class HTMLPurifier_HTMLDefinition
      */
     function setupCompat($config) {
         
+        // convenience for compat
         $e_Inline = new HTMLPurifier_ChildDef_Optional(
                         $this->info_content_sets['Inline'] +
                         array('#PCDATA' => true));
         
-        // blockquote changes, implement in TransformStrict and Legacy
-        if ($this->strict) {
-            $this->info['blockquote']->child =
-                new HTMLPurifier_ChildDef_StrictBlockquote(
-                    $this->info_content_sets['Block'] +
-                    array('#PCDATA' => true));
-        } else {
+        // blockquote alt child def, implement in Legacy
+        if (!$this->strict) {
             $this->info['blockquote']->child =
                 new HTMLPurifier_ChildDef_Optional(
                     $this->info_content_sets['Flow'] +
@@ -409,8 +429,7 @@ class HTMLPurifier_HTMLDefinition
                 array('#PCDATA' => true, 'p' => true));
         }
         
-        // custom, not sure where to implement, because it's not
-        // just /one/ module
+        // deprecated config setting, implement in DisableURI module
         if ($config->get('Attr', 'DisableURI')) {
             $this->info['a']->attr['href'] =
             $this->info['img']->attr['longdesc'] =
@@ -427,28 +446,7 @@ class HTMLPurifier_HTMLDefinition
             $this->info['ol']->attr['start'] = new HTMLPurifier_AttrDef_Integer();
         }
         
-        // deprecated elements transforms, implement in TransformToStrict
-        $this->info_tag_transform['font']   = new HTMLPurifier_TagTransform_Font();
-        $this->info_tag_transform['menu']   = new HTMLPurifier_TagTransform_Simple('ul');
-        $this->info_tag_transform['dir']    = new HTMLPurifier_TagTransform_Simple('ul');
-        $this->info_tag_transform['center'] = new HTMLPurifier_TagTransform_Center();
-        
-        // deprecated attribute transforms, implement in TransformToStrict
-        $this->info['h1']->attr_transform_pre[] =
-        $this->info['h2']->attr_transform_pre[] =
-        $this->info['h3']->attr_transform_pre[] =
-        $this->info['h4']->attr_transform_pre[] =
-        $this->info['h5']->attr_transform_pre[] =
-        $this->info['h6']->attr_transform_pre[] =
-        $this->info['p'] ->attr_transform_pre[] = 
-                    new HTMLPurifier_AttrTransform_TextAlign();
-        
-        // xml:lang <=> lang mirroring, implement in TransformToStrict?
-        $this->info_attr_transform_post[] = new HTMLPurifier_AttrTransform_Lang();
-        $this->info_global_attr['lang'] = new HTMLPurifier_AttrDef_Lang();
-        
-        // setup allowed elements, obsoleted by Modules? (does offer
-        // different functionality)
+        // setup allowed elements, SubtractiveWhitelist module
         $allowed_elements = $config->get('HTML', 'AllowedElements');
         if (is_array($allowed_elements)) {
             foreach ($this->info as $name => $d) {

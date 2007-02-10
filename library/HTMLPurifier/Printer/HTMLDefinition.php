@@ -130,7 +130,9 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
             $elements = array();
             $attr = array();
             if (isset($def->elements)) {
-                if ($def->type == 'strictblockquote') $def->validateChildren(array(), $this->config, $context);
+                if ($def->type == 'strictblockquote') {
+                    $def->validateChildren(array(), $this->config, $context);
+                }
                 $elements = $def->elements;
             } elseif ($def->type == 'chameleon') {
                 $attr['rowspan'] = 2;
