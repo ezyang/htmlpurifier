@@ -36,6 +36,7 @@ require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 
 // compat modules
 require_once 'HTMLPurifier/HTMLModule/TransformToStrict.php';
+require_once 'HTMLPurifier/HTMLModule/Legacy.php';
 
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'EnableAttrID', false, 'bool',
@@ -256,6 +257,7 @@ class HTMLPurifier_HTMLDefinition
         $this->modules['StyleAttribute']= new HTMLPurifier_HTMLModule_StyleAttribute();
         
         $this->modules['TransformToStrict'] = new HTMLPurifier_HTMLModule_TransformToStrict($config);
+        if (!$this->strict) $this->modules['Legacy'] = new HTMLPurifier_HTMLModule_Legacy($config);
         
         $this->attr_types       = new HTMLPurifier_AttrTypes();
         $this->attr_collections = new HTMLPurifier_AttrCollections();
@@ -393,42 +395,6 @@ class HTMLPurifier_HTMLDefinition
      */
     function setupCompat($config) {
         
-        // convenience for compat
-        $e_Inline = new HTMLPurifier_ChildDef_Optional(
-                        $this->info_content_sets['Inline'] +
-                        array('#PCDATA' => true));
-        
-        // blockquote alt child def, implement in Legacy
-        if (!$this->strict) {
-            $this->info['blockquote']->child =
-                new HTMLPurifier_ChildDef_Optional(
-                    $this->info_content_sets['Flow'] +
-                    array('#PCDATA' => true));
-        }
-        
-        // deprecated element definitions, implement in Legacy
-        if (!$this->strict) {
-            $this->info['u'] =
-            $this->info['s'] =
-            $this->info['strike'] = new HTMLPurifier_ElementDef();
-            $this->info['u']->child =
-            $this->info['s']->child =
-            $this->info['strike']->child = $e_Inline;
-            $this->info['u']->descendants_are_inline =
-            $this->info['s']->descendants_are_inline =
-            $this->info['strike']->descendants_are_inline = true;
-        }
-        
-        // changed content model for loose, implement in Legacy
-        if ($this->strict) {
-            $this->info['address']->child = $e_Inline;
-        } else {
-            $this->info['address']->child =
-                new HTMLPurifier_ChildDef_Optional(
-                $this->info_content_sets['Inline'] + 
-                array('#PCDATA' => true, 'p' => true));
-        }
-        
         // deprecated config setting, implement in DisableURI module
         if ($config->get('Attr', 'DisableURI')) {
             $this->info['a']->attr['href'] =
@@ -438,12 +404,6 @@ class HTMLPurifier_HTMLDefinition
             $this->info['blockquote']->attr['cite'] =
             $this->info['q']->attr['cite'] = 
             $this->info['img']->attr['src'] = null;
-        }
-        
-        // deprecated attributes implementations, implement in Legacy
-        if (!$this->strict) {
-            $this->info['li']->attr['value'] = new HTMLPurifier_AttrDef_Integer();
-            $this->info['ol']->attr['start'] = new HTMLPurifier_AttrDef_Integer();
         }
         
         // setup allowed elements, SubtractiveWhitelist module

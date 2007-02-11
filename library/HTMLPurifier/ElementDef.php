@@ -93,7 +93,17 @@ class HTMLPurifier_ElementDef
     function mergeIn($def) {
         
         // later keys takes precedence
-        foreach($def->attr                  as $k => $v) $this->attr[$k]                = $v;
+        foreach($def->attr as $k => $v) {
+            if ($k == 0) {
+                // merge in the includes
+                // sorry, no way to override an include
+                foreach ($v as $v2) {
+                    $def->attr[0][] = $v2;
+                }
+                continue;
+            }
+            $this->attr[$k] = $v;
+        }
         foreach($def->attr_transform_pre    as $k => $v) $this->attr_transform_pre[$k]  = $v;
         foreach($def->attr_transform_post   as $k => $v) $this->attr_transform_post[$k] = $v;
         foreach($def->auto_close            as $k => $v) $this->auto_close[$k]          = $v;

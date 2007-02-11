@@ -17,7 +17,40 @@
 class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
 {
     
-    // unimplemented
+    // incomplete
+    
+    var $elements = array('u', 's', 'strike');
+    var $non_standalone_elements = array('li', 'ol', 'address', 'blockquote');
+    
+    function HTMLPurifier_HTMLModule_Legacy() {
+        // setup new elements
+        foreach ($this->elements as $name) {
+            $this->info[$name] = new HTMLPurifier_ElementDef();
+            // for u, s, strike, as more elements get added, add
+            // conditionals as necessary
+            $this->info[$name]->content_model = 'Inline | #PCDATA';
+            $this->info[$name]->content_model_type = 'optional';
+            $this->info[$name]->attr[0] = array('Common');
+        }
+        
+        // setup modifications to old elements
+        foreach ($this->non_standalone_elements as $name) {
+            $this->info[$name] = new HTMLPurifier_ElementDef();
+            $this->info[$name]->standalone = false;
+        }
+        
+        $this->info['li']->attr['value'] = new HTMLPurifier_AttrDef_Integer();
+        $this->info['ol']->attr['start'] = new HTMLPurifier_AttrDef_Integer();
+        
+        $this->info['address']->content_model = 'Inline | #PCDATA | p';
+        $this->info['address']->content_model_type = 'optional';
+        $this->info['address']->child = false;
+        
+        $this->info['blockquote']->content_model = 'Flow | #PCDATA';
+        $this->info['blockquote']->content_model_type = 'optional';
+        $this->info['blockquote']->child = false;
+        
+    }
     
 }
 
