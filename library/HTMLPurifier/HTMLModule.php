@@ -91,6 +91,22 @@ class HTMLPurifier_HTMLModule
      */
     function getChildDef($def) {return false;}
     
+    /**
+     * Hook method that lets module perform arbitrary operations on
+     * HTMLPurifier_HTMLDefinition before the module gets processed.
+     * @param $definition Reference to HTMLDefinition being setup
+     * @param $config Instance of HTMLPurifier_Config
+     */
+    function preProcess(&$definition, $config) {}
+    
+    /**
+     * Hook method that lets module perform arbitrary operations
+     * on HTMLPurifier_HTMLDefinition after the module gets processed.
+     * @param $definition Reference to HTMLDefinition being setup
+     * @param $config Instance of HTMLPurifier_Config
+     */
+    function postProcess(&$definition, $config) {}
+    
 }
 
 ?>

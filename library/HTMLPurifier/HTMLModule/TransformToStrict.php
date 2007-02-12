@@ -27,6 +27,10 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         )
     );
     
+    var $info_attr_transform_post = array(
+        'lang' => false // placeholder
+    );
+    
     function HTMLPurifier_HTMLModule_TransformToStrict($config) {
         // deprecated tag transforms
         $this->info_tag_transform['font']   = new HTMLPurifier_TagTransform_Font();

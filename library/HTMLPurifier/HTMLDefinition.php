@@ -305,6 +305,9 @@ class HTMLPurifier_HTMLDefinition
         $this->info_content_sets = $this->content_sets->lookup;
         
         foreach ($this->modules as $module_i => $module) {
+            
+            $module->preProcess($this, $config);
+            
             // process element-wise definitions
             foreach ($module->info as $name => $def) {
                 // setup info
@@ -348,6 +351,9 @@ class HTMLPurifier_HTMLDefinition
             foreach($module->info_tag_transform         as $k => $v) $this->info_tag_transform[$k]      = $v;
             foreach($module->info_attr_transform_pre    as $k => $v) $this->info_attr_transform_pre[$k] = $v;
             foreach($module->info_attr_transform_post   as $k => $v) $this->info_attr_transform_post[$k]= $v;
+            
+            $module->postProcess($this, $config);
+            
         }
         
     }

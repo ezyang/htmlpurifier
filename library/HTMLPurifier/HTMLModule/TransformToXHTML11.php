@@ -14,7 +14,15 @@
 class HTMLPurifier_HTMLModule_TransformToXHTML11 extends HTMLPurifier_HTMLModule
 {
     
-    // unimplemented
+    var $attr_collections = array(
+        'Lang' => array(
+            'lang' => false // remove it
+        )
+    );
+    
+    var $info_attr_transform_post = array(
+        'lang' => false // remove it
+    );
     
 }
 

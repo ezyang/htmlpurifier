@@ -5,7 +5,9 @@
  * deprecated.
  * 
  * @note Not all legacy elements have been implemented yet, which
- *       is a bit of a reverse problem as compared to browsers!
+ *       is a bit of a reverse problem as compared to browsers! In
+ *       addition, this legacy module may implement a bit more than
+ *       mandated by XHTML 1.1.
  * 
  * This module can be used in combination with TransformToStrict in order
  * to transform as many deprecated elements as possible, but retain
