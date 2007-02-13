@@ -7,6 +7,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . '../library/');
 
 require_once 'HTMLPurifier/ConfigSchema.php';
 require_once 'HTMLPurifier/Config.php';
+require_once 'HTMLPurifier/Context.php';
 
 $LEXERS = array();
 $RUNS = isset($GLOBALS['HTMLPurifierTest']['Runs'])
@@ -93,11 +94,14 @@ function print_lexers() {
 function do_benchmark($name, $document) {
     global $LEXERS, $RUNS;
     
+    $config = HTMLPurifier_Config::createDefault();
+    $context = new HTMLPurifier_Context();
+    
     $timer = new RowTimer($name);
     $timer->start();
     
     foreach($LEXERS as $key => $lexer) {
-        for ($i=0; $i<$RUNS; $i++) $tokens = $lexer->tokenizeHTML($document);
+        for ($i=0; $i<$RUNS; $i++) $tokens = $lexer->tokenizeHTML($document, $config, $context);
         $timer->setMarker($key);
     }
     
