@@ -10,7 +10,7 @@
     .minor td {font-style:italic;}
 </style>
 
-<title>UTF-8 - HTML Purifier</title>
+<title>UTF-8: The Secret of Character Encoding - HTML Purifier</title>
 
 <!-- Note to users: this document, though professing to be UTF-8, attempts
 to use only ASCII characters, because most webservers are configured
@@ -19,27 +19,27 @@ own advice for sake of portability.  -->
 
 </head><body>
 
-<h1>UTF-8</h1>
+<h1>UTF-8: The Secret of Character Encoding</h1>
 
 <div id="filing">Filed under End-User</div>
 <div id="index">Return to the <a href="index.html">index</a>.</div>
 <div id="home"><a href="http://hp.jpsband.org/">HTML Purifier</a> End-User Documentation</div>
 
-<p>Character encoding and character sets, in truth, are not that
-difficult to understand. But if you don't understand them, you are going
-to be caught by surprise by some of HTML Purifier's behavior, namely
-the fact that it operates UTF-8 or the limitations of the character
-encoding transformations it does. This document will walk you through
+<p>Character encoding and character sets are not that
+difficult to understand, but so many people blithely stumble
+through the worlds of programming without knowing what to actually
+do about it, or say &quot;Ah, it's a job for those <em>internationalization</em>
+experts.&quot; No, it is not! This document will walk you through
 determining the encoding of your system and how you should handle
 this information. It will stay away from excessive discussion on
 the internals of character encoding.</p>
 
-<p>This document is not designed to be read from top to bottom: it will
+<p>This document is not designed to be read in its entirety: it will
 slowly introduce concepts that build on each other: you need not get to
 the bottom to have learned something new. However, I strongly
 recommend you read all the way to <strong>Why UTF-8?</strong>, because at least
 at that point you'd have made a conscious decision not to migrate,
-which can be a difficult but rewarding task.</p>
+which can be a rewarding (but difficult) task.</p>
 
 <blockquote class="aside">
 <div class="label">Asides</div>
