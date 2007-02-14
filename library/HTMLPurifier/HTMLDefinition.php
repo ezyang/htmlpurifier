@@ -38,6 +38,8 @@ require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 require_once 'HTMLPurifier/HTMLModule/TransformToStrict.php';
 require_once 'HTMLPurifier/HTMLModule/Legacy.php';
 
+// this definition and its modules MUST NOT define configuration directives
+// outside of the HTML or Attr namespaces
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'EnableAttrID', false, 'bool',
     'Allows the ID attribute in HTML.  This is disabled by default '.
@@ -112,9 +114,6 @@ HTMLPurifier_ConfigSchema::define(
  * Definition of the purified HTML that describes allowed children,
  * attributes, and many other things.
  * 
- * @note This is the next-gen definition that will be renamed to
- *       HTMLDefinition soon!
- * 
  * Conventions:
  * 
  * All member variables that are prefixed with info
@@ -127,7 +126,6 @@ HTMLPurifier_ConfigSchema::define(
  * internally by the HTMLDefinition and MUST NOT be used by other HTML
  * Purifier internals. Many of them, however, are public, and may be
  * edited by userspace code to tweak the behavior of HTMLDefinition.
- * In practice, there will not be too many of them.
  * 
  * HTMLPurifier_Printer_HTMLDefinition is a notable exception to this
  * rule: in the interest of comprehensiveness, it will sniff everything.
@@ -205,10 +203,24 @@ class HTMLPurifier_HTMLDefinition
     var $strict;
     
     /**
-     * Array of HTMLPurifier_Module instances, indexed by module name
+     * Array of HTMLPurifier_Module instances, indexed by module's class name
      * @public
      */
     var $modules = array();
+    
+    /**
+     * Associative array of module class name to module order keywords or
+     * numbers (keyword is preferred, all keywords are resolved at beginning
+     * of setup())
+     * @public
+     */
+    var $modules_order = array();
+    
+    /**
+     * List of prefixes HTML Purifier should try to resolve short names to.
+     * @public
+     */
+    var $module_prefixes = array('HTMLPurifier_HTMLModule_');
     
     /**
      * Instance of HTMLPurifier_AttrTypes
@@ -223,7 +235,7 @@ class HTMLPurifier_HTMLDefinition
     var $attr_collections;
     
     /**
-     * Is setup?
+     * Has setup() been called yet?
      * @public
      */
     var $setup = false;
@@ -234,45 +246,89 @@ class HTMLPurifier_HTMLDefinition
      */
     var $content_sets;
     
+    /**
+     * Lookup table of module order "names" and an integer index
+     * @public
+     */
+    var $order_keywords = array(
+        'setup'     => 10,
+        'early'     => 20,
+        'main'      => 30,
+        'late'      => 40,
+        'cleanup'   => 50,
+    );
+    
+    /**
+     * Temporary instance of HTMLPurifier_Config for convenience reasons,
+     * is removed after setup().
+     * @public
+     */
+    var $config;
+    
     
     /**
      * Performs low-cost, preliminary initialization.
      * @param $config Instance of HTMLPurifier_Config
      */
-    function HTMLPurifier_HTMLDefinition($config) {
+    function HTMLPurifier_HTMLDefinition(&$config) {
         
-        // setup some cached config variables
-        // this will eventually influence module loading
-        $this->strict = $config->get('HTML', 'Strict');
+        $this->config =& $config;
         
-        // order is important!
-        $this->modules['Text']          = new HTMLPurifier_HTMLModule_Text();
-        $this->modules['Hypertext']     = new HTMLPurifier_HTMLModule_Hypertext();
-        $this->modules['List']          = new HTMLPurifier_HTMLModule_List();
-        $this->modules['Presentation']  = new HTMLPurifier_HTMLModule_Presentation();
-        $this->modules['Edit']          = new HTMLPurifier_HTMLModule_Edit();
-        $this->modules['Bdo']           = new HTMLPurifier_HTMLModule_Bdo();
-        $this->modules['Tables']        = new HTMLPurifier_HTMLModule_Tables();
-        $this->modules['Image']         = new HTMLPurifier_HTMLModule_Image();
-        $this->modules['StyleAttribute']= new HTMLPurifier_HTMLModule_StyleAttribute();
-        
-        $this->modules['TransformToStrict'] = new HTMLPurifier_HTMLModule_TransformToStrict($config);
-        if (!$this->strict) $this->modules['Legacy'] = new HTMLPurifier_HTMLModule_Legacy($config);
-        
+        // set up public internals
+        $this->strict           = $config->get('HTML', 'Strict');
         $this->attr_types       = new HTMLPurifier_AttrTypes();
         $this->attr_collections = new HTMLPurifier_AttrCollections();
         $this->content_sets     = new HTMLPurifier_ContentSets();
         
-        // some compat stuff, will be factored to modules
+        // modules
         
-        // remove ID module
+        // main
+        $main_modules = array('Text', 'Hypertext', 'List', 'Presentation',
+            'Edit', 'Bdo', 'Tables', 'Image', 'StyleAttribute');
+        foreach ($main_modules as $module) $this->addModule($module, 'main');
+        
+        // late
+        if (!$this->strict) $this->addModule('Legacy', 'late');
+        
+        // cleanup
+        $this->addModule('TransformToStrict', 'cleanup');
+        
+        // remove ID module (refactor to module)
         if (!$config->get('HTML', 'EnableAttrID')) {
             $this->attr_collections->info['Core']['id'] = false;
         }
         
     }
     
-    
+    /**
+     * Adds a module to the ordered list.
+     * @param $module Mixed: string module name, with or without
+     *                HTMLPurifier_HTMLModule prefix, or instance of
+     *                subclass of HTMLPurifier_HTMLModule.
+     */
+    function addModule($module, $order = 'main') {
+        if (is_string($module)) {
+            $original_module = $module;
+            if (!class_exists($module)) {
+                foreach ($this->module_prefixes as $prefix) {
+                    $module = $prefix . $original_module;
+                    if (class_exists($module)) break;
+                }
+            }
+            if (!class_exists($module)) {
+                trigger_error($original_module . ' module does not exist', E_USER_ERROR);
+                return;
+            }
+            $module = new $module($this);
+        }
+        if (!isset($this->order_keywords[$order])) {
+            trigger_error('Order keyword does not exist', E_USER_ERROR);
+            return;
+        }
+        $name = strtolower(get_class($module));
+        $this->modules[$name] = $module;
+        $this->modules_order[$name] = $order;
+    }
     
     /**
      * Processes internals into form usable by HTMLPurifier internals. 
@@ -280,33 +336,55 @@ class HTMLPurifier_HTMLDefinition
      * be done.
      * @param $config Instance of HTMLPurifier_Config
      */
-    function setup($config) {
+    function setup() {
         
         // multiple call guard
         if ($this->setup) {return;} else {$this->setup = true;}
         
-        // would be nice if we could put each of these in their
-        // own object, would make this hookable too!
-        $this->processModules($config);
-        $this->setupAttrTransform($config);
-        $this->setupBlockWrapper($config);
-        $this->setupParent($config);
-        $this->setupCompat($config);
+        $this->processModules();
+        $this->setupAttrTransform();
+        $this->setupBlockWrapper();
+        $this->setupParent();
+        $this->setupCompat();
+        
+        unset($this->config);
         
     }
     
     /**
      * Processes the modules, setting up related info variables
-     * @param $config Instance of HTMLPurifier_Config
      */
-    function processModules($config) {
+    function processModules() {
+        
+        // substitute out the order keywords
+        foreach ($this->modules_order as $name => $order) {
+            if (empty($this->modules[$name])) {
+                trigger_error('Orphan module order definition for module: ' . $name, E_USER_ERROR);
+                return;
+            }
+            if (is_int($order)) continue;
+            if (empty($this->order_keywords[$order])) {
+                trigger_error('Unknown order keyword: ' . $order, E_USER_ERROR);
+                return;
+            }
+            $this->modules_order[$name] = $this->order_keywords[$order];
+        }
+        
+        // sort modules member variable
+        array_multisort(
+            $this->modules_order, SORT_ASC, SORT_NUMERIC,
+            $this->modules
+        );
+        
+        // setup the global registries
         $this->attr_collections->setup($this->attr_types, $this->modules);
         $this->content_sets->setup($this->modules);
         $this->info_content_sets = $this->content_sets->lookup;
         
+        // process the modules
         foreach ($this->modules as $module_i => $module) {
             
-            $module->preProcess($this, $config);
+            $module->preProcess($this);
             
             // process element-wise definitions
             foreach ($module->info as $name => $def) {
@@ -352,7 +430,7 @@ class HTMLPurifier_HTMLDefinition
             foreach($module->info_attr_transform_pre    as $k => $v) $this->info_attr_transform_pre[$k] = $v;
             foreach($module->info_attr_transform_post   as $k => $v) $this->info_attr_transform_post[$k]= $v;
             
-            $module->postProcess($this, $config);
+            $module->postProcess($this);
             
         }
         
@@ -360,18 +438,16 @@ class HTMLPurifier_HTMLDefinition
     
     /**
      * Sets up attribute transformations
-     * @param $config Instance of HTMLPurifier_Config
      */
-    function setupAttrTransform($config) {
+    function setupAttrTransform() {
         $this->info_attr_transform_post[] = new HTMLPurifier_AttrTransform_Lang();
     }
     
     /**
      * Sets up block wrapper based on config
-     * @param $config Instance of HTMLPurifier_Config
      */
-    function setupBlockWrapper($config) {
-        $block_wrapper = $config->get('HTML', 'BlockWrapper');
+    function setupBlockWrapper() {
+        $block_wrapper = $this->config->get('HTML', 'BlockWrapper');
         if (isset($this->info_content_sets['Block'][$block_wrapper])) {
             $this->info_block_wrapper = $block_wrapper;
         } else {
@@ -382,10 +458,9 @@ class HTMLPurifier_HTMLDefinition
     
     /**
      * Sets up parent of fragment based on config
-     * @param $config Instance of HTMLPurifier_Config
      */
-    function setupParent($config) {
-        $parent = $config->get('HTML', 'Parent');
+    function setupParent() {
+        $parent = $this->config->get('HTML', 'Parent');
         if (isset($this->info[$parent])) {
             $this->info_parent = $parent;
         } else {
@@ -399,10 +474,10 @@ class HTMLPurifier_HTMLDefinition
      * Sets up compat code from HTMLDefinition that has not been
      * delegated to modules yet
      */
-    function setupCompat($config) {
+    function setupCompat() {
         
         // deprecated config setting, implement in DisableURI module
-        if ($config->get('Attr', 'DisableURI')) {
+        if ($this->config->get('Attr', 'DisableURI')) {
             $this->info['a']->attr['href'] =
             $this->info['img']->attr['longdesc'] =
             $this->info['del']->attr['cite'] =
@@ -413,13 +488,13 @@ class HTMLPurifier_HTMLDefinition
         }
         
         // setup allowed elements, SubtractiveWhitelist module
-        $allowed_elements = $config->get('HTML', 'AllowedElements');
+        $allowed_elements = $this->config->get('HTML', 'AllowedElements');
         if (is_array($allowed_elements)) {
             foreach ($this->info as $name => $d) {
                 if(!isset($allowed_elements[$name])) unset($this->info[$name]);
             }
         }
-        $allowed_attributes = $config->get('HTML', 'AllowedAttributes');
+        $allowed_attributes = $this->config->get('HTML', 'AllowedAttributes');
         if (is_array($allowed_attributes)) {
             foreach ($this->info_global_attr as $attr_key => $info) {
                 if (!isset($allowed_attributes["*.$attr_key"])) {

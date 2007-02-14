@@ -149,6 +149,13 @@ class HTMLPurifier_Config
             return;
         }
         $this->conf[$namespace][$key] = $value;
+        if ($namespace == 'HTML' || $namespace == 'Attr') {
+            // reset HTML definition if relevant attributes changed
+            $this->html_definition = null;
+        }
+        if ($namespace == 'CSS') {
+            $this->css_definition = null;
+        }
     }
     
     /**
@@ -157,20 +164,14 @@ class HTMLPurifier_Config
      *             called before it's been setup, otherwise won't work.
      */
     function &getHTMLDefinition($raw = false) {
-        if ($this->html_definition === null) {
+        if (
+            empty($this->html_definition) || // hasn't ever been setup
+            ($raw && $this->html_definition->setup) // requesting new one
+        ) {
             $this->html_definition = new HTMLPurifier_HTMLDefinition($this);
-            if ($raw) {
-                return $this->html_definition; // no setup!
-            }
-            $this->html_definition->setup($this);
+            if ($raw) return $this->html_definition; // no setup!
         }
-        if ($raw && $this->html_definition->setup) {
-            trigger_error('HTMLDefinition already setup, overwriting old '.
-            'definition (set $config->definition manually to null '.
-            'if this is desired behavior).', E_USER_NOTICE);
-            $this->html_definition = new HTMLPurifier_HTMLDefinition($this);
-            return $this->html_definition;
-        }
+        if (!$this->html_definition->setup) $this->html_definition->setup();
         return $this->html_definition;
     }
     

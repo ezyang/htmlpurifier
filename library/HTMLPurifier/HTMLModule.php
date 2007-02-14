@@ -95,17 +95,22 @@ class HTMLPurifier_HTMLModule
      * Hook method that lets module perform arbitrary operations on
      * HTMLPurifier_HTMLDefinition before the module gets processed.
      * @param $definition Reference to HTMLDefinition being setup
-     * @param $config Instance of HTMLPurifier_Config
      */
-    function preProcess(&$definition, $config) {}
+    function preProcess(&$definition) {}
     
     /**
      * Hook method that lets module perform arbitrary operations
      * on HTMLPurifier_HTMLDefinition after the module gets processed.
      * @param $definition Reference to HTMLDefinition being setup
-     * @param $config Instance of HTMLPurifier_Config
      */
-    function postProcess(&$definition, $config) {}
+    function postProcess(&$definition) {}
+    
+    /**
+     * Hook method that is called when a module gets registered to
+     * the definition.
+     * @param $definition Reference to HTMLDefinition being setup
+     */
+    function setup(&$definition) {}
     
 }
 

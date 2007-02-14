@@ -31,7 +31,9 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         'lang' => false // placeholder
     );
     
-    function HTMLPurifier_HTMLModule_TransformToStrict($config) {
+    function HTMLPurifier_HTMLModule_TransformToStrict(&$definition) {
+        $config = $definition->config;
+        
         // deprecated tag transforms
         $this->info_tag_transform['font']   = new HTMLPurifier_TagTransform_Font();
         $this->info_tag_transform['menu']   = new HTMLPurifier_TagTransform_Simple('ul');

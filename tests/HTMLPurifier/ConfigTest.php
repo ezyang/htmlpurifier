@@ -216,7 +216,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
     }
     
-    function test_getDefinition() {
+    function test_getHTMLDefinition() {
         
         // we actually want to use the old copy, because the definition
         // generation routines have dependencies on configuration values
@@ -224,12 +224,41 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
         
         $config = HTMLPurifier_Config::createDefault();
-        $def = $config->getHTMLDefinition();
-        $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
         
         $def = $config->getCSSDefinition();
         $this->assertIsA($def, 'HTMLPurifier_CSSDefinition');
         
+        $def = $config->getHTMLDefinition();
+        $def2 = $config->getHTMLDefinition();
+        $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
+        $this->assertEqual($def, $def2);
+        $this->assertTrue($def->setup);
+        
+        // test re-calculation if HTML changes
+        $config->set('HTML', 'Strict', true);
+        $def = $config->getHTMLDefinition();
+        $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
+        $this->assertNotEqual($def, $def2);
+        $this->assertTrue($def->setup);
+        
+        // test retrieval of raw definition
+        $def =& $config->getHTMLDefinition(true);
+        $this->assertNotEqual($def, $def2);
+        $this->assertFalse($def->setup);
+        
+        // auto initialization
+        $config->getHTMLDefinition();
+        $this->assertTrue($def->setup);
+        
+    }
+    
+    function test_getCSSDefinition() {
+        $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
+        
+        $config = HTMLPurifier_Config::createDefault();
+        
+        $def = $config->getCSSDefinition();
+        $this->assertIsA($def, 'HTMLPurifier_CSSDefinition');
     }
     
     function test_loadArray() {
