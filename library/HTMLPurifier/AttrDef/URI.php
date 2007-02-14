@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/URIScheme.php';
 require_once 'HTMLPurifier/URISchemeRegistry.php';
-require_once 'HTMLPurifier/AttrDef/Host.php';
+require_once 'HTMLPurifier/AttrDef/URI/Host.php';
 require_once 'HTMLPurifier/PercentEncoder.php';
 
 HTMLPurifier_ConfigSchema::define(
@@ -100,7 +100,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
      * @param $embeds_resource_resource Does the URI here result in an extra HTTP request?
      */
     function HTMLPurifier_AttrDef_URI($embeds_resource = false) {
-        $this->host = new HTMLPurifier_AttrDef_Host();
+        $this->host = new HTMLPurifier_AttrDef_URI_Host();
         $this->PercentEncoder = new HTMLPurifier_PercentEncoder();
         $this->embeds_resource = (bool) $embeds_resource;
     }

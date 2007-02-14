@@ -29,6 +29,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Removed redundant "exclusionary" definitions from DTD roster
 . StrictBlockquote now requires a construction parameter as if it
   were an Required ChildDef, this is the "real" set of allowed elements
+. AttrDef partitioned into HTML, CSS and URI segments
 
 1.4.2, unknown release date
 ! docs/enduser-utf8.html explains how to use UTF-8 and HTML Purifier

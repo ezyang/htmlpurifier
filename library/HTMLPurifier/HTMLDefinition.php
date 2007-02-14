@@ -7,7 +7,7 @@ require_once 'HTMLPurifier/ContentSets.php';
 require_once 'HTMLPurifier/ElementDef.php';
 
 require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/AttrDef/Enum.php'; // common
+require_once 'HTMLPurifier/AttrDef/Enum.php';
 
 // temporary: attribute transformations
 require_once 'HTMLPurifier/AttrTransform.php';
