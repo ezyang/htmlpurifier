@@ -38,6 +38,8 @@ require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 require_once 'HTMLPurifier/HTMLModule/TransformToStrict.php';
 require_once 'HTMLPurifier/HTMLModule/Legacy.php';
 
+// tweak modules
+
 // this definition and its modules MUST NOT define configuration directives
 // outside of the HTML or Attr namespaces
 HTMLPurifier_ConfigSchema::define(
@@ -101,13 +103,6 @@ HTMLPurifier_ConfigSchema::define(
     'example, %HTML.EnableAttrID will take precedence over *.id in this '.
     'directive.  You must set that directive to true before you can use '.
     'IDs at all. This directive has been available since 1.3.0.'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'Attr', 'DisableURI', false, 'bool',
-    'Disables all URIs in all forms. Not sure why you\'d want to do that '.
-    '(after all, the Internet\'s founded on the notion of a hyperlink). '.
-    'This directive has been available since 1.3.0.'
 );
 
 /**
@@ -281,6 +276,8 @@ class HTMLPurifier_HTMLDefinition
         $this->content_sets     = new HTMLPurifier_ContentSets();
         
         // modules
+        
+        // early
         
         // main
         $main_modules = array('Text', 'Hypertext', 'List', 'Presentation',
@@ -475,17 +472,6 @@ class HTMLPurifier_HTMLDefinition
      * delegated to modules yet
      */
     function setupCompat() {
-        
-        // deprecated config setting, implement in DisableURI module
-        if ($this->config->get('Attr', 'DisableURI')) {
-            $this->info['a']->attr['href'] =
-            $this->info['img']->attr['longdesc'] =
-            $this->info['del']->attr['cite'] =
-            $this->info['ins']->attr['cite'] =
-            $this->info['blockquote']->attr['cite'] =
-            $this->info['q']->attr['cite'] = 
-            $this->info['img']->attr['src'] = null;
-        }
         
         // setup allowed elements, SubtractiveWhitelist module
         $allowed_elements = $this->config->get('HTML', 'AllowedElements');
