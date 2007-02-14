@@ -21,6 +21,7 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
     
     // incomplete
     
+    var $name = 'Legacy';
     var $elements = array('u', 's', 'strike');
     var $non_standalone_elements = array('li', 'ol', 'address', 'blockquote');
     

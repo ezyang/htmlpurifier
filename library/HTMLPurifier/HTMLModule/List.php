@@ -8,6 +8,7 @@ require_once 'HTMLPurifier/HTMLModule.php';
 class HTMLPurifier_HTMLModule_List extends HTMLPurifier_HTMLModule
 {
     
+    var $name = 'List';
     var $elements = array('dl', 'dt', 'dd', 'ol', 'ul', 'li');
     var $info = array();
     // According to the abstract schema, the List content set is a fully formed

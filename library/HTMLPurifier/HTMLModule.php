@@ -17,6 +17,11 @@
 class HTMLPurifier_HTMLModule
 {
     /**
+     * Short unique string identifier of the module
+     */
+    var $name;
+    
+    /**
      * List of elements that the module implements.
      * @note This is only for convention, as a module will often loop
      *       through the $elements array to define HTMLPurifier_ElementDef

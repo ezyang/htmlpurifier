@@ -15,6 +15,8 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_HTMLModule_SetParent extends HTMLPurifier_HTMLModule
 {
     
+    var $name = 'SetParent';
+    
     function postProcess(&$definition) {
         $parent = $definition->config->get('HTML', 'Parent');
         if (isset($definition->info[$parent])) {

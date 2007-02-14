@@ -35,6 +35,8 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_HTMLModule_TweakSubtractiveWhitelist extends HTMLPurifier_HTMLModule
 {
     
+    var $name = 'TweakSubtractiveWhitelist';
+    
     function postProcess(&$definition) {
         
         // setup allowed elements, SubtractiveWhitelist module

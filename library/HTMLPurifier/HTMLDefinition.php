@@ -282,9 +282,8 @@ class HTMLPurifier_HTMLDefinition
             trigger_error('Order keyword does not exist', E_USER_ERROR);
             return;
         }
-        $name = strtolower(get_class($module));
-        $this->modules[$name] = $module;
-        $this->modules_order[$name] = $order;
+        $this->modules[$module->name] = $module;
+        $this->modules_order[$module->name] = $order;
     }
     
     /**

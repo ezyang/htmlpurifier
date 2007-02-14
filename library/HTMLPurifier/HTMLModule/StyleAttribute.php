@@ -9,6 +9,8 @@ require_once 'HTMLPurifier/AttrDef/CSS.php';
  */
 class HTMLPurifier_HTMLModule_StyleAttribute extends HTMLPurifier_HTMLModule
 {
+    
+    var $name = 'StyleAttribute';
     var $attr_collections = array(
         // The inclusion routine differs from the Abstract Modules but
         // is in line with the DTD and XML Schemas.

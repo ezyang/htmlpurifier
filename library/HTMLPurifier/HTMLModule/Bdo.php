@@ -10,6 +10,7 @@ require_once 'HTMLPurifier/AttrTransform/BdoDir.php';
 class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
 {
     
+    var $name = 'Bdo';
     var $elements = array('bdo');
     var $info = array();
     var $content_sets = array('Inline' => 'bdo');

@@ -15,6 +15,8 @@ require_once 'HTMLPurifier/HTMLModule.php';
 class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
 {
     
+    var $name = 'Text';
+    
     var $elements = array('abbr', 'acronym', 'address', 'blockquote',
         'br', 'cite', 'code', 'dfn', 'div', 'em', 'h1', 'h2', 'h3',
         'h4', 'h5', 'h6', 'kbd', 'p', 'pre', 'q', 'samp', 'span', 'strong',
