@@ -12,6 +12,7 @@ class HTMLPurifier_AttrDef_IDTest extends HTMLPurifier_AttrDefHarness
         
         $id_accumulator = new HTMLPurifier_IDAccumulator();
         $this->context->register('IDAccumulator', $id_accumulator);
+        $this->config->set('Attr', 'EnableID', true);
         $this->def = new HTMLPurifier_AttrDef_ID();
         
     }
@@ -74,7 +75,8 @@ class HTMLPurifier_AttrDef_IDTest extends HTMLPurifier_AttrDefHarness
         
     }
     
-    function testIDReference() {
+    // reference functionality is disabled for now
+    function disabled_testIDReference() {
         
         $this->def = new HTMLPurifier_AttrDef_ID(true);
         

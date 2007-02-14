@@ -38,22 +38,14 @@ require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 require_once 'HTMLPurifier/HTMLModule/TransformToStrict.php';
 require_once 'HTMLPurifier/HTMLModule/Legacy.php';
 
+// config modules
+require_once 'HTMLPurifier/HTMLModule/SetParent.php';
+
 // tweak modules
+require_once 'HTMLPurifier/HTMLModule/TweakSubtractiveWhitelist.php';
 
 // this definition and its modules MUST NOT define configuration directives
 // outside of the HTML or Attr namespaces
-HTMLPurifier_ConfigSchema::define(
-    'HTML', 'EnableAttrID', false, 'bool',
-    'Allows the ID attribute in HTML.  This is disabled by default '.
-    'due to the fact that without proper configuration user input can '.
-    'easily break the validation of a webpage by specifying an ID that is '.
-    'already on the surrounding HTML.  If you don\'t mind throwing caution to '.
-    'the wind, enable this directive, but I strongly recommend you also '.
-    'consider blacklisting IDs you use (%Attr.IDBlacklist) or prefixing all '.
-    'user supplied IDs (%Attr.IDPrefix).  This directive has been available '.
-    'since 1.2.0, and when set to true reverts to the behavior of pre-1.2.0 '.
-    'versions.'
-);
 
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'Strict', false, 'bool',
@@ -70,39 +62,6 @@ HTMLPurifier_ConfigSchema::define(
     '<code>&lt;p&gt;</code> tags can be replaced '.
     'with whatever you desire, as long as it is a block level element. '.
     'This directive has been available since 1.3.0.'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'HTML', 'Parent', 'div', 'string',
-    'String name of element that HTML fragment passed to library will be '.
-    'inserted in.  An interesting variation would be using span as the '.
-    'parent element, meaning that only inline tags would be allowed. '.
-    'This directive has been available since 1.3.0.'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'HTML', 'AllowedElements', null, 'lookup/null',
-    'If HTML Purifier\'s tag set is unsatisfactory for your needs, you '.
-    'can overload it with your own list of tags to allow.  Note that this '.
-    'method is subtractive: it does its job by taking away from HTML Purifier '.
-    'usual feature set, so you cannot add a tag that HTML Purifier never '.
-    'supported in the first place (like embed, form or head).  If you change this, you '.
-    'probably also want to change %HTML.AllowedAttributes. '.
-    '<strong>Warning:</strong> If another directive conflicts with the '.
-    'elements here, <em>that</em> directive will win and override. '.
-    'This directive has been available since 1.3.0.'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'HTML', 'AllowedAttributes', null, 'lookup/null',
-    'IF HTML Purifier\'s attribute set is unsatisfactory, overload it! '.
-    'The syntax is \'tag.attr\' or \'*.attr\' for the global attributes '.
-    '(style, id, class, dir, lang, xml:lang).'.
-    '<strong>Warning:</strong> If another directive conflicts with the '.
-    'elements here, <em>that</em> directive will win and override. For '.
-    'example, %HTML.EnableAttrID will take precedence over *.id in this '.
-    'directive.  You must set that directive to true before you can use '.
-    'IDs at all. This directive has been available since 1.3.0.'
 );
 
 /**
@@ -246,11 +205,19 @@ class HTMLPurifier_HTMLDefinition
      * @public
      */
     var $order_keywords = array(
-        'setup'     => 10,
-        'early'     => 20,
-        'main'      => 30,
-        'late'      => 40,
-        'cleanup'   => 50,
+        'begin'     => 10,
+        'setup'     => 20,
+        
+        'pre'       => 30,
+        
+        'early'     => 40,
+        'main'      => 50,
+        'late'      => 60,
+        
+        'post'      => 70,
+        
+        'cleanup'   => 80,
+        'end'       => 90
     );
     
     /**
@@ -277,23 +244,16 @@ class HTMLPurifier_HTMLDefinition
         
         // modules
         
-        // early
-        
-        // main
         $main_modules = array('Text', 'Hypertext', 'List', 'Presentation',
             'Edit', 'Bdo', 'Tables', 'Image', 'StyleAttribute');
         foreach ($main_modules as $module) $this->addModule($module, 'main');
         
-        // late
         if (!$this->strict) $this->addModule('Legacy', 'late');
         
-        // cleanup
-        $this->addModule('TransformToStrict', 'cleanup');
+        $this->addModule('SetParent', 'post');
         
-        // remove ID module (refactor to module)
-        if (!$config->get('HTML', 'EnableAttrID')) {
-            $this->attr_collections->info['Core']['id'] = false;
-        }
+        $this->addModule('TransformToStrict', 'cleanup');
+        $this->addModule('TweakSubtractiveWhitelist', 'cleanup');
         
     }
     
@@ -341,8 +301,6 @@ class HTMLPurifier_HTMLDefinition
         $this->processModules();
         $this->setupAttrTransform();
         $this->setupBlockWrapper();
-        $this->setupParent();
-        $this->setupCompat();
         
         unset($this->config);
         
@@ -453,50 +411,6 @@ class HTMLPurifier_HTMLDefinition
         }
     }
     
-    /**
-     * Sets up parent of fragment based on config
-     */
-    function setupParent() {
-        $parent = $this->config->get('HTML', 'Parent');
-        if (isset($this->info[$parent])) {
-            $this->info_parent = $parent;
-        } else {
-            trigger_error('Cannot use unrecognized element as parent.',
-                E_USER_ERROR);
-        }
-        $this->info_parent_def = $this->info[$this->info_parent];
-    }
-    
-    /**
-     * Sets up compat code from HTMLDefinition that has not been
-     * delegated to modules yet
-     */
-    function setupCompat() {
-        
-        // setup allowed elements, SubtractiveWhitelist module
-        $allowed_elements = $this->config->get('HTML', 'AllowedElements');
-        if (is_array($allowed_elements)) {
-            foreach ($this->info as $name => $d) {
-                if(!isset($allowed_elements[$name])) unset($this->info[$name]);
-            }
-        }
-        $allowed_attributes = $this->config->get('HTML', 'AllowedAttributes');
-        if (is_array($allowed_attributes)) {
-            foreach ($this->info_global_attr as $attr_key => $info) {
-                if (!isset($allowed_attributes["*.$attr_key"])) {
-                    unset($this->info_global_attr[$attr_key]);
-                }
-            }
-            foreach ($this->info as $tag => $info) {
-                foreach ($info->attr as $attr => $attr_info) {
-                    if (!isset($allowed_attributes["$tag.$attr"])) {
-                        unset($this->info[$tag]->attr[$attr]);
-                    }
-                }
-            }
-        }
-        
-    }
     
 }
 

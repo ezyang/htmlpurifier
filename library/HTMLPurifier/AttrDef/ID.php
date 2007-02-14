@@ -4,6 +4,22 @@ require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/IDAccumulator.php';
 
 HTMLPurifier_ConfigSchema::define(
+    'Attr', 'EnableID', false, 'bool',
+    'Allows the ID attribute in HTML.  This is disabled by default '.
+    'due to the fact that without proper configuration user input can '.
+    'easily break the validation of a webpage by specifying an ID that is '.
+    'already on the surrounding HTML.  If you don\'t mind throwing caution to '.
+    'the wind, enable this directive, but I strongly recommend you also '.
+    'consider blacklisting IDs you use (%Attr.IDBlacklist) or prefixing all '.
+    'user supplied IDs (%Attr.IDPrefix).  This directive has been available '.
+    'since 1.2.0, and when set to true reverts to the behavior of pre-1.2.0 '.
+    'versions.'
+);
+HTMLPurifier_ConfigSchema::defineAlias(
+    'HTML', 'EnableAttrID', 'Attr', 'EnableID'
+);
+
+HTMLPurifier_ConfigSchema::define(
     'Attr', 'IDPrefix', '', 'string',
     'String to prefix to IDs.  If you have no idea what IDs your pages '.
     'may use, you may opt to simply add a prefix to all user-submitted ID '.
@@ -39,21 +55,12 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
 {
     
-    /**
-     * Is the ID an actual ID, or a reference to one?
-     * @note IDAccumulator checking is disabled for references
-     * @bool
-     */
-    var $ref = false;
-    
-    /**
-     * @param $ref bool indication if it's ID or IDREF
-     */
-    function HTMLPurifier_AttrDef_ID($ref = false) {
-        $this->ref = $ref;
-    }
+    // ref functionality disabled, since we also have to verify
+    // whether or not the ID it refers to exists
     
     function validate($id, $config, &$context) {
+        
+        if (!$config->get('Attr', 'EnableID')) return false;
         
         $id = trim($id); // trim it first
         
@@ -69,10 +76,10 @@ class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
                 '%Attr.IDPrefix is set', E_USER_WARNING);
         }
         
-        if (!$this->ref) {
+        //if (!$this->ref) {
             $id_accumulator =& $context->get('IDAccumulator');
             if (isset($id_accumulator->ids[$id])) return false;
-        }
+        //}
         
         // we purposely avoid using regex, hopefully this is faster
         
@@ -87,7 +94,7 @@ class HTMLPurifier_AttrDef_ID extends HTMLPurifier_AttrDef
             $result = ($trim === '');
         }
         
-        if (!$this->ref && $result) $id_accumulator->add($id);
+        if (/*!$this->ref && */$result) $id_accumulator->add($id);
         
         // if no change was made to the ID, return the result
         // else, return the new id if stripping whitespace made it
