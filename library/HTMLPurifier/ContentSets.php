@@ -36,8 +36,10 @@ class HTMLPurifier_ContentSets
      * sets and populates the keys, values and lookup member variables.
      * @param $modules List of HTMLPurifier_HTMLModule
      */
-    function setup($modules) {
+    function HTMLPurifier_ContentSets($modules) {
+        if (!is_array($modules)) $modules = array($modules);
         // populate content_sets based on module hints
+        // sorry, no way of overloading
         foreach ($modules as $module_i => $module) {
             foreach ($module->content_sets as $key => $value) {
                 if (isset($this->info[$key])) {
@@ -48,7 +50,6 @@ class HTMLPurifier_ContentSets
                 }
             }
         }
-        
         // perform content_set expansions
         $this->keys = array_keys($this->info);
         foreach ($this->info as $i => $set) {

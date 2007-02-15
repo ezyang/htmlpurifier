@@ -33,8 +33,7 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         'lang' => false // placeholder
     );
     
-    function HTMLPurifier_HTMLModule_TransformToStrict(&$definition) {
-        $config = $definition->config;
+    function HTMLPurifier_HTMLModule_TransformToStrict() {
         
         // deprecated tag transforms
         $this->info_tag_transform['font']   = new HTMLPurifier_TagTransform_Font();
@@ -62,10 +61,10 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         $this->info_attr_transform_post['lang'] = new HTMLPurifier_AttrTransform_Lang();
         $this->attr_collections['Lang']['lang'] = new HTMLPurifier_AttrDef_Lang();
         
-        if ($config->get('HTML', 'Strict')) {
-            $this->info['blockquote']->content_model_type = 'strictblockquote';
-            $this->info['blockquote']->child = false; // recalculate please!
-        }
+        // this should not be applied to XHTML 1.0 Transitional, ONLY
+        // XHTML 1.0 Strict. We may need three classes
+        $this->info['blockquote']->content_model_type = 'strictblockquote';
+        $this->info['blockquote']->child = false; // recalculate please!
         
     }
     

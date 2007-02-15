@@ -22,10 +22,10 @@ class HTMLPurifier_HTMLModule
     var $name;
     
     /**
-     * List of elements that the module implements.
-     * @note This is only for convention, as a module will often loop
-     *       through the $elements array to define HTMLPurifier_ElementDef
-     *       in the $info array.
+     * List of elements that the module implements or substantially
+     * modifies, either through a new ElementDef or a modified
+     * content set that directly affects the element (if the element was
+     * removed or added from a content set).
      * @protected
      */
     var $elements = array();
