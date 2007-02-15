@@ -22,9 +22,6 @@ require_once 'HTMLPurifier/TagTransform/Simple.php';
 require_once 'HTMLPurifier/TagTransform/Center.php';
 require_once 'HTMLPurifier/TagTransform/Font.php';
 
-// tweak modules
-require_once 'HTMLPurifier/HTMLModule/TweakSubtractiveWhitelist.php';
-
 // this definition and its modules MUST NOT define configuration directives
 // outside of the HTML or Attr namespaces
 
