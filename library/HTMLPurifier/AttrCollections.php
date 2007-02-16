@@ -15,32 +15,7 @@ class HTMLPurifier_AttrCollections
      * @note Technically, the composition of these is more complicated,
      *       but we bypass it using our own excludes property
      */
-    var $info = array(
-        'Core' => array(
-            0 => array('Style'),
-            // 'xml:space' => false,
-            'class' => 'NMTOKENS',
-            'id' => 'ID',
-            'title' => 'CDATA',
-        ),
-        'Lang' => array(
-            'xml:lang' => false, // see constructor
-        ),
-        'I18N' => array(
-            0 => array('Lang'), // proprietary, for xml:lang/lang
-        ),
-        'Common' => array(
-            0 => array('Core', 'I18N')
-        )
-    );
-    
-    /**
-     * Sets up direct objects not registered to HTMLPurifier_AttrTypes
-     */
-    function HTMLPurifier_AttrCollections() {
-        // setup direct objects
-        $this->info['Lang']['xml:lang'] = new HTMLPurifier_AttrDef_Lang();
-    }
+    var $info = array();
     
     /**
      * Performs all expansions on internal data for use by other inclusions
@@ -49,7 +24,7 @@ class HTMLPurifier_AttrCollections
      * @param $attr_types HTMLPurifier_AttrTypes instance
      * @param $modules Hash array of HTMLPurifier_HTMLModule members
      */
-    function setup($attr_types, $modules) {
+    function HTMLPurifier_AttrCollections($attr_types, $modules) {
         $info =& $this->info;
         // load extensions from the modules
         foreach ($modules as $module) {

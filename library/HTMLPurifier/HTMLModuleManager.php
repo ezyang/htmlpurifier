@@ -4,6 +4,7 @@ require_once 'HTMLPurifier/ContentSets.php';
 require_once 'HTMLPurifier/HTMLModule.php';
 
 // W3C modules
+require_once 'HTMLPurifier/HTMLModule/CommonAttributes.php';
 require_once 'HTMLPurifier/HTMLModule/Text.php';
 require_once 'HTMLPurifier/HTMLModule/Hypertext.php';
 require_once 'HTMLPurifier/HTMLModule/List.php';
@@ -41,6 +42,7 @@ class HTMLPurifier_HTMLModuleManager
      */
     var $collectionsSafe = array(
         '_Common' => array( // leading _ indicates private
+            'CommonAttributes',
             'Text',
             'Hypertext',
             'List',
@@ -103,6 +105,7 @@ class HTMLPurifier_HTMLModuleManager
         // modules
         $modules = array(
             // define
+            'CommonAttributes',
             'Text', 'Hypertext', 'List', 'Presentation',
             'Edit', 'Bdo', 'Tables', 'Image', 'StyleAttribute',
             // define-redefine
@@ -115,8 +118,9 @@ class HTMLPurifier_HTMLModuleManager
             $this->addModule($module);
         }
         
-        $this->attrTypes       = new HTMLPurifier_AttrTypes();
-        $this->attrCollections = new HTMLPurifier_AttrCollections();
+        // the only editable internal object. The rest need to
+        // be manipulated through modules
+        $this->attrTypes = new HTMLPurifier_AttrTypes();
         
     }
     
@@ -200,7 +204,7 @@ class HTMLPurifier_HTMLModuleManager
         $this->contentSets = new HTMLPurifier_ContentSets(
             $this->getModules($config, true)
         );
-        $this->attrCollections->setup($this->attrTypes,
+        $this->attrCollections = new HTMLPurifier_AttrCollections($this->attrTypes,
             $this->getModules($config));
         
     }
