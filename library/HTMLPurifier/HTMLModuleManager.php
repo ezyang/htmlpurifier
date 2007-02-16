@@ -30,6 +30,12 @@ class HTMLPurifier_HTMLModuleManager
     var $modules = array();
     
     /**
+     * Modules that, according to the current doctype and related settings,
+     * may be used.
+     */
+    // var $validModules = array();
+    
+    /**
      * Associative array of module class name to module order keywords or
      * numbers (keyword is preferred, all keywords are resolved at beginning
      * of setup())
@@ -181,6 +187,10 @@ class HTMLPurifier_HTMLModuleManager
             $this->modules
         );
         
+        $this->processCollections($this->collectionsSafe);
+        $this->processCollections($this->collectionsLenient);
+        $this->processCollections($this->collectionsCorrectional);
+        
         // sort the lookup modules
         foreach ($this->elementModuleLookup as $k => $modules) {
             if (count($modules) > 1) {
@@ -193,10 +203,6 @@ class HTMLPurifier_HTMLModuleManager
                 }
             }
         }
-        
-        $this->processCollections($this->collectionsSafe);
-        $this->processCollections($this->collectionsLenient);
-        $this->processCollections($this->collectionsCorrectional);
         
         // notice that it is vital that we get a full content sets
         // elements lineup, but attr collections must not go by
@@ -233,17 +239,14 @@ class HTMLPurifier_HTMLModuleManager
             }
         }
         
-        // replace with real modules
+        // replace with real modules, invert module from list to
+        // assoc array of module name to module instance
         foreach ($cols as $col_i => $col) {
             if (is_string($col)) continue;
-            $seen = array(); // lookup array to prevent dupes
             foreach ($col as $module_i => $module) {
-                if (isset($seen[$module])) {
-                    unset($cols[$col_i][$module_i]);
-                    continue;
-                }
-                $cols[$col_i][$module_i] = $this->modules[$module];
-                $seen[$module] = true;
+                unset($cols[$col_i][$module_i]);
+                $module = $this->modules[$module];
+                $cols[$col_i][$module->name] = $module;
             }
         }
         
@@ -294,14 +297,7 @@ class HTMLPurifier_HTMLModuleManager
             $modules = array_merge($modules, $this->collectionsCorrectional[$doctype]);
         }
         
-        // convert from numeric to module name indexing, also prevents
-        // duplicates
-        $ret = array();
-        foreach ($modules as $module) {
-            $ret[$module->name] = $module;
-        }
-        
-        return $ret;
+        return $modules;
         
     }
     
