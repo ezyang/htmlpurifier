@@ -30,10 +30,20 @@ class HTMLPurifier_HTMLModuleManager
     var $modules = array();
     
     /**
-     * Modules that, according to the current doctype and related settings,
-     * may be used.
+     * Modules that may be used in a valid doctype of this kind.
      */
-    // var $validModules = array();
+    var $validModules = array();
+    
+    /**
+     * Modules that we will use broadly, subset of validModules. Single
+     * element definitions may result in us consulting validModules.
+     */
+    var $activeModules = array();
+    
+    /**
+     * Current doctype for which $validModules is based
+     */
+    var $doctype;
     
     /**
      * Associative array of module class name to module order keywords or
@@ -158,15 +168,12 @@ class HTMLPurifier_HTMLModuleManager
         }
         $this->modules[$module->name] = $module;
         $this->order[$module->name] = $order;
-        foreach ($module->elements as $name) {
-            if (!isset($this->elementModuleLookup[$name])) {
-                $this->elementModuleLookup[$name] = array();
-            }
-            $this->elementModuleLookup[$name][] = $module->name;
-        }
     }
     
     function setup($config) {
+        // retrieve the doctype
+        $this->doctype = $this->getDoctype($config);
+        
         // substitute out the order keywords
         foreach ($this->order as $name => $order) {
             if (empty($this->modules[$name])) {
@@ -187,31 +194,43 @@ class HTMLPurifier_HTMLModuleManager
             $this->modules
         );
         
+        // process module collections to module name => module instance form
         $this->processCollections($this->collectionsSafe);
         $this->processCollections($this->collectionsLenient);
         $this->processCollections($this->collectionsCorrectional);
         
-        // sort the lookup modules
-        foreach ($this->elementModuleLookup as $k => $modules) {
-            if (count($modules) > 1) {
-                $this->elementModuleLookup[$k] = array();
-                $module_lookup = array_flip($modules);
-                foreach ($this->order as $name => $v) {
-                    if (isset($module_lookup[$name])) {
-                        $this->elementModuleLookup[$k][] = $name;
-                    }
+        // setup the validModules array
+        if (isset($this->collectionsSafe[$this->doctype])) {
+            $this->validModules += $this->collectionsSafe[$this->doctype];
+        }
+        if (isset($this->collectionsLenient[$this->doctype])) {
+            $this->validModules += $this->collectionsLenient[$this->doctype];
+        }
+        if (isset($this->collectionsCorrectional[$this->doctype])) {
+            $this->validModules += $this->collectionsCorrectional[$this->doctype];
+        }
+        
+        // setup the activeModules array
+        $this->activeModules = $this->validModules; // unimplemented!
+        
+        // setup lookup table based on all valid modules
+        foreach ($this->validModules as $module) {
+            foreach ($module->elements as $name) {
+                if (!isset($this->elementModuleLookup[$name])) {
+                    $this->elementModuleLookup[$name] = array();
                 }
+                $this->elementModuleLookup[$name][] = $module->name;
             }
         }
         
-        // notice that it is vital that we get a full content sets
-        // elements lineup, but attr collections must not go by
-        // anything other than the modules the user wants
+        // note the different choice
         $this->contentSets = new HTMLPurifier_ContentSets(
-            $this->getModules($config, true)
+            $this->validModules
         );
-        $this->attrCollections = new HTMLPurifier_AttrCollections($this->attrTypes,
-            $this->getModules($config));
+        $this->attrCollections = new HTMLPurifier_AttrCollections(
+            $this->attrTypes,
+            $this->activeModules
+        );
         
     }
     
@@ -275,41 +294,11 @@ class HTMLPurifier_HTMLModuleManager
     
     /**
      * @param $config
-     * @param $full Whether or not to retrieve *all* applicable modules
-     *              for the doctype and not just the safe/whitelisted ones.
-     *              Leniency modules are added based on config though.
-     */
-    function getModules($config, $full = false) {
-        
-        // CACHE!!!
-        
-        $doctype = $this->getDoctype($config);
-        
-        // more logic is needed here to retrieve modules based on
-        // configuration's leniency, etc.
-        $modules = $this->collectionsSafe[$doctype];
-        
-        if(isset($this->collectionsLenient[$doctype])) {
-            $modules = array_merge($modules, $this->collectionsLenient[$doctype]);
-        }
-        
-        if(isset($this->collectionsCorrectional[$doctype])) {
-            $modules = array_merge($modules, $this->collectionsCorrectional[$doctype]);
-        }
-        
-        return $modules;
-        
-    }
-    
-    /**
-     * @param $config
      */
     function getElements($config) {
         
-        $modules = $this->getModules($config);
-        
         $elements = array();
-        foreach ($modules as $module) {
+        foreach ($this->activeModules as $module) {
             foreach ($module->elements as $name) {
                 $elements[$name] = $this->getElement($name, $config);
             }
@@ -323,7 +312,7 @@ class HTMLPurifier_HTMLModuleManager
         
         $def = false;
         
-        $modules = $this->getModules($config, true);
+        $modules = $this->validModules;
         
         if (!isset($this->elementModuleLookup[$name])) {
             return false;

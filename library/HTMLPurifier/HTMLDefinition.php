@@ -200,9 +200,8 @@ class HTMLPurifier_HTMLDefinition
     function processModules() {
         
         $this->manager->setup($this->config);
-        $modules = $this->manager->getModules($this->config);
         
-        foreach ($modules as $module) {
+        foreach ($this->manager->activeModules as $module) {
             foreach($module->info_tag_transform         as $k => $v) $this->info_tag_transform[$k]      = $v;
             foreach($module->info_attr_transform_pre    as $k => $v) $this->info_attr_transform_pre[$k] = $v;
             foreach($module->info_attr_transform_post   as $k => $v) $this->info_attr_transform_post[$k]= $v;
