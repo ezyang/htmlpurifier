@@ -54,19 +54,13 @@ class HTMLPurifier_HTMLModuleManager
     
     /**
      * Associative array of module setup names to the corresponding safe
-     * (as in no XSS, no full document markup) modules.
+     * (as in no XSS, no full document markup) modules. These are
+     * included in both valid and active module lists by default.
      */
     var $collectionsSafe = array(
         '_Common' => array( // leading _ indicates private
-            'CommonAttributes',
-            'Text',
-            'Hypertext',
-            'List',
-            'Presentation',
-            'Edit',
-            'Bdo',
-            'Tables',
-            'Image',
+            'CommonAttributes', 'Text', 'Hypertext', 'List',
+            'Presentation', 'Edit', 'Bdo', 'Tables', 'Image',
             'StyleAttribute'
         ),
         // HTML definitions, defer completely to XHTML definitions
@@ -80,7 +74,8 @@ class HTMLPurifier_HTMLModuleManager
     
     /**
      * Modules to import if lenient mode (attempt to convert everything
-     * to a valid representation) is on
+     * to a valid representation) is on. These must not be in activeModules
+     * unless specified so.
      */
     var $collectionsLenient = array(
         'HTML 4.01 Strict' => 'XHTML 1.0 Strict',
@@ -90,7 +85,8 @@ class HTMLPurifier_HTMLModuleManager
     
     /**
      * Modules to import if correctional mode (correct everything that
-     * is feasible to strict mode) is on
+     * is feasible to strict mode) is on. These must not be in activeModules
+     * unless specified so.
      */
     var $collectionsCorrectional = array(
         'HTML 4.01 Transitional' => 'XHTML 1.0 Transitional',
