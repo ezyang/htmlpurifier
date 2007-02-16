@@ -16,6 +16,7 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
 {
     
     var $name = 'Text';
+    var $type = 'define';
     
     var $elements = array('abbr', 'acronym', 'address', 'blockquote',
         'br', 'cite', 'code', 'dfn', 'div', 'em', 'h1', 'h2', 'h3',

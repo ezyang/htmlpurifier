@@ -102,22 +102,17 @@ class HTMLPurifier_HTMLModuleManager
         
         // modules
         $modules = array(
-            'define' => array(
-                'Text', 'Hypertext', 'List', 'Presentation',
-                'Edit', 'Bdo', 'Tables', 'Image', 'StyleAttribute'
-            ),
-            'define-redefine' => array(
-                'Legacy'
-            ),
-            'redefine' => array(
-                'TransformToStrict', 'TransformToXHTML11'
-            )
+            // define
+            'Text', 'Hypertext', 'List', 'Presentation',
+            'Edit', 'Bdo', 'Tables', 'Image', 'StyleAttribute',
+            // define-redefine
+            'Legacy',
+            // redefine
+            'TransformToStrict', 'TransformToXHTML11'
         );
         
-        foreach ($modules as $order => $modules_of_order) {
-            foreach ($modules_of_order as $module) {
-                $this->addModule($module, $order);
-            }
+        foreach ($modules as $module) {
+            $this->addModule($module);
         }
         
         $this->attrTypes       = new HTMLPurifier_AttrTypes();
@@ -131,7 +126,7 @@ class HTMLPurifier_HTMLModuleManager
      *                HTMLPurifier_HTMLModule prefix, or instance of
      *                subclass of HTMLPurifier_HTMLModule.
      */
-    function addModule($module, $order = 'main') {
+    function addModule($module) {
         if (is_string($module)) {
             $original_module = $module;
             if (!class_exists($module)) {
@@ -146,6 +141,7 @@ class HTMLPurifier_HTMLModuleManager
             }
             $module = new $module();
         }
+        $order = $module->type;
         if (!isset($this->orderKeywords[$order])) {
             trigger_error('Order keyword does not exist', E_USER_ERROR);
             return;

@@ -11,6 +11,7 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
 {
     
     var $name = 'Bdo';
+    var $type = 'define';
     var $elements = array('bdo');
     var $info = array();
     var $content_sets = array('Inline' => 'bdo');

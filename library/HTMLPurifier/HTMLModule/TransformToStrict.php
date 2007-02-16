@@ -11,6 +11,7 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
 {
     
     var $name = 'TransformToStrict';
+    var $type = 'redefine';
     
     // we're actually modifying these elements, not defining them
     var $elements = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'blockquote');
