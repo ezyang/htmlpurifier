@@ -1,26 +1,7 @@
 <?php
 
 // components
-require_once 'HTMLPurifier/AttrTypes.php';
-require_once 'HTMLPurifier/AttrCollections.php';
 require_once 'HTMLPurifier/HTMLModuleManager.php';
-require_once 'HTMLPurifier/ElementDef.php';
-
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/AttrDef/Enum.php';
-
-// temporary: attribute transformations
-require_once 'HTMLPurifier/AttrTransform.php';
-require_once 'HTMLPurifier/AttrTransform/Lang.php';
-require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
-require_once 'HTMLPurifier/AttrTransform/BdoDir.php';
-require_once 'HTMLPurifier/AttrTransform/ImgRequired.php';
-
-// temporary: tag transformations
-require_once 'HTMLPurifier/TagTransform.php';
-require_once 'HTMLPurifier/TagTransform/Simple.php';
-require_once 'HTMLPurifier/TagTransform/Center.php';
-require_once 'HTMLPurifier/TagTransform/Font.php';
 
 // this definition and its modules MUST NOT define configuration directives
 // outside of the HTML or Attr namespaces

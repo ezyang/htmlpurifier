@@ -1,7 +1,14 @@
 <?php
 
-require_once 'HTMLPurifier/ContentSets.php';
 require_once 'HTMLPurifier/HTMLModule.php';
+require_once 'HTMLPurifier/ElementDef.php';
+
+require_once 'HTMLPurifier/ContentSets.php';
+require_once 'HTMLPurifier/AttrTypes.php';
+require_once 'HTMLPurifier/AttrCollections.php';
+
+require_once 'HTMLPurifier/AttrDef.php';
+require_once 'HTMLPurifier/AttrDef/Enum.php';
 
 // W3C modules
 require_once 'HTMLPurifier/HTMLModule/CommonAttributes.php';

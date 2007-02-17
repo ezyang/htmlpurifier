@@ -2,6 +2,13 @@
 
 require_once 'HTMLPurifier/ChildDef/StrictBlockquote.php';
 
+require_once 'HTMLPurifier/TagTransform/Simple.php';
+require_once 'HTMLPurifier/TagTransform/Center.php';
+require_once 'HTMLPurifier/TagTransform/Font.php';
+
+require_once 'HTMLPurifier/AttrTransform/Lang.php';
+require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
+
 /**
  * Proprietary module that transforms deprecated elements into Strict
  * HTML (see HTML 4.01 and XHTML 1.0) when possible.
