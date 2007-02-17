@@ -9,7 +9,6 @@ class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
 {
     
     var $name = 'Hypertext';
-    var $type = 'define';
     var $elements = array('a');
     var $info = array();
     var $content_sets = array('Inline' => 'a');

@@ -22,14 +22,9 @@ class HTMLPurifier_HTMLModule
     var $name;
     
     /**
-     * Type of module. Currently three supported values: define,
-     * define-redefine and redefine. Define means that the module solely
-     * creates new elements. Redefine means that the module solely
-     * redefines aspects of already existing elements. Define-Redefine
-     * is a combo of the two. This affects the order in which the module
-     * will be loaded, see HTMLPurifier_HTMLModuleManager for more details.
+     * Dynamically set integer that specifies when the module was loaded in.
      */
-    var $type;
+    var $order;
     
     /**
      * List of elements that the module implements or substantially

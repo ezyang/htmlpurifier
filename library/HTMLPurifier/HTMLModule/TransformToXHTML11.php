@@ -15,7 +15,6 @@ class HTMLPurifier_HTMLModule_TransformToXHTML11 extends HTMLPurifier_HTMLModule
 {
     
     var $name = 'TransformToXHTML11';
-    var $type = 'redefine';
     var $attr_collections = array(
         'Lang' => array(
             'lang' => false // remove it

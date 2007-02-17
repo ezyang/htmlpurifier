@@ -31,6 +31,9 @@ class HTMLPurifier_HTMLModuleManager
     
     /**
      * Modules that may be used in a valid doctype of this kind.
+     * Correctional and leniency modules should not be placed in this
+     * array unless the user said so: don't stuff every possible lenient
+     * module for this doctype in here.
      */
     var $validModules = array();
     
@@ -46,11 +49,14 @@ class HTMLPurifier_HTMLModuleManager
     var $doctype;
     
     /**
-     * Associative array of module class name to module order keywords or
-     * numbers (keyword is preferred, all keywords are resolved at beginning
-     * of setup())
+     * Designates next available integer order for modules.
      */
-    var $order = array();
+    var $moduleCounter = 0;
+    
+    /**
+     * List of suffixes of collections to process
+     */
+    var $collections = array('Safe', 'Unsafe', 'Lenient', 'Correctional');
     
     /**
      * Associative array of module setup names to the corresponding safe
@@ -73,8 +79,16 @@ class HTMLPurifier_HTMLModuleManager
     );
     
     /**
+     * Modules that specify elements that are unsafe from untrusted
+     * third-parties. These should be registered in $validModules but
+     * almost never $activeModules unless you really know what you're
+     * doing.
+     */
+    var $collectionsUnsafe = array( );
+    
+    /**
      * Modules to import if lenient mode (attempt to convert everything
-     * to a valid representation) is on. These must not be in activeModules
+     * to a valid representation) is on. These must not be in $activeModules
      * unless specified so.
      */
     var $collectionsLenient = array(
@@ -85,7 +99,7 @@ class HTMLPurifier_HTMLModuleManager
     
     /**
      * Modules to import if correctional mode (correct everything that
-     * is feasible to strict mode) is on. These must not be in activeModules
+     * is feasible to strict mode) is on. These must not be in $activeModules
      * unless specified so.
      */
     var $collectionsCorrectional = array(
@@ -152,62 +166,36 @@ class HTMLPurifier_HTMLModuleManager
                 }
             }
             if (!class_exists($module)) {
-                trigger_error($original_module . ' module does not exist', E_USER_ERROR);
+                trigger_error($original_module . ' module does not exist',
+                    E_USER_ERROR);
                 return;
             }
             $module = new $module();
         }
-        $order = $module->type;
-        if (!isset($this->orderKeywords[$order])) {
-            trigger_error('Order keyword does not exist', E_USER_ERROR);
-            return;
-        }
+        $module->order = $this->moduleCounter++; // assign then increment
         $this->modules[$module->name] = $module;
-        $this->order[$module->name] = $order;
     }
     
     function setup($config) {
         // retrieve the doctype
         $this->doctype = $this->getDoctype($config);
         
-        // substitute out the order keywords
-        foreach ($this->order as $name => $order) {
-            if (empty($this->modules[$name])) {
-                trigger_error('Orphan module order definition for module: ' . $name, E_USER_ERROR);
-                return;
-            }
-            if (is_int($order)) continue;
-            if (empty($this->orderKeywords[$order])) {
-                trigger_error('Unknown order keyword: ' . $order, E_USER_ERROR);
-                return;
-            }
-            $this->order[$name] = $this->orderKeywords[$order];
+        // process module collections to module name => module instance form
+        foreach ($this->collections as $suffix) {
+            $varname = 'collections' . $suffix;
+            $this->processCollections($this->$varname);
         }
         
-        // sort modules member variable
-        array_multisort(
-            $this->order, SORT_ASC, SORT_NUMERIC,
-            $this->modules
-        );
-        
-        // process module collections to module name => module instance form
-        $this->processCollections($this->collectionsSafe);
-        $this->processCollections($this->collectionsLenient);
-        $this->processCollections($this->collectionsCorrectional);
+        // $collections variable in following instances will be dynamically
+        // generated once we figure out some config variables
         
         // setup the validModules array
-        if (isset($this->collectionsSafe[$this->doctype])) {
-            $this->validModules += $this->collectionsSafe[$this->doctype];
-        }
-        if (isset($this->collectionsLenient[$this->doctype])) {
-            $this->validModules += $this->collectionsLenient[$this->doctype];
-        }
-        if (isset($this->collectionsCorrectional[$this->doctype])) {
-            $this->validModules += $this->collectionsCorrectional[$this->doctype];
-        }
+        $collections = array('Safe', 'Unsafe', 'Lenient', 'Correctional');
+        $this->validModules = $this->assembleModules($collections);
         
         // setup the activeModules array
-        $this->activeModules = $this->validModules; // unimplemented!
+        $collections = array('Safe', 'Lenient', 'Correctional');
+        $this->activeModules = $this->assembleModules($collections);
         
         // setup lookup table based on all valid modules
         foreach ($this->validModules as $module) {
@@ -221,15 +209,55 @@ class HTMLPurifier_HTMLModuleManager
         
         // note the different choice
         $this->contentSets = new HTMLPurifier_ContentSets(
+            // content models that contain non-allowed elements are 
+            // harmless because RemoveForeignElements will ensure
+            // they never get in anyway, and there is usually no
+            // reason why you should want to restrict a content
+            // model beyond what is mandated by the doctype.
+            // Note, however, that this means redefinitions of
+            // content models can't be tossed in validModels willy-nilly:
+            // that stuff still is regulated by configuration.
             $this->validModules
         );
         $this->attrCollections = new HTMLPurifier_AttrCollections(
             $this->attrTypes,
+            // only explicitly allowed modules are allowed to affect
+            // the global attribute collections. This mean's there's
+            // a distinction between loading the Bdo module, and the
+            // bdo element: Bdo will enable the dir attribute on all
+            // elements, while bdo will only define the bdo element,
+            // which will not have an editable directionality. This might
+            // catch people who are loading only elements by surprise, so
+            // we should consider loading an entire module if all the
+            // elements it defines are requested by the user, especially
+            // if it affects the global attribute collections.
             $this->activeModules
         );
         
     }
     
+    /**
+     * Takes a list of collections and merges together all the defined
+     * modules for the current doctype from those collections.
+     * @param $collections List of collection suffixes we should grab
+     *                     modules from (like 'Safe' or 'Lenient')
+     */
+    function assembleModules($collections) {
+        $modules = array();
+        foreach ($collections as $suffix) {
+            $varname = 'collections' . $suffix;
+            $cols = $this->$varname;
+            if (!empty($cols[$this->doctype])) {
+                $modules += $cols[$this->doctype];
+            }
+        }
+        return $modules;
+    }
+    
+    /**
+     * Takes a collection and performs inclusions and substitutions for it.
+     * @param $cols Reference to collections class member variable
+     */
     function processCollections(&$cols) {
         
         // $cols is the set of collections
@@ -258,11 +286,16 @@ class HTMLPurifier_HTMLModuleManager
         // assoc array of module name to module instance
         foreach ($cols as $col_i => $col) {
             if (is_string($col)) continue;
+            $order = array();
             foreach ($col as $module_i => $module) {
                 unset($cols[$col_i][$module_i]);
                 $module = $this->modules[$module];
                 $cols[$col_i][$module->name] = $module;
+                $order[$module->name] = $module->order;
             }
+            array_multisort(
+                $order, SORT_ASC, SORT_NUMERIC, $cols[$col_i]
+            );
         }
         
         // hook up aliases
@@ -278,18 +311,30 @@ class HTMLPurifier_HTMLModuleManager
         
     }
     
+    /**
+     * Retrieves the doctype from the configuration object
+     */
     function getDoctype($config) {
-        // get rid of this later
-        if ($config->get('HTML', 'Strict')) {
-            $doctype = 'XHTML 1.0 Strict';
+        if ($config->get('Core', 'XHTML')) {
+            $doctype = 'XHTML 1.0';
         } else {
-            $doctype = 'XHTML 1.0 Transitional';
+            $doctype = 'HTML 4.01';
+        }
+        if ($config->get('HTML', 'Strict')) {
+            $doctype .= ' Strict';
+        } else {
+            $doctype .= ' Transitional';
         }
         return $doctype;
     }
     
     /**
-     * @param $config
+     * Retrieves merged element definitions for all active elements.
+     * @note We may want to generate an elements array during setup
+     *       and pass that on, because a specific combination of
+     *       elements may trigger the loading of a module.
+     * @param $config Instance of HTMLPurifier_Config, for determining
+     *                stray elements.
      */
     function getElements($config) {
         
@@ -300,10 +345,17 @@ class HTMLPurifier_HTMLModuleManager
             }
         }
         
+        // standalone elements now loaded
+        
         return $elements;
         
     }
     
+    /**
+     * Retrieves a single merged element definition
+     * @param $name Name of element
+     * @param $config Instance of HTMLPurifier_Config, may not be necessary.
+     */
     function getElement($name, $config) {
         
         $def = false;
@@ -316,9 +368,6 @@ class HTMLPurifier_HTMLModuleManager
         
         foreach($this->elementModuleLookup[$name] as $module_name) {
             
-            // oops, we can't use that module at all
-            if (!isset($modules[$module_name])) continue;
-            
             $module = $modules[$module_name];
             $new_def = $module->info[$name];
             
@@ -327,6 +376,9 @@ class HTMLPurifier_HTMLModuleManager
             } elseif ($def) {
                 $def->mergeIn($new_def);
             } else {
+                // could have save it for another day functionality:
+                // non-standalone definitions that don't have a standalone
+                // to merge into could be deferred to the end
                 continue;
             }
             
@@ -348,20 +400,6 @@ class HTMLPurifier_HTMLModuleManager
         
         return $def;
         
-    }
-    
-    /**
-     * Retrieves full child definition for child, for the parent. Parent
-     * is a special case because it may not be allowed in the document.
-     */
-    function getFullChildDef($element, $config) {
-        $def = $this->getElement($element, $config);
-        if ($def === false) {
-            trigger_error('Cannot get child def of element not available in doctype',
-                E_USER_ERROR);
-            return false;
-        }
-        return $def->child;
     }
     
 }

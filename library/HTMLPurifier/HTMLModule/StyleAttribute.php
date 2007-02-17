@@ -11,7 +11,6 @@ class HTMLPurifier_HTMLModule_StyleAttribute extends HTMLPurifier_HTMLModule
 {
     
     var $name = 'StyleAttribute';
-    var $type = 'define';
     var $attr_collections = array(
         // The inclusion routine differs from the Abstract Modules but
         // is in line with the DTD and XML Schemas.

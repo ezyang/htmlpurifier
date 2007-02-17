@@ -3,7 +3,6 @@
 class HTMLPurifier_HTMLModule_CommonAttributes extends HTMLPurifier_HTMLModule
 {
     var $name = 'CommonAttributes';
-    var $type = 'define';
     
     var $attr_collections = array(
         'Core' => array(
