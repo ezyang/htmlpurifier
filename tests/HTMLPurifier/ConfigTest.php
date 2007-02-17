@@ -20,7 +20,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
     
     function tearDown() {
         HTMLPurifier_ConfigSchema::instance($this->old_copy);
-        tally_errors();
+        tally_errors($this);
     }
     
     // test functionality based on ConfigSchema

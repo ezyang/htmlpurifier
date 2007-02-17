@@ -41,7 +41,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
     function tearDown() {
         // testing is done, restore the old copy
         HTMLPurifier_ConfigSchema::instance($this->old_copy);
-        tally_errors();
+        tally_errors($this);
     }
     
     function test_defineNamespace() {

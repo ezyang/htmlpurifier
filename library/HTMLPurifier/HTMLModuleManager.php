@@ -45,10 +45,20 @@ class HTMLPurifier_HTMLModuleManager
     var $validModules = array();
     
     /**
-     * Modules that we will use broadly, subset of validModules. Single
+     * Collections that should be merged into $validModules
+     */
+    var $validModulesCollections = array('Safe', 'Unsafe', 'Lenient', 'Correctional');
+    
+    /**
+     * Modules that we will use broadly, subset of $validModules. Single
      * element definitions may result in us consulting validModules.
      */
     var $activeModules = array();
+    
+    /**
+     * Collections that should be merged into $activeModules
+     */
+    var $activeModulesCollections = array('Safe', 'Lenient', 'Correctional');
     
     /**
      * Current doctype for which $validModules is based
@@ -120,16 +130,7 @@ class HTMLPurifier_HTMLModuleManager
     /** List of prefixes we should use for resolving small names */
     var $prefixes = array('HTMLPurifier_HTMLModule_');
     
-    /** Associative array of order keywords to an integer index */
-    var $orderKeywords = array(
-        'define' => 10,
-        'define-redefine' => 20,
-        'redefine' => 30,
-    );
-    
-    /** Instance of HTMLPurifier_ContentSets configured with full modules. */
-    var $contentSets;
-    
+    var $contentSets; /**< Instance of HTMLPurifier_ContentSets */
     var $attrTypes; /**< Instance of HTMLPurifier_AttrTypes */
     var $attrCollections; /**< Instance of HTMLPurifier_AttrCollections */
     
@@ -183,6 +184,14 @@ class HTMLPurifier_HTMLModuleManager
         $this->modules[$module->name] = $module;
     }
     
+    /**
+     * Adds a class prefix that addModule() will use to resolve a
+     * string name to a concrete class
+     */
+    function addPrefix($prefix) {
+        $this->prefixes[] = (string) $prefix;
+    }
+    
     function setup($config) {
         // retrieve the doctype
         $this->doctype = $this->getDoctype($config);
@@ -193,16 +202,8 @@ class HTMLPurifier_HTMLModuleManager
             $this->processCollections($this->$varname);
         }
         
-        // $collections variable in following instances will be dynamically
-        // generated once we figure out some config variables
-        
-        // setup the validModules array
-        $collections = array('Safe', 'Unsafe', 'Lenient', 'Correctional');
-        $this->validModules = $this->assembleModules($collections);
-        
-        // setup the activeModules array
-        $collections = array('Safe', 'Lenient', 'Correctional');
-        $this->activeModules = $this->assembleModules($collections);
+        $this->validModules  = $this->assembleModules($this->validModulesCollections);
+        $this->activeModules = $this->assembleModules($this->activeModulesCollections);
         
         // setup lookup table based on all valid modules
         foreach ($this->validModules as $module) {
@@ -274,11 +275,27 @@ class HTMLPurifier_HTMLModuleManager
         // perform inclusions
         foreach ($cols as $col_i => $col) {
             if (is_string($col)) continue; // alias, save for later
-            if (!is_array($col[0])) continue; // no inclusions to do
+            if (empty($col[0]) || !is_array($col[0])) continue; // no inclusions to do
+            $seen = array($col_i => true); // recursion reporting
             $includes = $col[0];
-            unset($cols[$col_i][0]); // remove inclusions value
+            unset($cols[$col_i][0]); // remove inclusions value, recursion guard
             for ($i = 0; isset($includes[$i]); $i++) {
                 $inc = $includes[$i];
+                if (isset($seen[$inc])) {
+                    trigger_error(
+                        "Circular inclusion detected in $col_i collection",
+                        E_USER_ERROR
+                    );
+                    continue;
+                } else {
+                    $seen[$inc] = true;
+                }
+                if (!isset($cols[$inc])) {
+                    trigger_error(
+                        "Collection $col_i tried to include undefined ".
+                        "collection $inc", E_USER_ERROR);
+                    continue;
+                }
                 foreach ($cols[$inc] as $module) {
                     if (is_array($module)) { // another inclusion!
                         foreach ($module as $inc2) $includes[] = $inc2;
@@ -296,6 +313,21 @@ class HTMLPurifier_HTMLModuleManager
             $order = array();
             foreach ($col as $module_i => $module) {
                 unset($cols[$col_i][$module_i]);
+                if (is_array($module)) {
+                    trigger_error("Illegal inclusion array at index".
+                        " $module_i found collection $col_i, inclusion".
+                        " arrays must be at start of collection (index 0)",
+                        E_USER_ERROR);
+                    continue;
+                }
+                if (!isset($this->modules[$module])) {
+                    trigger_error(
+                        "Collection $col_i references undefined ".
+                        "module $module",
+                        E_USER_ERROR
+                    );
+                    continue;
+                }
                 $module = $this->modules[$module];
                 $cols[$col_i][$module->name] = $module;
                 $order[$module->name] = $module->order;
@@ -308,6 +340,23 @@ class HTMLPurifier_HTMLModuleManager
         // hook up aliases
         foreach ($cols as $col_i => $col) {
             if (!is_string($col)) continue;
+            if (!isset($cols[$col])) {
+                trigger_error(
+                    "$col_i collection is alias to undefined $col collection",
+                    E_USER_ERROR
+                );
+                unset($cols[$col_i]);
+                continue;
+            }
+            // recursion guard
+            if (is_string($cols[$col])) {
+                trigger_error(
+                    "Cannot alias $col_i collection to alias",
+                    E_USER_ERROR
+                );
+                unset($cols[$col_i]);
+                continue;
+            }
             $cols[$col_i] = $cols[$col];
         }
         
