@@ -111,16 +111,6 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
                 'HTML' => array('Text', 'Hypertext', 'Legacy')
             )
         );
-        $this->assertProcessCollections( // aliasing!
-            array(
-                'HTML' => 'XHTML',
-                'XHTML' => array('Text', 'Hypertext')
-            ),
-            array(
-                'HTML' => array('Text', 'Hypertext'),
-                'XHTML' => array('Text', 'Hypertext')
-            )
-        );
         $this->assertProcessCollections( // nested inclusions
             array(
                 'Full' => array(array('Minimal'), 'Hypertext'),
@@ -171,21 +161,6 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
             )
         );
         
-        $this->expectError('XHTML collection is alias to undefined Foobar collection');
-        $this->manager->processCollections(
-            $c = array(
-                'XHTML' => 'Foobar'
-            )
-        );
-        
-        $this->expectError('Cannot alias XHTML collection to alias');
-        $this->manager->processCollections(
-            $c = array(
-                'XHTML' => 'Foobar',
-                'Foobar' => 'HTML',
-                'HTML' => array()
-            )
-        );
     }
     
 }
