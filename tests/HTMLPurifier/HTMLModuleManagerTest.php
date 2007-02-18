@@ -19,14 +19,23 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
     var $manager;
     
     function setup() {
-        $this->manager = new HTMLPurifier_HTMLModuleManager();
+        $this->manager = new HTMLPurifier_HTMLModuleManager(true);
     }
     
     function teardown() {
         tally_errors($this);
     }
     
-    function test_addModule() {
+    function createModule($name) {
+        $module = new HTMLPurifier_HTMLModule();
+        $module->name = $name;
+        return $module;
+    }
+    
+    function test_addModule_withAutoload() {
+        $this->manager->autoDoctype = 'Generic Document 0.1';
+        $this->manager->autoCollection = 'Default';
+        
         $module = new HTMLPurifier_HTMLModule();
         $module->name = 'Module';
         
@@ -41,6 +50,26 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         $this->assertEqual($module2, $this->manager->modules['Module2']);
         $module2_order = $this->manager->modules['Module2']->order;
         $this->assertEqual($module_order + 1, $module2_order);
+        
+        $this->assertEqual(
+            $this->manager->collections['Default']['Generic Document 0.1'],
+            array('Module', 'Module2')
+        );
+        
+        $this->manager->setup(HTMLPurifier_Config::createDefault());
+        
+        $modules = array(
+            'Module' => $this->manager->modules['Module'],
+            'Module2' => $this->manager->modules['Module2']
+        );
+        
+        $this->assertIdentical(
+            $this->manager->collections['Default']['Generic Document 0.1'],
+            $modules
+        );
+        $this->assertIdentical($this->manager->activeModules, $modules);
+        $this->assertIdentical($this->manager->activeCollections, array('Default'));
+        
     }
     
     function test_addModule_undefinedClass() {
@@ -66,15 +95,22 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         $this->manager->processCollections($input);
         // substitute in modules for $expect
         foreach ($expect as $col_i => $col) {
+            $disable = false;
             foreach ($col as $mod_i => $mod) {
                 unset($expect[$col_i][$mod_i]);
+                if ($mod_i === '*') {
+                    $disable = true;
+                    continue;
+                }
                 $expect[$col_i][$mod] = $this->manager->modules[$mod];
             }
+            if ($disable) $expect[$col_i]['*'] = false;
         }
         $this->assertIdentical($input, $expect);
     }
     
     function testImpl_processCollections() {
+        $this->manager->initialize();
         $this->assertProcessCollections(
             array()
         );
@@ -123,9 +159,26 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
                 'Bare' => array('Text')
             )
         );
+        // strange but valid stuff that will be handled in assembleModules
+        $this->assertProcessCollections(
+            array(
+                'Linky' => array('Hypertext'),
+                'Listy' => array('List'),
+                '*' => array('Text')
+            )
+        );
+        $this->assertProcessCollections(
+            array(
+                'Linky' => array('Hypertext'),
+                'ListyOnly' => array('List', '*' => false),
+                '*' => array('Text')
+            )
+        );
     }
     
     function testImpl_processCollections_error() {
+        $this->manager->initialize();
+        
         $this->expectError( // active variables, watch out!
             'Illegal inclusion array at index 1 found collection HTML, '.
             'inclusion arrays must be at start of collection (index 0)');
@@ -162,6 +215,54 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         );
         
     }
+    
+    function test_makeCollection() {
+        $config = HTMLPurifier_Config::create(array(
+            'HTML.Doctype' => 'Custom Doctype'
+        ));
+        $this->manager->addModule($this->createModule('ActiveModule'));
+        $this->manager->addModule($this->createModule('DudModule'));
+        $this->manager->addModule($this->createModule('ValidModule'));
+        $ActiveModule   = $this->manager->modules['ActiveModule'];
+        $DudModule      = $this->manager->modules['DudModule'];
+        $ValidModule    = $this->manager->modules['ValidModule'];
+        $this->manager->collections['ToBeValid']['Custom Doctype'] = array('ValidModule');
+        $this->manager->collections['ToBeActive']['Custom Doctype'] = array('ActiveModule');
+        $this->manager->makeCollectionValid('ToBeValid');
+        $this->manager->makeCollectionActive('ToBeActive');
+        $this->manager->setup($config);
+        $this->assertIdentical($this->manager->validModules, array(
+            'ValidModule'  => $ValidModule,
+            'ActiveModule' => $ActiveModule
+        ));
+        $this->assertIdentical($this->manager->activeModules, array(
+            'ActiveModule' => $ActiveModule
+        ));
+    }
+    
+    function test_makeCollection_undefinedCollection() {
+        $config = HTMLPurifier_Config::create(array(
+            'HTML.Doctype' => 'Sweets Document 1.0'
+        ));
+        $this->manager->addModule($this->createModule('DonutsModule'));
+        $this->manager->addModule($this->createModule('ChocolateModule'));
+        $this->manager->collections['CocoaBased']['Sweets Document 1.0'] = array('ChocolateModule');
+        // notice how BreadBased collection is missing
+        $this->manager->makeCollectionActive('CocoaBased'); // to prevent other errors
+        $this->manager->makeCollectionValid('BreadBased');
+        $this->expectError('BreadBased collection is undefined');
+        $this->manager->setup($config);
+    }
+    
+    function untest_soupStuff() {
+        $config = HTMLPurifier_Config::create(array(
+            'HTML.Doctype' => 'The Soup Specification 8.0'
+        ));
+        $this->manager->addModule($this->createModule('VegetablesModule'));
+        $this->manager->addModule($this->createModule('MeatModule'));
+        
+    }
+    
     
 }
 

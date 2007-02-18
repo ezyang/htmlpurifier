@@ -27,10 +27,8 @@ class HTMLPurifier_HTMLModule
     var $order;
     
     /**
-     * List of elements that the module implements or substantially
-     * modifies, either through a new ElementDef or a modified
-     * content set that directly affects the element (if the element was
-     * removed or added from a content set).
+     * Informally, a list of elements this module changes. Not used in
+     * any significant way.
      * @protected
      */
     var $elements = array();

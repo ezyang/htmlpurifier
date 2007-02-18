@@ -27,6 +27,16 @@ require_once 'HTMLPurifier/HTMLModule/Legacy.php';
 require_once 'HTMLPurifier/HTMLModule/TransformToStrict.php';
 require_once 'HTMLPurifier/HTMLModule/TransformToXHTML11.php';
 
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'Doctype', null, 'string/null',
+    'Doctype to use, valid values are HTML 4.01 Transitional, HTML 4.01 '.
+    'Strict, XHTML 1.0 Transitional, XHTML 1.0 Strict, XHTML 1.1. '.
+    'Technically speaking this is not actually a doctype (as it does '.
+    'not identify a corresponding DTD), but we are using this name '.
+    'for sake of simplicty. This will override any older directives '.
+    'like %Core.XHTML or %HTML.Strict.'
+);
+
 class HTMLPurifier_HTMLModuleManager
 {
     
@@ -38,6 +48,14 @@ class HTMLPurifier_HTMLModuleManager
     
     /**
      * String doctype we will validate against. See $validModules for use.
+     * 
+     * @note
+     * There is a special doctype '*' that acts both as the "default"
+     * doctype if a customized system only defines one doctype and
+     * also a catch-all doctype that gets merged into all the other
+     * module collections. When possible, use a private collection to
+     * share modules between doctypes: this special doctype is to
+     * make life more convenient for users.
      */
     var $doctype;
     var $doctypeAliases = array(); /**< Lookup array of strings to real doctypes */
@@ -68,10 +86,21 @@ class HTMLPurifier_HTMLModuleManager
     var $activeModules = array();
     var $activeCollections = array(); /**< Collections to merge into $activeModules */
     
+    var $counter = 0; /**< Designates next available integer order for modules. */
+    var $initialized = false; /**< Says whether initialize() was called */
+    
     /**
-     * Designates next available integer order for modules.
+     * Specifies what doctype to siphon new modules from addModule() to,
+     * or false to disable the functionality. Must be used in conjunction
+     * with $autoCollection.
      */
-    var $counter = 0;
+    var $autoDoctype = false;
+    /**
+     * Specifies what collection to siphon new modules from addModule() to,
+     * or false to disable the functionality. Must be used in conjunction
+     * with $autoCollection.
+     */
+    var $autoCollection = false;
     
     /** Associative array of element name to defining modules (always array) */
     var $elementLookup = array();
@@ -97,6 +126,8 @@ class HTMLPurifier_HTMLModuleManager
     }
     
     function initialize() {
+        $this->initialized = true;
+        
         // load default modules to the recognized modules list (not active)
         $modules = array(
             // define
@@ -136,21 +167,24 @@ class HTMLPurifier_HTMLModuleManager
         $this->collections['Unsafe'] = array();
         
         // Modules to import if lenient mode (attempt to convert everything
-        // to a valid representation) is on. These must not be in $activeModules
+        // to a valid representation) is on. These must not be in $validModules
         // unless specified so.
         $this->collections['Lenient'] = array(
-            'HTML 4.01 Strict' => 'XHTML 1.0 Strict',
+            'HTML 4.01 Strict' => array(array('XHTML 1.0 Strict')),
             'XHTML 1.0 Strict' => array('TransformToStrict'),
             'XHTML 1.1' => array(array('XHTML 1.0 Strict'), 'TransformToXHTML11')
         );
         
         // Modules to import if correctional mode (correct everything that
-        // is feasible to strict mode) is on. These must not be in $activeModules
+        // is feasible to strict mode) is on. These must not be in $validModules
         // unless specified so.
         $this->collections['Correctional'] = array(
-            'HTML 4.01 Transitional' => 'XHTML 1.0 Transitional',
+            'HTML 4.01 Transitional' => array(array('XHTML 1.0 Transitional')),
             'XHTML 1.0 Transitional' => array('TransformToStrict'), // probably want a different one
         );
+        
+        // User-space modules, custom code or whatever
+        $this->collections['Extension'] = array();
         
         // setup active versus valid modules. ORDER IS IMPORTANT!
         // definition modules
@@ -159,6 +193,10 @@ class HTMLPurifier_HTMLModuleManager
         // redefinition modules
         $this->makeCollectionActive('Lenient');
         $this->makeCollectionActive('Correctional');
+        
+        $this->autoDoctype    = '*';
+        $this->autoCollection = 'Extension';
+        
     }
     
     /**
@@ -187,6 +225,9 @@ class HTMLPurifier_HTMLModuleManager
         }
         $module->order = $this->counter++; // assign then increment
         $this->modules[$module->name] = $module;
+        if ($this->autoDoctype !== false && $this->autoCollection !== false) {
+            $this->collections[$this->autoCollection][$this->autoDoctype][] = $module->name;
+        }
     }
     
     /**
@@ -217,6 +258,12 @@ class HTMLPurifier_HTMLModuleManager
     }
     
     function setup($config) {
+        
+        // load up the autocollection
+        if ($this->autoCollection !== false) {
+            $this->makeCollectionActive($this->autoCollection);
+        }
+        
         // retrieve the doctype
         $this->doctype = $this->getDoctype($config);
         if (isset($this->doctypeAliases[$this->doctype])) {
@@ -233,7 +280,7 @@ class HTMLPurifier_HTMLModuleManager
         
         // setup lookup table based on all valid modules
         foreach ($this->validModules as $module) {
-            foreach ($module->elements as $name) {
+            foreach ($module->info as $name => $def) {
                 if (!isset($this->elementLookup[$name])) {
                     $this->elementLookup[$name] = array();
                 }
@@ -280,12 +327,30 @@ class HTMLPurifier_HTMLModuleManager
         $modules = array();
         $numOfCollectionsUsed = 0;
         foreach ($collections as $name) {
+            $disable_global = false;
+            if (!isset($this->collections[$name])) {
+                trigger_error("$name collection is undefined", E_USER_ERROR);
+                continue;
+            }
             $cols = $this->collections[$name];
             if (isset($cols[$this->doctype])) {
+                if (isset($cols[$this->doctype]['*'])) {
+                    unset($cols[$this->doctype]['*']);
+                    $disable_global = true;
+                }
                 $modules += $cols[$this->doctype];
                 $numOfCollectionsUsed++;
             }
+            // accept catch-all doctype
+            if (
+                $this->doctype !== '*' && 
+                isset($cols['*']) &&
+                !$disable_global
+            ) {
+                $modules += $cols['*'];
+            }
         }
+        
         if ($numOfCollectionsUsed < 1) {
             // possible XSS injection if user-specified doctypes
             // are allowed
@@ -308,11 +373,15 @@ class HTMLPurifier_HTMLModuleManager
         
         // perform inclusions
         foreach ($cols as $col_i => $col) {
-            if (is_string($col)) continue; // alias, save for later
-            if (empty($col[0]) || !is_array($col[0])) continue; // no inclusions to do
-            $seen = array($col_i => true); // recursion reporting
-            $includes = $col[0];
-            unset($cols[$col_i][0]); // remove inclusions value, recursion guard
+            $seen = array();
+            if (!empty($col[0]) && is_array($col[0])) {
+                $seen[$col_i] = true; // recursion reporting
+                $includes = $col[0];
+                unset($cols[$col_i][0]); // remove inclusions value, recursion guard
+            } else {
+                $includes = array();
+            }
+            if (empty($includes)) continue;
             for ($i = 0; isset($includes[$i]); $i++) {
                 $inc = $includes[$i];
                 if (isset($seen[$inc])) {
@@ -343,7 +412,7 @@ class HTMLPurifier_HTMLModuleManager
         // replace with real modules, invert module from list to
         // assoc array of module name to module instance
         foreach ($cols as $col_i => $col) {
-            if (is_string($col)) continue;
+            $ignore_global = false;
             $order = array();
             foreach ($col as $module_i => $module) {
                 unset($cols[$col_i][$module_i]);
@@ -352,6 +421,10 @@ class HTMLPurifier_HTMLModuleManager
                         " $module_i found collection $col_i, inclusion".
                         " arrays must be at start of collection (index 0)",
                         E_USER_ERROR);
+                    continue;
+                }
+                if ($module_i === '*' && $module === false) {
+                    $ignore_global = true;
                     continue;
                 }
                 if (!isset($this->modules[$module])) {
@@ -369,6 +442,7 @@ class HTMLPurifier_HTMLModuleManager
             array_multisort(
                 $order, SORT_ASC, SORT_NUMERIC, $cols[$col_i]
             );
+            if ($ignore_global) $cols[$col_i]['*'] = false;
         }
         
         // delete pseudo-collections
@@ -382,7 +456,16 @@ class HTMLPurifier_HTMLModuleManager
      * Retrieves the doctype from the configuration object
      */
     function getDoctype($config) {
-        // this is BC
+        $doctype = $config->get('HTML', 'Doctype');
+        if ($doctype !== null) {
+            return $doctype;
+        }
+        if (!$this->initialized) {
+            // don't do HTML-oriented backwards compatibility stuff
+            // use either the auto-doctype, or the catch-all doctype
+            return $this->autoDoctype ? $this->autoDoctype : '*';
+        }
+        // this is backwards-compatibility stuff
         if ($config->get('Core', 'XHTML')) {
             $doctype = 'XHTML 1.0';
         } else {
