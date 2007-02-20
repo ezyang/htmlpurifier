@@ -33,7 +33,7 @@ HTMLPurifier_ConfigSchema::define(
     'Strict, XHTML 1.0 Transitional, XHTML 1.0 Strict, XHTML 1.1. '.
     'Technically speaking this is not actually a doctype (as it does '.
     'not identify a corresponding DTD), but we are using this name '.
-    'for sake of simplicty. This will override any older directives '.
+    'for sake of simplicity. This will override any older directives '.
     'like %Core.XHTML or %HTML.Strict.'
 );
 
