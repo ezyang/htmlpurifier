@@ -151,7 +151,8 @@ class HTMLPurifier_Lexer
             $lexer = $prototype;
         }
         if (empty($lexer)) {
-            if (class_exists('DOMDocument')) { // check for DOM support
+            if (version_compare(PHP_VERSION, "5", ">=") && // check for PHP5
+                class_exists('DOMDocument')) { // check for DOM support
                 require_once 'HTMLPurifier/Lexer/DOMLex.php';
                 $lexer = new HTMLPurifier_Lexer_DOMLex();
             } else {
