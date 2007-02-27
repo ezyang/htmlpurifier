@@ -42,13 +42,18 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         $module2 = new HTMLPurifier_HTMLModule();
         $module2->name = 'Module2';
         
+        // we need to grab the dynamically generated orders from
+        // the object since modules are not passed by reference
+        
         $this->manager->addModule($module);
-        $this->assertEqual($module, $this->manager->modules['Module']);
         $module_order = $this->manager->modules['Module']->order;
+        $module->order = $module_order;
+        $this->assertEqual($module, $this->manager->modules['Module']);
         
         $this->manager->addModule($module2);
-        $this->assertEqual($module2, $this->manager->modules['Module2']);
         $module2_order = $this->manager->modules['Module2']->order;
+        $module2->order = $module2_order;
+        $this->assertEqual($module2, $this->manager->modules['Module2']);
         $this->assertEqual($module_order + 1, $module2_order);
         
         $this->assertEqual(
