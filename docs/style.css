@@ -46,3 +46,14 @@ blockquote .label {font-weight:bold; font-size:1em; margin:0 0 .1em;
 #toc ol ol {list-style-type:lower-roman;}
 #toc ol {list-style-type:decimal;}
 #toc {list-style-type:upper-alpha;}
+
+q {
+  behavior: url(fixquotes.htc); /* IE fix */
+  quotes: '\201C' '\201D' '\2018' '\2019';
+}
+q:before {
+  content: open-quote;
+}
+q:after {
+  content: close-quote;
+}

@@ -1,0 +1,6 @@
+<public:attach event="oncontentready" onevent="init();" />
+<script>
+function init() {
+  element.innerHTML = '&#8220;'+element.innerHTML+'&#8221;';
+}
+</script>
