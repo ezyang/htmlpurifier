@@ -20,20 +20,86 @@
 filtersets: therefore, users must be able to define their own sets of
 <q>allowed</q> elements, as well as switch in-between doctypes of HTML.</p>
 
-<p>Our goals (pending reorganization):</p>
+<p>Our goals are to let the user:</p>
 
-<ul>
-    <li>Easily switch from one doctype to another,</li>
-    <li>Create own doctype, possibly non-HTML based,</li>
-    <li>Select a custom set of tags and attributes,</li>
-    <li>Select XHTML 1.1 style modules,</li>
-    <li>Switch on/off <q>dangerous</q> tags,</li>
-    <li>Define custom behavior for pre-existing tags,</li>
-    <li>Define custom tags for their own use,</li>
-    <li>Define custom attribute type / override existing one,</li>
-    <li>Change the root node which fragment will be inserted in.</li>
-</ul>
+<dl>
+    <dt>Select</dt>
+    <dd><ul>
+        <li>Doctype</li>
+        <li>Filtersets: Rich / Plain / Full ...</li>
+        <li>Collections: Safe / Unsafe / Leniency(?) / Corrections(?) [advanced]</li>
+        <li>Modules / Tags / Attributes</li>
+    </ul></dd>
+    <dt>Customize</dt>
+    <dd><ul>
+        <li>Tags / Attributes / Attribute Types</li>
+        <li>Filtersets</li>
+        <li>Root Node</li>
+    </ul></dd>
+    <dt>Create</dt>
+    <dd><ul>
+        <li>Modules / Tags / Attributes / Attribute Types</li>
+        <li>Filtersets</li>
+        <li>Doctype</li>
+    </ul></dd>
+</dl>
 
-<div id="version">$Id: dev-optimization.html 655 2007-01-18 22:38:40Z Edward $</div>
+<h2>Select</h2>
+
+<h3>Selecting a Doctype</h3>
+
+<p>By default, users will use a doctype-based, permissive but secure
+whitelist.  They must define a <strong>doctype</strong>, and this serves
+as the first method of determining a filterset.</p>
+
+<p class="technical">This identifier is based
+on the name the W3C has given to the document type and <em>not</em>
+the DTD identifier.</p>
+
+<p>This parameter is set via the configuration object:</p>
+
+<pre>$config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');</pre>
+
+<h3>Selecting a Filterset</h3>
+
+<p>However, selecting this doctype doesn't mean much, because if we
+adhered exactly to the definition we would be letting XSS and other
+nasties through. HTML Purifier must, in its filterset, allow a subset
+of the doctype, which we shall call a <strong>filterset</strong>.</p>
+
+<p>By default, HTML Purifier will use the <strong>Rich</strong>
+filterset, which allows as many elements as possible with untrusted
+sources. Other possible filtersets could be:</p>
+
+<dl>
+    <dt>Full</dt>
+    <dd>Allows the full span of elements in the doctype, good if you want
+        HTML Purifier to work as a Tidy substitute but not to strip
+        anything out.</dd>
+    <dt>Plain</dt>
+    <dd>Provides a minimum set of tags for semantic markup of things
+        like blog comments.</dd>
+</dl>
+
+<p>Extension-authors would be able to define custom filtersets for
+other users to use.</p>
+
+<p>A possible call to select a filterset would be:</p>
+
+<pre>$config->set('HTML', 'Filterset', 'Rich');</pre>
+
+<h3>Selecting Modules / Tags / Attributes</h3>
+
+<p>If this cookie cutter approach doesn't appeal to a user, they may
+decide to roll their own filterset by selecting modules, tags and
+attributes to allow.</p>
+
+<p class="technical">This would make use of the same facilities
+as a filterset author would use, except that it would go under an
+<q>anonymous</q> filterset that would be auto-selected if any of the
+relevant module/tag/attribute selection configuration directives were
+non-null.</p>
+
+<div id="version">$Id$</div>
 
 </body></html>

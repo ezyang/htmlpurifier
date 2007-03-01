@@ -57,3 +57,12 @@ q:before {
 q:after {
   content: close-quote;
 }
+
+/* Marks off implementation details interesting only to the person writing
+   the class described in the spec. */
+.technical {margin-left:2em; }
+.technical:before {content:"Technical note: "; font-weight:bold; color:#061; }
+
+/* Marks off sections that are lacking. */
+.fixme {margin-left:2em; }
+.fixme:before {content:"Fix me: "; font-weight:bold; color:#C00; }
