@@ -27,7 +27,8 @@ filtersets: therefore, users must be able to define their own sets of
     <dd><ul>
         <li>Doctype</li>
         <li>Filtersets: Rich / Plain / Full ...</li>
-        <li>Collections: Safe / Unsafe / Leniency(?) / Corrections(?) [advanced]</li>
+        <li>Mode: Lenient / Correctional</li>
+        <li>Collections (?): Safe / Unsafe</li>
         <li>Modules / Tags / Attributes</li>
     </ul></dd>
     <dt>Customize</dt>
@@ -87,6 +88,31 @@ other users to use.</p>
 <p>A possible call to select a filterset would be:</p>
 
 <pre>$config->set('HTML', 'Filterset', 'Rich');</pre>
+
+<h3>Selecting Mode</h3>
+
+<p>Within filtersets, there are various <strong>modes</strong> of operation.
+These indicate variant behaviors that, while not strictly changing the
+allowed set of elements and attributes, will definitely affect the output.
+Currently, we have two modes, which may be used together:</p>
+
+<dl>
+    <dt>Lenient</dt>
+    <dd>Deprecated elements and attributes will be transformed into
+        standards-compliant alternatives when explicitly disallowed. For
+        example, in the XHTML 1.0 Strict doctype, a <code>center</code>
+        tag would be turned into a <code>div</code> with the CSS property
+        <code>text-align:center;</code>, but in XHTML 1.0 Transitional
+        the tag would be preserved. This mode is on by default.</dd>
+    <dt>Correctional</dt>
+    <dd>Deprecated elements and attributes will be transformed into
+        standards-compliant alternatives whenever possible. Referring
+        back to the previous example, the <code>center</code> tag would
+        be transformed in both cases. However, tags without a
+        reasonable standards-compliant alternative will be preserved
+        in their form. This mode is on by default. It may have
+        various levels of operation.</dd>
+</dl>
 
 <h3>Selecting Modules / Tags / Attributes</h3>
 
