@@ -31,8 +31,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   were an Required ChildDef, this is the "real" set of allowed elements
 . AttrDef partitioned into HTML, CSS and URI segments
 
-1.4.2, unknown release date
+1.4.x?, unknown release date
 ! docs/enduser-utf8.html explains how to use UTF-8 and HTML Purifier
+. Modify Youtube filter regexp to be multiline
+. Require both PHP5 and DOM extension in order to use DOMLex, fixes
+  some edge cases where a DOMDocument class exists in a PHP4 environment.
 
 1.4.1, released 2007-01-21
 ! docs/enduser-youtube.html updated according to new functionality
