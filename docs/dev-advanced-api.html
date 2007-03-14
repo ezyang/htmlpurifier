@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="description" content="Functional specification for HTML Purifier's advanced API." />
+<meta name="description" content="Functional specification for HTML Purifier's advanced API for defining custom filtering behavior." />
 <link rel="stylesheet" type="text/css" href="style.css" />
 
 <title>Advanced API - HTML Purifier</title>
@@ -114,6 +114,23 @@ Currently, we have two modes, which may be used together:</p>
         various levels of operation.</dd>
 </dl>
 
+<p>A possible call to select modes would be:</p>
+
+<pre>$config->set('HTML', 'Mode', array('correctional', 'lenient'));</pre>
+
+<p>If modes have extra parameters, a hash might work well:</p>
+
+<pre>$config->set('HTML', 'Mode', array(
+    'correctional' => 9, // strongest level
+    'lenient' => true // this one's just boolean
+));</pre>
+
+<p>Modes may possibly be wrapped up with the filterset declaration:</p>
+
+<pre>$config->set('HTML', 'Filterset', 'Rich: correctional, lenient');</pre>
+
+<p>Further investigation in this field is necessary.</p>
+
 <h3>Selecting Modules / Tags / Attributes</h3>
 
 <p>If this cookie cutter approach doesn't appeal to a user, they may
@@ -125,6 +142,46 @@ as a filterset author would use, except that it would go under an
 <q>anonymous</q> filterset that would be auto-selected if any of the
 relevant module/tag/attribute selection configuration directives were
 non-null.</p>
+
+<p>On the highest level, a user will usually be most interested in
+directly specifying which elements and attributes are desired. For
+example:</p>
+
+<pre>$config->set('HTML', 'AllowedElements', 'a,b,em,p,blockquote,code,i');</pre>
+
+<p>Attribute declarations could be merged into this declaration as such:</p>
+
+<pre>$config->set('HTML', 'Allowed', 'a[href,title],b,em,p[class],blockquote[cite],code,i');</pre>
+
+<p>...or be kept separate:</p>
+
+<pre>$config->set('HTML', 'AllowedAttributes', 'a.href,a.title,p.class,blockquote.cite');</pre>
+
+<p class="technical">Considering that, internally speaking, as mandated by
+the XHTML 1.1 Modularization specification, we have organized our
+elements around modules, considerable gymnastics will be needed to
+get this sort of functionality working.</p>
+
+<p>A user may also specify a module to load a class of elements and attributes
+into their filterest:</p>
+
+<pre>$config->set('HTML', 'Allowed', 'Hypertext,Core');</pre>
+
+<p class="fixme">The granularity of these modules is too coarse for
+the average user (for example, the core module loads everything from
+the essential <code>p</code> tag to the not-so-safe <code>h1</code>
+tag). How do we make this still a viable solution?</p>
+
+<h3>Unified selector</h3>
+
+<p>Because selecting each and every one of these configuration options
+is a chore, we may wish to offer a specialized configuration method
+for selecting a filterset. Possibility:</p>
+
+<pre>function selectFilter($doctype, $filterset, $mode)</pre>
+
+<p>...which is simply a light wrapper over the individual configuration
+calls. A custom config file format or text format could also be adopted.</p>
 
 <div id="version">$Id$</div>
 
