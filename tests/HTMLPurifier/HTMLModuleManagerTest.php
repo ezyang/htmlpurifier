@@ -187,37 +187,45 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         $this->expectError( // active variables, watch out!
             'Illegal inclusion array at index 1 found collection HTML, '.
             'inclusion arrays must be at start of collection (index 0)');
-        $this->manager->processCollections(
-            $c = array(
-                'HTML' => array('Legacy', array('XHTML')),
-                'XHTML' => array('Text', 'Hypertext')
-            )
+                $c = array(
+            'HTML' => array('Legacy', array('XHTML')),
+            'XHTML' => array('Text', 'Hypertext')
+
+
         );
+        $this->manager->processCollections($c);
+        unset($c);
         
         $this->expectError('Collection HTML references undefined '.
             'module Foobar');
-        $this->manager->processCollections(
-            $c = array(
-                'HTML' => array('Foobar')
-            )
+        $c = array(
+            'HTML' => array('Foobar')
+
+
         );
+        $this->manager->processCollections($c);
+        unset($c);
         
         $this->expectError('Collection HTML tried to include undefined '.
             'collection _Common');
-        $this->manager->processCollections(
-            $c = array(
-                'HTML' => array(array('_Common'), 'Legacy')
-            )
+        $c = array(
+            'HTML' => array(array('_Common'), 'Legacy')
+
+
         );
+        $this->manager->processCollections($c);
+        unset($c);
         
         // reports the first circular inclusion it runs across
         $this->expectError('Circular inclusion detected in HTML collection');
-        $this->manager->processCollections(
-            $c = array(
-                'HTML' => array(array('XHTML')),
-                'XHTML' => array(array('HTML'))
-            )
+        $c = array(
+            'HTML' => array(array('XHTML')),
+            'XHTML' => array(array('HTML'))
+
+
         );
+        $this->manager->processCollections($c);
+        unset($c);
         
     }
     
