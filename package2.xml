@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.5.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+ <name>HTMLPurifier</name>
+ <channel>hp.jpsband.org</channel>
+ <summary>Standards-compliant HTML filter</summary>
+ <description>HTML Purifier is an HTML filter that will remove all malicious code
+    (better known as XSS) with a thoroughly audited, secure yet permissive
+    whitelist and will also make sure your documents are standards
+    compliant.</description>
+ <lead>
+  <name>Edward Z. Yang</name>
+  <user>edwardzyang</user>
+  <email>htmlpurifier@jpsband.org</email>
+  <active>yes</active>
+ </lead>
+ <date>2007-03-24</date>
+ <time>16:36:26</time>
+ <version>
+  <release>1.5.0</release>
+  <api>1.5</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.gnu.org/licenses/lgpl.html">LGPL</license>
+ <notes>Major bugs were fixed and some major internal refactoring was undertaken. The visible changes include XHTML 1.1-style modularization of HTMLDefinition, rudimentary internationalization, and a fix for a fatal error when the PHP4 DOM XML extension was loaded. The x subtag is now allowed in language codes. Element by element AllowedAttribute declaration is now possible for global attributes. Instead of *.class, you can write span.class. The old syntax still works, and enables the attribute for all elements.</notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <file baseinstalldir="/" md5sum="e7c7d7a9517d9c0ee17fddfc863487fd" name="HTMLPurifier/AttrCollections.php" role="php" />
+   <file baseinstalldir="/" md5sum="655c5398103ccaa3c19ead83f584ac9d" name="HTMLPurifier/AttrDef.php" role="php" />
+   <file baseinstalldir="/" md5sum="6392a8b9312efc058eef3ddce1084c6a" name="HTMLPurifier/AttrTransform.php" role="php" />
+   <file baseinstalldir="/" md5sum="ec4d6ad7c81b203549ba54ed69a8a80c" name="HTMLPurifier/AttrTypes.php" role="php" />
+   <file baseinstalldir="/" md5sum="604695d7b6bc708a0ab514b142f89e0c" name="HTMLPurifier/ChildDef.php" role="php" />
+   <file baseinstalldir="/" md5sum="42c8b6aec794fc3dc2a2fce56545b937" name="HTMLPurifier/Config.php" role="php" />
+   <file baseinstalldir="/" md5sum="a1ed5cac71e00653dd0aba5b880eb46d" name="HTMLPurifier/ConfigDef.php" role="php" />
+   <file baseinstalldir="/" md5sum="361930af25ec97680cecd14407a1348e" name="HTMLPurifier/ConfigSchema.php" role="php" />
+   <file baseinstalldir="/" md5sum="373313b6010e58048b074d22d851a089" name="HTMLPurifier/ContentSets.php" role="php" />
+   <file baseinstalldir="/" md5sum="a1e6452930c0d99169a5967c5c433d0f" name="HTMLPurifier/Context.php" role="php" />
+   <file baseinstalldir="/" md5sum="ee719ede48d0adb3374e8f639e93fed6" name="HTMLPurifier/CSSDefinition.php" role="php" />
+   <file baseinstalldir="/" md5sum="6ae8baef403f1a870f8398293e453300" name="HTMLPurifier/ElementDef.php" role="php" />
+   <file baseinstalldir="/" md5sum="ea9fb91c5a490fbaa207676bfc9f1261" name="HTMLPurifier/Encoder.php" role="php" />
+   <file baseinstalldir="/" md5sum="2cba003af11f60741ff1f620049800a7" name="HTMLPurifier/EntityLookup.php" role="php" />
+   <file baseinstalldir="/" md5sum="f488348b1f0222c0c74113500dec6c68" name="HTMLPurifier/EntityParser.php" role="php" />
+   <file baseinstalldir="/" md5sum="17d383b158a75b5dc7fe7443c4fa48ad" name="HTMLPurifier/Error.php" role="php" />
+   <file baseinstalldir="/" md5sum="e7d1039eff87250aed396b0d1a0888c2" name="HTMLPurifier/Filter.php" role="php" />
+   <file baseinstalldir="/" md5sum="73c2ff78d3c574eab10ec045635e9e2c" name="HTMLPurifier/Generator.php" role="php" />
+   <file baseinstalldir="/" md5sum="33457be498f95c3441a465d48a25f92a" name="HTMLPurifier/HTMLDefinition.php" role="php" />
+   <file baseinstalldir="/" md5sum="5d8db75ad24ad4231b1fc1004deb2730" name="HTMLPurifier/HTMLModule.php" role="php" />
+   <file baseinstalldir="/" md5sum="82c8ecf258d48683e5d40231f606649f" name="HTMLPurifier/HTMLModuleManager.php" role="php" />
+   <file baseinstalldir="/" md5sum="6d5b217b9b3b8995a8e690870cc4c6b4" name="HTMLPurifier/IDAccumulator.php" role="php" />
+   <file baseinstalldir="/" md5sum="c88fa3b65a26f6ee725b03647c217203" name="HTMLPurifier/Language.php" role="php" />
+   <file baseinstalldir="/" md5sum="bd622501031e7a8043fd4a42d2f024bf" name="HTMLPurifier/LanguageFactory.php" role="php" />
+   <file baseinstalldir="/" md5sum="9c5be7ddb00e99f0644044cee595be56" name="HTMLPurifier/Lexer.php" role="php" />
+   <file baseinstalldir="/" md5sum="d6ec6a86dfb28cb2c6f13769bcabd0ab" name="HTMLPurifier/PercentEncoder.php" role="php" />
+   <file baseinstalldir="/" md5sum="d57b30e542b5a30c9bfb398bdb5b7ef9" name="HTMLPurifier/Printer.php" role="php" />
+   <file baseinstalldir="/" md5sum="ea8ef9eb8d3989a7427138aa39723945" name="HTMLPurifier/Strategy.php" role="php" />
+   <file baseinstalldir="/" md5sum="5966731a2618e93ecf2207a9cd6afbe0" name="HTMLPurifier/TagTransform.php" role="php" />
+   <file baseinstalldir="/" md5sum="21748d2079733a5a823455ce742c844c" name="HTMLPurifier/Token.php" role="php" />
+   <file baseinstalldir="/" md5sum="c504e994d0e6e1bd7ea36957d8d05e2a" name="HTMLPurifier/TokenFactory.php" role="php" />
+   <file baseinstalldir="/" md5sum="d509a906c2d48c53de8da4920eab8c0c" name="HTMLPurifier/URIScheme.php" role="php" />
+   <file baseinstalldir="/" md5sum="b6b713306da947592b00181949697247" name="HTMLPurifier/URISchemeRegistry.php" role="php" />
+   <file baseinstalldir="/" md5sum="ecbd670d7b547ed28990fa87c40f5ff1" name="HTMLPurifier/AttrDef/CSS.php" role="php" />
+   <file baseinstalldir="/" md5sum="9341db8aec36166cce711da9ad3e22b0" name="HTMLPurifier/AttrDef/Enum.php" role="php" />
+   <file baseinstalldir="/" md5sum="d875b14f1631b64477652f4ed722a7c9" name="HTMLPurifier/AttrDef/Integer.php" role="php" />
+   <file baseinstalldir="/" md5sum="b6025c7899ebddac03b447bf7cd84a84" name="HTMLPurifier/AttrDef/Lang.php" role="php" />
+   <file baseinstalldir="/" md5sum="75cce7ee68260fb11528db17a0e1ffd0" name="HTMLPurifier/AttrDef/Text.php" role="php" />
+   <file baseinstalldir="/" md5sum="8e01fb3ed741e601d1350c81058bbb9c" name="HTMLPurifier/AttrDef/URI.php" role="php" />
+   <file baseinstalldir="/" md5sum="7ba53b08f602e457bae5d0a564674461" name="HTMLPurifier/AttrDef/CSS/Background.php" role="php" />
+   <file baseinstalldir="/" md5sum="19039ad4b52fb8d0f5fbecb6c3b9eb50" name="HTMLPurifier/AttrDef/CSS/BackgroundPosition.php" role="php" />
+   <file baseinstalldir="/" md5sum="6292132764bc902af78a0ad4ee802a8e" name="HTMLPurifier/AttrDef/CSS/Border.php" role="php" />
+   <file baseinstalldir="/" md5sum="4dbea0195c724cff7a3a801012f81cd4" name="HTMLPurifier/AttrDef/CSS/Color.php" role="php" />
+   <file baseinstalldir="/" md5sum="f99fff2634cc37ca9558f64e80a6ed70" name="HTMLPurifier/AttrDef/CSS/Composite.php" role="php" />
+   <file baseinstalldir="/" md5sum="84bb4340b9f08d9a94960b46aa9d3981" name="HTMLPurifier/AttrDef/CSS/Font.php" role="php" />
+   <file baseinstalldir="/" md5sum="35bd42cf003ffe755987d4ba96ba5d63" name="HTMLPurifier/AttrDef/CSS/FontFamily.php" role="php" />
+   <file baseinstalldir="/" md5sum="26cdeba022b496d76d5c9bce9ccce6d0" name="HTMLPurifier/AttrDef/CSS/Length.php" role="php" />
+   <file baseinstalldir="/" md5sum="8da27d2a08e05d3d32f1fcc44cba03ae" name="HTMLPurifier/AttrDef/CSS/ListStyle.php" role="php" />
+   <file baseinstalldir="/" md5sum="427d0e3ec25ca9a67c3846d33a56ddf0" name="HTMLPurifier/AttrDef/CSS/Multiple.php" role="php" />
+   <file baseinstalldir="/" md5sum="7b0fd12290b0d02d36ed8a87ade69d62" name="HTMLPurifier/AttrDef/CSS/Number.php" role="php" />
+   <file baseinstalldir="/" md5sum="40a496c0ebb443c7e02b228874ddf717" name="HTMLPurifier/AttrDef/CSS/Percentage.php" role="php" />
+   <file baseinstalldir="/" md5sum="f52825c0e930bd560b0e4ee740666188" name="HTMLPurifier/AttrDef/CSS/TextDecoration.php" role="php" />
+   <file baseinstalldir="/" md5sum="64b79b977779a1bc2814032ab2839157" name="HTMLPurifier/AttrDef/CSS/URI.php" role="php" />
+   <file baseinstalldir="/" md5sum="60e63c861deb4815edb39d3b78510f14" name="HTMLPurifier/AttrDef/HTML/ID.php" role="php" />
+   <file baseinstalldir="/" md5sum="4ecf72779228db30d03eadddbf817fbc" name="HTMLPurifier/AttrDef/HTML/Length.php" role="php" />
+   <file baseinstalldir="/" md5sum="0eaacf908918680b15ad78ac4e21b11e" name="HTMLPurifier/AttrDef/HTML/MultiLength.php" role="php" />
+   <file baseinstalldir="/" md5sum="de5f49832e46a24f745ac97fa7fc2c3c" name="HTMLPurifier/AttrDef/HTML/Nmtokens.php" role="php" />
+   <file baseinstalldir="/" md5sum="0a0288726c923d470f93d0991c8264d3" name="HTMLPurifier/AttrDef/HTML/Pixels.php" role="php" />
+   <file baseinstalldir="/" md5sum="fac3934fed37939c8215fb567b8205ce" name="HTMLPurifier/AttrDef/URI/Email.php" role="php" />
+   <file baseinstalldir="/" md5sum="7784f15771e1108ed19f7721c469d21c" name="HTMLPurifier/AttrDef/URI/Host.php" role="php" />
+   <file baseinstalldir="/" md5sum="1c21b01ff7480037ccc1cf1e3b5dc428" name="HTMLPurifier/AttrDef/URI/IPv4.php" role="php" />
+   <file baseinstalldir="/" md5sum="6d535292470227c4ea7a95671077f508" name="HTMLPurifier/AttrDef/URI/IPv6.php" role="php" />
+   <file baseinstalldir="/" md5sum="318b06e941c0a0edc8a90f80fd3dff76" name="HTMLPurifier/AttrDef/URI/Email/SimpleCheck.php" role="php" />
+   <file baseinstalldir="/" md5sum="e482ce6406170a1a0a3da3f95baf2886" name="HTMLPurifier/AttrTransform/BdoDir.php" role="php" />
+   <file baseinstalldir="/" md5sum="9a6c3866dbf7751c3d24fc17a988fecd" name="HTMLPurifier/AttrTransform/ImgRequired.php" role="php" />
+   <file baseinstalldir="/" md5sum="f407cd85b8e70e0394b15fd6551fd603" name="HTMLPurifier/AttrTransform/Lang.php" role="php" />
+   <file baseinstalldir="/" md5sum="585802b0c00b81c31dfd6b265bb3ae50" name="HTMLPurifier/AttrTransform/TextAlign.php" role="php" />
+   <file baseinstalldir="/" md5sum="9cd36a8bf94d2688d3637d6d7c6ca7f4" name="HTMLPurifier/ChildDef/Chameleon.php" role="php" />
+   <file baseinstalldir="/" md5sum="538de158a822349457b993b5e6f37de4" name="HTMLPurifier/ChildDef/Custom.php" role="php" />
+   <file baseinstalldir="/" md5sum="55569b9f5219c8e4778a0950ee6e69e8" name="HTMLPurifier/ChildDef/Empty.php" role="php" />
+   <file baseinstalldir="/" md5sum="ae279f4d1d5490c0baa31fb39e81d5d7" name="HTMLPurifier/ChildDef/Optional.php" role="php" />
+   <file baseinstalldir="/" md5sum="4fc1586e2bb5b27c898cca8f2a65426a" name="HTMLPurifier/ChildDef/Required.php" role="php" />
+   <file baseinstalldir="/" md5sum="304e060123344abaa50033c12e1903c2" name="HTMLPurifier/ChildDef/StrictBlockquote.php" role="php" />
+   <file baseinstalldir="/" md5sum="d0061d573c1a0db76ae94704824884ee" name="HTMLPurifier/ChildDef/Table.php" role="php" />
+   <file baseinstalldir="/" md5sum="40419ec56ad401e0c98934879287e7d3" name="HTMLPurifier/ConfigDef/Directive.php" role="php" />
+   <file baseinstalldir="/" md5sum="40406643b09dda26d6f87536ba1acf1e" name="HTMLPurifier/ConfigDef/DirectiveAlias.php" role="php" />
+   <file baseinstalldir="/" md5sum="437c42bdfb701bf22863bce85856797a" name="HTMLPurifier/ConfigDef/Namespace.php" role="php" />
+   <file baseinstalldir="/" md5sum="5e2066baba7c0c0de8ff0ecc38ce2a5c" name="HTMLPurifier/EntityLookup/entities.ser" role="data" />
+   <file baseinstalldir="/" md5sum="1448c975d76dbb5538981f0e5333c9c2" name="HTMLPurifier/Filter/YouTube.php" role="php" />
+   <file baseinstalldir="/" md5sum="733ae6635c67c71133a52f03008d5ce2" name="HTMLPurifier/HTMLModule/Bdo.php" role="php" />
+   <file baseinstalldir="/" md5sum="d5a1958026a6c4186419937fbec1b0c6" name="HTMLPurifier/HTMLModule/CommonAttributes.php" role="php" />
+   <file baseinstalldir="/" md5sum="2df79ba7b6e30abdf2f69e24dd44dc60" name="HTMLPurifier/HTMLModule/Edit.php" role="php" />
+   <file baseinstalldir="/" md5sum="6d205f4ff65e958c7563e404570fd037" name="HTMLPurifier/HTMLModule/Hypertext.php" role="php" />
+   <file baseinstalldir="/" md5sum="c8830596b9dea89161cf9389da5961f5" name="HTMLPurifier/HTMLModule/Image.php" role="php" />
+   <file baseinstalldir="/" md5sum="b743a9c76c9ff67013513e2e0729856d" name="HTMLPurifier/HTMLModule/Legacy.php" role="php" />
+   <file baseinstalldir="/" md5sum="eb34c8dac65cc252893b6b1af157f57d" name="HTMLPurifier/HTMLModule/List.php" role="php" />
+   <file baseinstalldir="/" md5sum="838321561cb1151e9249d3f9cca2c9e0" name="HTMLPurifier/HTMLModule/Presentation.php" role="php" />
+   <file baseinstalldir="/" md5sum="4a2a7a403903bc829f55c06dd69e463d" name="HTMLPurifier/HTMLModule/StyleAttribute.php" role="php" />
+   <file baseinstalldir="/" md5sum="f61eda907b5b71e8371b2e1dee6611b8" name="HTMLPurifier/HTMLModule/Tables.php" role="php" />
+   <file baseinstalldir="/" md5sum="15b5863244063e9a586ee40efac66be1" name="HTMLPurifier/HTMLModule/Text.php" role="php" />
+   <file baseinstalldir="/" md5sum="aa714002b4874111e8cc0f003d1ce080" name="HTMLPurifier/HTMLModule/TransformToStrict.php" role="php" />
+   <file baseinstalldir="/" md5sum="98bd0c198c1bdd4f95057a21e1c91e8c" name="HTMLPurifier/HTMLModule/TransformToXHTML11.php" role="php" />
+   <file baseinstalldir="/" md5sum="10ca88bd593d3dd1df553b7795ef50e1" name="HTMLPurifier/Language/classes/en-x-test.php" role="php" />
+   <file baseinstalldir="/" md5sum="7e326133ae7b115e8a0953e8f179f245" name="HTMLPurifier/Language/messages/en-x-test.php" role="php" />
+   <file baseinstalldir="/" md5sum="b27a1929e477424750aee8801b910b52" name="HTMLPurifier/Language/messages/en.php" role="php" />
+   <file baseinstalldir="/" md5sum="fc02804816634a45dbc7fcba79e00421" name="HTMLPurifier/Lexer/DirectLex.php" role="php" />
+   <file baseinstalldir="/" md5sum="4e7291f4a5727c2d10cbb21af74a1d9e" name="HTMLPurifier/Lexer/DOMLex.php" role="php" />
+   <file baseinstalldir="/" md5sum="ab6de023d2b27f1026371ff843e2386b" name="HTMLPurifier/Lexer/PEARSax3.php" role="php" />
+   <file baseinstalldir="/" md5sum="df5b4fc9a21b22933d22cf61ab3f3e77" name="HTMLPurifier/Printer/CSSDefinition.php" role="php" />
+   <file baseinstalldir="/" md5sum="963dfbcac00c491257d8fd390f92a64d" name="HTMLPurifier/Printer/HTMLDefinition.php" role="php" />
+   <file baseinstalldir="/" md5sum="a9cac18e738cc12369ed39323ede0bec" name="HTMLPurifier/Strategy/Composite.php" role="php" />
+   <file baseinstalldir="/" md5sum="9c1a03474b5af091ae631c031afb3a95" name="HTMLPurifier/Strategy/Core.php" role="php" />
+   <file baseinstalldir="/" md5sum="9c23ea95770f4016bab99a8fec8aa27f" name="HTMLPurifier/Strategy/FixNesting.php" role="php" />
+   <file baseinstalldir="/" md5sum="6531b2e7a97bdba3fa35e2bf4d4a7a99" name="HTMLPurifier/Strategy/MakeWellFormed.php" role="php" />
+   <file baseinstalldir="/" md5sum="9dec0926c42b51fa6dc6663b4e1e5af1" name="HTMLPurifier/Strategy/RemoveForeignElements.php" role="php" />
+   <file baseinstalldir="/" md5sum="e3a7382cdf13b1098666ce1ad495f7b5" name="HTMLPurifier/Strategy/ValidateAttributes.php" role="php" />
+   <file baseinstalldir="/" md5sum="dea4315d5b862629339c12d131fac652" name="HTMLPurifier/TagTransform/Center.php" role="php" />
+   <file baseinstalldir="/" md5sum="b62c983810871766fe8c0aca630e227e" name="HTMLPurifier/TagTransform/Font.php" role="php" />
+   <file baseinstalldir="/" md5sum="7f280d16f5c88ee878151e18ecd75228" name="HTMLPurifier/TagTransform/Simple.php" role="php" />
+   <file baseinstalldir="/" md5sum="d58bcfec09caa381dc566ecb03c84815" name="HTMLPurifier/URIScheme/ftp.php" role="php" />
+   <file baseinstalldir="/" md5sum="621e14ebeb2331911394760314500947" name="HTMLPurifier/URIScheme/http.php" role="php" />
+   <file baseinstalldir="/" md5sum="4937024ae24fff48d896edd24b76d17c" name="HTMLPurifier/URIScheme/https.php" role="php" />
+   <file baseinstalldir="/" md5sum="4b75ef49963dcd4d70d94aa8b4b7391c" name="HTMLPurifier/URIScheme/mailto.php" role="php" />
+   <file baseinstalldir="/" md5sum="955504a7ec5e0994ad1be320a07223ae" name="HTMLPurifier/URIScheme/news.php" role="php" />
+   <file baseinstalldir="/" md5sum="72e572f49cfdae2162022f0ccf7c1855" name="HTMLPurifier/URIScheme/nntp.php" role="php" />
+   <file baseinstalldir="/" md5sum="9ad5bd06840c405c0a2f6f42202c322f" name="HTMLPurifier.auto.php" role="php" />
+   <file baseinstalldir="/" md5sum="be6f88a777dccaf3722f0da4fff8fe1c" name="HTMLPurifier.func.php" role="php" />
+   <file baseinstalldir="/" md5sum="716e5855d7f138dc636be717c1fe78a1" name="HTMLPurifier.php" role="php" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.3.9</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.3</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>1.5.0</release>
+    <api>1.5</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-03-24</date>
+   <license uri="http://www.gnu.org/licenses/lgpl.html">LGPL</license>
+   <notes>Major bugs were fixed and some major internal refactoring was undertaken. The visible changes include XHTML 1.1-style modularization of HTMLDefinition, rudimentary internationalization, and a fix for a fatal error when the PHP4 DOM XML extension was loaded. The x subtag is now allowed in language codes. Element by element AllowedAttribute declaration is now possible for global attributes. Instead of *.class, you can write span.class. The old syntax still works, and enables the attribute for all elements.</notes>
+  </release>
+ </changelog>
+</package>
