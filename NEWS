@@ -9,6 +9,36 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+1.5.0, released 2007-03-23
+! Added a rudimentary I18N and L10N system modeled off MediaWiki. It
+  doesn't actually do anything yet, but keep your eyes peeled.
+! docs/enduser-utf8.html explains how to use UTF-8 and HTML Purifier
+! Newly structured HTMLDefinition modeled off of XHTML 1.1 modules.
+  I am loathe to release beta quality APIs, but this is exactly that;
+  don't use the internal interfaces if you're not willing to do migration
+  later on.
+- Allow 'x' subtag in language codes
+- Fixed buggy chameleon-support for ins and del
+. Added support for IDREF attributes (i.e. for)
+. Renamed HTMLPurifier_AttrDef_Class to HTMLPurifier_AttrDef_Nmtokens
+. Removed context variable ParentType, replaced with IsInline, which
+  is false when you're not inline and an integer of the parent that
+  caused you to become inline when you are (so possibly zero)
+. Removed ElementDef->type in favor of ElementDef->descendants_are_inline
+  and HTMLDefinition->content_sets
+. StrictBlockquote now reports what elements its supposed to allow,
+  rather than what it does allow
+. Removed HTMLDefinition->info_flow_elements in favor of
+  HTMLDefinition->content_sets['Flow']
+. Removed redundant "exclusionary" definitions from DTD roster
+. StrictBlockquote now requires a construction parameter as if it
+  were an Required ChildDef, this is the "real" set of allowed elements
+. AttrDef partitioned into HTML, CSS and URI segments
+. Modify Youtube filter regexp to be multiline
+. Require both PHP5 and DOM extension in order to use DOMLex, fixes
+  some edge cases where a DOMDocument class exists in a PHP4 environment
+  due to DOM XML extension.
+
 1.4.1, released 2007-01-21
 ! docs/enduser-youtube.html updated according to new functionality
 - YouTube IDs can have underscores and dashes

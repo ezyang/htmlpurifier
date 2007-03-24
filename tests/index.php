@@ -51,6 +51,9 @@ $test_file_lookup = array_flip($test_files);
 // determine test file
 if (isset($_GET['f']) && isset($test_file_lookup[$_GET['f']])) {
     $GLOBALS['HTMLPurifierTest']['File'] = $_GET['f'];
+} elseif (isset($argv[1]) && isset($test_file_lookup[$argv[1]])) {
+    // command-line
+    $GLOBALS['HTMLPurifierTest']['File'] = $argv[1];
 } else {
     $GLOBALS['HTMLPurifierTest']['File'] = false;
 }

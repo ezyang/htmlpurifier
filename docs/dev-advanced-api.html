@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="Functional specification for HTML Purifier's advanced API for defining custom filtering behavior." />
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+<title>Advanced API - HTML Purifier</title>
+
+</head><body>
+
+<h1>Advanced API</h1>
+
+<div id="filing">Filed under Development</div>
+<div id="index">Return to the <a href="index.html">index</a>.</div>
+<div id="home"><a href="http://hp.jpsband.org/">HTML Purifier</a> End-User Documentation</div>
+
+<p>It makes no sense to adopt a <q>one-size-fits-all</q> approach to
+filtersets: therefore, users must be able to define their own sets of
+<q>allowed</q> elements, as well as switch in-between doctypes of HTML.</p>
+
+<p>Our goals are to let the user:</p>
+
+<dl>
+    <dt>Select</dt>
+    <dd><ul>
+        <li>Doctype</li>
+        <li>Filtersets: Rich / Plain / Full ...</li>
+        <li>Mode: Lenient / Correctional</li>
+        <li>Collections (?): Safe / Unsafe</li>
+        <li>Modules / Tags / Attributes</li>
+    </ul></dd>
+    <dt>Customize</dt>
+    <dd><ul>
+        <li>Tags / Attributes / Attribute Types</li>
+        <li>Filtersets</li>
+        <li>Root Node</li>
+    </ul></dd>
+    <dt>Create</dt>
+    <dd><ul>
+        <li>Modules / Tags / Attributes / Attribute Types</li>
+        <li>Filtersets</li>
+        <li>Doctype</li>
+    </ul></dd>
+</dl>
+
+<h2>Select</h2>
+
+<h3>Selecting a Doctype</h3>
+
+<p>By default, users will use a doctype-based, permissive but secure
+whitelist.  They must define a <strong>doctype</strong>, and this serves
+as the first method of determining a filterset.</p>
+
+<p class="technical">This identifier is based
+on the name the W3C has given to the document type and <em>not</em>
+the DTD identifier.</p>
+
+<p>This parameter is set via the configuration object:</p>
+
+<pre>$config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');</pre>
+
+<h3>Selecting a Filterset</h3>
+
+<p>However, selecting this doctype doesn't mean much, because if we
+adhered exactly to the definition we would be letting XSS and other
+nasties through. HTML Purifier must, in its filterset, allow a subset
+of the doctype, which we shall call a <strong>filterset</strong>.</p>
+
+<p>By default, HTML Purifier will use the <strong>Rich</strong>
+filterset, which allows as many elements as possible with untrusted
+sources. Other possible filtersets could be:</p>
+
+<dl>
+    <dt>Full</dt>
+    <dd>Allows the full span of elements in the doctype, good if you want
+        HTML Purifier to work as a Tidy substitute but not to strip
+        anything out.</dd>
+    <dt>Plain</dt>
+    <dd>Provides a minimum set of tags for semantic markup of things
+        like blog comments.</dd>
+</dl>
+
+<p>Extension-authors would be able to define custom filtersets for
+other users to use.</p>
+
+<p>A possible call to select a filterset would be:</p>
+
+<pre>$config->set('HTML', 'Filterset', 'Rich');</pre>
+
+<h3>Selecting Mode</h3>
+
+<p>Within filtersets, there are various <strong>modes</strong> of operation.
+These indicate variant behaviors that, while not strictly changing the
+allowed set of elements and attributes, will definitely affect the output.
+Currently, we have two modes, which may be used together:</p>
+
+<dl>
+    <dt>Lenient</dt>
+    <dd>Deprecated elements and attributes will be transformed into
+        standards-compliant alternatives when explicitly disallowed. For
+        example, in the XHTML 1.0 Strict doctype, a <code>center</code>
+        tag would be turned into a <code>div</code> with the CSS property
+        <code>text-align:center;</code>, but in XHTML 1.0 Transitional
+        the tag would be preserved. This mode is on by default.</dd>
+    <dt>Correctional</dt>
+    <dd>Deprecated elements and attributes will be transformed into
+        standards-compliant alternatives whenever possible. Referring
+        back to the previous example, the <code>center</code> tag would
+        be transformed in both cases. However, tags without a
+        reasonable standards-compliant alternative will be preserved
+        in their form. This mode is on by default. It may have
+        various levels of operation.</dd>
+</dl>
+
+<p>A possible call to select modes would be:</p>
+
+<pre>$config->set('HTML', 'Mode', array('correctional', 'lenient'));</pre>
+
+<p>If modes have extra parameters, a hash might work well:</p>
+
+<pre>$config->set('HTML', 'Mode', array(
+    'correctional' => 9, // strongest level
+    'lenient' => true // this one's just boolean
+));</pre>
+
+<p>Modes may possibly be wrapped up with the filterset declaration:</p>
+
+<pre>$config->set('HTML', 'Filterset', 'Rich: correctional, lenient');</pre>
+
+<p>Further investigation in this field is necessary.</p>
+
+<h3>Selecting Modules / Tags / Attributes</h3>
+
+<p>If this cookie cutter approach doesn't appeal to a user, they may
+decide to roll their own filterset by selecting modules, tags and
+attributes to allow.</p>
+
+<p class="technical">This would make use of the same facilities
+as a filterset author would use, except that it would go under an
+<q>anonymous</q> filterset that would be auto-selected if any of the
+relevant module/tag/attribute selection configuration directives were
+non-null.</p>
+
+<p>On the highest level, a user will usually be most interested in
+directly specifying which elements and attributes are desired. For
+example:</p>
+
+<pre>$config->set('HTML', 'AllowedElements', 'a,b,em,p,blockquote,code,i');</pre>
+
+<p>Attribute declarations could be merged into this declaration as such:</p>
+
+<pre>$config->set('HTML', 'Allowed', 'a[href,title],b,em,p[class],blockquote[cite],code,i');</pre>
+
+<p>...or be kept separate:</p>
+
+<pre>$config->set('HTML', 'AllowedAttributes', 'a.href,a.title,p.class,blockquote.cite');</pre>
+
+<p class="technical">Considering that, internally speaking, as mandated by
+the XHTML 1.1 Modularization specification, we have organized our
+elements around modules, considerable gymnastics will be needed to
+get this sort of functionality working.</p>
+
+<p>A user may also specify a module to load a class of elements and attributes
+into their filterest:</p>
+
+<pre>$config->set('HTML', 'Allowed', 'Hypertext,Core');</pre>
+
+<p class="fixme">The granularity of these modules is too coarse for
+the average user (for example, the core module loads everything from
+the essential <code>p</code> tag to the not-so-safe <code>h1</code>
+tag). How do we make this still a viable solution?</p>
+
+<h3>Unified selector</h3>
+
+<p>Because selecting each and every one of these configuration options
+is a chore, we may wish to offer a specialized configuration method
+for selecting a filterset. Possibility:</p>
+
+<pre>function selectFilter($doctype, $filterset, $mode)</pre>
+
+<p>...which is simply a light wrapper over the individual configuration
+calls. A custom config file format or text format could also be adopted.</p>
+
+<div id="version">$Id$</div>
+
+</body></html>

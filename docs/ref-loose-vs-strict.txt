@@ -32,6 +32,6 @@ A tag's attribute 'target' (for selecting frames) cut
     current behavior: no substitute, just delete when in strict, allow in loose
 Attribute 'name' deprecated in favor of 'id'
     current behavior: dropped silently
-    projected behavior: create proper AttrTransform (currently not allowed at all)
+    projected behavior: create proper AttrTransform
 [done] PRE tag allows SUB/SUP? (strict dtd comment vs syntax, loose disallows)
     current behavior: disallow as usual

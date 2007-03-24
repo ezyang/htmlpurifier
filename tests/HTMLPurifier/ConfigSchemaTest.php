@@ -41,14 +41,14 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
     function tearDown() {
         // testing is done, restore the old copy
         HTMLPurifier_ConfigSchema::instance($this->old_copy);
-        tally_errors();
+        tally_errors($this);
     }
     
     function test_defineNamespace() {
         CS::defineNamespace('http', $d = 'This is an internet protocol.');
         
         $this->assertIdentical($this->our_copy->info_namespace, array(
-            'http' => new HTMLPurifier_ConfigEntity_Namespace($d)
+            'http' => new HTMLPurifier_ConfigDef_Namespace($d)
         ));
         
         $this->expectError('Cannot redefine namespace');
@@ -68,7 +68,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         $this->assertIdentical($this->our_copy->defaults['Car']['Seats'], 5);
         $this->assertIdentical($this->our_copy->info['Car']['Seats'],
-            new HTMLPurifier_ConfigEntity_Directive('int',
+            new HTMLPurifier_ConfigDef_Directive('int',
                 array($this->file => array($l => $d))
             )
         );
@@ -77,7 +77,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         $this->assertIdentical($this->our_copy->defaults['Car']['Age'], null);
         $this->assertIdentical($this->our_copy->info['Car']['Age'], 
-            new HTMLPurifier_ConfigEntity_Directive('int',
+            new HTMLPurifier_ConfigDef_Directive('int',
                 array($this->file => array($l => $d)), true
             )
         );
@@ -106,7 +106,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         $this->assertIdentical($this->our_copy->defaults['Cat']['Dead'], false);
         $this->assertIdentical($this->our_copy->info['Cat']['Dead'], 
-            new HTMLPurifier_ConfigEntity_Directive('bool',
+            new HTMLPurifier_ConfigDef_Directive('bool',
                 array($this->file => array($l1 => $d1, $l2 => $d2))
             )
         );
@@ -132,7 +132,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         $this->assertIdentical($this->our_copy->defaults['QuantumNumber']['Difficulty'], null);
         $this->assertIdentical($this->our_copy->info['QuantumNumber']['Difficulty'], 
-            new HTMLPurifier_ConfigEntity_Directive(
+            new HTMLPurifier_ConfigDef_Directive(
                 'string',
                 array($this->file => array($l => $d)),
                 true,
@@ -184,7 +184,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         $this->assertIdentical($this->our_copy->defaults['Abbrev']['HTH'], 'Happy to Help');
         $this->assertIdentical($this->our_copy->info['Abbrev']['HTH'], 
-            new HTMLPurifier_ConfigEntity_Directive(
+            new HTMLPurifier_ConfigDef_Directive(
                 'string',
                 array($this->file => array($l => $d)),
                 false,
@@ -224,7 +224,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         
         $this->assertTrue(!isset($this->our_copy->defaults['Home']['Carpet']));
         $this->assertIdentical($this->our_copy->info['Home']['Carpet'], 
-            new HTMLPurifier_ConfigEntity_DirectiveAlias('Home', 'Rug')
+            new HTMLPurifier_ConfigDef_DirectiveAlias('Home', 'Rug')
         );
         
         $this->expectError('Cannot define directive alias in undefined namespace');

@@ -21,7 +21,7 @@ require_once 'HTMLPurifier/TokenFactory.php';
  * 
  * @warning DOM tends to drop whitespace, which may wreak havoc on indenting.
  *          If this is a huge problem, due to the fact that HTML is hand
- *          edited and youa re unable to get a parser cache that caches the
+ *          edited and you are unable to get a parser cache that caches the
  *          the output of HTML Purifier while keeping the original HTML lying
  *          around, you may want to run Tidy on the resulting output or use
  *          HTMLPurifier_DirectLex
@@ -54,7 +54,13 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         
         $doc = new DOMDocument();
         $doc->encoding = 'UTF-8'; // technically does nothing, but whatever
-        @$doc->loadHTML($string); // mute all errors, handle it transparently
+        
+        // DOM will toss errors if the HTML its parsing has really big
+        // problems, so we're going to mute them. This can cause problems
+        // if a custom error handler that doesn't implement error_reporting
+        // is set, as noted by a Drupal plugin of HTML Purifier. Consider
+        // making our own error reporter to temporarily load in
+        @$doc->loadHTML($string);
         
         $tokens = array();
         $this->tokenizeDOM(

@@ -149,23 +149,36 @@ class HTMLPurifier_Config
             return;
         }
         $this->conf[$namespace][$key] = $value;
+        if ($namespace == 'HTML' || $namespace == 'Attr') {
+            // reset HTML definition if relevant attributes changed
+            $this->html_definition = null;
+        }
+        if ($namespace == 'CSS') {
+            $this->css_definition = null;
+        }
     }
     
     /**
-     * Retrieves a copy of the HTML definition.
+     * Retrieves reference to the HTML definition.
+     * @param $raw Return a copy that has not been setup yet. Must be
+     *             called before it's been setup, otherwise won't work.
      */
-    function getHTMLDefinition() {
-        if ($this->html_definition === null) {
-            $this->html_definition = new HTMLPurifier_HTMLDefinition();
-            $this->html_definition->setup($this);
+    function &getHTMLDefinition($raw = false) {
+        if (
+            empty($this->html_definition) || // hasn't ever been setup
+            ($raw && $this->html_definition->setup) // requesting new one
+        ) {
+            $this->html_definition = new HTMLPurifier_HTMLDefinition($this);
+            if ($raw) return $this->html_definition; // no setup!
         }
+        if (!$this->html_definition->setup) $this->html_definition->setup();
         return $this->html_definition;
     }
     
     /**
-     * Retrieves a copy of the CSS definition
+     * Retrieves reference to the CSS definition
      */
-    function getCSSDefinition() {
+    function &getCSSDefinition() {
         if ($this->css_definition === null) {
             $this->css_definition = new HTMLPurifier_CSSDefinition();
             $this->css_definition->setup($this);

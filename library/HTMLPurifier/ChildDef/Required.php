@@ -20,10 +20,13 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
             $elements = str_replace(' ', '', $elements);
             $elements = explode('|', $elements);
         }
-        $elements = array_flip($elements);
-        foreach ($elements as $i => $x) {
-            $elements[$i] = true;
-            if (empty($i)) unset($elements[$i]);
+        $keys = array_keys($elements);
+        if ($keys == array_keys($keys)) {
+            $elements = array_flip($elements);
+            foreach ($elements as $i => $x) {
+                $elements[$i] = true;
+                if (empty($i)) unset($elements[$i]);
+            }
         }
         $this->elements = $elements;
         $this->gen = new HTMLPurifier_Generator();

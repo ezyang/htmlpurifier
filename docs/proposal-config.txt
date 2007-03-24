@@ -7,7 +7,7 @@ value is used for.  This means decentralized configuration declarations that
 are nevertheless error checking and a centralized configuration object.
 
 Directives are divided into namespaces, indicating the major portion of
-functionality they cover (although there may be overlaps.  Please consult
+functionality they cover (although there may be overlaps).  Please consult
 the documentation in ConfigDef for more information on these namespaces.
 
 Since configuration is dependant on context, internal classes require a
@@ -36,4 +36,5 @@ the definition, you'd have to force reconstruction.
 
 In practice, the pulling directives from the config object are
 solely need-based, and the flex points are littered throughout the
-setup() function.  Some sort of refactoring is likely in order.
+setup() function.  Some sort of refactoring is likely in order. See
+ref-xhtml-1.1.txt for more info.

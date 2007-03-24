@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/AttrDef.php';
 require_once 'HTMLPurifier/URIScheme.php';
 require_once 'HTMLPurifier/URISchemeRegistry.php';
-require_once 'HTMLPurifier/AttrDef/Host.php';
+require_once 'HTMLPurifier/AttrDef/URI/Host.php';
 require_once 'HTMLPurifier/PercentEncoder.php';
 
 HTMLPurifier_ConfigSchema::define(
@@ -77,6 +77,14 @@ HTMLPurifier_ConfigSchema::define(
     'This directive has been available since 1.3.0.'
 );
 
+HTMLPurifier_ConfigSchema::define(
+    'URI', 'Disable', false, 'bool',
+    'Disables all URIs in all forms. Not sure why you\'d want to do that '.
+    '(after all, the Internet\'s founded on the notion of a hyperlink). '.
+    'This directive has been available since 1.3.0.'
+);
+HTMLPurifier_ConfigSchema::defineAlias('Attr', 'DisableURI', 'URI', 'Disable');
+
 /**
  * Validates a URI as defined by RFC 3986.
  * @note Scheme-specific mechanics deferred to HTMLPurifier_URIScheme
@@ -92,7 +100,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
      * @param $embeds_resource_resource Does the URI here result in an extra HTTP request?
      */
     function HTMLPurifier_AttrDef_URI($embeds_resource = false) {
-        $this->host = new HTMLPurifier_AttrDef_Host();
+        $this->host = new HTMLPurifier_AttrDef_URI_Host();
         $this->PercentEncoder = new HTMLPurifier_PercentEncoder();
         $this->embeds_resource = (bool) $embeds_resource;
     }
@@ -101,6 +109,8 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         
         // We'll write stack-based parsers later, for now, use regexps to
         // get things working as fast as possible (irony)
+        
+        if ($config->get('URI', 'Disable')) return false;
         
         // parse as CDATA
         $uri = $this->parseCDATA($uri);

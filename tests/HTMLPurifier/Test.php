@@ -83,6 +83,20 @@ class HTMLPurifier_Test extends UnitTestCase
         
     }
     
+    function testEnableAttrID() {
+        
+        $this->purifier = new HTMLPurifier();
+        
+        $this->assertPurification(
+            '<span id="moon">foobar</span>',
+            '<span>foobar</span>'
+        );
+        
+        $this->purifier = new HTMLPurifier(array('HTML.EnableAttrID' => true));
+        $this->assertPurification('<span id="moon">foobar</span>');
+        
+    }
+    
 }
 
 ?>

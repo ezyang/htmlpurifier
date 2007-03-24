@@ -42,3 +42,27 @@ blockquote .label {font-weight:bold; font-size:1em; margin:0 0 .1em;
 
 /* Contains, without exception, $Id$, for SVN version info. */
 #version {text-align:right; font-style:italic; margin:2em 0;}
+
+#toc ol ol {list-style-type:lower-roman;}
+#toc ol {list-style-type:decimal;}
+#toc {list-style-type:upper-alpha;}
+
+q {
+  behavior: url(fixquotes.htc); /* IE fix */
+  quotes: '\201C' '\201D' '\2018' '\2019';
+}
+q:before {
+  content: open-quote;
+}
+q:after {
+  content: close-quote;
+}
+
+/* Marks off implementation details interesting only to the person writing
+   the class described in the spec. */
+.technical {margin-left:2em; }
+.technical:before {content:"Technical note: "; font-weight:bold; color:#061; }
+
+/* Marks off sections that are lacking. */
+.fixme {margin-left:2em; }
+.fixme:before {content:"Fix me: "; font-weight:bold; color:#C00; }

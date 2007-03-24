@@ -22,6 +22,17 @@ foreach ($_GET as $key => $value) {
 
 @$config->loadArray($get);
 
+/* // sample local definition, obviously needs to be less clunky
+$html_definition =& $config->getHTMLDefinition(true);
+$module = new HTMLPurifier_HTMLModule();
+$module->name = 'Marquee';
+$module->info['marquee'] = new HTMLPurifier_ElementDef();
+$module->info['marquee']->content_model = '#PCDATA | Inline';
+$module->info['marquee']->content_model_type = 'optional';
+$module->content_sets = array('Inline' => 'marquee');
+$html_definition->manager->addModule($module);
+*/
+
 $printer_html_definition = new HTMLPurifier_Printer_HTMLDefinition();
 $printer_css_definition  = new HTMLPurifier_Printer_CSSDefinition();
 

@@ -7,7 +7,7 @@ TODO List
     ? At-risk
 ==========================
 
-1.5 release
+1.6 release
  # Implement all non-essential attribute transforms, configurable
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
  # Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
@@ -15,8 +15,9 @@ TODO List
     - Requires I18N facilities to be created first (COMPLEX)
  ? Configuration profiles: sets of directives that get set with one func call
  - XSS-attempt detection
+ - Implement IDREF support
 
-1.6 release
+1.7 release
  # Add pre-packaged "levels" of cleaning (custom behavior already done)
  - More fine-grained control over escaping behavior
     - Silently drop content inbetween SCRIPT tags (can be generalized to allow
@@ -29,7 +30,7 @@ TODO List
    tag or attribute that is not supported
  - Parse TinyMCE whitelist into our %HTML.Allow* whitelists
 
-1.7 release
+1.8 release
  # Additional support for poorly written HTML
     - Microsoft Word HTML cleaning (i.e. MsoNormal, but research essential!)
     - Friendly strict handling of <address> (block -> <br>)
@@ -76,7 +77,6 @@ Ongoing
     - more! (look for ones that use WYSIWYGs)
 
 Unknown release (on a scratch-an-itch basis)
- - Upgrade SimpleTest testing code to newest versions
  - Have 'lang' attribute be checked against official lists
  ? Semi-lossy dumb alternate character encoding transformations, achieved by
    encoding all characters that have string entity equivalents

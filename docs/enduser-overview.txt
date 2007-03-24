@@ -36,7 +36,7 @@ forgiving lexer.  You may also be interested in the unit tests located in the
 tests/ folder, which provide a living document on how exactly the filter deals
 with malformed input.
 
-In summary:
+In summary (see corresponding classes for more details):
 
 1. Parse document into an array of tag and text tokens (Lexer)
 2. Remove all elements not on whitelist and transform certain other elements

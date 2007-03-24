@@ -10,7 +10,7 @@ HTMLPurifier_ConfigSchema::define(
         'irc'   => true, // "Internet Relay Chat", usually needs another app
         // for Usenet, these two are similar, but distinct
         'nntp'  => true, // individual Netnews articles
-        'news'  => true  // newsgroup or individual Netnews articles),
+        'news'  => true  // newsgroup or individual Netnews articles
     ), 'lookup',
     'Whitelist that defines the schemes that a URI is allowed to have.  This '.
     'prevents XSS attacks from using pseudo-schemes like javascript or mocha.'

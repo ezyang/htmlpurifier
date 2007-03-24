@@ -4,27 +4,31 @@ require_once 'HTMLPurifier/ChildDef/Required.php';
 
 /**
  * Takes the contents of blockquote when in strict and reformats for validation.
- * 
- * From XHTML 1.0 Transitional to Strict, there is a notable change where 
  */
 class   HTMLPurifier_ChildDef_StrictBlockquote
 extends HTMLPurifier_ChildDef_Required
 {
+    var $real_elements;
+    var $fake_elements;
     var $allow_empty = true;
     var $type = 'strictblockquote';
     var $init = false;
-    function HTMLPurifier_ChildDef_StrictBlockquote() {}
     function validateChildren($tokens_of_children, $config, &$context) {
         
         $def = $config->getHTMLDefinition();
         if (!$this->init) {
             // allow all inline elements
-            $this->elements = $def->info_flow_elements;
-            $this->elements['#PCDATA'] = true;
+            $this->real_elements = $this->elements;
+            $this->fake_elements = $def->info_content_sets['Flow'];
+            $this->fake_elements['#PCDATA'] = true;
             $this->init = true;
         }
         
+        // trick the parent class into thinking it allows more
+        $this->elements = $this->fake_elements;
         $result = parent::validateChildren($tokens_of_children, $config, $context);
+        $this->elements = $this->real_elements;
+        
         if ($result === false) return array();
         if ($result === true) $result = $tokens_of_children;
         
@@ -40,8 +44,10 @@ extends HTMLPurifier_ChildDef_Required
             // ifs are nested for readability
             if (!$is_inline) {
                 if (!$depth) {
-                     if (($token->type == 'text') ||
-                         ($def->info[$token->name]->type == 'inline')) {
+                     if (
+                        $token->type == 'text' ||
+                        !isset($this->elements[$token->name])
+                     ) {
                         $is_inline = true;
                         $ret[] = $block_wrap_start;
                      }
@@ -50,7 +56,7 @@ extends HTMLPurifier_ChildDef_Required
                 if (!$depth) {
                     // starting tokens have been inline text / empty
                     if ($token->type == 'start' || $token->type == 'empty') {
-                        if ($def->info[$token->name]->type == 'block') {
+                        if (isset($this->elements[$token->name])) {
                             // ended
                             $ret[] = $block_wrap_end;
                             $is_inline = false;

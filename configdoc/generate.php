@@ -188,7 +188,7 @@ $xsl_processor->importStylesheet($xsl_dom_stylesheet);
 $html_output = $xsl_processor->transformToXML($dom_document);
 
 // some slight fudges to preserve backwards compatibility
-$html_output = str_replace('/>', ' />', $html_output); // <br /> not <br>
+$html_output = str_replace('/>', ' />', $html_output); // <br /> not <br/>
 $html_output = str_replace(' xmlns=""', '', $html_output); // rm unnecessary xmlns
 
 if (class_exists('Tidy')) {

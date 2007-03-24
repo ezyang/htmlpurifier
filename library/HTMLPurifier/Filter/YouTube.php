@@ -9,7 +9,7 @@ class HTMLPurifier_Filter_YouTube extends HTMLPurifier_Filter
     
     function preFilter($html, $config, &$context) {
         $pre_regex = '#<object[^>]+>.+?'.
-            'http://www.youtube.com/v/([A-Za-z0-9\-_]+).+?</object>#';
+            'http://www.youtube.com/v/([A-Za-z0-9\-_]+).+?</object>#s';
         $pre_replace = '<span class="youtube-embed">\1</span>';
         return preg_replace($pre_regex, $pre_replace, $html);
     }
