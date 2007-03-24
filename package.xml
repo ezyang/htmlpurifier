@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.5.0">
+ <name>HTMLPurifier</name>
+ <summary>Standards-compliant HTML filter</summary>
+ <description>HTML Purifier is an HTML filter that will remove all malicious code
+    (better known as XSS) with a thoroughly audited, secure yet permissive
+    whitelist and will also make sure your documents are standards
+    compliant.
+ </description>
+ <maintainers>
+  <maintainer>
+   <user>edwardzyang</user>
+   <name>Edward Z. Yang</name>
+   <email>htmlpurifier@jpsband.org</email>
+   <role>lead</role>
+  </maintainer>
+  </maintainers>
+ <release>
+  <version>1.5.0</version>
+  <date>2007-03-24</date>
+  <license>LGPL</license>
+  <state>stable</state>
+  <notes>Major bugs were fixed and some major internal refactoring was undertaken. The visible changes include XHTML 1.1-style modularization of HTMLDefinition, rudimentary internationalization, and a fix for a fatal error when the PHP4 DOM XML extension was loaded. The x subtag is now allowed in language codes. Element by element AllowedAttribute declaration is now possible for global attributes. Instead of *.class, you can write span.class. The old syntax still works, and enables the attribute for all elements.
+  </notes>
+  <deps>
+   <dep type="php" rel="ge" version="4.3.9" optional="no"/>
+  </deps>
+  <provides type="class" name="HTMLPurifier" />
+  <provides type="function" name="HTMLPurifier::addFilter" />
+  <provides type="function" name="HTMLPurifier::purify" />
+  <provides type="function" name="HTMLPurifier::purifyArray" />
+  <filelist>
+   <dir name="HTMLPurifier">
+    <dir name="AttrDef">
+     <dir name="CSS">
+      <file role="php" baseinstalldir="/" name="Background.php"/>
+      <file role="php" baseinstalldir="/" name="BackgroundPosition.php"/>
+      <file role="php" baseinstalldir="/" name="Border.php"/>
+      <file role="php" baseinstalldir="/" name="Color.php"/>
+      <file role="php" baseinstalldir="/" name="Composite.php"/>
+      <file role="php" baseinstalldir="/" name="Font.php"/>
+      <file role="php" baseinstalldir="/" name="FontFamily.php"/>
+      <file role="php" baseinstalldir="/" name="Length.php"/>
+      <file role="php" baseinstalldir="/" name="ListStyle.php"/>
+      <file role="php" baseinstalldir="/" name="Multiple.php"/>
+      <file role="php" baseinstalldir="/" name="Number.php"/>
+      <file role="php" baseinstalldir="/" name="Percentage.php"/>
+      <file role="php" baseinstalldir="/" name="TextDecoration.php"/>
+      <file role="php" baseinstalldir="/" name="URI.php"/>
+     </dir> <!-- /HTMLPurifier/AttrDef/CSS -->
+     <dir name="HTML">
+      <file role="php" baseinstalldir="/" name="ID.php"/>
+      <file role="php" baseinstalldir="/" name="Length.php"/>
+      <file role="php" baseinstalldir="/" name="MultiLength.php"/>
+      <file role="php" baseinstalldir="/" name="Nmtokens.php"/>
+      <file role="php" baseinstalldir="/" name="Pixels.php"/>
+     </dir> <!-- /HTMLPurifier/AttrDef/HTML -->
+     <dir name="URI">
+      <dir name="Email">
+       <file role="php" baseinstalldir="/" name="SimpleCheck.php"/>
+      </dir> <!-- /HTMLPurifier/AttrDef/URI/Email -->
+      <file role="php" baseinstalldir="/" name="Email.php"/>
+      <file role="php" baseinstalldir="/" name="Host.php"/>
+      <file role="php" baseinstalldir="/" name="IPv4.php"/>
+      <file role="php" baseinstalldir="/" name="IPv6.php"/>
+     </dir> <!-- /HTMLPurifier/AttrDef/URI -->
+     <file role="php" baseinstalldir="/" name="CSS.php"/>
+     <file role="php" baseinstalldir="/" name="Enum.php"/>
+     <file role="php" baseinstalldir="/" name="Integer.php"/>
+     <file role="php" baseinstalldir="/" name="Lang.php"/>
+     <file role="php" baseinstalldir="/" name="Text.php"/>
+     <file role="php" baseinstalldir="/" name="URI.php"/>
+    </dir> <!-- /HTMLPurifier/AttrDef -->
+    <dir name="AttrTransform">
+     <file role="php" baseinstalldir="/" name="BdoDir.php"/>
+     <file role="php" baseinstalldir="/" name="ImgRequired.php"/>
+     <file role="php" baseinstalldir="/" name="Lang.php"/>
+     <file role="php" baseinstalldir="/" name="TextAlign.php"/>
+    </dir> <!-- /HTMLPurifier/AttrTransform -->
+    <dir name="ChildDef">
+     <file role="php" baseinstalldir="/" name="Chameleon.php"/>
+     <file role="php" baseinstalldir="/" name="Custom.php"/>
+     <file role="php" baseinstalldir="/" name="Empty.php"/>
+     <file role="php" baseinstalldir="/" name="Optional.php"/>
+     <file role="php" baseinstalldir="/" name="Required.php"/>
+     <file role="php" baseinstalldir="/" name="StrictBlockquote.php"/>
+     <file role="php" baseinstalldir="/" name="Table.php"/>
+    </dir> <!-- /HTMLPurifier/ChildDef -->
+    <dir name="ConfigDef">
+     <file role="php" baseinstalldir="/" name="Directive.php"/>
+     <file role="php" baseinstalldir="/" name="DirectiveAlias.php"/>
+     <file role="php" baseinstalldir="/" name="Namespace.php"/>
+    </dir> <!-- /HTMLPurifier/ConfigDef -->
+    <dir name="EntityLookup">
+     <file role="data" baseinstalldir="/" name="entities.ser"/>
+    </dir> <!-- /HTMLPurifier/EntityLookup -->
+    <dir name="Filter">
+     <file role="php" baseinstalldir="/" name="YouTube.php"/>
+    </dir> <!-- /HTMLPurifier/Filter -->
+    <dir name="HTMLModule">
+     <file role="php" baseinstalldir="/" name="Bdo.php"/>
+     <file role="php" baseinstalldir="/" name="CommonAttributes.php"/>
+     <file role="php" baseinstalldir="/" name="Edit.php"/>
+     <file role="php" baseinstalldir="/" name="Hypertext.php"/>
+     <file role="php" baseinstalldir="/" name="Image.php"/>
+     <file role="php" baseinstalldir="/" name="Legacy.php"/>
+     <file role="php" baseinstalldir="/" name="List.php"/>
+     <file role="php" baseinstalldir="/" name="Presentation.php"/>
+     <file role="php" baseinstalldir="/" name="StyleAttribute.php"/>
+     <file role="php" baseinstalldir="/" name="Tables.php"/>
+     <file role="php" baseinstalldir="/" name="Text.php"/>
+     <file role="php" baseinstalldir="/" name="TransformToStrict.php"/>
+     <file role="php" baseinstalldir="/" name="TransformToXHTML11.php"/>
+    </dir> <!-- /HTMLPurifier/HTMLModule -->
+    <dir name="Language">
+     <dir name="classes">
+      <file role="php" baseinstalldir="/" name="en-x-test.php"/>
+     </dir> <!-- /HTMLPurifier/Language/classes -->
+     <dir name="messages">
+      <file role="php" baseinstalldir="/" name="en-x-test.php"/>
+      <file role="php" baseinstalldir="/" name="en.php"/>
+     </dir> <!-- /HTMLPurifier/Language/messages -->
+    </dir> <!-- /HTMLPurifier/Language -->
+    <dir name="Lexer">
+     <file role="php" baseinstalldir="/" name="DirectLex.php"/>
+     <file role="php" baseinstalldir="/" name="DOMLex.php"/>
+     <file role="php" baseinstalldir="/" name="PEARSax3.php"/>
+    </dir> <!-- /HTMLPurifier/Lexer -->
+    <dir name="Printer">
+     <file role="php" baseinstalldir="/" name="CSSDefinition.php"/>
+     <file role="php" baseinstalldir="/" name="HTMLDefinition.php"/>
+    </dir> <!-- /HTMLPurifier/Printer -->
+    <dir name="Strategy">
+     <file role="php" baseinstalldir="/" name="Composite.php"/>
+     <file role="php" baseinstalldir="/" name="Core.php"/>
+     <file role="php" baseinstalldir="/" name="FixNesting.php"/>
+     <file role="php" baseinstalldir="/" name="MakeWellFormed.php"/>
+     <file role="php" baseinstalldir="/" name="RemoveForeignElements.php"/>
+     <file role="php" baseinstalldir="/" name="ValidateAttributes.php"/>
+    </dir> <!-- /HTMLPurifier/Strategy -->
+    <dir name="TagTransform">
+     <file role="php" baseinstalldir="/" name="Center.php"/>
+     <file role="php" baseinstalldir="/" name="Font.php"/>
+     <file role="php" baseinstalldir="/" name="Simple.php"/>
+    </dir> <!-- /HTMLPurifier/TagTransform -->
+    <dir name="URIScheme">
+     <file role="php" baseinstalldir="/" name="ftp.php"/>
+     <file role="php" baseinstalldir="/" name="http.php"/>
+     <file role="php" baseinstalldir="/" name="https.php"/>
+     <file role="php" baseinstalldir="/" name="mailto.php"/>
+     <file role="php" baseinstalldir="/" name="news.php"/>
+     <file role="php" baseinstalldir="/" name="nntp.php"/>
+    </dir> <!-- /HTMLPurifier/URIScheme -->
+    <file role="php" baseinstalldir="/" name="AttrCollections.php"/>
+    <file role="php" baseinstalldir="/" name="AttrDef.php"/>
+    <file role="php" baseinstalldir="/" name="AttrTransform.php"/>
+    <file role="php" baseinstalldir="/" name="AttrTypes.php"/>
+    <file role="php" baseinstalldir="/" name="ChildDef.php"/>
+    <file role="php" baseinstalldir="/" name="Config.php"/>
+    <file role="php" baseinstalldir="/" name="ConfigDef.php"/>
+    <file role="php" baseinstalldir="/" name="ConfigSchema.php"/>
+    <file role="php" baseinstalldir="/" name="ContentSets.php"/>
+    <file role="php" baseinstalldir="/" name="Context.php"/>
+    <file role="php" baseinstalldir="/" name="CSSDefinition.php"/>
+    <file role="php" baseinstalldir="/" name="ElementDef.php"/>
+    <file role="php" baseinstalldir="/" name="Encoder.php"/>
+    <file role="php" baseinstalldir="/" name="EntityLookup.php"/>
+    <file role="php" baseinstalldir="/" name="EntityParser.php"/>
+    <file role="php" baseinstalldir="/" name="Error.php"/>
+    <file role="php" baseinstalldir="/" name="Filter.php"/>
+    <file role="php" baseinstalldir="/" name="Generator.php"/>
+    <file role="php" baseinstalldir="/" name="HTMLDefinition.php"/>
+    <file role="php" baseinstalldir="/" name="HTMLModule.php"/>
+    <file role="php" baseinstalldir="/" name="HTMLModuleManager.php"/>
+    <file role="php" baseinstalldir="/" name="IDAccumulator.php"/>
+    <file role="php" baseinstalldir="/" name="Language.php"/>
+    <file role="php" baseinstalldir="/" name="LanguageFactory.php"/>
+    <file role="php" baseinstalldir="/" name="Lexer.php"/>
+    <file role="php" baseinstalldir="/" name="PercentEncoder.php"/>
+    <file role="php" baseinstalldir="/" name="Printer.php"/>
+    <file role="php" baseinstalldir="/" name="Strategy.php"/>
+    <file role="php" baseinstalldir="/" name="TagTransform.php"/>
+    <file role="php" baseinstalldir="/" name="Token.php"/>
+    <file role="php" baseinstalldir="/" name="TokenFactory.php"/>
+    <file role="php" baseinstalldir="/" name="URIScheme.php"/>
+    <file role="php" baseinstalldir="/" name="URISchemeRegistry.php"/>
+   </dir> <!-- /HTMLPurifier -->
+   <file role="php" baseinstalldir="/" name="HTMLPurifier.auto.php"/>
+   <file role="php" baseinstalldir="/" name="HTMLPurifier.func.php"/>
+   <file role="php" baseinstalldir="/" name="HTMLPurifier.php"/>
+  </filelist>
+ </release>
+ <changelog>
+   <release>
+    <version>1.5.0</version>
+    <date>2007-03-24</date>
+    <license>LGPL</license>
+    <state>stable</state>
+    <notes>Major bugs were fixed and some major internal refactoring was undertaken. The visible changes include XHTML 1.1-style modularization of HTMLDefinition, rudimentary internationalization, and a fix for a fatal error when the PHP4 DOM XML extension was loaded. The x subtag is now allowed in language codes. Element by element AllowedAttribute declaration is now possible for global attributes. Instead of *.class, you can write span.class. The old syntax still works, and enables the attribute for all elements.
+    </notes>
+   </release>
+ </changelog>
+</package>
