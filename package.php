@@ -11,10 +11,9 @@ $pkg->setOptions(
         'baseinstalldir' => '/',
         'packagefile' => 'package2.xml',
         'packagedirectory' => dirname(__FILE__) . '/library',
-        'outputdirectory' => dirname(__FILE__),
         'filelistgenerator' => 'file',
-        'installexceptions' => array('library/HTMLPurifier/' => 'HTMLPurifier/'),
         'include' => array('*'),
+        'ignore' => array('HTMLPurifier.auto.php'),
     )
 );
 
