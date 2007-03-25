@@ -13,9 +13,12 @@ TODO List
  # Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
  # Error logging for filtering/cleanup procedures
     - Requires I18N facilities to be created first (COMPLEX)
+ # Implement all deprecated tags and attributes, for use when correctional
+   mode is not on
  ? Configuration profiles: sets of directives that get set with one func call
  - XSS-attempt detection
- - Implement IDREF support
+ - Implement IDREF support (harder than it seems, since you cannot have
+   IDREFs to non-existent IDs)
 
 1.7 release
  # Add pre-packaged "levels" of cleaning (custom behavior already done)
@@ -77,8 +80,9 @@ Ongoing
     - more! (look for ones that use WYSIWYGs)
 
 Unknown release (on a scratch-an-itch basis)
- - Have 'lang' attribute be checked against official lists
- ? Semi-lossy dumb alternate character encoding transformations, achieved by
+ - Allow non-ASCII characters in font names
+ ? Semi-lossy dumb alternate character encoding transfor
+ ? Have 'lang' attribute be checked against official listsmations, achieved by
    encoding all characters that have string entity equivalents
 
 Requested
