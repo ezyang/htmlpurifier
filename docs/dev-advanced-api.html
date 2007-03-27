@@ -29,7 +29,7 @@ filtersets: therefore, users must be able to define their own sets of
         <li>Filtersets: Rich / Plain / Full ...</li>
         <li>Mode: Lenient / Correctional</li>
         <li>Collections (?): Safe / Unsafe</li>
-        <li>Modules / Tags / Attributes</li>
+        <li>Tags / Attributes / Modules</li>
     </ul></dd>
     <dt>Customize</dt>
     <dd><ul>
@@ -60,6 +60,11 @@ the DTD identifier.</p>
 <p>This parameter is set via the configuration object:</p>
 
 <pre>$config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');</pre>
+
+<p>Due to legacy, the default option is XHTML 1.0 Transitional, however, we
+really shouldn't be guessing what the user's doctype is. Fortunantely,
+people who can't be bothered to set this won't be bothered when their
+pages stop validating.</p>
 
 <h3>Selecting a Filterset</h3>
 
@@ -131,7 +136,14 @@ Currently, we have two modes, which may be used together:</p>
 
 <p>Further investigation in this field is necessary.</p>
 
-<h3>Selecting Modules / Tags / Attributes</h3>
+<p>With regards to the various levels of operation conjectured in the
+Correctional mode, this is prompted by the fact that a user may want to
+correct certain problems but not others, for example, fix the <code>center</code>
+tag but not the <code>u</code> tag, both of which are deprecated.
+Having an integer <q>level</q> will not work very well for such fine
+grained tweaking, but an array of specific settings might.</p>
+
+<h3>Selecting Tags / Attributes / Modules</h3>
 
 <p>If this cookie cutter approach doesn't appeal to a user, they may
 decide to roll their own filterset by selecting modules, tags and
@@ -143,34 +155,41 @@ as a filterset author would use, except that it would go under an
 relevant module/tag/attribute selection configuration directives were
 non-null.</p>
 
-<p>On the highest level, a user will usually be most interested in
-directly specifying which elements and attributes are desired. For
-example:</p>
+<p>In practice, this is the most commonly demanded feature. Most users are
+perfectly happy defining a filterset that looks like:</p>
 
-<pre>$config->set('HTML', 'AllowedElements', 'a,b,em,p,blockquote,code,i');</pre>
+<pre>$config->setAllowedHTML('a[href,title],em,p,blockquote');</pre>
 
-<p>Attribute declarations could be merged into this declaration as such:</p>
+<p>We currently support a separated interface, which also must be preserved:</p>
 
-<pre>$config->set('HTML', 'Allowed', 'a[href,title],b,em,p[class],blockquote[cite],code,i');</pre>
+<pre>$config->set('HTML', 'AllowedTags', 'a,em,p,blockquote');
+$config->set('HTML', 'AllowedAttributes', 'a.href,a.title');</pre>
 
-<p>...or be kept separate:</p>
+<p class="technical">The directive %HTML.Allowed is a convenience function
+that may be fully expressed with the legacy interface, and thus is
+given its own setter.</p>
 
-<pre>$config->set('HTML', 'AllowedAttributes', 'a.href,a.title,p.class,blockquote.cite');</pre>
+<p>A user may also choose to allow modules:</p>
 
-<p class="technical">Considering that, internally speaking, as mandated by
-the XHTML 1.1 Modularization specification, we have organized our
-elements around modules, considerable gymnastics will be needed to
-get this sort of functionality working.</p>
+<pre>$config->set('HTML', 'AllowedModules', 'Hypertext,Text,Lists'); // or
+$config->setAllowedHTML('Hypertext,Text,Lists');</pre>
 
-<p>A user may also specify a module to load a class of elements and attributes
-into their filterest:</p>
-
-<pre>$config->set('HTML', 'Allowed', 'Hypertext,Core');</pre>
+<p>But it is not expected that this feature will be widely used.</p>
 
 <p class="fixme">The granularity of these modules is too coarse for
 the average user (for example, the core module loads everything from
 the essential <code>p</code> tag to the not-so-safe <code>h1</code>
 tag). How do we make this still a viable solution?</p>
+
+<p class="technical">Modules are distinguished from regular tags by the
+case of their first letter. While XML distinguishes between lower and uppercase
+letters, in practice, most well-known XML languages use only lower-case
+tag names for sake of consistency.</p>
+
+<p class="technical">Considering that, internally speaking, as mandated by
+the XHTML 1.1 Modularization specification, we have organized our
+elements around modules, considerable gymnastics will be needed to
+get this sort of functionality working.</p>
 
 <h3>Unified selector</h3>
 
