@@ -172,6 +172,13 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<img src="" alt="Invalid image" />'
         );
         
+        // name rewritten as id
+        $this->assertResult(
+            '<a name="foobar" />',
+            '<a id="foobar" />',
+            array('HTML.EnableAttrID' => true)
+        );
+        
     }
     
 }

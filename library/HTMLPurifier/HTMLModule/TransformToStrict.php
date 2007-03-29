@@ -10,6 +10,7 @@ require_once 'HTMLPurifier/AttrTransform/Lang.php';
 require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
 require_once 'HTMLPurifier/AttrTransform/BgColor.php';
 require_once 'HTMLPurifier/AttrTransform/Border.php';
+require_once 'HTMLPurifier/AttrTransform/Name.php';
 
 /**
  * Proprietary module that transforms deprecated elements into Strict
@@ -23,7 +24,7 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
     
     // we're actually modifying these elements, not defining them
     var $elements = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p',
-        'blockquote', 'table', 'td', 'th', 'tr', 'img');
+        'blockquote', 'table', 'td', 'th', 'tr', 'img', 'a');
     
     var $info_tag_transform = array(
         // placeholders, see constructor for definitions
@@ -82,6 +83,9 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         $this->info['th']->attr_transform_pre['bgcolor'] = new HTMLPurifier_AttrTransform_BgColor();
         
         $this->info['img']->attr_transform_pre['border'] = new HTMLPurifier_AttrTransform_Border();
+        
+        $this->info['img']->attr_transform_pre['name'] = 
+        $this->info['a']->attr_transform_pre['name'] = new HTMLPurifier_AttrTransform_Name();
         
     }
     
