@@ -19,6 +19,7 @@ TODO List
  - XSS-attempt detection
  - Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
+ - Regexp matching for IDs
 
 1.7 release
  # Add pre-packaged "levels" of cleaning (custom behavior already done)
