@@ -179,6 +179,12 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             array('HTML.EnableAttrID' => true)
         );
         
+        // lengths
+        $this->assertResult(
+            '<td height="10" width="5%" /><th height="5%" width="10" /><hr width="10" height="10" />',
+            '<td style="height:10px;width:5%;" /><th style="height:5%;width:10px;" /><hr style="width:10px;" />'
+        );
+        
     }
     
 }

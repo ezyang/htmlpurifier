@@ -14,7 +14,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   + bgcolor in td, th, tr and table
   + border in img
   + name in a and img
+  + width in td, th and hr
+  + height in td, th
   + (incomplete)
+! Support for CSS attribute 'height' added
 
 1.5.1, unknown release date
 - Fix segfault in unit test. The problem is not very reproduceable and
