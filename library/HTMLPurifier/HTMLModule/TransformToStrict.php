@@ -8,6 +8,7 @@ require_once 'HTMLPurifier/TagTransform/Font.php';
 
 require_once 'HTMLPurifier/AttrTransform/Lang.php';
 require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
+require_once 'HTMLPurifier/AttrTransform/BgColor.php';
 
 /**
  * Proprietary module that transforms deprecated elements into Strict
@@ -20,7 +21,8 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
     var $name = 'TransformToStrict';
     
     // we're actually modifying these elements, not defining them
-    var $elements = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'blockquote');
+    var $elements = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p',
+        'blockquote', 'table', 'td', 'th', 'tr');
     
     var $info_tag_transform = array(
         // placeholders, see constructor for definitions
@@ -72,6 +74,11 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         // XHTML 1.0 Strict. We may need three classes
         $this->info['blockquote']->content_model_type = 'strictblockquote';
         $this->info['blockquote']->child = false; // recalculate please!
+        
+        $this->info['table']->attr_transform_pre['bgcolor'] = 
+        $this->info['tr']->attr_transform_pre['bgcolor'] = 
+        $this->info['td']->attr_transform_pre['bgcolor'] = 
+        $this->info['th']->attr_transform_pre['bgcolor'] = new HTMLPurifier_AttrTransform_BgColor();
         
     }
     
