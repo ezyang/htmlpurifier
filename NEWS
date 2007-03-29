@@ -12,6 +12,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 1.6.0, unknown release date
 ! Support for all deprecated attributes via attribute transformations
   + bgcolor in td, th, tr and table
+  + border in img
   + (incomplete)
 
 1.5.1, unknown release date

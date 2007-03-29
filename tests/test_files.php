@@ -35,6 +35,7 @@ $test_files[] = 'AttrDef/URITest.php';
 $test_files[] = 'AttrDefTest.php';
 $test_files[] = 'AttrTransform/BdoDirTest.php';
 $test_files[] = 'AttrTransform/BgColorTest.php';
+$test_files[] = 'AttrTransform/BorderTest.php';
 $test_files[] = 'AttrTransform/ImgRequiredTest.php';
 $test_files[] = 'AttrTransform/LangTest.php';
 $test_files[] = 'AttrTransform/TextAlignTest.php';
