@@ -218,18 +218,31 @@ class HTMLPurifier_HTMLDefinition
                 $this->info_parent, $this->config);
         }
         
+        // support template text
+        $support = "(for information on implementing this, see the ".
+                   "support forums) ";
+        
         // setup allowed elements, SubtractiveWhitelist module
         $allowed_elements = $this->config->get('HTML', 'AllowedElements');
         if (is_array($allowed_elements)) {
             foreach ($this->info as $name => $d) {
                 if(!isset($allowed_elements[$name])) unset($this->info[$name]);
+                unset($allowed_elements[$name]);
+            }
+            // emit errors
+            foreach ($allowed_elements as $element => $d) {
+                trigger_error("Element '$element' is not supported $support", E_USER_WARNING);
             }
         }
+        
         $allowed_attributes = $this->config->get('HTML', 'AllowedAttributes');
+        $allowed_attributes_mutable = $allowed_attributes; // by copy!
         if (is_array($allowed_attributes)) {
             foreach ($this->info_global_attr as $attr_key => $info) {
                 if (!isset($allowed_attributes["*.$attr_key"])) {
                     unset($this->info_global_attr[$attr_key]);
+                } elseif (isset($allowed_attributes_mutable["*.$attr_key"])) {
+                    unset($allowed_attributes_mutable["*.$attr_key"]);
                 }
             }
             foreach ($this->info as $tag => $info) {
@@ -237,7 +250,25 @@ class HTMLPurifier_HTMLDefinition
                     if (!isset($allowed_attributes["$tag.$attr"]) &&
                         !isset($allowed_attributes["*.$attr"])) {
                         unset($this->info[$tag]->attr[$attr]);
+                    } else {
+                        if (isset($allowed_attributes_mutable["$tag.$attr"])) {
+                            unset($allowed_attributes_mutable["$tag.$attr"]);
+                        } elseif (isset($allowed_attributes_mutable["*.$attr"])) {
+                            unset($allowed_attributes_mutable["*.$attr"]);
+                        }
                     }
+                }
+            }
+            // emit errors
+            foreach ($allowed_attributes_mutable as $elattr => $d) {
+                list($element, $attribute) = explode('.', $elattr);
+                if ($element == '*') {
+                    trigger_error("Global attribute '$attribute' is not ".
+                        "supported in any elements $support",
+                        E_USER_WARNING);
+                } else {
+                    trigger_error("Attribute '$attribute' in element '$element' not supported $support",
+                        E_USER_WARNING);
                 }
             }
         }

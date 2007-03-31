@@ -7,16 +7,12 @@ TODO List
     ? Maybe I'll Do It
 ==========================
 
-1.6 release [Long Overdue]
- - More user-friendly warnings when %HTML.Allow* attempts to specify a
-   tag or attribute that is not supported
-
 1.7 release [Advanced API]
  # Complete advanced API, and fully document it
- # Add pre-packaged "levels" of cleaning
  # Implement all edge-case attribute transforms
  # Implement all deprecated tags and attributes
- - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists
+ - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists (possibly
+   do this earlier)
 
 1.8 release [Refactor, refactor!]
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)

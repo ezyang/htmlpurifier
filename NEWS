@@ -21,6 +21,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   and %Attr.AllowedRev to activate
 - You can define ID blacklists using regular expressions via
   %Attr.IDBlacklistRegexp
+- Error messages are emitted when you attempt to "allow" elements or
+  attributes that HTML Purifier does not support
 
 1.5.1, unknown release date
 - Fix segfault in unit test. The problem is not very reproduceable and
