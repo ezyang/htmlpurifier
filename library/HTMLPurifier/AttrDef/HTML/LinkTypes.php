@@ -6,14 +6,15 @@ HTMLPurifier_ConfigSchema::define(
     'Attr', 'AllowedRel', array(), 'lookup',
     'List of allowed forward document relationships in the rel attribute. '.
     'Common values may be nofollow or print. By default, this is empty, '.
-    'meaning that no document relationships are allowed.'
+    'meaning that no document relationships are allowed. This directive '.
+    'was available since 1.6.0.'
 );
 
 HTMLPurifier_ConfigSchema::define(
     'Attr', 'AllowedRev', array(), 'lookup',
     'List of allowed reverse document relationships in the rev attribute. '.
     'This attribute is a bit of an edge-case; if you don\'t know what it '.
-    'is for, stay away.'
+    'is for, stay away. This directive was available since 1.6.0.'
 );
 
 /**

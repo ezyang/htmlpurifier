@@ -95,6 +95,15 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
         
     }
     
+    function testRegexp() {
+        
+        $this->config->set('Attr', 'IDBlacklistRegexp', '/^g_/');
+        
+        $this->assertDef('good_id');
+        $this->assertDef('g_bad_id', false);
+        
+    }
+    
 }
 
 ?>

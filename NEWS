@@ -10,16 +10,17 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 1.6.0, unknown release date
-! Support for all deprecated attributes via attribute transformations
+! Support for most common deprecated attributes via transformations:
   + bgcolor in td, th, tr and table
   + border in img
   + name in a and img
   + width in td, th and hr
   + height in td, th
-  + (incomplete)
 ! Support for CSS attribute 'height' added
 ! Support for rel and rev attributes in a tags added, use %Attr.AllowedRel
   and %Attr.AllowedRev to activate
+- You can define ID blacklists using regular expressions via
+  %Attr.IDBlacklistRegexp
 
 1.5.1, unknown release date
 - Fix segfault in unit test. The problem is not very reproduceable and
