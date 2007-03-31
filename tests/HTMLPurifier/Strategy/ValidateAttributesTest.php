@@ -185,6 +185,13 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<td style="height:10px;width:5%;" /><th style="height:5%;width:10px;" /><hr style="width:10px;" />'
         );
         
+        // link types
+        $this->assertResult(
+            '<a href="foo" rel="nofollow" />',
+            true,
+            array('Attr.AllowedRel' => 'nofollow')
+        );
+        
     }
     
 }

@@ -18,6 +18,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   + height in td, th
   + (incomplete)
 ! Support for CSS attribute 'height' added
+! Support for rel and rev attributes in a tags added, use %Attr.AllowedRel
+  and %Attr.AllowedRev to activate
 
 1.5.1, unknown release date
 - Fix segfault in unit test. The problem is not very reproduceable and

@@ -24,6 +24,7 @@ $test_files[] = 'AttrDef/HTML/LengthTest.php';
 $test_files[] = 'AttrDef/HTML/MultiLengthTest.php';
 $test_files[] = 'AttrDef/HTML/NmtokensTest.php';
 $test_files[] = 'AttrDef/HTML/PixelsTest.php';
+$test_files[] = 'AttrDef/HTML/LinkTypesTest.php';
 $test_files[] = 'AttrDef/IntegerTest.php';
 $test_files[] = 'AttrDef/LangTest.php';
 $test_files[] = 'AttrDef/TextTest.php';
