@@ -47,7 +47,9 @@ HTML Purifier is all about web-standards, so accordingly your webpages should
 be standards compliant.  HTML Purifier can deal with these doctypes:
 
 * XHTML 1.0 Transitional (default)
+* XHTML 1.0 Strict
 * HTML 4.01 Transitional
+* HTML 4.01 Strict
 
 ...and these character encodings:
 
@@ -87,7 +89,7 @@ into configuring things just for the heck of it, skip to 4.3).
 * Am I using UTF-8?
 * Am I using XHTML 1.0 Transitional?
 
-If you answered yes to any of these questions, instantiate a configuration
+If you answered no to any of these questions, instantiate a configuration
 object and read on:
 
     $config = HTMLPurifier_Config::createDefault();
