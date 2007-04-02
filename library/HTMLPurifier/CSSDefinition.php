@@ -162,7 +162,9 @@ class HTMLPurifier_CSSDefinition
             new HTMLPurifier_AttrDef_CSS_Percentage()
         ));
         
-        $this->info['width'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
+        $this->info['width'] =
+        $this->info['height'] = 
+        new HTMLPurifier_AttrDef_CSS_Composite(array(
             new HTMLPurifier_AttrDef_CSS_Length(true),
             new HTMLPurifier_AttrDef_CSS_Percentage(true),
             new HTMLPurifier_AttrDef_Enum(array('auto'))

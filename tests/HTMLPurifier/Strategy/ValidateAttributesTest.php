@@ -172,6 +172,26 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<img src="" alt="Invalid image" />'
         );
         
+        // name rewritten as id
+        $this->assertResult(
+            '<a name="foobar" />',
+            '<a id="foobar" />',
+            array('HTML.EnableAttrID' => true)
+        );
+        
+        // lengths
+        $this->assertResult(
+            '<td height="10" width="5%" /><th height="5%" width="10" /><hr width="10" height="10" />',
+            '<td style="height:10px;width:5%;" /><th style="height:5%;width:10px;" /><hr style="width:10px;" />'
+        );
+        
+        // link types
+        $this->assertResult(
+            '<a href="foo" rel="nofollow" />',
+            true,
+            array('Attr.AllowedRel' => 'nofollow')
+        );
+        
     }
     
 }

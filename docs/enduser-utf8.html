@@ -1003,7 +1003,11 @@ when dealing with Unicode text:</p>
     </ul></li>
 </ul>
 
-<p>...and always think in bytes, not characters. If you use strpos()
+<p>Note: this list applies to UTF-8 encoded text only: if you have
+a string that you are 100% sure is ASCII, be my guest and use
+<code>strtolower</code> (HTML Purifier uses this function.)</p>
+
+<p>Regardless, always think in bytes, not characters. If you use strpos()
 to find the position of a character, it will be in bytes, but this
 usually won't matter since substr() also operates with byte indices!</p>
 

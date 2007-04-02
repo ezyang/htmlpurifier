@@ -40,8 +40,8 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
         $def1->setReturnValue('validate', $output, $def1_params);
         $def2->expectNever('validate');
         
-        $this->assertIdentical($output,
-            $def->validate($input, $config, $context));
+        $result = $def->validate($input, $config, $context);
+        $this->assertIdentical($output, $result);
         
         $def1->tally();
         $def2->tally();
@@ -60,8 +60,8 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
         $def2->expectOnce('validate', $def_params);
         $def2->setReturnValue('validate', $output, $def_params);
         
-        $this->assertIdentical($output,
-            $def->validate($input, $config, $context));
+        $result = $def->validate($input, $config, $context);
+        $this->assertIdentical($output, $result);
         
         $def1->tally();
         $def2->tally();
@@ -80,8 +80,8 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
         $def2->expectOnce('validate', $def_params);
         $def2->setReturnValue('validate', false, $def_params);
         
-        $this->assertIdentical($output,
-            $def->validate($input, $config, $context));
+        $result = $def->validate($input, $config, $context);
+        $this->assertIdentical($output, $result);
         
         $def1->tally();
         $def2->tally();

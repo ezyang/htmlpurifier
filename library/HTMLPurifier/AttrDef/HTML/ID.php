@@ -43,6 +43,14 @@ HTMLPurifier_ConfigSchema::define(
     'is set to a non-empty value! This directive was available since 1.2.0.'
 );
 
+HTMLPurifier_ConfigSchema::define(
+    'Attr', 'IDBlacklistRegexp', null, 'string/null',
+    'PCRE regular expression to be matched against all IDs. If the expression '.
+    'is matches, the ID is rejected. Use this with care: may cause '.
+    'significant degradation. ID matching is done after all other '.
+    'validation. This directive was available since 1.6.0.'
+);
+
 /**
  * Validates the HTML attribute ID.
  * @warning Even though this is the id processor, it
@@ -92,6 +100,11 @@ class HTMLPurifier_AttrDef_HTML_ID extends HTMLPurifier_AttrDef
                 'A..Za..z0..9:-._'
               );
             $result = ($trim === '');
+        }
+        
+        $regexp = $config->get('Attr', 'IDBlacklistRegexp');
+        if ($regexp && preg_match($regexp, $id)) {
+            return false;
         }
         
         if (/*!$this->ref && */$result) $id_accumulator->add($id);

@@ -9,6 +9,25 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+1.6.0, released 2007-04-01
+! Support for most common deprecated attributes via transformations:
+  + bgcolor in td, th, tr and table
+  + border in img
+  + name in a and img
+  + width in td, th and hr
+  + height in td, th
+! Support for CSS attribute 'height' added
+! Support for rel and rev attributes in a tags added, use %Attr.AllowedRel
+  and %Attr.AllowedRev to activate
+- You can define ID blacklists using regular expressions via
+  %Attr.IDBlacklistRegexp
+- Error messages are emitted when you attempt to "allow" elements or
+  attributes that HTML Purifier does not support
+
+1.5.1, unknown release date
+- Fix segfault in unit test. The problem is not very reproduceable and
+  I don't know what causes it, but a six line patch fixed it.
+
 1.5.0, released 2007-03-23
 ! Added a rudimentary I18N and L10N system modeled off MediaWiki. It
   doesn't actually do anything yet, but keep your eyes peeled.
