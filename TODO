@@ -7,6 +7,12 @@ TODO List
     ? Maybe I'll Do It
 ==========================
 
+1.6.1 [Oh God, We Missed Something!]
+ # vspace and hspace in img
+ # align in img and table
+ # target in a
+ # noshade and size in hr
+
 1.7 release [Advanced API]
  # Complete advanced API, and fully document it
  # Implement all edge-case attribute transforms
@@ -82,6 +88,7 @@ Unknown release (on a scratch-an-itch basis)
  ? Semi-lossy dumb alternate character encoding transfor
  ? Have 'lang' attribute be checked against official lists, achieved by
    encoding all characters that have string entity equivalents
+ - Explain how to use HTML Purifier in non-PHP languages
 
 Requested
  ? Native content compression, whitespace stripping (don't rely on Tidy, make
