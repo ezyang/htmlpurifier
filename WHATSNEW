@@ -1,0 +1,5 @@
+The 1.6.0 release, code-named Long-Overdue, contains added support
+for a number of deprecated attributes HTML Purifier should have
+had from the very beginning, including the name, bgcolor, border,
+width and height attributes. The CSS property 'height',
+rel and rev attributes, ID blacklist regexps are also available.
