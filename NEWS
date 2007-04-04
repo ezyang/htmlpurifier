@@ -11,6 +11,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 1.7.0, unknown release date
 
+1.6.1, unknown release date
+! DirectLex now preserves text in which a < bracket is followed by
+  a non-alphanumeric character. This means that certain emoticons
+  are now preserved.
+
 1.6.0, released 2007-04-01
 ! Support for most common deprecated attributes via transformations:
   + bgcolor in td, th, tr and table

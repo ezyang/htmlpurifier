@@ -281,6 +281,18 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $input[18] = '<br test="x &lt; 6" />';
         $expect[18] = array( new HTMLPurifier_Token_Empty('br', array('test' => 'x < 6')) );
         
+        // test emoticon protection
+        $input[19] = '<b>Whoa! >.< That\'s not good >.></b>';
+        $expect[19] = array(
+            new HTMLPurifier_Token_Start('b'),
+            new HTMLPurifier_Token_Text('Whoa! >.'),
+            new HTMLPurifier_Token_Text('< That\'s not good >'),
+            new HTMLPurifier_Token_Text('.>'),
+            new HTMLPurifier_Token_End('b'),
+        );
+        $sax_expect[19] = false; // SAX drops the < character
+        $dom_expect[19] = false; // DOM drops the entire pseudo-tag
+        
         $default_config = HTMLPurifier_Config::createDefault();
         $default_context = new HTMLPurifier_Context();
         foreach($input as $i => $discard) {
