@@ -206,17 +206,19 @@ class HTMLPurifier_HTMLModuleManager
      * @param $module Mixed: string module name, with or without
      *                HTMLPurifier_HTMLModule prefix, or instance of
      *                subclass of HTMLPurifier_HTMLModule.
+     * @note This function will not call autoload, you must instantiate
+     *       (and thus invoke) autoload outside the method.
      */
     function addModule($module) {
         if (is_string($module)) {
             $original_module = $module;
-            if (!class_exists($module)) {
+            if (!class_exists($module, false)) {
                 foreach ($this->prefixes as $prefix) {
                     $module = $prefix . $original_module;
                     if (class_exists($module)) break;
                 }
             }
-            if (!class_exists($module)) {
+            if (!class_exists($module, false)) {
                 trigger_error($original_module . ' module does not exist',
                     E_USER_ERROR);
                 return;

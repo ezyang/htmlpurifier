@@ -15,6 +15,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! DirectLex now preserves text in which a < bracket is followed by
   a non-alphanumeric character. This means that certain emoticons
   are now preserved.
+- Possibly fatal bug with __autoload() fixed in module manager
 
 1.6.0, released 2007-04-01
 ! Support for most common deprecated attributes via transformations:
