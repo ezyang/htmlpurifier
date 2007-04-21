@@ -208,20 +208,33 @@ class HTMLPurifier_HTMLModuleManager
      *                subclass of HTMLPurifier_HTMLModule.
      * @note This function will not call autoload, you must instantiate
      *       (and thus invoke) autoload outside the method.
+     * @note If a string is passed as a module name, different variants
+     *       will be tested in this order:
+     *          - Check for HTMLPurifier_HTMLModule_$name
+     *          - Check all prefixes with $name in order they were added
+     *          - Check for literal object name
+     *          - Throw fatal error
+     *       If your object name collides with an internal class, specify
+     *       your module manually.
      */
     function addModule($module) {
         if (is_string($module)) {
             $original_module = $module;
-            if (!class_exists($module, false)) {
-                foreach ($this->prefixes as $prefix) {
-                    $module = $prefix . $original_module;
-                    if (class_exists($module)) break;
+            $ok = false;
+            foreach ($this->prefixes as $prefix) {
+                $module = $prefix . $original_module;
+                if (class_exists($module)) {
+                    $ok = true;
+                    break;
                 }
             }
-            if (!class_exists($module, false)) {
-                trigger_error($original_module . ' module does not exist',
-                    E_USER_ERROR);
-                return;
+            if (!$ok) {
+                $module = $original_module;
+                if (!class_exists($module, false)) {
+                    trigger_error($original_module . ' module does not exist',
+                        E_USER_ERROR);
+                    return;
+                }
             }
             $module = new $module();
         }

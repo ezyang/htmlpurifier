@@ -16,6 +16,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   a non-alphanumeric character. This means that certain emoticons
   are now preserved.
 - Possibly fatal bug with __autoload() fixed in module manager
+- Invert HTMLModuleManager->addModule() processing order to check
+  prefixes first and then the literal module
 
 1.6.0, released 2007-04-01
 ! Support for most common deprecated attributes via transformations:
