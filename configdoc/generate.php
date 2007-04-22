@@ -24,8 +24,7 @@ error_reporting(E_ALL);
 // ---------------------------------------------------------------------------
 // Include HTML Purifier library
 
-set_include_path('../library' . PATH_SEPARATOR . get_include_path());
-require_once 'HTMLPurifier.php';
+require_once '../library/HTMLPurifier.auto.php';
 
 
 // ---------------------------------------------------------------------------
