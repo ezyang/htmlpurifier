@@ -27,12 +27,12 @@ $pkg->setDescription(
     compliant.'
 );
 
-$pkg->addMaintainer('lead', 'edwardzyang', 'Edward Z. Yang', 'htmlpurifier@jpsband.org', 'yes');
+$pkg->addMaintainer('lead', 'ezyang', 'Edward Z. Yang', 'admin@htmlpurifier.org', 'yes');
 
 $version = file_get_contents('VERSION');
 $api_version = substr($version, 0, strrpos($version, '.'));
 
-$pkg->setChannel('hp.jpsband.org');
+$pkg->setChannel('htmlpurifier.org');
 $pkg->setAPIVersion($api_version);
 $pkg->setAPIStability('stable');
 $pkg->setReleaseVersion($version);
