@@ -18,7 +18,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Possibly fatal bug with __autoload() fixed in module manager
 - Invert HTMLModuleManager->addModule() processing order to check
   prefixes first and then the literal module
-
+. Demo script removed: it has been added to the website's repository
+ 
 1.6.0, released 2007-04-01
 ! Support for most common deprecated attributes via transformations:
   + bgcolor in td, th, tr and table
