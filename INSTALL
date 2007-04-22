@@ -143,7 +143,7 @@ versions will also allow strict-compliant output.
 4.3. Other settings
 
 There are more configuration directives which can be read about
-here: <http://hp.jpsband.org/live/configdoc/plain.html>  They're a bit boring,
+here: <http://htmlpurifier.org/live/configdoc/plain.html>  They're a bit boring,
 but they can help out for those of you who like to exert maximum control over
 your code.
 

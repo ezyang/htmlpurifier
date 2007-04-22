@@ -105,7 +105,7 @@ transformation into a real array list or a lookup table).</p>
 ?>
 <tr>
 <th>
-    <a href="http://hp.jpsband.org/live/configdoc/plain.html#<?php echo $directive ?>">
+    <a href="http://htmlpurifier.org/live/configdoc/plain.html#<?php echo $directive ?>">
         <label for="<?php echo $directive; ?>">%<?php echo $directive; ?></label>
     </a>
 </th>
