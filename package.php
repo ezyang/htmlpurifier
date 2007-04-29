@@ -13,6 +13,7 @@ $pkg->setOptions(
         'packagedirectory' => dirname(__FILE__) . '/library',
         'filelistgenerator' => 'file',
         'include' => array('*'),
+        'dir_roles' => array('/' => 'php'), // hack to put .ser in the right place
         'ignore' => array('HTMLPurifier.auto.php'),
     )
 );
