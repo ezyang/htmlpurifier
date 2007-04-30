@@ -12,6 +12,7 @@ require_once 'HTMLPurifier/AttrTransform/BgColor.php';
 require_once 'HTMLPurifier/AttrTransform/Border.php';
 require_once 'HTMLPurifier/AttrTransform/Name.php';
 require_once 'HTMLPurifier/AttrTransform/Length.php';
+require_once 'HTMLPurifier/AttrTransform/ImgSpace.php';
 
 /**
  * Proprietary module that transforms deprecated elements into Strict
@@ -94,6 +95,9 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         
         $this->info['td']->attr_transform_pre['height'] = 
         $this->info['th']->attr_transform_pre['height'] = new HTMLPurifier_AttrTransform_Length('height');
+        
+        $this->info['img']->attr_transform_pre['hspace'] = new HTMLPurifier_AttrTransform_ImgSpace('hspace');
+        $this->info['img']->attr_transform_pre['vspace'] = new HTMLPurifier_AttrTransform_ImgSpace('vspace');
         
     }
     

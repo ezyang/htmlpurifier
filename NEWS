@@ -17,6 +17,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   are now preserved.
 ! %Core.RemoveInvalidImg is now operational, when set to false invalid
   images will hang around with an empty src
+! Support for more deprecated attributes via transformations:
+  + hspace and vspace in img
 - Possibly fatal bug with __autoload() fixed in module manager
 - Invert HTMLModuleManager->addModule() processing order to check
   prefixes first and then the literal module

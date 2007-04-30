@@ -38,6 +38,7 @@ $test_files[] = 'AttrTransform/BdoDirTest.php';
 $test_files[] = 'AttrTransform/BgColorTest.php';
 $test_files[] = 'AttrTransform/BorderTest.php';
 $test_files[] = 'AttrTransform/ImgRequiredTest.php';
+$test_files[] = 'AttrTransform/ImgSpaceTest.php';
 $test_files[] = 'AttrTransform/LangTest.php';
 $test_files[] = 'AttrTransform/LengthTest.php';
 $test_files[] = 'AttrTransform/NameTest.php';

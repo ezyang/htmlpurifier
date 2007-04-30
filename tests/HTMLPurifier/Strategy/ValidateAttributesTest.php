@@ -192,6 +192,13 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             array('Attr.AllowedRel' => 'nofollow')
         );
         
+        // border
+        $this->assertResult(
+            '<img src="foo" alt="foo" hspace="1" vspace="3" />',
+            '<img src="foo" alt="foo" style="margin-top:3px;margin-bottom:3px;margin-left:1px;margin-right:1px;" />',
+            array('Attr.AllowedRel' => 'nofollow')
+        );
+        
     }
     
 }
