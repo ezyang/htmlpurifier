@@ -7,7 +7,7 @@ TODO List
     ? Maybe I'll Do It
 ==========================
 
-1.6.1 [Oh God, We Missed Something!]
+1.6.1 [Oh Dear, We Missed Something!]
  # vspace and hspace in img
  # align in img and table
  # target in a
@@ -19,6 +19,7 @@ TODO List
  # Implement all deprecated tags and attributes
  - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists (possibly
    do this earlier)
+ ? HTML interface for tweaking configuration to see changes
 
 1.8 release [Refactor, refactor!]
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
