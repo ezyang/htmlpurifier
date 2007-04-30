@@ -19,6 +19,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   images will hang around with an empty src
 ! Support for more deprecated attributes via transformations:
   + hspace and vspace in img
+! target attribute in a tag supported, use %Attr.AllowedFrameTargets
+  to enable
 - Possibly fatal bug with __autoload() fixed in module manager
 - Invert HTMLModuleManager->addModule() processing order to check
   prefixes first and then the literal module

@@ -22,6 +22,7 @@ require_once 'HTMLPurifier/HTMLModule/Tables.php';
 require_once 'HTMLPurifier/HTMLModule/Image.php';
 require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 require_once 'HTMLPurifier/HTMLModule/Legacy.php';
+require_once 'HTMLPurifier/HTMLModule/Target.php';
 
 // proprietary modules
 require_once 'HTMLPurifier/HTMLModule/TransformToStrict.php';
@@ -134,6 +135,7 @@ class HTMLPurifier_HTMLModuleManager
             'CommonAttributes',
             'Text', 'Hypertext', 'List', 'Presentation',
             'Edit', 'Bdo', 'Tables', 'Image', 'StyleAttribute',
+            'Target',
             // define-redefine
             'Legacy',
             // redefine
@@ -155,7 +157,7 @@ class HTMLPurifier_HTMLModuleManager
             'HTML 4.01 Transitional' => array(array('XHTML 1.0 Transitional')),
             'HTML 4.01 Strict' => array(array('XHTML 1.0 Strict')),
             // XHTML definitions
-            'XHTML 1.0 Transitional' => array( array('XHTML 1.0 Strict'), 'Legacy' ),
+            'XHTML 1.0 Transitional' => array( array('XHTML 1.0 Strict'), 'Legacy', 'Target' ),
             'XHTML 1.0 Strict' => array(array('_Common')),
             'XHTML 1.1' => array(array('_Common')),
         );

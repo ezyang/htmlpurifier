@@ -199,6 +199,21 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             array('Attr.AllowedRel' => 'nofollow')
         );
         
+        // link targets
+        $this->assertResult(
+            '<a href="foo" target="_top" />',
+            true,
+            array('Attr.AllowedFrameTargets' => '_top')
+        );
+        $this->assertResult(
+            '<a href="foo" target="_top" />',
+            '<a href="foo" />'
+        );
+        $this->assertResult(
+            '<a href="foo" target="_top" />',
+            '<a href="foo" />',
+            array('Attr.AllowedFrameTargets' => '_top', 'HTML.Strict' => true)
+        );
     }
     
 }

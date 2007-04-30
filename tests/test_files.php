@@ -21,6 +21,7 @@ $test_files[] = 'AttrDef/CSSTest.php';
 $test_files[] = 'AttrDef/EnumTest.php';
 $test_files[] = 'AttrDef/HTML/IDTest.php';
 $test_files[] = 'AttrDef/HTML/LengthTest.php';
+$test_files[] = 'AttrDef/HTML/FrameTargetTest.php';
 $test_files[] = 'AttrDef/HTML/MultiLengthTest.php';
 $test_files[] = 'AttrDef/HTML/NmtokensTest.php';
 $test_files[] = 'AttrDef/HTML/PixelsTest.php';
