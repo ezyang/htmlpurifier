@@ -20,6 +20,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Possibly fatal bug with __autoload() fixed in module manager
 - Invert HTMLModuleManager->addModule() processing order to check
   prefixes first and then the literal module
+- Empty strings get converted to empty arrays instead of arrays with
+  an empty string in them.
 . Demo script removed: it has been added to the website's repository
 . Basic.php script modified to work out of the box
  
