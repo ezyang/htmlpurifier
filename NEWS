@@ -15,10 +15,13 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! DirectLex now preserves text in which a < bracket is followed by
   a non-alphanumeric character. This means that certain emoticons
   are now preserved.
+! %Core.RemoveInvalidImg is now operational, when set to false invalid
+  images will hang around with an empty src
 - Possibly fatal bug with __autoload() fixed in module manager
 - Invert HTMLModuleManager->addModule() processing order to check
   prefixes first and then the literal module
 . Demo script removed: it has been added to the website's repository
+. Basic.php script modified to work out of the box
  
 1.6.0, released 2007-04-01
 ! Support for most common deprecated attributes via transformations:

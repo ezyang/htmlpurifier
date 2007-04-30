@@ -51,6 +51,15 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
         // test preservation of valid img tag
         $this->assertResult('<img src="foobar.gif" />');
         
+        // test preservation of invalid img tag when removal is disabled
+        $this->assertResult(
+            '<img />',
+            true,
+            array(
+                'Core.RemoveInvalidImg' => false
+            )
+        );
+        
     }
     
 }
