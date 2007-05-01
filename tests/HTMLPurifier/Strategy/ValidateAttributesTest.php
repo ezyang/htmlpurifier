@@ -214,6 +214,13 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<a href="foo" />',
             array('Attr.AllowedFrameTargets' => '_top', 'HTML.Strict' => true)
         );
+        
+        // hr rule transformations
+        $this->assertResult(
+            '<hr size="3" />',
+            '<hr style="height:3px;" />'
+        );
+        
     }
     
 }

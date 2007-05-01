@@ -99,6 +99,8 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         $this->info['img']->attr_transform_pre['hspace'] = new HTMLPurifier_AttrTransform_ImgSpace('hspace');
         $this->info['img']->attr_transform_pre['vspace'] = new HTMLPurifier_AttrTransform_ImgSpace('vspace');
         
+        $this->info['hr']->attr_transform_pre['size'] = new HTMLPurifier_AttrTransform_Length('size', 'height');
+        
     }
     
     var $defines_child_def = true;
