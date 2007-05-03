@@ -1,31 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="description" content="Discusses code quality issues and places that need to be refactored in HTML Purifier." />
-<link rel="stylesheet" type="text/css" href="./style.css" />
 
-<title>Code Quality Issues - HTML Purifier</title>
+Code Quality Issues
 
-</head><body>
-
-<h1>Code Quality Issues</h1>
-
-<div id="filing">Filed under Development</div>
-<div id="index">Return to the <a href="index.html">index</a>.</div>
-<div id="home"><a href="http://htmlpurifier.org/">HTML Purifier</a> End-User Documentation</div>
-
-<p>Okay, face it.  Programmers can get lazy, cut corners, or make mistakes. They
+Okay, face it.  Programmers can get lazy, cut corners, or make mistakes. They
 also can do quick prototypes, and then forget to rewrite them later.  Well,
 while I can't list mistakes in here, I can list prototype-like segments
 of code that should be aggressively refactored.  This does not list
-optimization issues, that needs to be done after intense profiling.</p>
+optimization issues, that needs to be done after intense profiling.
 
-<pre>
 docs/examples/demo.php - ad hoc HTML/PHP soup to the extreme
 
-AttrDef
+AttrDef - a lot of duplication, more generic classes need to be created;
+a lot of strtolower() calls, no legit casing
     Class - doesn't support Unicode characters (fringe); uses regular
         expressions
     Lang - code duplication; premature optimization
@@ -45,8 +30,3 @@ URIScheme - needs to have callable generic checks
     mailto - doesn't validate emails, doesn't validate querystring
     news - doesn't validate opaque path
     nntp - doesn't constrain path
-</pre>
-
-<div id="version">$Id$</div>
-
-</body></html>
