@@ -19,9 +19,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   images will hang around with an empty src
 ! Support for more deprecated attributes via transformations:
   + hspace and vspace in img
-  + size in hr
+  + size and noshade in hr
+  + nowrap in td
 ! target attribute in a tag supported, use %Attr.AllowedFrameTargets
   to enable
+! CSS property white-space now allows nowrap (supported in all modern
+  browsers) but not others (which have spotty browser implementations)
 - Possibly fatal bug with __autoload() fixed in module manager
 - Invert HTMLModuleManager->addModule() processing order to check
   prefixes first and then the literal module

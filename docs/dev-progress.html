@@ -168,9 +168,9 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr class="impl-no"><td>quotes</td><td>May be dropped from CSS2, fairly useless for inline context</td></tr>
 <tr class="impl-no"><td>visibility</td><td>ENUM(visible, hidden, collapse),
     Dangerous</td></tr>
-<tr class="css1 feature"><td>white-space</td><td>ENUM(normal, pre, nowrap, pre-wrap,
+<tr class="css1 feature impl-partial"><td>white-space</td><td>ENUM(normal, pre, nowrap, pre-wrap,
     pre-line), Spotty implementation:
-    pre (no IE 5/6), nowrap (no IE 5),
+    pre (no IE 5/6), <em>nowrap</em> (no IE 5, supported),
     pre-wrap (only Opera), pre-line (no support). Fixable? Unknown target milestone.</td></tr>
 </tbody>
 
@@ -281,8 +281,8 @@ Mozilla on inside and needs -moz-outline, no IE support.</td></tr>
 <tr class="impl-yes"><td>lang</td><td>*</td><td>Copy value to xml:lang</td></tr>
 <tr class="impl-yes"><td rowspan="2">name</td><td>IMG</td><td>Turn into ID</td></tr>
     <tr class="impl-yes"><td>A</td><td>Turn into ID</td></tr>
-<tr><td>noshade</td><td>HR</td><td>Boolean, style 'border-style:solid;'</td></tr>
-<tr><td>nowrap</td><td>TD, TH</td><td>Boolean, style 'white-space:nowrap;' (not compat with IE5)</td></tr>
+<tr class="impl-yes"><td>noshade</td><td>HR</td><td>Boolean, style 'border-style:solid;'</td></tr>
+<tr class="impl-yes"><td>nowrap</td><td>TD, TH</td><td>Boolean, style 'white-space:nowrap;' (not compat with IE5)</td></tr>
 <tr class="impl-yes"><td>size</td><td>HR</td><td>Near-equiv 'height', needs px suffix if original was pixels</td></tr>
 <tr class="required impl-yes"><td>src</td><td>IMG</td><td>Required, insert blank or default img if not set</td></tr>
 <tr class="impl-yes"><td>start</td><td>OL</td><td>Poorly supported 'counter-reset', allowed in loose, dropped in strict</td></tr>

@@ -9,6 +9,7 @@ require_once 'HTMLPurifier/TagTransform/Font.php';
 require_once 'HTMLPurifier/AttrTransform/Lang.php';
 require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
 require_once 'HTMLPurifier/AttrTransform/BgColor.php';
+require_once 'HTMLPurifier/AttrTransform/BoolToCSS.php';
 require_once 'HTMLPurifier/AttrTransform/Border.php';
 require_once 'HTMLPurifier/AttrTransform/Name.php';
 require_once 'HTMLPurifier/AttrTransform/Length.php';
@@ -92,6 +93,8 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         $this->info['td']->attr_transform_pre['width'] = 
         $this->info['th']->attr_transform_pre['width'] = 
         $this->info['hr']->attr_transform_pre['width'] = new HTMLPurifier_AttrTransform_Length('width');
+        $this->info['td']->attr_transform_pre['nowrap'] = 
+        $this->info['th']->attr_transform_pre['nowrap'] = new HTMLPurifier_AttrTransform_BoolToCSS('nowrap', 'white-space:nowrap;');
         
         $this->info['td']->attr_transform_pre['height'] = 
         $this->info['th']->attr_transform_pre['height'] = new HTMLPurifier_AttrTransform_Length('height');
@@ -100,6 +103,7 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         $this->info['img']->attr_transform_pre['vspace'] = new HTMLPurifier_AttrTransform_ImgSpace('vspace');
         
         $this->info['hr']->attr_transform_pre['size'] = new HTMLPurifier_AttrTransform_Length('size', 'height');
+        $this->info['hr']->attr_transform_pre['noshade'] = new HTMLPurifier_AttrTransform_BoolToCSS('noshade', 'border-style:solid;');
         
     }
     

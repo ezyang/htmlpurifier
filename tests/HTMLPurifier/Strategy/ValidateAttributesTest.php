@@ -220,6 +220,16 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<hr size="3" />',
             '<hr style="height:3px;" />'
         );
+        $this->assertResult(
+            '<hr noshade />',
+            '<hr style="border-style:solid;" />'
+        );
+        
+        // td boolean transformation
+        $this->assertResult(
+            '<td nowrap />',
+            '<td style="white-space:nowrap;" />'
+        );
         
     }
     
