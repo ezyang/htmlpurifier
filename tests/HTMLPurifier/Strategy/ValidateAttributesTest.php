@@ -231,6 +231,12 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<td style="white-space:nowrap;" />'
         );
         
+        // test only one lang
+        $this->assertResult(
+            '<b lang="en">asdf</b>',
+            '<b xml:lang="en">asdf</b>', array('HTML.Doctype' => 'XHTML 1.1')
+        );
+        
     }
     
 }
