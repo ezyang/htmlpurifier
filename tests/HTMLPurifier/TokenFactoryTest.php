@@ -11,7 +11,7 @@ class HTMLPurifier_TokenFactoryTest extends UnitTestCase
         $regular = new HTMLPurifier_Token_Start('a', array('href' => 'about:blank'));
         $generated = $factory->createStart('a', array('href' => 'about:blank'));
         
-        $this->assertEqual($regular, $generated);
+        $this->assertIdentical($regular, $generated);
         
     }
 }

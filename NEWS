@@ -9,6 +9,43 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+1.7.0, unknown release date
+
+1.6.1, released 2007-05-05
+! Support for more deprecated attributes via transformations:
+  + hspace and vspace in img
+  + size and noshade in hr
+  + nowrap in td
+  + clear in br
+  + align in caption, table, img and hr
+  + type in ul, ol and li
+! DirectLex now preserves text in which a < bracket is followed by
+  a non-alphanumeric character. This means that certain emoticons
+  are now preserved.
+! %Core.RemoveInvalidImg is now operational, when set to false invalid
+  images will hang around with an empty src
+! target attribute in a tag supported, use %Attr.AllowedFrameTargets
+  to enable
+! CSS property white-space now allows nowrap (supported in all modern
+  browsers) but not others (which have spotty browser implementations)
+! XHTML 1.1 mode now sort-of works without any fatal errors, and
+  lang is now moved over to xml:lang.
+! Attribute transformation smoketest available at smoketests/attrTransform.php
+! Transformation of font's size attribute now handles super-large numbers
+- Possibly fatal bug with __autoload() fixed in module manager
+- Invert HTMLModuleManager->addModule() processing order to check
+  prefixes first and then the literal module
+- Empty strings get converted to empty arrays instead of arrays with
+  an empty string in them.
+- Merging in attribute lists now works.
+. Demo script removed: it has been added to the website's repository
+. Basic.php script modified to work out of the box
+. Refactor AttrTransform classes to reduce duplication
+. AttrTransform_TextAlign axed in favor of a more general
+  AttrTransform_EnumToCSS, refer to HTMLModule/TransformToStrict.php to
+  see how the new equivalent is implemented
+. Unit tests now use exclusively assertIdentical
+ 
 1.6.0, released 2007-04-01
 ! Support for most common deprecated attributes via transformations:
   + bgcolor in td, th, tr and table

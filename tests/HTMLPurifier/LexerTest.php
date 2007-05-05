@@ -280,13 +280,25 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $input[18] = '<br test="x &lt; 6" />';
         $expect[18] = array( new HTMLPurifier_Token_Empty('br', array('test' => 'x < 6')) );
         
+        // test emoticon protection
+        $input[19] = '<b>Whoa! >.< That\'s not good >.></b>';
+        $expect[19] = array(
+            new HTMLPurifier_Token_Start('b'),
+            new HTMLPurifier_Token_Text('Whoa! >.'),
+            new HTMLPurifier_Token_Text('< That\'s not good >'),
+            new HTMLPurifier_Token_Text('.>'),
+            new HTMLPurifier_Token_End('b'),
+        );
+        $sax_expect[19] = false; // SAX drops the < character
+        $dom_expect[19] = false; // DOM drops the entire pseudo-tag
+        
         $default_config = HTMLPurifier_Config::createDefault();
         $default_context = new HTMLPurifier_Context();
         foreach($input as $i => $discard) {
             if (!isset($config[$i])) $config[$i] = $default_config;
             
             $result = $this->DirectLex->tokenizeHTML($input[$i], $config[$i], $default_context);
-            $this->assertEqual($expect[$i], $result, 'DirectLexTest '.$i.': %s');
+            $this->assertIdentical($expect[$i], $result, 'DirectLexTest '.$i.': %s');
             paintIf($result, $expect[$i] != $result);
             
             if ($this->_has_pear) {
@@ -294,14 +306,14 @@ class HTMLPurifier_LexerTest extends UnitTestCase
                 $sax_result = $this->PEARSax3->tokenizeHTML($input[$i], $config[$i], $default_context);
                 if (!isset($sax_expect[$i])) {
                     // by default, assert with normal result
-                    $this->assertEqual($expect[$i], $sax_result, 'PEARSax3Test '.$i.': %s');
+                    $this->assertIdentical($expect[$i], $sax_result, 'PEARSax3Test '.$i.': %s');
                     paintIf($sax_result, $expect[$i] != $sax_result);
                 } elseif ($sax_expect[$i] === false) {
                     // assertions were turned off, optionally dump
                     // paintIf($sax_expect, $i == NUMBER);
                 } else {
                     // match with a custom SAX result array
-                    $this->assertEqual($sax_expect[$i], $sax_result, 'PEARSax3Test (custom) '.$i.': %s');
+                    $this->assertIdentical($sax_expect[$i], $sax_result, 'PEARSax3Test (custom) '.$i.': %s');
                     paintIf($sax_result, $sax_expect[$i] != $sax_result);
                 }
             }
@@ -310,12 +322,12 @@ class HTMLPurifier_LexerTest extends UnitTestCase
                 $dom_result = $this->DOMLex->tokenizeHTML($input[$i], $config[$i], $default_context);
                 // same structure as SAX
                 if (!isset($dom_expect[$i])) {
-                    $this->assertEqual($expect[$i], $dom_result, 'DOMLexTest '.$i.': %s');
+                    $this->assertIdentical($expect[$i], $dom_result, 'DOMLexTest '.$i.': %s');
                     paintIf($dom_result, $expect[$i] != $dom_result);
                 } elseif ($dom_expect[$i] === false) {
                     // paintIf($dom_result, $i == NUMBER);
                 } else {
-                    $this->assertEqual($dom_expect[$i], $dom_result, 'DOMLexTest (custom) '.$i.': %s');
+                    $this->assertIdentical($dom_expect[$i], $dom_result, 'DOMLexTest (custom) '.$i.': %s');
                     paintIf($dom_result, $dom_expect[$i] != $dom_result);
                 }
             }

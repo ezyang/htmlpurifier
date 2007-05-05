@@ -9,7 +9,7 @@ class HTMLPurifier_ChildDef_RequiredTest extends HTMLPurifier_ChildDefHarness
     function testParsing() {
         
         $def = new HTMLPurifier_ChildDef_Required('foobar | bang |gizmo');
-        $this->assertEqual($def->elements,
+        $this->assertIdentical($def->elements,
           array(
             'foobar' => true
            ,'bang'   => true
@@ -17,7 +17,7 @@ class HTMLPurifier_ChildDef_RequiredTest extends HTMLPurifier_ChildDefHarness
           ));
         
         $def = new HTMLPurifier_ChildDef_Required(array('href', 'src'));
-        $this->assertEqual($def->elements,
+        $this->assertIdentical($def->elements,
           array(
             'href' => true
            ,'src'  => true

@@ -33,7 +33,7 @@ class HTMLPurifier_AttrTransform_LangTest
         // copy xml:lang to lang
         $this->assertResult(
             array('xml:lang' => 'en'),
-            array('lang' => 'en', 'xml:lang' => 'en')
+            array('xml:lang' => 'en', 'lang' => 'en')
         );
         
         // both set, override lang with xml:lang

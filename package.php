@@ -13,6 +13,7 @@ $pkg->setOptions(
         'packagedirectory' => dirname(__FILE__) . '/library',
         'filelistgenerator' => 'file',
         'include' => array('*'),
+        'dir_roles' => array('/' => 'php'), // hack to put .ser in the right place
         'ignore' => array('HTMLPurifier.auto.php'),
     )
 );
@@ -27,17 +28,20 @@ $pkg->setDescription(
     compliant.'
 );
 
-$pkg->addMaintainer('lead', 'edwardzyang', 'Edward Z. Yang', 'htmlpurifier@jpsband.org', 'yes');
+$pkg->addMaintainer('lead', 'ezyang', 'Edward Z. Yang', 'admin@htmlpurifier.org', 'yes');
 
-$pkg->setChannel('hp.jpsband.org');
-$pkg->setAPIVersion('1.5');
+$version = file_get_contents('VERSION');
+$api_version = substr($version, 0, strrpos($version, '.'));
+
+$pkg->setChannel('htmlpurifier.org');
+$pkg->setAPIVersion($api_version);
 $pkg->setAPIStability('stable');
-$pkg->setReleaseVersion('1.5.0');
+$pkg->setReleaseVersion($version);
 $pkg->setReleaseStability('stable');
 
 $pkg->addRelease();
 
-$pkg->setNotes('Major bugs were fixed and some major internal refactoring was undertaken. The visible changes include XHTML 1.1-style modularization of HTMLDefinition, rudimentary internationalization, and a fix for a fatal error when the PHP4 DOM XML extension was loaded. The x subtag is now allowed in language codes. Element by element AllowedAttribute declaration is now possible for global attributes. Instead of *.class, you can write span.class. The old syntax still works, and enables the attribute for all elements.');
+$pkg->setNotes(file_get_contents('WHATSNEW'));
 $pkg->setPackageType('php');
 
 $pkg->setPhpDep('4.3.9');

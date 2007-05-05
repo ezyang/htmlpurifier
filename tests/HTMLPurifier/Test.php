@@ -72,7 +72,7 @@ class HTMLPurifier_Test extends UnitTestCase
         
         $this->purifier = new HTMLPurifier();
         
-        $this->assertEqual(
+        $this->assertIdentical(
             $this->purifier->purifyArray(
                 array('Good', '<b>Sketchy', 'foo' => '<script>bad</script>')
             ),

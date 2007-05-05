@@ -164,13 +164,13 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
         $config = HTMLPurifier_Config::createDefault();
         
-        $this->assertEqual($config->get('Home', 'Rug'), 3);
+        $this->assertIdentical($config->get('Home', 'Rug'), 3);
         
         $this->expectError('Cannot get value from aliased directive, use real name');
         $config->get('Home', 'Carpet');
         
         $config->set('Home', 'Carpet', 999);
-        $this->assertEqual($config->get('Home', 'Rug'), 999);
+        $this->assertIdentical($config->get('Home', 'Rug'), 999);
         
     }
     
@@ -231,7 +231,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $def = $config->getHTMLDefinition();
         $def2 = $config->getHTMLDefinition();
         $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
-        $this->assertEqual($def, $def2);
+        $this->assertIdentical($def, $def2);
         $this->assertTrue($def->setup);
         
         // test re-calculation if HTML changes
@@ -298,8 +298,8 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
             )
         ));
         
-        $this->assertEqual($config_manual, $config_loadabbr);
-        $this->assertEqual($config_manual, $config_loadfull);
+        $this->assertIdentical($config_manual, $config_loadabbr);
+        $this->assertIdentical($config_manual, $config_loadfull);
         
     }
     
@@ -314,15 +314,15 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
         // test flat pass-through
         $created_config = HTMLPurifier_Config::create($config);
-        $this->assertEqual($config, $created_config);
+        $this->assertIdentical($config, $created_config);
         
         // test loadArray
         $created_config = HTMLPurifier_Config::create(array('Cake.Sprinkles' => 42));
-        $this->assertEqual($config, $created_config);
+        $this->assertIdentical($config, $created_config);
         
         // test loadIni
         $created_config = HTMLPurifier_Config::create(dirname(__FILE__) . '/ConfigTest-create.ini');
-        $this->assertEqual($config, $created_config);
+        $this->assertIdentical($config, $created_config);
         
     }
     

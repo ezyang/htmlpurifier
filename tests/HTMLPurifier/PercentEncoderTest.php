@@ -15,7 +15,7 @@ class HTMLPurifier_PercentEncoderTest extends UnitTestCase
     
     function assertDecode($string, $expect = true) {
         if ($expect === true) $expect = $string;
-        $this->assertEqual($this->PercentEncoder->{$this->func}($string), $expect);
+        $this->assertIdentical($this->PercentEncoder->{$this->func}($string), $expect);
     }
     
     function test_normalize() {

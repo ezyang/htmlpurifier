@@ -1,0 +1,7 @@
+The 1.6.1 release, code-named 'Ach! We missed something! Run!', completes
+HTML Purifier's roster of attribute transformations. It also implements
+a number of minor features (such as better font transformations, smarter
+HTML parsing, the CSS property 'white-space' and XHTML 1.1), a few bug
+fixes (most notably fixed __autoload compatibility issues) and a ton
+of refactoring. 1.6 was for things that absolutely could not wait: this
+release, developed in a more leisurely pace, fills in the gaps.

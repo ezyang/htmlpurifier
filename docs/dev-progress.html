@@ -32,7 +32,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <div id="filing">Filed under Development</div>
 <div id="index">Return to the <a href="index.html">index</a>.</div>
-<div id="home"><a href="http://hp.jpsband.org/">HTML Purifier</a> End-User Documentation</div>
+<div id="home"><a href="http://htmlpurifier.org/">HTML Purifier</a> End-User Documentation</div>
 
 <h2>Key</h2>
 
@@ -142,7 +142,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 
 <tbody>
 <tr><th colspan="2">Unknown</th></tr>
-<tr class="danger css1 impl-yes"><td>background-image</td><td>Dangerous, target milestone 1.3</td></tr>
+<tr class="danger css1 impl-yes"><td>background-image</td><td>Dangerous</td></tr>
 <tr class="css1 impl-yes"><td>background-attachment</td><td>ENUM(scroll, fixed),
     Depends on background-image</td></tr>
 <tr class="css1 impl-yes"><td>background-position</td><td>Depends on background-image</td></tr>
@@ -168,9 +168,9 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <tr class="impl-no"><td>quotes</td><td>May be dropped from CSS2, fairly useless for inline context</td></tr>
 <tr class="impl-no"><td>visibility</td><td>ENUM(visible, hidden, collapse),
     Dangerous</td></tr>
-<tr class="css1 feature"><td>white-space</td><td>ENUM(normal, pre, nowrap, pre-wrap,
+<tr class="css1 feature impl-partial"><td>white-space</td><td>ENUM(normal, pre, nowrap, pre-wrap,
     pre-line), Spotty implementation:
-    pre (no IE 5/6), nowrap (no IE 5),
+    pre (no IE 5/6), <em>nowrap</em> (no IE 5, supported),
     pre-wrap (only Opera), pre-line (no support). Fixable? Unknown target milestone.</td></tr>
 </tbody>
 
@@ -238,7 +238,7 @@ Mozilla on inside and needs -moz-outline, no IE support.</td></tr>
 <tr><th colspan="3">Questionable</th></tr>
 <tr class="impl-no"><td>accesskey</td><td>A</td><td>May interfere with main interface</td></tr>
 <tr class="impl-no"><td>tabindex</td><td>A</td><td>May interfere with main interface</td></tr>
-<tr><td>target</td><td>A</td><td>Config enabled, only useful for frame layouts, disallowed in strict</td></tr>
+<tr class="impl-yes"><td>target</td><td>A</td><td>Config enabled, only useful for frame layouts, disallowed in strict</td></tr>
 </tbody>
 
 <tbody>
@@ -262,35 +262,35 @@ Mozilla on inside and needs -moz-outline, no IE support.</td></tr>
 </tbody>
 
 <tbody>
-<tr><th colspan="3">Transform, target milestone 1.6</th></tr>
-<tr><td rowspan="5">align</td><td>CAPTION</td><td>Near-equiv style 'caption-side', drop left and right</td></tr>
-    <tr><td>IMG</td><td rowspan="2">Margin-left and margin-right = auto or parent div</td></tr>
-    <tr><td>TABLE</td></tr>
-    <tr><td>HR</td><td>Near-equivalent style 'text-align' (Works for IE and Opera, but not Firefox). Also try <code>margin-right:auto; margin-left:0;</code> for left or <code>margin-right:0; margin-left:auto;</code> for right (optionally replacing 0 with the original margin for that side)</td></tr>
+<tr><th colspan="3">Transform</th></tr>
+<tr class="impl-yes"><td rowspan="5">align</td><td>CAPTION</td><td>'caption-side' for top/bottom, 'text-align' for left/right</td></tr>
+    <tr class="impl-yes"><td>IMG</td><td rowspan="3">See specimens/html-align-to-css.html</td></tr>
+    <tr class="impl-yes"><td>TABLE</td></tr>
+    <tr class="impl-yes"><td>HR</td></tr>
     <tr class="impl-yes"><td>H1, H2, H3, H4, H5, H6, P</td><td>Equivalent style 'text-align'</td></tr>
 <tr class="required impl-yes"><td>alt</td><td>IMG</td><td>Required, insert image filename if src is present or default invalid image text</td></tr>
 <tr class="impl-yes"><td rowspan="3">bgcolor</td><td>TABLE</td><td>Superset style 'background-color'</td></tr>
     <tr class="impl-yes"><td>TR</td><td>Superset style 'background-color'</td></tr>
     <tr class="impl-yes"><td>TD, TH</td><td>Superset style 'background-color'</td></tr>
 <tr class="impl-yes"><td>border</td><td>IMG</td><td>Equivalent style <code>border:[number]px solid</code></td></tr>
-<tr><td>clear</td><td>BR</td><td>Near-equiv style 'clear', transform 'all' into 'both'</td></tr>
+<tr class="impl-yes"><td>clear</td><td>BR</td><td>Near-equiv style 'clear', transform 'all' into 'both'</td></tr>
 <tr class="impl-no"><td>compact</td><td>DL, OL, UL</td><td>Boolean, needs custom CSS class; rarely used anyway</td></tr>
 <tr class="required impl-yes"><td>dir</td><td>BDO</td><td>Required, insert ltr (or configuration value) if none</td></tr>
 <tr class="impl-yes"><td>height</td><td>TD, TH</td><td>Near-equiv style 'height', needs px suffix if original was in pixels</td></tr>
-<tr><td>hspace</td><td>IMG</td><td>Near-equiv styles 'margin-top' and 'margin-bottom', needs px suffix</td></tr>
+<tr class="impl-yes"><td>hspace</td><td>IMG</td><td>Near-equiv styles 'margin-top' and 'margin-bottom', needs px suffix</td></tr>
 <tr class="impl-yes"><td>lang</td><td>*</td><td>Copy value to xml:lang</td></tr>
 <tr class="impl-yes"><td rowspan="2">name</td><td>IMG</td><td>Turn into ID</td></tr>
     <tr class="impl-yes"><td>A</td><td>Turn into ID</td></tr>
-<tr><td>noshade</td><td>HR</td><td>Boolean, style 'border-style:solid;'</td></tr>
-<tr><td>nowrap</td><td>TD, TH</td><td>Boolean, style 'white-space:nowrap;' (not compat with IE5)</td></tr>
-<tr><td>size</td><td>HR</td><td>Near-equiv 'height', needs px suffix if original was pixels</td></tr>
+<tr class="impl-yes"><td>noshade</td><td>HR</td><td>Boolean, style 'border-style:solid;'</td></tr>
+<tr class="impl-yes"><td>nowrap</td><td>TD, TH</td><td>Boolean, style 'white-space:nowrap;' (not compat with IE5)</td></tr>
+<tr class="impl-yes"><td>size</td><td>HR</td><td>Near-equiv 'height', needs px suffix if original was pixels</td></tr>
 <tr class="required impl-yes"><td>src</td><td>IMG</td><td>Required, insert blank or default img if not set</td></tr>
 <tr class="impl-yes"><td>start</td><td>OL</td><td>Poorly supported 'counter-reset', allowed in loose, dropped in strict</td></tr>
-<tr><td rowspan="3">type</td><td>LI</td><td rowspan="3">Equivalent style 'list-style-type', different allowed values though. (needs testing)</td></tr>
-    <tr><td>OL</td></tr>
-    <tr><td>UL</td></tr>
+<tr class="impl-yes"><td rowspan="3">type</td><td>LI</td><td rowspan="3">Equivalent style 'list-style-type', different allowed values though. (needs testing)</td></tr>
+    <tr class="impl-yes"><td>OL</td></tr>
+    <tr class="impl-yes"><td>UL</td></tr>
 <tr class="impl-yes"><td>value</td><td>LI</td><td>Poorly supported 'counter-reset', allowed in loose, dropped in strict</td></tr>
-<tr><td>vspace</td><td>IMG</td><td>Near-equiv styles 'margin-left' and 'margin-right', needs px suffix, see hspace</td></tr>
+<tr class="impl-yes"><td>vspace</td><td>IMG</td><td>Near-equiv styles 'margin-left' and 'margin-right', needs px suffix, see hspace</td></tr>
 <tr class="impl-yes"><td rowspan="2">width</td><td>HR</td><td rowspan="2">Near-equiv style 'width', needs px suffix if original was pixels</td></tr>
     <tr class="impl-yes"><td>TD, TH</td></tr>
 </tbody>

@@ -49,14 +49,14 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
         $context->loadArray($context_array);
         
         // start tag transform
-        $this->assertEqual(
+        $this->assertIdentical(
                 new HTMLPurifier_Token_Start($expect_name, $expect_added_attributes),
                 $transformer->transform(
                     new HTMLPurifier_Token_Start($name), $config, $context)
             );
         
         // start tag transform with attributes
-        $this->assertEqual(
+        $this->assertIdentical(
                 new HTMLPurifier_Token_Start($expect_name, $expect_attributes),
                 $transformer->transform(
                     new HTMLPurifier_Token_Start($name, $attributes),
@@ -65,7 +65,7 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
             );
         
         // end tag transform
-        $this->assertEqual(
+        $this->assertIdentical(
                 new HTMLPurifier_Token_End($expect_name),
                 $transformer->transform(
                     new HTMLPurifier_Token_End($name), $config, $context
@@ -73,7 +73,7 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
             );
         
         // empty tag transform
-        $this->assertEqual(
+        $this->assertIdentical(
                 new HTMLPurifier_Token_Empty($expect_name, $expect_added_attributes),
                 $transformer->transform(
                     new HTMLPurifier_Token_Empty($name), $config, $context
@@ -81,7 +81,7 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
             );
         
         // empty tag transform with attributes
-        $this->assertEqual(
+        $this->assertIdentical(
                 new HTMLPurifier_Token_Empty($expect_name, $expect_attributes),
                 $transformer->transform(
                     new HTMLPurifier_Token_Empty($name, $attributes),
@@ -152,6 +152,7 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
         );
         
         // test the size transforms
+        $this->assertSizeToStyle($transformer, '0', 'xx-small');
         $this->assertSizeToStyle($transformer, '1', 'xx-small');
         $this->assertSizeToStyle($transformer, '2', 'small');
         $this->assertSizeToStyle($transformer, '3', 'medium');
@@ -160,10 +161,13 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
         $this->assertSizeToStyle($transformer, '6', 'xx-large');
         $this->assertSizeToStyle($transformer, '7', '300%');
         $this->assertSizeToStyle($transformer, '-1', 'smaller');
-        $this->assertSizeToStyle($transformer, '+1', 'larger');
         $this->assertSizeToStyle($transformer, '-2', '60%');
+        $this->assertSizeToStyle($transformer, '-3', '60%');
+        $this->assertSizeToStyle($transformer, '+1', 'larger');
         $this->assertSizeToStyle($transformer, '+2', '150%');
+        $this->assertSizeToStyle($transformer, '+3', '200%');
         $this->assertSizeToStyle($transformer, '+4', '300%');
+        $this->assertSizeToStyle($transformer, '+5', '300%');
         
         // test multiple transforms, the alphabetical ordering is important
         $this->assertTransformation(
