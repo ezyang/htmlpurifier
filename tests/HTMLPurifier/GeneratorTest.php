@@ -61,7 +61,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         
         foreach ($inputs as $i => $input) {
             $result = $this->obj->generateFromToken($input);
-            $this->assertEqual($result, $expect[$i]);
+            $this->assertIdentical($result, $expect[$i]);
             paintIf($result, $result != $expect[$i]);
         }
         
@@ -90,7 +90,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         
         foreach ($inputs as $i => $input) {
             $result = $this->obj->generateAttributes($input);
-            $this->assertEqual($result, $expect[$i]);
+            $this->assertIdentical($result, $expect[$i]);
             paintIf($result, $result != $expect[$i]);
         }
         
@@ -121,7 +121,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         // normalized newlines, this probably should be put somewhere else
         $result = str_replace("\r\n", "\n", $result);
         $result = str_replace("\r", "\n", $result);
-        $this->assertEqual($expect, $result);
+        $this->assertIdentical($expect, $result);
     }
     
     function test_generateFromTokens_XHTMLoff() {

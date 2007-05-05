@@ -97,7 +97,7 @@ class HTMLPurifier_Harness extends UnitTestCase
             }
         }
         
-        $this->assertEqual($expect, $result);
+        $this->assertIdentical($expect, $result);
         
     }
     

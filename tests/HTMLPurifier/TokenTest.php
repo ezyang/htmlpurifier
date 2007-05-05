@@ -12,8 +12,8 @@ class HTMLPurifier_TokenTest extends UnitTestCase
         if ($expect_attr === null) $expect_attr = $attr;
         $token = new HTMLPurifier_Token_Start($name, $attr);
         
-        $this->assertEqual($expect_name, $token->name);
-        $this->assertEqual($expect_attr, $token->attr);
+        $this->assertIdentical($expect_name, $token->name);
+        $this->assertIdentical($expect_attr, $token->attr);
     }
     
     function testConstruct() {

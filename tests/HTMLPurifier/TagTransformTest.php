@@ -49,14 +49,14 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
         $context->loadArray($context_array);
         
         // start tag transform
-        $this->assertEqual(
+        $this->assertIdentical(
                 new HTMLPurifier_Token_Start($expect_name, $expect_added_attributes),
                 $transformer->transform(
                     new HTMLPurifier_Token_Start($name), $config, $context)
             );
         
         // start tag transform with attributes
-        $this->assertEqual(
+        $this->assertIdentical(
                 new HTMLPurifier_Token_Start($expect_name, $expect_attributes),
                 $transformer->transform(
                     new HTMLPurifier_Token_Start($name, $attributes),
@@ -65,7 +65,7 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
             );
         
         // end tag transform
-        $this->assertEqual(
+        $this->assertIdentical(
                 new HTMLPurifier_Token_End($expect_name),
                 $transformer->transform(
                     new HTMLPurifier_Token_End($name), $config, $context
@@ -73,7 +73,7 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
             );
         
         // empty tag transform
-        $this->assertEqual(
+        $this->assertIdentical(
                 new HTMLPurifier_Token_Empty($expect_name, $expect_added_attributes),
                 $transformer->transform(
                     new HTMLPurifier_Token_Empty($name), $config, $context
@@ -81,7 +81,7 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
             );
         
         // empty tag transform with attributes
-        $this->assertEqual(
+        $this->assertIdentical(
                 new HTMLPurifier_Token_Empty($expect_name, $expect_attributes),
                 $transformer->transform(
                     new HTMLPurifier_Token_Empty($name, $attributes),

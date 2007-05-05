@@ -9,11 +9,11 @@ class HTMLPurifier_AttrDefTest extends UnitTestCase
         
         $def = new HTMLPurifier_AttrDef();
         
-        $this->assertEqual('', $def->parseCDATA(''));
-        $this->assertEqual('', $def->parseCDATA("\t\n\r \t\t"));
-        $this->assertEqual('foo', $def->parseCDATA("\t\n\r foo\t\t"));
-        $this->assertEqual('ignorelinefeeds', $def->parseCDATA("ignore\nline\nfeeds"));
-        $this->assertEqual('translate to space', $def->parseCDATA("translate\rto\tspace"));
+        $this->assertIdentical('', $def->parseCDATA(''));
+        $this->assertIdentical('', $def->parseCDATA("\t\n\r \t\t"));
+        $this->assertIdentical('foo', $def->parseCDATA("\t\n\r foo\t\t"));
+        $this->assertIdentical('ignorelinefeeds', $def->parseCDATA("ignore\nline\nfeeds"));
+        $this->assertIdentical('translate to space', $def->parseCDATA("translate\rto\tspace"));
         
     }
     

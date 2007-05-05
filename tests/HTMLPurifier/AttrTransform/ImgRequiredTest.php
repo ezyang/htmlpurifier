@@ -34,7 +34,7 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
         
         $this->assertResult(
             array('alt' => 'intrigue'),
-            array('src' => '', 'alt' => 'intrigue')
+            array('alt' => 'intrigue', 'src' => '')
         );
         
     }

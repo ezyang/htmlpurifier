@@ -12,10 +12,10 @@ class HTMLPurifier_LanguageFactoryTest extends UnitTestCase
         $language = $factory->create('en');
         
         $this->assertIsA($language, 'HTMLPurifier_Language');
-        $this->assertEqual($language->code, 'en');
+        $this->assertIdentical($language->code, 'en');
         
         // lazy loading test
-        $this->assertEqual(count($language->messages), 0);
+        $this->assertIdentical(count($language->messages), 0);
         $language->load();
         $this->assertNotEqual(count($language->messages), 0);
         
@@ -30,15 +30,15 @@ class HTMLPurifier_LanguageFactoryTest extends UnitTestCase
         $language = $factory->create('en-x-test');
         
         $this->assertIsA($language, 'HTMLPurifier_Language_en_x_test');
-        $this->assertEqual($language->code, 'en-x-test');
+        $this->assertIdentical($language->code, 'en-x-test');
         
         $language->load();
         
         // test overloaded message
-        $this->assertEqual($language->getMessage('htmlpurifier'), 'HTML Purifier X');
+        $this->assertIdentical($language->getMessage('htmlpurifier'), 'HTML Purifier X');
         
         // test inherited message
-        $this->assertEqual($language->getMessage('pizza'), 'Pizza');
+        $this->assertIdentical($language->getMessage('pizza'), 'Pizza');
         
     }
     

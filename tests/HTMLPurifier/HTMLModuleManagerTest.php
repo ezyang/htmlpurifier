@@ -48,15 +48,15 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         $this->manager->addModule($module);
         $module_order = $this->manager->modules['Module']->order;
         $module->order = $module_order;
-        $this->assertEqual($module, $this->manager->modules['Module']);
+        $this->assertIdentical($module, $this->manager->modules['Module']);
         
         $this->manager->addModule($module2);
         $module2_order = $this->manager->modules['Module2']->order;
         $module2->order = $module2_order;
-        $this->assertEqual($module2, $this->manager->modules['Module2']);
-        $this->assertEqual($module_order + 1, $module2_order);
+        $this->assertIdentical($module2, $this->manager->modules['Module2']);
+        $this->assertIdentical($module_order + 1, $module2_order);
         
-        $this->assertEqual(
+        $this->assertIdentical(
             $this->manager->collections['Default']['Generic Document 0.1'],
             array('Module', 'Module2')
         );
