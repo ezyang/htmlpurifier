@@ -225,14 +225,14 @@ class HTMLPurifier_HTMLModuleManager
             $ok = false;
             foreach ($this->prefixes as $prefix) {
                 $module = $prefix . $original_module;
-                if (class_exists($module)) {
+                if ($this->_classExists($module)) {
                     $ok = true;
                     break;
                 }
             }
             if (!$ok) {
                 $module = $original_module;
-                if (!class_exists($module, false)) {
+                if (!$this->_classExists($module)) {
                     trigger_error($original_module . ' module does not exist',
                         E_USER_ERROR);
                     return;
@@ -244,6 +244,23 @@ class HTMLPurifier_HTMLModuleManager
         $this->modules[$module->name] = $module;
         if ($this->autoDoctype !== false && $this->autoCollection !== false) {
             $this->collections[$this->autoCollection][$this->autoDoctype][] = $module->name;
+        }
+    }
+    
+    /**
+     * Safely tests for class existence without invoking __autoload in PHP5
+     * @param $name String class name to test
+     * @private
+     */
+    function _classExists($name) {
+        static $is_php_4 = null;
+        if ($is_php_4 === null) {
+            $is_php_4 = version_compare(PHP_VERSION, '5', '<');
+        }
+        if ($is_php_4) {
+            return class_exists($name);
+        } else {
+            return class_exists($name, false);
         }
     }
     
@@ -508,7 +525,8 @@ class HTMLPurifier_HTMLModuleManager
         
         $elements = array();
         foreach ($this->activeModules as $module) {
-            foreach ($module->elements as $name) {
+            foreach ($module->info as $name => $v) {
+                if (isset($elements[$name])) continue;
                 $elements[$name] = $this->getElement($name, $config);
             }
         }
