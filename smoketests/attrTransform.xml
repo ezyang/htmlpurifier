@@ -10,7 +10,8 @@
         <sample><![CDATA[<font face="Arial">Arial</font>]]></sample>
     </group>
     <group title="font.size">
-        <sample><![CDATA[<font size="-99">-99</font>]]></sample>
+        <sample><![CDATA[<font size="-2">-2</font>]]></sample>
+        <sample><![CDATA[<font size="-1">-1</font>]]></sample>
         <sample><![CDATA[<font size="0">0</font>]]></sample>
         <sample><![CDATA[<font size="1">1</font>]]></sample>
         <sample><![CDATA[<font size="2">2</font>]]></sample>
@@ -20,7 +21,11 @@
         <sample><![CDATA[<font size="6">6</font>]]></sample>
         <sample><![CDATA[<font size="7">7</font>]]></sample>
         <sample><![CDATA[<font size="8">8</font>]]></sample>
-        <sample><![CDATA[<font size="99">99</font>]]></sample>
+        <sample><![CDATA[<font size="+1">+1</font>]]></sample>
+        <sample><![CDATA[<font size="+2">+2</font>]]></sample>
+        <sample><![CDATA[<font size="+3">+3</font>]]></sample>
+        <sample><![CDATA[<font size="+4">+4</font>]]></sample>
+        <sample><![CDATA[<font size="+5">+5</font>]]></sample>
     </group>
     <group title="center">
         <sample><![CDATA[<center>Centered</center>]]></sample>
