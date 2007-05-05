@@ -326,7 +326,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         );
         $this->assertResult(
             '<hr noshade />',
-            '<hr style="border-style:solid;" />'
+            '<hr style="color:#808080;background-color:#808080;border:0;" />'
         );
         // align transformation
         $this->assertResult(

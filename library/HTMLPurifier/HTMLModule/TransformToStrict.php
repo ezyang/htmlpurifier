@@ -50,6 +50,13 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
     
     function HTMLPurifier_HTMLModule_TransformToStrict() {
         
+        // behavior with transformations when there's another CSS property
+        // working on it is interesting: the CSS will *always* override
+        // the deprecated attribute, whereas an inline CSS declaration will
+        // override the corresponding declaration in, say, an external
+        // stylesheet. This behavior won't affect most people, but it
+        // does represent an operational difference we CANNOT fix.
+        
         // deprecated tag transforms
         $this->info_tag_transform['font']   = new HTMLPurifier_TagTransform_Font();
         $this->info_tag_transform['menu']   = new HTMLPurifier_TagTransform_Simple('ul');
@@ -99,6 +106,7 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         $this->info['td']->attr_transform_pre['width'] = 
         $this->info['th']->attr_transform_pre['width'] = 
         $this->info['hr']->attr_transform_pre['width'] = new HTMLPurifier_AttrTransform_Length('width');
+        
         $this->info['td']->attr_transform_pre['nowrap'] = 
         $this->info['th']->attr_transform_pre['nowrap'] = new HTMLPurifier_AttrTransform_BoolToCSS('nowrap', 'white-space:nowrap;');
         
@@ -109,7 +117,10 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         $this->info['img']->attr_transform_pre['vspace'] = new HTMLPurifier_AttrTransform_ImgSpace('vspace');
         
         $this->info['hr']->attr_transform_pre['size'] = new HTMLPurifier_AttrTransform_Length('size', 'height');
-        $this->info['hr']->attr_transform_pre['noshade'] = new HTMLPurifier_AttrTransform_BoolToCSS('noshade', 'border-style:solid;');
+        
+        // this transformation is not precise but often good enough.
+        // different browsers use different styles to designate noshade
+        $this->info['hr']->attr_transform_pre['noshade'] = new HTMLPurifier_AttrTransform_BoolToCSS('noshade', 'color:#808080;background-color:#808080;border: 0;');
         
         $this->info['br']->attr_transform_pre['clear'] =
             new HTMLPurifier_AttrTransform_EnumToCSS('clear', array(
@@ -119,12 +130,16 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
                 'none' => 'clear:none;',
             ));
         
+        // this is a slightly unreasonable attribute
         $this->info['caption']->attr_transform_pre['align'] =
             new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
+                // we're following IE's behavior, not Firefox's, due
+                // to the fact that no one supports caption-side:right,
+                // W3C included (with CSS 2.1)
                 'left' => 'text-align:left;',
                 'right' => 'text-align:right;',
                 'top' => 'caption-side:top;',
-                'bottom' => 'caption-side:bottom;'
+                'bottom' => 'caption-side:bottom;' // not supported by IE
             ));
         
         $this->info['table']->attr_transform_pre['align'] = 

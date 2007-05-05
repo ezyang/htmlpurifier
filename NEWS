@@ -29,6 +29,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   browsers) but not others (which have spotty browser implementations)
 ! XHTML 1.1 mode now sort-of works without any fatal errors, and
   lang is now moved over to xml:lang.
+! Attribute transformation smoketest available at smoketests/attrTransform.php
 - Possibly fatal bug with __autoload() fixed in module manager
 - Invert HTMLModuleManager->addModule() processing order to check
   prefixes first and then the literal module
