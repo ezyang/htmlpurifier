@@ -11,12 +11,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 1.7.0, unknown release date
 
-1.6.1, unknown release date
-! DirectLex now preserves text in which a < bracket is followed by
-  a non-alphanumeric character. This means that certain emoticons
-  are now preserved.
-! %Core.RemoveInvalidImg is now operational, when set to false invalid
-  images will hang around with an empty src
+1.6.1, released 2007-05-05
 ! Support for more deprecated attributes via transformations:
   + hspace and vspace in img
   + size and noshade in hr
@@ -24,6 +19,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   + clear in br
   + align in caption, table, img and hr
   + type in ul, ol and li
+! DirectLex now preserves text in which a < bracket is followed by
+  a non-alphanumeric character. This means that certain emoticons
+  are now preserved.
+! %Core.RemoveInvalidImg is now operational, when set to false invalid
+  images will hang around with an empty src
 ! target attribute in a tag supported, use %Attr.AllowedFrameTargets
   to enable
 ! CSS property white-space now allows nowrap (supported in all modern
