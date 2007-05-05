@@ -23,6 +23,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   + nowrap in td
   + clear in br
   + align in caption, table, img and hr
+  + type in ul, ol and li
 ! target attribute in a tag supported, use %Attr.AllowedFrameTargets
   to enable
 ! CSS property white-space now allows nowrap (supported in all modern

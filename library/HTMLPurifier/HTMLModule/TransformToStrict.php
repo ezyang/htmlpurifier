@@ -28,7 +28,7 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
     // we're actually modifying these elements, not defining them
     var $elements = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p',
         'blockquote', 'table', 'td', 'th', 'tr', 'img', 'a', 'hr', 'br',
-        'caption');
+        'caption', 'ul', 'ol', 'li');
     
     var $info_tag_transform = array(
         // placeholders, see constructor for definitions
@@ -164,6 +164,28 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
                 'center' => 'margin-left:auto;margin-right:auto;text-align:center;',
                 'right' => 'margin-left:auto;margin-right:0;text-align:right;'
             ));
+        
+        $ul_types = array(
+            'disc'   => 'list-style-type:disc;',
+            'square' => 'list-style-type:square;',
+            'circle' => 'list-style-type:circle;'
+        );
+        $ol_types = array(
+            '1'   => 'list-style-type:decimal;',
+            'i'   => 'list-style-type:lower-roman;',
+            'I'   => 'list-style-type:upper-roman;',
+            'a'   => 'list-style-type:lower-alpha;',
+            'A'   => 'list-style-type:upper-alpha;'
+        );
+        $li_types = $ul_types + $ol_types;
+        
+        $this->info['ul']->attr_transform_pre['type'] =
+            new HTMLPurifier_AttrTransform_EnumToCSS('type', $ul_types);
+        $this->info['ol']->attr_transform_pre['type'] =
+            new HTMLPurifier_AttrTransform_EnumToCSS('type', $ol_types, true);
+        $this->info['li']->attr_transform_pre['type'] =
+            new HTMLPurifier_AttrTransform_EnumToCSS('type', $li_types, true);
+        
         
     }
     

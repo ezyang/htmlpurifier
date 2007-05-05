@@ -371,6 +371,69 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         );
     }
     
+    function testListTypeTransform() {
+        // ul
+        $this->assertResult(
+            '<ul type="disc" />',
+            '<ul style="list-style-type:disc;" />'
+        );
+        $this->assertResult(
+            '<ul type="square" />',
+            '<ul style="list-style-type:square;" />'
+        );
+        $this->assertResult(
+            '<ul type="circle" />',
+            '<ul style="list-style-type:circle;" />'
+        );
+        $this->assertResult( // case insensitive
+            '<ul type="CIRCLE" />',
+            '<ul style="list-style-type:circle;" />'
+        );
+        $this->assertResult(
+            '<ul type="a" />',
+            '<ul />'
+        );
+        // ol
+        $this->assertResult(
+            '<ol type="1" />',
+            '<ol style="list-style-type:decimal;" />'
+        );
+        $this->assertResult(
+            '<ol type="i" />',
+            '<ol style="list-style-type:lower-roman;" />'
+        );
+        $this->assertResult(
+            '<ol type="I" />',
+            '<ol style="list-style-type:upper-roman;" />'
+        );
+        $this->assertResult(
+            '<ol type="a" />',
+            '<ol style="list-style-type:lower-alpha;" />'
+        );
+        $this->assertResult(
+            '<ol type="A" />',
+            '<ol style="list-style-type:upper-alpha;" />'
+        );
+        $this->assertResult(
+            '<ol type="disc" />',
+            '<ol />'
+        );
+        // li
+        $this->assertResult(
+            '<li type="circle" />',
+            '<li style="list-style-type:circle;" />'
+        );
+        $this->assertResult(
+            '<li type="A" />',
+            '<li style="list-style-type:upper-alpha;" />'
+        );
+        $this->assertResult( // case sensitive
+            '<li type="CIRCLE" />',
+            '<li />'
+        );
+        
+    }
+    
 }
 
 ?>
