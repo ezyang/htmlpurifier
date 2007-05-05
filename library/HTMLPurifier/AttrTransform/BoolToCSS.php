@@ -28,13 +28,10 @@ extends HTMLPurifier_AttrTransform {
     }
     
     function transform($attr, $config, &$context) {
-        
         if (!isset($attr[$this->attr])) return $attr;
         unset($attr[$this->attr]);
-        if (!isset($attr['style'])) $attr['style'] = '';
-        $attr['style'] = $this->css . $attr['style'];
+        $this->prependCSS($attr, $this->css);
         return $attr;
-        
     }
     
 }

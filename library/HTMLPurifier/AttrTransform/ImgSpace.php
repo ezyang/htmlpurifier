@@ -25,13 +25,10 @@ extends HTMLPurifier_AttrTransform {
         
         if (!isset($attr[$this->attr])) return $attr;
         
-        $width = $attr[$this->attr];
-        unset($attr[$this->attr]);
+        $width = $this->confiscateAttr($attr, $this->attr);
         // some validation could happen here
         
         if (!isset($this->css[$this->attr])) return $attr;
-        
-        $attr['style'] = isset($attr['style']) ? $attr['style'] : '';
         
         $style = '';
         foreach ($this->css[$this->attr] as $suffix) {
@@ -39,7 +36,7 @@ extends HTMLPurifier_AttrTransform {
             $style .= "$property:{$width}px;";
         }
         
-        $attr['style'] = $style . $attr['style'];
+        $this->prependCSS($attr, $style);
         
         return $attr;
         

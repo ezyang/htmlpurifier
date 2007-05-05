@@ -34,6 +34,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   an empty string in them.
 . Demo script removed: it has been added to the website's repository
 . Basic.php script modified to work out of the box
+. Refactor AttrTransform classes to reduce duplication
  
 1.6.0, released 2007-04-01
 ! Support for most common deprecated attributes via transformations:

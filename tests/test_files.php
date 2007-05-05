@@ -35,6 +35,7 @@ $test_files[] = 'AttrDef/URI/IPv4Test.php';
 $test_files[] = 'AttrDef/URI/IPv6Test.php';
 $test_files[] = 'AttrDef/URITest.php';
 $test_files[] = 'AttrDefTest.php';
+$test_files[] = 'AttrTransformTest.php';
 $test_files[] = 'AttrTransform/BdoDirTest.php';
 $test_files[] = 'AttrTransform/BgColorTest.php';
 $test_files[] = 'AttrTransform/BoolToCSSTest.php';

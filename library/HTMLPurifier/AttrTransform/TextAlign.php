@@ -12,8 +12,8 @@ extends HTMLPurifier_AttrTransform {
         
         if (!isset($attr['align'])) return $attr;
         
-        $align = strtolower(trim($attr['align']));
-        unset($attr['align']);
+        $align = $this->confiscateAttr($attr, 'align');
+        $align = strtolower(trim($align));
         
         $values = array('left' => 1,
                         'right' => 1,
@@ -24,8 +24,7 @@ extends HTMLPurifier_AttrTransform {
             return $attr;
         }
         
-        $attr['style'] = isset($attr['style']) ? $attr['style'] : '';
-        $attr['style'] = "text-align:$align;" . $attr['style'];
+        $this->prependCSS($attr, "text-align:$align;");
         
         return $attr;
         
