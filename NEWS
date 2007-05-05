@@ -21,6 +21,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   + hspace and vspace in img
   + size and noshade in hr
   + nowrap in td
+  + clear in br
+  + align in caption, table, img and hr
 ! target attribute in a tag supported, use %Attr.AllowedFrameTargets
   to enable
 ! CSS property white-space now allows nowrap (supported in all modern

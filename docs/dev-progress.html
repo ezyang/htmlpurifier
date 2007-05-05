@@ -263,17 +263,17 @@ Mozilla on inside and needs -moz-outline, no IE support.</td></tr>
 
 <tbody>
 <tr><th colspan="3">Transform, target milestone 1.6.1/1.7</th></tr>
-<tr><td rowspan="5">align</td><td>CAPTION</td><td>Near-equiv style 'caption-side', drop left and right</td></tr>
-    <tr><td>IMG</td><td rowspan="3">See specimens/html-align-to-css.html</td></tr>
-    <tr><td>TABLE</td></tr>
-    <tr><td>HR</td></tr>
+<tr class="impl-yes"><td rowspan="5">align</td><td>CAPTION</td><td>'caption-side' for top/bottom, 'text-align' for left/right</td></tr>
+    <tr class="impl-yes"><td>IMG</td><td rowspan="3">See specimens/html-align-to-css.html</td></tr>
+    <tr class="impl-yes"><td>TABLE</td></tr>
+    <tr class="impl-yes"><td>HR</td></tr>
     <tr class="impl-yes"><td>H1, H2, H3, H4, H5, H6, P</td><td>Equivalent style 'text-align'</td></tr>
 <tr class="required impl-yes"><td>alt</td><td>IMG</td><td>Required, insert image filename if src is present or default invalid image text</td></tr>
 <tr class="impl-yes"><td rowspan="3">bgcolor</td><td>TABLE</td><td>Superset style 'background-color'</td></tr>
     <tr class="impl-yes"><td>TR</td><td>Superset style 'background-color'</td></tr>
     <tr class="impl-yes"><td>TD, TH</td><td>Superset style 'background-color'</td></tr>
 <tr class="impl-yes"><td>border</td><td>IMG</td><td>Equivalent style <code>border:[number]px solid</code></td></tr>
-<tr><td>clear</td><td>BR</td><td>Near-equiv style 'clear', transform 'all' into 'both'</td></tr>
+<tr class="impl-yes"><td>clear</td><td>BR</td><td>Near-equiv style 'clear', transform 'all' into 'both'</td></tr>
 <tr class="impl-no"><td>compact</td><td>DL, OL, UL</td><td>Boolean, needs custom CSS class; rarely used anyway</td></tr>
 <tr class="required impl-yes"><td>dir</td><td>BDO</td><td>Required, insert ltr (or configuration value) if none</td></tr>
 <tr class="impl-yes"><td>height</td><td>TD, TH</td><td>Near-equiv style 'height', needs px suffix if original was in pixels</td></tr>

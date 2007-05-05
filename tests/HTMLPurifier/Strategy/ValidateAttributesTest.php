@@ -13,14 +13,11 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $this->obj = new HTMLPurifier_Strategy_ValidateAttributes();
     }
     
-    function test() {
-        
-        // attribute order is VERY fragile, perhaps we should define
-        // an ordering scheme!
-        
+    function testEmpty() {
         $this->assertResult('');
-        
-        // test ids
+    }
+    
+    function testIDs() {
         $this->assertResult(
             '<div id="valid">Kill the ID.</div>',
             '<div>Kill the ID.</div>'
@@ -71,26 +68,44 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             )
         );
         
-        // test classes
+        // name rewritten as id
+        $this->assertResult(
+            '<a name="foobar" />',
+            '<a id="foobar" />',
+            array('HTML.EnableAttrID' => true)
+        );
+    }
+    
+    function testClasses() {
         $this->assertResult('<div class="valid">Valid</div>');
         
         $this->assertResult(
             '<div class="valid 0invalid">Keep valid.</div>',
             '<div class="valid">Keep valid.</div>'
         );
-        
-        // test title
+    }
+    
+    function testTitle() {
         $this->assertResult(
             '<acronym title="PHP: Hypertext Preprocessor">PHP</acronym>'
         );
-        
-        // test lang
+    }
+    
+    function testLang() {
         $this->assertResult(
             '<span lang="fr">La soupe.</span>',
             '<span lang="fr" xml:lang="fr">La soupe.</span>'
         );
         
-        // test align
+        // test only xml:lang for XHTML 1.1
+        $this->assertResult(
+            '<b lang="en">asdf</b>',
+            '<b xml:lang="en">asdf</b>', array('HTML.Doctype' => 'XHTML 1.1')
+        );
+    }
+    
+    function testAlign() {
+        
         $this->assertResult(
             '<h1 align="center">Centered Headline</h1>',
             '<h1 style="text-align:center;">Centered Headline</h1>'
@@ -112,7 +127,9 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<h1>Invalid Headline</h1>'
         );
         
-        // test table
+    }
+    
+    function testTable() {
         $this->assertResult(
 '<table frame="above" rules="rows" summary="A test table" border="2" cellpadding="5%" cellspacing="3" width="100%">
     <col align="right" width="4*" />
@@ -131,7 +148,64 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
 </table>'
         );
         
-        // test URI
+        // test col.span is non-zero
+        $this->assertResult(
+            '<col span="0" />',
+            '<col />'
+        );
+        // lengths
+        $this->assertResult(
+            '<td height="10" width="5%" /><th height="5%" width="10" /><hr width="10" height="10" />',
+            '<td style="height:10px;width:5%;" /><th style="height:5%;width:10px;" /><hr style="width:10px;" />'
+        );
+        // td boolean transformation
+        $this->assertResult(
+            '<td nowrap />',
+            '<td style="white-space:nowrap;" />'
+        );
+        
+        // caption align transformation
+        $this->assertResult(
+            '<caption align="left" />',
+            '<caption style="text-align:left;" />'
+        );
+        $this->assertResult(
+            '<caption align="right" />',
+            '<caption style="text-align:right;" />'
+        );
+        $this->assertResult(
+            '<caption align="top" />',
+            '<caption style="caption-side:top;" />'
+        );
+        $this->assertResult(
+            '<caption align="bottom" />',
+            '<caption style="caption-side:bottom;" />'
+        );
+        $this->assertResult(
+            '<caption align="nonsense" />',
+            '<caption />'
+        );
+        
+        // align transformation
+        $this->assertResult(
+            '<table align="left" />',
+            '<table style="float:left;" />'
+        );
+        $this->assertResult(
+            '<table align="center" />',
+            '<table style="margin-left:auto;margin-right:auto;" />'
+        );
+        $this->assertResult(
+            '<table align="right" />',
+            '<table style="float:right;" />'
+        );
+        $this->assertResult(
+            '<table align="top" />',
+            '<table />'
+        );
+    }
+    
+    function testURI() {
         $this->assertResult('<a href="http://www.google.com/">Google</a>');
         
         // test invalid URI
@@ -139,9 +213,9 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<a href="javascript:badstuff();">Google</a>',
             '<a>Google</a>'
         );
-        
-        // test required attributes for img
-        
+    }
+    
+    function testImg() {
         // (this should never happen, as RemoveForeignElements
         //  should have removed the offending image tag)
         $this->assertResult(
@@ -158,7 +232,40 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<img alt="pretty picture" />',
             '<img alt="pretty picture" src="" />'
         );
+        // mailto in image is not allowed
+        $this->assertResult(
+            '<img src="mailto:foo@example.com" />',
+            '<img src="" alt="Invalid image" />'
+        );
+        // align transformation
+        $this->assertResult(
+            '<img src="foobar.jpg" alt="foobar" align="left" />',
+            '<img src="foobar.jpg" alt="foobar" style="float:left;" />'
+        );
+        $this->assertResult(
+            '<img src="foobar.jpg" alt="foobar" align="right" />',
+            '<img src="foobar.jpg" alt="foobar" style="float:right;" />'
+        );
+        $this->assertResult(
+            '<img src="foobar.jpg" alt="foobar" align="bottom" />',
+            '<img src="foobar.jpg" alt="foobar" style="vertical-align:baseline;" />'
+        );
+        $this->assertResult(
+            '<img src="foobar.jpg" alt="foobar" align="middle" />',
+            '<img src="foobar.jpg" alt="foobar" style="vertical-align:middle;" />'
+        );
+        $this->assertResult(
+            '<img src="foobar.jpg" alt="foobar" align="top" />',
+            '<img src="foobar.jpg" alt="foobar" style="vertical-align:top;" />'
+        );
+        $this->assertResult(
+            '<img src="foobar.jpg" alt="foobar" align="outerspace" />',
+            '<img src="foobar.jpg" alt="foobar" />'
+        );
         
+    }
+    
+    function testBdo() {
         // test required attributes for bdo
         $this->assertResult(
             '<bdo>Go left.</bdo>',
@@ -169,52 +276,23 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<bdo dir="blahblah">Invalid value!</bdo>',
             '<bdo dir="ltr">Invalid value!</bdo>'
         );
-        
-        // see above, behavior is subtly different
+    }
+    
+    function testDir() {
+        // see testBdo, behavior is subtly different
         $this->assertResult(
             '<span dir="blahblah">Invalid value!</span>',
             '<span>Invalid value!</span>'
         );
+    }
         
-        // test col.span is non-zero
-        $this->assertResult(
-            '<col span="0" />',
-            '<col />'
-        );
-        
-        // mailto in image is not allowed
-        $this->assertResult(
-            '<img src="mailto:foo@example.com" />',
-            '<img src="" alt="Invalid image" />'
-        );
-        
-        // name rewritten as id
-        $this->assertResult(
-            '<a name="foobar" />',
-            '<a id="foobar" />',
-            array('HTML.EnableAttrID' => true)
-        );
-        
-        // lengths
-        $this->assertResult(
-            '<td height="10" width="5%" /><th height="5%" width="10" /><hr width="10" height="10" />',
-            '<td style="height:10px;width:5%;" /><th style="height:5%;width:10px;" /><hr style="width:10px;" />'
-        );
-        
+    function testLinks() {
         // link types
         $this->assertResult(
             '<a href="foo" rel="nofollow" />',
             true,
             array('Attr.AllowedRel' => 'nofollow')
         );
-        
-        // border
-        $this->assertResult(
-            '<img src="foo" alt="foo" hspace="1" vspace="3" />',
-            '<img src="foo" alt="foo" style="margin-top:3px;margin-bottom:3px;margin-left:1px;margin-right:1px;" />',
-            array('Attr.AllowedRel' => 'nofollow')
-        );
-        
         // link targets
         $this->assertResult(
             '<a href="foo" target="_top" />',
@@ -230,8 +308,18 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<a href="foo" />',
             array('Attr.AllowedFrameTargets' => '_top', 'HTML.Strict' => true)
         );
-        
-        // hr rule transformations
+    }
+    
+    function testBorder() {
+        // border
+        $this->assertResult(
+            '<img src="foo" alt="foo" hspace="1" vspace="3" />',
+            '<img src="foo" alt="foo" style="margin-top:3px;margin-bottom:3px;margin-left:1px;margin-right:1px;" />',
+            array('Attr.AllowedRel' => 'nofollow')
+        );
+    }
+    
+    function testHr() {
         $this->assertResult(
             '<hr size="3" />',
             '<hr style="height:3px;" />'
@@ -240,21 +328,47 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<hr noshade />',
             '<hr style="border-style:solid;" />'
         );
-        
-        // td boolean transformation
+        // align transformation
         $this->assertResult(
-            '<td nowrap />',
-            '<td style="white-space:nowrap;" />'
+            '<hr align="left" />',
+            '<hr style="margin-left:0;margin-right:auto;text-align:left;" />'
         );
-        
-        // test only one lang
         $this->assertResult(
-            '<b lang="en">asdf</b>',
-            '<b xml:lang="en">asdf</b>', array('HTML.Doctype' => 'XHTML 1.1')
+            '<hr align="center" />',
+            '<hr style="margin-left:auto;margin-right:auto;text-align:center;" />'
         );
-        
-        
-        
+        $this->assertResult(
+            '<hr align="right" />',
+            '<hr style="margin-left:auto;margin-right:0;text-align:right;" />'
+        );
+        $this->assertResult(
+            '<hr align="bottom" />',
+            '<hr />'
+        );
+    }
+    
+    function testBr() {
+        // br clear transformation
+        $this->assertResult(
+            '<br clear="left" />',
+            '<br style="clear:left;" />'
+        );
+        $this->assertResult(
+            '<br clear="right" />',
+            '<br style="clear:right;" />'
+        );
+        $this->assertResult( // test both?
+            '<br clear="all" />',
+            '<br style="clear:both;" />'
+        );
+        $this->assertResult(
+            '<br clear="none" />',
+            '<br style="clear:none;" />'
+        );
+        $this->assertResult(
+            '<br clear="foo" />',
+            '<br />'
+        );
     }
     
 }

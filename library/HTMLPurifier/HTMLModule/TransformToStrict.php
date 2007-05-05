@@ -27,7 +27,8 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
     
     // we're actually modifying these elements, not defining them
     var $elements = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p',
-        'blockquote', 'table', 'td', 'th', 'tr', 'img', 'a', 'hr');
+        'blockquote', 'table', 'td', 'th', 'tr', 'img', 'a', 'hr', 'br',
+        'caption');
     
     var $info_tag_transform = array(
         // placeholders, see constructor for definitions
@@ -109,6 +110,45 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         
         $this->info['hr']->attr_transform_pre['size'] = new HTMLPurifier_AttrTransform_Length('size', 'height');
         $this->info['hr']->attr_transform_pre['noshade'] = new HTMLPurifier_AttrTransform_BoolToCSS('noshade', 'border-style:solid;');
+        
+        $this->info['br']->attr_transform_pre['clear'] =
+            new HTMLPurifier_AttrTransform_EnumToCSS('clear', array(
+                'left' => 'clear:left;',
+                'right' => 'clear:right;',
+                'all' => 'clear:both;',
+                'none' => 'clear:none;',
+            ));
+        
+        $this->info['caption']->attr_transform_pre['align'] =
+            new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
+                'left' => 'text-align:left;',
+                'right' => 'text-align:right;',
+                'top' => 'caption-side:top;',
+                'bottom' => 'caption-side:bottom;'
+            ));
+        
+        $this->info['table']->attr_transform_pre['align'] = 
+            new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
+                'left' => 'float:left;',
+                'center' => 'margin-left:auto;margin-right:auto;',
+                'right' => 'float:right;'
+            ));
+        
+        $this->info['img']->attr_transform_pre['align'] = 
+            new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
+                'left' => 'float:left;',
+                'right' => 'float:right;',
+                'top' => 'vertical-align:top;',
+                'middle' => 'vertical-align:middle;',
+                'bottom' => 'vertical-align:baseline;',
+            ));
+        
+        $this->info['hr']->attr_transform_pre['align'] = 
+            new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
+                'left' => 'margin-left:0;margin-right:auto;text-align:left;',
+                'center' => 'margin-left:auto;margin-right:auto;text-align:center;',
+                'right' => 'margin-left:auto;margin-right:0;text-align:right;'
+            ));
         
     }
     

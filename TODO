@@ -7,11 +7,6 @@ TODO List
     ? Maybe I'll Do It
 ==========================
 
-1.6.1 [Oh Dear, We Missed Something!]
- # align in img, table, hr and caption
- # clear in br
- # type in ul, ol, li
-
 1.7 release [Advanced API]
  # Complete advanced API, and fully document it
  # Implement all edge-case attribute transforms
