@@ -1,17 +1,17 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
+require_once 'HTMLPurifier/AttrTransform/EnumToCSS.php';
 require_once 'HTMLPurifier/AttrTransformHarness.php';
 
-class HTMLPurifier_AttrTransform_TextAlignTest extends HTMLPurifier_AttrTransformHarness
+class HTMLPurifier_AttrTransform_EnumToCSSTest extends HTMLPurifier_AttrTransformHarness
 {
     
-    function setUp() {
-        parent::setUp();
-        $this->obj = new HTMLPurifier_AttrTransform_TextAlign();
-    }
-    
-    function test() {
+    function testRegular() {
+        
+        $this->obj = new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
+            'left'  => 'text-align:left;',
+            'right' => 'text-align:right;'
+        ));
         
         // leave empty arrays alone
         $this->assertResult( array() );
@@ -31,16 +31,6 @@ class HTMLPurifier_AttrTransform_TextAlignTest extends HTMLPurifier_AttrTransfor
             array('style' => 'text-align:right;')
         );
         
-        $this->assertResult(
-            array('align' => 'center'),
-            array('style' => 'text-align:center;')
-        );
-        
-        $this->assertResult(
-            array('align' => 'justify'),
-            array('style' => 'text-align:justify;')
-        );
-        
         // drop garbage value
         $this->assertResult(
             array('align' => 'invalid'),
@@ -53,10 +43,32 @@ class HTMLPurifier_AttrTransform_TextAlignTest extends HTMLPurifier_AttrTransfor
             array('style' => 'text-align:left;font-weight:bold;')
         );
         
+    }
+    
+    function testCaseInsensitive() {
+        
+        $this->obj = new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
+            'right' => 'text-align:right;'
+        ));
+        
         // test case insensitivity
         $this->assertResult(
-            array('align' => 'CENTER'),
-            array('style' => 'text-align:center;')
+            array('align' => 'RIGHT'),
+            array('style' => 'text-align:right;')
+        );
+        
+    }
+    
+    function testCaseSensitive() {
+        
+        $this->obj = new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
+            'right' => 'text-align:right;'
+        ), true);
+        
+        // test case insensitivity
+        $this->assertResult(
+            array('align' => 'RIGHT'),
+            array()
         );
         
     }

@@ -95,6 +95,22 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<h1 align="center">Centered Headline</h1>',
             '<h1 style="text-align:center;">Centered Headline</h1>'
         );
+        $this->assertResult(
+            '<h1 align="right">Right-aligned Headline</h1>',
+            '<h1 style="text-align:right;">Right-aligned Headline</h1>'
+        );
+        $this->assertResult(
+            '<h1 align="left">Left-aligned Headline</h1>',
+            '<h1 style="text-align:left;">Left-aligned Headline</h1>'
+        );
+        $this->assertResult(
+            '<p align="justify">Justified Paragraph</p>',
+            '<p style="text-align:justify;">Justified Paragraph</p>'
+        );
+        $this->assertResult(
+            '<h1 align="invalid">Invalid Headline</h1>',
+            '<h1>Invalid Headline</h1>'
+        );
         
         // test table
         $this->assertResult(
@@ -236,6 +252,8 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
             '<b lang="en">asdf</b>',
             '<b xml:lang="en">asdf</b>', array('HTML.Doctype' => 'XHTML 1.1')
         );
+        
+        
         
     }
     

@@ -35,6 +35,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Demo script removed: it has been added to the website's repository
 . Basic.php script modified to work out of the box
 . Refactor AttrTransform classes to reduce duplication
+. AttrTransform_TextAlign axed in favor of a more general
+  AttrTransform_EnumToCSS, refer to HTMLModule/TransformToStrict.php to
+  see how the new equivalent is implemented
  
 1.6.0, released 2007-04-01
 ! Support for most common deprecated attributes via transformations:

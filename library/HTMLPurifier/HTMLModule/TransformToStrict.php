@@ -7,13 +7,13 @@ require_once 'HTMLPurifier/TagTransform/Center.php';
 require_once 'HTMLPurifier/TagTransform/Font.php';
 
 require_once 'HTMLPurifier/AttrTransform/Lang.php';
-require_once 'HTMLPurifier/AttrTransform/TextAlign.php';
 require_once 'HTMLPurifier/AttrTransform/BgColor.php';
 require_once 'HTMLPurifier/AttrTransform/BoolToCSS.php';
 require_once 'HTMLPurifier/AttrTransform/Border.php';
 require_once 'HTMLPurifier/AttrTransform/Name.php';
 require_once 'HTMLPurifier/AttrTransform/Length.php';
 require_once 'HTMLPurifier/AttrTransform/ImgSpace.php';
+require_once 'HTMLPurifier/AttrTransform/EnumToCSS.php';
 
 /**
  * Proprietary module that transforms deprecated elements into Strict
@@ -61,6 +61,11 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         }
         
         // deprecated attribute transforms
+        
+        // align battery
+        $align_lookup = array();
+        $align_values = array('left', 'right', 'center', 'justify');
+        foreach ($align_values as $v) $align_lookup[$v] = "text-align:$v;";
         $this->info['h1']->attr_transform_pre['align'] =
         $this->info['h2']->attr_transform_pre['align'] =
         $this->info['h3']->attr_transform_pre['align'] =
@@ -68,7 +73,7 @@ class HTMLPurifier_HTMLModule_TransformToStrict extends HTMLPurifier_HTMLModule
         $this->info['h5']->attr_transform_pre['align'] =
         $this->info['h6']->attr_transform_pre['align'] =
         $this->info['p'] ->attr_transform_pre['align'] = 
-                    new HTMLPurifier_AttrTransform_TextAlign();
+                    new HTMLPurifier_AttrTransform_EnumToCSS('align', $align_lookup);
         
         // xml:lang <=> lang mirroring, implement in TransformToStrict,
         // this is overridden in TransformToXHTML11
