@@ -3,6 +3,11 @@
 // Merges in changes from trunk to strict branch
 // WORKING COPY MUST BE POINTED TO STRICT BRANCH
 
+if (php_sapi_name() != 'cli') {
+    echo 'Release script cannot be called from web-browser.';
+    exit;
+}
+
 require 'svn.php';
 
 $svn_info = svn_info('.');
