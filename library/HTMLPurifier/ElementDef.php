@@ -99,22 +99,41 @@ class HTMLPurifier_ElementDef
                 // merge in the includes
                 // sorry, no way to override an include
                 foreach ($v as $v2) {
-                    $def->attr[0][] = $v2;
+                    $this->attr[0][] = $v2;
                 }
+                continue;
+            }
+            if ($v === false) {
+                if (isset($this->attr[$k])) unset($this->attr[$k]);
                 continue;
             }
             $this->attr[$k] = $v;
         }
-        foreach($def->attr_transform_pre    as $k => $v) $this->attr_transform_pre[$k]  = $v;
-        foreach($def->attr_transform_post   as $k => $v) $this->attr_transform_post[$k] = $v;
-        foreach($def->auto_close            as $k => $v) $this->auto_close[$k]          = $v;
-        foreach($def->excludes              as $k => $v) $this->excludes[$k]            = $v;
+        $this->_mergeAssocArray($this->attr_transform_pre, $def->attr_transform_pre);
+        $this->_mergeAssocArray($this->attr_transform_post, $def->attr_transform_post);
+        $this->_mergeAssocArray($this->auto_close, $def->auto_close);
+        $this->_mergeAssocArray($this->excludes, $def->excludes);
         
         if(!is_null($def->child)) $this->child = $def->child;
         if(!empty($def->content_model)) $this->content_model .= ' | ' . $def->content_model;
         if(!empty($def->content_model_type)) $this->content_model_type = $def->content_model_type;
         if(!is_null($def->descendants_are_inline)) $this->descendants_are_inline = $def->descendants_are_inline;
         
+    }
+    
+    /**
+     * Merges one array into another, removes values which equal false
+     * @param $a1 Array by reference that is merged into
+     * @param $a2 Array that merges into $a1
+     */
+    function _mergeAssocArray(&$a1, $a2) {
+        foreach ($a2 as $k => $v) {
+            if ($v === false) {
+                if (isset($a1[$k])) unset($a1[$k]);
+                continue;
+            }
+            $a1[$k] = $v;
+        }
     }
     
 }
