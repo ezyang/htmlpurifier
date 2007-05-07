@@ -12,6 +12,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 1.7.0, unknown release date
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible
+. Added convenience functions for HTMLModule constructors
 
 1.6.1, released 2007-05-05
 ! Support for more deprecated attributes via transformations:

@@ -120,6 +120,49 @@ class HTMLPurifier_HTMLModule
      */
     function setup(&$definition) {}
     
+    /**
+     * Convenience function that sets up a new element
+     * @param $element Name of element to add
+     * @param $safe Is element safe for untrusted users to use?
+     * @param $type What content set should element be registered to?
+     *              Set as false to skip this step.
+     * @param $content_model Content model definition in form of:
+     *              "$content_model_type: $content_model"
+     * @param $attr_includes What attribute collections to register to
+     *              element?
+     * @param $attr What unique attributes does the element define?
+     * @note See ElementDef for in-depth descriptions of these parameters.
+     * @protected
+     */
+    function addElement($element, $safe, $type, $content_model, $attr_includes, $attr) {
+        $this->elements[] = $element;
+        // parse content_model
+        list($content_model_type, $content_model) = explode(':', $content_model);
+        $content_model_type = strtolower(trim($content_model_type));
+        $content_model = trim($content_model);
+        // merge in attribute inclusions
+        $attr[0] = $attr_includes;
+        // add element to content sets
+        if ($type) $this->addElementToContentSet($element, $type);
+        // create element
+        $this->info[$element] = HTMLPurifier_ElementDef::create(
+            $safe, $content_model, $content_model_type, $attr
+        );
+    }
+    
+    /**
+     * Convenience function that registers an element to a content set
+     * @param Element to register
+     * @param Name content set (warning: case sensitive, usually upper-case
+     *        first letter)
+     * @protected
+     */
+    function addElementToContentSet($element, $type) {
+        if (!isset($this->content_sets[$type])) $this->content_sets[$type] = '';
+        else $this->content_sets[$type] .= ' | ';
+        $this->content_sets[$type] .= $element;
+    }
+    
 }
 
 ?>

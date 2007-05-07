@@ -58,6 +58,7 @@ class HTMLPurifier_ElementDef
     /**
      * Value of $child->type, used to determine which ChildDef to use,
      * used in combination with $content_model.
+     * @warning This must be lowercase
      * @public
      */
     var $content_model_type;
@@ -85,6 +86,24 @@ class HTMLPurifier_ElementDef
      * @public
      */
     var $excludes = array();
+    
+    /**
+     * Is this element safe for untrusted users to use?
+     */
+    var $safe = false;
+    
+    /**
+     * Factory constructor for creating new standalone element defs
+     * @static
+     */
+    function create($safe, $content_model, $content_model_type, $attr) {
+        $def = new HTMLPurifier_ElementDef();
+        $def->safe = (bool) $safe;
+        $def->content_model = $content_model;
+        $def->content_model_type = $content_model_type;
+        $def->attr = $attr;
+        return $def;
+    }
     
     /**
      * Merges the values of another element definition into this one.
