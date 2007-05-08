@@ -18,7 +18,7 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
     function HTMLPurifier_HTMLModule_Bdo() {
         $dir = new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false);
         $this->addElement(
-            'bdo', true, 'Inline', 'Optional: #PCDATA | Inline', array('Core', 'Lang'),
+            'bdo', true, 'Inline', 'Inline', array('Core', 'Lang'),
             array(
                 'dir' => $dir, // required
                 // The Abstract Module specification has the attribute

@@ -16,6 +16,9 @@
 
 class HTMLPurifier_HTMLModule
 {
+    
+    // -- Overloadable ----------------------------------------------------
+    
     /**
      * Short unique string identifier of the module
      */
@@ -120,13 +123,15 @@ class HTMLPurifier_HTMLModule
      */
     function setup(&$definition) {}
     
+    // -- Convenience -----------------------------------------------------
+    
     /**
      * Convenience function that sets up a new element
      * @param $element Name of element to add
      * @param $safe Is element safe for untrusted users to use?
      * @param $type What content set should element be registered to?
      *              Set as false to skip this step.
-     * @param $content_model Content model definition in form of:
+     * @param $contents Allowed children in form of:
      *              "$content_model_type: $content_model"
      * @param $attr_includes What attribute collections to register to
      *              element?
@@ -134,14 +139,12 @@ class HTMLPurifier_HTMLModule
      * @note See ElementDef for in-depth descriptions of these parameters.
      * @protected
      */
-    function addElement($element, $safe, $type, $content_model, $attr_includes, $attr) {
+    function addElement($element, $safe, $type, $contents, $attr_includes, $attr) {
         $this->elements[] = $element;
         // parse content_model
-        list($content_model_type, $content_model) = explode(':', $content_model);
-        $content_model_type = strtolower(trim($content_model_type));
-        $content_model = trim($content_model);
+        list($content_model_type, $content_model) = $this->parseContents($contents);
         // merge in attribute inclusions
-        $attr[0] = $attr_includes;
+        $this->mergeInAttrIncludes($attr, $attr_includes);
         // add element to content sets
         if ($type) $this->addElementToContentSet($element, $type);
         // create element
@@ -163,6 +166,41 @@ class HTMLPurifier_HTMLModule
         $this->content_sets[$type] .= $element;
     }
     
+    /**
+     * Convenience function that transforms single-string contents
+     * into separate content model and content model type
+     * @param $contents Allowed children in form of:
+     *                  "$content_model_type: $content_model"
+     */
+    function parseContents($contents) {
+        switch ($contents) {
+            // check for shorthand content model forms
+            case 'Inline':
+                $contents = 'Optional: Inline | #PCDATA';
+                break;
+            case 'Flow':
+                $contents = 'Optional: Flow | #PCDATA';
+                break;
+        }
+        list($content_model_type, $content_model) = explode(':', $contents);
+        $content_model_type = strtolower(trim($content_model_type));
+        $content_model = trim($content_model);
+        return array($content_model_type, $content_model);
+    }
+    
+    /**
+     * Convenience function that merges a list of attribute includes into
+     * an attribute array.
+     * @param $attr Reference to attr array to modify
+     * @param $attr_includes Array of includes / string include to merge in
+     */
+    function mergeInAttrIncludes(&$attr, $attr_includes) {
+        if (!is_array($attr_includes)) {
+            if (empty($attr_includes)) $attr_includes = array();
+            else $attr_includes = array($attr_includes);
+        }
+        $attr[0] = $attr_includes;
+    }
 }
 
 ?>

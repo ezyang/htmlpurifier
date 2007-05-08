@@ -45,6 +45,56 @@ class HTMLPurifier_HTMLModuleTest extends UnitTestCase
         
     }
     
+    function test_parseContents() {
+        
+        $module = new HTMLPurifier_HTMLModule();
+        
+        // pre-defined templates
+        $this->assertIdentical(
+            $module->parseContents('Inline'),
+            array('optional', 'Inline | #PCDATA')
+        );
+        $this->assertIdentical(
+            $module->parseContents('Flow'),
+            array('optional', 'Flow | #PCDATA')
+        );
+        
+        // normalization procedures
+        $this->assertIdentical(
+            $module->parseContents('optional: a'),
+            array('optional', 'a')
+        );
+        $this->assertIdentical(
+            $module->parseContents('OPTIONAL :a'),
+            array('optional', 'a')
+        );
+        $this->assertIdentical(
+            $module->parseContents('Optional: a'),
+            array('optional', 'a')
+        );
+        
+        // others
+        $this->assertIdentical(
+            $module->parseContents('Optional: a | b | c'),
+            array('optional', 'a | b | c')
+        );
+        
+    }
+    
+    function test_mergeInAttrIncludes() {
+        
+        $module = new HTMLPurifier_HTMLModule();
+        
+        $attr = array();
+        $module->mergeInAttrIncludes($attr, 'Common');
+        $this->assertIdentical($attr, array(0 => array('Common')));
+        
+        $attr = array('a' => 'b');
+        $module->mergeInAttrIncludes($attr, array('Common', 'Good'));
+        $this->assertIdentical($attr, array('a' => 'b', 0 => array('Common', 'Good')));
+        
+    }
+    
 }
 
 ?>
