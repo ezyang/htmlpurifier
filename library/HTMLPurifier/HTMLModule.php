@@ -139,7 +139,7 @@ class HTMLPurifier_HTMLModule
      * @note See ElementDef for in-depth descriptions of these parameters.
      * @protected
      */
-    function addElement($element, $safe, $type, $contents, $attr_includes, $attr) {
+    function addElement($element, $safe, $type, $contents, $attr_includes, $attr = array()) {
         $this->elements[] = $element;
         // parse content_model
         list($content_model_type, $content_model) = $this->parseContents($contents);
@@ -175,12 +175,12 @@ class HTMLPurifier_HTMLModule
     function parseContents($contents) {
         switch ($contents) {
             // check for shorthand content model forms
+            case 'Empty':
+                return array('empty', '');
             case 'Inline':
-                $contents = 'Optional: Inline | #PCDATA';
-                break;
+                return array('optional', 'Inline | #PCDATA');
             case 'Flow':
-                $contents = 'Optional: Flow | #PCDATA';
-                break;
+                return array('optional', 'Flow | #PCDATA');
         }
         list($content_model_type, $content_model) = explode(':', $contents);
         $content_model_type = strtolower(trim($content_model_type));

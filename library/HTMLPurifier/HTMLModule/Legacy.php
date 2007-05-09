@@ -22,22 +22,22 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
     // incomplete
     
     var $name = 'Legacy';
-    var $elements = array('u', 's', 'strike');
-    var $non_standalone_elements = array('li', 'ol', 'address', 'blockquote');
     
     function HTMLPurifier_HTMLModule_Legacy() {
-        // setup new elements
-        foreach ($this->elements as $name) {
-            $this->info[$name] = new HTMLPurifier_ElementDef();
-            // for u, s, strike, as more elements get added, add
-            // conditionals as necessary
-            $this->info[$name]->content_model = 'Inline | #PCDATA';
-            $this->info[$name]->content_model_type = 'optional';
-            $this->info[$name]->attr[0] = array('Common');
-        }
+        $this->addElement(
+            'u', true, 'Inline', 'Inline', 'Common'
+        );
+        $this->addElement(
+            's', true, 'Inline', 'Inline', 'Common'
+        );
+        $this->addElement(
+            'strike', true, 'Inline', 'Inline', 'Common'
+        );
         
         // setup modifications to old elements
-        foreach ($this->non_standalone_elements as $name) {
+        // perhaps we could make some convenience functions for these...
+        $elements = array('li', 'ol', 'address', 'blockquote');
+        foreach ($elements as $name) {
             $this->info[$name] = new HTMLPurifier_ElementDef();
             $this->info[$name]->standalone = false;
         }

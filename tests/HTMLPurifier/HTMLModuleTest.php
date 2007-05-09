@@ -58,6 +58,10 @@ class HTMLPurifier_HTMLModuleTest extends UnitTestCase
             $module->parseContents('Flow'),
             array('optional', 'Flow | #PCDATA')
         );
+        $this->assertIdentical(
+            $module->parseContents('Empty'),
+            array('empty', '')
+        );
         
         // normalization procedures
         $this->assertIdentical(
