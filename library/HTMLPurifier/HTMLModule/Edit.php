@@ -18,12 +18,8 @@ class HTMLPurifier_HTMLModule_Edit extends HTMLPurifier_HTMLModule
             'cite' => 'URI',
             // 'datetime' => 'Datetime', // not implemented
         );
-        $this->addElement(
-            'del', true, 'Inline', $contents, 'Common', $attr
-        );
-        $this->addElement(
-            'ins', true, 'Inline', $contents, 'Common', $attr
-        );
+        $this->addElement('del', true, 'Inline', $contents, 'Common', $attr);
+        $this->addElement('ins', true, 'Inline', $contents, 'Common', $attr);
     }
     
     // HTML 4.01 specifies that ins/del must not contain block

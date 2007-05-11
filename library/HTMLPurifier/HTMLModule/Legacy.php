@@ -24,15 +24,9 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
     var $name = 'Legacy';
     
     function HTMLPurifier_HTMLModule_Legacy() {
-        $this->addElement(
-            'u', true, 'Inline', 'Inline', 'Common'
-        );
-        $this->addElement(
-            's', true, 'Inline', 'Inline', 'Common'
-        );
-        $this->addElement(
-            'strike', true, 'Inline', 'Inline', 'Common'
-        );
+        $this->addElement('u', true, 'Inline', 'Inline', 'Common');
+        $this->addElement('s', true, 'Inline', 'Inline', 'Common');
+        $this->addElement('strike', true, 'Inline', 'Inline', 'Common');
         
         // setup modifications to old elements
         // perhaps we could make some convenience functions for these...

@@ -22,27 +22,15 @@ class HTMLPurifier_HTMLModule_List extends HTMLPurifier_HTMLModule
     var $content_sets = array('Flow' => 'List');
     
     function HTMLPurifier_HTMLModule_List() {
-        $this->addElement(
-            'ol', true, 'List', 'Required: li', 'Common'
-        );
-        $this->addElement(
-            'ul', true, 'List', 'Required: li', 'Common'
-        );
-        $this->addElement(
-            'dl', true, 'List', 'Required: dt | dd', 'Common'
-        );
+        $this->addElement('ol', true, 'List', 'Required: li', 'Common');
+        $this->addElement('ul', true, 'List', 'Required: li', 'Common');
+        $this->addElement('dl', true, 'List', 'Required: dt | dd', 'Common');
         
-        $this->addElement(
-            'li', true, false, 'Flow', 'Common'
-        );
+        $this->addElement('li', true, false, 'Flow', 'Common');
         $this->info['li']->auto_close = array('li' => true);
         
-        $this->addElement(
-            'dd', true, false, 'Flow', 'Common'
-        );
-        $this->addElement(
-            'dt', true, false, 'Inline', 'Common'
-        );
+        $this->addElement('dd', true, false, 'Flow', 'Common');
+        $this->addElement('dt', true, false, 'Inline', 'Common');
     }
     
 }
