@@ -137,9 +137,11 @@ class HTMLPurifier_HTMLModule
      *              element?
      * @param $attr What unique attributes does the element define?
      * @note See ElementDef for in-depth descriptions of these parameters.
+     * @return Reference to created element definition object, so you 
+     *         can set advanced parameters
      * @protected
      */
-    function addElement($element, $safe, $type, $contents, $attr_includes, $attr = array()) {
+    function &addElement($element, $safe, $type, $contents, $attr_includes, $attr = array()) {
         $this->elements[] = $element;
         // parse content_model
         list($content_model_type, $content_model) = $this->parseContents($contents);
@@ -153,6 +155,7 @@ class HTMLPurifier_HTMLModule
         );
         // literal object $contents means direct child manipulation
         if (!is_string($contents)) $this->info[$element]->child = $contents;
+        return $this->info[$element];
     }
     
     /**

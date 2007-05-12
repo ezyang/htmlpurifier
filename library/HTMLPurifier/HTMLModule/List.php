@@ -26,8 +26,8 @@ class HTMLPurifier_HTMLModule_List extends HTMLPurifier_HTMLModule
         $this->addElement('ul', true, 'List', 'Required: li', 'Common');
         $this->addElement('dl', true, 'List', 'Required: dt | dd', 'Common');
         
-        $this->addElement('li', true, false, 'Flow', 'Common');
-        $this->info['li']->auto_close = array('li' => true);
+        $li =& $this->addElement('li', true, false, 'Flow', 'Common');
+        $li->auto_close = array('li' => true);
         
         $this->addElement('dd', true, false, 'Flow', 'Common');
         $this->addElement('dt', true, false, 'Inline', 'Common');

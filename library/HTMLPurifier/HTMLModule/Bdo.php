@@ -17,7 +17,7 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
     
     function HTMLPurifier_HTMLModule_Bdo() {
         $dir = new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false);
-        $this->addElement(
+        $bdo =& $this->addElement(
             'bdo', true, 'Inline', 'Inline', array('Core', 'Lang'),
             array(
                 'dir' => $dir, // required
@@ -28,7 +28,8 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
                 // be managed with a global attribute transform)
             )
         );
-        $this->info['bdo']->attr_transform_post['required-dir'] = new HTMLPurifier_AttrTransform_BdoDir();
+        $bdo->attr_transform_post['required-dir'] = new HTMLPurifier_AttrTransform_BdoDir();
+        
         $this->attr_collections['I18N']['dir'] = $dir;
     }
     

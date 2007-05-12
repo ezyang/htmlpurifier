@@ -21,7 +21,7 @@ class HTMLPurifier_HTMLModuleTest extends UnitTestCase
     function test_addElement() {
         
         $module = new HTMLPurifier_HTMLModule();
-        $module->addElement(
+        $def =& $module->addElement(
             'a', true, 'Inline', 'Optional: #PCDATA', array('Common'),
             array(
                 'href' => 'URI'
@@ -29,19 +29,21 @@ class HTMLPurifier_HTMLModuleTest extends UnitTestCase
         );
         
         $module2 = new HTMLPurifier_HTMLModule();
-        $def = new HTMLPurifier_ElementDef();
-        $def->safe = true;
-        $def->content_model = '#PCDATA';
-        $def->content_model_type = 'optional';
-        $def->attr = array(
+        $def2 = new HTMLPurifier_ElementDef();
+        $def2->safe = true;
+        $def2->content_model = '#PCDATA';
+        $def2->content_model_type = 'optional';
+        $def2->attr = array(
             'href' => 'URI',
             0 => array('Common')
         );
-        $module2->info['a'] = $def;
+        $module2->info['a'] = $def2;
         $module2->elements = array('a');
         $module2->content_sets['Inline'] = 'a';
         
         $this->assertIdentical($module, $module2);
+        $this->assertIdentical($def, $def2);
+        $this->assertReference($def, $module->info['a']);
         
     }
     

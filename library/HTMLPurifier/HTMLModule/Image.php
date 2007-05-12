@@ -18,7 +18,7 @@ class HTMLPurifier_HTMLModule_Image extends HTMLPurifier_HTMLModule
     var $content_sets = array('Inline' => 'img');
     
     function HTMLPurifier_HTMLModule_Image() {
-        $this->addElement(
+        $img =& $this->addElement(
             'img', true, 'Inline', 'Empty', 'Common',
             array(
                 'alt' => 'Text',
@@ -28,7 +28,7 @@ class HTMLPurifier_HTMLModule_Image extends HTMLPurifier_HTMLModule
                 'width' => 'Length'
             )
         );
-        $this->info['img']->attr_transform_post[] =
+        $img->attr_transform_post[] =
             new HTMLPurifier_AttrTransform_ImgRequired();
     }
     

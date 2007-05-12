@@ -12,7 +12,7 @@ class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
     var $name = 'Hypertext';
     
     function HTMLPurifier_HTMLModule_Hypertext() {
-        $this->addElement(
+        $a =& $this->addElement(
             'a', true, 'Inline', 'Inline', 'Common',
             array(
                 // 'accesskey' => 'Character',
@@ -25,7 +25,7 @@ class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
                 // 'type' => 'ContentType',
             )
         );
-        $this->info['a']->excludes = array('a' => true);
+        $a->excludes = array('a' => true);
     }
     
 }
