@@ -90,7 +90,7 @@ class HTMLPurifier_ElementDef
     /**
      * Is this element safe for untrusted users to use?
      */
-    var $safe = false;
+    var $safe;
     
     /**
      * Low-level factory constructor for creating new standalone element defs
@@ -137,6 +137,7 @@ class HTMLPurifier_ElementDef
         if(!empty($def->content_model)) $this->content_model .= ' | ' . $def->content_model;
         if(!empty($def->content_model_type)) $this->content_model_type = $def->content_model_type;
         if(!is_null($def->descendants_are_inline)) $this->descendants_are_inline = $def->descendants_are_inline;
+        if(!is_null($def->safe)) $this->safe = $def->safe;
         
     }
     
