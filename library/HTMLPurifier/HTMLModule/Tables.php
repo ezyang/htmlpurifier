@@ -10,75 +10,66 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
 {
     
     var $name = 'Tables';
-    var $elements = array('caption', 'table', 'td', 'th', 'tr', 'col',
-        'colgroup', 'tbody', 'thead', 'tfoot');
-    var $content_sets = array('Block' => 'table');
     
     function HTMLPurifier_HTMLModule_Tables() {
-        foreach ($this->elements as $e) {
-            $this->info[$e] = new HTMLPurifier_ElementDef();
-            $this->info[$e]->attr = array(0 => array('Common'));
-            $attr =& $this->info[$e]->attr;
-            if ($e == 'caption') continue;
-            if ($e == 'table'){
-                $attr['border'] = 'Pixels';
-                $attr['cellpadding'] = 'Length';
-                $attr['cellspacing'] = 'Length';
-                $attr['frame'] = new HTMLPurifier_AttrDef_Enum(array(
+        
+        $this->addElement('table', true, 'Block', 
+            new HTMLPurifier_ChildDef_Table(),  'Common', 
+            array(
+                'border' => 'Pixels',
+                'cellpadding' => 'Length',
+                'cellspacing' => 'Length',
+                'frame' => new HTMLPurifier_AttrDef_Enum(array(
                     'void', 'above', 'below', 'hsides', 'lhs', 'rhs',
                     'vsides', 'box', 'border'
-                ), false);
-                $attr['rules'] = new HTMLPurifier_AttrDef_Enum(array(
+                ), false),
+                'rules' => new HTMLPurifier_AttrDef_Enum(array(
                     'none', 'groups', 'rows', 'cols', 'all'
-                ), false);
-                $attr['summary'] = 'Text';
-                $attr['width'] = 'Length';
-                continue;
-            }
-            if ($e == 'col' || $e == 'colgroup') {
-                $attr['span'] = 'Number';
-                $attr['width'] = 'MultiLength';
-            }
-            if ($e == 'td' || $e == 'th') {
-                $attr['abbr'] = 'Text';
-                $attr['colspan'] = 'Number';
-                $attr['rowspan'] = 'Number';
-            }
-            $attr['align'] = new HTMLPurifier_AttrDef_Enum(array(
+                ), false),
+                'summary' => 'Text',
+                'width' => 'Length'
+            )
+        );
+        
+        $this->addElement('caption', true, false, 'Inline', 'Common');
+        
+        // common attributes
+        $cell_align = array(
+            'align' => new HTMLPurifier_AttrDef_Enum(array(
                 'left', 'center', 'right', 'justify', 'char'
-            ), false);
-            $attr['valign'] = new HTMLPurifier_AttrDef_Enum(array(
+            ), false),
+            'valign' => new HTMLPurifier_AttrDef_Enum(array(
                 'top', 'middle', 'bottom', 'baseline'
-            ), false);
-            $attr['charoff'] = 'Length';
-        }
-        $this->info['caption']->content_model = '#PCDATA | Inline';
-        $this->info['caption']->content_model_type = 'optional';
+            ), false),
+            'charoff' => 'Length',
+        );
         
-        // Is done directly because it doesn't leverage substitution
-        // mechanisms. True model is:
-        // 'caption?, ( col* | colgroup* ), (( thead?, tfoot?, tbody+ ) | ( tr+ ))'
-        $this->info['table']->child = new HTMLPurifier_ChildDef_Table();
+        $cell_t = array_merge(
+            array(
+                'abbr'    => 'Text',
+                'colspan' => 'Number',
+                'rowspan' => 'Number',
+            ),
+            $cell_align
+        );
+        $this->addElement('td', true, false, 'Flow', 'Common', $cell_t);
+        $this->addElement('th', true, false, 'Flow', 'Common', $cell_t);
         
-        $this->info['td']->content_model = 
-        $this->info['th']->content_model = '#PCDATA | Flow';
-        $this->info['td']->content_model_type = 
-        $this->info['th']->content_model_type = 'optional';
+        $this->addElement('tr', true, false, 'Required: td | th', 'Common', $cell_align);
         
-        $this->info['tr']->content_model = 'td | th';
-        $this->info['tr']->content_model_type = 'required';
+        $cell_col = array_merge(
+            array(
+                'span'  => 'Number',
+                'width' => 'MultiLength',
+            ),
+            $cell_align
+        );
+        $this->addElement('col',      true, false, 'Empty',         'Common', $cell_col);
+        $this->addElement('colgroup', true, false, 'Optional: col', 'Common', $cell_col);
         
-        $this->info['col']->content_model_type = 'empty';
-        
-        $this->info['colgroup']->content_model = 'col';
-        $this->info['colgroup']->content_model_type = 'optional';
-        
-        $this->info['tbody']->content_model = 
-        $this->info['thead']->content_model = 
-        $this->info['tfoot']->content_model = 'tr';
-        $this->info['tbody']->content_model_type = 
-        $this->info['thead']->content_model_type = 
-        $this->info['tfoot']->content_model_type = 'required';
+        $this->addElement('tbody', true, false, 'Required: tr', 'Common', $cell_align);
+        $this->addElement('thead', true, false, 'Required: tr', 'Common', $cell_align);
+        $this->addElement('tfoot', true, false, 'Required: tr', 'Common', $cell_align);
         
     }
     

@@ -93,7 +93,7 @@ class HTMLPurifier_ElementDef
     var $safe = false;
     
     /**
-     * Factory constructor for creating new standalone element defs
+     * Low-level factory constructor for creating new standalone element defs
      * @static
      */
     function create($safe, $content_model, $content_model_type, $attr) {

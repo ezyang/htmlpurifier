@@ -83,6 +83,13 @@ class HTMLPurifier_HTMLModuleTest extends UnitTestCase
             array('optional', 'a | b | c')
         );
         
+        // object pass-through
+        generate_mock_once('HTMLPurifier_AttrDef');
+        $this->assertIdentical(
+            $module->parseContents(new HTMLPurifier_AttrDefMock()),
+            array(null, null)
+        );
+        
     }
     
     function test_mergeInAttrIncludes() {

@@ -151,6 +151,8 @@ class HTMLPurifier_HTMLModule
         $this->info[$element] = HTMLPurifier_ElementDef::create(
             $safe, $content_model, $content_model_type, $attr
         );
+        // literal object $contents means direct child manipulation
+        if (!is_string($contents)) $this->info[$element]->child = $contents;
     }
     
     /**
@@ -171,8 +173,12 @@ class HTMLPurifier_HTMLModule
      * into separate content model and content model type
      * @param $contents Allowed children in form of:
      *                  "$content_model_type: $content_model"
+     * @note If contents is an object, an array of two nulls will be
+     *       returned, and the callee needs to take the original $contents
+     *       and use it directly.
      */
     function parseContents($contents) {
+        if (!is_string($contents)) return array(null, null); // defer
         switch ($contents) {
             // check for shorthand content model forms
             case 'Empty':
