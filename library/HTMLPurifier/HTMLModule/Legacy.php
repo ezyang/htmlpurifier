@@ -29,23 +29,22 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
         $this->addElement('strike', true, 'Inline', 'Inline', 'Common');
         
         // setup modifications to old elements
-        // perhaps we could make some convenience functions for these...
-        $elements = array('li', 'ol', 'address', 'blockquote');
-        foreach ($elements as $name) {
-            $this->info[$name] = new HTMLPurifier_ElementDef();
-            $this->info[$name]->standalone = false;
-        }
         
-        $this->info['li']->attr['value'] = new HTMLPurifier_AttrDef_Integer();
-        $this->info['ol']->attr['start'] = new HTMLPurifier_AttrDef_Integer();
+        $li =& $this->addBlankElement('li');
+        $li->attr['value'] = new HTMLPurifier_AttrDef_Integer();
         
-        $this->info['address']->content_model = 'Inline | #PCDATA | p';
-        $this->info['address']->content_model_type = 'optional';
-        $this->info['address']->child = false;
+        $ol =& $this->addBlankElement('ol');
+        $ol->attr['start'] = new HTMLPurifier_AttrDef_Integer();
         
-        $this->info['blockquote']->content_model = 'Flow | #PCDATA';
-        $this->info['blockquote']->content_model_type = 'optional';
-        $this->info['blockquote']->child = false;
+        $address =& $this->addBlankElement('address');
+        $address->content_model = 'Inline | #PCDATA | p';
+        $address->content_model_type = 'optional';
+        $address->child = false;
+        
+        $blockquote =& $this->addBlankElement('blockquote');
+        $blockquote->content_model = 'Flow | #PCDATA';
+        $blockquote->content_model_type = 'optional';
+        $blockquote->child = false;
         
     }
     

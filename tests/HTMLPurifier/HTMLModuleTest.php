@@ -108,6 +108,19 @@ class HTMLPurifier_HTMLModuleTest extends UnitTestCase
         
     }
     
+    function test_addBlankElement() {
+        
+        $module = new HTMLPurifier_HTMLModule();
+        $def =& $module->addBlankElement('a');
+        
+        $def2 = new HTMLPurifier_ElementDef();
+        $def2->standalone = false;
+        
+        $this->assertReference($module->info['a'], $def);
+        $this->assertIdentical($def, $def2);
+        
+    }
+    
 }
 
 ?>

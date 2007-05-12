@@ -159,6 +159,19 @@ class HTMLPurifier_HTMLModule
     }
     
     /**
+     * Convenience function that creates a totally blank, non-standalone
+     * element.
+     * @param $element Name of element to create
+     * @return Reference to created element
+     */
+    function &addBlankElement($element) {
+        $this->elements[] = $element;
+        $this->info[$element] = new HTMLPurifier_ElementDef();
+        $this->info[$element]->standalone = false;
+        return $this->info[$element];
+    }
+    
+    /**
      * Convenience function that registers an element to a content set
      * @param Element to register
      * @param Name content set (warning: case sensitive, usually upper-case
