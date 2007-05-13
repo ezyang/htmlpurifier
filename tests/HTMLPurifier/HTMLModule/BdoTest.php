@@ -7,6 +7,7 @@ class HTMLPurifier_HTMLModule_BdoTest extends HTMLPurifier_HTMLModuleHarness
     
     function test() {
         
+        // max
         $this->assertResult(
             '<span>
                  <bdo
@@ -21,6 +22,23 @@ class HTMLPurifier_HTMLModule_BdoTest extends HTMLPurifier_HTMLModuleHarness
                     #PCDATA <span>Inline</span>
                  </bdo>
              </span>', true, array('Attr.EnableID' => true)
+        );
+        
+        // min
+        $this->assertResult(
+            '<bdo></bdo>', '<bdo dir="ltr"></bdo>'
+        );
+        
+        // children
+        $this->assertResult(
+            '<bdo dir="rtl">Text<span></span><div></div></bdo>',
+            '<bdo dir="rtl">Text<span></span></bdo>'
+        );
+        
+        // global attr
+        $this->assertResult(
+            '<br dir="ltr" /><span dir="ltr"></span>',
+            '<br /><span dir="ltr"></span>'
         );
         
     }
