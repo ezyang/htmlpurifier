@@ -223,6 +223,24 @@ class HTMLPurifier_HTMLModule
         }
         $attr[0] = $attr_includes;
     }
+    
+    /**
+     * Convenience function that generates a lookup table with boolean
+     * true as value.
+     * @param $list List of values to turn into a lookup
+     * @note You can also pass an arbitrary number of arguments in
+     *       place of the regular argument
+     * @return Lookup array equivalent of list
+     */
+    function makeLookup($list) {
+        if (is_string($list)) $list = func_get_args();
+        $ret = array();
+        foreach ($list as $value) {
+            if (is_null($value)) continue;
+            $ret[$value] = true;
+        }
+        return $ret;
+    }
 }
 
 ?>

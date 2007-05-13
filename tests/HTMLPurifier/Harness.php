@@ -73,12 +73,17 @@ class HTMLPurifier_Harness extends UnitTestCase
         $context->loadArray($context_array);
         
         if ($this->to_tokens && is_string($input)) {
-            $input = $this->lexer->tokenizeHTML($input, $config, $context);
+            // $func may cause $input to change, so "clone" another copy
+            // to sacrifice
+            $input   = $this->lexer->tokenizeHTML($s = $input, $config, $context);
+            $input_c = $this->lexer->tokenizeHTML($s, $config, $context);
+        } else {
+            $input_c = $input;
         }
         
         // call the function
         $func = $this->func;
-        $result = $this->obj->$func($input, $config, $context);
+        $result = $this->obj->$func($input_c, $config, $context);
         
         // test a bool result
         if (is_bool($result)) {

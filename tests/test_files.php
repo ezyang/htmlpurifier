@@ -62,6 +62,7 @@ $test_files[] = 'EntityParserTest.php';
 $test_files[] = 'GeneratorTest.php';
 $test_files[] = 'HTMLModuleManagerTest.php';
 $test_files[] = 'HTMLModuleTest.php';
+$test_files[] = 'HTMLModule/BdoTest.php';
 $test_files[] = 'IDAccumulatorTest.php';
 $test_files[] = 'LanguageFactoryTest.php';
 $test_files[] = 'LanguageTest.php';

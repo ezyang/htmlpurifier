@@ -121,6 +121,30 @@ class HTMLPurifier_HTMLModuleTest extends UnitTestCase
         
     }
     
+    function test_makeLookup() {
+        
+        $module = new HTMLPurifier_HTMLModule();
+        
+        $this->assertIdentical(
+            $module->makeLookup('foo'),
+            array('foo' => true)
+        );
+        $this->assertIdentical(
+            $module->makeLookup(array('foo')),
+            array('foo' => true)
+        );
+        
+        $this->assertIdentical(
+            $module->makeLookup('foo', 'two'),
+            array('foo' => true, 'two' => true)
+        );
+        $this->assertIdentical(
+            $module->makeLookup(array('foo', 'two')),
+            array('foo' => true, 'two' => true)
+        );
+        
+    }
+    
 }
 
 ?>
