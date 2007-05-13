@@ -155,8 +155,8 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         );
         // lengths
         $this->assertResult(
-            '<td height="10" width="5%" /><th height="5%" width="10" /><hr width="10" height="10" />',
-            '<td style="height:10px;width:5%;" /><th style="height:5%;width:10px;" /><hr style="width:10px;" />'
+            '<td width="5%" height="10" /><th width="10" height="5%" /><hr width="10" height="10" />',
+            '<td style="width:5%;height:10px;" /><th style="width:10px;height:5%;" /><hr style="width:10px;" />'
         );
         // td boolean transformation
         $this->assertResult(
