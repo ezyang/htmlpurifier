@@ -13,6 +13,8 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
     
     function HTMLPurifier_HTMLModule_Tables() {
         
+        $this->addElement('caption', true, false, 'Inline', 'Common');
+        
         $this->addElement('table', true, 'Block', 
             new HTMLPurifier_ChildDef_Table(),  'Common', 
             array(
@@ -31,17 +33,15 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
             )
         );
         
-        $this->addElement('caption', true, false, 'Inline', 'Common');
-        
         // common attributes
         $cell_align = array(
             'align' => new HTMLPurifier_AttrDef_Enum(array(
                 'left', 'center', 'right', 'justify', 'char'
             ), false),
+            'charoff' => 'Length',
             'valign' => new HTMLPurifier_AttrDef_Enum(array(
                 'top', 'middle', 'bottom', 'baseline'
             ), false),
-            'charoff' => 'Length',
         );
         
         $cell_t = array_merge(

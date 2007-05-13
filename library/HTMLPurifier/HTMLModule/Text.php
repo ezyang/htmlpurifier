@@ -42,9 +42,8 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
         $this->addElement('br',   true, 'Inline', 'Empty',  'Core');
         
         // Block Phrasal --------------------------------------------------
-        $this->addElement('address', true, 'Block',  'Inline', 'Common');
-        $this->addElement('blockquote', true, 'Block',
-            'Optional: Heading | Block | List', 'Common', array('cite' => 'URI') );
+        $this->addElement('address',     true, 'Block', 'Inline', 'Common');
+        $this->addElement('blockquote',  true, 'Block', 'Optional: Heading | Block | List', 'Common', array('cite' => 'URI') );
         $pre =& $this->addElement('pre', true, 'Block', 'Inline', 'Common');
         $pre->excludes = $this->makeLookup(
             'img', 'big', 'small', 'object', 'applet', 'font', 'basefont' );
@@ -63,7 +62,7 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
             'address', 'blockquote', 'dd', 'dir', 'div', 'dl', 'dt',
             'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'ol', 'p', 'pre',
             'table', 'ul' );
-        $this->addElement('div', true, 'Block',  'Flow', 'Common');
+        $this->addElement('div', true, 'Block', 'Flow', 'Common');
         
     }
     
