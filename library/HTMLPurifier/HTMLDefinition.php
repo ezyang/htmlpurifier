@@ -231,7 +231,7 @@ class HTMLPurifier_HTMLDefinition
         $support = "(for information on implementing this, see the ".
                    "support forums) ";
         
-        // setup allowed elements, SubtractiveWhitelist module
+        // setup allowed elements, SubtractiveWhitelist module(?)
         $allowed_elements = $this->config->get('HTML', 'AllowedElements');
         if (is_array($allowed_elements)) {
             foreach ($this->info as $name => $d) {

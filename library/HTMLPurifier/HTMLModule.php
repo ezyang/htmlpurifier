@@ -25,11 +25,6 @@ class HTMLPurifier_HTMLModule
     var $name;
     
     /**
-     * Dynamically set integer that specifies when the module was loaded in.
-     */
-    var $order;
-    
-    /**
      * Informally, a list of elements this module changes. Not used in
      * any significant way.
      * @protected

@@ -2,6 +2,7 @@
 
 require_once 'HTMLPurifier/HTMLModule.php';
 require_once 'HTMLPurifier/ElementDef.php';
+require_once 'HTMLPurifier/Doctype.php';
 
 require_once 'HTMLPurifier/ContentSets.php';
 require_once 'HTMLPurifier/AttrTypes.php';
@@ -39,32 +40,6 @@ HTMLPurifier_ConfigSchema::define(
     'like %Core.XHTML or %HTML.Strict.'
 );
 
-class HTMLPurifier_Doctype
-{
-    /**
-     * Full name of doctype
-     */
-    var $name;
-    
-    /**
-     * List of aliases to doctype name
-     */
-    var $aliases = array();
-    
-    /**
-     * List of standard modules (string identifiers or literal objects)
-     * that this doctype uses
-     */
-    var $modules = array();
-    
-    /**
-     * Associative array of mode names to lists of modules; these are
-     * the modules added into the standard list if a particular mode
-     * is enabled, such as lenient or correctional.
-     */
-    var $modulesForModes = array();
-}
-
 class HTMLPurifier_HTMLModuleManager
 {
     
@@ -101,15 +76,7 @@ class HTMLPurifier_HTMLModuleManager
      */
     var $validModules = array();
     
-    var $counter = 0; /**< Designates next available integer order for modules. */
     var $initialized = false; /**< Says whether initialize() was called */
-    
-    /**
-     * Specifies what doctype to siphon new modules from addModule() to,
-     * or false to disable the functionality. Must be used in conjunction
-     * with $autoCollection.
-     */
-    var $autoDoctype = false;
     
     /** Associative array of element name to defining modules (always array) */
     var $elementLookup = array();
@@ -140,22 +107,6 @@ class HTMLPurifier_HTMLModuleManager
     function initialize() {
         $this->initialized = true;
         
-        // load default modules to the recognized modules list (not active)
-        $modules = array(
-            // define
-            'CommonAttributes',
-            'Text', 'Hypertext', 'List', 'Presentation',
-            'Edit', 'Bdo', 'Tables', 'Image', 'StyleAttribute',
-            'Target', 'Scripting',
-            // define-redefine
-            'Legacy',
-            // redefine
-            'TransformToStrict', 'TransformToXHTML11'
-        );
-        foreach ($modules as $module) {
-            $this->addModule($module);
-        }
-        
         // these doctype definitions should be placed somewhere else
         
         $common = array(
@@ -185,12 +136,12 @@ class HTMLPurifier_HTMLModuleManager
         $d->modules = array_merge($common);
         $d->modulesForMode['lenient'] = array('TransformToStrict', 'TransformToXHTML11');
         
-        $this->autoDoctype    = '*';
-        
     }
     
     /**
      * @temporary
+     * @note Real version should retrieve a fully formed instance of
+     *       the doctype and register its aliases
      */
     function &addDoctype($name) {
         $this->doctypes[$name] = new HTMLPurifier_Doctype();
@@ -215,6 +166,9 @@ class HTMLPurifier_HTMLModuleManager
      *          - Throw fatal error
      *       If your object name collides with an internal class, specify
      *       your module manually.
+     * @warning If your module has the same name as an already loaded
+     *          module, your module will overload the old one WITHOUT
+     *          warning.
      */
     function addModule($module) {
         if (is_string($module)) {
@@ -237,15 +191,12 @@ class HTMLPurifier_HTMLModuleManager
             }
             $module = new $module();
         }
-        $module->order = $this->counter++; // assign then increment
         $this->modules[$module->name] = $module;
-        if ($this->autoDoctype !== false && $this->autoCollection !== false) {
-            $this->collections[$this->autoCollection][$this->autoDoctype][] = $module->name;
-        }
     }
     
     /**
      * Safely tests for class existence without invoking __autoload in PHP5
+     * or greater.
      * @param $name String class name to test
      * @private
      */
@@ -269,6 +220,11 @@ class HTMLPurifier_HTMLModuleManager
         $this->prefixes[] = (string) $prefix;
     }
     
+    /**
+     * Performs processing on modules, after being called you may
+     * use getElement() and getElements()
+     * @param $config Instance of HTMLPurifier_Config
+     */
     function setup($config) {
         
         // retrieve the doctype
@@ -287,7 +243,15 @@ class HTMLPurifier_HTMLModuleManager
         }
         
         foreach ($modules as $module) {
-            $this->validModules[$module] = $this->modules[$module]; 
+            if (is_object($module)) {
+                $this->validModules[$module->name] = $module;
+                continue;
+            } else {
+                if (!isset($this->modules[$module])) {
+                    $this->addModule($module);
+                }
+                $this->validModules[$module] = $this->modules[$module]; 
+            }
         }
         
         // setup lookup table based on all valid modules
@@ -323,11 +287,6 @@ class HTMLPurifier_HTMLModuleManager
         $doctype = $config->get('HTML', 'Doctype');
         if ($doctype !== null) {
             return $doctype;
-        }
-        if (!$this->initialized) {
-            // don't do HTML-oriented backwards compatibility stuff
-            // use either the auto-doctype, or the catch-all doctype
-            return $this->autoDoctype ? $this->autoDoctype : '*';
         }
         // this is backwards-compatibility stuff
         if ($config->get('Core', 'XHTML')) {
@@ -373,10 +332,13 @@ class HTMLPurifier_HTMLModuleManager
      * Retrieves a single merged element definition
      * @param $name Name of element
      * @param $config Instance of HTMLPurifier_Config, may not be necessary.
+     * @param $trusted Boolean trusted overriding parameter: set to true
+     *                 if you want the full version of an element
      */
-    function getElement($name, $config) {
+    function getElement($name, $config, $trusted = null) {
         
         $def = false;
+        if ($trusted === null) $trusted = $this->trusted;
         
         $modules = $this->validModules;
         
@@ -390,7 +352,7 @@ class HTMLPurifier_HTMLModuleManager
             $new_def = $module->info[$name];
             
             // refuse to create/merge in a definition that is deemed unsafe
-            if (!$this->trusted && ($new_def->safe === false)) {
+            if (!$trusted && ($new_def->safe === false)) {
                 $def = false;
                 continue;
             }
