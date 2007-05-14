@@ -44,70 +44,50 @@ class HTMLPurifier_HTMLModuleManager
 {
     
     /**
-     * Array of HTMLPurifier_Module instances, indexed by module's class name.
-     * All known modules, regardless of use, are in this array.
+     * Associative array of doctype names to doctype definitions.
+     * @note This may be replaced by a DoctypeManager
+     */
+    var $doctypes;
+    var $doctype; /**< String doctype name to determine modules to load */
+    var $doctypeAliases = array(); /**< Lookup array of strings to real doctypes */
+    
+    /**
+     * Active instances of modules for the specified doctype are
+     * indexed, by name, in this array.
      */
     var $modules = array();
     
     /**
-     * String doctype we will validate against. See $validModules for use.
-     * 
-     * @note
-     * There is a special doctype '*' that acts both as the "default"
-     * doctype if a customized system only defines one doctype and
-     * also a catch-all doctype that gets merged into all the other
-     * module collections. When possible, use a private collection to
-     * share modules between doctypes: this special doctype is to
-     * make life more convenient for users.
+     * Array of recognized HTMLPurifier_Module instances, indexed by 
+     * module's class name. This array is usually lazy loaded, but a
+     * user can overload a module by pre-emptively registering it.
      */
-    var $doctype;
-    var $doctypeAliases = array(); /**< Lookup array of strings to real doctypes */
+    var $registeredModules = array();
     
     /**
-     * Associative array of doctype names to doctype definitions.
+     * Associative array of element name to list of modules that have
+     * definitions for the element; this array is dynamically filled.
      */
-    var $doctypes;
-    
-    /**
-     * Modules that may be used in a valid doctype of this kind.
-     * Correctional and leniency modules should not be placed in this
-     * array unless the user said so: don't stuff every possible lenient
-     * module for this doctype in here.
-     */
-    var $validModules = array();
-    
-    var $initialized = false; /**< Says whether initialize() was called */
-    
-    /** Associative array of element name to defining modules (always array) */
     var $elementLookup = array();
     
-    /** List of prefixes we should use for resolving small names */
+    /** List of prefixes we should use for registering small names */
     var $prefixes = array('HTMLPurifier_HTMLModule_');
     
-    var $contentSets; /**< Instance of HTMLPurifier_ContentSets */
-    var $attrTypes; /**< Instance of HTMLPurifier_AttrTypes */
+    var $contentSets;     /**< Instance of HTMLPurifier_ContentSets */
+    var $attrTypes;       /**< Instance of HTMLPurifier_AttrTypes */
     var $attrCollections; /**< Instance of HTMLPurifier_AttrCollections */
     
     /** If set to true, unsafe elements and attributes will be allowed */
     var $trusted = false;
     
-    /**
-     * @param $blank If true, don't do any initializing
-     */
-    function HTMLPurifier_HTMLModuleManager($blank = false) {
+    function HTMLPurifier_HTMLModuleManager() {
         
         // the only editable internal object. The rest need to
         // be manipulated through modules
         $this->attrTypes = new HTMLPurifier_AttrTypes();
         
-        if (!$blank) $this->initialize();
-        
-    }
-    
-    function initialize() {
-        $this->initialized = true;
-        
-        // these doctype definitions should be placed somewhere else
+        // these doctype definitions should be placed somewhere else,
+        // and instead, a DoctypeManager instantiated during construction
         
         $common = array(
             'CommonAttributes', 'Text', 'Hypertext', 'List',
@@ -139,7 +119,8 @@ class HTMLPurifier_HTMLModuleManager
     }
     
     /**
-     * @temporary
+     * Temporary function that creates a new doctype and returns a
+     * reference to it.
      * @note Real version should retrieve a fully formed instance of
      *       the doctype and register its aliases
      */
@@ -150,9 +131,8 @@ class HTMLPurifier_HTMLModuleManager
     }
     
     /**
-     * Adds a module to the recognized module list. This does not
-     * do anything else: the module must be added to a corresponding
-     * collection to be "activated".
+     * Registers a module to the recognized module list, useful for
+     * overloading pre-existing modules.
      * @param $module Mixed: string module name, with or without
      *                HTMLPurifier_HTMLModule prefix, or instance of
      *                subclass of HTMLPurifier_HTMLModule.
@@ -165,13 +145,15 @@ class HTMLPurifier_HTMLModuleManager
      *          - Check for literal object name
      *          - Throw fatal error
      *       If your object name collides with an internal class, specify
-     *       your module manually.
+     *       your module manually. All modules must have been included
+     *       externally: registerModule will not perform inclusions for you!
      * @warning If your module has the same name as an already loaded
      *          module, your module will overload the old one WITHOUT
      *          warning.
      */
-    function addModule($module) {
+    function registerModule($module) {
         if (is_string($module)) {
+            // attempt to load the module
             $original_module = $module;
             $ok = false;
             foreach ($this->prefixes as $prefix) {
@@ -191,13 +173,15 @@ class HTMLPurifier_HTMLModuleManager
             }
             $module = new $module();
         }
-        $this->modules[$module->name] = $module;
+        $this->registeredModules[$module->name] = $module;
     }
     
     /**
      * Safely tests for class existence without invoking __autoload in PHP5
      * or greater.
      * @param $name String class name to test
+     * @note If any other class needs it, we'll need to stash in a 
+     *       conjectured "compatibility" class
      * @private
      */
     function _classExists($name) {
@@ -213,11 +197,19 @@ class HTMLPurifier_HTMLModuleManager
     }
     
     /**
-     * Adds a class prefix that addModule() will use to resolve a
+     * Adds a module to the current doctype by first registering it,
+     * and then tacking it on to the active doctype
+     */
+    function addModule($module) {
+        // unimplemented
+    }
+    
+    /**
+     * Adds a class prefix that registerModule() will use to resolve a
      * string name to a concrete class
      */
     function addPrefix($prefix) {
-        $this->prefixes[] = (string) $prefix;
+        $this->prefixes[] = $prefix;
     }
     
     /**
@@ -244,18 +236,18 @@ class HTMLPurifier_HTMLModuleManager
         
         foreach ($modules as $module) {
             if (is_object($module)) {
-                $this->validModules[$module->name] = $module;
+                $this->modules[$module->name] = $module;
                 continue;
             } else {
                 if (!isset($this->modules[$module])) {
-                    $this->addModule($module);
+                    $this->registerModule($module);
                 }
-                $this->validModules[$module] = $this->modules[$module]; 
+                $this->modules[$module] = $this->registeredModules[$module]; 
             }
         }
         
         // setup lookup table based on all valid modules
-        foreach ($this->validModules as $module) {
+        foreach ($this->modules as $module) {
             foreach ($module->info as $name => $def) {
                 if (!isset($this->elementLookup[$name])) {
                     $this->elementLookup[$name] = array();
@@ -268,14 +260,14 @@ class HTMLPurifier_HTMLModuleManager
         $this->contentSets = new HTMLPurifier_ContentSets(
             // content set assembly deals with all possible modules,
             // not just ones deemed to be "safe"
-            $this->validModules
+            $this->modules
         );
         $this->attrCollections = new HTMLPurifier_AttrCollections(
             $this->attrTypes,
             // there is no way to directly disable a global attribute,
             // but using AllowedAttributes or simply not including
             // the module in your custom doctype should be sufficient
-            $this->validModules
+            $this->modules
         );
         
     }
@@ -284,6 +276,7 @@ class HTMLPurifier_HTMLModuleManager
      * Retrieves the doctype from the configuration object
      */
     function getDoctype($config) {
+        // simplistic test
         $doctype = $config->get('HTML', 'Doctype');
         if ($doctype !== null) {
             return $doctype;
@@ -306,11 +299,12 @@ class HTMLPurifier_HTMLModuleManager
      * Retrieves merged element definitions.
      * @param $config Instance of HTMLPurifier_Config, for determining
      *                stray elements.
+     * @return Array of HTMLPurifier_ElementDef
      */
     function getElements($config) {
         
         $elements = array();
-        foreach ($this->validModules as $module) {
+        foreach ($this->modules as $module) {
             foreach ($module->info as $name => $v) {
                 if (isset($elements[$name])) continue;
                 // if element is not safe, don't use it
@@ -319,7 +313,8 @@ class HTMLPurifier_HTMLModuleManager
             }
         }
         
-        // remove dud elements
+        // remove dud elements, this happens when an element that
+        // appeared to be safe actually wasn't
         foreach ($elements as $n => $v) {
             if ($v === false) unset($elements[$n]);
         }
@@ -334,13 +329,14 @@ class HTMLPurifier_HTMLModuleManager
      * @param $config Instance of HTMLPurifier_Config, may not be necessary.
      * @param $trusted Boolean trusted overriding parameter: set to true
      *                 if you want the full version of an element
+     * @return Merged HTMLPurifier_ElementDef
      */
     function getElement($name, $config, $trusted = null) {
         
         $def = false;
         if ($trusted === null) $trusted = $this->trusted;
         
-        $modules = $this->validModules;
+        $modules = $this->modules;
         
         if (!isset($this->elementLookup[$name])) {
             return false;
