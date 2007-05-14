@@ -31,7 +31,7 @@ require_once 'HTMLPurifier/HTMLModule/TransformToXHTML11.php';
 
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'Doctype', null, 'string/null',
-    'Doctype to use, valid values are HTML 4.01 Transitional, HTML 4.01 '.
+    'Doctype to use, pre-defined values are HTML 4.01 Transitional, HTML 4.01 '.
     'Strict, XHTML 1.0 Transitional, XHTML 1.0 Strict, XHTML 1.1. '.
     'Technically speaking this is not actually a doctype (as it does '.
     'not identify a corresponding DTD), but we are using this name '.
@@ -94,30 +94,12 @@ class HTMLPurifier_HTMLModuleManager
     var $doctypes;
     
     /**
-     * Associative array: $collections[$type][$doctype] = list of modules.
-     * This is used to logically separate types of functionality so that
-     * based on the doctype and other configuration settings they may
-     * be easily switched and on and off. Custom setups may not need
-     * to use this abstraction, opting to have only one big collection
-     * with one valid doctype.
-     */
-    var $collections = array();
-    
-    /**
      * Modules that may be used in a valid doctype of this kind.
      * Correctional and leniency modules should not be placed in this
      * array unless the user said so: don't stuff every possible lenient
      * module for this doctype in here.
      */
     var $validModules = array();
-    var $validCollections = array(); /**< Collections to merge into $validModules */
-    
-    /**
-     * Modules that we will allow in input, subset of $validModules. Single
-     * element definitions may result in us consulting validModules.
-     */
-    var $activeModules = array();
-    var $activeCollections = array(); /**< Collections to merge into $activeModules */
     
     var $counter = 0; /**< Designates next available integer order for modules. */
     var $initialized = false; /**< Says whether initialize() was called */
@@ -128,12 +110,6 @@ class HTMLPurifier_HTMLModuleManager
      * with $autoCollection.
      */
     var $autoDoctype = false;
-    /**
-     * Specifies what collection to siphon new modules from addModule() to,
-     * or false to disable the functionality. Must be used in conjunction
-     * with $autoCollection.
-     */
-    var $autoCollection = false;
     
     /** Associative array of element name to defining modules (always array) */
     var $elementLookup = array();
@@ -209,64 +185,13 @@ class HTMLPurifier_HTMLModuleManager
         $d->modules = array_merge($common);
         $d->modulesForMode['lenient'] = array('TransformToStrict', 'TransformToXHTML11');
         
-        // ----------------------------------------------------------------
-        
-        // Safe modules for supported doctypes. These are included
-        // in the valid and active module lists by default
-        $this->collections['Safe'] = array(
-            '_Common' => array( // leading _ indicates private
-                'CommonAttributes', 'Text', 'Hypertext', 'List',
-                'Presentation', 'Edit', 'Bdo', 'Tables', 'Image',
-                'StyleAttribute'
-            ),
-            // HTML definitions, defer to XHTML definitions
-            'HTML 4.01 Transitional' => array(array('XHTML 1.0 Transitional')),
-            'HTML 4.01 Strict' => array(array('XHTML 1.0 Strict')),
-            // XHTML definitions
-            'XHTML 1.0 Transitional' => array( array('XHTML 1.0 Strict'), 'Legacy', 'Target' ),
-            'XHTML 1.0 Strict' => array(array('_Common')),
-            'XHTML 1.1' => array(array('_Common')),
-        );
-        
-        // Modules that specify elements that are unsafe from untrusted
-        // third-parties. These should be registered in $validModules but
-        // almost never $activeModules unless you really know what you're
-        // doing.
-        $this->collections['Unsafe'] = array();
-        
-        // Modules to import if lenient mode (attempt to convert everything
-        // to a valid representation) is on. These must not be in $validModules
-        // unless specified so.
-        $this->collections['Lenient'] = array(
-            'HTML 4.01 Strict' => array(array('XHTML 1.0 Strict')),
-            'XHTML 1.0 Strict' => array('TransformToStrict'),
-            'XHTML 1.1' => array(array('XHTML 1.0 Strict'), 'TransformToXHTML11')
-        );
-        
-        // Modules to import if correctional mode (correct everything that
-        // is feasible to strict mode) is on. These must not be in $validModules
-        // unless specified so.
-        $this->collections['Correctional'] = array(
-            'HTML 4.01 Transitional' => array(array('XHTML 1.0 Transitional')),
-            'XHTML 1.0 Transitional' => array('TransformToStrict'), // probably want a different one
-        );
-        
-        // User-space modules, custom code or whatever
-        $this->collections['Extension'] = array();
-        
-        // setup active versus valid modules. ORDER IS IMPORTANT!
-        // definition modules
-        $this->makeCollectionActive('Safe');
-        $this->makeCollectionValid('Unsafe');
-        // redefinition modules
-        $this->makeCollectionActive('Lenient');
-        $this->makeCollectionActive('Correctional');
-        
         $this->autoDoctype    = '*';
-        $this->autoCollection = 'Extension';
         
     }
     
+    /**
+     * @temporary
+     */
     function &addDoctype($name) {
         $this->doctypes[$name] = new HTMLPurifier_Doctype();
         $this->doctypes[$name]->name = $name;
@@ -337,25 +262,6 @@ class HTMLPurifier_HTMLModuleManager
     }
     
     /**
-     * Makes a collection active, while also making it valid if not
-     * already done so. See $activeModules for the semantics of "active".
-     * @param $collection_name Name of collection to activate
-     */
-    function makeCollectionActive($collection_name) {
-        if (!in_array($collection_name, $this->validCollections)) {
-            $this->makeCollectionValid($collection_name);
-        }
-        $this->activeCollections[] = $collection_name;
-    }
-    
-    /**
-     * Makes a collection valid. See $validModules for the semantics of "valid"
-     */
-    function makeCollectionValid($collection_name) {
-        $this->validCollections[] = $collection_name;
-    }
-    
-    /**
      * Adds a class prefix that addModule() will use to resolve a
      * string name to a concrete class
      */
@@ -365,27 +271,14 @@ class HTMLPurifier_HTMLModuleManager
     
     function setup($config) {
         
-        // load up the autocollection
-        if ($this->autoCollection !== false) {
-            $this->makeCollectionActive($this->autoCollection);
-        }
-        
         // retrieve the doctype
         $this->doctype = $this->getDoctype($config);
         if (isset($this->doctypeAliases[$this->doctype])) {
+            // resolve alias
             $this->doctype = $this->doctypeAliases[$this->doctype];
         }
         
-        // process module collections to module name => module instance form
-        foreach ($this->collections as $col_i => $x) {
-            $this->processCollections($this->collections[$col_i]);
-        }
-        
-        //$this->validModules  = $this->assembleModules($this->validCollections);
-        $this->activeModules = $this->assembleModules($this->activeCollections);
-        
-        // ----------------------------------------------------------------
-        
+        // retrieve object instance of doctype
         $doctype = $this->doctypes[$this->doctype];
         $modules = $doctype->modules;
         foreach ($doctype->modulesForMode as $mode => $mode_modules) {
@@ -396,8 +289,6 @@ class HTMLPurifier_HTMLModuleManager
         foreach ($modules as $module) {
             $this->validModules[$module] = $this->modules[$module]; 
         }
-        
-        // ----------------------------------------------------------------
         
         // setup lookup table based on all valid modules
         foreach ($this->validModules as $module) {
@@ -411,165 +302,17 @@ class HTMLPurifier_HTMLModuleManager
         
         // note the different choice
         $this->contentSets = new HTMLPurifier_ContentSets(
-            // content models that contain non-allowed elements are 
-            // harmless because RemoveForeignElements will ensure
-            // they never get in anyway, and there is usually no
-            // reason why you should want to restrict a content
-            // model beyond what is mandated by the doctype.
-            // Note, however, that this means redefinitions of
-            // content models can't be tossed in validModels willy-nilly:
-            // that stuff still is regulated by configuration.
+            // content set assembly deals with all possible modules,
+            // not just ones deemed to be "safe"
             $this->validModules
         );
         $this->attrCollections = new HTMLPurifier_AttrCollections(
             $this->attrTypes,
-            // only explicitly allowed modules are allowed to affect
-            // the global attribute collections. This mean's there's
-            // a distinction between loading the Bdo module, and the
-            // bdo element: Bdo will enable the dir attribute on all
-            // elements, while bdo will only define the bdo element,
-            // which will not have an editable directionality. This might
-            // catch people who are loading only elements by surprise, so
-            // we should consider loading an entire module if all the
-            // elements it defines are requested by the user, especially
-            // if it affects the global attribute collections.
-            $this->activeModules
+            // there is no way to directly disable a global attribute,
+            // but using AllowedAttributes or simply not including
+            // the module in your custom doctype should be sufficient
+            $this->validModules
         );
-        
-    }
-    
-    /**
-     * Takes a list of collections and merges together all the defined
-     * modules for the current doctype from those collections.
-     * @param $collections List of collection suffixes we should grab
-     *                     modules from (like 'Safe' or 'Lenient')
-     */
-    function assembleModules($collections) {
-        $modules = array();
-        $numOfCollectionsUsed = 0;
-        foreach ($collections as $name) {
-            $disable_global = false;
-            if (!isset($this->collections[$name])) {
-                trigger_error("$name collection is undefined", E_USER_ERROR);
-                continue;
-            }
-            $cols = $this->collections[$name];
-            if (isset($cols[$this->doctype])) {
-                if (isset($cols[$this->doctype]['*'])) {
-                    unset($cols[$this->doctype]['*']);
-                    $disable_global = true;
-                }
-                $modules += $cols[$this->doctype];
-                $numOfCollectionsUsed++;
-            }
-            // accept catch-all doctype
-            if (
-                $this->doctype !== '*' && 
-                isset($cols['*']) &&
-                !$disable_global
-            ) {
-                $modules += $cols['*'];
-            }
-        }
-        
-        if ($numOfCollectionsUsed < 1) {
-            // possible XSS injection if user-specified doctypes
-            // are allowed
-            trigger_error("Doctype {$this->doctype} does not exist, ".
-                "check for typos (if you desire a doctype that allows ".
-                "no elements, use an empty array collection)", E_USER_ERROR);
-        }
-        return $modules;
-    }
-    
-    /**
-     * Takes a collection and performs inclusions and substitutions for it.
-     * @param $cols Reference to collections class member variable
-     */
-    function processCollections(&$cols) {
-        
-        // $cols is the set of collections
-        // $col_i is the name (index) of a collection
-        // $col is a collection/list of modules
-        
-        // perform inclusions
-        foreach ($cols as $col_i => $col) {
-            $seen = array();
-            if (!empty($col[0]) && is_array($col[0])) {
-                $seen[$col_i] = true; // recursion reporting
-                $includes = $col[0];
-                unset($cols[$col_i][0]); // remove inclusions value, recursion guard
-            } else {
-                $includes = array();
-            }
-            if (empty($includes)) continue;
-            for ($i = 0; isset($includes[$i]); $i++) {
-                $inc = $includes[$i];
-                if (isset($seen[$inc])) {
-                    trigger_error(
-                        "Circular inclusion detected in $col_i collection",
-                        E_USER_ERROR
-                    );
-                    continue;
-                } else {
-                    $seen[$inc] = true;
-                }
-                if (!isset($cols[$inc])) {
-                    trigger_error(
-                        "Collection $col_i tried to include undefined ".
-                        "collection $inc", E_USER_ERROR);
-                    continue;
-                }
-                foreach ($cols[$inc] as $module) {
-                    if (is_array($module)) { // another inclusion!
-                        foreach ($module as $inc2) $includes[] = $inc2;
-                        continue;
-                    }
-                    $cols[$col_i][] = $module; // merge in the other modules
-                }
-            }
-        }
-        
-        // replace with real modules, invert module from list to
-        // assoc array of module name to module instance
-        foreach ($cols as $col_i => $col) {
-            $ignore_global = false;
-            $order = array();
-            foreach ($col as $module_i => $module) {
-                unset($cols[$col_i][$module_i]);
-                if (is_array($module)) {
-                    trigger_error("Illegal inclusion array at index".
-                        " $module_i found collection $col_i, inclusion".
-                        " arrays must be at start of collection (index 0)",
-                        E_USER_ERROR);
-                    continue;
-                }
-                if ($module_i === '*' && $module === false) {
-                    $ignore_global = true;
-                    continue;
-                }
-                if (!isset($this->modules[$module])) {
-                    trigger_error(
-                        "Collection $col_i references undefined ".
-                        "module $module",
-                        E_USER_ERROR
-                    );
-                    continue;
-                }
-                $module = $this->modules[$module];
-                $cols[$col_i][$module->name] = $module;
-                $order[$module->name] = $module->order;
-            }
-            array_multisort(
-                $order, SORT_ASC, SORT_NUMERIC, $cols[$col_i]
-            );
-            if ($ignore_global) $cols[$col_i]['*'] = false;
-        }
-        
-        // delete pseudo-collections
-        foreach ($cols as $col_i => $col) {
-            if ($col_i[0] == '_') unset($cols[$col_i]);
-        }
         
     }
     

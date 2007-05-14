@@ -182,7 +182,7 @@ class HTMLPurifier_HTMLDefinition
         
         $this->manager->setup($this->config);
         
-        foreach ($this->manager->activeModules as $module) {
+        foreach ($this->manager->validModules as $module) {
             foreach($module->info_tag_transform         as $k => $v) {
                 if ($v === false) unset($this->info_tag_transform[$k]);
                 else $this->info_tag_transform[$k] = $v;
