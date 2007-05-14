@@ -23,6 +23,7 @@ require_once 'HTMLPurifier/HTMLModule/Image.php';
 require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 require_once 'HTMLPurifier/HTMLModule/Legacy.php';
 require_once 'HTMLPurifier/HTMLModule/Target.php';
+require_once 'HTMLPurifier/HTMLModule/Scripting.php';
 
 // proprietary modules
 require_once 'HTMLPurifier/HTMLModule/TransformToStrict.php';
@@ -37,6 +38,32 @@ HTMLPurifier_ConfigSchema::define(
     'for sake of simplicity. This will override any older directives '.
     'like %Core.XHTML or %HTML.Strict.'
 );
+
+class HTMLPurifier_Doctype
+{
+    /**
+     * Full name of doctype
+     */
+    var $name;
+    
+    /**
+     * List of aliases to doctype name
+     */
+    var $aliases = array();
+    
+    /**
+     * List of standard modules (string identifiers or literal objects)
+     * that this doctype uses
+     */
+    var $modules = array();
+    
+    /**
+     * Associative array of mode names to lists of modules; these are
+     * the modules added into the standard list if a particular mode
+     * is enabled, such as lenient or correctional.
+     */
+    var $modulesForModes = array();
+}
 
 class HTMLPurifier_HTMLModuleManager
 {
@@ -60,6 +87,11 @@ class HTMLPurifier_HTMLModuleManager
      */
     var $doctype;
     var $doctypeAliases = array(); /**< Lookup array of strings to real doctypes */
+    
+    /**
+     * Associative array of doctype names to doctype definitions.
+     */
+    var $doctypes;
     
     /**
      * Associative array: $collections[$type][$doctype] = list of modules.
@@ -113,6 +145,9 @@ class HTMLPurifier_HTMLModuleManager
     var $attrTypes; /**< Instance of HTMLPurifier_AttrTypes */
     var $attrCollections; /**< Instance of HTMLPurifier_AttrCollections */
     
+    /** If set to true, unsafe elements and attributes will be allowed */
+    var $trusted = false;
+    
     /**
      * @param $blank If true, don't do any initializing
      */
@@ -135,7 +170,7 @@ class HTMLPurifier_HTMLModuleManager
             'CommonAttributes',
             'Text', 'Hypertext', 'List', 'Presentation',
             'Edit', 'Bdo', 'Tables', 'Image', 'StyleAttribute',
-            'Target',
+            'Target', 'Scripting',
             // define-redefine
             'Legacy',
             // redefine
@@ -144,6 +179,37 @@ class HTMLPurifier_HTMLModuleManager
         foreach ($modules as $module) {
             $this->addModule($module);
         }
+        
+        // these doctype definitions should be placed somewhere else
+        
+        $common = array(
+            'CommonAttributes', 'Text', 'Hypertext', 'List',
+            'Presentation', 'Edit', 'Bdo', 'Tables', 'Image',
+            'StyleAttribute', 'Scripting'
+        );
+        $transitional = array('Legacy', 'Target');
+        
+        $d =& $this->addDoctype('HTML 4.01 Transitional');
+        $d->modules = array_merge($common, $transitional);
+        $d->modulesForMode['correctional'] = array('TransformToStrict');
+        
+        $d =& $this->addDoctype('XHTML 1.0 Transitional');
+        $d->modules = array_merge($common, $transitional);
+        $d->modulesForMode['correctional'] = array('TransformToStrict');
+        
+        $d =& $this->addDoctype('HTML 4.01 Strict');
+        $d->modules = array_merge($common);
+        $d->modulesForMode['lenient'] = array('TransformToStrict');
+        
+        $d =& $this->addDoctype('XHTML 1.0 Strict');
+        $d->modules = array_merge($common);
+        $d->modulesForMode['lenient'] = array('TransformToStrict');
+        
+        $d =& $this->addDoctype('XHTML 1.1');
+        $d->modules = array_merge($common);
+        $d->modulesForMode['lenient'] = array('TransformToStrict', 'TransformToXHTML11');
+        
+        // ----------------------------------------------------------------
         
         // Safe modules for supported doctypes. These are included
         // in the valid and active module lists by default
@@ -199,6 +265,12 @@ class HTMLPurifier_HTMLModuleManager
         $this->autoDoctype    = '*';
         $this->autoCollection = 'Extension';
         
+    }
+    
+    function &addDoctype($name) {
+        $this->doctypes[$name] = new HTMLPurifier_Doctype();
+        $this->doctypes[$name]->name = $name;
+        return $this->doctypes[$name];
     }
     
     /**
@@ -309,8 +381,23 @@ class HTMLPurifier_HTMLModuleManager
             $this->processCollections($this->collections[$col_i]);
         }
         
-        $this->validModules  = $this->assembleModules($this->validCollections);
+        //$this->validModules  = $this->assembleModules($this->validCollections);
         $this->activeModules = $this->assembleModules($this->activeCollections);
+        
+        // ----------------------------------------------------------------
+        
+        $doctype = $this->doctypes[$this->doctype];
+        $modules = $doctype->modules;
+        foreach ($doctype->modulesForMode as $mode => $mode_modules) {
+            // TODO: test if $mode is active
+            $modules = array_merge($modules, $mode_modules);
+        }
+        
+        foreach ($modules as $module) {
+            $this->validModules[$module] = $this->modules[$module]; 
+        }
+        
+        // ----------------------------------------------------------------
         
         // setup lookup table based on all valid modules
         foreach ($this->validModules as $module) {
@@ -514,24 +601,26 @@ class HTMLPurifier_HTMLModuleManager
     }
     
     /**
-     * Retrieves merged element definitions for all active elements.
-     * @note We may want to generate an elements array during setup
-     *       and pass that on, because a specific combination of
-     *       elements may trigger the loading of a module.
+     * Retrieves merged element definitions.
      * @param $config Instance of HTMLPurifier_Config, for determining
      *                stray elements.
      */
     function getElements($config) {
         
         $elements = array();
-        foreach ($this->activeModules as $module) {
+        foreach ($this->validModules as $module) {
             foreach ($module->info as $name => $v) {
                 if (isset($elements[$name])) continue;
+                // if element is not safe, don't use it
+                if (!$this->trusted && ($v->safe === false)) continue;
                 $elements[$name] = $this->getElement($name, $config);
             }
         }
         
-        // standalone elements now loaded
+        // remove dud elements
+        foreach ($elements as $n => $v) {
+            if ($v === false) unset($elements[$n]);
+        }
         
         return $elements;
         
@@ -557,7 +646,17 @@ class HTMLPurifier_HTMLModuleManager
             $module = $modules[$module_name];
             $new_def = $module->info[$name];
             
+            // refuse to create/merge in a definition that is deemed unsafe
+            if (!$this->trusted && ($new_def->safe === false)) {
+                $def = false;
+                continue;
+            }
+            
             if (!$def && $new_def->standalone) {
+                // element with unknown safety is not to be trusted.
+                // however, a merge-in definition with undefined safety
+                // is fine
+                if (!$new_def->safe) continue;
                 $def = $new_def;
             } elseif ($def) {
                 $def->mergeIn($new_def);

@@ -10,6 +10,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 1.7.0, unknown release date
+# Completely refactored HTMLModuleManager, decentralizing safety
+  information
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible
 . Added convenience functions for HTMLModule constructors

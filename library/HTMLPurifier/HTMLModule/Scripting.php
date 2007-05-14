@@ -48,6 +48,7 @@ class HTMLPurifier_HTMLModule_Scripting extends HTMLPurifier_HTMLModule
         // are required)
         foreach ($this->elements as $element) {
             $this->info[$element] = new HTMLPurifier_ElementDef();
+            $this->info[$element]->safe = false;
         }
         $this->info['noscript']->attr = array( 0 => array('Common') );
         $this->info['noscript']->content_model = 'Heading | List | Block';
