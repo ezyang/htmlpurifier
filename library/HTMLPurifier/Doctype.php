@@ -12,11 +12,6 @@ class HTMLPurifier_Doctype
     var $name;
     
     /**
-     * List of aliases to doctype name
-     */
-    var $aliases = array();
-    
-    /**
      * List of standard modules (string identifiers or literal objects)
      * that this doctype uses
      */
@@ -28,6 +23,20 @@ class HTMLPurifier_Doctype
      * is enabled, such as lenient or correctional.
      */
     var $modulesForModes = array();
+    
+    /**
+     * List of aliases to doctype name
+     */
+    var $aliases = array();
+    
+    function HTMLPurifier_Doctype($name = null, $modules = array(),
+        $modules_for_modes = array(), $aliases = array()
+    ) {
+        $this->name = $name;
+        $this->modules = $modules;
+        $this->modulesForModes = $modules_for_modes;
+        $this->aliases = $aliases;
+    }
 }
 
 ?>

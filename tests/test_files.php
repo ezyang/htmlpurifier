@@ -55,6 +55,7 @@ $test_files[] = 'ChildDef/TableTest.php';
 $test_files[] = 'ConfigSchemaTest.php';
 $test_files[] = 'ConfigTest.php';
 $test_files[] = 'ContextTest.php';
+$test_files[] = 'DoctypeRegistryTest.php';
 $test_files[] = 'ElementDefTest.php';
 $test_files[] = 'EncoderTest.php';
 $test_files[] = 'EntityLookupTest.php';
