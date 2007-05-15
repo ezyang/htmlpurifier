@@ -198,7 +198,7 @@ class HTMLPurifier_HTMLDefinition
             }
         }
         
-        $this->info = $this->manager->getElements($this->config);
+        $this->info = $this->manager->getElements();
         $this->info_content_sets = $this->manager->contentSets->lookup;
         
     }
@@ -217,15 +217,14 @@ class HTMLPurifier_HTMLDefinition
         }
         
         $parent = $this->config->get('HTML', 'Parent');
-        $def = $this->manager->getElement($parent, $this->config);
+        $def = $this->manager->getElement($parent, true);
         if ($def) {
             $this->info_parent = $parent;
             $this->info_parent_def = $def;
         } else {
             trigger_error('Cannot use unrecognized element as parent.',
                 E_USER_ERROR);
-            $this->info_parent_def = $this->manager->getElement(
-                $this->info_parent, $this->config);
+            $this->info_parent_def = $this->manager->getElement($this->info_parent, true);
         }
         
         // support template text

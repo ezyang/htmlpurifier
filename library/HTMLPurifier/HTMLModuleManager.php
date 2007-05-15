@@ -77,6 +77,13 @@ class HTMLPurifier_HTMLModuleManager
     var $registeredModules = array();
     
     /**
+     * List of extra modules that were added by the user using addModule().
+     * These get unconditionally merged into the current doctype, whatever
+     * it may be.
+     */
+    var $userModules = array();
+    
+    /**
      * Associative array of element name to list of modules that have
      * definitions for the element; this array is dynamically filled.
      */
@@ -210,7 +217,9 @@ class HTMLPurifier_HTMLModuleManager
      * and then tacking it on to the active doctype
      */
     function addModule($module) {
-        // unimplemented
+        $this->registerModule($module);
+        if (is_object($module)) $module = $module->name;
+        $this->userModules[] = $module;
     }
     
     /**
@@ -234,16 +243,19 @@ class HTMLPurifier_HTMLModuleManager
         $doctype = $this->doctypes->make($config);
         $modules = $doctype->modules;
         
+        // merge in custom modules
+        $modules = array_merge($modules, $this->userModules);
+        
         foreach ($modules as $module) {
             if (is_object($module)) {
-                $this->modules[$module->name] = $module;
+                $this->registeredModules[$module->name] = $module;
                 continue;
             } else {
-                if (!isset($this->modules[$module])) {
+                if (!isset($this->registeredModules[$module])) {
                     $this->registerModule($module);
                 }
-                $this->modules[$module] = $this->registeredModules[$module]; 
             }
+            $this->modules[$module] = $this->registeredModules[$module];
         }
         
         // setup lookup table based on all valid modules
@@ -274,11 +286,9 @@ class HTMLPurifier_HTMLModuleManager
     
     /**
      * Retrieves merged element definitions.
-     * @param $config Instance of HTMLPurifier_Config, for determining
-     *                stray elements.
      * @return Array of HTMLPurifier_ElementDef
      */
-    function getElements($config) {
+    function getElements() {
         
         $elements = array();
         foreach ($this->modules as $module) {
@@ -286,7 +296,7 @@ class HTMLPurifier_HTMLModuleManager
                 if (isset($elements[$name])) continue;
                 // if element is not safe, don't use it
                 if (!$this->trusted && ($v->safe === false)) continue;
-                $elements[$name] = $this->getElement($name, $config);
+                $elements[$name] = $this->getElement($name);
             }
         }
         
@@ -303,12 +313,11 @@ class HTMLPurifier_HTMLModuleManager
     /**
      * Retrieves a single merged element definition
      * @param $name Name of element
-     * @param $config Instance of HTMLPurifier_Config, may not be necessary.
      * @param $trusted Boolean trusted overriding parameter: set to true
      *                 if you want the full version of an element
      * @return Merged HTMLPurifier_ElementDef
      */
-    function getElement($name, $config, $trusted = null) {
+    function getElement($name, $trusted = null) {
         
         $def = false;
         if ($trusted === null) $trusted = $this->trusted;
