@@ -170,6 +170,7 @@ class HTMLPurifier_HTMLDefinition
         $this->processModules();
         $this->setupConfigStuff();
         
+        // remove complicated variables to ease serialization
         unset($this->config);
         unset($this->manager);
         
@@ -240,6 +241,7 @@ class HTMLPurifier_HTMLDefinition
             }
             // emit errors
             foreach ($allowed_elements as $element => $d) {
+                $element = htmlspecialchars($element);
                 trigger_error("Element '$element' is not supported $support", E_USER_WARNING);
             }
         }
@@ -271,6 +273,8 @@ class HTMLPurifier_HTMLDefinition
             // emit errors
             foreach ($allowed_attributes_mutable as $elattr => $d) {
                 list($element, $attribute) = explode('.', $elattr);
+                $element = htmlspecialchars($element);
+                $attribute = htmlspecialchars($attribute);
                 if ($element == '*') {
                     trigger_error("Global attribute '$attribute' is not ".
                         "supported in any elements $support",
