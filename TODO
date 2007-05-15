@@ -9,7 +9,14 @@ TODO List
 
 1.7 release [Advanced API]
  # Complete advanced API, and fully document it
- # Implement all edge-case attribute transforms
+    - Add framework for unsafe attributes
+    - Wire in modes (configuration, module and manager wise)
+    - Reorganize configuration directives
+        . New namespace: Output for Generator
+    - Determine handling for complex/cascading configuration directives
+    - Reorganize transformation modules
+    - Set up anonymous module management by HTMLDefinition
+ # Implement HTMLDefinition caching using serialize
  # Implement all deprecated tags and attributes
  - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists (possibly
    do this earlier)
@@ -51,6 +58,8 @@ TODO List
 2.0 release [Beyond HTML]
  # Legit token based CSS parsing (will require revamping almost every
    AttrDef class)
+ # More control over allowed CSS properties (maybe modularize it in the
+   same fashion!)
  # Formatters for plaintext (COMPLEX)
     - Auto-paragraphing (be sure to leverage fact that we know when things
       shouldn't be paragraphed, such as lists and tables).
@@ -84,6 +93,8 @@ Unknown release (on a scratch-an-itch basis)
  ? Have 'lang' attribute be checked against official lists, achieved by
    encoding all characters that have string entity equivalents
  - Explain how to use HTML Purifier in non-PHP languages
+ - Abstract ChildDef_BlockQuote to work with all elements that only
+   allow blocks in them, required or optional
 
 Requested
  ? Native content compression, whitespace stripping (don't rely on Tidy, make
