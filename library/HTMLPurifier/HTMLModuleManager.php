@@ -3,6 +3,7 @@
 require_once 'HTMLPurifier/HTMLModule.php';
 require_once 'HTMLPurifier/ElementDef.php';
 require_once 'HTMLPurifier/Doctype.php';
+require_once 'HTMLPurifier/DoctypeRegistry.php';
 
 require_once 'HTMLPurifier/ContentSets.php';
 require_once 'HTMLPurifier/AttrTypes.php';
@@ -44,12 +45,16 @@ class HTMLPurifier_HTMLModuleManager
 {
     
     /**
-     * Associative array of doctype names to doctype definitions.
-     * @note This may be replaced by a DoctypeManager
+     * Instance of HTMLPurifier_DoctypeRegistry
+     * @public
      */
     var $doctypes;
-    var $doctype; /**< String doctype name to determine modules to load */
-    var $doctypeAliases = array(); /**< Lookup array of strings to real doctypes */
+    
+    /**
+     * Instance of HTMLPurifier_AttrTypes
+     * @public
+     */
+    var $attrTypes;
     
     /**
      * Active instances of modules for the specified doctype are
@@ -74,7 +79,6 @@ class HTMLPurifier_HTMLModuleManager
     var $prefixes = array('HTMLPurifier_HTMLModule_');
     
     var $contentSets;     /**< Instance of HTMLPurifier_ContentSets */
-    var $attrTypes;       /**< Instance of HTMLPurifier_AttrTypes */
     var $attrCollections; /**< Instance of HTMLPurifier_AttrCollections */
     
     /** If set to true, unsafe elements and attributes will be allowed */
@@ -82,13 +86,13 @@ class HTMLPurifier_HTMLModuleManager
     
     function HTMLPurifier_HTMLModuleManager() {
         
-        // the only editable internal object. The rest need to
-        // be manipulated through modules
+        // editable internal objects
         $this->attrTypes = new HTMLPurifier_AttrTypes();
+        $this->doctypes  = new HTMLPurifier_DoctypeRegistry();
         
-        // these doctype definitions should be placed somewhere else,
-        // and instead, a DoctypeManager instantiated during construction
+        // setup default HTML doctypes
         
+        // module reuse
         $common = array(
             'CommonAttributes', 'Text', 'Hypertext', 'List',
             'Presentation', 'Edit', 'Bdo', 'Tables', 'Image',
@@ -96,38 +100,36 @@ class HTMLPurifier_HTMLModuleManager
         );
         $transitional = array('Legacy', 'Target');
         
-        $d =& $this->addDoctype('HTML 4.01 Transitional');
-        $d->modules = array_merge($common, $transitional);
-        $d->modulesForMode['correctional'] = array('TransformToStrict');
+        $this->doctypes->register(
+            'HTML 4.01 Transitional',
+            array_merge($common, $transitional),
+            array('correctional' => array('TransformToStrict'))
+        );
         
-        $d =& $this->addDoctype('XHTML 1.0 Transitional');
-        $d->modules = array_merge($common, $transitional);
-        $d->modulesForMode['correctional'] = array('TransformToStrict');
+        $this->doctypes->register(
+            'XHTML 1.0 Transitional',
+            array_merge($common, $transitional),
+            array('correctional' => array('TransformToStrict'))
+        );
         
-        $d =& $this->addDoctype('HTML 4.01 Strict');
-        $d->modules = array_merge($common);
-        $d->modulesForMode['lenient'] = array('TransformToStrict');
+        $this->doctypes->register(
+            'HTML 4.01 Strict',
+            array_merge($common),
+            array('lenient' => array('TransformToStrict'))
+        );
         
-        $d =& $this->addDoctype('XHTML 1.0 Strict');
-        $d->modules = array_merge($common);
-        $d->modulesForMode['lenient'] = array('TransformToStrict');
+        $this->doctypes->register(
+            'XHTML 1.0 Strict',
+            array_merge($common),
+            array('lenient' => array('TransformToStrict'))
+        );
         
-        $d =& $this->addDoctype('XHTML 1.1');
-        $d->modules = array_merge($common);
-        $d->modulesForMode['lenient'] = array('TransformToStrict', 'TransformToXHTML11');
+        $this->doctypes->register(
+            'XHTML 1.1',
+            array_merge($common),
+            array('lenient' => array('TransformToStrict', 'TransformToXHTML11'))
+        );
         
-    }
-    
-    /**
-     * Temporary function that creates a new doctype and returns a
-     * reference to it.
-     * @note Real version should retrieve a fully formed instance of
-     *       the doctype and register its aliases
-     */
-    function &addDoctype($name) {
-        $this->doctypes[$name] = new HTMLPurifier_Doctype();
-        $this->doctypes[$name]->name = $name;
-        return $this->doctypes[$name];
     }
     
     /**
@@ -219,20 +221,9 @@ class HTMLPurifier_HTMLModuleManager
      */
     function setup($config) {
         
-        // retrieve the doctype
-        $this->doctype = $this->getDoctype($config);
-        if (isset($this->doctypeAliases[$this->doctype])) {
-            // resolve alias
-            $this->doctype = $this->doctypeAliases[$this->doctype];
-        }
-        
-        // retrieve object instance of doctype
-        $doctype = $this->doctypes[$this->doctype];
+        // generate
+        $doctype = $this->doctypes->make($config);
         $modules = $doctype->modules;
-        foreach ($doctype->modulesForMode as $mode => $mode_modules) {
-            // TODO: test if $mode is active
-            $modules = array_merge($modules, $mode_modules);
-        }
         
         foreach ($modules as $module) {
             if (is_object($module)) {
@@ -270,29 +261,6 @@ class HTMLPurifier_HTMLModuleManager
             $this->modules
         );
         
-    }
-    
-    /**
-     * Retrieves the doctype from the configuration object
-     */
-    function getDoctype($config) {
-        // simplistic test
-        $doctype = $config->get('HTML', 'Doctype');
-        if ($doctype !== null) {
-            return $doctype;
-        }
-        // this is backwards-compatibility stuff
-        if ($config->get('Core', 'XHTML')) {
-            $doctype = 'XHTML 1.0';
-        } else {
-            $doctype = 'HTML 4.01';
-        }
-        if ($config->get('HTML', 'Strict')) {
-            $doctype .= ' Strict';
-        } else {
-            $doctype .= ' Transitional';
-        }
-        return $doctype;
     }
     
     /**

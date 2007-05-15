@@ -25,7 +25,7 @@ class HTMLPurifier_Doctype
     var $modulesForModes = array();
     
     /**
-     * List of aliases to doctype name
+     * List of aliases for this doctype
      */
     var $aliases = array();
     
@@ -36,6 +36,15 @@ class HTMLPurifier_Doctype
         $this->modules = $modules;
         $this->modulesForModes = $modules_for_modes;
         $this->aliases = $aliases;
+    }
+    
+    /**
+     * Clones the doctype, use before resolving modes and the like
+     */
+    function copy() {
+        return new HTMLPurifier_Doctype(
+            $this->name, $this->modules, $this->modulesForModes, $this->aliases
+        );
     }
 }
 

@@ -52,6 +52,7 @@ class HTMLPurifier_DoctypeRegistry
     /**
      * Retrieves reference to a doctype of a certain name
      * @note This function resolves aliases
+     * @note When possible, use the more fully-featured make()
      * @param $doctype Name of doctype
      * @return Reference to doctype object
      */
@@ -62,6 +63,44 @@ class HTMLPurifier_DoctypeRegistry
             $null = null; return $null;
         }
         return $this->doctypes[$doctype];
+    }
+    
+    /**
+     * Creates a doctype based on a configuration object,
+     * will perform initialization on the doctype
+     */
+    function make($config) {
+        $original_doctype = $this->get($this->getDoctypeFromConfig($config));
+        $doctype = $original_doctype->copy();
+        // initialization goes here
+        foreach ($doctype->modulesForModes as $mode => $mode_modules) {
+            // TODO: test if $mode is active
+            $doctype->modules = array_merge($doctype->modules, $mode_modules);
+        }
+        return $doctype;
+    }
+    
+    /**
+     * Retrieves the doctype from the configuration object
+     */
+    function getDoctypeFromConfig($config) {
+        // recommended test
+        $doctype = $config->get('HTML', 'Doctype');
+        if ($doctype !== null) {
+            return $doctype;
+        }
+        // backwards-compatibility
+        if ($config->get('Core', 'XHTML')) {
+            $doctype = 'XHTML 1.0';
+        } else {
+            $doctype = 'HTML 4.01';
+        }
+        if ($config->get('HTML', 'Strict')) {
+            $doctype .= ' Strict';
+        } else {
+            $doctype .= ' Transitional';
+        }
+        return $doctype;
     }
     
 }
