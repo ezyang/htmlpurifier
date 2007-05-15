@@ -21,6 +21,13 @@ HTMLPurifier_ConfigSchema::define(
     'This directive was available since 1.1.'
 );
 
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'CommentScriptContents', true, 'bool',
+    'Determines whether or not HTML Purifier should attempt to fix up '.
+    'the contents of script tags for legacy browsers with comments. This '.
+    'directive was available since 1.7.'
+);
+
 // extension constraints could be factored into ConfigSchema
 HTMLPurifier_ConfigSchema::define(
     'Core', 'TidyFormat', false, 'bool',
@@ -55,6 +62,12 @@ class HTMLPurifier_Generator
     var $_xhtml = true;
     
     /**
+     * Bool cache of %Core.CommentScriptContents
+     * @private
+     */
+    var $_scriptFix = false;
+    
+    /**
      * Generates HTML from an array of tokens.
      * @param $tokens Array of HTMLPurifier_Token
      * @param $config HTMLPurifier_Config object
@@ -63,11 +76,20 @@ class HTMLPurifier_Generator
     function generateFromTokens($tokens, $config, &$context) {
         $html = '';
         if (!$config) $config = HTMLPurifier_Config::createDefault();
-        $this->_clean_utf8 = $config->get('Core', 'CleanUTF8DuringGeneration');
-        $this->_xhtml = $config->get('Core', 'XHTML');
+        $this->_clean_utf8  = $config->get('Core', 'CleanUTF8DuringGeneration');
+        $this->_xhtml       = $config->get('Core', 'XHTML');
+        $this->_scriptFix   = $config->get('Core', 'CommentScriptContents');
         if (!$tokens) return '';
-        foreach ($tokens as $token) {
-            $html .= $this->generateFromToken($token);
+        for ($i = 0, $size = count($tokens); $i < $size; $i++) {
+            if ($this->_scriptFix && $tokens[$i]->name === 'script') {
+                // script special case
+                $html .= $this->generateFromToken($tokens[$i++]);
+                $html .= $this->generateScriptFromToken($tokens[$i++]);
+                while ($tokens[$i]->name != 'script') {
+                    $html .= $this->generateScriptFromToken($tokens[$i++]);
+                }
+            }
+            $html .= $this->generateFromToken($tokens[$i]);
         }
         if ($config->get('Core', 'TidyFormat') && extension_loaded('tidy')) {
             
@@ -123,6 +145,18 @@ class HTMLPurifier_Generator
             return '';
             
         }
+    }
+    
+    /**
+     * Special case processor for the contents of script tags
+     * @warning This runs into problems if there's already a literal
+     *          --> somewhere inside the script contents.
+     */
+    function generateScriptFromToken($token) {
+        if (!$token->type == 'text') return $this->generateFromToken($token);
+        return '<!--' . PHP_EOL . $token->data . PHP_EOL . '// -->';
+        // more advanced version:
+        // return '<!--//--><![CDATA[//><!--' . PHP_EOL . $token->data . PHP_EOL . '//--><!]]>';
     }
     
     /**

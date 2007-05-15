@@ -124,6 +124,31 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         $this->assertIdentical($expect, $result);
     }
     
+    function test_generateFromTokens_Scripting() {
+        $this->config = HTMLPurifier_Config::createDefault();
+        
+        $this->assertGeneration(
+            array(
+                new HTMLPurifier_Token_Start('script'),
+                new HTMLPurifier_Token_Text('alert(3 < 5);'),
+                new HTMLPurifier_Token_End('script')
+            ),
+            "<script><!--\nalert(3 < 5);\n// --></script>"
+        );
+        
+        $this->config = HTMLPurifier_Config::createDefault();
+        $this->config->set('Core', 'CommentScriptContents', false);
+        
+        $this->assertGeneration(
+            array(
+                new HTMLPurifier_Token_Start('script'),
+                new HTMLPurifier_Token_Text('alert(3 < 5);'),
+                new HTMLPurifier_Token_End('script')
+            ),
+            "<script>alert(3 &lt; 5);</script>"
+        );
+    }
+    
     function test_generateFromTokens_XHTMLoff() {
         $this->config = HTMLPurifier_Config::createDefault();
         $this->config->set('Core', 'XHTML', false);

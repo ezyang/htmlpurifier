@@ -41,6 +41,13 @@ HTMLPurifier_ConfigSchema::define(
     'like %Core.XHTML or %HTML.Strict.'
 );
 
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'Trusted', false, 'bool',
+    'Indicates whether or not the user input is trusted or not. If the '.
+    'input is trusted, a more expansive set of allowed tags and attributes '.
+    'will be used. This directive has been available since 1.7.0.'
+);
+
 class HTMLPurifier_HTMLModuleManager
 {
     
@@ -221,6 +228,8 @@ class HTMLPurifier_HTMLModuleManager
      */
     function setup($config) {
         
+        $this->trusted = $config->get('HTML', 'Trusted');
+        
         // generate
         $doctype = $this->doctypes->make($config);
         $modules = $doctype->modules;
@@ -325,7 +334,7 @@ class HTMLPurifier_HTMLModuleManager
                 // element with unknown safety is not to be trusted.
                 // however, a merge-in definition with undefined safety
                 // is fine
-                if (!$new_def->safe) continue;
+                if (!$trusted && !$new_def->safe) continue;
                 $def = $new_def;
             } elseif ($def) {
                 $def->mergeIn($new_def);
