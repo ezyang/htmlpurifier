@@ -27,14 +27,15 @@ class HTMLPurifier_DoctypeRegistry
      * @param $aliases Alias names for doctype
      * @return Reference to registered doctype (usable for further editing)
      */
-    function &register($doctype, $modules = array(),
-        $modules_for_modes = array(), $aliases = array()
+    function &register($doctype, $xml = true, $modules = array(),
+        $tidy_modules = array(), $aliases = array()
     ) {
         if (!is_array($modules)) $modules = array($modules);
+        if (!is_array($tidy_modules)) $tidy_modules = array($tidy_modules);
         if (!is_array($aliases)) $aliases = array($aliases);
         if (!is_object($doctype)) {
             $doctype = new HTMLPurifier_Doctype(
-                $doctype, $modules, $modules_for_modes, $aliases
+                $doctype, $xml, $modules, $tidy_modules, $aliases
             );
         }
         $this->doctypes[$doctype->name] =& $doctype;
@@ -68,15 +69,16 @@ class HTMLPurifier_DoctypeRegistry
     /**
      * Creates a doctype based on a configuration object,
      * will perform initialization on the doctype
+     * @note Use this function to get a copy of doctype that config
+     *       can hold on to (this is necessary in order to tell
+     *       Generator whether or not the current document is XML
+     *       based or not).
      */
     function make($config) {
         $original_doctype = $this->get($this->getDoctypeFromConfig($config));
         $doctype = $original_doctype->copy();
-        // initialization goes here
-        foreach ($doctype->modulesForModes as $mode => $mode_modules) {
-            // TODO: test if $mode is active
-            $doctype->modules = array_merge($doctype->modules, $mode_modules);
-        }
+        // FIXME!!! Set $doctype into $config so others can use it,
+        // you might need to use two copies
         return $doctype;
     }
     

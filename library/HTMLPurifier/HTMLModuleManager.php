@@ -115,33 +115,38 @@ class HTMLPurifier_HTMLModuleManager
         $transitional = array('Legacy', 'Target');
         
         $this->doctypes->register(
-            'HTML 4.01 Transitional',
+            'HTML 4.01 Transitional', false,
             array_merge($common, $transitional),
-            array('correctional' => array('TransformToStrict'))
+            array('TransformToStrict')
+            // Tidy: Transitional
         );
         
         $this->doctypes->register(
-            'XHTML 1.0 Transitional',
+            'HTML 4.01 Strict', false,
+            array_merge($common),
+            array('TransformToStrict')
+            // Tidy: Strict
+        );
+        
+        $this->doctypes->register(
+            'XHTML 1.0 Transitional', true,
             array_merge($common, $transitional),
-            array('correctional' => array('TransformToStrict'))
+            array('TransformToStrict')
+            // Tidy: Transitional, XHTML
         );
         
         $this->doctypes->register(
-            'HTML 4.01 Strict',
+            'XHTML 1.0 Strict', true,
             array_merge($common),
-            array('lenient' => array('TransformToStrict'))
+            array('TransformToStrict')
+            // Tidy: Strict, XHTML
         );
         
         $this->doctypes->register(
-            'XHTML 1.0 Strict',
+            'XHTML 1.1', true,
             array_merge($common),
-            array('lenient' => array('TransformToStrict'))
-        );
-        
-        $this->doctypes->register(
-            'XHTML 1.1',
-            array_merge($common),
-            array('lenient' => array('TransformToStrict', 'TransformToXHTML11'))
+            array('TransformToStrict', 'TransformToXHTML11')
+            // Tidy: Strict, XHTML1_1
         );
         
     }
@@ -247,15 +252,12 @@ class HTMLPurifier_HTMLModuleManager
         $modules = array_merge($modules, $this->userModules);
         
         foreach ($modules as $module) {
-            if (is_object($module)) {
-                $this->registeredModules[$module->name] = $module;
-                continue;
-            } else {
-                if (!isset($this->registeredModules[$module])) {
-                    $this->registerModule($module);
-                }
-            }
-            $this->modules[$module] = $this->registeredModules[$module];
+            $this->processModule($module);
+        }
+        
+        foreach ($doctype->tidyModules as $module) {
+            $this->processModule($module);
+            // FIXME!!! initialize the tidy modules here
         }
         
         // setup lookup table based on all valid modules
@@ -282,6 +284,17 @@ class HTMLPurifier_HTMLModuleManager
             $this->modules
         );
         
+    }
+    
+    /**
+     * Takes a module and adds it to the active module collection,
+     * registering it if necessary.
+     */
+    function processModule($module) {
+        if (!isset($this->registeredModules[$module]) || is_object($module)) {
+            $this->registerModule($module);
+        }
+        $this->modules[$module] = $this->registeredModules[$module];
     }
     
     /**

@@ -18,24 +18,28 @@ class HTMLPurifier_Doctype
     var $modules = array();
     
     /**
-     * Associative array of mode names to lists of modules; these are
-     * the modules added into the standard list if a particular mode
-     * is enabled, such as lenient or correctional.
+     * List of modules to use for tidying up code
      */
-    var $modulesForModes = array();
+    var $tidyModules = array();
+    
+    /**
+     * Is the language derived from XML (i.e. XHTML)?
+     */
+    var $xml = true;
     
     /**
      * List of aliases for this doctype
      */
     var $aliases = array();
     
-    function HTMLPurifier_Doctype($name = null, $modules = array(),
-        $modules_for_modes = array(), $aliases = array()
+    function HTMLPurifier_Doctype($name = null, $xml = true, $modules = array(),
+        $tidyModules = array(), $aliases = array()
     ) {
-        $this->name = $name;
-        $this->modules = $modules;
-        $this->modulesForModes = $modules_for_modes;
-        $this->aliases = $aliases;
+        $this->name         = $name;
+        $this->xml          = $xml;
+        $this->modules      = $modules;
+        $this->tidyModules  = $tidyModules;
+        $this->aliases      = $aliases;
     }
     
     /**
@@ -43,7 +47,7 @@ class HTMLPurifier_Doctype
      */
     function copy() {
         return new HTMLPurifier_Doctype(
-            $this->name, $this->modules, $this->modulesForModes, $this->aliases
+            $this->name, $this->xml, $this->modules, $this->tidyModules, $this->aliases
         );
     }
 }
