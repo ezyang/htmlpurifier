@@ -1,6 +1,6 @@
 
 Is HTML Purifier Strict or Transitional?
-    A little bit of helpful guidance
+    [rename/deprecation pending]
 
 Despite the fact that HTML Purifier professes to support both transitional and
 strict HTML, it rejects a lot of attributes and elements that are actually, indeed,
@@ -21,17 +21,13 @@ allows them anyway and 2. older browsers support them better? After all, the
 whole point about CSS is to seperate styling from content, so inline styling
 doesn't solve that problem.
 
-It's an icky question, and we'll have to deal with it as more and more 
-transforms get implemented.  As of right now, however, we currently support
-these loose-only constructs in loose mode:
+[new material]
 
-- <ul start="1">, <li value="1"> attributes
-- <u>, <strike>, <s> tags
-- flow children in <blockquote>
-- mixed children in <address>
+HTML Purifier 1.7 creates a new organizational system for deprecated attribute/
+element transformations. They will be unified under the title of "Tidy", which
+is what they are: cleaning up after deprecated user markup into standards-compliant
+versions. There will also be a change in the default behavior (athough, to the
+end user not inspecting the HTML, there will be no change: in fact, it may
+work even better).
 
-The changed child definitions as well as the ul.start li.value are the most
-compelling reasons why loose should be used.  We may want offer disabling <u>,
-<strike> and <s> by themselves. We may also want to offer no pre-emptive
-deprecated conversions. This all must be unified.
-
+Consult the Advanced API for more details.

@@ -1,5 +1,6 @@
 
 XHTML 1.1 and HTML Purifier
+   [needs updating, most of this is implemented]
 
 Todo for XHTML 1.1 support <http://www.w3.org/TR/xhtml11/changes.html>
 1. Scratch lang entirely in favor of xml:lang

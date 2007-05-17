@@ -18,5 +18,7 @@ HTML Purifier context.
 
 <listing>, monospace pre-variant (extremely rare)
 <plaintext>, escapes all tags to the end of document
-<ruby> and friends, (more research needed, appears to be XHTML 1.1 markup)
 <xmp>, monospace, replace with pre
+
+These should be put into their own Tidy module, not loaded by default(?). These
+all qualify as "lenient" transforms.

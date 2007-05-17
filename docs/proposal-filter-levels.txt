@@ -114,6 +114,10 @@ Partially presentational - table.cellpadding, table.cellspacing,
 
 == CSS Risk Analysis ==
 
+Currently, there is no support for fine-grained "allowed CSS" specification,
+mainly because I'm lazy, partially because no one has asked for it. However,
+this will be added eventually.
+
 There are certain CSS elements that are extremely useful inline, but then
 as you get to more presentation oriented styling it may not always be
 appropriate to inline them.
