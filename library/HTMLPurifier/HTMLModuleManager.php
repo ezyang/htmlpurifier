@@ -26,10 +26,14 @@ require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 require_once 'HTMLPurifier/HTMLModule/Legacy.php';
 require_once 'HTMLPurifier/HTMLModule/Target.php';
 require_once 'HTMLPurifier/HTMLModule/Scripting.php';
+require_once 'HTMLPurifier/HTMLModule/XMLCommonAttributes.php';
+require_once 'HTMLPurifier/HTMLModule/NonXMLCommonAttributes.php';
 
-// proprietary modules
-require_once 'HTMLPurifier/HTMLModule/TransformToStrict.php';
-require_once 'HTMLPurifier/HTMLModule/TransformToXHTML11.php';
+// tidy modules
+require_once 'HTMLPurifier/HTMLModule/Tidy.php';
+require_once 'HTMLPurifier/HTMLModule/Tidy/XHTMLAndHTML4.php';
+require_once 'HTMLPurifier/HTMLModule/Tidy/XHTML.php';
+require_once 'HTMLPurifier/HTMLModule/Tidy/XHTMLStrict.php';
 
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'Doctype', null, 'string/null',
@@ -113,40 +117,37 @@ class HTMLPurifier_HTMLModuleManager
             'StyleAttribute', 'Scripting'
         );
         $transitional = array('Legacy', 'Target');
+        $xml = array('XMLCommonAttributes');
+        $non_xml = array('NonXMLCommonAttributes');
         
         $this->doctypes->register(
             'HTML 4.01 Transitional', false,
-            array_merge($common, $transitional),
-            array('TransformToStrict')
-            // Tidy: Transitional
+            array_merge($common, $transitional, $non_xml),
+            array('Tidy_Transitional')
         );
         
         $this->doctypes->register(
             'HTML 4.01 Strict', false,
-            array_merge($common),
-            array('TransformToStrict')
-            // Tidy: Strict
+            array_merge($common, $non_xml),
+            array('Tidy_Strict')
         );
         
         $this->doctypes->register(
             'XHTML 1.0 Transitional', true,
-            array_merge($common, $transitional),
-            array('TransformToStrict')
-            // Tidy: Transitional, XHTML
+            array_merge($common, $transitional, $xml, $non_xml),
+            array('Tidy_Transitional', 'Tidy_XHTML')
         );
         
         $this->doctypes->register(
             'XHTML 1.0 Strict', true,
-            array_merge($common),
-            array('TransformToStrict')
-            // Tidy: Strict, XHTML
+            array_merge($common, $xml, $non_xml),
+            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_XHTMLStrict')
         );
         
         $this->doctypes->register(
             'XHTML 1.1', true,
-            array_merge($common),
-            array('TransformToStrict', 'TransformToXHTML11')
-            // Tidy: Strict, XHTML1_1
+            array_merge($common, $xml),
+            array('Tidy_Strict', 'Tidy_XHTML') // Tidy_XHTML1_1
         );
         
     }
@@ -193,6 +194,10 @@ class HTMLPurifier_HTMLModuleManager
                 }
             }
             $module = new $module();
+        }
+        if (empty($module->name)) {
+            trigger_error('Module instance of ' . get_class($module) . ' must have name');
+            return;
         }
         $this->registeredModules[$module->name] = $module;
     }
@@ -257,7 +262,9 @@ class HTMLPurifier_HTMLModuleManager
         
         foreach ($doctype->tidyModules as $module) {
             $this->processModule($module);
-            // FIXME!!! initialize the tidy modules here
+            if (method_exists($this->modules[$module], 'construct')) {
+                $this->modules[$module]->construct($config);
+            }
         }
         
         // setup lookup table based on all valid modules

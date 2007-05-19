@@ -12,6 +12,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 1.7.0, unknown release date
 # Completely refactored HTMLModuleManager, decentralizing safety
   information
+# Transform modules changed to Tidy modules, which offer more flexibility
+  and better modularization
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible
 . Added convenience functions for HTMLModule constructors

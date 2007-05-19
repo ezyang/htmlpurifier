@@ -10,10 +10,9 @@ TODO List
 1.7 release [Advanced API]
  # Complete advanced API, and fully document it
     - Add framework for unsafe attributes
-    - Wire in modes (configuration, module and manager wise)
+    - Document Tidy modules
     - Reorganize configuration directives
-    - Determine handling for complex/cascading configuration directives
-    - Reorganize transformation modules
+    - Set up doctype object inside configuration object
     - Set up anonymous module management by HTMLDefinition
  # Implement HTMLDefinition caching using serialize
  # Implement all deprecated tags and attributes
