@@ -6,13 +6,6 @@ require_once 'HTMLPurifier/HTMLModuleManager.php';
 // this definition and its modules MUST NOT define configuration directives
 // outside of the HTML or Attr namespaces
 
-// will be superceded by more accurate doctype declaration schemes
-HTMLPurifier_ConfigSchema::define(
-    'HTML', 'Strict', false, 'bool',
-    'Determines whether or not to use Transitional (loose) or Strict rulesets. '.
-    'This directive has been available since 1.3.0.'
-);
-
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'BlockWrapper', 'p', 'string',
     'String name of element to wrap inline elements that are inside a block '.

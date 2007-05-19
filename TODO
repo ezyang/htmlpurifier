@@ -12,7 +12,6 @@ TODO List
     - Add framework for unsafe attributes
     - Wire in modes (configuration, module and manager wise)
     - Reorganize configuration directives
-        . New namespace: Output for Generator
     - Determine handling for complex/cascading configuration directives
     - Reorganize transformation modules
     - Set up anonymous module management by HTMLDefinition

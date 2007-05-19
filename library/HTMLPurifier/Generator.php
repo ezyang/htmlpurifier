@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/Lexer.php';
 
 HTMLPurifier_ConfigSchema::define(
-    'Core', 'CleanUTF8DuringGeneration', false, 'bool',
+    'Output', 'EnableRedundantUTF8Cleaning', false, 'bool',
     'When true, HTMLPurifier_Generator will also check all strings it '.
     'escapes for UTF-8 well-formedness as a defense in depth measure. '.
     'This could cause a considerable performance impact, and is not '.
@@ -12,57 +12,64 @@ HTMLPurifier_ConfigSchema::define(
     'the configuration value is only read at the beginning of '.
     'generateFromTokens.'
 );
+HTMLPurifier_ConfigSchema::defineAlias('Core', 'CleanUTF8DuringGeneration', 'Output', 'EnableRedundantUTF8Cleaning');
 
 HTMLPurifier_ConfigSchema::define(
-    'Core', 'XHTML', true, 'bool',
-    'Determines whether or not output is XHTML or not.  When disabled, HTML '.
-    'Purifier goes into HTML 4.01 removes XHTML-specific markup constructs, '.
-    'such as boolean attribute expansion and trailing slashes in empty tags. '.
-    'This directive was available since 1.1.'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'CommentScriptContents', true, 'bool',
+    'Output', 'CommentScriptContents', true, 'bool',
     'Determines whether or not HTML Purifier should attempt to fix up '.
     'the contents of script tags for legacy browsers with comments. This '.
     'directive was available since 1.7.'
 );
+HTMLPurifier_ConfigSchema::defineAlias('Core', 'CommentScriptContents', 'Output', 'CommentScriptContents');
 
 // extension constraints could be factored into ConfigSchema
 HTMLPurifier_ConfigSchema::define(
-    'Core', 'TidyFormat', false, 'bool',
-    '<p>Determines whether or not to run Tidy on the final output for pretty '.
-    'formatting reasons, such as indentation and wrap.</p><p>This can greatly '.
-    'improve readability for editors who are hand-editing the HTML, but is '.
-    'by no means necessary as HTML Purifier has already fixed all major '.
-    'errors the HTML may have had. Tidy is a non-default extension, and this directive '.
-    'will silently fail if Tidy is not available.</p><p>If you are looking to make '.
-    'the overall look of your page\'s source better, I recommend running Tidy '.
-    'on the entire page rather than just user-content (after all, the '.
-    'indentation relative to the containing blocks will be incorrect).</p><p>This '.
-    'directive was available since 1.1.1.</p>'
+    'Output', 'TidyFormat', false, 'bool', <<<HTML
+<p>
+    Determines whether or not to run Tidy on the final output for pretty 
+    formatting reasons, such as indentation and wrap.
+</p>
+<p>
+    This can greatly improve readability for editors who are hand-editing
+    the HTML, but is by no means necessary as HTML Purifier has already
+    fixed all major errors the HTML may have had. Tidy is a non-default
+    extension, and this directive will silently fail if Tidy is not
+    available.
+</p>
+<p>
+    If you are looking to make the overall look of your page's source
+    better, I recommend running Tidy on the entire page rather than just
+    user-content (after all, the indentation relative to the containing
+    blocks will be incorrect).
+</p>
+<p>
+    This directive was available since 1.1.1.
+</p>
+HTML
 );
+HTMLPurifier_ConfigSchema::defineAlias('Core', 'TidyFormat', 'Output', 'TidyFormat');
 
 /**
  * Generates HTML from tokens.
+ * @todo Create a configuration-wide instance that all objects retrieve
  */
 class HTMLPurifier_Generator
 {
     
     /**
-     * Bool cache of %Core.CleanUTF8DuringGeneration
+     * Bool cache of %Output.EnableRedundantUTF8Cleaning
      * @private
      */
     var $_clean_utf8 = false;
     
     /**
-     * Bool cache of %Core.XHTML
+     * Bool cache of %HTML.XHTML
      * @private
      */
     var $_xhtml = true;
     
     /**
-     * Bool cache of %Core.CommentScriptContents
+     * Bool cache of %Output.CommentScriptContents
      * @private
      */
     var $_scriptFix = false;
@@ -76,9 +83,13 @@ class HTMLPurifier_Generator
     function generateFromTokens($tokens, $config, &$context) {
         $html = '';
         if (!$config) $config = HTMLPurifier_Config::createDefault();
-        $this->_clean_utf8  = $config->get('Core', 'CleanUTF8DuringGeneration');
-        $this->_xhtml       = $config->get('Core', 'XHTML');
-        $this->_scriptFix   = $config->get('Core', 'CommentScriptContents');
+        $this->_clean_utf8  = $config->get('Output', 'EnableRedundantUTF8Cleaning');
+        
+        // this should replaced with a query to the Doctype object in
+        // config to determine whether or not this is an XML-based language
+        $this->_xhtml       = $config->get('HTML', 'XHTML');
+        
+        $this->_scriptFix   = $config->get('Output', 'CommentScriptContents');
         if (!$tokens) return '';
         for ($i = 0, $size = count($tokens); $i < $size; $i++) {
             if ($this->_scriptFix && $tokens[$i]->name === 'script') {
@@ -91,7 +102,7 @@ class HTMLPurifier_Generator
             }
             $html .= $this->generateFromToken($tokens[$i]);
         }
-        if ($config->get('Core', 'TidyFormat') && extension_loaded('tidy')) {
+        if ($config->get('Output', 'TidyFormat') && extension_loaded('tidy')) {
             
             $tidy_options = array(
                'indent'=> true,

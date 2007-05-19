@@ -2,6 +2,22 @@
 
 require_once 'HTMLPurifier/Doctype.php';
 
+// Legacy directives for doctype specification
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'Strict', false, 'bool',
+    'Determines whether or not to use Transitional (loose) or Strict rulesets. '.
+    'This directive is deprecated in favor of %HTML.Doctype. '.
+    'This directive has been available since 1.3.0.'
+);
+
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'XHTML', true, 'bool',
+    'Determines whether or not output is XHTML 1.0 or HTML 4.01 flavor. '.
+    'This directive is deprecated in favor of %HTML.Doctype. '.
+    'This directive was available since 1.1.'
+);
+HTMLPurifier_ConfigSchema::defineAlias('Core', 'XHTML', 'HTML', 'XHTML');
+
 class HTMLPurifier_DoctypeRegistry
 {
     
@@ -92,7 +108,7 @@ class HTMLPurifier_DoctypeRegistry
             return $doctype;
         }
         // backwards-compatibility
-        if ($config->get('Core', 'XHTML')) {
+        if ($config->get('HTML', 'XHTML')) {
             $doctype = 'XHTML 1.0';
         } else {
             $doctype = 'HTML 4.01';
