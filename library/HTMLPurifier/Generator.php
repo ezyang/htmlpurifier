@@ -84,12 +84,11 @@ class HTMLPurifier_Generator
         $html = '';
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $this->_clean_utf8  = $config->get('Output', 'EnableRedundantUTF8Cleaning');
-        
-        // this should replaced with a query to the Doctype object in
-        // config to determine whether or not this is an XML-based language
-        $this->_xhtml       = $config->get('HTML', 'XHTML');
-        
         $this->_scriptFix   = $config->get('Output', 'CommentScriptContents');
+        
+        $doctype = $config->getDoctype();
+        $this->_xhtml = $doctype->xml;
+        
         if (!$tokens) return '';
         for ($i = 0, $size = count($tokens); $i < $size; $i++) {
             if ($this->_scriptFix && $tokens[$i]->name === 'script') {

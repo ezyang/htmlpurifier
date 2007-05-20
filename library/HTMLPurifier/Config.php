@@ -47,6 +47,11 @@ class HTMLPurifier_Config
     var $autoFinalize = true;
     
     /**
+     * Instance of HTMLPurifier_Doctype, representing current doctype
+     */
+    var $doctype;
+    
+    /**
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
      */
@@ -223,6 +228,16 @@ class HTMLPurifier_Config
                 }
             }
         }
+    }
+    
+    /**
+     * Returns the current doctype object
+     */
+    function getDoctype() {
+        if (!$this->doctype) {
+            $this->getHTMLDefinition();
+        }
+        return $this->doctype;
     }
     
     /**

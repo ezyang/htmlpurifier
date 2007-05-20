@@ -93,8 +93,7 @@ class HTMLPurifier_DoctypeRegistry
     function make($config) {
         $original_doctype = $this->get($this->getDoctypeFromConfig($config));
         $doctype = $original_doctype->copy();
-        // FIXME!!! Set $doctype into $config so others can use it,
-        // you might need to use two copies
+        $config->doctype = $doctype;
         return $doctype;
     }
     
