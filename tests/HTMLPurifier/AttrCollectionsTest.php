@@ -70,7 +70,7 @@ class HTMLPurifier_AttrCollectionsTest extends UnitTestCase
         $types = new HTMLPurifier_AttrTypesMock($this);
         $collections = new HTMLPurifier_AttrCollections($types, array());
         $collections->info = array(
-            'Core' => array(0 => array('Inclusion'), 'attr-original' => 'Type'),
+            'Core' => array(0 => array('Inclusion', 'Undefined'), 'attr-original' => 'Type'),
             'Inclusion' => array(0 => array('SubInclusion'), 'attr' => 'Type'),
             'SubInclusion' => array('attr2' => 'Type')
         );

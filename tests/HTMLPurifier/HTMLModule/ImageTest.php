@@ -7,6 +7,8 @@ class HTMLPurifier_HTMLModule_ImageTest extends HTMLPurifier_HTMLModuleHarness
     
     function test() {
         
+        $this->setupScaffold('Image');
+        
         // max
         $this->assertResult(
             '<span>
@@ -16,6 +18,7 @@ class HTMLPurifier_HTMLModule_ImageTest extends HTMLPurifier_HTMLModuleHarness
                     longdesc="example.description.txt"
                     height="42"
                     width="42"
+                    ac:common="yes"
                  />
              </span>'
         );

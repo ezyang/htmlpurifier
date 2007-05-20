@@ -42,6 +42,11 @@ class HTMLPurifier_Harness extends UnitTestCase
      */
     var $generator;
     
+    /**
+     * Default config to fall back on if no config is available
+     */
+    var $config;
+    
     function HTMLPurifier_Harness() {
         $this->lexer     = new HTMLPurifier_Lexer_DirectLex();
         $this->generator = new HTMLPurifier_Generator();
@@ -52,22 +57,24 @@ class HTMLPurifier_Harness extends UnitTestCase
      * Asserts a specific result from a one parameter + config/context function
      * @param $input Input parameter
      * @param $expect Expectation
-     * @param $config_array Configuration array in form of
-     *                      Namespace.Directive => Value or an actual config
-     *                      object.
+     * @param $config Configuration array in form of Ns.Directive => Value.
+     *                Has no effect if $this->config is set.
      * @param $context_array Context array in form of Key => Value or an actual
      *                       context object.
      */
     function assertResult($input, $expect = true,
-        $config_array = array(), $context_array = array()
+        $config_array = false, $context_array = array()
     ) {
         
-        // setup config object
-        $config  = HTMLPurifier_Config::createDefault();
-        $config->loadArray($config_array);
+        // setup config 
+        if ($this->config) {
+            $config = HTMLPurifier_Config::create($this->config);
+        } else {
+            $config = HTMLPurifier_Config::create($config_array);
+        }
         
         // setup context object. Note that we are operating on a copy of it!
-        // We will extend the test harness to allow you to do post-tests
+        // When necessary, extend the test harness to allow post-tests
         // on the context object
         $context = new HTMLPurifier_Context();
         $context->loadArray($context_array);

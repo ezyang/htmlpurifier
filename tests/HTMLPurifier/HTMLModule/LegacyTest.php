@@ -7,12 +7,14 @@ class HTMLPurifier_HTMLModule_LegacyTest extends HTMLPurifier_HTMLModuleHarness
     
     function test() {
         
+        $this->setupScaffold('Legacy');
+        
         // max
         $this->assertResult(
             '<span>
-                <u>Text<span></span></u>
-                <s>Text<span></span></s>
-                <strike>Text<span></span></strike>
+                <u ac:common="yes">Text<span></span></u>
+                <s ac:common="yes">Text<span></span></s>
+                <strike ac:common="yes">Text<span></span></strike>
             </span>'
         );
         

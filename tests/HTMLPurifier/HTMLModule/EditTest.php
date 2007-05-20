@@ -7,21 +7,23 @@ class HTMLPurifier_HTMLModule_EditTest extends HTMLPurifier_HTMLModuleHarness
     
     function test() {
         
+        $this->setupScaffold('Edit');
+        
         // max
         $this->assertResult(
             '<span>
-                 <ins cite="http://www.example.com/">
+                 <ins cite="http://www.example.com/" ac:common="yes">
                     #PCDATA <span></span>
                  </ins>
-                 <del cite="http://www.example.com/">
+                 <del cite="http://www.example.com/" ac:common="yes">
                     #PCDATA <span></span>
                  </del>
              </span>
              <div>
-                 <ins cite="http://www.example.com/">
+                 <ins cite="http://www.example.com/" ac:common="yes">
                     #PCDATA <div></div> <span></span>
                  </ins>
-                 <del cite="http://www.example.com/">
+                 <del cite="http://www.example.com/" ac:common="yes">
                     #PCDATA <div></div> <span></span>
                  </del>
              </div>'

@@ -7,6 +7,11 @@ class HTMLPurifier_HTMLModule_HypertextTest extends HTMLPurifier_HTMLModuleHarne
     
     function test() {
         
+        $this->setupScaffold('Hypertext', array(
+            'Attr.AllowedRel' => 'nofollow',
+            'Attr.AllowedRev' => 'index'
+        ));
+        
         // max
         $this->assertResult(
             '<span>
@@ -14,13 +19,11 @@ class HTMLPurifier_HTMLModule_HypertextTest extends HTMLPurifier_HTMLModuleHarne
                     href="http://www.example.com/"
                     rel="nofollow"
                     rev="index"
+                    ac:common="true"
                  >
                     #PCDATA <span>Inline</span>
                  </a>
-             </span>', true, array(
-                'Attr.AllowedRel' => 'nofollow',
-                'Attr.AllowedRev' => 'index'
-             )
+             </span>', true
         );
         
         // invalid children

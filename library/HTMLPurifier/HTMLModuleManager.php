@@ -53,6 +53,43 @@ HTMLPurifier_ConfigSchema::define(
     'will be used. This directive has been available since 1.7.0.'
 );
 
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'AllowedModules', null, 'lookup/null', '
+<p>
+    A doctype comes with a set of usual modules to use. Without having
+    to mucking about with the doctypes, you can quickly activate or
+    disable these modules by specifying which modules you wish to allow
+    with this directive. This is most useful for unit testing specific
+    modules, although end users may find it useful for their own ends.
+</p>
+<p>
+    If you specify a module that does not exist, the manager will silently
+    fail to use it, so be careful! User-defined modules are not affected
+    by this directive. Modules defined in %HTML.CoreModules are not
+    affected by this directive. This directive has been available since 1.7.0.
+</p>
+');
+
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'CoreModules', array(
+        'Structure' => true,
+        'Text' => true,
+        'Hypertext' => true,
+        'List' => true,
+        'NonXMLCommonAttributes' => true,
+        'XMLCommonAttributes' => true,
+        'CommonAttributes' => true
+     ), 'lookup', '
+<p>
+    Certain modularized doctypes (XHTML, namely), have certain modules
+    that must be included for the doctype to be an conforming document
+    type: put those modules here. By default, XHTML\'s core modules
+    are used. You can set this to a blank array to disable core module
+    protection, but this is not recommended. This directive has been
+    available since 1.7.0.
+</p>
+');
+
 class HTMLPurifier_HTMLModuleManager
 {
     
@@ -254,6 +291,17 @@ class HTMLPurifier_HTMLModuleManager
         $doctype = $this->doctypes->make($config);
         $modules = $doctype->modules;
         
+        // take out the default modules that aren't allowed
+        $lookup = $config->get('HTML', 'AllowedModules');
+        $special_cases = $config->get('HTML', 'CoreModules');
+        
+        if (is_array($lookup)) {
+            foreach ($modules as $k => $m) {
+                if (isset($special_cases[$m])) continue;
+                if (!isset($lookup[$m])) unset($modules[$k]);
+            }
+        }
+        
         // merge in custom modules
         $modules = array_merge($modules, $this->userModules);
         
@@ -291,7 +339,6 @@ class HTMLPurifier_HTMLModuleManager
             // the module in your custom doctype should be sufficient
             $this->modules
         );
-        
     }
     
     /**

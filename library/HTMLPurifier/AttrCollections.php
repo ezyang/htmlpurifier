@@ -63,6 +63,7 @@ class HTMLPurifier_AttrCollections
             if (isset($seen[$merge[$i]])) continue;
             $seen[$merge[$i]] = true;
             // foreach attribute of the inclusion, copy it over
+            if (!isset($this->info[$merge[$i]])) continue;
             foreach ($this->info[$merge[$i]] as $key => $value) {
                 if (isset($attr[$key])) continue; // also catches more inclusions
                 $attr[$key] = $value;

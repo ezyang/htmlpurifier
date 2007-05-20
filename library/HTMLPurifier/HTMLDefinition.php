@@ -7,48 +7,63 @@ require_once 'HTMLPurifier/HTMLModuleManager.php';
 // outside of the HTML or Attr namespaces
 
 HTMLPurifier_ConfigSchema::define(
-    'HTML', 'BlockWrapper', 'p', 'string',
-    'String name of element to wrap inline elements that are inside a block '.
-    'context.  This only occurs in the children of blockquote in strict mode. '.
-    'Example: by default value, <code>&lt;blockquote&gt;Foo&lt;/blockquote&gt;</code> '.
-    'would become <code>&lt;blockquote&gt;&lt;p&gt;Foo&lt;/p&gt;&lt;/blockquote&gt;</code>. The '.
-    '<code>&lt;p&gt;</code> tags can be replaced '.
-    'with whatever you desire, as long as it is a block level element. '.
-    'This directive has been available since 1.3.0.'
-);
+    'HTML', 'BlockWrapper', 'p', 'string', '
+<p>
+    String name of element to wrap inline elements that are inside a block
+    context.  This only occurs in the children of blockquote in strict mode.
+</p>
+<p>
+    Example: by default value,
+    <code>&lt;blockquote&gt;Foo&lt;/blockquote&gt;</code> would become
+    <code>&lt;blockquote&gt;&lt;p&gt;Foo&lt;/p&gt;&lt;/blockquote&gt;</code>.
+    The <code>&lt;p&gt;</code> tags can be replaced with whatever you desire,
+    as long as it is a block level element. This directive has been available
+    since 1.3.0.
+</p>
+');
 
 HTMLPurifier_ConfigSchema::define(
-    'HTML', 'Parent', 'div', 'string',
-    'String name of element that HTML fragment passed to library will be '.
-    'inserted in.  An interesting variation would be using span as the '.
-    'parent element, meaning that only inline tags would be allowed. '.
-    'This directive has been available since 1.3.0.'
-);
+    'HTML', 'Parent', 'div', 'string', '
+<p>
+    String name of element that HTML fragment passed to library will be 
+    inserted in.  An interesting variation would be using span as the 
+    parent element, meaning that only inline tags would be allowed. 
+    This directive has been available since 1.3.0.
+</p>
+');
 
 HTMLPurifier_ConfigSchema::define(
-    'HTML', 'AllowedElements', null, 'lookup/null',
-    'If HTML Purifier\'s tag set is unsatisfactory for your needs, you '.
-    'can overload it with your own list of tags to allow.  Note that this '.
-    'method is subtractive: it does its job by taking away from HTML Purifier '.
-    'usual feature set, so you cannot add a tag that HTML Purifier never '.
-    'supported in the first place (like embed, form or head).  If you change this, you '.
-    'probably also want to change %HTML.AllowedAttributes. '.
-    '<strong>Warning:</strong> If another directive conflicts with the '.
-    'elements here, <em>that</em> directive will win and override. '.
-    'This directive has been available since 1.3.0.'
-);
+    'HTML', 'AllowedElements', null, 'lookup/null', '
+<p>
+    If HTML Purifier\'s tag set is unsatisfactory for your needs, you 
+    can overload it with your own list of tags to allow.  Note that this 
+    method is subtractive: it does its job by taking away from HTML Purifier 
+    usual feature set, so you cannot add a tag that HTML Purifier never 
+    supported in the first place (like embed, form or head).  If you 
+    change this, you probably also want to change %HTML.AllowedAttributes. 
+</p>
+<p>
+    <strong>Warning:</strong> If another directive conflicts with the 
+    elements here, <em>that</em> directive will win and override. 
+    This directive has been available since 1.3.0.
+</p>
+');
 
 HTMLPurifier_ConfigSchema::define(
-    'HTML', 'AllowedAttributes', null, 'lookup/null',
-    'IF HTML Purifier\'s attribute set is unsatisfactory, overload it! '.
-    'The syntax is \'tag.attr\' or \'*.attr\' for the global attributes '.
-    '(style, id, class, dir, lang, xml:lang).'.
-    '<strong>Warning:</strong> If another directive conflicts with the '.
-    'elements here, <em>that</em> directive will win and override. For '.
-    'example, %HTML.EnableAttrID will take precedence over *.id in this '.
-    'directive.  You must set that directive to true before you can use '.
-    'IDs at all. This directive has been available since 1.3.0.'
-);
+    'HTML', 'AllowedAttributes', null, 'lookup/null', '
+<p>
+    If HTML Purifier\'s attribute set is unsatisfactory, overload it! 
+    The syntax is "tag.attr" or "*.attr" for the global attributes 
+    (style, id, class, dir, lang, xml:lang).
+</p>
+<p>
+    <strong>Warning:</strong> If another directive conflicts with the 
+    elements here, <em>that</em> directive will win and override. For 
+    example, %HTML.EnableAttrID will take precedence over *.id in this 
+    directive.  You must set that directive to true before you can use 
+    IDs at all. This directive has been available since 1.3.0.
+</p>
+');
 
 /**
  * Definition of the purified HTML that describes allowed children,

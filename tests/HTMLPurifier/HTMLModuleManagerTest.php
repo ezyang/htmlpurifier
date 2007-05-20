@@ -72,6 +72,34 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         
     }
     
+    function testAllowedModules() {
+        
+        $manager = new HTMLPurifier_HTMLModuleManager();
+        $manager->doctypes->register(
+            'Fantasy Inventory 1.0', true,
+            array('Weapons', 'Magic')
+        );
+        
+        // register these modules so it doesn't blow up
+        $weapons_module = new HTMLPurifier_HTMLModule();
+        $weapons_module->name = 'Weapons';
+        $manager->registerModule($weapons_module);
+        
+        $magic_module = new HTMLPurifier_HTMLModule();
+        $magic_module->name = 'Magic';
+        $manager->registerModule($magic_module);
+        
+        $config = HTMLPurifier_Config::create(array(
+            'HTML.Doctype' => 'Fantasy Inventory 1.0',
+            'HTML.AllowedModules' => 'Weapons'
+        ));
+        $manager->setup($config);
+        
+        $this->assertTrue( isset($manager->modules['Weapons']));
+        $this->assertFalse(isset($manager->modules['Magic']));
+        
+    }
+    
 }
 
 ?>
