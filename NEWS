@@ -14,6 +14,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   information
 # Transform modules changed to Tidy modules, which offer more flexibility
   and better modularization
+# Configuration object now finalizes itself when a read operation is
+  performed on it, ensuring that its internal state stays consistent.
+  To revert this behavior, you can set the $autoFinalize member variable 
+  off, but it's not recommended.
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible
 . Added convenience functions for HTMLModule constructors

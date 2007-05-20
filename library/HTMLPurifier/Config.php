@@ -36,6 +36,17 @@ class HTMLPurifier_Config
     var $css_definition;
     
     /**
+     * Bool indicator whether or not config is finalized
+     */
+    var $finalized = false;
+    
+    /**
+     * Bool indicator whether or not to automatically finalize 
+     * the object if a read operation is done
+     */
+    var $autoFinalize = true;
+    
+    /**
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
      */
@@ -78,6 +89,7 @@ class HTMLPurifier_Config
      * @param $key String key
      */
     function get($namespace, $key, $from_alias = false) {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
         if (!isset($this->def->info[$namespace][$key])) {
             trigger_error('Cannot retrieve value of undefined directive',
                 E_USER_WARNING);
@@ -96,6 +108,7 @@ class HTMLPurifier_Config
      * @param $namespace String namespace
      */
     function getBatch($namespace) {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
         if (!isset($this->def->info[$namespace])) {
             trigger_error('Cannot retrieve undefined namespace',
                 E_USER_WARNING);
@@ -111,6 +124,7 @@ class HTMLPurifier_Config
      * @param $value Mixed value
      */
     function set($namespace, $key, $value, $from_alias = false) {
+        if ($this->isFinalized('Cannot set directive after finalization')) return;
         if (!isset($this->def->info[$namespace][$key])) {
             trigger_error('Cannot set undefined directive to value',
                 E_USER_WARNING);
@@ -164,6 +178,7 @@ class HTMLPurifier_Config
      *             called before it's been setup, otherwise won't work.
      */
     function &getHTMLDefinition($raw = false) {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
         if (
             empty($this->html_definition) || // hasn't ever been setup
             ($raw && $this->html_definition->setup) // requesting new one
@@ -179,6 +194,7 @@ class HTMLPurifier_Config
      * Retrieves reference to the CSS definition
      */
     function &getCSSDefinition() {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
         if ($this->css_definition === null) {
             $this->css_definition = new HTMLPurifier_CSSDefinition();
             $this->css_definition->setup($this);
@@ -192,6 +208,7 @@ class HTMLPurifier_Config
      * @param $config_array Configuration associative array
      */
     function loadArray($config_array) {
+        if ($this->isFinalized('Cannot load directives after finalization')) return;
         foreach ($config_array as $key => $value) {
             $key = str_replace('_', '.', $key);
             if (strpos($key, '.') !== false) {
@@ -213,8 +230,27 @@ class HTMLPurifier_Config
      * @param $filename Name of ini file
      */
     function loadIni($filename) {
+        if ($this->isFinalized('Cannot load directives after finalization')) return;
         $array = parse_ini_file($filename, true);
         $this->loadArray($array);
+    }
+    
+    /**
+     * Checks whether or not the configuration object is finalized.
+     * @param $error String error message, or false for no error
+     */
+    function isFinalized($error = false) {
+        if ($this->finalized && $error) {
+            trigger_error($error, E_USER_ERROR);
+        }
+        return $this->finalized;
+    }
+    
+    /**
+     * Finalizes a configuration object, prohibiting further change
+     */
+    function finalize() {
+        $this->finalized = true;
     }
     
 }

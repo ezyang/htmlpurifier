@@ -66,9 +66,12 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
         
         $this->assertDef('user_story95_alas');
         $this->assertDef('user_alas', 'user_story95_user_alas'); // !
-        
+    }
+    
+    function testLocalPrefixWithoutMainPrefix() {
         // no effect when IDPrefix isn't set
         $this->config->set('Attr', 'IDPrefix', '');
+        $this->config->set('Attr', 'IDPrefixLocal', 'story95_');
         $this->expectError('%Attr.IDPrefixLocal cannot be used unless '.
             '%Attr.IDPrefix is set');
         $this->assertDef('amherst');

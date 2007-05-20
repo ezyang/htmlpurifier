@@ -247,13 +247,10 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         
         $this->def = new HTMLPurifier_AttrDef_URI();
         $this->config->set('URI', 'DisableExternal', true);
+        $this->config->set('URI', 'Host', 'sub.example.com');
         
         $this->assertDef('/foobar.txt');
         $this->assertDef('http://google.com/', false);
-        $this->assertDef('http://sub.example.com/alas?foo=asd', false);
-        
-        $this->config->set('URI', 'Host', 'sub.example.com');
-        
         $this->assertDef('http://sub.example.com/alas?foo=asd');
         $this->assertDef('http://example.com/teehee', false);
         $this->assertDef('http://www.example.com/#man', false);
