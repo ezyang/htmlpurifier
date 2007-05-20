@@ -16,7 +16,3 @@ trouble.  Therein lies the solution:
 HTML Purifier is perfect for filtering pure-HTML input from WYSIWYG editors.
 
 Enough said.
-
-There is a proof-of-concept integration of HTML Purifier with the Mantis
-bugtracker at http://hp.jpsband.org/mantis/ You can see notes on how
-this integration was acheived at http://hp.jpsband.org/mantis_notes.txt
