@@ -10,19 +10,15 @@ require_once 'HTMLPurifier/AttrDef.php';
 class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
 {
     
-    /**
-     * Generic font family keywords.
-     * @protected
-     */
-    var $generic_names = array(
-        'serif' => true,
-        'sans-serif' => true,
-        'monospace' => true,
-        'fantasy' => true,
-        'cursive' => true
-    );
-    
     function validate($string, $config, &$context) {
+        static $generic_names = array(
+            'serif' => true,
+            'sans-serif' => true,
+            'monospace' => true,
+            'fantasy' => true,
+            'cursive' => true
+        );
+        
         $string = $this->parseCDATA($string);
         // assume that no font names contain commas in them
         $fonts = explode(',', $string);
@@ -31,7 +27,7 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
             $font = trim($font);
             if ($font === '') continue;
             // match a generic name
-            if (isset($this->generic_names[$font])) {
+            if (isset($generic_names[$font])) {
                 $final .= $font . ', ';
                 continue;
             }
