@@ -10,10 +10,10 @@ TODO List
 1.7 release [Advanced API]
  # Complete advanced API, and fully document it
     - Add framework for unsafe attributes
-    - Document Tidy modules
     - Reorganize configuration directives
     - Set up doctype object inside configuration object
     - Set up anonymous module management by HTMLDefinition
+    - Revamp/create unit tests for modules, esp. the Tidy ones
  # Implement HTMLDefinition caching using serialize
  # Implement all deprecated tags and attributes
  - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists (possibly
