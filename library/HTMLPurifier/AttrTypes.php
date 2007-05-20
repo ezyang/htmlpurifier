@@ -37,6 +37,18 @@ class HTMLPurifier_AttrTypes
         // number is really a positive integer (one or more digits)
         $this->info['Number']   = new HTMLPurifier_AttrDef_Integer(false, false, true);
     }
+    
+    /**
+     * Retrieves a type
+     */
+    function get($type) {
+        // maybe some extra initialization could be done
+        if (!isset($this->info[$type])) {
+            trigger_error('Cannot retrieve undefined attribute type ' . $type, E_USER_ERROR);
+            return;
+        }
+        return $this->info[$type];
+    }
 }
 
 ?>

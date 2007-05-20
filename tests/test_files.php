@@ -3,6 +3,7 @@
 if (!defined('HTMLPurifierTest')) exit;
 
 // define callable test files (sorted alphabetically)
+$test_files[] = 'AttrCollectionsTest.php';
 $test_files[] = 'AttrDef/CSS/BackgroundPositionTest.php';
 $test_files[] = 'AttrDef/CSS/BackgroundTest.php';
 $test_files[] = 'AttrDef/CSS/BorderTest.php';
@@ -46,6 +47,7 @@ $test_files[] = 'AttrTransform/ImgSpaceTest.php';
 $test_files[] = 'AttrTransform/LangTest.php';
 $test_files[] = 'AttrTransform/LengthTest.php';
 $test_files[] = 'AttrTransform/NameTest.php';
+$test_files[] = 'AttrTypesTest.php';
 $test_files[] = 'ChildDef/ChameleonTest.php';
 $test_files[] = 'ChildDef/CustomTest.php';
 $test_files[] = 'ChildDef/OptionalTest.php';

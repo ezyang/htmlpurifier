@@ -21,6 +21,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible
 . Added convenience functions for HTMLModule constructors
+. AttrTypes now has accessor functions that should be used instead
+  of directly manipulating info
 
 1.6.1, released 2007-05-05
 ! Support for more deprecated attributes via transformations:

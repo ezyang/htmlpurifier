@@ -168,9 +168,13 @@ class HTMLPurifier_Config
             return;
         }
         $this->conf[$namespace][$key] = $value;
+        
+        // reset definitions if the directives they depend on changed
+        // this is a very costly process, so it's discouraged 
+        // with finalization
         if ($namespace == 'HTML' || $namespace == 'Attr') {
-            // reset HTML definition if relevant attributes changed
             $this->html_definition = null;
+            $this->doctype = null;
         }
         if ($namespace == 'CSS') {
             $this->css_definition = null;
