@@ -2,6 +2,8 @@
 
 require_once 'HTMLPurifier/LanguageFactory.php';
 
+// UNUSED
+
 class HTMLPurifier_Language
 {
     

@@ -6,6 +6,8 @@ require_once 'HTMLPurifier/ChildDef/Empty.php';
 require_once 'HTMLPurifier/ChildDef/Required.php';
 require_once 'HTMLPurifier/ChildDef/Optional.php';
 
+// NOT UNIT TESTED!!!
+
 class HTMLPurifier_ContentSets
 {
     

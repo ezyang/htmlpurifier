@@ -3,6 +3,8 @@
 require_once 'HTMLPurifier/Language.php';
 require_once 'HTMLPurifier/AttrDef/Lang.php';
 
+// UNUSED
+
 /**
  * Class responsible for generating HTMLPurifier_Language objects, managing
  * caching and fallbacks.

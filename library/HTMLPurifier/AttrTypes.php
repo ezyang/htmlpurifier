@@ -16,12 +16,13 @@ class HTMLPurifier_AttrTypes
 {
     /**
      * Lookup array of attribute string identifiers to concrete implementations
-     * @public
+     * @protected
      */
     var $info = array();
     
     /**
-     * Constructs the info array
+     * Constructs the info array, supplying default implementations for attribute
+     * types.
      */
     function HTMLPurifier_AttrTypes() {
         $this->info['CDATA']    = new HTMLPurifier_AttrDef_Text();
@@ -40,14 +41,26 @@ class HTMLPurifier_AttrTypes
     
     /**
      * Retrieves a type
+     * @param $type String type name
+     * @return Object AttrDef for type
      */
     function get($type) {
-        // maybe some extra initialization could be done
+        // If $type is complicated, we may to clone the attribute
+        // definition and make custom changes
         if (!isset($this->info[$type])) {
             trigger_error('Cannot retrieve undefined attribute type ' . $type, E_USER_ERROR);
             return;
         }
         return $this->info[$type];
+    }
+    
+    /**
+     * Sets a new implementation for a type
+     * @param $type String type name
+     * @param $impl Object AttrDef for type
+     */
+    function set($type, $impl) {
+        $this->info[$type] = $impl;
     }
 }
 

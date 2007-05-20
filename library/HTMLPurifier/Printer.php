@@ -4,6 +4,8 @@ require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Token.php';
 require_once 'HTMLPurifier/Encoder.php';
 
+// OUT OF DATE, NEEDS UPDATING!
+
 class HTMLPurifier_Printer
 {
     
