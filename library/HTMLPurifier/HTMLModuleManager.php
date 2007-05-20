@@ -34,6 +34,7 @@ require_once 'HTMLPurifier/HTMLModule/Tidy.php';
 require_once 'HTMLPurifier/HTMLModule/Tidy/XHTMLAndHTML4.php';
 require_once 'HTMLPurifier/HTMLModule/Tidy/XHTML.php';
 require_once 'HTMLPurifier/HTMLModule/Tidy/XHTMLStrict.php';
+require_once 'HTMLPurifier/HTMLModule/Tidy/Proprietary.php';
 
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'Doctype', null, 'string/null',
@@ -123,31 +124,31 @@ class HTMLPurifier_HTMLModuleManager
         $this->doctypes->register(
             'HTML 4.01 Transitional', false,
             array_merge($common, $transitional, $non_xml),
-            array('Tidy_Transitional')
+            array('Tidy_Transitional', 'Tidy_Proprietary')
         );
         
         $this->doctypes->register(
             'HTML 4.01 Strict', false,
             array_merge($common, $non_xml),
-            array('Tidy_Strict')
+            array('Tidy_Strict', 'Tidy_Proprietary')
         );
         
         $this->doctypes->register(
             'XHTML 1.0 Transitional', true,
             array_merge($common, $transitional, $xml, $non_xml),
-            array('Tidy_Transitional', 'Tidy_XHTML')
+            array('Tidy_Transitional', 'Tidy_XHTML', 'Tidy_Proprietary')
         );
         
         $this->doctypes->register(
             'XHTML 1.0 Strict', true,
             array_merge($common, $xml, $non_xml),
-            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_XHTMLStrict')
+            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_XHTMLStrict', 'Tidy_Proprietary')
         );
         
         $this->doctypes->register(
             'XHTML 1.1', true,
             array_merge($common, $xml),
-            array('Tidy_Strict', 'Tidy_XHTML') // Tidy_XHTML1_1
+            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_Proprietary') // Tidy_XHTML1_1
         );
         
     }

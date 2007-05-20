@@ -2,6 +2,18 @@
 
 require_once 'HTMLPurifier/HTMLModule/Tidy.php';
 
+require_once 'HTMLPurifier/TagTransform/Simple.php';
+require_once 'HTMLPurifier/TagTransform/Center.php';
+require_once 'HTMLPurifier/TagTransform/Font.php';
+
+require_once 'HTMLPurifier/AttrTransform/BgColor.php';
+require_once 'HTMLPurifier/AttrTransform/BoolToCSS.php';
+require_once 'HTMLPurifier/AttrTransform/Border.php';
+require_once 'HTMLPurifier/AttrTransform/Name.php';
+require_once 'HTMLPurifier/AttrTransform/Length.php';
+require_once 'HTMLPurifier/AttrTransform/ImgSpace.php';
+require_once 'HTMLPurifier/AttrTransform/EnumToCSS.php';
+
 class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends
       HTMLPurifier_HTMLModule_Tidy
 {
@@ -74,7 +86,6 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends
         $r['h5@align'] =
         $r['h6@align'] =
         $r['p@align']  =
-        $r['div@align'] =
             new HTMLPurifier_AttrTransform_EnumToCSS('align', $align_lookup);
         
         // @bgcolor for table, tr, td, th ---------------------------------

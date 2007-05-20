@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/HTMLModule/Tidy.php';
+require_once 'HTMLPurifier/ChildDef/StrictBlockquote.php';
 
 class HTMLPurifier_HTMLModule_Tidy_XHTMLStrict extends
       HTMLPurifier_HTMLModule_Tidy
@@ -11,7 +12,6 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLStrict extends
     
     function makeFixes() {
         $r = array();
-        $r['blockquote#child'] = false;
         $r['blockquote#content_model_type'] = 'strictblockquote';
         return $r;
     }

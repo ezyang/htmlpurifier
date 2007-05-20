@@ -25,6 +25,7 @@ h4 {font-family:sans-serif; font-size:0.9em; font-weight:bold; }
 .aside {margin-left:2em; font-family:sans-serif; font-size:0.9em; }
 blockquote .label {font-weight:bold; font-size:1em; margin:0 0 .1em;
     border-bottom:1px solid #CCC;}
+.emphasis {font-weight:bold; text-align:center; font-size:1.3em;}
 
 /* A regular table */
 .table {border-collapse:collapse; border-bottom:2px solid #888; margin-left:2em; }

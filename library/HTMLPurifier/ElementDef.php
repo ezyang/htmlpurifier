@@ -141,9 +141,15 @@ class HTMLPurifier_ElementDef
         $this->_mergeAssocArray($this->auto_close, $def->auto_close);
         $this->_mergeAssocArray($this->excludes, $def->excludes);
         
+        if(!empty($def->content_model)) {
+            $this->content_model .= ' | ' . $def->content_model;
+            $this->child = false;
+        }
+        if(!empty($def->content_model_type)) {
+            $this->content_model_type = $def->content_model_type;
+            $this->child = false;
+        }
         if(!is_null($def->child)) $this->child = $def->child;
-        if(!empty($def->content_model)) $this->content_model .= ' | ' . $def->content_model;
-        if(!empty($def->content_model_type)) $this->content_model_type = $def->content_model_type;
         if(!is_null($def->descendants_are_inline)) $this->descendants_are_inline = $def->descendants_are_inline;
         if(!is_null($def->safe)) $this->safe = $def->safe;
         
