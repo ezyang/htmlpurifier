@@ -29,7 +29,7 @@ class HTMLPurifier_Test extends UnitTestCase
         
         $this->assertPurification(
             '<u>Illegal underline</u>',
-            'Illegal underline'
+            '<span style="text-decoration:underline;">Illegal underline</span>'
         );
         
         $this->assertPurification(

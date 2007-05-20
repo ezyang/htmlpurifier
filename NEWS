@@ -23,6 +23,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Added convenience functions for HTMLModule constructors
 . AttrTypes now has accessor functions that should be used instead
   of directly manipulating info
+. TagTransform_Center deprecated in favor of generic TagTransform_Simple
 
 1.6.1, released 2007-05-05
 ! Support for more deprecated attributes via transformations:

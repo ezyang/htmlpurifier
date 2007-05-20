@@ -3,7 +3,6 @@
 require_once 'HTMLPurifier/TagTransform.php';
 
 // needs to be seperated into files
-require_once 'HTMLPurifier/TagTransform/Center.php';
 require_once 'HTMLPurifier/TagTransform/Font.php';
 require_once 'HTMLPurifier/TagTransform/Simple.php';
 
@@ -104,9 +103,9 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
         
     }
     
-    function testCenter() {
+    function testSimpleWithCSS() {
         
-        $transformer = new HTMLPurifier_TagTransform_Center();
+        $transformer = new HTMLPurifier_TagTransform_Simple('div', 'text-align:center;');
         
         $this->assertTransformation(
             $transformer,

@@ -3,7 +3,6 @@
 require_once 'HTMLPurifier/HTMLModule/Tidy.php';
 
 require_once 'HTMLPurifier/TagTransform/Simple.php';
-require_once 'HTMLPurifier/TagTransform/Center.php';
 require_once 'HTMLPurifier/TagTransform/Font.php';
 
 require_once 'HTMLPurifier/AttrTransform/BgColor.php';
@@ -27,7 +26,10 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends
         $r['font']   = new HTMLPurifier_TagTransform_Font();
         $r['menu']   = new HTMLPurifier_TagTransform_Simple('ul');
         $r['dir']    = new HTMLPurifier_TagTransform_Simple('ul');
-        $r['center'] = new HTMLPurifier_TagTransform_Center();
+        $r['center'] = new HTMLPurifier_TagTransform_Simple('div',  'text-align:center;');
+        $r['u']      = new HTMLPurifier_TagTransform_Simple('span', 'text-decoration:underline;');
+        $r['s']      = new HTMLPurifier_TagTransform_Simple('span', 'text-decoration:line-through;');
+        $r['strike'] = new HTMLPurifier_TagTransform_Simple('span', 'text-decoration:line-through;');
         
         // == deprecated attribute transforms =============================
         
