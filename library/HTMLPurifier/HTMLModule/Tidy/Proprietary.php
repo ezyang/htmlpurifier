@@ -10,16 +10,7 @@ class HTMLPurifier_HTMLModule_Tidy_Proprietary extends
     var $defaultLevel = 'light';
     
     function makeFixes() {
-        $r = array();
-        
-        // {{{ // duplicated from XHTMLAndHTML4: not sure how to factor out
-            $align_lookup = array();
-            $align_values = array('left', 'right', 'center', 'justify');
-            foreach ($align_values as $v) $align_lookup[$v] = "text-align:$v;";
-        // }}}
-        $r['div@align'] = new HTMLPurifier_AttrTransform_EnumToCSS('align', $align_lookup);
-        
-        return $r;
+        return array();
     }
     
 }

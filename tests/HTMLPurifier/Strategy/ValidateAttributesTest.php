@@ -11,6 +11,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     function setUp() {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_ValidateAttributes();
+        $this->config = array('HTML.Doctype' => 'XHTML 1.0 Strict');
     }
     
     function testEmpty() {
@@ -297,7 +298,8 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $this->assertResult(
             '<a href="foo" target="_top" />',
             true,
-            array('Attr.AllowedFrameTargets' => '_top')
+            array('Attr.AllowedFrameTargets' => '_top',
+                'HTML.Doctype' => 'XHTML 1.0 Transitional')
         );
         $this->assertResult(
             '<a href="foo" target="_top" />',

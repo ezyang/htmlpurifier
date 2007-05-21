@@ -88,6 +88,7 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends
         $r['h5@align'] =
         $r['h6@align'] =
         $r['p@align']  =
+        $r['div@align'] = 
             new HTMLPurifier_AttrTransform_EnumToCSS('align', $align_lookup);
         
         // @bgcolor for table, tr, td, th ---------------------------------
@@ -179,7 +180,7 @@ class HTMLPurifier_HTMLModule_Tidy_Transitional extends
       HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4
 {
     var $name = 'Tidy_Transitional';
-    var $defaultLevel = 'light'; // switch this to heavy once we implement legacy fully
+    var $defaultLevel = 'heavy';
 }
 
 class HTMLPurifier_HTMLModule_Tidy_Strict extends

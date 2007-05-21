@@ -14,6 +14,7 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
     
     function test() {
         
+        $this->config = array('HTML.Doctype' => 'XHTML 1.0 Strict');
         
         $this->assertResult('');
         

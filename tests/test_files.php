@@ -20,6 +20,7 @@ $test_files[] = 'AttrDef/CSS/TextDecorationTest.php';
 $test_files[] = 'AttrDef/CSS/URITest.php';
 $test_files[] = 'AttrDef/CSSTest.php';
 $test_files[] = 'AttrDef/EnumTest.php';
+$test_files[] = 'AttrDef/HTML/ColorTest.php';
 $test_files[] = 'AttrDef/HTML/IDTest.php';
 $test_files[] = 'AttrDef/HTML/LengthTest.php';
 $test_files[] = 'AttrDef/HTML/FrameTargetTest.php';

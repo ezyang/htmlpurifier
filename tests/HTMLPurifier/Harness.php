@@ -63,12 +63,13 @@ class HTMLPurifier_Harness extends UnitTestCase
      *                       context object.
      */
     function assertResult($input, $expect = true,
-        $config_array = false, $context_array = array()
+        $config_array = array(), $context_array = array()
     ) {
         
         // setup config 
         if ($this->config) {
             $config = HTMLPurifier_Config::create($this->config);
+            $config->loadArray($config_array);
         } else {
             $config = HTMLPurifier_Config::create($config_array);
         }

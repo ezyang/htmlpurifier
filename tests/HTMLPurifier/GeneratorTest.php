@@ -89,11 +89,19 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         $expect[4] = 'title="Theta is ' . $theta_char . '"';
         
         foreach ($inputs as $i => $input) {
-            $result = $this->obj->generateAttributes($input);
+            $result = $this->obj->generateAttributes($input, 'irrelevant');
             $this->assertIdentical($result, $expect[$i]);
             paintIf($result, $result != $expect[$i]);
         }
         
+    }
+    
+    function test_generateAttributes_minimized() {
+        $gen = new HTMLPurifier_Generator();
+        $context = new HTMLPurifier_Context();
+        $gen->generateFromTokens(array(), HTMLPurifier_Config::create(array('HTML.Doctype' => 'HTML 4.01 Transitional')), $context);
+        $result = $gen->generateAttributes(array('compact' => 'compact'), 'menu');
+        $this->assertIdentical($result, 'compact');
     }
     
     function test_generateFromTokens() {

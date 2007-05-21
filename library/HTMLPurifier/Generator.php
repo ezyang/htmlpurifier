@@ -75,6 +75,12 @@ class HTMLPurifier_Generator
     var $_scriptFix = false;
     
     /**
+     * Cache of HTMLDefinition
+     * @private
+     */
+    var $_def;
+    
+    /**
      * Generates HTML from an array of tokens.
      * @param $tokens Array of HTMLPurifier_Token
      * @param $config HTMLPurifier_Config object
@@ -88,6 +94,8 @@ class HTMLPurifier_Generator
         
         $doctype = $config->getDoctype();
         $this->_xhtml = $doctype->xml;
+        
+        $this->_def = $config->getHTMLDefinition();
         
         if (!$tokens) return '';
         for ($i = 0, $size = count($tokens); $i < $size; $i++) {
@@ -136,14 +144,14 @@ class HTMLPurifier_Generator
     function generateFromToken($token) {
         if (!isset($token->type)) return '';
         if ($token->type == 'start') {
-            $attr = $this->generateAttributes($token->attr);
+            $attr = $this->generateAttributes($token->attr, $token->name);
             return '<' . $token->name . ($attr ? ' ' : '') . $attr . '>';
             
         } elseif ($token->type == 'end') {
             return '</' . $token->name . '>';
             
         } elseif ($token->type == 'empty') {
-            $attr = $this->generateAttributes($token->attr);
+            $attr = $this->generateAttributes($token->attr, $token->name);
              return '<' . $token->name . ($attr ? ' ' : '') . $attr .
                 ( $this->_xhtml ? ' /': '' )
                 . '>';
@@ -174,13 +182,16 @@ class HTMLPurifier_Generator
      * @param $assoc_array_of_attributes Attribute array
      * @return Generate HTML fragment for insertion.
      */
-    function generateAttributes($assoc_array_of_attributes) {
+    function generateAttributes($assoc_array_of_attributes, $element) {
         $html = '';
         foreach ($assoc_array_of_attributes as $key => $value) {
             if (!$this->_xhtml) {
                 // remove namespaced attributes
                 if (strpos($key, ':') !== false) continue;
-                // also needed: check for attribute minimization
+                if (!empty($this->_def->info[$element]->attr[$key]->minimized)) {
+                    $html .= $key . ' ';
+                    continue;
+                }
             }
             $html .= $key.'="'.$this->escape($value).'" ';
         }

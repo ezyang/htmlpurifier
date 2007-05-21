@@ -70,7 +70,9 @@ class HTMLPurifier_Config
      * @return Configured HTMLPurifier_Config object
      */
     function create($config) {
-        if (is_a($config, 'HTMLPurifier_Config')) return $config;
+        if (is_a($config, 'HTMLPurifier_Config')) {
+            $config = $config->conf; // create a clone
+        }
         $ret = HTMLPurifier_Config::createDefault();
         if (is_string($config)) $ret->loadIni($config);
         elseif (is_array($config)) $ret->loadArray($config);

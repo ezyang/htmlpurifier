@@ -13,6 +13,8 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
     
     function test() {
         
+        $this->config = array('HTML.Doctype' => 'XHTML 1.0 Strict');
+        
         $this->assertResult('');
         $this->assertResult('This is <b>bold text</b>.');
         

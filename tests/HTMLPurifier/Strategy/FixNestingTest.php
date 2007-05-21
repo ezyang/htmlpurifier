@@ -13,6 +13,8 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
     
     function test() {
         
+        $this->config = array('HTML.Doctype' => 'XHTML 1.0 Strict');
+        
         // legal inline
         $this->assertResult('<b>Bold text</b>');
         

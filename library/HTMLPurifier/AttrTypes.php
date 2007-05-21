@@ -34,6 +34,7 @@ class HTMLPurifier_AttrTypes
         $this->info['Text']     = new HTMLPurifier_AttrDef_Text();
         $this->info['URI']      = new HTMLPurifier_AttrDef_URI();
         $this->info['LanguageCode'] = new HTMLPurifier_AttrDef_Lang();
+        $this->info['Color']    = new HTMLPurifier_AttrDef_HTML_Color();
         
         // number is really a positive integer (one or more digits)
         $this->info['Number']   = new HTMLPurifier_AttrDef_Integer(false, false, true);
