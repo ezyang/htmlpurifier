@@ -49,7 +49,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
         $tokens[] = new HTMLPurifier_Token_End($parent_name);
         
         // setup the context variables
-        $is_inline = false; // reference var that we alter
+        $is_inline = $definition->info_parent_def->descendants_are_inline;
         $context->register('IsInline', $is_inline);
         
         //####################################################################//

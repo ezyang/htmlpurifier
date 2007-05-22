@@ -1,19 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Lexer.php';
-
-HTMLPurifier_ConfigSchema::define(
-    'Output', 'EnableRedundantUTF8Cleaning', false, 'bool',
-    'When true, HTMLPurifier_Generator will also check all strings it '.
-    'escapes for UTF-8 well-formedness as a defense in depth measure. '.
-    'This could cause a considerable performance impact, and is not '.
-    'strictly necessary due to the fact that the Lexers should have '.
-    'ensured that all the UTF-8 strings were well-formed.  Note that '.
-    'the configuration value is only read at the beginning of '.
-    'generateFromTokens.'
-);
-HTMLPurifier_ConfigSchema::defineAlias('Core', 'CleanUTF8DuringGeneration', 'Output', 'EnableRedundantUTF8Cleaning');
-
 HTMLPurifier_ConfigSchema::define(
     'Output', 'CommentScriptContents', true, 'bool',
     'Determines whether or not HTML Purifier should attempt to fix up '.
@@ -57,12 +43,6 @@ class HTMLPurifier_Generator
 {
     
     /**
-     * Bool cache of %Output.EnableRedundantUTF8Cleaning
-     * @private
-     */
-    var $_clean_utf8 = false;
-    
-    /**
      * Bool cache of %HTML.XHTML
      * @private
      */
@@ -89,7 +69,6 @@ class HTMLPurifier_Generator
     function generateFromTokens($tokens, $config, &$context) {
         $html = '';
         if (!$config) $config = HTMLPurifier_Config::createDefault();
-        $this->_clean_utf8  = $config->get('Output', 'EnableRedundantUTF8Cleaning');
         $this->_scriptFix   = $config->get('Output', 'CommentScriptContents');
         
         $doctype = $config->getDoctype();
@@ -204,7 +183,6 @@ class HTMLPurifier_Generator
      * @return String escaped data.
      */
     function escape($string) {
-        if ($this->_clean_utf8) $string = HTMLPurifier_Lexer::cleanUTF8($string);
         return htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
     }
     

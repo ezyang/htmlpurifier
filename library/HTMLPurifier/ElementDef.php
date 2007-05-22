@@ -79,7 +79,7 @@ class HTMLPurifier_ElementDef
      * have to worry about this one.
      * @public
      */
-    var $descendants_are_inline;
+    var $descendants_are_inline = false;
     
     /**
      * Lookup table of tags excluded from all descendants of this tag.
@@ -150,7 +150,7 @@ class HTMLPurifier_ElementDef
             $this->child = false;
         }
         if(!is_null($def->child)) $this->child = $def->child;
-        if(!is_null($def->descendants_are_inline)) $this->descendants_are_inline = $def->descendants_are_inline;
+        if($def->descendants_are_inline) $this->descendants_are_inline = $def->descendants_are_inline;
         if(!is_null($def->safe)) $this->safe = $def->safe;
         
     }

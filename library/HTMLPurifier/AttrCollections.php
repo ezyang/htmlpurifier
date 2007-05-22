@@ -1,7 +1,6 @@
 <?php
 
 require_once 'HTMLPurifier/AttrTypes.php';
-require_once 'HTMLPurifier/AttrDef/Lang.php';
 
 /**
  * Defines common attribute collections that modules reference

@@ -42,7 +42,7 @@
 
 // almost every class has an undocumented dependency to these, so make sure
 // they get included
-require_once 'HTMLPurifier/ConfigSchema.php';
+require_once 'HTMLPurifier/ConfigSchema.php'; // important
 require_once 'HTMLPurifier/Config.php';
 require_once 'HTMLPurifier/Context.php';
 

@@ -1,5 +1,12 @@
 <?php
 
+require_once 'HTMLPurifier/ConfigSchema.php';
+
+// member variables
+require_once 'HTMLPurifier/HTMLDefinition.php';
+require_once 'HTMLPurifier/CSSDefinition.php';
+require_once 'HTMLPurifier/Doctype.php';
+
 /**
  * Configuration object that triggers customizable behavior.
  *

@@ -37,7 +37,7 @@ class HTMLPurifier_ElementDefTest extends UnitTestCase
             'old' => true,
             'removed-old' => true
         );
-        $def1->descendants_are_inline = $overloaded_old;
+        $def1->descendants_are_inline = false;
         $def1->excludes = array(
             'old' => true,
             'removed-old' => true
@@ -64,7 +64,7 @@ class HTMLPurifier_ElementDefTest extends UnitTestCase
             'new' => true,
             'removed-old' => false
         );
-        $def2->descendants_are_inline = $overloaded_new;
+        $def2->descendants_are_inline = true;
         $def2->excludes = array(
             'new' => true,
             'removed-old' => false
@@ -94,7 +94,7 @@ class HTMLPurifier_ElementDefTest extends UnitTestCase
             'old' => true,
             'new' => true
         ));
-        $this->assertIdentical($def1->descendants_are_inline, $overloaded_new);
+        $this->assertIdentical($def1->descendants_are_inline, true);
         $this->assertIdentical($def1->excludes, array(
             'old' => true,
             'new' => true
