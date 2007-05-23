@@ -21,13 +21,8 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
                 'border' => 'Pixels',
                 'cellpadding' => 'Length',
                 'cellspacing' => 'Length',
-                'frame' => new HTMLPurifier_AttrDef_Enum(array(
-                    'void', 'above', 'below', 'hsides', 'lhs', 'rhs',
-                    'vsides', 'box', 'border'
-                ), false),
-                'rules' => new HTMLPurifier_AttrDef_Enum(array(
-                    'none', 'groups', 'rows', 'cols', 'all'
-                ), false),
+                'frame' => 'Enum#void,above,below,hsides,lhs,rhs,vsides,box,border',
+                'rules' => 'Enum#none,groups,rows,cols,all',
                 'summary' => 'Text',
                 'width' => 'Length'
             )
@@ -35,13 +30,9 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
         
         // common attributes
         $cell_align = array(
-            'align' => new HTMLPurifier_AttrDef_Enum(array(
-                'left', 'center', 'right', 'justify', 'char'
-            ), false),
+            'align' => 'Enum#left,center,right,justify,char',
             'charoff' => 'Length',
-            'valign' => new HTMLPurifier_AttrDef_Enum(array(
-                'top', 'middle', 'bottom', 'baseline'
-            ), false),
+            'valign' => 'Enum#top,middle,bottom,baseline',
         );
         
         $cell_t = array_merge(

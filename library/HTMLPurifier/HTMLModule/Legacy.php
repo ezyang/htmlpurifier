@@ -35,7 +35,7 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
         ));
         $this->addElement('center', true, 'Block', 'Flow', 'Common');
         $this->addElement('dir', true, 'Block', 'Required: li', 'Common', array(
-            'compact' => new HTMLPurifier_AttrDef_HTML_Bool('compact')
+            'compact' => 'Bool#compact'
         ));
         $this->addElement('font', true, 'Inline', 'Inline', array('Core', 'I18N'), array(
             'color' => 'Color',
@@ -43,7 +43,7 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
             'size' => 'Text', // tighten it
         ));
         $this->addElement('menu', true, 'Block', 'Required: li', 'Common', array(
-            'compact' => new HTMLPurifier_AttrDef_HTML_Bool('compact')
+            'compact' => 'Bool#compact'
         ));
         $this->addElement('s', true, 'Inline', 'Inline', 'Common');
         $this->addElement('strike', true, 'Inline', 'Inline', 'Common');
@@ -57,7 +57,7 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
         $ol =& $this->addBlankElement('ol');
         $ol->attr['start'] = new HTMLPurifier_AttrDef_Integer();
         
-        $align = new HTMLPurifier_AttrDef_Enum(array('left', 'right', 'center', 'justify'));
+        $align = 'Enum#left,right,center,justify';
         
         $address =& $this->addBlankElement('address');
         $address->content_model = 'Inline | #PCDATA | p';
@@ -70,15 +70,16 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
         $blockquote->child = false;
         
         $br =& $this->addBlankElement('br');
-        $br->attr['clear'] = new HTMLPurifier_AttrDef_Enum(array('left', 'all', 'right', 'none'));
+        $br->attr['clear'] = 'Enum#left,all,right,none';
         
         $caption =& $this->addBlankElement('caption');
-        $caption->attr['align'] = new HTMLPurifier_AttrDef_Enum(array('top', 'bottom', 'left', 'right'));
+        $caption->attr['align'] = 'Enum#top,bottom,left,right';
         
         $div =& $this->addBlankElement('div');
         $div->attr['align'] = $align;
         
-        // dl.compact omitted
+        $dl =& $this->addBlankElement('dl');
+        $dl->attr['compact'] = 'Bool#compact';
         
         for ($i = 1; $i <= 6; $i++) {
             $h =& $this->addBlankElement("h$i");

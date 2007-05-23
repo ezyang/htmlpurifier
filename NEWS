@@ -18,6 +18,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   performed on it, ensuring that its internal state stays consistent.
   To revert this behavior, you can set the $autoFinalize member variable 
   off, but it's not recommended.
+# New compact syntax for AttrDef objects that can be used to instantiate
+  new objects via make()
 - Deprecated and removed EnableRedundantUTF8Cleaning. It didn't even work!
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible

@@ -9,9 +9,12 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         $manager = new HTMLPurifier_HTMLModuleManager();
         $manager->doctypes->register('Blank'); // doctype normally is blank...
         
+        $attrdef_nmtokens = 1; // magic number
+        
         generate_mock_once('HTMLPurifier_AttrDef');
-        $attrdef_nmtokens =& new HTMLPurifier_AttrDefMock($this);
-        $manager->attrTypes->info['NMTOKENS'] =& $attrdef_nmtokens;
+        $attrdef =& new HTMLPurifier_AttrDefMock($this);
+        $attrdef->setReturnValue('make', $attrdef_nmtokens);
+        $manager->attrTypes->info['NMTOKENS'] =& $attrdef;
         
         // ...but we add user modules
         

@@ -16,21 +16,17 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
     );
     
     function HTMLPurifier_HTMLModule_Bdo() {
-        $dir = new HTMLPurifier_AttrDef_Enum(array('ltr','rtl'), false);
         $bdo =& $this->addElement(
             'bdo', true, 'Inline', 'Inline', array('Core', 'Lang'),
             array(
-                'dir' => $dir, // required
+                'dir' => 'Enum#ltr,rtl', // required
                 // The Abstract Module specification has the attribute
-                // inclusions wrong for bdo: bdo allows
-                // xml:lang too (and we'll toss in lang for good measure,
-                // though it is not allowed for XHTML 1.1, this will
-                // be managed with a global attribute transform)
+                // inclusions wrong for bdo: bdo allows Lang
             )
         );
         $bdo->attr_transform_post['required-dir'] = new HTMLPurifier_AttrTransform_BdoDir();
         
-        $this->attr_collections['I18N']['dir'] = $dir;
+        $this->attr_collections['I18N']['dir'] = 'Enum#ltr,rtl';
     }
     
 }

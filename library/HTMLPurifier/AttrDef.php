@@ -62,6 +62,20 @@ class HTMLPurifier_AttrDef
         $string = str_replace(array("\r", "\t"), ' ', $string);
         return $string;
     }
+    
+    /**
+     * Factory method for creating this class from a string.
+     * @param $string String construction info
+     * @return Created AttrDef object corresponding to $string
+     * @public
+     */
+    function make($string) {
+        // default implementation, return flyweight of this object
+        // if overloaded, it is *necessary* for you to clone the
+        // object (usually by instantiating a new copy) and return that
+        return $this;
+    }
+    
 }
 
 ?>
