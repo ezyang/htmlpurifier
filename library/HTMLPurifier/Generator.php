@@ -71,10 +71,8 @@ class HTMLPurifier_Generator
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $this->_scriptFix   = $config->get('Output', 'CommentScriptContents');
         
-        $doctype = $config->getDoctype();
-        $this->_xhtml = $doctype->xml;
-        
         $this->_def = $config->getHTMLDefinition();
+        $this->_xhtml = $this->_def->doctype->xml;
         
         if (!$tokens) return '';
         for ($i = 0, $size = count($tokens); $i < $size; $i++) {

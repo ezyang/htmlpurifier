@@ -158,6 +158,14 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             );
         }
         
+        // something funky weird happened in the registry, abort!
+        if (!$scheme_obj) {
+            trigger_error(
+                'Default scheme object "' . $config->get('URI', 'DefaultScheme') . '" was not readable',
+                E_USER_WARNING
+            );
+            return false;
+        }
         
         // the URI we're processing embeds_resource a resource in the page, but the URI
         // it references cannot be located

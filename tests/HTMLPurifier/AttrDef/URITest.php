@@ -209,17 +209,17 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->scheme = new HTMLPurifier_URISchemeMock($this);
         
         // here are the schemes we will support with overloaded mocks
-        $registry->setReturnReference('getScheme', $this->scheme, array('http', $this->config, $this->context));
-        $registry->setReturnReference('getScheme', $this->scheme, array('mailto', $this->config, $this->context));
+        $registry->setReturnReference('getScheme', $this->scheme, array('http', '*', '*'));
+        $registry->setReturnReference('getScheme', $this->scheme, array('mailto', '*', '*'));
         
         // default return value is false (meaning no scheme defined: reject)
-        $registry->setReturnValue('getScheme', false, array('*', $this->config, $this->context));
+        $registry->setReturnValue('getScheme', false, array('*', '*', '*'));
         
         if ($this->components === false) {
             $this->scheme->expectNever('validateComponents');
         } else {
-            $this->components[] = $this->config; // append the configuration
-            $this->components[] =& $this->context; // append context
+            $this->components[] = '*'; // append the configuration
+            $this->components[] = '*'; // append context
             $this->scheme->setReturnValue(
                 'validateComponents', $this->return_components, $this->components);
             $this->scheme->expectOnce('validateComponents', $this->components);

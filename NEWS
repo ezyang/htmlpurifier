@@ -27,6 +27,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . AttrTypes now has accessor functions that should be used instead
   of directly manipulating info
 . TagTransform_Center deprecated in favor of generic TagTransform_Simple
+. Add extra protection in AttrDef_URI against phantom Schemes
+. Doctype object added to HTMLDefinition which describes certain aspects
+  of the operational document type
 
 1.6.1, released 2007-05-05
 ! Support for more deprecated attributes via transformations:

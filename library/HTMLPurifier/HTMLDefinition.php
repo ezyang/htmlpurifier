@@ -147,6 +147,10 @@ class HTMLPurifier_HTMLDefinition
      */
     var $info_content_sets = array();
     
+    /**
+     * Doctype object
+     */
+    var $doctype;
     
     
     /** PUBLIC BUT INTERNAL VARIABLES */
@@ -160,9 +164,47 @@ class HTMLPurifier_HTMLDefinition
      * Performs low-cost, preliminary initialization.
      * @param $config Instance of HTMLPurifier_Config
      */
-    function HTMLPurifier_HTMLDefinition(&$config) {
-        $this->config =& $config;
+    function HTMLPurifier_HTMLDefinition($config) {
+        $this->config = $config;
         $this->manager = new HTMLPurifier_HTMLModuleManager();
+    }
+    
+    /**
+     * Retrieve definition object from cache
+     */
+    function getCache($config) {
+        static $cache = array();
+        $file = HTMLPurifier_HTMLDefinition::getCacheFile($config);
+        if (isset($cache[$file])) return $cache[$file]; // unit test optimization
+        if (!file_exists($file)) return false;
+        $cache[$file] = unserialize(file_get_contents($file));
+        return $cache[$file];
+    }
+    
+    /**
+     * Determines a cache key identifier for a particular configuration
+     */
+    function getCacheKey($config) {
+        return md5(serialize(array($config->getBatch('HTML'), $config->getBatch('Attr'))));
+    }
+    
+    /**
+     * Determines file a particular configuration's definition is stored in
+     */
+    function getCacheFile($config) {
+        $key = HTMLPurifier_HTMLDefinition::getCacheKey($config);
+        return dirname(__FILE__) . '/HTMLDefinition/' . $key . '.ser';
+    }
+    
+    /**
+     * Saves HTMLDefinition to cache
+     */
+    function saveCache($config) {
+        $file = $this->getCacheFile($config);
+        $contents = serialize($this);
+        $fh = fopen($file, 'w');
+        fwrite($fh, $contents);
+        fclose($fh);
     }
     
     /**
@@ -190,6 +232,7 @@ class HTMLPurifier_HTMLDefinition
     function processModules() {
         
         $this->manager->setup($this->config);
+        $this->doctype = $this->manager->doctype;
         
         foreach ($this->manager->modules as $module) {
             foreach($module->info_tag_transform         as $k => $v) {

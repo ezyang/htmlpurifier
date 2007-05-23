@@ -11,14 +11,15 @@ TODO List
  # Complete advanced API, and fully document it
     - Add framework for unsafe attributes
     - Reorganize configuration directives
-    - Set up doctype object inside configuration object
-    - Set up anonymous module management by HTMLDefinition
- # Implement HTMLDefinition caching using serialize
+    - Set up anonymous module management by HTMLDefinition (Advanced API)
+    - Get all AttrTypes into string form
+ # Clean up HTMLDefinition caching, need easy cache invalidation,
+   versioning of caches, etc.
  # Implement all deprecated tags and attributes
  # Create parsing/standards compliance smoketest
  # Reorganize Unit Tests
- - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists (possibly
-   do this earlier)
+    - Refactor loop tests (esp. AttrDef_URI)
+ - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists
  ? HTML interface for tweaking configuration to see changes
 
 1.8 release [Refactor, refactor!]

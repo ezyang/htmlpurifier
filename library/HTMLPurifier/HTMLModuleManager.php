@@ -100,6 +100,12 @@ class HTMLPurifier_HTMLModuleManager
     var $doctypes;
     
     /**
+     * Instance of current doctype
+     * @public
+     */
+    var $doctype;
+    
+    /**
      * Instance of HTMLPurifier_AttrTypes
      * @public
      */
@@ -288,8 +294,8 @@ class HTMLPurifier_HTMLModuleManager
         $this->trusted = $config->get('HTML', 'Trusted');
         
         // generate
-        $doctype = $this->doctypes->make($config);
-        $modules = $doctype->modules;
+        $this->doctype = $this->doctypes->make($config);
+        $modules = $this->doctype->modules;
         
         // take out the default modules that aren't allowed
         $lookup = $config->get('HTML', 'AllowedModules');
@@ -309,7 +315,7 @@ class HTMLPurifier_HTMLModuleManager
             $this->processModule($module);
         }
         
-        foreach ($doctype->tidyModules as $module) {
+        foreach ($this->doctype->tidyModules as $module) {
             $this->processModule($module);
             if (method_exists($this->modules[$module], 'construct')) {
                 $this->modules[$module]->construct($config);

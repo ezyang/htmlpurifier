@@ -54,11 +54,6 @@ class HTMLPurifier_Config
     var $autoFinalize = true;
     
     /**
-     * Instance of HTMLPurifier_Doctype, representing current doctype
-     */
-    var $doctype;
-    
-    /**
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
      */
@@ -201,10 +196,17 @@ class HTMLPurifier_Config
             empty($this->html_definition) || // hasn't ever been setup
             ($raw && $this->html_definition->setup) // requesting new one
         ) {
+            if (!$raw) {
+                $this->html_definition = HTMLPurifier_HTMLDefinition::getCache($this);
+                if ($this->html_definition) return $this->html_definition;
+            }
             $this->html_definition = new HTMLPurifier_HTMLDefinition($this);
             if ($raw) return $this->html_definition; // no setup!
         }
-        if (!$this->html_definition->setup) $this->html_definition->setup();
+        if (!$this->html_definition->setup) {
+            $this->html_definition->setup();
+            $this->html_definition->saveCache($this);
+        }
         return $this->html_definition;
     }
     
@@ -241,16 +243,6 @@ class HTMLPurifier_Config
                 }
             }
         }
-    }
-    
-    /**
-     * Returns the current doctype object
-     */
-    function getDoctype() {
-        if (!$this->doctype) {
-            $this->getHTMLDefinition();
-        }
-        return $this->doctype;
     }
     
     /**
