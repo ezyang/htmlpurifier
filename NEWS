@@ -30,6 +30,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Add extra protection in AttrDef_URI against phantom Schemes
 . Doctype object added to HTMLDefinition which describes certain aspects
   of the operational document type
+. Lexer is now pre-emptively included, with a conditional include for the
+  PHP5 only version.
 
 1.6.1, released 2007-05-05
 ! Support for more deprecated attributes via transformations:

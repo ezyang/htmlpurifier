@@ -4,6 +4,14 @@ require_once 'HTMLPurifier/Token.php';
 require_once 'HTMLPurifier/Encoder.php';
 require_once 'HTMLPurifier/EntityParser.php';
 
+// implementations
+require_once 'HTMLPurifier/Lexer/DirectLex.php';
+if (version_compare(PHP_VERSION, "5", ">=")) {
+    // You can remove the if statement if you are running PHP 5 only.
+    // We ought to get the strict version to follow those rules.
+    require_once 'HTMLPurifier/Lexer/DOMLex.php';
+}
+
 HTMLPurifier_ConfigSchema::define(
     'Core', 'AcceptFullDocuments', true, 'bool',
     'This parameter determines whether or not the filter should accept full '.
@@ -153,10 +161,8 @@ class HTMLPurifier_Lexer
         if (empty($lexer)) {
             if (version_compare(PHP_VERSION, "5", ">=") && // check for PHP5
                 class_exists('DOMDocument')) { // check for DOM support
-                require_once 'HTMLPurifier/Lexer/DOMLex.php';
                 $lexer = new HTMLPurifier_Lexer_DOMLex();
             } else {
-                require_once 'HTMLPurifier/Lexer/DirectLex.php';
                 $lexer = new HTMLPurifier_Lexer_DirectLex();
             }
         }
