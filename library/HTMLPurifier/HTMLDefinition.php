@@ -1,6 +1,6 @@
 <?php
 
-// components
+require_once 'HTMLPurifier/Definition.php';
 require_once 'HTMLPurifier/HTMLModuleManager.php';
 
 // this definition and its modules MUST NOT define configuration directives
@@ -85,7 +85,7 @@ HTMLPurifier_ConfigSchema::define(
  * HTMLPurifier_Printer_HTMLDefinition is a notable exception to this
  * rule: in the interest of comprehensiveness, it will sniff everything.
  */
-class HTMLPurifier_HTMLDefinition
+class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
 {
     
     /** FULLY-PUBLIC VARIABLES */
@@ -155,17 +155,12 @@ class HTMLPurifier_HTMLDefinition
     
     /** PUBLIC BUT INTERNAL VARIABLES */
     
-    var $setup = false; /**< Has setup() been called yet? */
-    var $config; /**< Temporary instance of HTMLPurifier_Config */
-    
     var $manager; /**< Instance of HTMLPurifier_HTMLModuleManager */
     
     /**
      * Performs low-cost, preliminary initialization.
-     * @param $config Instance of HTMLPurifier_Config
      */
-    function HTMLPurifier_HTMLDefinition($config) {
-        $this->config = $config;
+    function HTMLPurifier_HTMLDefinition() {
         $this->manager = new HTMLPurifier_HTMLModuleManager();
     }
     
@@ -207,31 +202,18 @@ class HTMLPurifier_HTMLDefinition
         fclose($fh);
     }
     
-    /**
-     * Processes internals into form usable by HTMLPurifier internals. 
-     * Modifying the definition after calling this function should not
-     * be done.
-     */
-    function setup() {
-        
-        // multiple call guard
-        if ($this->setup) {return;} else {$this->setup = true;}
-        
-        $this->processModules();
-        $this->setupConfigStuff();
-        
-        // remove complicated variables to ease serialization
-        unset($this->config);
+    function doSetup($config) {
+        $this->processModules($config);
+        $this->setupConfigStuff($config);
         unset($this->manager);
-        
     }
     
     /**
      * Extract out the information from the manager
      */
-    function processModules() {
+    function processModules($config) {
         
-        $this->manager->setup($this->config);
+        $this->manager->setup($config);
         $this->doctype = $this->manager->doctype;
         
         foreach ($this->manager->modules as $module) {
@@ -257,9 +239,9 @@ class HTMLPurifier_HTMLDefinition
     /**
      * Sets up stuff based on config. We need a better way of doing this.
      */
-    function setupConfigStuff() {
+    function setupConfigStuff($config) {
         
-        $block_wrapper = $this->config->get('HTML', 'BlockWrapper');
+        $block_wrapper = $config->get('HTML', 'BlockWrapper');
         if (isset($this->info_content_sets['Block'][$block_wrapper])) {
             $this->info_block_wrapper = $block_wrapper;
         } else {
@@ -267,7 +249,7 @@ class HTMLPurifier_HTMLDefinition
                 E_USER_ERROR);
         }
         
-        $parent = $this->config->get('HTML', 'Parent');
+        $parent = $config->get('HTML', 'Parent');
         $def = $this->manager->getElement($parent, true);
         if ($def) {
             $this->info_parent = $parent;
@@ -283,7 +265,7 @@ class HTMLPurifier_HTMLDefinition
                    "support forums) ";
         
         // setup allowed elements, SubtractiveWhitelist module(?)
-        $allowed_elements = $this->config->get('HTML', 'AllowedElements');
+        $allowed_elements = $config->get('HTML', 'AllowedElements');
         if (is_array($allowed_elements)) {
             foreach ($this->info as $name => $d) {
                 if(!isset($allowed_elements[$name])) unset($this->info[$name]);
@@ -296,7 +278,7 @@ class HTMLPurifier_HTMLDefinition
             }
         }
         
-        $allowed_attributes = $this->config->get('HTML', 'AllowedAttributes');
+        $allowed_attributes = $config->get('HTML', 'AllowedAttributes');
         $allowed_attributes_mutable = $allowed_attributes; // by copy!
         if (is_array($allowed_attributes)) {
             foreach ($this->info_global_attr as $attr_key => $info) {

@@ -228,19 +228,23 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
         
         $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
         $config->autoFinalize = false;
         
         $def = $config->getCSSDefinition();
         $this->assertIsA($def, 'HTMLPurifier_CSSDefinition');
         
-        $def = $config->getHTMLDefinition();
-        $def2 = $config->getHTMLDefinition();
+        $def  =& $config->getHTMLDefinition();
+        $def2 =& $config->getHTMLDefinition();
         $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
-        $this->assertIdentical($def, $def2);
+        $this->assertReference($def, $def2);
         $this->assertTrue($def->setup);
         
         // test re-calculation if HTML changes
-        $config->set('HTML', 'Strict', true);
+        unset($def, $def2);
+        $def2 = $config->getHTMLDefinition(); // forcibly de-reference
+        
+        $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
         $def = $config->getHTMLDefinition();
         $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
         $this->assertNotEqual($def, $def2);

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'HTMLPurifier/Definition.php';
+
 require_once 'HTMLPurifier/AttrDef/CSS/Background.php';
 require_once 'HTMLPurifier/AttrDef/CSS/BackgroundPosition.php';
 require_once 'HTMLPurifier/AttrDef/CSS/Border.php';
@@ -19,7 +21,7 @@ require_once 'HTMLPurifier/AttrDef/Enum.php';
  * Defines allowed CSS attributes and what their values are.
  * @see HTMLPurifier_HTMLDefinition
  */
-class HTMLPurifier_CSSDefinition
+class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
 {
     
     /**
@@ -30,7 +32,7 @@ class HTMLPurifier_CSSDefinition
     /**
      * Constructs the info array.  The meat of this class.
      */
-    function setup($config) {
+    function doSetup($config) {
         
         $this->info['text-align'] = new HTMLPurifier_AttrDef_Enum(
             array('left', 'right', 'center', 'justify'), false);

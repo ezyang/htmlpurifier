@@ -200,11 +200,11 @@ class HTMLPurifier_Config
                 $this->html_definition = HTMLPurifier_HTMLDefinition::getCache($this);
                 if ($this->html_definition) return $this->html_definition;
             }
-            $this->html_definition = new HTMLPurifier_HTMLDefinition($this);
+            $this->html_definition = new HTMLPurifier_HTMLDefinition();
             if ($raw) return $this->html_definition; // no setup!
         }
         if (!$this->html_definition->setup) {
-            $this->html_definition->setup();
+            $this->html_definition->setup($this);
             $this->html_definition->saveCache($this);
         }
         return $this->html_definition;
