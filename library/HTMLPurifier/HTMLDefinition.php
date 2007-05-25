@@ -155,6 +155,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     
     /** PUBLIC BUT INTERNAL VARIABLES */
     
+    var $type = 'HTML';
     var $manager; /**< Instance of HTMLPurifier_HTMLModuleManager */
     
     /**
@@ -162,44 +163,6 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      */
     function HTMLPurifier_HTMLDefinition() {
         $this->manager = new HTMLPurifier_HTMLModuleManager();
-    }
-    
-    /**
-     * Retrieve definition object from cache
-     */
-    function getCache($config) {
-        static $cache = array();
-        $file = HTMLPurifier_HTMLDefinition::getCacheFile($config);
-        if (isset($cache[$file])) return $cache[$file]; // unit test optimization
-        if (!file_exists($file)) return false;
-        $cache[$file] = unserialize(file_get_contents($file));
-        return $cache[$file];
-    }
-    
-    /**
-     * Determines a cache key identifier for a particular configuration
-     */
-    function getCacheKey($config) {
-        return md5(serialize(array($config->getBatch('HTML'), $config->getBatch('Attr'))));
-    }
-    
-    /**
-     * Determines file a particular configuration's definition is stored in
-     */
-    function getCacheFile($config) {
-        $key = HTMLPurifier_HTMLDefinition::getCacheKey($config);
-        return dirname(__FILE__) . '/HTMLDefinition/' . $key . '.ser';
-    }
-    
-    /**
-     * Saves HTMLDefinition to cache
-     */
-    function saveCache($config) {
-        $file = $this->getCacheFile($config);
-        $contents = serialize($this);
-        $fh = fopen($file, 'w');
-        fwrite($fh, $contents);
-        fclose($fh);
     }
     
     function doSetup($config) {

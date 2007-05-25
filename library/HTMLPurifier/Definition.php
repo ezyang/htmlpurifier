@@ -13,6 +13,11 @@ class HTMLPurifier_Definition
     var $setup = false;
     
     /**
+     * What type of definition is it?
+     */
+    var $type;
+    
+    /**
      * Sets up the definition object into the final form, something
      * not done by the constructor
      * @param $config HTMLPurifier_Config instance

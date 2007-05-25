@@ -6,6 +6,7 @@ require_once 'HTMLPurifier/ConfigSchema.php';
 require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/CSSDefinition.php';
 require_once 'HTMLPurifier/Doctype.php';
+require_once 'HTMLPurifier/DefinitionCache.php';
 
 /**
  * Configuration object that triggers customizable behavior.
@@ -176,11 +177,9 @@ class HTMLPurifier_Config
         // reset definitions if the directives they depend on changed
         // this is a very costly process, so it's discouraged 
         // with finalization
-        if ($namespace == 'HTML' || $namespace == 'Attr') {
+        if ($namespace == 'HTML') {
             $this->html_definition = null;
-            $this->doctype = null;
-        }
-        if ($namespace == 'CSS') {
+        } elseif ($namespace == 'CSS') {
             $this->css_definition = null;
         }
     }
@@ -192,34 +191,59 @@ class HTMLPurifier_Config
      */
     function &getHTMLDefinition($raw = false) {
         if (!$this->finalized && $this->autoFinalize) $this->finalize();
-        if (
-            empty($this->html_definition) || // hasn't ever been setup
-            ($raw && $this->html_definition->setup) // requesting new one
-        ) {
-            if (!$raw) {
-                $this->html_definition = HTMLPurifier_HTMLDefinition::getCache($this);
-                if ($this->html_definition) return $this->html_definition;
-            }
-            $this->html_definition = new HTMLPurifier_HTMLDefinition();
-            if ($raw) return $this->html_definition; // no setup!
+        $cache = HTMLPurifier_DefinitionCache::create('HTML', $this);
+        if($this->checkDefinition($this->html_definition, $cache, $raw)) {
+            return $this->html_definition;
         }
-        if (!$this->html_definition->setup) {
-            $this->html_definition->setup($this);
-            $this->html_definition->saveCache($this);
-        }
-        return $this->html_definition;
+        return $this->createDefinition(
+            $this->html_definition,
+            $cache,
+            $raw, 
+            new HTMLPurifier_HTMLDefinition()
+        );
     }
     
     /**
      * Retrieves reference to the CSS definition
      */
-    function &getCSSDefinition() {
+    function &getCSSDefinition($raw = false) {
         if (!$this->finalized && $this->autoFinalize) $this->finalize();
-        if ($this->css_definition === null) {
-            $this->css_definition = new HTMLPurifier_CSSDefinition();
-            $this->css_definition->setup($this);
+        $cache = HTMLPurifier_DefinitionCache::create('CSS', $this);
+        if($this->checkDefinition($this->css_definition, $cache, $raw)) {
+            return $this->css_definition;
         }
-        return $this->css_definition;
+        return $this->createDefinition(
+            $this->css_definition,
+            $cache,
+            $raw, 
+            new HTMLPurifier_CSSDefinition()
+        );
+    }
+    
+    /**
+     * Checks the variable and cache for an easy-access definition,
+     * sets def to variable and returns true if available
+     */
+    function checkDefinition(&$var, $cache, $raw) {
+        if ($raw) return false;
+        if (!empty($var)) {
+            if (!$var->setup) $var->setup($this);
+            return true;
+        }
+        $var = $cache->get($this);
+        return (bool) $var;
+    }
+    
+    /**
+     * Generates a new definition, possibly returning it raw, returns
+     * reference to variable.
+     */
+    function &createDefinition(&$var, $cache, $raw, $obj) {
+        $var = $obj;
+        if ($raw) return $var;
+        $var->setup($this);
+        $cache->set($var, $this);
+        return $var;
     }
     
     /**
@@ -264,6 +288,14 @@ class HTMLPurifier_Config
             trigger_error($error, E_USER_ERROR);
         }
         return $this->finalized;
+    }
+    
+    /**
+     * Finalizes configuration only if auto finalize is on and not
+     * already finalized
+     */
+    function autoFinalize() {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
     }
     
     /**

@@ -262,7 +262,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
     }
     
     function test_getCSSDefinition() {
-        $this->old_copy = CS::instance($this->old_copy);
+        $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
         
         $config = HTMLPurifier_Config::createDefault();
         $config->autoFinalize = false;

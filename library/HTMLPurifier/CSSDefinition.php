@@ -24,6 +24,8 @@ require_once 'HTMLPurifier/AttrDef/Enum.php';
 class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
 {
     
+    var $type = 'CSS';
+    
     /**
      * Assoc array of attribute name to definition object.
      */
