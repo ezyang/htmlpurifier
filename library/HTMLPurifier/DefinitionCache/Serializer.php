@@ -54,7 +54,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         }
         $fh = fopen($file, 'w');
         if (!$fh) return false;
-        $status = fwrite($fh, $contents);
+        $status = fwrite($fh, $data);
         fclose($fh);
         return $status;
     }
