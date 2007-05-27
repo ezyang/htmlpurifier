@@ -91,30 +91,43 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends UnitTestCase
         $this->assertNotEqual ($def_original, $def_3); // did not change!
         $this->assertIdentical($def_3, $def_2);
         
+        $cache->replace($def_original, $config);
+        $def_4 = $cache->get($config);
+        $this->assertIdentical($def_original, $def_4);
+        
         $cache->remove($config);
         $this->assertFileNotExist($file);
         
-        $def_4 = $cache->get($config);
-        $this->assertFalse($def_4);
+        $this->assertFalse($cache->replace($def_original, $config));
+        $def_5 = $cache->get($config);
+        $this->assertFalse($def_5);
         
     }
     
     function test_errors() {
-        /*$cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
+        $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
         $def = new HTMLPurifier_Definition();
         $def->setup = true;
         $def->type = 'NotTest';
+        $config = $this->generateConfigMock(array('Test' => 'foo'));
         
-        $this->expectError('Cannot add definition of type NotTest to cache for Test');*/
+        $this->expectError('Cannot use definition of type NotTest in cache for Test');
+        $cache->add($def, $config);
+        
+        $this->expectError('Cannot use definition of type NotTest in cache for Test');
+        $cache->set($def, $config);
+        
+        $this->expectError('Cannot use definition of type NotTest in cache for Test');
+        $cache->replace($def, $config);
     }
     
     function test_flush() {
-        /*
-        $cache = new HTMLPurifier_DefinitionCache_Serializer();
         
-        $config1 = $this->generateConfigMock(array('Candles' => 1));
-        $config2 = $this->generateConfigMock(array('Candles' => 2));
-        $config3 = $this->generateConfigMock(array('Candles' => 3));
+        $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
+        
+        $config1 = $this->generateConfigMock(array('Test' => 1));
+        $config2 = $this->generateConfigMock(array('Test' => 2));
+        $config3 = $this->generateConfigMock(array('Test' => 3));
         
         $def1 = $this->generateDefinition(array('info_candles' => 1));
         $def2 = $this->generateDefinition(array('info_candles' => 2));
@@ -124,12 +137,16 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends UnitTestCase
         $cache->add($def2, $config2);
         $cache->add($def3, $config3);
         
-        $this->assertTrue($cache->get('Test', $config1));
-        $this->assertTrue($cache->get('Test', $config2));
-        $this->assertTrue($cache->get('Test', $config3));
+        $this->assertEqual($def1, $cache->get($config1));
+        $this->assertEqual($def2, $cache->get($config2));
+        $this->assertEqual($def3, $cache->get($config3));
         
-        $cache->flush('Test');
-        */
+        $cache->flush();
+        
+        $this->assertFalse($cache->get($config1));
+        $this->assertFalse($cache->get($config2));
+        $this->assertFalse($cache->get($config3));
+        
     }
     
     /**

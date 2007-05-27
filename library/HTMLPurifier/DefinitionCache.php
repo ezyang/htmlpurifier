@@ -6,8 +6,6 @@ require_once 'HTMLPurifier/DefinitionCache/Serializer.php';
  * Abstract class representing Definition cache managers that implements
  * useful common methods and is a factory.
  * @note The configuration object is transformed into the key used by the cache
- * @todo Implement flush()
- * @todo Implement replace()
  * @todo Get some sort of versioning variable so the library can easily
  *       invalidate the cache with a new version
  * @todo Make the test runner cache aware and allow the user to easily
@@ -16,7 +14,6 @@ require_once 'HTMLPurifier/DefinitionCache/Serializer.php';
  *       cache their custom HTMLDefinition, which can be loaded
  *       via a configuration directive
  * @todo Implement memcached
- * @todo Perform type checking on $def objects
  */
 class HTMLPurifier_DefinitionCache
 {
@@ -51,6 +48,20 @@ class HTMLPurifier_DefinitionCache
     }
     
     /**
+     * Checks if a definition's type jives with the cache's type
+     * @note Throws an error on failure
+     * @param $def Definition object to check
+     * @return Boolean true if good, false if not
+     */
+    function checkDefType($def) {
+        if ($def->type !== $this->type) {
+            trigger_error("Cannot use definition of type {$def->type} in cache for {$this->type}");
+            return false;
+        }
+        return true;
+    }
+    
+    /**
      * Adds a definition object to the cache
      */
     function add($def, $config) {
@@ -65,6 +76,13 @@ class HTMLPurifier_DefinitionCache
     }
     
     /**
+     * Replace an object in the cache
+     */
+    function replace($def, $config) {
+        trigger_error('Cannot call abstract method', E_USER_ERROR);
+    }
+    
+    /**
      * Retrieves a definition object from the cache
      */
     function get($config) {
@@ -75,6 +93,13 @@ class HTMLPurifier_DefinitionCache
      * Removes a definition object to the cache
      */
     function remove($config) {
+        trigger_error('Cannot call abstract method', E_USER_ERROR);
+    }
+    
+    /**
+     * Clears all objects from cache
+     */
+    function flush($config) {
         trigger_error('Cannot call abstract method', E_USER_ERROR);
     }
     

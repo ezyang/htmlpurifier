@@ -7,13 +7,22 @@ class HTMLPurifier_DefinitionCache_Serializer extends
 {
     
     function add($def, $config) {
+        if (!$this->checkDefType($def)) return;
         $file = $this->generateFilePath($config);
         if (file_exists($file)) return false;
         return $this->_write($file, serialize($def));
     }
     
     function set($def, $config) {
+        if (!$this->checkDefType($def)) return;
         $file = $this->generateFilePath($config);
+        return $this->_write($file, serialize($def));
+    }
+    
+    function replace($def, $config) {
+        if (!$this->checkDefType($def)) return;
+        $file = $this->generateFilePath($config);
+        if (!file_exists($file)) return false;
         return $this->_write($file, serialize($def));
     }
     
@@ -29,13 +38,34 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         return unlink($file);
     }
     
+    function flush() {
+        $dir = $this->generateDirectoryPath();
+        $dh  = opendir($dir);
+        while (false !== ($filename = readdir($dh))) {
+            if (empty($filename)) continue;
+            if ($filename[0] === '.') continue;
+            // optimization: md5 + .ser will always be 36 char long
+            // needs to be changed if we change the identifier
+            if (strlen($filename) !== 36) continue;
+            unlink($dir . '/' . $filename);
+        }
+    }
+    
     /**
      * Generates the file path to the serial file corresponding to
      * the configuration and definition name
      */
     function generateFilePath($config) {
         $key = $this->generateKey($config);
-        return dirname(__FILE__) . '/Serializer/' . $this->type . '/' . $key . '.ser';
+        return $this->generateDirectoryPath() . '/' . $key . '.ser';
+    }
+    
+    /**
+     * Generates the path to the directory contain this cache's serial files
+     * @note No trailing slash
+     */
+    function generateDirectoryPath() {
+        return dirname(__FILE__) . '/Serializer/' . $this->type;
     }
     
     /**

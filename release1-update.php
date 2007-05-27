@@ -77,6 +77,19 @@ if (!$c) {
 }
 file_put_contents('library/HTMLPurifier.php', $htmlpurifier_c);
 
+$config_c = file_get_contents('library/HTMLPurifier/Config.php');
+$config_c = preg_replace(
+    '/var \$version = \'.+?\';/',
+    "var \$version = '$version';",
+    $config_c,
+    1, $c
+);
+if (!$c) {
+    echo 'Could not update Config.php, missing var $version.' . PHP_EOL;
+    exit;
+}
+file_put_contents('library/HTMLPurifier/Config.php', $config_c);
+
 echo "Review changes, write something in WHATSNEW, and then SVN commit with log 'Release $version.'" . PHP_EOL;
 
 ?>
