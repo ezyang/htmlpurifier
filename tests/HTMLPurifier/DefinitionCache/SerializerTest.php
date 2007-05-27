@@ -59,7 +59,7 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends UnitTestCase
             '/../../../library/HTMLPurifier/DefinitionCache/Serializer/Test/' .
             $config_md5 . '.ser'
         );
-        if($file) unlink($file); // prevent previous failures from causing problems
+        if($file && file_exists($file)) unlink($file); // prevent previous failures from causing problems
         
         $config = $this->generateConfigMock($config_array);
         $this->assertIdentical($config_md5, $cache->generateKey($config));

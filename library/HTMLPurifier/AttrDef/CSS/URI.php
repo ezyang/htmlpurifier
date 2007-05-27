@@ -29,7 +29,7 @@ class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
         if ($uri_string[$new_length] != ')') return false;
         $uri = trim(substr($uri_string, 0, $new_length));
         
-        if (isset($uri[0]) && ($uri[0] == "'" || $uri[0] == '"')) {
+        if (!empty($uri) && ($uri[0] == "'" || $uri[0] == '"')) {
             $quote = $uri[0];
             $new_length = strlen($uri) - 1;
             if ($uri[$new_length] !== $quote) return false;

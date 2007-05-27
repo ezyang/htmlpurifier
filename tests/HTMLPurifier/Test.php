@@ -97,6 +97,26 @@ class HTMLPurifier_Test extends UnitTestCase
         
     }
     
+    function test_table() {
+        
+        $this->purifier = new HTMLPurifier();
+        $this->assertPurification(
+'<TABLE>
+<COLGROUP>
+<COL span=3 width=64 />
+<TBODY><TR><TD>1</TD><TD>2</TD><TD>3</TD></TR>
+</TBODY>
+</TABLE>',
+'<table>
+<colgroup>
+<col span="3" width="64" />
+</colgroup><tbody><tr><td>1</td><td>2</td><td>3</td></tr>
+</tbody>
+</table>'
+        );
+        
+    }
+    
 }
 
 ?>

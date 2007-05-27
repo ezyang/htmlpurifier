@@ -57,7 +57,8 @@ class HTMLPurifier_EntityParserTest extends UnitTestCase
                 // this is only for PHP 5, the below is PHP 5 and PHP 4
                 //$chars = str_split($arg[1], 2);
                 $chars = array();
-                for ($i = 0; isset($arg[1][$i]); $i += 2) {
+                // strlen must be called in loop because strings size changes
+                for ($i = 0; strlen($arg[1]) > $i; $i += 2) {
                     $chars[] = $arg[1][$i] . $arg[1][$i+1];
                 }
                 foreach ($chars as $char) {

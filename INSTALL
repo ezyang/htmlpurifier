@@ -13,7 +13,7 @@ Todo: Convert to using the array syntax for configuration.
 
 1.  Compatibility
 
-HTML Purifier works in both PHP 4 and PHP 5, from PHP 4.3.9 and up. It has no
+HTML Purifier works in both PHP 4 and PHP 5, from PHP 4.3.2 and up. It has no
 core dependencies with other libraries. (Whoopee!)
 
 Optional extensions are iconv (usually installed) and tidy (also common).

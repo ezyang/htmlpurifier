@@ -20,6 +20,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   off, but it's not recommended.
 # New compact syntax for AttrDef objects that can be used to instantiate
   new objects via make()
+! HTML Purifier now works in PHP 4.3.2.
 - Deprecated and removed EnableRedundantUTF8Cleaning. It didn't even work!
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible

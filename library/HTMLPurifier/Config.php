@@ -8,6 +8,21 @@ require_once 'HTMLPurifier/CSSDefinition.php';
 require_once 'HTMLPurifier/Doctype.php';
 require_once 'HTMLPurifier/DefinitionCache.php';
 
+// accomodations for versions earlier than 4.3.10 and 5.0.2
+// borrowed from PHP_Compat, LGPL licensed, by Aidan Lister <aidan@php.net>
+if (!defined('PHP_EOL')) {
+    switch (strtoupper(substr(PHP_OS, 0, 3))) {
+        case 'WIN':
+            define('PHP_EOL', "\r\n");
+            break;
+        case 'DAR':
+            define('PHP_EOL', "\r");
+            break;
+        default:
+            define('PHP_EOL', "\n");
+    }
+}
+
 /**
  * Configuration object that triggers customizable behavior.
  *
