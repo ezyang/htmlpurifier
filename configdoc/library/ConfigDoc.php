@@ -11,7 +11,7 @@ class ConfigDoc
         // generate types document, describing type constraints
         $types_serializer = new ConfigDoc_XMLSerializer_Types();
         $types_document = $types_serializer->serialize($schema);
-        $types_document->save('types.xml');
+        $types_document->save(dirname(__FILE__) . '/../types.xml'); // only ONE
         
         // generate configdoc.xml, documents configuration directives
         $schema_serializer = new ConfigDoc_XMLSerializer_ConfigSchema();
