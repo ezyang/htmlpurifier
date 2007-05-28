@@ -62,8 +62,8 @@ require_once 'HTMLPurifier/Printer/ConfigForm.php';
 require_once 'testSchema.php';
 
 // cleanup ( this should be rolled into Config )
-$config = HTMLPurifier_Config::loadArrayFromForm($_GET);
-$printer = new HTMLPurifier_Printer_ConfigForm('?doc');
+$config = HTMLPurifier_Config::loadArrayFromForm($_GET, 'config');
+$printer = new HTMLPurifier_Printer_ConfigForm('config', '?doc#%s');
 echo $printer->render($config);
 
 ?>

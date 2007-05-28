@@ -18,11 +18,19 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
     var $docURL;
     
     /**
+     * Name of form element to stuff config in
+     * @protected
+     */
+    var $name;
+    
+    /**
+     * @param $name Form element name for directives to be stuffed into
      * @param $doc_url String documentation URL, will have fragment tagged on
      */
-    function HTMLPurifier_Printer_ConfigForm($doc_url = null) {
+    function HTMLPurifier_Printer_ConfigForm($name, $doc_url = null) {
         parent::HTMLPurifier_Printer();
         $this->docURL = $doc_url;
+        $this->name   = $name;
         $this->fields['default']    = new HTMLPurifier_Printer_ConfigForm_default();
         $this->fields['bool']       = new HTMLPurifier_Printer_ConfigForm_bool();
     }
@@ -81,11 +89,15 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
         foreach ($directives as $directive => $value) {
             $ret .= $this->start('tr');
             $ret .= $this->start('th');
-            if ($this->docURL) $ret .= $this->start('a', array('href' => $this->docURL . "#$ns.$directive"));
+            if ($this->docURL) {
+                $url = str_replace('%s', urlencode("$ns.$directive"), $this->docURL);
+                $ret .= $this->start('a', array('href' => $url));
+            }
                 $ret .= $this->element(
                     'label',
                     "%$ns.$directive",
-                    array('for' => "$ns.$directive")
+                    // component printers must create an element with this id
+                    array('for' => "{$this->name}:$ns.$directive")
                 );
             if ($this->docURL) $ret .= $this->end('a');
             $ret .= $this->end('th');
@@ -98,7 +110,7 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
                 if ($def->allow_null) {
                     $type_obj = new HTMLPurifier_Printer_ConfigForm_NullDecorator($type_obj);
                 }
-                $ret .= $type_obj->render($ns, $directive, $value, $this->config);
+                $ret .= $type_obj->render($ns, $directive, $value, $this->name, $this->config);
             $ret .= $this->end('td');
             $ret .= $this->end('tr');
         }
@@ -123,9 +135,9 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
         parent::HTMLPurifier_Printer();
         $this->obj = $obj;
     }
-    function render($ns, $directive, $value, $config) {
+    function render($ns, $directive, $value, $name, $config) {
         $ret = '';
-        $ret .= $this->start('label', array('for' => "Null_$ns.$directive"));
+        $ret .= $this->start('label', array('for' => "$name:Null_$ns.$directive"));
         $ret .= $this->element('span', "$ns.$directive:", array('class' => 'verbose'));
         $ret .= $this->text(' Null/Disabled');
         $ret .= $this->end('label');
@@ -133,15 +145,15 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
             'type' => 'checkbox',
             'value' => '1',
             'class' => 'null-toggle',
-            'name' => "Null_$ns.$directive",
-            'id' => "Null_$ns.$directive",
-            'onclick' => "toggleWriteability('$ns.$directive',checked)" // INLINE JAVASCRIPT!!!!
+            'name' => "$name:Null_$ns.$directive",
+            'id' => "$name:Null_$ns.$directive",
+            'onclick' => "toggleWriteability('$name:$ns.$directive',checked)" // INLINE JAVASCRIPT!!!!
         );
         if ($value === null) $attr['checked'] = 'checked';
         $ret .= $this->elementEmpty('input', $attr);
         $ret .= $this->text(' or ');
         $ret .= $this->elementEmpty('br');
-        $ret .= $this->obj->render($ns, $directive, $value, $config);
+        $ret .= $this->obj->render($ns, $directive, $value, $name, $config);
         return $ret;
     }
 }
@@ -150,7 +162,7 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
  * Swiss-army knife configuration form field printer
  */
 class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer {
-    function render($ns, $directive, $value, $config) {
+    function render($ns, $directive, $value, $name, $config) {
         // this should probably be split up a little
         $ret = '';
         $def = $config->def->info[$ns][$directive];
@@ -182,8 +194,8 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer {
         }
         $attr = array(
             'type' => 'text',
-            'name' => "$ns.$directive",
-            'id' => "$ns.$directive"
+            'name' => "$name"."[$ns.$directive]",
+            'id' => "$name:$ns.$directive"
         );
         if ($value === null) $attr['disabled'] = 'disabled';
         if (is_array($def->allowed)) {
@@ -206,34 +218,34 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer {
  * Bool form field printer
  */
 class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer {
-    function render($ns, $directive, $value, $config) {
+    function render($ns, $directive, $value, $name, $config) {
         $ret = '';
         
-        $ret .= $this->start('div', array('id' => "$ns.$directive"));
+        $ret .= $this->start('div', array('id' => "$name:$ns.$directive"));
         
-        $ret .= $this->start('label', array('for' => "Yes_$ns.$directive"));
+        $ret .= $this->start('label', array('for' => "$name:Yes_$ns.$directive"));
         $ret .= $this->element('span', "$ns.$directive:", array('class' => 'verbose'));
         $ret .= $this->text(' Yes');
         $ret .= $this->end('label');
         
         $attr = array(
             'type' => 'radio',
-            'name' => "Yes_$ns.$directive",
-            'id' => "Yes_$ns.$directive",
+            'name' => "$name"."[$ns.$directive]",
+            'id' => "$name:Yes_$ns.$directive",
             'value' => '1'
         );
         if ($value) $attr['checked'] = 'checked';
         $ret .= $this->elementEmpty('input', $attr);
         
-        $ret .= $this->start('label', array('for' => "No_$ns.$directive"));
+        $ret .= $this->start('label', array('for' => "$name:No_$ns.$directive"));
         $ret .= $this->element('span', "$ns.$directive:", array('class' => 'verbose'));
         $ret .= $this->text(' No');
         $ret .= $this->end('label');
         
         $attr = array(
             'type' => 'radio',
-            'name' => "No_$ns.$directive",
-            'id' => "No_$ns.$directive",
+            'name' => "$name"."[$ns.$directive]",
+            'id' => "$name:No_$ns.$directive",
             'value' => '0'
         );
         if (!$value) $attr['checked'] = 'checked';

@@ -6,7 +6,7 @@ require_once 'HTMLPurifier/Printer/HTMLDefinition.php';
 require_once 'HTMLPurifier/Printer/CSSDefinition.php';
 require_once 'HTMLPurifier/Printer/ConfigForm.php';
 
-$config = HTMLPurifier_Config::loadArrayFromForm($_GET);
+$config = HTMLPurifier_Config::loadArrayFromForm($_GET, 'config');
 
 // you can do custom configuration!
 if (file_exists('printDefinition.settings.php')) {
@@ -26,6 +26,11 @@ $html_definition->manager->addModule($module);
 
 $printer_html_definition = new HTMLPurifier_Printer_HTMLDefinition();
 $printer_css_definition  = new HTMLPurifier_Printer_CSSDefinition();
+
+$printer_config_form = new HTMLPurifier_Printer_ConfigForm(
+    'config',
+    'http://htmlpurifier.org/live/configdoc/plain.html#%s'
+);
 
 echo '<?xml version="1.0" encoding="UTF-8" ?>';
 ?>
@@ -69,8 +74,7 @@ transformation into a real array list or a lookup table).</p>
 
 <form method="get" action="" name="hp-configform">
 <?php
-    $printer = new HTMLPurifier_Printer_ConfigForm('http://htmlpurifier.org/live/configdoc/plain.html');
-    echo $printer->render($config, 'HTML');
+    echo $printer_config_form->render($config, 'HTML');
 ?>
 <p>* Some configuration directives make a distinction between an empty
 variable and a null variable. A whitelist, for example, will take an

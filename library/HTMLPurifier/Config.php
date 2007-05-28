@@ -301,10 +301,12 @@ class HTMLPurifier_Config
      * Loads configuration values from $_GET/$_POST that were posted
      * via ConfigForm
      * @param $array $_GET or $_POST array to import
+     * @param $index Index/name that the config variables are in
      * @param $mq_fix Boolean whether or not to enable magic quotes fix
      * @static
      */
-    function loadArrayFromForm($array, $mq_fix = true) {
+    function loadArrayFromForm($array, $index, $mq_fix = true) {
+        $array = (isset($array[$index]) && is_array($array[$index])) ? $array[$index] : array();
         $mq = get_magic_quotes_gpc() && $mq_fix;
         foreach ($array as $key => $value) {
             if (!strncmp($key, 'Null_', 5) && !empty($value)) {
