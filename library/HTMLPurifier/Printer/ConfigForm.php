@@ -168,7 +168,7 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer {
                 case 'hash':
                     $nvalue = '';
                     foreach ($value as $i => $v) {
-                        $nvalue .= "$i,$v,";
+                        $nvalue .= "$i:$v,";
                     }
                     $value = $nvalue;
                     break;

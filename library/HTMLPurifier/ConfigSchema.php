@@ -347,10 +347,12 @@ class HTMLPurifier_ConfigSchema {
                     // remove spaces
                     foreach ($var as $i => $j) $var[$i] = trim($j);
                     if ($type === 'hash') {
-                        // key,value,key,value
+                        // key:value,key2:value2
                         $nvar = array();
-                        for ($i = 0, $c = count($var); $i + 1 < $c; $i += 2) {
-                            $nvar[$var[$i]] = $var[$i + 1];
+                        foreach ($var as $keypair) {
+                            $c = explode(':', $keypair, 2);
+                            if (!isset($c[1])) continue;
+                            $nvar[$c[0]] = $c[1];
                         }
                         $var = $nvar;
                     }
