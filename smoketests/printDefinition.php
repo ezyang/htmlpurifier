@@ -4,23 +4,14 @@ require_once 'common.php'; // load library
 
 require_once 'HTMLPurifier/Printer/HTMLDefinition.php';
 require_once 'HTMLPurifier/Printer/CSSDefinition.php';
+require_once 'HTMLPurifier/Printer/ConfigForm.php';
 
-$config = HTMLPurifier_Config::createDefault();
+$config = HTMLPurifier_Config::loadArrayFromForm($_GET);
 
 // you can do custom configuration!
 if (file_exists('printDefinition.settings.php')) {
     include 'printDefinition.settings.php';
 }
-
-$get = $_GET;
-foreach ($_GET as $key => $value) {
-    if (!strncmp($key, 'Null_', 5) && !empty($value)) {
-        unset($get[substr($key, 5)]);
-        unset($get[$key]);
-    }
-}
-
-@$config->loadArray($get);
 
 /* // sample local definition, obviously needs to be less clunky
 $html_definition =& $config->getHTMLDefinition(true);
@@ -45,9 +36,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
     <title>HTML Purifier Printer Smoketest</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style type="text/css">
-        form table {margin:1em auto;}
-        form th {text-align:right;padding-right:1em;}
-        form .c {display:none;}
+        .hp-config {margin-left:auto; margin-right:auto;}
         .HTMLPurifier_Printer table {border-collapse:collapse;
             border:1px solid #000; width:600px;
             margin:1em auto;font-family:sans-serif;font-size:75%;}
@@ -59,11 +48,8 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
         .HTMLPurifier_Printer .heavy {background:#99C;text-align:center;}
         dt {font-weight:bold;}
     </style>
-    <script type="text/javascript">
-        function toggleWriteability(id_of_patient, checked) {
-            document.getElementById(id_of_patient).disabled = checked;
-        }
-    </script>
+    <link rel="stylesheet" href="../library/HTMLPurifier/Printer/ConfigForm.css" type="text/css" />
+    <script defer="defer" type="text/javascript" src="../library/HTMLPurifier/Printer/ConfigForm.js"></script>
 </head>
 <body>
 
@@ -81,73 +67,11 @@ influences the internal workings of the definition objects.</p>
 list of items, HTML Purifier will take care of the rest (including
 transformation into a real array list or a lookup table).</p>
 
-<form id="edit-config" name="edit-config" method="get" action="printDefinition.php">
-<table>
+<form method="get" action="" name="hp-configform">
 <?php
-    $directives = $config->getBatch('HTML');
-    // can't handle hashes
-    foreach ($directives as $key => $value) {
-        $directive = "HTML.$key";
-        if (is_array($value)) {
-            $keys = array_keys($value);
-            if ($keys === array_keys($keys)) {
-                $value = implode(',', $keys);
-            } else {
-                $new_value = '';
-                foreach ($value as $name => $bool) {
-                    if ($bool !== true) continue;
-                    $new_value .= "$name,";
-                }
-                $value = rtrim($new_value, ',');
-            }
-        }
-        $allow_null = $config->def->info['HTML'][$key]->allow_null;
+    $printer = new HTMLPurifier_Printer_ConfigForm('http://htmlpurifier.org/live/configdoc/plain.html');
+    echo $printer->render($config, 'HTML');
 ?>
-<tr>
-<th>
-    <a href="http://htmlpurifier.org/live/configdoc/plain.html#<?php echo $directive ?>">
-        <label for="<?php echo $directive; ?>">%<?php echo $directive; ?></label>
-    </a>
-</th>
-<?php if (is_bool($value)) { ?>
-<td id="<?php echo $directive; ?>">
-    <label for="Yes_<?php echo $directive; ?>"><span class="c">%<?php echo $directive; ?>:</span> Yes</label>
-    <input type="radio" name="<?php echo $directive; ?>" id="Yes_<?php echo $directive; ?>" value="1"<?php if ($value) { ?> checked="checked"<?php } ?> /> &nbsp;
-    <label for="No_<?php echo $directive; ?>"><span class="c">%<?php echo $directive; ?>:</span> No</label>
-    <input type="radio" name="<?php echo $directive; ?>" id="No_<?php echo $directive; ?>" value="0"<?php if (!$value) { ?> checked="checked"<?php } ?> />
-<?php } else { ?>
-<td>
-    <?php if($allow_null) { ?>
-        <label for="Null_<?php echo $directive; ?>"><span class="c">%<?php echo $directive; ?>:</span> Null/Disabled*</label>
-        <input
-            type="checkbox"
-            value="1"
-            onclick="toggleWriteability('<?php echo $directive ?>',checked)"
-            name="Null_<?php echo $directive; ?>"
-            id="Null_<?php echo $directive; ?>"
-            <?php if ($value === null) { ?> checked="checked"<?php } ?>
-          /> or <br />
-    <?php } ?>
-    <input
-        type="text"
-        name="<?php echo $directive; ?>"
-        id="<?php echo $directive; ?>"
-        value="<?php echo escapeHTML($value); ?>"
-        <?php if($value === null) {echo 'disabled="disabled"';} ?>
-    />
-<?php } ?>
-</td>
-</tr>
-<?php
-    }
-?>
-<tr>
-    <td colspan="2" style="text-align:right;">
-        [<a href="printDefinition.php">Reset</a>]
-        <input type="submit" value="Submit" />
-    </td>
-</tr>
-</table>
 <p>* Some configuration directives make a distinction between an empty
 variable and a null variable. A whitelist, for example, will take an
 empty array as meaning <em>no</em> allowed elements, while checking

@@ -7,14 +7,19 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
     
     /**
      * Printers for specific fields
+     * @protected
      */
     var $fields = array();
     
     /**
      * Documentation URL, can have fragment tagged on end
+     * @protected
      */
     var $docURL;
     
+    /**
+     * @param $doc_url String documentation URL, will have fragment tagged on
+     */
     function HTMLPurifier_Printer_ConfigForm($doc_url = null) {
         parent::HTMLPurifier_Printer();
         $this->docURL = $doc_url;
@@ -22,9 +27,21 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
         $this->fields['bool']       = new HTMLPurifier_Printer_ConfigForm_bool();
     }
     
-    function render($config) {
+    /**
+     * Returns HTML output for a configuration form
+     * @param $config Configuration object of current form state
+     * @param $ns Optional namespace(s) to restrict form to
+     */
+    function render($config, $ns = true) {
         $this->config = $config;
-        $all = $config->getAll();
+        if ($ns === true) {
+            $all = $config->getAll();
+        } else {
+            if (is_string($ns)) $ns = array($ns);
+            foreach ($ns as $n) {
+                $all = array($n => $config->getBatch($n));
+            }
+        }
         $ret = '';
         $ret .= $this->start('table', array('class' => 'hp-config'));
         $ret .= $this->start('thead');
@@ -36,10 +53,23 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
         foreach ($all as $ns => $directives) {
             $ret .= $this->renderNamespace($ns, $directives);
         }
+        $ret .= $this->start('tfoot');
+        $ret .= $this->start('tr');
+            $ret .= $this->start('td', array('colspan' => 2, 'class' => 'controls'));
+                $ret .= '<input type="submit" value="Submit" /> [<a href="?">Reset</a>]';
+            $ret .= $this->end('td');
+        $ret .= $this->end('tr');
+        $ret .= $this->end('tfoot');
         $ret .= $this->end('table');
         return $ret;
     }
     
+    /**
+     * Renders a single namespace
+     * @param $ns String namespace name
+     * @param $directive Associative array of directives to values
+     * @protected
+     */
     function renderNamespace($ns, $directives) {
         $ret = '';
         $ret .= $this->start('tbody', array('class' => 'namespace'));
@@ -78,8 +108,17 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
     
 }
 
+/**
+ * Printer decorator for directives that accept null
+ */
 class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer {
+    /**
+     * Printer being decorated
+     */
     var $obj;
+    /**
+     * @param $obj Printer to decorate
+     */
     function HTMLPurifier_Printer_ConfigForm_NullDecorator($obj) {
         parent::HTMLPurifier_Printer();
         $this->obj = $obj;
@@ -107,8 +146,12 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
     }
 }
 
+/**
+ * Swiss-army knife configuration form field printer
+ */
 class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer {
     function render($ns, $directive, $value, $config) {
+        // this should probably be split up a little
         $ret = '';
         $def = $config->def->info[$ns][$directive];
         if (is_array($value)) {
@@ -159,6 +202,9 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer {
     }
 }
 
+/**
+ * Bool form field printer
+ */
 class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer {
     function render($ns, $directive, $value, $config) {
         $ret = '';

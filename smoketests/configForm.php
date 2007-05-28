@@ -67,10 +67,6 @@ $printer = new HTMLPurifier_Printer_ConfigForm('?doc');
 echo $printer->render($config);
 
 ?>
-<div style="text-align:right;">
-    <input type="submit" value="Submit" />
-    [<a href="?">Reset</a>]
-</div>
 </form>
 <pre>
 <?php
