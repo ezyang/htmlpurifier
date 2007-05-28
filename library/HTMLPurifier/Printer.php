@@ -28,9 +28,9 @@ class HTMLPurifier_Printer
     
     /**
      * Main function that renders object or aspect of that object
-     * @param $config Configuration object
+     * @note Parameters vary depending on printer
      */
-    function render($config) {}
+    // function render() {}
     
     /**
      * Returns a start tag
@@ -64,6 +64,18 @@ class HTMLPurifier_Printer
         return $this->start($tag, $attr) .
                ($escape ? $this->escape($contents) : $contents) .
                $this->end($tag);
+    }
+    
+    function elementEmpty($tag, $attr = array()) {
+        return $this->generator->generateFromToken(
+            new HTMLPurifier_Token_Empty($tag, $attr)
+        );
+    }
+    
+    function text($text) {
+        return $this->generator->generateFromToken(
+            new HTMLPurifier_Token_Text($text)
+        );
     }
     
     /**

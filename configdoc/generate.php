@@ -14,6 +14,11 @@ TODO:
 - factor out code into classes
 */
 
+// there are several hacks for the configForm.php smoketest
+// - load copies (override default schema)
+// - file/line server information hack
+// - post-processing, base-name change hack
+
 // ---------------------------------------------------------------------------
 // Check and configure environment
 
@@ -47,7 +52,15 @@ function appendHTMLDiv($document, $node, $html) {
 // ---------------------------------------------------------------------------
 // Load copies of HTMLPurifier_ConfigDef and HTMLPurifier
 
-$schema = HTMLPurifier_ConfigSchema::instance();
+// hack
+if (defined('HTMLPURIFIER_CUSTOM_SCHEMA')) {
+    // included from somewhere else
+    $var = HTMLPURIFIER_CUSTOM_SCHEMA;
+    $schema = $$var;
+    chdir(dirname(__FILE__));
+} else {
+    $schema = HTMLPurifier_ConfigSchema::instance();
+}
 $purifier = new HTMLPurifier();
 
 
@@ -153,8 +166,11 @@ foreach($schema->info as $namespace_name => $namespace_info) {
         foreach ($info->descriptions as $file => $file_descriptions) {
             foreach ($file_descriptions as $line => $description) {
                 $dom_description = $dom_document->createElement('description');
-                $dom_description->setAttribute('file', $file);
-                $dom_description->setAttribute('line', $line);
+                // hack
+                if (!defined('HTMLPURIFIER_CUSTOM_SCHEMA')) {
+                    $dom_description->setAttribute('file', $file);
+                    $dom_description->setAttribute('line', $line);
+                }
                 appendHTMLDiv($dom_document, $dom_description, $description);
                 $dom_descriptions->appendChild($dom_description);
             }
@@ -203,9 +219,13 @@ if (class_exists('Tidy')) {
     $html_output = (string) $tidy;
 }
 
-// write it to a file (todo: parse into seperate pages)
-file_put_contents("$xsl_stylesheet_name.html", $html_output);
-
+// hack
+if (!defined('HTMLPURIFIER_CUSTOM_SCHEMA')) {
+    // write it to a file (todo: parse into seperate pages)
+    file_put_contents("$xsl_stylesheet_name.html", $html_output);
+} else {
+    $html_output = str_replace('styles/plain.css', HTMLPURIFIER_SCRIPT_LOCATION . 'styles/plain.css', $html_output);
+}
 
 // ---------------------------------------------------------------------------
 // Output for instant feedback

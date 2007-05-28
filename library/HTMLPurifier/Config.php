@@ -148,6 +148,14 @@ class HTMLPurifier_Config
     }
     
     /**
+     * Retrieves all directives, organized by namespace
+     */
+    function getAll() {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
+        return $this->conf;
+    }
+    
+    /**
      * Sets a value to configuration.
      * @param $namespace String namespace
      * @param $key String key

@@ -20,7 +20,6 @@ TODO List
  # Reorganize Unit Tests
     - Refactor loop tests (esp. AttrDef_URI)
  - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists
- ? HTML interface for tweaking configuration to see changes
 
 1.8 release [Refactor, refactor!]
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)

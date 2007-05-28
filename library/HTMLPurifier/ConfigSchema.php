@@ -8,6 +8,7 @@ require_once 'HTMLPurifier/ConfigDef/DirectiveAlias.php';
 
 /**
  * Configuration definition, defines directives and their defaults.
+ * @note If you update this, please update Printer_ConfigForm
  * @todo The ability to define things multiple times is confusing and should
  *       be factored out to its own function named registerDependency() or 
  *       addNote(), where only the namespace.name and an extra descriptions
@@ -304,6 +305,7 @@ class HTMLPurifier_ConfigSchema {
         if ($allow_null && $var === null) return null;
         switch ($type) {
             case 'mixed':
+                //if (is_string($var)) $var = unserialize($var);
                 return $var;
             case 'istring':
             case 'string':
@@ -344,6 +346,14 @@ class HTMLPurifier_ConfigSchema {
                     $var = explode(',',$var);
                     // remove spaces
                     foreach ($var as $i => $j) $var[$i] = trim($j);
+                    if ($type === 'hash') {
+                        // key,value,key,value
+                        $nvar = array();
+                        for ($i = 0, $c = count($var); $i + 1 < $c; $i += 2) {
+                            $nvar[$var[$i]] = $var[$i + 1];
+                        }
+                        $var = $nvar;
+                    }
                 }
                 if (!is_array($var)) break;
                 $keys = array_keys($var);
