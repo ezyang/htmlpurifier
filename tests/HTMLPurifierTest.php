@@ -4,7 +4,7 @@ require_once 'HTMLPurifier.php';
 
 // integration test
 
-class HTMLPurifier_Test extends UnitTestCase
+class HTMLPurifierTest extends UnitTestCase
 {
     var $purifier;
     
