@@ -31,7 +31,6 @@ class ConfigDoc
      * Remove any generated files
      */
     function cleanup() {
-        unlink('types.xml');
         unlink('configdoc.xml');
     }
     
