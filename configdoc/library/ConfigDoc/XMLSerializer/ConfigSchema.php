@@ -10,7 +10,7 @@ class ConfigDoc_XMLSerializer_ConfigSchema extends ConfigDoc_XMLSerializer
      * @todo Split into sub-serializers
      * @param $schema HTMLPurifier_ConfigSchema to serialize
      */
-    function serialize($schema) {
+    public function serialize($schema) {
         $dom_document = new DOMDocument('1.0', 'UTF-8');
         $dom_root = $dom_document->createElement('configdoc');
         $dom_document->appendChild($dom_root);
@@ -35,7 +35,7 @@ class ConfigDoc_XMLSerializer_ConfigSchema extends ConfigDoc_XMLSerializer
             );
             $dom_namespace_description = $dom_document->createElement('description');
             $dom_namespace->appendChild($dom_namespace_description);
-            appendHTMLDiv($dom_document, $dom_namespace_description,
+            $this->appendHTMLDiv($dom_document, $dom_namespace_description,
                 $schema->info_namespace[$namespace_name]->description);
             
             foreach ($namespace_info as $name => $info) {
@@ -100,7 +100,7 @@ class ConfigDoc_XMLSerializer_ConfigSchema extends ConfigDoc_XMLSerializer
                             $dom_description->setAttribute('file', $file);
                             $dom_description->setAttribute('line', $line);
                         }
-                        appendHTMLDiv($dom_document, $dom_description, $description);
+                        $this->appendHTMLDiv($dom_document, $dom_description, $description);
                         $dom_descriptions->appendChild($dom_description);
                     }
                 }

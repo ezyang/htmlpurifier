@@ -2,6 +2,7 @@
 
 /**
  * Generates XML and HTML documents describing configuration.
+ * @note PHP 5 only!
  */
 
 /*
@@ -23,7 +24,7 @@ TODO:
 // Check and configure environment
 
 if (version_compare('5', PHP_VERSION, '>')) exit('Requires PHP 5 or higher.');
-error_reporting(E_ALL);
+error_reporting(E_ALL); // probably not possible to use E_STRICT
 
 
 // ---------------------------------------------------------------------------
@@ -31,22 +32,6 @@ error_reporting(E_ALL);
 
 require_once '../library/HTMLPurifier.auto.php';
 require_once 'library/ConfigDoc.auto.php';
-
-// ---------------------------------------------------------------------------
-// Setup convenience functions
-
-function appendHTMLDiv($document, $node, $html) {
-    global $purifier;
-    $html = $purifier->purify($html);
-    $dom_html = $document->createDocumentFragment();
-    $dom_html->appendXML($html);
-    
-    $dom_div = $document->createElement('div');
-    $dom_div->setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
-    $dom_div->appendChild($dom_html);
-    
-    $node->appendChild($dom_div);
-}
 
 
 // ---------------------------------------------------------------------------
@@ -83,41 +68,20 @@ $dom_document->save('configdoc.xml');
 // ---------------------------------------------------------------------------
 // Generate final output using XSLT
 
-// load the stylesheet
+// determine stylesheet name
 $xsl_stylesheet_name = 'plain';
 $xsl_stylesheet = "styles/$xsl_stylesheet_name.xsl";
-$xsl_dom_stylesheet = new DOMDocument();
-$xsl_dom_stylesheet->load($xsl_stylesheet);
 
-// setup the XSLT processor
-$xsl_processor = new XSLTProcessor();
-
-// perform the transformation
-$xsl_processor->importStylesheet($xsl_dom_stylesheet);
-$html_output = $xsl_processor->transformToXML($dom_document);
-
-// some slight fudges to preserve backwards compatibility
-$html_output = str_replace('/>', ' />', $html_output); // <br /> not <br/>
-$html_output = str_replace(' xmlns=""', '', $html_output); // rm unnecessary xmlns
-
-if (class_exists('Tidy')) {
-    // cleanup output
-    $config = array(
-        'indent'        => true,
-        'output-xhtml'  => true,
-        'wrap'          => 80
-    );
-    $tidy = new Tidy;
-    $tidy->parseString($html_output, $config, 'utf8');
-    $tidy->cleanRepair();
-    $html_output = (string) $tidy;
-}
+// transform
+$xslt_processor = new ConfigDoc_HTMLXSLTProcessor();
+$xslt_processor->importStylesheet($xsl_stylesheet);
+$html_output = $xslt_processor->transformToHTML($dom_document);
 
 // hack
 if (!defined('HTMLPURIFIER_CUSTOM_SCHEMA')) {
     // write it to a file (todo: parse into seperate pages)
     file_put_contents("$xsl_stylesheet_name.html", $html_output);
-} else {
+} elseif (defined('HTMLPURIFIER_SCRIPT_LOCATION')) {
     $html_output = str_replace('styles/plain.css', HTMLPURIFIER_SCRIPT_LOCATION . 'styles/plain.css', $html_output);
 }
 

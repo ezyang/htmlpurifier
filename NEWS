@@ -20,11 +20,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   off, but it's not recommended.
 # New compact syntax for AttrDef objects that can be used to instantiate
   new objects via make()
+# Definitions (esp. HTMLDefinition) are now cached for a significant
+  performance boost
 ! HTML Purifier now works in PHP 4.3.2.
 ! Configuration form-editing API makes tweaking HTMLPurifier_Config a
   breeze!
 ! Configuration directives that accept hashes now allow new string
   format: key1,value1,key2,value2
+! ConfigDoc now factored into OOP design
 - Deprecated and removed EnableRedundantUTF8Cleaning. It didn't even work!
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible
