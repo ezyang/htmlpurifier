@@ -164,6 +164,23 @@ class HTMLPurifier
         return $array_of_html;
     }
     
+    /**
+     * Singleton for enforcing just one HTML Purifier in your system
+     */
+    function &getInstance($prototype = null) {
+        static $htmlpurifier;
+        if (!$htmlpurifier || $prototype) {
+            if (is_a($prototype, 'HTMLPurifier')) {
+                $htmlpurifier = $prototype;
+            } elseif ($prototype) {
+                $htmlpurifier = new HTMLPurifier(HTMLPurifier_Config::create($prototype));
+            } else {
+                $htmlpurifier = new HTMLPurifier();
+            }
+        }
+        return $htmlpurifier;
+    }
+    
     
 }
 

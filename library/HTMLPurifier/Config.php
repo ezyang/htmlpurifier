@@ -298,6 +298,23 @@ class HTMLPurifier_Config
     }
     
     /**
+     * Loads configuration values from $_GET/$_POST that were posted
+     * via ConfigForm
+     * @static
+     */
+    function loadArrayFromForm($array) {
+        $mq = get_magic_quotes_gpc();
+        foreach ($array as $key => $value) {
+            if (!strncmp($key, 'Null_', 5) && !empty($value)) {
+                unset($array[substr($key, 5)]);
+                unset($array[$key]);
+            }
+            if ($mq) $array[$key] = stripslashes($value);
+        }
+        return @HTMLPurifier_Config::create($array);
+    }
+    
+    /**
      * Loads configuration values from an ini file
      * @param $filename Name of ini file
      */

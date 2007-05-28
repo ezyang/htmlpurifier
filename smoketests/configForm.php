@@ -3,12 +3,37 @@
 require_once 'common.php';
 
 if (isset($_GET['doc'])) {
+    
+    if (
+        file_exists('testSchema.html') &&
+        filemtime('testSchema.php') < filemtime('testSchema.html') &&
+        !isset($_GET['purge'])
+    ) {
+        echo file_get_contents('testSchema.html');
+        exit;
+    }
+    
+    if (version_compare('5', PHP_VERSION, '>')) exit('Requires PHP 5 or higher.');
+    
+    // setup schema for parsing
     require_once 'testSchema.php';
-    $new_schema = $custom_schema;
-    HTMLPurifier_ConfigSchema::instance($old);
-    define('HTMLPURIFIER_CUSTOM_SCHEMA', 'new_schema');
-    define('HTMLPURIFIER_SCRIPT_LOCATION', '../configdoc/');
-    require_once '../configdoc/generate.php';
+    $new_schema = $custom_schema; // dereference the reference
+    HTMLPurifier_ConfigSchema::instance($old); // restore old version
+    
+    // setup ConfigDoc environment
+    require_once '../configdoc/library/ConfigDoc.auto.php';
+    
+    // perform the ConfigDoc generation
+    $configdoc = new ConfigDoc();
+    $html = $configdoc->generate($new_schema, 'plain', array(
+        'css' => '../configdoc/styles/plain.css',
+        'title' => 'Sample Configuration Documentation'
+    ));
+    $configdoc->cleanup();
+    
+    file_put_contents('testSchema.html', $html);
+    echo $html;
+    
     exit;
 }
 
@@ -37,17 +62,7 @@ require_once 'HTMLPurifier/Printer/ConfigForm.php';
 require_once 'testSchema.php';
 
 // cleanup ( this should be rolled into Config )
-$get = isset($_GET) ? $_GET : array();
-$mq = get_magic_quotes_gpc();
-foreach ($_GET as $key => $value) {
-    if (!strncmp($key, 'Null_', 5) && !empty($value)) {
-        unset($get[substr($key, 5)]);
-        unset($get[$key]);
-    }
-    if ($mq) $get[$key] = stripslashes($value);
-}
-$config = @HTMLPurifier_Config::create($get);
-
+$config = HTMLPurifier_Config::loadArrayFromForm($_GET);
 $printer = new HTMLPurifier_Printer_ConfigForm('?doc');
 echo $printer->render($config);
 

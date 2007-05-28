@@ -95,8 +95,8 @@ class ConfigDoc_XMLSerializer_ConfigSchema extends ConfigDoc_XMLSerializer
                 foreach ($info->descriptions as $file => $file_descriptions) {
                     foreach ($file_descriptions as $line => $description) {
                         $dom_description = $dom_document->createElement('description');
-                        // hack
-                        if (!defined('HTMLPURIFIER_CUSTOM_SCHEMA')) {
+                        // refuse to write $file if it's a full path
+                        if (str_replace('\\', '/', realpath($file)) != $file) {
                             $dom_description->setAttribute('file', $file);
                             $dom_description->setAttribute('line', $line);
                         }

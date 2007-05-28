@@ -51,6 +51,12 @@ class ConfigDoc_HTMLXSLTProcessor
         return $out;
     }
     
+    public function setParameters($options) {
+        foreach ($options as $name => $value) {
+            $this->xsltProcessor->setParameter('', $name, $value);
+        }
+    }
+    
 }
 
 ?>

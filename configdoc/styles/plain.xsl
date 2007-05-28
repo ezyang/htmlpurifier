@@ -12,19 +12,21 @@
         indent = "no"
         media-type = "text/html"
     />
+    <xsl:param name="css" select="'styles/plain.css'"/>
+    <xsl:param name="title" select="'Configuration Documentation'"/>
     
     <xsl:variable name="typeLookup" select="document('../types.xml')" />
     
     <xsl:template match="/">
         <html lang="en" xml:lang="en">
             <head>
-                <title>Configuration Documentation - <xsl:value-of select="/configdoc/title" /></title>
+                <title><xsl:value-of select="$title" /> - <xsl:value-of select="/configdoc/title" /></title>
                 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-                <link rel="stylesheet" type="text/css" href="styles/plain.css" />
+                <link rel="stylesheet" type="text/css" href="{$css}" />
             </head>
             <body>
                 <div id="library"><xsl:value-of select="/configdoc/title" /></div>
-                <h1>Configuration Documentation</h1>
+                <h1><xsl:value-of select="$title" /></h1>
                 <h2>Table of Contents</h2>
                 <ul id="toc">
                     <xsl:apply-templates mode="toc" />

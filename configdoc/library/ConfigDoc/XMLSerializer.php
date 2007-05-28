@@ -9,8 +9,7 @@ class ConfigDoc_XMLSerializer
 {
     
     protected function appendHTMLDiv($document, $node, $html) {
-        // oh no, it's a global!
-        global $purifier;
+        $purifier = HTMLPurifier::getInstance();
         $html = $purifier->purify($html);
         $dom_html = $document->createDocumentFragment();
         $dom_html->appendXML($html);
