@@ -74,6 +74,7 @@ $test_files[] = 'HTMLPurifier/EncoderTest.php';
 $test_files[] = 'HTMLPurifier/EntityLookupTest.php';
 $test_files[] = 'HTMLPurifier/EntityParserTest.php';
 $test_files[] = 'HTMLPurifier/GeneratorTest.php';
+$test_files[] = 'HTMLPurifier/HTMLDefinitionTest.php';
 $test_files[] = 'HTMLPurifier/HTMLModuleManagerTest.php';
 $test_files[] = 'HTMLPurifier/HTMLModuleTest.php';
 $test_files[] = 'HTMLPurifier/HTMLModule/ScriptingTest.php';

@@ -30,6 +30,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   format: key1:value1,key2:value2
 ! ConfigDoc now factored into OOP design
 ! All deprecated elements now natively supported
+! Implement TinyMCE styled whitelist specification format in
+  %HTML.Allowed
 - Deprecated and removed EnableRedundantUTF8Cleaning. It didn't even work!
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible

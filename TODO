@@ -10,10 +10,7 @@ TODO List
 1.7 release [Advanced API]
  # Complete advanced API, and fully document it
     - Add framework for unsafe attributes
-    - Reorganize configuration directives
     - Set up anonymous module management by HTMLDefinition (Advanced API)
-    - Get all AttrTypes into string form
- - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists
 
 1.8 release [Refactor, refactor!]
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
@@ -48,6 +45,9 @@ TODO List
  - Append something to duplicate IDs so they're still usable (impl. note: the
    dupe detector would also need to detect the suffix as well)
 
+1.11 release [It's All About Trust] (floating)
+ # Implement untrusted, dangerous elements/attributes
+
 2.0 release [Beyond HTML]
  # Legit token based CSS parsing (will require revamping almost every
    AttrDef class)
@@ -81,8 +81,6 @@ Ongoing
     - eFiction
     - more! (look for ones that use WYSIWYGs)
  - Complete basic smoketests
- - Reorganize Unit Tests
-    - Refactor loop tests (esp. AttrDef_URI)
 
 Unknown release (on a scratch-an-itch basis)
  ? Semi-lossy dumb alternate character encoding transfor
@@ -91,6 +89,9 @@ Unknown release (on a scratch-an-itch basis)
  - Explain how to use HTML Purifier in non-PHP languages
  - Abstract ChildDef_BlockQuote to work with all elements that only
    allow blocks in them, required or optional
+ - Reorganize Unit Tests
+    - Refactor loop tests (esp. AttrDef_URI)
+ - Reorganize configuration directives (Create more namespaces! Get messy!)
 
 Requested
  ? Native content compression, whitespace stripping (don't rely on Tidy, make

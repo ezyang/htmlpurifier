@@ -12,6 +12,7 @@ TODO:
 - allow generation of packaged docs that can be easily moved
 - multipage documentation
 - determine how to multilingualize
+- add blurbs to ToC
 */
 
 if (version_compare('5', PHP_VERSION, '>')) exit('Requires PHP 5 or higher.');

@@ -65,6 +65,25 @@ HTMLPurifier_ConfigSchema::define(
 </p>
 ');
 
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'Allowed', null, 'string/null', '
+<p>
+    This is a convenience directive that rolls the functionality of
+    %HTML.AllowedElements and %HTML.AllowedAttributes into one directive.
+    Specify elements and attributes that are allowed using:
+    <code>element1[attr1|attr2],element2...</code>.
+</p>
+<p>
+    <strong>Warning</strong>:
+    All of the constraints on the component directives are still enforced.
+    The syntax is a <em>subset</em> of TinyMCE\'s <code>valid_elements</code>
+    whitelist: directly copy-pasting it here will probably result in
+    broken whitelists. If %HTML.AllowedElements or %HTML.AllowedAttributes
+    are set, this directive has no effect.
+    This directive has been available since 1.7.0.
+</p>
+');
+
 /**
  * Definition of the purified HTML that describes allowed children,
  * attributes, and many other things.
@@ -233,8 +252,18 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         $support = "(for information on implementing this, see the ".
                    "support forums) ";
         
-        // setup allowed elements, SubtractiveWhitelist module(?)
+        // setup allowed elements
+        
         $allowed_elements = $config->get('HTML', 'AllowedElements');
+        $allowed_attributes = $config->get('HTML', 'AllowedAttributes');
+        
+        if (!is_array($allowed_elements) && !is_array($allowed_attributes)) {
+            $allowed = $config->get('HTML', 'Allowed');
+            if (is_string($allowed)) {
+                list($allowed_elements, $allowed_attributes) = $this->parseTinyMCEAllowedList($allowed);
+            }
+        }
+        
         if (is_array($allowed_elements)) {
             foreach ($this->info as $name => $d) {
                 if(!isset($allowed_elements[$name])) unset($this->info[$name]);
@@ -247,7 +276,6 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             }
         }
         
-        $allowed_attributes = $config->get('HTML', 'AllowedAttributes');
         $allowed_attributes_mutable = $allowed_attributes; // by copy!
         if (is_array($allowed_attributes)) {
             foreach ($this->info_global_attr as $attr_key => $info) {
@@ -286,6 +314,41 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 }
             }
         }
+        
+    }
+    
+    /**
+     * Parses a TinyMCE-flavored Allowed Elements and Attributes list into
+     * separate lists for processing. Format is element[attr1|attr2],element2...
+     * @warning Although it's largely drawn from TinyMCE's implementation,
+     *      it is different, and you'll probably have to modify your lists
+     * @param $list String list to parse
+     * @param array($allowed_elements, $allowed_attributes)
+     */
+    function parseTinyMCEAllowedList($list) {
+        
+        $elements = array();
+        $attributes = array();
+        
+        $chunks = explode(',', $list);
+        foreach ($chunks as $chunk) {
+            // remove TinyMCE element control characters
+            if (!strpos($chunk, '[')) {
+                $element = $chunk;
+                $attr = false;
+            } else {
+                list($element, $attr) = explode('[', $chunk);
+            }
+            if ($element !== '*') $elements[$element] = true;
+            if (!$attr) continue;
+            $attr = substr($attr, 0, strlen($attr) - 1); // remove trailing ]
+            $attr = explode('|', $attr);
+            foreach ($attr as $key) {
+                $attributes["$element.$key"] = true;
+            }
+        }
+        
+        return array($elements, $attributes);
         
     }
     
