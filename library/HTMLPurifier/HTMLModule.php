@@ -139,9 +139,13 @@ class HTMLPurifier_HTMLModule
      * @return Reference to created element
      */
     function &addBlankElement($element) {
-        $this->elements[] = $element;
-        $this->info[$element] = new HTMLPurifier_ElementDef();
-        $this->info[$element]->standalone = false;
+        if (!isset($this->info[$element])) {
+            $this->elements[] = $element;
+            $this->info[$element] = new HTMLPurifier_ElementDef();
+            $this->info[$element]->standalone = false;
+        } else {
+            trigger_error("Definition for $element already exists in module, cannot redefine");
+        }
         return $this->info[$element];
     }
     

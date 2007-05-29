@@ -51,12 +51,6 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
         
         // setup modifications to old elements
         
-        $li =& $this->addBlankElement('li');
-        $li->attr['value'] = new HTMLPurifier_AttrDef_Integer();
-        
-        $ol =& $this->addBlankElement('ol');
-        $ol->attr['start'] = new HTMLPurifier_AttrDef_Integer();
-        
         $align = 'Enum#left,right,center,justify';
         
         $address =& $this->addBlankElement('address');
@@ -86,7 +80,59 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
             $h->attr['align'] = $align;
         }
         
-        // to be continued...
+        $hr =& $this->addBlankElement('hr');
+        $hr->attr['align'] = $align;
+        $hr->attr['noshade'] = 'Bool#noshade';
+        $hr->attr['size'] = 'Pixels';
+        $hr->attr['width'] = 'Length';
+        
+        $img =& $this->addBlankElement('img');
+        $img->attr['align'] = 'Enum#top,middle,bottom,left,right';
+        $img->attr['border'] = 'Pixels';
+        $img->attr['hspace'] = 'Pixels';
+        $img->attr['vspace'] = 'Pixels';
+        
+        // figure out this integer business
+        
+        $li =& $this->addBlankElement('li');
+        $li->attr['value'] = new HTMLPurifier_AttrDef_Integer();
+        $li->attr['type']  = 'Enum#s:1,i,I,a,A,disc,square,circle';
+        
+        $ol =& $this->addBlankElement('ol');
+        $ol->attr['compact'] = 'Bool#compact';
+        $ol->attr['start'] = new HTMLPurifier_AttrDef_Integer();
+        $ol->attr['type'] = 'Enum#s:1,i,I,a,A';
+        
+        $p =& $this->addBlankElement('p');
+        $p->attr['align'] = $align;
+        
+        $pre =& $this->addBlankElement('pre');
+        $pre->attr['width'] = 'Number';
+        
+        // script omitted
+        
+        $table =& $this->addBlankElement('table');
+        $table->attr['align'] = 'Enum#left,center,right';
+        $table->attr['bgcolor'] = 'Color';
+        
+        $tr =& $this->addBlankElement('tr');
+        $tr->attr['bgcolor'] = 'Color';
+        
+        $th =& $this->addBlankElement('th');
+        $th->attr['bgcolor'] = 'Color';
+        $th->attr['height'] = 'Length';
+        $th->attr['nowrap'] = 'Bool#nowrap';
+        $th->attr['width'] = 'Length';
+        
+        $td =& $this->addBlankElement('td');
+        $td->attr['bgcolor'] = 'Color';
+        $td->attr['height'] = 'Length';
+        $td->attr['nowrap'] = 'Bool#nowrap';
+        $td->attr['width'] = 'Length';
+        
+        $ul =& $this->addBlankElement('ul');
+        $ul->attr['compact'] = 'Bool#compact';
+        $ul->attr['type'] = 'Enum#square,disc,circle';
         
     }
     

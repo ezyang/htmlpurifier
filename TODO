@@ -15,10 +15,6 @@ TODO List
     - Get all AttrTypes into string form
  # Clean up HTMLDefinition caching, need easy cache invalidation,
    versioning of caches, etc.
- # Implement all deprecated tags and attributes
- # Create parsing/standards compliance smoketest
- # Reorganize Unit Tests
-    - Refactor loop tests (esp. AttrDef_URI)
  - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists
 
 1.8 release [Refactor, refactor!]
@@ -86,6 +82,9 @@ Ongoing
     - WordPress (mostly written, needs beta-testing)
     - eFiction
     - more! (look for ones that use WYSIWYGs)
+ - Complete basic smoketests
+ - Reorganize Unit Tests
+    - Refactor loop tests (esp. AttrDef_URI)
 
 Unknown release (on a scratch-an-itch basis)
  ? Semi-lossy dumb alternate character encoding transfor

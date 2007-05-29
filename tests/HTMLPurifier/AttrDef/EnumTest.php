@@ -25,8 +25,13 @@ class HTMLPurifier_AttrDef_EnumTest extends HTMLPurifier_AttrDefHarness
     
     function test_make() {
         $factory = new HTMLPurifier_AttrDef_Enum();
+        
         $def = $factory->make('foo,bar');
         $def2 = new HTMLPurifier_AttrDef_Enum(array('foo', 'bar'));
+        $this->assertIdentical($def, $def2);
+        
+        $def = $factory->make('s:foo,BAR');
+        $def2 = new HTMLPurifier_AttrDef_Enum(array('foo', 'BAR'), true);
         $this->assertIdentical($def, $def2);
     }
     
