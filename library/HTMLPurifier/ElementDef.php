@@ -51,6 +51,8 @@ class HTMLPurifier_ElementDef
      * Abstract string representation of internal ChildDef rules. See
      * HTMLPurifier_ContentSets for how this is parsed and then transformed
      * into an HTMLPurifier_ChildDef.
+     * @warning This is a temporary variable that is not available after
+     *      being processed by HTMLDefinition
      * @public
      */
     var $content_model;
@@ -59,6 +61,8 @@ class HTMLPurifier_ElementDef
      * Value of $child->type, used to determine which ChildDef to use,
      * used in combination with $content_model.
      * @warning This must be lowercase
+     * @warning This is a temporary variable that is not available after
+     *      being processed by HTMLDefinition
      * @public
      */
     var $content_model_type;

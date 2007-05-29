@@ -44,6 +44,13 @@ class HTMLPurifier_Config
     var $version = '1.6.1';
     
     /**
+     * Integer key users can use to indicate they have manually
+     * overridden some internal behavior and would like the
+     * cache to invalidate itself.
+     */
+    var $revision = 1;
+    
+    /**
      * Two-level associative array of configuration directives
      */
     var $conf;
@@ -54,14 +61,9 @@ class HTMLPurifier_Config
     var $def;
     
     /**
-     * Cached instance of HTMLPurifier_HTMLDefinition
+     * Indexed array of definitions
      */
-    var $html_definition;
-    
-    /**
-     * Cached instance of HTMLPurifier_CSSDefinition
-     */
-    var $css_definition;
+    var $definitions;
     
     /**
      * Bool indicator whether or not config is finalized
@@ -205,10 +207,8 @@ class HTMLPurifier_Config
         // reset definitions if the directives they depend on changed
         // this is a very costly process, so it's discouraged 
         // with finalization
-        if ($namespace == 'HTML') {
-            $this->html_definition = null;
-        } elseif ($namespace == 'CSS') {
-            $this->css_definition = null;
+        if ($namespace == 'HTML' || $namespace == 'CSS') {
+            $this->definitions[$namespace] = null;
         }
     }
     
@@ -218,60 +218,61 @@ class HTMLPurifier_Config
      *             called before it's been setup, otherwise won't work.
      */
     function &getHTMLDefinition($raw = false) {
-        if (!$this->finalized && $this->autoFinalize) $this->finalize();
-        $cache = HTMLPurifier_DefinitionCache::create('HTML', $this);
-        if($this->checkDefinition($this->html_definition, $cache, $raw)) {
-            return $this->html_definition;
-        }
-        return $this->createDefinition(
-            $this->html_definition,
-            $cache,
-            $raw, 
-            new HTMLPurifier_HTMLDefinition()
-        );
+        return $this->getDefinition('HTML', $raw);
     }
     
     /**
      * Retrieves reference to the CSS definition
      */
     function &getCSSDefinition($raw = false) {
+        return $this->getDefinition('CSS', $raw);
+    }
+    
+    /**
+     * Retrieves a definition
+     * @param $type Type of definition: HTML, CSS, etc
+     * @param $raw  Whether or not definition should be returned raw
+     */
+    function &getDefinition($type, $raw = false) {
         if (!$this->finalized && $this->autoFinalize) $this->finalize();
-        $cache = HTMLPurifier_DefinitionCache::create('CSS', $this);
-        if($this->checkDefinition($this->css_definition, $cache, $raw)) {
-            return $this->css_definition;
+        $cache = HTMLPurifier_DefinitionCache::create($type, $this);
+        if (!$raw) {
+            // see if we can quickly supply a definition
+            if (!empty($this->definitions[$type])) {
+                if (!$this->definitions[$type]->setup) {
+                    $this->definitions[$type]->setup($this);
+                }
+                return $this->definitions[$type];
+            }
+            // memory check missed, try cache
+            $this->definitions[$type] = $cache->get($this);
+            if ($this->definitions[$type]) {
+                // definition in cache, return it
+                return $this->definitions[$type];
+            }
+        } elseif (
+            !empty($this->definitions[$type]) &&
+            !$this->definitions[$type]->setup
+        ) {
+            // raw requested, raw in memory, quick return
+            return $this->definitions[$type];
         }
-        return $this->createDefinition(
-            $this->css_definition,
-            $cache,
-            $raw, 
-            new HTMLPurifier_CSSDefinition()
-        );
-    }
-    
-    /**
-     * Checks the variable and cache for an easy-access definition,
-     * sets def to variable and returns true if available
-     */
-    function checkDefinition(&$var, $cache, $raw) {
-        if ($raw) return false;
-        if (!empty($var)) {
-            if (!$var->setup) $var->setup($this);
-            return true;
+        // quick checks failed, let's create the object
+        if ($type == 'HTML') {
+            $this->definitions[$type] = new HTMLPurifier_HTMLDefinition();
+        } elseif ($type == 'CSS') {
+            $this->definitions[$type] = new HTMLPurifier_CSSDefinition();
+        } else {
+            trigger_error("Definition of $type type not supported");
+            return false;
         }
-        $var = $cache->get($this);
-        return (bool) $var;
-    }
-    
-    /**
-     * Generates a new definition, possibly returning it raw, returns
-     * reference to variable.
-     */
-    function &createDefinition(&$var, $cache, $raw, $obj) {
-        $var = $obj;
-        if ($raw) return $var;
-        $var->setup($this);
-        $cache->set($var, $this);
-        return $var;
+        // quick abort if raw
+        if ($raw) return $this->definitions[$type];
+        // set it up
+        $this->definitions[$type]->setup($this);
+        // save in cache
+        $cache->set($this->definitions[$type], $this);
+        return $this->definitions[$type];
     }
     
     /**

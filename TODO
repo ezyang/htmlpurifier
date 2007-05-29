@@ -13,8 +13,7 @@ TODO List
     - Reorganize configuration directives
     - Set up anonymous module management by HTMLDefinition (Advanced API)
     - Get all AttrTypes into string form
- # Clean up HTMLDefinition caching, need easy cache invalidation,
-   versioning of caches, etc.
+ # Clean up HTMLDefinition caching, need easy cache invalidation.
  - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists
 
 1.8 release [Refactor, refactor!]

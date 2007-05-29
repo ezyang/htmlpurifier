@@ -53,7 +53,12 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
         
         $config_array = array('Foo' => 'Bar');
-        $config_md5   = md5(serialize($config_array));
+        
+        $config = $this->generateConfigMock($config_array);
+        $config->version = '1.0.0';
+        $config->revision = 2;
+        
+        $config_md5   = '1.0.0-' . $config->revision . '-' . md5(serialize($config_array));
         
         $file = realpath(
             $rel_file = dirname(__FILE__) .
@@ -62,7 +67,6 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         );
         if($file && file_exists($file)) unlink($file); // prevent previous failures from causing problems
         
-        $config = $this->generateConfigMock($config_array);
         $this->assertIdentical($config_md5, $cache->generateKey($config));
         
         $def_original = $this->generateDefinition();
@@ -147,6 +151,34 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $this->assertFalse($cache->get($config1));
         $this->assertFalse($cache->get($config2));
         $this->assertFalse($cache->get($config3));
+        
+    }
+    
+    function testCleanup() {
+        
+        $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
+        
+        // in order of age, oldest first
+        // note that configurations are all identical, but version/revision
+        // are different
+        
+        $config1 = $this->generateConfigMock();
+        $config1->version = '0.9.0';
+        $config1->revision = 574;
+        $def1 = $this->generateDefinition(array('info' => 1));
+        
+        $config2 = $this->generateConfigMock();
+        $config2->version = '1.0.0beta';
+        $config2->revision = 1;
+        $def2 = $this->generateDefinition(array('info' => 3));
+        
+        $cache->set($def1, $config1);
+        $cache->cleanup($config1);
+        $this->assertEqual($def1, $cache->get($config1)); // no change
+        
+        $cache->cleanup($config2);
+        $this->assertFalse($cache->get($config1));
+        $this->assertFalse($cache->get($config2));
         
     }
     

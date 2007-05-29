@@ -169,6 +169,12 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         $this->processModules($config);
         $this->setupConfigStuff($config);
         unset($this->manager);
+        
+        // cleanup some of the element definitions
+        foreach ($this->info as $k => $v) {
+            unset($this->info[$k]->content_model);
+            unset($this->info[$k]->content_model_type);
+        }
     }
     
     /**

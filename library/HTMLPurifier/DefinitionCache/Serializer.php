@@ -44,10 +44,18 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         while (false !== ($filename = readdir($dh))) {
             if (empty($filename)) continue;
             if ($filename[0] === '.') continue;
-            // optimization: md5 + .ser will always be 36 char long
-            // needs to be changed if we change the identifier
-            if (strlen($filename) !== 36) continue;
             unlink($dir . '/' . $filename);
+        }
+    }
+    
+    function cleanup($config) {
+        $dir = $this->generateDirectoryPath();
+        $dh  = opendir($dir);
+        while (false !== ($filename = readdir($dh))) {
+            if (empty($filename)) continue;
+            if ($filename[0] === '.') continue;
+            $key = substr($filename, 0, strlen($filename) - 4);
+            if ($this->isOld($key, $config)) unlink($dir . '/' . $filename);
         }
     }
     

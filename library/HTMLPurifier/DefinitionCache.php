@@ -33,7 +33,23 @@ class HTMLPurifier_DefinitionCache
      * @param Instance of HTMLPurifier_Config
      */
     function generateKey($config) {
-        return md5(serialize($config->getBatch($this->type)));
+        $version  = $config->version;
+        $revision = $config->revision;
+        return $version . '-' . $revision . '-' . md5(serialize($config->getBatch($this->type)));
+    }
+    
+    /**
+     * Tests whether or not a key is old with respect to the configuration's
+     * version and revision number.
+     * @param $key Key to test
+     * @param $config Instance of HTMLPurifier_Config to test against
+     */
+    function isOld($key, $config) {
+        list($version, $revision, $hash) = explode('-', $key, 3);
+        $compare = version_compare($version, $config->version);
+        if ($compare > 0) return false;
+        if ($compare == 0 && $revision >= $config->revision) return false;
+        return true;
     }
     
     /**
@@ -99,10 +115,16 @@ class HTMLPurifier_DefinitionCache
     /**
      * Clears all objects from cache
      */
-    function flush($config) {
+    function flush() {
         trigger_error('Cannot call abstract method', E_USER_ERROR);
     }
     
+    /**
+     * Clears all expired (older version or revision) objects from cache
+     */
+    function cleanup($config) {
+        trigger_error('Cannot call abstract method', E_USER_ERROR);
+    }
 }
 
 ?>
