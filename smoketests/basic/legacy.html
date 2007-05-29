@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+ <title>HTML Purifier Legacy Smoketest Test Data</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ <link rel="stylesheet" href="legacy.css" type="text/css" />
+</head>
+<body>
+
+<h1>HTML Purifier Legacy Smoketest Test Data</h1>
+
+<p>This is the legacy smoketest.</p>
+
+<h2>Elements</h2>
+
+<div>
+<div>
+    <basefont color="green" face="Arial" size="6" id="basefont" />
+    basefont: Green, Arial, size 6 text (IE-only)
+</div>
+
+<center>center</center>
+
+<dir compact="compact">
+    <li>dir</li>
+</dir>
+
+<font color="green" face="Arial" size="6">font: Green, Arial, size 6 text</font>
+
+isindex:
+<isindex prompt="Foo" />
+
+<menu compact="compact">
+    <li>menu</li>
+</menu>
+
+<s>s</s> <strike>strike</strike> <u>u</u>
+</div>
+
+<h2>Attributes</h2>
+
+<div>
+<!-- body -->
+
+<div style="font-size:42pt; float:left;">*</div>
+<br clear="left" />
+<p>br@clear (asterisk is up)</p>
+
+<table>
+    <caption align="bottom">caption@align</caption>
+    <tr><td>Cell</td></tr>
+</table>
+
+<div align="center">div@center</div>
+
+<dl compact="compact">
+    <dt>dl@compact</dt>
+</dl>
+
+<h1 align="right">h1</h1>
+<h2 align="right">h2</h2>
+<h3 align="right">h3</h3>
+<h4 align="right">h4</h4>
+<h5 align="right">h5</h5>
+<h6 align="right">h6</h6>
+
+hr@align
+<hr align="right" width="50" />
+hr@noshade
+<hr noshade="noshade" />
+hr@width
+<hr width="50" />
+hr@size
+<hr size="50" />
+
+
+</div>
+
+<!--
+
+img& 	align ("top" | "middle" | "bottom" | "left" | "right"), border (Pixels), hspace (Pixels), vspace (Pixels) 	 
+input& 	align ("top" | "middle" | "bottom" | "left" | "right") 	When the Basic Forms or Forms Module is selected.
+legend& 	align ("left" | "center" | "right" | "justify") 	When the Forms Module is selected.
+li& 	type (CDATA), value (Number) 	 
+ol& 	compact ("compact"), start (Number), type (CDATA) 	 
+p& 	align ("left" | "center" | "right", "justify") 	 
+pre& 	width (Number) 	 
+script& 	language (CDATA) 	When the Scripting module is selected.
+table& 	align ("left" | "center" | "right"), bgcolor (Color) 	When the Tables module is selected.
+tr& 	bgcolor (Color) 	When the Tables module is selected.
+th& 	bgcolor (Color), height (Length) nowrap ("nowrap"), width (Length) 	When the Tables module is selected.
+td& 	bgcolor (Color), height (Length) nowrap ("nowrap"), width (Length) 	When the Tables module is selected.
+ul& 	compact ("compact"), type (CDATA)
+
+-->
+
+</body>
+</html>

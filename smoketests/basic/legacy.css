@@ -1,0 +1,32 @@
+
+center,
+dir[compact='compact'],
+isindex[prompt='Foo'],
+menu[compact='compact'],
+s,
+u,
+strike,
+
+caption[align='bottom'],
+div[align='center'],
+dl[compact='compact'],
+
+h1[align='right'],
+h2[align='right'],
+h3[align='right'],
+h4[align='right'],
+h5[align='right'],
+h6[align='right'],
+
+hr[align='right'],
+hr[noshade='noshade'],
+hr[width='50'],
+hr[size='50'],
+
+.insert-declarations-above
+ {background:#008000; color:#FFF; font-weight:bold;}
+
+font {background:#BFB;}
+u {border:1px solid #000;}
+hr {height:1em;}
+hr[size='50'] {height:50px;}
