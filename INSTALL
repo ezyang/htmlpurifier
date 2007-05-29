@@ -130,13 +130,15 @@ detailed lowdown on the topic.
 For those of you stuck using HTML 4.01 Transitional, you can disable
 XHTML output like this:
 
-    $config->set('Core', 'XHTML', false);
+    $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
 
-I recommend that you use XHTML, although not as much as I recommend UTF-8.  If
-your HTML 4.01 page validates, good for you!
+Supported doctypes include:
 
-Currently, we can only guarantee transitional-complaint output, future
-versions will also allow strict-compliant output.
+    * HTML 4.01 Strict
+    * HTML 4.01 Transitional
+    * XHTML 1.0 Strict
+    * XHTML 1.0 Transitional
+    * XHTML 1.1
 
 
 
@@ -184,8 +186,8 @@ If your website is in a different encoding or doctype, use this code:
     require_once '/path/to/htmlpurifier/library/HTMLPurifier.auto.php';
     
     $config = HTMLPurifier_Config::createDefault();
-    $config->set('Core', 'Encoding', 'ISO-8859-1'); //replace with your encoding
-    $config->set('Core', 'XHTML', true); //replace with false if HTML 4.01
+    $config->set('Core', 'Encoding', 'ISO-8859-1'); // replace with your encoding
+    $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional'); // replace with your doctype
     $purifier = new HTMLPurifier($config);
     
     $clean_html = $purifier->purify($dirty_html);

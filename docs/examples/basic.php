@@ -8,8 +8,8 @@ require_once '../../library/HTMLPurifier.auto.php';
 $config = HTMLPurifier_Config::createDefault();
 
 // configuration goes here:
-$config->set('Core', 'Encoding', 'ISO-8859-1'); //replace with your encoding
-$config->set('Core', 'XHTML', true); // set to false if HTML 4.01
+$config->set('Core', 'Encoding', 'UTF-8'); // replace with your encoding
+$config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional'); // replace with your doctype
 
 $purifier = new HTMLPurifier($config);
 
