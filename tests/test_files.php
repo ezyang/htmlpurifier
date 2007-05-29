@@ -63,6 +63,7 @@ $test_files[] = 'HTMLPurifier/ConfigTest.php';
 $test_files[] = 'HTMLPurifier/ContextTest.php';
 $test_files[] = 'HTMLPurifier/DefinitionCacheFactoryTest.php';
 $test_files[] = 'HTMLPurifier/DefinitionCacheTest.php';
+$test_files[] = 'HTMLPurifier/DefinitionCache/Decorator/CleanupTest.php';
 $test_files[] = 'HTMLPurifier/DefinitionCache/Decorator/MemoryTest.php';
 $test_files[] = 'HTMLPurifier/DefinitionCache/DecoratorTest.php';
 $test_files[] = 'HTMLPurifier/DefinitionCache/SerializerTest.php';

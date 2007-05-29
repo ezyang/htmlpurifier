@@ -9,9 +9,10 @@ class HTMLPurifier_DefinitionCache_Decorator_Template extends
       HTMLPurifier_DefinitionCache_Decorator
 {
     
-    // must be defined!!!
+    var $name = 'Template'; // replace this
     
     function copy() {
+        // replace class name with yours
         return new HTMLPurifier_DefinitionCache_Decorator_Template();
     }
     

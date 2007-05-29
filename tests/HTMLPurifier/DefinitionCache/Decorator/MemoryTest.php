@@ -1,29 +1,16 @@
 <?php
 
-require_once 'HTMLPurifier/DefinitionCacheHarness.php';
+require_once 'HTMLPurifier/DefinitionCache/DecoratorHarness.php';
 require_once 'HTMLPurifier/DefinitionCache/Decorator/Memory.php';
 
 generate_mock_once('HTMLPurifier_DefinitionCache');
 
-class HTMLPurifier_DefinitionCache_Decorator_MemoryTest extends HTMLPurifier_DefinitionCacheHarness
+class HTMLPurifier_DefinitionCache_Decorator_MemoryTest extends HTMLPurifier_DefinitionCache_DecoratorHarness
 {
     
     function setup() {
-        unset($this->mock);
-        unset($this->cache);
-        $this->mock     =& new HTMLPurifier_DefinitionCacheMock($this);
-        $this->mock->type = 'Test';
-        $this->cache    = new HTMLPurifier_DefinitionCache_Decorator_Memory();
-        $this->cache    = $this->cache->decorate($this->mock);
-        $this->def      = $this->generateDefinition();
-        $this->config   = $this->generateConfigMock();
-    }
-    
-    function test_get() {
-        $this->mock->expectOnce('get', array($this->config)); // only ONE call!
-        $this->mock->setReturnValue('get', $this->def, array($this->config));
-        $this->assertEqual($this->cache->get($this->config), $this->def);
-        $this->assertEqual($this->cache->get($this->config), $this->def);
+        $this->cache = new HTMLPurifier_DefinitionCache_Decorator_Memory();
+        parent::setup();
     }
     
     function setupMockForSuccess($op) {
@@ -38,38 +25,45 @@ class HTMLPurifier_DefinitionCache_Decorator_MemoryTest extends HTMLPurifier_Def
         $this->mock->expectOnce('get', array($this->config));
     }
     
+    function test_get() {
+        $this->mock->expectOnce('get', array($this->config)); // only ONE call!
+        $this->mock->setReturnValue('get', $this->def, array($this->config));
+        $this->assertEqual($this->cache->get($this->config), $this->def);
+        $this->assertEqual($this->cache->get($this->config), $this->def);
+    }
+    
     function test_set() {
-        $this->setupMockForSuccess('set');
+        $this->setupMockForSuccess('set', 'get');
         $this->assertEqual($this->cache->set($this->def, $this->config), true);
         $this->assertEqual($this->cache->get($this->config), $this->def);
     }
     
     function test_set_failure() {
-        $this->setupMockForFailure('set');
+        $this->setupMockForFailure('set', 'get');
         $this->assertEqual($this->cache->set($this->def, $this->config), false);
         $this->cache->get($this->config);
     }
     
     function test_replace() {
-        $this->setupMockForSuccess('replace');
+        $this->setupMockForSuccess('replace', 'get');
         $this->assertEqual($this->cache->replace($this->def, $this->config), true);
         $this->assertEqual($this->cache->get($this->config), $this->def);
     }
     
     function test_replace_failure() {
-        $this->setupMockForFailure('replace');
+        $this->setupMockForFailure('replace', 'get');
         $this->assertEqual($this->cache->replace($this->def, $this->config), false);
         $this->cache->get($this->config);
     }
     
     function test_add() {
-        $this->setupMockForSuccess('add');
+        $this->setupMockForSuccess('add', 'get');
         $this->assertEqual($this->cache->add($this->def, $this->config), true);
         $this->assertEqual($this->cache->get($this->config), $this->def);
     }
     
     function test_add_failure() {
-        $this->setupMockForFailure('add');
+        $this->setupMockForFailure('add', 'get');
         $this->assertEqual($this->cache->add($this->def, $this->config), false);
         $this->cache->get($this->config);
     }

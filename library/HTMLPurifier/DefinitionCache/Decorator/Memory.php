@@ -12,6 +12,7 @@ class HTMLPurifier_DefinitionCache_Decorator_Memory extends
 {
     
     var $definitions;
+    var $name = 'Memory';
     
     function copy() {
         return new HTMLPurifier_DefinitionCache_Decorator_Memory();

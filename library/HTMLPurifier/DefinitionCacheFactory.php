@@ -25,6 +25,13 @@ class HTMLPurifier_DefinitionCacheFactory
     var $decorators = array();
     
     /**
+     * Initialize default decorators
+     */
+    function setup() {
+        $this->addDecorator('Cleanup');
+    }
+    
+    /**
      * Retrieves an instance of global definition cache factory.
      * @static
      */
@@ -34,6 +41,7 @@ class HTMLPurifier_DefinitionCacheFactory
             $instance = $prototype;
         } elseif ($instance === null || $prototype === true) {
             $instance = new HTMLPurifier_DefinitionCacheFactory();
+            $instance->setup();
         }
         return $instance;
     }
@@ -74,7 +82,7 @@ class HTMLPurifier_DefinitionCacheFactory
             $class = "HTMLPurifier_DefinitionCache_Decorator_$decorator";
             $decorator = new $class;
         }
-        $this->decorators[] = $decorator;
+        $this->decorators[$decorator->name] = $decorator;
     }
     
 }
