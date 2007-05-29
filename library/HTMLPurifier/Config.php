@@ -6,7 +6,7 @@ require_once 'HTMLPurifier/ConfigSchema.php';
 require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/CSSDefinition.php';
 require_once 'HTMLPurifier/Doctype.php';
-require_once 'HTMLPurifier/DefinitionCache.php';
+require_once 'HTMLPurifier/DefinitionCacheFactory.php';
 
 // accomodations for versions earlier than 4.3.10 and 5.0.2
 // borrowed from PHP_Compat, LGPL licensed, by Aidan Lister <aidan@php.net>
@@ -75,6 +75,12 @@ class HTMLPurifier_Config
      * the object if a read operation is done
      */
     var $autoFinalize = true;
+    
+    /**
+     * Namespace indexed array of serials for specific namespaces (see
+     * getSerial for more info).
+     */
+    var $serials = array();
     
     /**
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
@@ -150,6 +156,18 @@ class HTMLPurifier_Config
     }
     
     /**
+     * Returns a md5 signature of a segment of the configuration object
+     * that uniquely identifies that particular configuration
+     * @param $namespace Namespace to get serial for
+     */
+    function getBatchSerial($namespace) {
+        if (empty($this->serials[$namespace])) {
+            $this->serials[$namespace] = md5(serialize($this->getBatch($namespace)));
+        }
+        return $this->serials[$namespace];
+    }
+    
+    /**
      * Retrieves all directives, organized by namespace
      */
     function getAll() {
@@ -210,6 +228,8 @@ class HTMLPurifier_Config
         if ($namespace == 'HTML' || $namespace == 'CSS') {
             $this->definitions[$namespace] = null;
         }
+        
+        $this->serials[$namespace] = false;
     }
     
     /**
@@ -235,7 +255,8 @@ class HTMLPurifier_Config
      */
     function &getDefinition($type, $raw = false) {
         if (!$this->finalized && $this->autoFinalize) $this->finalize();
-        $cache = HTMLPurifier_DefinitionCache::create($type, $this);
+        $factory = HTMLPurifier_DefinitionCacheFactory::instance();
+        $cache = $factory->create($type, $this);
         if (!$raw) {
             // see if we can quickly supply a definition
             if (!empty($this->definitions[$type])) {

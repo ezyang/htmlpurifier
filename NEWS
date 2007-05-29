@@ -21,7 +21,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 # New compact syntax for AttrDef objects that can be used to instantiate
   new objects via make()
 # Definitions (esp. HTMLDefinition) are now cached for a significant
-  performance boost
+  performance boost. You can disable caching by setting %Core.DefinitionCache
+  to null.
 ! HTML Purifier now works in PHP 4.3.2.
 ! Configuration form-editing API makes tweaking HTMLPurifier_Config a
   breeze!

@@ -3,62 +3,18 @@
 require_once 'HTMLPurifier/DefinitionCacheHarness.php';
 require_once 'HTMLPurifier/DefinitionCache/Serializer.php';
 
-class HTMLPurifier_Definition_SerializerMock extends HTMLPurifier_Definition
-{
-    
-    var $_test;
-    var $_expect = false;
-    
-    function HTMLPurifier_Definition_SerializerMock(&$test_case) {
-        $this->_test =& $test_case;
-    }
-    
-    function expectDoSetupOnce() {$this->_expect = true;}
-    
-    function doSetup($config) {
-        if ($this->_expect) {
-            $this->_test->pass();
-        } else {
-            $this->_test->fail('Unexpected call to doSetup');
-        }
-        unset($this->_test, $this->_expect);
-    }
-    
-}
-
 class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_DefinitionCacheHarness
 {
-    
-    function test__SerializerMock_pass() {
-        $config = 'config';
-        generate_mock_once('UnitTestCase');
-        $test =& new UnitTestCaseMock($this);
-        $test->expectOnce('pass');
-        $mock = new HTMLPurifier_Definition_SerializerMock($test);
-        $mock->expectDoSetupOnce();
-        $mock->doSetup($config);
-    }
-    
-    function test__SerializerMock_fail() {
-        $config = 'config';
-        generate_mock_once('UnitTestCase');
-        $test =& new UnitTestCaseMock($this);
-        $test->expectOnce('fail');
-        $mock = new HTMLPurifier_Definition_SerializerMock($test);
-        $mock->doSetup($config);
-    }
     
     function test() {
         
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
         
-        $config_array = array('Foo' => 'Bar');
-        
-        $config = $this->generateConfigMock($config_array);
+        $config = $this->generateConfigMock('serial');
         $config->version = '1.0.0';
         $config->revision = 2;
         
-        $config_md5   = '1.0.0-' . $config->revision . '-' . md5(serialize($config_array));
+        $config_md5   = '1.0.0-' . $config->revision . '-serial';
         
         $file = realpath(
             $rel_file = dirname(__FILE__) .
@@ -114,7 +70,7 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $def = new HTMLPurifier_Definition();
         $def->setup = true;
         $def->type = 'NotTest';
-        $config = $this->generateConfigMock(array('Test' => 'foo'));
+        $config = $this->generateConfigMock('testfoo');
         
         $this->expectError('Cannot use definition of type NotTest in cache for Test');
         $cache->add($def, $config);
@@ -130,9 +86,9 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
         
-        $config1 = $this->generateConfigMock(array('Test' => 1));
-        $config2 = $this->generateConfigMock(array('Test' => 2));
-        $config3 = $this->generateConfigMock(array('Test' => 3));
+        $config1 = $this->generateConfigMock('test1');
+        $config2 = $this->generateConfigMock('test2');
+        $config3 = $this->generateConfigMock('test3');
         
         $def1 = $this->generateDefinition(array('info_candles' => 1));
         $def2 = $this->generateDefinition(array('info_candles' => 2));

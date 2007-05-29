@@ -8,10 +8,10 @@ class HTMLPurifier_DefinitionCacheHarness extends UnitTestCase
      * to a getBatch() call
      * @param $values Values to return when getBatch is invoked
      */
-    function generateConfigMock($values = array()) {
+    function generateConfigMock($serial = 'defaultserial') {
         generate_mock_once('HTMLPurifier_Config');
         $config = new HTMLPurifier_ConfigMock($this);
-        $config->setReturnValue('getBatch', $values, array('Test'));
+        $config->setReturnValue('getBatchSerial', $serial, array('Test'));
         $config->version = '1.0.0';
         $config->revision = 1;
         return $config;

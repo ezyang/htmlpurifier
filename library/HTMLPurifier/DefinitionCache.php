@@ -1,11 +1,13 @@
 <?php
 
 require_once 'HTMLPurifier/DefinitionCache/Serializer.php';
+require_once 'HTMLPurifier/DefinitionCache/Null.php';
+
+require_once 'HTMLPurifier/DefinitionCache/Decorator.php';
 
 /**
  * Abstract class representing Definition cache managers that implements
  * useful common methods and is a factory.
- * @note The configuration object is transformed into the key used by the cache
  * @todo Get some sort of versioning variable so the library can easily
  *       invalidate the cache with a new version
  * @todo Make the test runner cache aware and allow the user to easily
@@ -33,9 +35,9 @@ class HTMLPurifier_DefinitionCache
      * @param Instance of HTMLPurifier_Config
      */
     function generateKey($config) {
-        $version  = $config->version;
-        $revision = $config->revision;
-        return $version . '-' . $revision . '-' . md5(serialize($config->getBatch($this->type)));
+        return $config->version . '-' . // possibly replace with function calls
+               $config->revision . '-' .
+               $config->getBatchSerial($this->type);
     }
     
     /**
@@ -50,17 +52,6 @@ class HTMLPurifier_DefinitionCache
         if ($compare > 0) return false;
         if ($compare == 0 && $revision >= $config->revision) return false;
         return true;
-    }
-    
-    /**
-     * Factory method that creates a cache object based on configuration
-     * @param $name Name of definitions handled by cache
-     * @param $config Instance of HTMLPurifier_Config
-     */
-    function create($name, $config) {
-        // only one implementation as for right now, $config will
-        // be used to determine implementation
-        return new HTMLPurifier_DefinitionCache_Serializer($name);
     }
     
     /**

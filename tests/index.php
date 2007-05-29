@@ -40,6 +40,10 @@ if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {
 // initialize and load HTML Purifier
 require_once '../library/HTMLPurifier.auto.php';
 
+// setup special DefinitionCacheFactory decorator
+$factory =& HTMLPurifier_DefinitionCacheFactory::instance();
+$factory->addDecorator('Memory'); // since we deal with a lot of config objects
+
 // load tests
 $test_files = array();
 require 'test_files.php'; // populates $test_files array
