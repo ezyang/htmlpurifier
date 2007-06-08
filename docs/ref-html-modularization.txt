@@ -1,5 +1,5 @@
 
-The Modularizatino of HTMLDefinition in HTML Purifier
+The Modularization of HTMLDefinition in HTML Purifier
 
 Todo for XHTML 1.1 support <http://www.w3.org/TR/xhtml11/changes.html>
 1. Support Ruby <http://www.w3.org/TR/2001/REC-ruby-20010531/>
