@@ -30,7 +30,7 @@ advanced API is oriented specifically for these use-cases.</p>
     <dt>Select</dt>
     <dd><ul>
         <li>Doctype</li>
-        <li><em>Filterset</em></li>
+        <!-- <li>Filterset</li> -->
         <li>Elements / Attributes / Modules</li>
         <li>Tidy</li>
     </ul></dd>
@@ -38,7 +38,7 @@ advanced API is oriented specifically for these use-cases.</p>
     <dd><ul>
         <li>Attributes</li>
         <li>Elements</li>
-        <li>Doctypes</li>
+        <!--<li>Doctypes</li>-->
     </ul></dd>
 </dl>
 
@@ -55,7 +55,7 @@ is essential for standards-compliant output.</p>
 
 <p class="technical">This identifier is based
 on the name the W3C has given to the document type and <em>not</em>
-the DTD identifier, although that may be included as an alias.</p>
+the DTD identifier.</p>
 
 <p>This parameter is set via the configuration object:</p>
 
@@ -71,38 +71,30 @@ be bothered when their pages stop validating.</p>
 <p>HTML Purifier will, by default, allow as many elements and attributes
 as possible. However, a user may decide to roll their own filterset by
 selecting modules, elements and attributes to allow for their own
-specific use-case.</p>
+specific use-case. This can be done using %HTML.Allowed:</p>
 
-<p class="technical">The currently un-documented Filterset interface
-will offer a way of encapsulating the following declarations, so that
-a user can pick a recipe of tags that is thought to be commonly used.</p>
+<pre>$config->set('HTML', 'Allowed', 'a[href|title],em,p,blockquote');</pre>
 
-<p>In practice, this is the most commonly demanded feature. Most users are
-perfectly happy defining a filterset that looks like:</p>
+<p class="technical">The directive %HTML.Allowed is a convenience feature
+that may be fully expressed with the legacy interface.</p>
 
-<pre>$config->setAllowedHTML('a[href,title];em;p;blockquote');</pre>
-
-<p class="technical">The directive %HTML.Allowed is a convenience function
-that may be fully expressed with the legacy interface, and thus is
-given its own setter, or implemented by intercepting the set() function
-call, parsing, and assigning to the finer grained directives accordingly.</p>
-
-<p>We currently support a separated interface, which also must be preserved:</p>
+<p>We currently support another interface from older versions:</p>
 
 <pre>$config->set('HTML', 'AllowedElements', 'a,em,p,blockquote');
 $config->set('HTML', 'AllowedAttributes', 'a.href,a.title');</pre>
 
-<p>A user may also choose to allow modules:</p>
+<p>A user may also choose to allow modules using a specialized
+directive:</p>
 
-<pre>$config->set('HTML', 'AllowedModules', 'Hypertext,Text,Lists'); // or
-$config->setAllowedHTML('Hypertext,Text,Lists');</pre>
+<pre>$config->set('HTML', 'AllowedModules', 'Hypertext,Text,Lists');</pre>
 
 <p>But it is not expected that this feature will be widely used.</p>
 
 <p class="technical">Module selection will work slightly differently
 from the other AllowedElements and AllowedAttributes directives by
-directly modifying the doctype you are operating in. You cannot,
-however, add modules: there is a separate interface for that.</p>
+directly modifying the doctype you are operating in, in the spirit of
+XHTML 1.1's modularization. We stop users from shooting themselves in the
+foot by mandating the modules in %HTML.CoreModules be used.</p>
 
 <p class="technical">Modules are distinguished from regular elements by the
 case of their first letter. While XML distinguishes between and allows
@@ -117,28 +109,10 @@ HTML Purifier, Tidy functionality involves turning unsupported and
 deprecated elements into standards-compliant ones, maintaining
 backwards compatibility, and enforcing best practices.</p>
 
-<p>Tidy is optional, when on, it has several coarse
-levels of operations, as well as directives that can be used to fine-tune
-the output. The coarse levels, set at %HTML.TidyLevel, are:</p>
+<p>This is a complicated feature, and is explained more in depth at
+<a href="enduser-tidy.html">the Tidy documentation page</a>.</p>
 
-<dl>
-    <dt>Lenient</dt>
-    <dd>Preserve any non standards-compliant aspects by transforming
-        them into standards-compliant equivalents.</dd>
-    <dt>Correctional</dt>
-    <dd>Default: Be lenient and enforce good practices.</dd>
-    <dt>Aggressive</dt>
-    <dd>Be correctional and transform as many deprecated elements as
-        possible to CSS forms</dd>
-</dl>
-
-<p>The distinction between correctional and aggressive is fuzzy,
-so the user will also have %HTML.TidyAdd and %HTML.TidyRemove, in
-which they may list the names of transforms they want and don't want,
-using the broad level as a starting point. The naming convention
-has not been established yet, but it will be something along the lines
-of 'element.attribute', with globs and special cases supported.</p>
-
+<!--
 <h3>Unified selector</h3>
 
 <p>Because selecting each and every one of these configuration options
@@ -149,6 +123,7 @@ for selecting a filterset. Possibility:</p>
 
 <p>...which is simply a light wrapper over the individual configuration
 calls. A custom config file format or text format could also be adopted.</p>
+-->
 
 <h2>Customize</h2>
 
@@ -166,31 +141,26 @@ consistency's sake we will mandate this for everything.</p>
 <h3>Attributes</h3>
 
 <p>An attribute is bound to an element by a name and has a specific
-<code>AttrDef</code> that validates it. Thus, the interface should
-be:</p>
+<code>AttrDef</code> that validates it. The interface is therefore:</p>
 
 <pre>function addAttribute($element, $attribute, $attribute_def);</pre>
 
-<p>With a use-case that looks like:</p>
+<p>Example of the functionality in action:</p>
 
-<pre>$def->addAttribute('a', 'rel', new HTMLPurifier_AttrDef_Enum(array('nofollow')));</pre>
+<pre>$def->addAttribute('a', 'rel', 'Enum#nofollow');</pre>
 
-<p>The <code>$attribute_def</code> value can be a little flexible,
-to make things simpler. We'll let it also be:</p>
+<p>The <code>$attribute_def</code> value is flexible,
+to make things simpler. It can be a literal object or:</p>
 
 <ul>
-    <li>Class name: We'll instantiate it for you</li>
+    <!--<li>Class name: We'll instantiate it for you</li>
     <li>Function name: We'll create an <code>HTMLPurifier_AttrDef_Anonymous</code>
-        class with that function registered as a callback.</li>
+        class with that function registered as a callback.</li>-->
     <li>String attribute type: We'll use <code>HTMLPurifier_AttrTypes</code>
-        </li>
-    <li>String starting with <code>enum(</code>: We'll explode it and stuff it in an
-        <code>HTMLPurifier_AttrDef_Enum</code> for you.</li>
+        to resolve it for you. Any data that follows a hash mark (#) will
+        be used to customize the attribute type: in the example above, 
+        we specify which values for Enum to allow.</li>
 </ul>
-
-<p>Making the previous example written as:</p>
-
-<pre>$def->addAttribute('a', 'rel', 'enum(nofollow)');</pre>
 
 <h3>Elements</h3>
 
