@@ -76,7 +76,7 @@ class HTMLPurifierTest extends UnitTestCase
             $this->purifier->purifyArray(
                 array('Good', '<b>Sketchy', 'foo' => '<script>bad</script>')
             ),
-            array('Good', '<b>Sketchy</b>', 'foo' => 'bad')
+            array('Good', '<b>Sketchy</b>', 'foo' => '')
         );
         
         $this->assertIsA($this->purifier->context, 'array');

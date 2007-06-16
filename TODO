@@ -19,16 +19,13 @@ TODO List
  - Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
  - Allow non-ASCII characters in font names
+ - Genericize special cases in RemoveForeignElements
 
 1.9 release [Error'ed]
  # Error logging for filtering/cleanup procedures
     - Requires I18N facilities to be created first (COMPLEX)
  - XSS-attempt detection
  - More fine-grained control over escaping behavior
-    - Silently drop content inbetween SCRIPT tags (can be generalized to allow
-      specification of elements that, when detected as foreign, trigger removal
-      of children, although unbalanced tags could wreck havoc (or at least
-      delete the rest of the document)).
 
 1.10 release [Do What I Mean, Not What I Say]
  # Additional support for poorly written HTML

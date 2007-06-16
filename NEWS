@@ -23,6 +23,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 # Definitions (esp. HTMLDefinition) are now cached for a significant
   performance boost. You can disable caching by setting %Core.DefinitionCache
   to null.
+# Contents between <script> tags are now completely removed if <script>
+  is not allowed
 ! HTML Purifier now works in PHP 4.3.2.
 ! Configuration form-editing API makes tweaking HTMLPurifier_Config a
   breeze!

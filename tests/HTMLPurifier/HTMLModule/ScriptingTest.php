@@ -7,9 +7,9 @@ class HTMLPurifier_HTMLModule_ScriptingTest extends HTMLPurifier_HTMLModuleHarne
     
     function test() {
         
-        // default
+        // default (remove everything)
         $this->assertResult(
-            '<script type="text/javascript">foo();</script>', 'foo();'
+            '<script type="text/javascript">foo();</script>', ''
         );
         
         // enabled

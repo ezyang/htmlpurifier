@@ -26,6 +26,17 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
         );
         
         $this->assertResult(
+            '<script>alert();</script>',
+            ''
+        );
+        
+        $this->assertResult(
+            '<script>alert();</script>',
+            'alert();',
+            array('Core.RemoveScriptContents' => false)
+        );
+        
+        $this->assertResult(
             '<menu><li>Item 1</li></menu>',
             '<ul><li>Item 1</li></ul>'
         );
