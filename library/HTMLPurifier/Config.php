@@ -129,12 +129,14 @@ class HTMLPurifier_Config
     function get($namespace, $key, $from_alias = false) {
         if (!$this->finalized && $this->autoFinalize) $this->finalize();
         if (!isset($this->def->info[$namespace][$key])) {
-            trigger_error('Cannot retrieve value of undefined directive',
+            // can't add % due to SimpleTest bug
+            trigger_error('Cannot retrieve value of undefined directive ' . htmlspecialchars("$namespace.$key"),
                 E_USER_WARNING);
             return;
         }
         if ($this->def->info[$namespace][$key]->class == 'alias') {
-            trigger_error('Cannot get value from aliased directive, use real name',
+            $d = $this->def->info[$namespace][$key];
+            trigger_error('Cannot get value from aliased directive, use real name ' . $d->namespace . '.' . $d->name,
                 E_USER_ERROR);
             return;
         }
@@ -148,7 +150,7 @@ class HTMLPurifier_Config
     function getBatch($namespace) {
         if (!$this->finalized && $this->autoFinalize) $this->finalize();
         if (!isset($this->def->info[$namespace])) {
-            trigger_error('Cannot retrieve undefined namespace',
+            trigger_error('Cannot retrieve undefined namespace ' . htmlspecialchars($namespace),
                 E_USER_WARNING);
             return;
         }
@@ -184,14 +186,14 @@ class HTMLPurifier_Config
     function set($namespace, $key, $value, $from_alias = false) {
         if ($this->isFinalized('Cannot set directive after finalization')) return;
         if (!isset($this->def->info[$namespace][$key])) {
-            trigger_error('Cannot set undefined directive to value',
+            trigger_error('Cannot set undefined directive ' . htmlspecialchars("$namespace.$key") . ' to value',
                 E_USER_WARNING);
             return;
         }
         if ($this->def->info[$namespace][$key]->class == 'alias') {
             if ($from_alias) {
                 trigger_error('Double-aliases not allowed, please fix '.
-                    'ConfigSchema bug');
+                    'ConfigSchema bug with' . "$namespace.$key");
             }
             $this->set($this->def->info[$namespace][$key]->namespace,
                        $this->def->info[$namespace][$key]->name,
@@ -200,7 +202,7 @@ class HTMLPurifier_Config
         }
         $value = $this->def->validate(
                     $value,
-                    $this->def->info[$namespace][$key]->type,
+                    $type = $this->def->info[$namespace][$key]->type,
                     $this->def->info[$namespace][$key]->allow_null
                  );
         if (is_string($value)) {
@@ -211,13 +213,14 @@ class HTMLPurifier_Config
             if ($this->def->info[$namespace][$key]->allowed !== true) {
                 // check to see if the value is allowed
                 if (!isset($this->def->info[$namespace][$key]->allowed[$value])) {
-                    trigger_error('Value not supported', E_USER_WARNING);
+                    trigger_error('Value not supported, valid values are: ' .
+                        $this->_listify($this->def->info[$namespace][$key]->allowed), E_USER_WARNING);
                     return;
                 }
             }
         }
         if ($this->def->isError($value)) {
-            trigger_error('Value is of invalid type', E_USER_WARNING);
+            trigger_error('Value for ' . "$namespace.$key" . ' is of invalid type, should be ' . $type, E_USER_WARNING);
             return;
         }
         $this->conf[$namespace][$key] = $value;
@@ -230,6 +233,16 @@ class HTMLPurifier_Config
         }
         
         $this->serials[$namespace] = false;
+    }
+    
+    /**
+     * Convenience function for error reporting
+     * @private
+     */
+    function _listify($lookup) {
+        $list = array();
+        foreach ($lookup as $name => $b) $list[] = $name;
+        return implode(', ', $list);
     }
     
     /**
@@ -285,10 +298,19 @@ class HTMLPurifier_Config
             $this->definitions[$type] = new HTMLPurifier_CSSDefinition();
         } else {
             trigger_error("Definition of $type type not supported");
-            return false;
+            $false = false;
+            return $false;
         }
         // quick abort if raw
-        if ($raw) return $this->definitions[$type];
+        if ($raw) {
+            if (is_null($this->get($type, 'DefinitionID'))) {
+                // fatally error out if definition ID not set
+                trigger_error("Cannot retrieve raw version without specifying %$type.DefinitionID", E_USER_ERROR);
+                $false = false;
+                return $false;
+            }
+            return $this->definitions[$type];
+        }
         // set it up
         $this->definitions[$type]->setup($this);
         // save in cache

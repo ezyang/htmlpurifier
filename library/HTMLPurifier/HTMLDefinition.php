@@ -7,6 +7,37 @@ require_once 'HTMLPurifier/HTMLModuleManager.php';
 // outside of the HTML or Attr namespaces
 
 HTMLPurifier_ConfigSchema::define(
+    'HTML', 'DefinitionID', null, 'string/null', '
+<p>
+    Unique identifier for a custom-built HTML definition. If you edit
+    the raw version of the HTMLDefinition, introducing changes that the
+    configuration object does not reflect, you must specify this variable.
+    If you change your custom edits, you should change this directive, or
+    clear your cache. Example:
+</p>
+<pre>
+$config = HTMLPurifier_Config::createDefault();
+$config->set(\'HTML\', \'DefinitionID\', \'1\');
+$def = $config->getHTMLDefinition();
+$def->addAttribute(\'a\', \'tabindex\', \'Number\');
+</pre>
+<p>
+    In the above example, the configuration is still at the defaults, but
+    using the advanced API, an extra attribute has been added. The
+    configuration object normally has no way of knowing that this change
+    has taken place, so it needs an extra directive: %HTML.DefinitionID.
+    If someone else attempts to use the default configuration, these two
+    pieces of code will not clobber each other in the cache, since one has
+    an extra directive attached to it.
+</p>
+<p>
+    This directive has been available since 1.7.0, and in that version or
+    later you <em>must</em> specify a value to this directive to use the
+    advanced API features.
+</p>
+');
+
+HTMLPurifier_ConfigSchema::define(
     'HTML', 'BlockWrapper', 'p', 'string', '
 <p>
     String name of element to wrap inline elements that are inside a block
@@ -107,7 +138,7 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
 {
     
-    /** FULLY-PUBLIC VARIABLES */
+    // FULLY-PUBLIC VARIABLES ---------------------------------------------
     
     /**
      * Associative array of element names to HTMLPurifier_ElementDef
@@ -172,7 +203,9 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     var $doctype;
     
     
-    /** PUBLIC BUT INTERNAL VARIABLES */
+    
+    
+    // PUBLIC BUT INTERNAL VARIABLES --------------------------------------
     
     var $type = 'HTML';
     var $manager; /**< Instance of HTMLPurifier_HTMLModuleManager */

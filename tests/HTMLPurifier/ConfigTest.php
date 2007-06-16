@@ -66,10 +66,10 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $config->set('Element', 'IsotopeNames', array(238 => 'Plutonium-238', 239 => 'Plutonium-239'));
         $config->set('Element', 'Object', false); // unmodeled
         
-        $this->expectError('Cannot set undefined directive to value');
+        $this->expectError('Cannot set undefined directive Element.Metal to value');
         $config->set('Element', 'Metal', true);
         
-        $this->expectError('Value is of invalid type');
+        $this->expectError('Value for Element.Radioactive is of invalid type, should be bool');
         $config->set('Element', 'Radioactive', 'very');
         
         // test value retrieval
@@ -83,7 +83,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $this->assertIdentical($config->get('Element', 'IsotopeNames'), array(238 => 'Plutonium-238', 239 => 'Plutonium-239'));
         $this->assertIdentical($config->get('Element', 'Object'), false);
         
-        $this->expectError('Cannot retrieve value of undefined directive');
+        $this->expectError('Cannot retrieve value of undefined directive Element.Metal');
         $config->get('Element', 'Metal');
         
     }
@@ -117,7 +117,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $config->set('Instrument', 'Manufacturer', 'Selmer');
         $this->assertIdentical($config->get('Instrument', 'Manufacturer'), 'Conn-Selmer');
         
-        $this->expectError('Value not supported');
+        $this->expectError('Value not supported, valid values are: Yamaha, Conn-Selmer, Vandoren, Laubin, Buffet, other');
         $config->set('Instrument', 'Manufacturer', 'buffet');
         
         // case insensitive
@@ -152,7 +152,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $this->assertIdentical($config->get('ReportCard', 'English'), null);
         
         // error
-        $this->expectError('Value is of invalid type');
+        $this->expectError('Value for ReportCard.Absences is of invalid type, should be int');
         $config->set('ReportCard', 'Absences', null);
         
     }
@@ -168,7 +168,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
         $this->assertIdentical($config->get('Home', 'Rug'), 3);
         
-        $this->expectError('Cannot get value from aliased directive, use real name');
+        $this->expectError('Cannot get value from aliased directive, use real name Home.Rug');
         $config->get('Home', 'Carpet');
         
         $config->set('Home', 'Carpet', 999);
@@ -197,7 +197,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         );
         
         // grab a non-existant namespace
-        $this->expectError('Cannot retrieve undefined namespace');
+        $this->expectError('Cannot retrieve undefined namespace Constants');
         $config->getBatch('Constants');
         
     }
@@ -251,6 +251,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $this->assertTrue($def->setup);
         
         // test retrieval of raw definition
+        $config->set('HTML', 'DefinitionID', 'HTMLPurifier_ConfigTest->test_getHTMLDefinition()');
         $def =& $config->getHTMLDefinition(true);
         $this->assertNotEqual($def, $def2);
         $this->assertFalse($def->setup);
@@ -261,14 +262,27 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
     }
     
+    function test_getHTMLDefinition_rawError() {
+        $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
+        $config = HTMLPurifier_Config::createDefault();
+        $this->expectError('Cannot retrieve raw version without specifying %HTML.DefinitionID');
+        $def =& $config->getHTMLDefinition(true);
+    }
+    
     function test_getCSSDefinition() {
         $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
-        
         $config = HTMLPurifier_Config::createDefault();
-        $config->autoFinalize = false;
-        
         $def = $config->getCSSDefinition();
         $this->assertIsA($def, 'HTMLPurifier_CSSDefinition');
+    }
+    
+    function test_getDefinition() {
+        CS::defineNamespace('Core', 'Core stuff');
+        CS::define('Core', 'DefinitionCache', null, 'string/null', 'Cache?');
+        CS::defineNamespace('Crust', 'Krusty Krabs');
+        $config = HTMLPurifier_Config::createDefault();
+        $this->expectError("Definition of Crust type not supported");
+        $config->getDefinition('Crust');
     }
     
     function test_loadArray() {

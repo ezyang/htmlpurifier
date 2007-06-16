@@ -22,7 +22,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   new objects via make()
 # Definitions (esp. HTMLDefinition) are now cached for a significant
   performance boost. You can disable caching by setting %Core.DefinitionCache
-  to null.
+  to null. You CANNOT edit raw definitions without setting the corresponding
+  DefinitionID directive (%HTML.DefinitionID for HTMLDefinition).
 # Contents between <script> tags are now completely removed if <script>
   is not allowed
 ! HTML Purifier now works in PHP 4.3.2.
@@ -34,6 +35,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! All deprecated elements now natively supported
 ! Implement TinyMCE styled whitelist specification format in
   %HTML.Allowed
+! Config object gives more friendly error messages when things go wrong
 - Deprecated and removed EnableRedundantUTF8Cleaning. It didn't even work!
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible

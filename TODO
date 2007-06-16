@@ -7,7 +7,7 @@ TODO List
     ? Maybe I'll Do It
 ==========================
 
-1.7 release [Advanced API]
+1.7 release (possibly 2.0) [Advanced API]
  # Complete advanced API, and fully document it
     - Add framework for unsafe attributes
     - Set up anonymous module management by HTMLDefinition (Advanced API)
