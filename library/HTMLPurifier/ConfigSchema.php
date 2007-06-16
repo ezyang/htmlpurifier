@@ -68,6 +68,7 @@ class HTMLPurifier_ConfigSchema {
         $this->defineNamespace('HTML', 'Configuration regarding allowed HTML.');
         $this->defineNamespace('CSS', 'Configuration regarding allowed CSS.');
         $this->defineNamespace('Output', 'Configuration relating to the generation of (X)HTML.');
+        $this->defineNamespace('Cache', 'Configuration for DefinitionCache and related subclasses.');
         $this->defineNamespace('Test', 'Developer testing configuration for our unit tests.');
     }
     

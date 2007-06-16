@@ -102,7 +102,7 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $this->assertEqual($def2, $cache->get($config2));
         $this->assertEqual($def3, $cache->get($config3));
         
-        $cache->flush();
+        $cache->flush($config1); // only essential directive is %Cache.SerializerPath
         
         $this->assertFalse($cache->get($config1));
         $this->assertFalse($cache->get($config2));
@@ -151,6 +151,24 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
      */
     function assertFileNotExist($file) {
         $this->assertFalse(file_exists($file), 'Expected ' . $file . ' does not exist');
+    }
+    
+    function testAlternatePath() {
+        
+        $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
+        $config = $this->generateConfigMock('serial');
+        $config->version = '1.0.0';
+        $config->revision = 1;
+        $dir = dirname(__FILE__) . '/SerializerTest';
+        $config->setReturnValue('get', $dir, array('Cache', 'SerializerPath'));
+        
+        $def_original = $this->generateDefinition();
+        $cache->add($def_original, $config);
+        $this->assertFileExist($dir . '/Test/1.0.0-1-serial.ser');
+        
+        unlink($dir . '/Test/1.0.0-1-serial.ser');
+        rmdir( $dir . '/Test');
+        
     }
     
 }

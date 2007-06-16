@@ -32,8 +32,8 @@ class HTMLPurifier_DefinitionCache_DecoratorTest extends HTMLPurifier_Definition
         $mock->expectOnce('get', array($config));
         $cache->get($config);
         
-        $mock->expectOnce('flush', array());
-        $cache->flush();
+        $mock->expectOnce('flush', array($config));
+        $cache->flush($config);
         
         $mock->expectOnce('cleanup', array($config));
         $cache->cleanup($config);

@@ -106,7 +106,7 @@ class HTMLPurifier_DefinitionCache
     /**
      * Clears all objects from cache
      */
-    function flush() {
+    function flush($config) {
         trigger_error('Cannot call abstract method', E_USER_ERROR);
     }
     

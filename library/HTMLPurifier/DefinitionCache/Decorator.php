@@ -50,8 +50,8 @@ class HTMLPurifier_DefinitionCache_Decorator extends HTMLPurifier_DefinitionCach
         return $this->cache->get($config);
     }
     
-    function flush() {
-        return $this->cache->flush();
+    function flush($config) {
+        return $this->cache->flush($config);
     }
     
     function cleanup($config) {
