@@ -69,7 +69,7 @@ class HTMLPurifier
     var $config;
     var $filters;
     
-    var $lexer, $strategy, $generator;
+    var $strategy, $generator;
     
     /**
      * Final HTMLPurifier_Context of last run purification. Might be an array.
@@ -89,7 +89,6 @@ class HTMLPurifier
         
         $this->config = HTMLPurifier_Config::create($config);
         
-        $this->lexer        = HTMLPurifier_Lexer::create();
         $this->strategy     = new HTMLPurifier_Strategy_Core();
         $this->generator    = new HTMLPurifier_Generator();
         
@@ -117,6 +116,10 @@ class HTMLPurifier
         
         $config = $config ? HTMLPurifier_Config::create($config) : $this->config;
         
+        // implementation is partially environment dependant, partially
+        // configuration dependant
+        $lexer = HTMLPurifier_Lexer::create($config);
+        
         $context = new HTMLPurifier_Context();
         $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);
         
@@ -130,7 +133,7 @@ class HTMLPurifier
                 // list of tokens
                 $this->strategy->execute(
                     // list of un-purified tokens
-                    $this->lexer->tokenizeHTML(
+                    $lexer->tokenizeHTML(
                         // un-purified HTML
                         $html, $config, $context
                     ),

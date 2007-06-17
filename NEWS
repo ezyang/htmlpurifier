@@ -26,6 +26,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   DefinitionID directive (%HTML.DefinitionID for HTMLDefinition).
 # Contents between <script> tags are now completely removed if <script>
   is not allowed
+# Prototype-declarations for Lexer removed in favor of configuration
+  determination of Lexer implementations.
 ! HTML Purifier now works in PHP 4.3.2.
 ! Configuration form-editing API makes tweaking HTMLPurifier_Config a
   breeze!
