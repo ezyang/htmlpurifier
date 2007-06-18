@@ -11,6 +11,7 @@
  */
 class HTMLPurifier_Token {
     var $type; /**< Type of node to bypass <tt>is_a()</tt>. @public */
+    var $line; /**< Line number node was on in source document. Null if unknown. @public */
     
     /**
      * Copies the tag into a new one (clone substitute).

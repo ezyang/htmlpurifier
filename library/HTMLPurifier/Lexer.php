@@ -47,8 +47,23 @@ HTMLPurifier_ConfigSchema::define(
     to use it.
   </dd>
 </dl>
+<p>
+  This directive has been available since 1.7.0.
+</p>
 '
 );
+
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'MaintainLineNumbers', false, 'bool', '
+<p>
+  If true, HTML Purifier will add line number information to all tokens.
+  This is useful when error reporting is turned on, but can result in
+  significant performance degradation and should not be used when
+  unnecessary. This directive must be used with the DirectLex lexer,
+  as the DOMLex lexer does not (yet) support this functionality. This directive
+  has been available since 1.7.0.
+</p>
+');
 
 /**
  * Forgivingly lexes HTML (SGML-style) markup into tokens.
@@ -135,7 +150,14 @@ class HTMLPurifier_Lexer
         }
         
         if (is_null($lexer)) { do {
-            // auto-detectection algorithm
+            // auto-detection algorithm
+            
+            // once PHP DOM implements native line numbers, or we
+            // hack out something using XSLT, remove this stipulation
+            if ($config->get('Core', 'MaintainLineNumbers')) {
+                $lexer = 'DirectLex';
+                break;
+            }
             
             if (version_compare(PHP_VERSION, "5", ">=") && // check for PHP5
                 class_exists('DOMDocument')) { // check for DOM support

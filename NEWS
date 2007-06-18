@@ -53,6 +53,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Lexer is now pre-emptively included, with a conditional include for the
   PHP5 only version.
 . HTMLDefinition and CSSDefinition have a common parent class: Definition.
+. DirectLex can now track line-numbers
 
 1.6.1, released 2007-05-05
 ! Support for more deprecated attributes via transformations:

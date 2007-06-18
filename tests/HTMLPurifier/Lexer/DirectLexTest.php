@@ -64,6 +64,65 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         
     }
     
+    function testLineNumbers() {
+        
+        $html = '<b>Line 1</b>
+                 <i>Line 2</i>
+                 Still Line 2<br
+                 />Now Line 4
+                 
+                 <br />';
+        
+        $expect = array(
+            // line 1
+            0 => new HTMLPurifier_Token_Start('b')
+           ,1 => new HTMLPurifier_Token_Text('Line 1')
+           ,2 => new HTMLPurifier_Token_End('b')
+           ,3 => new HTMLPurifier_Token_Text('
+                 ')
+            // line 2
+           ,4 => new HTMLPurifier_Token_Start('i')
+           ,5 => new HTMLPurifier_Token_Text('Line 2')
+           ,6 => new HTMLPurifier_Token_End('i')
+           ,7 => new HTMLPurifier_Token_Text('
+                 Still Line 2')
+            // line 3
+           ,8 => new HTMLPurifier_Token_Empty('br')
+            // line 4
+           ,9 => new HTMLPurifier_Token_Text('Now Line 4
+                 
+                 ')
+            // line SIX
+           ,10 => new HTMLPurifier_Token_Empty('br')
+        );
+        
+        $context = new HTMLPurifier_Context();
+        $config  = HTMLPurifier_Config::createDefault();
+        $output = $this->DirectLex->tokenizeHTML($html, $config, $context);
+        
+        $this->assertIdentical($output, $expect);
+        
+        $context = new HTMLPurifier_Context();
+        $config  = HTMLPurifier_Config::create(array(
+            'Core.MaintainLineNumbers' => true
+        ));
+        $expect[0]->line = 1;
+        $expect[1]->line = 1;
+        $expect[2]->line = 1;
+        $expect[3]->line = 1;
+        $expect[4]->line = 2;
+        $expect[5]->line = 2;
+        $expect[6]->line = 2;
+        $expect[7]->line = 2;
+        $expect[8]->line = 3;
+        $expect[9]->line = 4;
+        $expect[10]->line = 6;
+        
+        $output = $this->DirectLex->tokenizeHTML($html, $config, $context);
+        $this->assertIdentical($output, $expect);
+        
+    }
+    
     
 }
 
