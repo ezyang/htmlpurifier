@@ -67,3 +67,5 @@ q:after {
 /* Marks off sections that are lacking. */
 .fixme {margin-left:2em; }
 .fixme:before {content:"Fix me: "; font-weight:bold; color:#C00; }
+
+#applicability {margin: 1em 5%; font-style:italic;}
