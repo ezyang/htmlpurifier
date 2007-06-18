@@ -54,6 +54,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   PHP5 only version.
 . HTMLDefinition and CSSDefinition have a common parent class: Definition.
 . DirectLex can now track line-numbers
+. Preliminary error collector is in place, although no code actually reports
+  errors yet
 
 1.6.1, released 2007-05-05
 ! Support for more deprecated attributes via transformations:

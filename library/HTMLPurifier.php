@@ -51,6 +51,23 @@ require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Strategy/Core.php';
 require_once 'HTMLPurifier/Encoder.php';
 
+require_once 'HTMLPurifier/LanguageFactory.php';
+
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'Language', 'en', 'string', '
+ISO 639 language code for localizable things in HTML Purifier to use,
+which is mainly error reporting. There is currently only an English (en)
+translation, so this directive is currently useless.
+This directive has been available since 1.7.0.
+');
+
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'CollectErrors', false, 'bool', '
+Whether or not to collect errors found while filtering the document. This
+is a useful way to give feedback to your users. CURRENTLY NOT IMPLEMENTED.
+This directive has been available since 1.7.0.
+');
+
 /**
  * Main library execution class.
  * 
@@ -121,6 +138,18 @@ class HTMLPurifier
         $lexer = HTMLPurifier_Lexer::create($config);
         
         $context = new HTMLPurifier_Context();
+        
+        // set up global context variables
+        if ($config->get('Core', 'CollectErrors')) {
+            // may get moved out if other facilities use it
+            $language_factory = HTMLPurifier_LanguageFactory::instance();
+            $language = $language_factory->create($config->get('Core', 'Language'));
+            $context->register('Locale', $language);
+            
+            $error_collector = new HTMLPurifier_ErrorCollector();
+            $context->register('ErrorCollector', $language);
+        }
+        
         $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);
         
         for ($i = 0, $size = count($this->filters); $i < $size; $i++) {

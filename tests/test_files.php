@@ -70,6 +70,7 @@ $test_files[] = 'HTMLPurifier/DefinitionCache/SerializerTest.php';
 $test_files[] = 'HTMLPurifier/DefinitionTest.php';
 $test_files[] = 'HTMLPurifier/DoctypeRegistryTest.php';
 $test_files[] = 'HTMLPurifier/ElementDefTest.php';
+$test_files[] = 'HTMLPurifier/ErrorCollectorTest.php';
 $test_files[] = 'HTMLPurifier/EncoderTest.php';
 $test_files[] = 'HTMLPurifier/EntityLookupTest.php';
 $test_files[] = 'HTMLPurifier/EntityParserTest.php';
