@@ -46,7 +46,10 @@ class HTMLPurifier_Config
     /**
      * Integer key users can use to indicate they have manually
      * overridden some internal behavior and would like the
-     * cache to invalidate itself.
+     * cache to invalidate itself. This is used in conjunction
+     * with the %NAMESPACE.DefinitionID, the semantic difference is
+     * that the configuration directive determines "semantic identity",
+     * while this integer indicates "chronological identity".
      */
     var $revision = 1;
     
