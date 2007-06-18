@@ -41,6 +41,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Deprecated and removed EnableRedundantUTF8Cleaning. It didn't even work!
 - DOMLex will not emit errors when a custom error handler that does not
   honor error_reporting is used
+- StrictBlockquote child definition refrains from wrapping whitespace
+  in tags now.
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible
 . Added convenience functions for HTMLModule constructors

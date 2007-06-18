@@ -11,10 +11,13 @@ extends HTMLPurifier_ChildDefHarness
         
         $this->obj = new HTMLPurifier_ChildDef_StrictBlockquote('div | p');
         
+        // assuming default wrap is p
+        
         $this->assertResult('');
         $this->assertResult('<p>Valid</p>');
         $this->assertResult('<div>Still valid</div>');
         $this->assertResult('Needs wrap', '<p>Needs wrap</p>');
+        $this->assertResult('<p>Do not wrap</p>    <p>Whitespace</p>');
         $this->assertResult(
                'Wrap'. '<p>Do not wrap</p>',
             '<p>Wrap</p><p>Do not wrap</p>'
@@ -35,6 +38,7 @@ extends HTMLPurifier_ChildDefHarness
             '<foo>Bar</foo><bas /><b>People</b>Conniving.'. '<p>Fools!</p>',
               '<p>Bar'.          '<b>People</b>Conniving.</p><p>Fools!</p>'
         );
+        
         $this->assertResult('Needs wrap', '<div>Needs wrap</div>',
             array('HTML.BlockWrapper' => 'div'));
         
