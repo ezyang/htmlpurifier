@@ -57,13 +57,26 @@ class HTMLPurifier_HTMLDefinitionTest extends UnitTestCase
         $config = HTMLPurifier_Config::create(array(
             'HTML.DefinitionID' => 'HTMLPurifier_HTMLDefinitionTest->test_addAttribute'
         ));
-        $config->revision = 9;
         $def =& $config->getHTMLDefinition(true);
         $def->addAttribute('span', 'custom', 'Enum#attribute');
-        $def = $config->getHTMLDefinition();
         
         $purifier = new HTMLPurifier($config);
         $input = '<span custom="attribute">Custom!</span>';
+        $output = $purifier->purify($input);
+        $this->assertIdentical($input, $output);
+        
+    }
+    
+    function test_addElement() {
+        
+        $config = HTMLPurifier_Config::create(array(
+            'HTML.DefinitionID' => 'HTMLPurifier_HTMLDefinitionTest->test_addElement'
+        ));
+        $def =& $config->getHTMLDefinition(true);
+        $def->addElement('marquee', 'Inline', 'Inline', 'Common', array('width' => 'Length'));
+        
+        $purifier = new HTMLPurifier($config);
+        $input = '<span><marquee width="50">Foobar</marquee></span>';
         $output = $purifier->purify($input);
         $this->assertIdentical($input, $output);
         

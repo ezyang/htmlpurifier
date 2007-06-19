@@ -208,6 +208,10 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     
     /**
      * Adds a custom attribute to a pre-existing element
+     * @param $element_name String element name to add attribute to
+     * @param $attr_name String name of attribute
+     * @param $def Attribute definition, can be string or object, see
+     *             HTMLPurifier_AttrTypes for details
      */
     function addAttribute($element_name, $attr_name, $def) {
         $module =& $this->getAnonymousModule();
@@ -215,8 +219,23 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         $element->attr[$attr_name] = $def;
     }
     
-    var $_anonModule;
+    /**
+     * Adds a custom element to your HTML definition
+     * @note See HTMLPurifier_HTMLModule::addElement for detailed 
+     *       parameter descriptions.
+     */
+    function addElement($element_name, $type, $contents, $attr_collections, $attributes) {
+        $module =& $this->getAnonymousModule();
+        // assume that if the user is calling this, the element
+        // is safe. This may not be a good idea
+        $module->addElement($element_name, true, $type, $contents, $attr_collections, $attributes);
+    }
     
+    /**
+     * Retrieves a reference to the anonymous module, so you can
+     * bust out advanced features without having to make your own
+     * module.
+     */
     function &getAnonymousModule() {
         if (!$this->_anonModule) {
             $this->_anonModule = new HTMLPurifier_HTMLModule();
@@ -224,6 +243,8 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         }
         return $this->_anonModule;
     }
+    
+    var $_anonModule;
     
     
     // PUBLIC BUT INTERNAL VARIABLES --------------------------------------
