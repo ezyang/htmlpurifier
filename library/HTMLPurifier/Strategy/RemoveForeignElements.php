@@ -52,6 +52,18 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
             }
             if (!empty( $token->is_tag )) {
                 // DEFINITION CALL
+                
+                // before any processing, try to transform the element
+                if (
+                    isset($definition->info_tag_transform[$token->name])
+                ) {
+                    // there is a transformation for this tag
+                    // DEFINITION CALL
+                    $token = $definition->
+                                info_tag_transform[$token->name]->
+                                    transform($token, $config, $context);
+                }
+                
                 if (isset($definition->info[$token->name])) {
                     // leave untouched, except for a few special cases:
                     
@@ -73,14 +85,6 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                         if ($token->attr['src'] === false) continue;
                     }
                     
-                } elseif (
-                    isset($definition->info_tag_transform[$token->name])
-                ) {
-                    // there is a transformation for this tag
-                    // DEFINITION CALL
-                    $token = $definition->
-                                info_tag_transform[$token->name]->
-                                    transform($token, $config, $context);
                 } elseif ($escape_invalid_tags) {
                     // invalid tag, generate HTML and insert in
                     $token = new HTMLPurifier_Token_Text(

@@ -72,6 +72,13 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
             )
         );
         
+        // test transform to unallowed element
+        $this->assertResult(
+            '<font color="red" face="Arial" size="6">Big Warning!</font>',
+            'Big Warning!',
+            array('HTML.Allowed' => 'div')
+        );
+        
     }
     
 }

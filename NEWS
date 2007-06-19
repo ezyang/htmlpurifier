@@ -45,6 +45,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   honor error_reporting is used
 - StrictBlockquote child definition refrains from wrapping whitespace
   in tags now.
+- Bug resulting from tag transforms to non-allowed elements fixed
 . Unit test for ElementDef created, ElementDef behavior modified to
   be more flexible
 . Added convenience functions for HTMLModule constructors
