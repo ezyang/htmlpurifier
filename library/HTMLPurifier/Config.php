@@ -105,11 +105,13 @@ class HTMLPurifier_Config
      */
     function create($config) {
         if (is_a($config, 'HTMLPurifier_Config')) {
-            $config = $config->conf; // create a clone
+            // pass-through
+            return $config;
         }
         $ret = HTMLPurifier_Config::createDefault();
         if (is_string($config)) $ret->loadIni($config);
         elseif (is_array($config)) $ret->loadArray($config);
+        if (isset($revision)) $ret->revision = $revision;
         return $ret;
     }
     

@@ -52,6 +52,23 @@ class HTMLPurifier_HTMLDefinitionTest extends UnitTestCase
         
     }
     
+    function test_addAttribute() {
+        
+        $config = HTMLPurifier_Config::create(array(
+            'HTML.DefinitionID' => 'HTMLPurifier_HTMLDefinitionTest->test_addAttribute'
+        ));
+        $config->revision = 9;
+        $def =& $config->getHTMLDefinition(true);
+        $def->addAttribute('span', 'custom', 'Enum#attribute');
+        $def = $config->getHTMLDefinition();
+        
+        $purifier = new HTMLPurifier($config);
+        $input = '<span custom="attribute">Custom!</span>';
+        $output = $purifier->purify($input);
+        $this->assertIdentical($input, $output);
+        
+    }
+    
 }
 
 ?>

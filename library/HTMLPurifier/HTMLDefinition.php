@@ -204,6 +204,27 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     
     
     
+    // RAW CUSTOMIZATION STUFF --------------------------------------------
+    
+    /**
+     * Adds a custom attribute to a pre-existing element
+     */
+    function addAttribute($element_name, $attr_name, $def) {
+        $module =& $this->getAnonymousModule();
+        $element =& $module->addBlankElement($element_name);
+        $element->attr[$attr_name] = $def;
+    }
+    
+    var $_anonModule;
+    
+    function &getAnonymousModule() {
+        if (!$this->_anonModule) {
+            $this->_anonModule = new HTMLPurifier_HTMLModule();
+            $this->_anonModule->name = 'Anonymous';
+        }
+        return $this->_anonModule;
+    }
+    
     
     // PUBLIC BUT INTERNAL VARIABLES --------------------------------------
     
@@ -233,6 +254,14 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      * Extract out the information from the manager
      */
     function processModules($config) {
+        
+        if ($this->_anonModule) {
+            // for user specific changes
+            // this is late-loaded so we don't have to deal with PHP4
+            // reference wonky-ness
+            $this->manager->addModule($this->_anonModule);
+            unset($this->_anonModule);
+        }
         
         $this->manager->setup($config);
         $this->doctype = $this->manager->doctype;
