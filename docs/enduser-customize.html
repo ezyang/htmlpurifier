@@ -240,7 +240,7 @@ $def =& $config->getHTMLDefinition(true);</pre>
   DefinitionRev.
 </p>
 
-<h2>Add an attribute</h2>
+<h2 id="addAttribute">Add an attribute</h2>
 
 <p>
   For this example, we're going to implement the <code>target</code> attribute found
@@ -251,12 +251,19 @@ $def =& $config->getHTMLDefinition(true);</pre>
 <ol>
   <li>What element is it found on?</li>
   <li>What is its name?</li>
+  <li>Is it required or optional?</li>
   <li>What are valid values for it?</li>
 </ol>
 
 <p>
-  The first two are easy: the element is <code>a</code> and the attribute
-  is <code>target</code>. The third question is a little trickier.
+  The first three are easy: the element is <code>a</code>, the attribute
+  is <code>target</code>, and it is not a required attribute. (If it
+  was required, we'd need to append an asterisk to the attribute name,
+  you'll see an example of this in the addElement() example).
+</p>
+
+<p>
+  The last question is a little trickier.
   Lets allow the special values: _blank, _self, _target and _top.
   The form of this is called an <strong>enumeration</strong>, a list of
   valid values, although only one can be used at a time.  To translate
@@ -368,9 +375,11 @@ $def =& $config->getHTMLDefinition(true);
 </table>
 
 <p>
-  For a complete list, consult <code>library/HTMLPurifier/AttrTypes.php</code>;
+  For a complete list, consult
+  <a href="http://htmlpurifier.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/AttrTypes.php"><code>library/HTMLPurifier/AttrTypes.php</code></a>;
   more information on attributes that accept parameters can be found on their
-  respective includes in <code>library/HTMLPurifier/AttrDef</code>.
+  respective includes in
+  <a href="http://htmlpurifier.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/AttrDef/"><code>library/HTMLPurifier/AttrDef</code></a>.
 </p>
 
 <p>
@@ -395,8 +404,387 @@ $def =& $config->getHTMLDefinition(true);
 <h2>Add an element</h2>
 
 <p>
-  To be written...
+  Adding attributes is really small-fry stuff, though, and it was possible
+  to add them (albeit a bit more wordy) prior to 2.0. The real gem of 
+  the Advanced API is adding elements. There are five questions to 
+  ask when adding a new element:
 </p>
+
+<ol>
+  <li>What is the element's name?</li>
+  <li>What content set does this element belong to?</li>
+  <li>What are the allowed children of this element?</li>
+  <li>What attributes does the element allow that are general?</li>
+  <li>What attributes does the element allow that are specific to this element?</li>
+</ol>
+
+<p>
+  It's a mouthful, and you'll be slightly lost if your not familiar with
+  the HTML specification, so let's explain them step by step.
+</p>
+
+<h3>Content set</h3>
+
+<p>
+  The HTML specification defines two major content sets: Inline
+  and Block.  Each of these
+  content sets contain a list of elements: Inline contains things like
+  <code>span</code> and <code>b</code> while Block contains things like
+  <code>div</code> and <code>blockquote</code>.
+</p>
+
+<p>
+  These content sets amount to a macro mechanism for HTML definition. Most
+  elements in HTML are organized into one of these two sets, and most
+  elements in HTML allow elements from one of these sets.  If we had
+  to write each element verbatim into each other element's allowed
+  children, we would have ridiculously large lists; instead we use
+  content sets to compactify the declaration.
+</p>
+
+<p>
+  Practically speaking, there are several useful values you can use here:
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Content set</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Inline</th>
+      <td>Character level elements, text</td>
+    </tr>
+    <tr>
+      <th>Block</th>
+      <td>Block-like elements, like paragraphs and lists</td>
+    </tr>
+    <tr>
+      <th><em>false</em></th>
+      <td>
+        Any element that doesn't fit into the mold, for example <code>li</code>
+        or <code>tr</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  By specifying a valid value here, all other elements that use that
+  content set will also allow your element, without you having to do
+  anything. If you specify <em>false</em>, you'll have to register
+  your element manually.
+</p>
+
+<h3>Allowed children</h3>
+
+<p>
+  Allowed children defines the elements that this element can contain.
+  The allowed values may range from none to a complex regexp depending on
+  your element.
+</p>
+
+<p>
+  If you've ever taken a look at the HTML DTD's before, you may have
+  noticed declarations like this:
+</p>
+
+<pre>&lt;!ELEMENT LI - O (%flow;)*             -- list item --&gt;</pre>
+
+<p>
+  The <code>(%flow;)*</code> indicates the allowed children of the
+  <code>li</code> tag: <code>li</code> allows any number of flow
+  elements as its children. In HTML Purifier, we'd write it like
+  <code>Flow</code> (here's where the content sets we were
+  discussing earlier come into play). There are three shorthand content models you
+  can specify:
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Content model</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Empty</th>
+      <td>No children allowed, like <code>br</code> or <code>hr</code></td>
+    </tr>
+    <tr>
+      <th>Inline</th>
+      <td>Any number of inline elements and text, like <code>span</code></td>
+    </tr>
+    <tr>
+      <th>Flow</th>
+      <td>Any number of inline elements, block elements and text, like <code>div</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  This covers 90% of all the cases out there, but what about elements that
+  break the mold like <code>ul</code>? This guy requires at least one
+  child, and the only valid children for it are <code>li</code>. The
+  content model is: <code>Required: li</code>. There are two parts: the
+  first type determines what <code>ChildDef</code> will be used to validate
+  content models. The most common values are:
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Required</th>
+      <td>Children must be one or more of the valid elements</td>
+    </tr>
+    <tr>
+      <th>Optional</th>
+      <td>Children can be any number of the valid elements</td>
+    </tr>
+    <tr>
+      <th>Custom</th>
+      <td>Children must follow the DTD-style regex</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  You can also implement your own <code>ChildDef</code>: this was done
+  for a few special cases in HTML Purifier such as <code>Chameleon</code>
+  (for <code>ins</code> and <code>del</code>), <code>StrictBlockquote</code>
+  and <code>Table</code>.
+</p>
+
+<p>
+  The second part specifies either valid elements or a regular expression.
+  Valid elements are separated with horizontal bars (|), i.e.
+  "<code>a | b | c</code>".  Use #PCDATA to represent plain text.
+  Regular expressions are based off of DTD's style:
+</p>
+
+<ul>
+  <li>Parentheses () are used for grouping</li>
+  <li>Commas (,) separate elements that should come one after another</li>
+  <li>Horizontal bars (|) indicate one or the other elements should be used</li>
+  <li>Plus signs (+) are used for a one or more match</li>
+  <li>Asterisks (*) are used for a zero or more match</li>
+  <li>Question marks (?) are used for a zero or one match</li>
+</ul>
+
+<p>
+  For example, "<code>a, b?, (c | d), e+, f*</code>" means "In this order,
+  one <code>a</code> element, at most one <code>b</code> element,
+  one <code>c</code> or <code>d</code> element (but not both), one or more
+  <code>e</code> elements, and any number of <code>f</code> elements."
+  Regex veterans should be able to jump right in, and those not so savvy
+  can always copy-paste W3C's content model definitions into HTML Purifier
+  and hope for the best.
+</p>
+
+<p>
+  A word of warning: while the regex format is extremely flexible on
+  the developer's side, it is
+  quite unforgiving on the user's side.  If the user input does not <em>exactly</em>
+  match the specification, the entire contents of the element will
+  be nuked.  This is why there is are specific content model types like
+  Optional and Required: while they could be implemented as <code>Custom:
+  (valid | elements)*</code>, the custom classes contain special recovery
+  measures that make sure as much of the user's original content gets 
+  through. HTML Purifier's core, as a rule, does not use Custom.
+</p>
+
+<p>
+  One final note: you can also use Content Sets inside your valid elements
+  lists or regular expressions. In fact, the three shorthand content models
+  mentioned above are just that: abbreviations:
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Content model</th>
+      <th>Implementation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Inline</th>
+      <td>Optional: Inline | #PCDATA</td>
+    </tr>
+    <tr>
+      <th>Flow</th>
+      <td>Optional: Flow | #PCDATA</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  When the definition is compiled, Inline will be replaced with a
+  horizontal-bar separated list of inline elements. Also, notice that
+  it does not contain text: you have to specify that yourself.
+</p>
+
+<h3>Common attributes</h3>
+
+<p>
+  Congratulations: you have just gotten over the proverbial hump (Allowed
+  children). Common attributes is much simpler, and boils down to
+  one question: does your element have the <code>id</code>, <code>style</code>,
+  <code>class</code>, <code>title</code> and <code>lang</code> attributes?
+  If so, you'll want to specify the <code>Common</code> attribute collection,
+  which contains these five attributes that are found on almost every
+  HTML element in the specification.
+</p>
+
+<p>
+  There are a few more collections, but they're really edge cases:
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Collection</th>
+      <th>Attributes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>I18N</th>
+      <td><code>lang</code>, possibly <code>xml:lang</code></td>
+    </tr>
+    <tr>
+      <th>Core</th>
+      <td><code>style</code>, <code>class</code>, <code>id</code> and <code>title</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  Common is a combination of the above-mentioned collections.
+</p>
+
+<h3>Attributes</h3>
+
+<p>
+  If you didn't read the <a href="#addAttribute">previous section on
+  adding attributes</a>, read it now.  The last parameter is simply
+  array of attribute names to attribute implementations, in the exact
+  same format as <code>addAttribute()</code>.
+</p>
+
+<h3>Putting it all together</h3>
+
+<p>
+  We're going to implement <code>form</code>. Before we embark, lets
+  grab a reference implementation from over at the
+  <a href="http://www.w3.org/TR/html4/sgml/loosedtd.html">transitional DTD</a>:
+</p>
+
+<pre>&lt;!ELEMENT FORM - - (%flow;)* -(FORM)   -- interactive form --&gt;
+&lt;!ATTLIST FORM
+  %attrs;                              -- %coreattrs, %i18n, %events --
+  action      %URI;          #REQUIRED -- server-side form handler --
+  method      (GET|POST)     GET       -- HTTP method used to submit the form--
+  enctype     %ContentType;  &quot;application/x-www-form-urlencoded&quot;
+  accept      %ContentTypes; #IMPLIED  -- list of MIME types for file upload --
+  name        CDATA          #IMPLIED  -- name of form for scripting --
+  onsubmit    %Script;       #IMPLIED  -- the form was submitted --
+  onreset     %Script;       #IMPLIED  -- the form was reset --
+  target      %FrameTarget;  #IMPLIED  -- render in this frame --
+  accept-charset %Charsets;  #IMPLIED  -- list of supported charsets --
+  &gt;</pre>
+
+<p>
+  Juicy! With just this, we can answer four of our five questions:
+</p>
+
+<ol>
+  <li>What is the element's name? <strong>form</strong></li>
+  <li>What content set does this element belong to? <strong>Block</strong>
+    (this needs a little sleuthing, I find the easiest way is to search
+    the DTD for <code>FORM</code> and determine which set it is in.)</li>
+  <li>What are the allowed children of this element? <strong>One
+    or more flow elements, but no nested <code>form</code>s</strong></li>
+  <li>What attributes does the element allow that are general? <strong>Common</strong></li>
+  <li>What attributes does the element allow that are specific to this element? <strong>A whole bunch, see ATTLIST;
+    we're going to the vital ones: <code>action</code>, <code>method</code> and <code>name</code></strong></li>
+</ol>
+
+<p>
+  Time for some code:
+</p>
+
+<pre>$config = HTMLPurifier_Config::createDefault();
+$config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
+$config->set('HTML', 'DefinitionRev', 1);
+$config->set('Core', 'DefinitionCache', null); // remove this later!
+$def =& $config->getHTMLDefinition(true);
+$def->addAttribute('a', 'target', new HTMLPurifier_AttrDef_Enum(
+  array('_blank','_self','_target','_top')
+));
+<strong>$form =& $def->addElement(
+  'form',   // name
+  'Block',  // content set
+  'Flow', // allowed children
+  'Common', // attribute collection
+  array( // attributes
+    'action*' => 'URI',
+    'method' => 'Enum#get|post',
+    'name' => 'ID'
+  )
+);
+$form->excludes = array('form' => true);</strong></pre>
+
+<p>
+  Each of the parameters corresponds to one of the questions we asked.
+  Notice that we added an asterisk to the end of the <code>action</code>
+  attribute to indicate that it is required. If someone specifies a
+  <code>form</code> without that attribute, the tag will be axed.
+  Also, the extra line at the end is a special extra declaration that
+  prevents forms from being nested within each other.
+</p>
+
+<p>
+  And that's all there is to it! Implementing the rest of the form
+  module is left as an exercise to the user; to see more examples
+  check the <a href="http://htmlpurifier.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/HTMLModule/"><code>library/HTMLPurifier/HTMLModule/</code></a> directory
+  in your local HTML Purifier installation.
+</p>
+
+<h2>And beyond...</h2>
+
+<p>
+  Perceptive users may have realized that, to a certain extent, we
+  have simply re-implemented the facilities of XML Schema or the
+  Document Type Definition.  What you are seeing here, however, is
+  not just an XML Schema or Document Type Definition: it is a fully
+  expressive method of specifying the definition of HTML that is
+  a portable superset of the capabilities of the two above-mentioned schema
+  languages.  What makes HTMLDefinition so powerful is the fact that
+  if we don't have an implementation for a content model or an attribute
+  definition, you can supply it yourself by writing a PHP class.
+</p>
+
+<p>
+  There are many facets of HTMLDefinition beyond the Advanced API I have
+  walked you through today.  To find out more about these, you can
+  check out these source files:
+</p>
+
+<ul>
+  <li><a href="http://htmlpurifier.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/HTMLModule.php"><code>library/HTMLPurifier/HTMLModule.php</code></a></li>
+  <li><a href="http://htmlpurifier.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/ElementDef.php"><code>library/HTMLPurifier/ElementDef.php</code></a></li>
+</ul>
 
 <div id="version">$Id: enduser-tidy.html 1158 2007-06-18 19:26:29Z Edward $</div>
 
