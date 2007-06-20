@@ -58,14 +58,14 @@ HTMLPurifier_ConfigSchema::define(
 ISO 639 language code for localizable things in HTML Purifier to use,
 which is mainly error reporting. There is currently only an English (en)
 translation, so this directive is currently useless.
-This directive has been available since 1.7.0.
+This directive has been available since 2.0.0.
 ');
 
 HTMLPurifier_ConfigSchema::define(
     'Core', 'CollectErrors', false, 'bool', '
 Whether or not to collect errors found while filtering the document. This
 is a useful way to give feedback to your users. CURRENTLY NOT IMPLEMENTED.
-This directive has been available since 1.7.0.
+This directive has been available since 2.0.0.
 ');
 
 /**

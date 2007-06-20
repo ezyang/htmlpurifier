@@ -22,7 +22,7 @@ HTMLPurifier_ConfigSchema::define(
 <p>
     Revision identifier for your custom definition. See
     %HTML.DefinitionRev for details. This directive has been available
-    since 1.7.0.
+    since 2.0.0.
 </p>
 ');
 

@@ -24,7 +24,7 @@ HTMLPurifier_ConfigSchema::define(
     ), 'hash', '
 Lookup array of color names to six digit hexadecimal number corresponding
 to color, with preceding hash mark. Used when parsing colors.
-This directive has been available since 1.7.0.
+This directive has been available since 2.0.0.
 ');
 
 /**

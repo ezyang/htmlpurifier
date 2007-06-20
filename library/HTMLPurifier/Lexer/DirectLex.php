@@ -12,7 +12,7 @@ HTMLPurifier_ConfigSchema::define(
   performance, and this is only strictly necessary if the counting
   algorithm is buggy (in which case you should report it as a bug).
   This has no effect when %Core.MaintainLineNumbers is disabled or DirectLex is
-  not being used. This directive has been available since 1.7.0.
+  not being used. This directive has been available since 2.0.0.
 </p>
 ');
 

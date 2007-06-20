@@ -31,7 +31,7 @@ $def->addAttribute(\'a\', \'tabindex\', \'Number\');
     an extra directive attached to it.
 </p>
 <p>
-    This directive has been available since 1.7.0, and in that version or
+    This directive has been available since 2.0.0, and in that version or
     later you <em>must</em> specify a value to this directive to use the
     advanced API features.
 </p>
@@ -46,7 +46,7 @@ HTMLPurifier_ConfigSchema::define(
     context: revision 3 is more up-to-date then revision 2.  Thus, when
     this gets incremented, the cache handling is smart enough to clean
     up any older revisions of your definition as well as flush the
-    cache.  This directive has been available since 1.7.0.
+    cache.  This directive has been available since 2.0.0.
 </p>
 ');
 
@@ -124,7 +124,7 @@ HTMLPurifier_ConfigSchema::define(
     whitelist: directly copy-pasting it here will probably result in
     broken whitelists. If %HTML.AllowedElements or %HTML.AllowedAttributes
     are set, this directive has no effect.
-    This directive has been available since 1.7.0.
+    This directive has been available since 2.0.0.
 </p>
 ');
 

@@ -16,8 +16,8 @@ HTMLPurifier_ConfigSchema::define(
 HTMLPurifier_ConfigSchema::define(
     'Core', 'RemoveScriptContents', true, 'bool', '
 This directive enables HTML Purifier to remove not only script tags
-but all of their contents. This directive has been available since 1.7.0,
-revert to pre-1.7.0 behavior by setting to false.
+but all of their contents. This directive has been available since 2.0.0,
+revert to pre-2.0.0 behavior by setting to false.
 '
 );
 

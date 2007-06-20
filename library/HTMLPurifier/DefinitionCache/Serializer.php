@@ -9,7 +9,7 @@ HTMLPurifier_ConfigSchema::define(
     Default is within the
     HTML Purifier library inside DefinitionCache/Serializer. This
     path must be writable by the webserver. This directive has been
-    available since 1.7.0.
+    available since 2.0.0.
 </p>
 ');
 

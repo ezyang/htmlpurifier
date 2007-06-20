@@ -48,7 +48,7 @@ HTMLPurifier_ConfigSchema::define(
   </dd>
 </dl>
 <p>
-  This directive has been available since 1.7.0.
+  This directive has been available since 2.0.0.
 </p>
 '
 );
@@ -61,7 +61,7 @@ HTMLPurifier_ConfigSchema::define(
   significant performance degradation and should not be used when
   unnecessary. This directive must be used with the DirectLex lexer,
   as the DOMLex lexer does not (yet) support this functionality. This directive
-  has been available since 1.7.0.
+  has been available since 2.0.0.
 </p>
 ');
 

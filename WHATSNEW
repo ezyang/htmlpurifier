@@ -1,7 +1,7 @@
-The 1.6.1 release, code-named 'Ach! We missed something! Run!', completes
-HTML Purifier's roster of attribute transformations. It also implements
-a number of minor features (such as better font transformations, smarter
-HTML parsing, the CSS property 'white-space' and XHTML 1.1), a few bug
-fixes (most notably fixed __autoload compatibility issues) and a ton
-of refactoring. 1.6 was for things that absolutely could not wait: this
-release, developed in a more leisurely pace, fills in the gaps.
+HTML Purifier 2.0 is the culmination of two major architectural changes. 
+The first is Tidy, which enables HTML Purifier to both natively support 
+deprecated elements and also convert them to standards-compliant 
+alternatives. The second is the Advanced API, which enables users to 
+create new elements and attributes with ease. Keeping in line with a 
+commitment to high quality, there are also four esoteric bug-fixes and a 
+plethora of subtle improvements that enhance the library. 

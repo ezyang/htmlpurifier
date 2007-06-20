@@ -7,7 +7,7 @@ TODO List
     ? Maybe I'll Do It
 ==========================
 
-1.8 release [Refactor, refactor!]
+2.1 release [Refactor, refactor!]
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
  # Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
  - Configuration profiles: predefined directives set with one func call
@@ -16,13 +16,13 @@ TODO List
  - Allow non-ASCII characters in font names
  - Genericize special cases in RemoveForeignElements
 
-1.9 release [Error'ed]
+2.2 release [Error'ed]
  # Error logging for filtering/cleanup procedures
     - Requires I18N facilities to be created first (COMPLEX)
  - XSS-attempt detection
  - More fine-grained control over escaping behavior
 
-1.10 release [Do What I Mean, Not What I Say]
+2.3 release [Do What I Mean, Not What I Say]
  # Additional support for poorly written HTML
     - Microsoft Word HTML cleaning (i.e. MsoNormal, but research essential!)
     - Friendly strict handling of <address> (block -> <br>)
@@ -37,10 +37,10 @@ TODO List
  - Append something to duplicate IDs so they're still usable (impl. note: the
    dupe detector would also need to detect the suffix as well)
 
-1.11 release [It's All About Trust] (floating)
+2.4 release [It's All About Trust] (floating)
  # Implement untrusted, dangerous elements/attributes
 
-2.0 release [Beyond HTML]
+3.0 release [Beyond HTML]
  # Legit token based CSS parsing (will require revamping almost every
    AttrDef class)
  # More control over allowed CSS properties (maybe modularize it in the
@@ -59,7 +59,7 @@ TODO List
  - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
    Also, enable disabling of directionality
 
-3.0 release [To XML and Beyond]
+4.0 release [To XML and Beyond]
  - Extended HTML capabilities based on namespacing and tag transforms (COMPLEX)
     - Hooks for adding custom processors to custom namespaced tags and
       attributes, offer default implementation

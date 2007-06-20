@@ -50,7 +50,7 @@ HTMLPurifier_ConfigSchema::define(
     'HTML', 'Trusted', false, 'bool',
     'Indicates whether or not the user input is trusted or not. If the '.
     'input is trusted, a more expansive set of allowed tags and attributes '.
-    'will be used. This directive has been available since 1.7.0.'
+    'will be used. This directive has been available since 2.0.0.'
 );
 
 HTMLPurifier_ConfigSchema::define(
@@ -66,7 +66,7 @@ HTMLPurifier_ConfigSchema::define(
     If you specify a module that does not exist, the manager will silently
     fail to use it, so be careful! User-defined modules are not affected
     by this directive. Modules defined in %HTML.CoreModules are not
-    affected by this directive. This directive has been available since 1.7.0.
+    affected by this directive. This directive has been available since 2.0.0.
 </p>
 ');
 
@@ -86,7 +86,7 @@ HTMLPurifier_ConfigSchema::define(
     type: put those modules here. By default, XHTML\'s core modules
     are used. You can set this to a blank array to disable core module
     protection, but this is not recommended. This directive has been
-    available since 1.7.0.
+    available since 2.0.0.
 </p>
 ');
 

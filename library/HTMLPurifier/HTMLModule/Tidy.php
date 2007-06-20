@@ -18,7 +18,7 @@ There are four allowed values:</p>
     <dd>Transform all deprecated elements and attributes to standards
     compliant equivalents</dd>
 </dl>
-<p>This directive has been available since 1.7.0</p>
+<p>This directive has been available since 2.0.0</p>
 ' );
 HTMLPurifier_ConfigSchema::defineAllowedValues(
     'HTML', 'TidyLevel', array('none', 'light', 'medium', 'heavy')
@@ -27,13 +27,13 @@ HTMLPurifier_ConfigSchema::defineAllowedValues(
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'TidyAdd', array(), 'lookup', '
 Fixes to add to the default set of Tidy fixes as per your level. This
-directive has been available since 1.7.0.
+directive has been available since 2.0.0.
 ' );
 
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'TidyRemove', array(), 'lookup', '
 Fixes to remove from the default set of Tidy fixes as per your level. This
-directive has been available since 1.7.0.
+directive has been available since 2.0.0.
 ' );
 
 /**
