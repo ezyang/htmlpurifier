@@ -40,6 +40,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Config object gives more friendly error messages when things go wrong
 ! Advanced API implemented: easy functions for creating elements (addElement)
   and attributes (addAttribute) on HTMLDefinition
+! Add native support for required attributes
 - Deprecated and removed EnableRedundantUTF8Cleaning. It didn't even work!
 - DOMLex will not emit errors when a custom error handler that does not
   honor error_reporting is used
@@ -63,6 +64,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . DirectLex can now track line-numbers
 . Preliminary error collector is in place, although no code actually reports
   errors yet
+. Factor out most of ValidateAttributes to new AttrValidator class
 
 1.6.1, released 2007-05-05
 ! Support for more deprecated attributes via transformations:

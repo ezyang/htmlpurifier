@@ -217,11 +217,10 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
     
     function testImg() {
-        // (this should never happen, as RemoveForeignElements
-        //  should have removed the offending image tag)
         $this->assertResult(
             '<img />',
-            '<img src="" alt="Invalid image" />'
+            '<img src="" alt="Invalid image" />',
+            array('Core.RemoveInvalidImg' => false)
         );
         
         $this->assertResult(
@@ -231,12 +230,14 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         
         $this->assertResult(
             '<img alt="pretty picture" />',
-            '<img alt="pretty picture" src="" />'
+            '<img alt="pretty picture" src="" />',
+            array('Core.RemoveInvalidImg' => false)
         );
         // mailto in image is not allowed
         $this->assertResult(
             '<img src="mailto:foo@example.com" />',
-            '<img src="" alt="Invalid image" />'
+            '<img alt="mailto:foo@example.com" src="" />',
+            array('Core.RemoveInvalidImg' => false)
         );
         // align transformation
         $this->assertResult(

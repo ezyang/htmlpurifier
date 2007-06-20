@@ -19,13 +19,15 @@ class HTMLPurifier_HTMLModule_Image extends HTMLPurifier_HTMLModule
         $img =& $this->addElement(
             'img', true, 'Inline', 'Empty', 'Common',
             array(
-                'alt' => 'Text',
+                'alt*' => 'Text',
                 'height' => 'Length',
                 'longdesc' => 'URI', 
-                'src' => new HTMLPurifier_AttrDef_URI(true), // embedded
+                'src*' => new HTMLPurifier_AttrDef_URI(true), // embedded
                 'width' => 'Length'
             )
         );
+        // kind of strange, but splitting things up would be inefficient
+        $img->attr_transform_pre[] =
         $img->attr_transform_post[] =
             new HTMLPurifier_AttrTransform_ImgRequired();
     }

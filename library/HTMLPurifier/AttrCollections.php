@@ -82,19 +82,47 @@ class HTMLPurifier_AttrCollections
      * @param $attr_types HTMLPurifier_AttrTypes instance
      */
     function expandIdentifiers(&$attr, $attr_types) {
+        
+        // because foreach will process new elements we add, make sure we
+        // skip duplicates
+        $processed = array();
+        
         foreach ($attr as $def_i => $def) {
+            // skip inclusions
             if ($def_i === 0) continue;
-            if (!is_string($def)) continue;
+            
+            if (isset($processed[$def_i])) continue;
+            
+            // determine whether or not attribute is required
+            if ($required = (strpos($def_i, '*') !== false)) {
+                // rename the definition
+                unset($attr[$def_i]);
+                $def_i = trim($def_i, '*');
+                $attr[$def_i] = $def;
+            }
+            
+            $processed[$def_i] = true;
+            
+            // if we've already got a literal object, move on
+            if (is_object($def)) {
+                // preserve previous required
+                $attr[$def_i]->required = ($required || $attr[$def_i]->required);
+                continue;
+            }
+            
             if ($def === false) {
                 unset($attr[$def_i]);
                 continue;
             }
+            
             if ($t = $attr_types->get($def)) {
                 $attr[$def_i] = $t;
+                $attr[$def_i]->required = $required;
             } else {
                 unset($attr[$def_i]);
             }
         }
+        
     }
     
 }

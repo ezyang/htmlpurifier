@@ -15,7 +15,10 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
         
         $this->assertResult(
             array(),
-            array('src' => '', 'alt' => 'Invalid image')
+            array('src' => '', 'alt' => 'Invalid image'),
+            array(
+                'Core.RemoveInvalidImg' => false
+            )
         );
         
         $this->assertResult(
@@ -23,7 +26,8 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
             array('src' => 'blank.png', 'alt' => 'Pawned!'),
             array(
                 'Attr.DefaultInvalidImage' => 'blank.png',
-                'Attr.DefaultInvalidImageAlt' => 'Pawned!'
+                'Attr.DefaultInvalidImageAlt' => 'Pawned!',
+                'Core.RemoveInvalidImg' => false
             )
         );
         
@@ -34,7 +38,10 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
         
         $this->assertResult(
             array('alt' => 'intrigue'),
-            array('alt' => 'intrigue', 'src' => '')
+            array('alt' => 'intrigue', 'src' => ''),
+            array(
+                'Core.RemoveInvalidImg' => false
+            )
         );
         
     }

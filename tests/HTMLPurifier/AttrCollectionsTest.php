@@ -110,17 +110,24 @@ class HTMLPurifier_AttrCollectionsTest extends UnitTestCase
         
         $attr = array(
             'attr1' => 'Color',
-            'attr2' => 'URI'
+            'attr2*' => 'URI'
         );
-        $types->setReturnValue('get', 'ColorObject', array('Color'));
-        $types->setReturnValue('get', 'URIObject', array('URI'));
+        $c_object = new HTMLPurifier_AttrDef();
+        $c_object->_name = 'Color'; // for testing purposes only
+        $u_object = new HTMLPurifier_AttrDef();
+        $u_object->_name = 'URL'; // for testing purposes only
+        
+        $types->setReturnValue('get', $c_object, array('Color'));
+        $types->setReturnValue('get', $u_object, array('URI'));
+        
         $collections->expandIdentifiers($attr, $types);
         
+        $u_object->required = true;
         $this->assertIdentical(
             $attr,
             array(
-                'attr1' => 'ColorObject',
-                'attr2' => 'URIObject'
+                'attr1' => $c_object,
+                'attr2' => $u_object
             )
         );
         

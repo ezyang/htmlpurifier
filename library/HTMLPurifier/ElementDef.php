@@ -86,6 +86,13 @@ class HTMLPurifier_ElementDef
     var $descendants_are_inline = false;
     
     /**
+     * List of the names of required attributes this element has. Dynamically
+     * populated.
+     * @public
+     */
+    var $required_attr = array();
+    
+    /**
      * Lookup table of tags excluded from all descendants of this tag.
      * @note SGML permits exclusions for all descendants, but this is
      *       not possible with DTDs or XML Schemas. W3C has elected to
@@ -172,6 +179,13 @@ class HTMLPurifier_ElementDef
             }
             $a1[$k] = $v;
         }
+    }
+    
+    /**
+     * Retrieves a copy of the element definition
+     */
+    function copy() {
+        return unserialize(serialize($this));
     }
     
 }

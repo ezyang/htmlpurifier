@@ -5,6 +5,8 @@ require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/TagTransform.php';
 
+require_once 'HTMLPurifier/AttrValidator.php';
+
 HTMLPurifier_ConfigSchema::define(
     'Core', 'RemoveInvalidImg', true, 'bool',
     'This directive enables pre-emptive URI checking in <code>img</code> '.
@@ -41,6 +43,8 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         $remove_invalid_img  = $config->get('Core', 'RemoveInvalidImg');
         $remove_script_contents = $config->get('Core', 'RemoveScriptContents');
         
+        $attr_validator = new HTMLPurifier_AttrValidator();
+        
         // removes tokens until it reaches a closing tag with its value
         $remove_until = false;
         
@@ -65,24 +69,23 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                 }
                 
                 if (isset($definition->info[$token->name])) {
-                    // leave untouched, except for a few special cases:
                     
-                    // hard-coded image special case, pre-emptively drop
-                    // if not available. Probably not abstract-able
-                    if ( $token->name == 'img' && $remove_invalid_img ) {
-                        if (!isset($token->attr['src'])) {
-                            continue;
+                    // mostly everything's good, but
+                    // we need to make sure required attributes are in order
+                    if (
+                        $definition->info[$token->name]->required_attr &&
+                        ($token->name != 'img' || $remove_invalid_img) // ensure config option still works
+                    ) {
+                        $token = $attr_validator->validateToken($token, $config, $context);
+                        $ok = true;
+                        foreach ($definition->info[$token->name]->required_attr as $name) {
+                            if (!isset($token->attr[$name])) {
+                                $ok = false;
+                                break;
+                            }
                         }
-                        if (!isset($definition->info['img']->attr['src'])) {
-                            continue;
-                        }
-                        $token->attr['src'] =
-                            $definition->
-                                info['img']->
-                                    attr['src']->
-                                        validate($token->attr['src'],
-                                            $config, $context);
-                        if ($token->attr['src'] === false) continue;
+                        if (!$ok) continue;
+                        $token->armor['ValidateAttributes'] = true;
                     }
                     
                 } elseif ($escape_invalid_tags) {

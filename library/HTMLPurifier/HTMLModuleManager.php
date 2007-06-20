@@ -405,7 +405,11 @@ class HTMLPurifier_HTMLModuleManager
         foreach($this->elementLookup[$name] as $module_name) {
             
             $module = $modules[$module_name];
-            $new_def = $module->info[$name];
+            
+            // copy is used because, ideally speaking, the original
+            // definition should not be modified. Usually, this will
+            // make no difference, but for consistency's sake
+            $new_def = $module->info[$name]->copy();
             
             // refuse to create/merge in a definition that is deemed unsafe
             if (!$trusted && ($new_def->safe === false)) {
@@ -442,6 +446,13 @@ class HTMLPurifier_HTMLModuleManager
             }
             
             $this->contentSets->generateChildDef($def, $module);
+        }
+            
+        // add information on required attributes
+        foreach ($def->attr as $attr_name => $attr_def) {
+            if ($attr_def->required) {
+                $def->required_attr[] = $attr_name;
+            }
         }
         
         return $def;

@@ -14,10 +14,16 @@ class HTMLPurifier_AttrDef
 {
     
     /**
-     * Tells us whether or not an HTML attribute is minimized. Only the
-     * boolean attribute vapourware would use this.
+     * Tells us whether or not an HTML attribute is minimized. Has no
+     * meaning in other contexts.
      */
     var $minimized = false;
+    
+    /**
+     * Tells us whether or not an HTML attribute is required. Has no
+     * meaning in other contexts
+     */
+    var $required = false;
     
     /**
      * Validates and cleans passed string according to a definition.
