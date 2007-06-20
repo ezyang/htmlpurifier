@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-1.7.0, unknown release date
+2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety
   information
 # Transform modules changed to Tidy modules, which offer more flexibility
