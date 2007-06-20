@@ -36,7 +36,7 @@ class HTMLPurifier_DefinitionCache
      */
     function generateKey($config) {
         return $config->version . '-' . // possibly replace with function calls
-               $config->revision . '-' .
+               $config->get($this->type, 'DefinitionRev') . '-' .
                $config->getBatchSerial($this->type);
     }
     
@@ -50,7 +50,7 @@ class HTMLPurifier_DefinitionCache
         list($version, $revision, $hash) = explode('-', $key, 3);
         $compare = version_compare($version, $config->version);
         if ($compare > 0) return false;
-        if ($compare == 0 && $revision >= $config->revision) return false;
+        if ($compare == 0 && $revision >= $config->get($this->type, 'DefinitionRev')) return false;
         return true;
     }
     

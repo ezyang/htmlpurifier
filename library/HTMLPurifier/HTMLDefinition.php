@@ -38,6 +38,19 @@ $def->addAttribute(\'a\', \'tabindex\', \'Number\');
 ');
 
 HTMLPurifier_ConfigSchema::define(
+    'HTML', 'DefinitionRev', 1, 'int', '
+<p>
+    Revision identifier for your custom definition specified in
+    %HTML.DefinitionID.  This serves the same purpose: uniquely identifying
+    your custom definition, but this one does so in a chronological
+    context: revision 3 is more up-to-date then revision 2.  Thus, when
+    this gets incremented, the cache handling is smart enough to clean
+    up any older revisions of your definition as well as flush the
+    cache.  This directive has been available since 1.7.0.
+</p>
+');
+
+HTMLPurifier_ConfigSchema::define(
     'HTML', 'BlockWrapper', 'p', 'string', '
 <p>
     String name of element to wrap inline elements that are inside a block

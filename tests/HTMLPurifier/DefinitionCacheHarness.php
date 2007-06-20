@@ -13,7 +13,6 @@ class HTMLPurifier_DefinitionCacheHarness extends UnitTestCase
         $config = new HTMLPurifier_ConfigMock($this);
         $config->setReturnValue('getBatchSerial', $serial, array('Test'));
         $config->version = '1.0.0';
-        $config->revision = 1;
         return $config;
     }
     

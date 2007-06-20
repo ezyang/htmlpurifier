@@ -11,10 +11,10 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
         
         $config = $this->generateConfigMock('serial');
+        $config->setReturnValue('get', 2, array('Test', 'DefinitionRev'));
         $config->version = '1.0.0';
-        $config->revision = 2;
         
-        $config_md5   = '1.0.0-' . $config->revision . '-serial';
+        $config_md5   = '1.0.0-2-serial';
         
         $file = realpath(
             $rel_file = dirname(__FILE__) .
@@ -120,12 +120,12 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         
         $config1 = $this->generateConfigMock();
         $config1->version = '0.9.0';
-        $config1->revision = 574;
+        $config1->setReturnValue('get', 574, array('Test', 'DefinitionRev'));
         $def1 = $this->generateDefinition(array('info' => 1));
         
         $config2 = $this->generateConfigMock();
         $config2->version = '1.0.0beta';
-        $config2->revision = 1;
+        $config2->setReturnValue('get', 1, array('Test', 'DefinitionRev'));
         $def2 = $this->generateDefinition(array('info' => 3));
         
         $cache->set($def1, $config1);
@@ -158,7 +158,7 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
         $config = $this->generateConfigMock('serial');
         $config->version = '1.0.0';
-        $config->revision = 1;
+        $config->setReturnValue('get', 1, array('Test', 'DefinitionRev'));
         $dir = dirname(__FILE__) . '/SerializerTest';
         $config->setReturnValue('get', $dir, array('Cache', 'SerializerPath'));
         
