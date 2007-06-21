@@ -83,9 +83,12 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         // intercept non element nodes. WE MUST catch all of them,
         // but we're not getting the character reference nodes because
         // those should have been preprocessed
-        if ($node->nodeType === XML_TEXT_NODE ||
-                  $node->nodeType === XML_CDATA_SECTION_NODE) {
+        if ($node->nodeType === XML_TEXT_NODE) {
             $tokens[] = $this->factory->createText($node->data);
+            return;
+        } elseif ($node->nodeType === XML_CDATA_SECTION_NODE) {
+            // undo DOM's special treatment of <script> tags
+            $tokens[] = $this->factory->createText($this->parseData($node->data));
             return;
         } elseif ($node->nodeType === XML_COMMENT_NODE) {
             $tokens[] = $this->factory->createComment($node->data);

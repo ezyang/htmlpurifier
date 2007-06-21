@@ -259,7 +259,19 @@ class HTMLPurifier_Lexer
      */
     function escapeCDATA($string) {
         return preg_replace_callback(
-            '/<!\[CDATA\[(.+?)\]\]>/',
+            '/<!\[CDATA\[(.+?)\]\]>/s',
+            array('HTMLPurifier_Lexer', 'CDATACallback'),
+            $string
+        );
+    }
+    
+    /**
+     * Special CDATA case that is especiall convoluted for <script>
+     */
+    function escapeCommentedCDATA($string) {
+        // <!--//--><![CDATA[//><!--
+        return preg_replace_callback(
+            '#<!--//--><!\[CDATA\[//><!--(.+?)//--><!\]\]>#s',
             array('HTMLPurifier_Lexer', 'CDATACallback'),
             $string
         );
@@ -289,6 +301,11 @@ class HTMLPurifier_Lexer
         // extract body from document if applicable
         if ($config->get('Core', 'AcceptFullDocuments')) {
             $html = $this->extractBody($html);
+        }
+        
+        if ($config->get('HTML', 'Trusted')) {
+            // escape convoluted CDATA
+            $html = $this->escapeCommentedCDATA($html);
         }
         
         // escape CDATA

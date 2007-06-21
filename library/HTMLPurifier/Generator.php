@@ -4,7 +4,7 @@ HTMLPurifier_ConfigSchema::define(
     'Output', 'CommentScriptContents', true, 'bool',
     'Determines whether or not HTML Purifier should attempt to fix up '.
     'the contents of script tags for legacy browsers with comments. This '.
-    'directive was available since 1.7.'
+    'directive was available since 2.0.0.'
 );
 HTMLPurifier_ConfigSchema::defineAlias('Core', 'CommentScriptContents', 'Output', 'CommentScriptContents');
 
@@ -76,13 +76,17 @@ class HTMLPurifier_Generator
         
         if (!$tokens) return '';
         for ($i = 0, $size = count($tokens); $i < $size; $i++) {
-            if ($this->_scriptFix && $tokens[$i]->name === 'script') {
+            if ($this->_scriptFix && $tokens[$i]->name === 'script'
+                && $i + 2 < $size && $tokens[$i+2]->type == 'end') {
                 // script special case
+                // the contents of the script block must be ONE token
+                // for this to work
                 $html .= $this->generateFromToken($tokens[$i++]);
                 $html .= $this->generateScriptFromToken($tokens[$i++]);
-                while ($tokens[$i]->name != 'script') {
-                    $html .= $this->generateScriptFromToken($tokens[$i++]);
-                }
+                // We're not going to do this: it wouldn't be valid anyway
+                //while ($tokens[$i]->name != 'script') {
+                //    $html .= $this->generateScriptFromToken($tokens[$i++]);
+                //}
             }
             $html .= $this->generateFromToken($tokens[$i]);
         }
@@ -148,10 +152,12 @@ class HTMLPurifier_Generator
      *          --> somewhere inside the script contents.
      */
     function generateScriptFromToken($token) {
-        if (!$token->type == 'text') return $this->generateFromToken($token);
-        return '<!--' . PHP_EOL . $token->data . PHP_EOL . '// -->';
+        if ($token->type != 'text') return $this->generateFromToken($token);
+        // return '<!--' . PHP_EOL . trim($token->data) . PHP_EOL . '// -->';
         // more advanced version:
-        // return '<!--//--><![CDATA[//><!--' . PHP_EOL . $token->data . PHP_EOL . '//--><!]]>';
+        // thanks <http://lachy.id.au/log/2005/05/script-comments>
+        $data = preg_replace('#//\s*$#', '', $token->data);
+        return '<!--//--><![CDATA[//><!--' . PHP_EOL . trim($data) . PHP_EOL . '//--><!]]>';
     }
     
     /**

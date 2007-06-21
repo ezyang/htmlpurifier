@@ -17,9 +17,11 @@ HTMLPurifier_ConfigSchema::define(
 
 HTMLPurifier_ConfigSchema::define(
     'Core', 'RemoveScriptContents', true, 'bool', '
-This directive enables HTML Purifier to remove not only script tags
-but all of their contents. This directive has been available since 2.0.0,
-revert to pre-2.0.0 behavior by setting to false.
+<p>
+  This directive enables HTML Purifier to remove not only script tags
+  but all of their contents. This directive has been available since 2.0.0,
+  revert to pre-2.0.0 behavior by setting to false.
+</p>
 '
 );
 
@@ -47,6 +49,9 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         
         // removes tokens until it reaches a closing tag with its value
         $remove_until = false;
+        
+        // converts comments into text tokens when this is equal to a tag name
+        $textify_comments = false;
         
         foreach($tokens as $token) {
             if ($remove_until) {
@@ -88,6 +93,13 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                         $token->armor['ValidateAttributes'] = true;
                     }
                     
+                    // CAN BE GENERICIZED
+                    if ($token->name == 'script' && $token->type == 'start') {
+                        $textify_comments = $token->name;
+                    } elseif ($token->name === $textify_comments && $token->type == 'end') {
+                        $textify_comments = false;
+                    }
+                    
                 } elseif ($escape_invalid_tags) {
                     // invalid tag, generate HTML and insert in
                     $token = new HTMLPurifier_Token_Text(
@@ -108,8 +120,14 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     continue;
                 }
             } elseif ($token->type == 'comment') {
-                // strip comments
-                continue;
+                // textify comments in script tags when they are allowed
+                if ($textify_comments !== false) {
+                    $data = $token->data;
+                    $token = new HTMLPurifier_Token_Text($data);
+                } else {
+                    // strip comments
+                    continue;
+                }
             } elseif ($token->type == 'text') {
             } else {
                 continue;

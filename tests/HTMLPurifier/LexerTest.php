@@ -299,6 +299,22 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $sax_expect[19] = false; // SAX drops the < character
         $dom_expect[19] = false; // DOM drops the entire pseudo-tag
         
+        // test comment parsing with funky characters inside
+        $input[20] = '<!-- This >< comment --><br />';
+        $expect[20] = array(
+            new HTMLPurifier_Token_Comment(' This >< comment '),
+            new HTMLPurifier_Token_Empty('br')
+        );
+        $sax_expect[20] = false;
+        
+        // test comment parsing of missing end
+        $input[21] = '<!-- This >< comment';
+        $expect[21] = array(
+            new HTMLPurifier_Token_Comment(' This >< comment')
+        );
+        $sax_expect[21] = false;
+        $dom_expect[21] = false;
+        
         $default_config = HTMLPurifier_Config::createDefault();
         $default_context = new HTMLPurifier_Context();
         foreach($input as $i => $discard) {

@@ -8,6 +8,8 @@ class HTMLPurifier_AttrValidator
             
         $definition = $config->getHTMLDefinition();
         
+        if ($token->type !== 'start' && $token->type !== 'empty') return $token;
+        
         // create alias to global definition array, see also $defs
         // DEFINITION CALL
         $d_defs = $definition->info_global_attr;

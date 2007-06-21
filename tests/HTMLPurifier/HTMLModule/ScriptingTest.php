@@ -18,6 +18,14 @@ class HTMLPurifier_HTMLModule_ScriptingTest extends HTMLPurifier_HTMLModuleHarne
             array('HTML.Trusted' => true)
         );
         
+        // CDATA
+        $this->assertResult(
+'//<![CDATA[
+alert("<This is compatible with XHTML>");
+//]]> ', true,
+            array('HTML.Trusted' => true)
+        );
+        
         // max
         $this->assertResult(
             '<script

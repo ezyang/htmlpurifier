@@ -79,6 +79,18 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
             array('HTML.Allowed' => 'div')
         );
         
+        // text-ify commented script contents ( the trailing comment gets
+        // removed during generation )
+        $this->assertResult(
+'<script type="text/javascript"><!--
+alert(<b>bold</b>);
+// --></script>',
+'<script type="text/javascript">
+alert(&lt;b&gt;bold&lt;/b&gt;);
+// </script>',
+            array('HTML.Trusted' => true, 'Output.CommentScriptContents' => false)
+        );
+        
     }
     
 }

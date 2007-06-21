@@ -9,6 +9,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+2.0.1, unknown release date
+- Clean up special case code for <script> tags
+
 2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety
   information

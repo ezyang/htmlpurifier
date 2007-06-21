@@ -12,9 +12,9 @@ class HTMLPurifierTest extends UnitTestCase
         $this->purifier = new HTMLPurifier();
     }
     
-    function assertPurification($input, $expect = null) {
+    function assertPurification($input, $expect = null, $config = array()) {
         if ($expect === null) $expect = $input;
-        $result = $this->purifier->purify($input);
+        $result = $this->purifier->purify($input, $config);
         $this->assertIdentical($expect, $result);
     }
     
@@ -95,6 +95,41 @@ class HTMLPurifierTest extends UnitTestCase
         $this->purifier = new HTMLPurifier(array('HTML.EnableAttrID' => true));
         $this->assertPurification('<span id="moon">foobar</span>');
         
+    }
+    
+    function testScript() {
+        $this->purifier = new HTMLPurifier(array('HTML.Trusted' => true));
+        $ideal = '<script type="text/javascript"><!--//--><![CDATA[//><!--
+alert("<This is compatible with XHTML>");
+//--><!]]></script>';
+        
+        $this->assertPurification($ideal);
+        
+        $this->assertPurification(
+            '<script type="text/javascript"><![CDATA[
+alert("<This is compatible with XHTML>");
+]]></script>',
+            $ideal
+        );
+        
+        $this->assertPurification(
+            '<script type="text/javascript">alert("<This is compatible with XHTML>");</script>',
+            $ideal
+        );
+        
+        $this->assertPurification(
+            '<script type="text/javascript"><!--
+alert("<This is compatible with XHTML>");
+//--></script>',
+            $ideal
+        );
+        
+        $this->assertPurification(
+            '<script type="text/javascript"><![CDATA[
+alert("<This is compatible with XHTML>");
+//]]></script>',
+            $ideal
+        );
     }
     
 }

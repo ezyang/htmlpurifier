@@ -5,14 +5,6 @@
 WARNING: THIS MODULE IS EXTREMELY DANGEROUS AS IT ENABLES INLINE SCRIPTING
 INSIDE HTML PURIFIER DOCUMENTS. USE ONLY WITH TRUSTED USER INPUT!!!
 
-Usage:
-
-require_once 'HTMLPurifier/HTMLModule/Scripting.php';
-$def =& $config->getHTMLDefinition(true); // get the raw version
-$def->manager->addModule('Scripting');
-
-This must come before any other calls to getHTMLDefinition()
-
 */
 
 /**
@@ -63,6 +55,7 @@ class HTMLPurifier_HTMLModule_Scripting extends HTMLPurifier_HTMLModule
         );
         $this->info['script']->content_model = '#PCDATA';
         $this->info['script']->content_model_type = 'optional';
+        $this->info['script']->attr_transform_pre['type'] =
         $this->info['script']->attr_transform_post['type'] =
             new HTMLPurifier_AttrTransform_ScriptRequired();
     }

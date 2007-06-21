@@ -126,22 +126,34 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 
                 // Check if it's a comment
                 if (
-                    substr($segment, 0, 3) == '!--' &&
-                    substr($segment, $strlen_segment-2, 2) == '--'
+                    substr($segment, 0, 3) == '!--'
                 ) {
+                    // re-determine segment length, looking for -->
+                    $position_comment_end = strpos($html, '-->', $cursor);
+                    if ($position_comment_end === false) {
+                        // uh oh, we have a comment that extends to
+                        // infinity. Can't be helped: set comment
+                        // end position to end of string
+                        $position_comment_end = strlen($html);
+                        $end = true;
+                    } else {
+                        $end = false;
+                    }
+                    $strlen_segment = $position_comment_end - $cursor;
+                    $segment = substr($html, $cursor, $strlen_segment);
                     $token = new
                         HTMLPurifier_Token_Comment(
                             substr(
-                                $segment, 3, $strlen_segment - 5
+                                $segment, 3, $strlen_segment - 3
                             )
                         );
                     if ($maintain_line_numbers) {
                         $token->line = $current_line;
-                        $current_line += $this->substrCount($html, $nl, $cursor, $position_next_gt - $cursor);
+                        $current_line += $this->substrCount($html, $nl, $cursor, $strlen_segment);
                     }
                     $array[] = $token;
+                    $cursor = $end ? $position_comment_end : $position_comment_end + 3;
                     $inside_tag = false;
-                    $cursor = $position_next_gt + 1;
                     continue;
                 }
                 
