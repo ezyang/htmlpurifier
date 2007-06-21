@@ -38,25 +38,25 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         $this->factory = new HTMLPurifier_TokenFactory();
     }
     
-    public function tokenizeHTML($string, $config, &$context) {
+    public function tokenizeHTML($html, $config, &$context) {
         
-        $string = $this->normalize($string, $config, $context);
+        $html = $this->normalize($html, $config, $context);
         
-        // preprocess string, essential for UTF-8
-        $string =
+        // preprocess html, essential for UTF-8
+        $html =
             '<!DOCTYPE html '.
                 'PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'.
                 '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.
             '<html><head>'.
             '<meta http-equiv="Content-Type" content="text/html;'.
                 ' charset=utf-8" />'.
-            '</head><body><div>'.$string.'</div></body></html>';
+            '</head><body><div>'.$html.'</div></body></html>';
         
         $doc = new DOMDocument();
         $doc->encoding = 'UTF-8'; // theoretically, the above has this covered
         
         set_error_handler(array($this, 'muteErrorHandler'));
-        $doc->loadHTML($string);
+        $doc->loadHTML($html);
         restore_error_handler();
         
         $tokens = array();

@@ -2,9 +2,6 @@
 
 require_once 'HTMLPurifier/DefinitionCache.php';
 
-require_once 'HTMLPurifier/DefinitionCache/Decorator/Memory.php';
-require_once 'HTMLPurifier/DefinitionCache/Decorator/Cleanup.php';
-
 class HTMLPurifier_DefinitionCache_Decorator extends HTMLPurifier_DefinitionCache
 {
     
