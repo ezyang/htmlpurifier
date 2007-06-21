@@ -14,13 +14,11 @@ TODO List
  - Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
  - Allow non-ASCII characters in font names
- - Genericize special cases in RemoveForeignElements
 
 2.2 release [Error'ed]
  # Error logging for filtering/cleanup procedures
     - Requires I18N facilities to be created first (COMPLEX)
  - XSS-attempt detection
- - More fine-grained control over escaping behavior
 
 2.3 release [Do What I Mean, Not What I Say]
  # Additional support for poorly written HTML
@@ -86,10 +84,11 @@ Unknown release (on a scratch-an-itch basis)
  - Reorganize configuration directives (Create more namespaces! Get messy!)
 
 Requested
- ? Native content compression, whitespace stripping (don't rely on Tidy, make
-   sure we don't remove from <pre> or related tags)
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations (unless
    patch provided)
  - Pretty-printing HTML, users can use Tidy on the output on entire page
+ - Native content compression, whitespace stripping (don't rely on Tidy, make
+   sure we don't remove from <pre> or related tags): use gzip if this is
+   really important
