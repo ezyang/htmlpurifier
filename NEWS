@@ -12,6 +12,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 2.0.1, unknown release date
 - Clean up special case code for <script> tags
 . Rewire some test-cases to swallow errors rather than expect them
+. HTMLDefinition printer updated with some of the new attributes
 
 2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety

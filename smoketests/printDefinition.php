@@ -13,17 +13,6 @@ if (file_exists('printDefinition.settings.php')) {
     include 'printDefinition.settings.php';
 }
 
-/* // sample local definition, obviously needs to be less clunky
-$html_definition =& $config->getHTMLDefinition(true);
-$module = new HTMLPurifier_HTMLModule();
-$module->name = 'Marquee';
-$module->info['marquee'] = new HTMLPurifier_ElementDef();
-$module->info['marquee']->content_model = '#PCDATA | Inline';
-$module->info['marquee']->content_model_type = 'optional';
-$module->content_sets = array('Inline' => 'marquee');
-$html_definition->manager->addModule($module);
-*/
-
 $printer_html_definition = new HTMLPurifier_Printer_HTMLDefinition();
 $printer_css_definition  = new HTMLPurifier_Printer_CSSDefinition();
 
@@ -51,6 +40,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
         .HTMLPurifier_Printer caption {font-size:1.5em; font-weight:bold;
             width:100%;}
         .HTMLPurifier_Printer .heavy {background:#99C;text-align:center;}
+        .HTMLPurifier_Printer .unsafe {background:#C99;}
         dt {font-weight:bold;}
     </style>
     <link rel="stylesheet" href="../library/HTMLPurifier/Printer/ConfigForm.css" type="text/css" />

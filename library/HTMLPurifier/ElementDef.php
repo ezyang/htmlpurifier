@@ -3,6 +3,8 @@
 /**
  * Structure that stores an HTML element definition. Used by
  * HTMLPurifier_HTMLDefinition and HTMLPurifier_HTMLModule.
+ * @note This class is inspected by HTMLPurifier_Printer_HTMLDefinition.
+ *       Please update that class too.
  */
 class HTMLPurifier_ElementDef
 {
