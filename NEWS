@@ -9,7 +9,62 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-1.7.0, unknown release date
+2.0.0, released 2007-06-20
+# Completely refactored HTMLModuleManager, decentralizing safety
+  information
+# Transform modules changed to Tidy modules, which offer more flexibility
+  and better modularization
+# Configuration object now finalizes itself when a read operation is
+  performed on it, ensuring that its internal state stays consistent.
+  To revert this behavior, you can set the $autoFinalize member variable 
+  off, but it's not recommended.
+# New compact syntax for AttrDef objects that can be used to instantiate
+  new objects via make()
+# Definitions (esp. HTMLDefinition) are now cached for a significant
+  performance boost. You can disable caching by setting %Core.DefinitionCache
+  to null. You CANNOT edit raw definitions without setting the corresponding
+  DefinitionID directive (%HTML.DefinitionID for HTMLDefinition).
+# Contents between <script> tags are now completely removed if <script>
+  is not allowed
+# Prototype-declarations for Lexer removed in favor of configuration
+  determination of Lexer implementations.
+! HTML Purifier now works in PHP 4.3.2.
+! Configuration form-editing API makes tweaking HTMLPurifier_Config a
+  breeze!
+! Configuration directives that accept hashes now allow new string
+  format: key1:value1,key2:value2
+! ConfigDoc now factored into OOP design
+! All deprecated elements now natively supported
+! Implement TinyMCE styled whitelist specification format in
+  %HTML.Allowed
+! Config object gives more friendly error messages when things go wrong
+! Advanced API implemented: easy functions for creating elements (addElement)
+  and attributes (addAttribute) on HTMLDefinition
+! Add native support for required attributes
+- Deprecated and removed EnableRedundantUTF8Cleaning. It didn't even work!
+- DOMLex will not emit errors when a custom error handler that does not
+  honor error_reporting is used
+- StrictBlockquote child definition refrains from wrapping whitespace
+  in tags now.
+- Bug resulting from tag transforms to non-allowed elements fixed
+- ChildDef_Custom's regex generation has been improved, removing several
+  false positives
+. Unit test for ElementDef created, ElementDef behavior modified to
+  be more flexible
+. Added convenience functions for HTMLModule constructors
+. AttrTypes now has accessor functions that should be used instead
+  of directly manipulating info
+. TagTransform_Center deprecated in favor of generic TagTransform_Simple
+. Add extra protection in AttrDef_URI against phantom Schemes
+. Doctype object added to HTMLDefinition which describes certain aspects
+  of the operational document type
+. Lexer is now pre-emptively included, with a conditional include for the
+  PHP5 only version.
+. HTMLDefinition and CSSDefinition have a common parent class: Definition.
+. DirectLex can now track line-numbers
+. Preliminary error collector is in place, although no code actually reports
+  errors yet
+. Factor out most of ValidateAttributes to new AttrValidator class
 
 1.6.1, released 2007-05-05
 ! Support for more deprecated attributes via transformations:
@@ -61,7 +116,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Error messages are emitted when you attempt to "allow" elements or
   attributes that HTML Purifier does not support
 
-1.5.1, unknown release date
+
 - Fix segfault in unit test. The problem is not very reproduceable and
   I don't know what causes it, but a six line patch fixed it.
 

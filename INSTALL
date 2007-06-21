@@ -1,4 +1,3 @@
-
 Install
     How to install HTML Purifier
 
@@ -8,13 +7,13 @@ installation GUI, you've come to the wrong place!)  The impatient can scroll
 down to the bottom of this INSTALL document to see the code, but you really
 should make sure a few things are properly done.
 
-Todo: Convert to using the array syntax for configuration.
+
 
 
 1.  Compatibility
 
-HTML Purifier works in both PHP 4 and PHP 5, from PHP 4.3.9 and up. It has no
-core dependencies with other libraries. (Whoopee!)
+HTML Purifier works in both PHP 4 and PHP 5, from PHP 4.3.2 and up. It has no
+core dependencies with other libraries.
 
 Optional extensions are iconv (usually installed) and tidy (also common).
 If you use UTF-8 and don't plan on pretty-printing HTML, you can get away with
@@ -50,6 +49,7 @@ be standards compliant.  HTML Purifier can deal with these doctypes:
 * XHTML 1.0 Strict
 * HTML 4.01 Transitional
 * HTML 4.01 Strict
+* XHTML 1.1 sans Ruby
 
 ...and these character encodings:
 
@@ -68,11 +68,11 @@ the doctype from this code in your HTML documents:
     <meta http-equiv="Content-type" content="text/html;charset=ENCODING">
 
 For legacy codebases these declarations may be missing.  If that is the case,
-STOP, and read up on character encodings and doctypes (in that order).  Here
-are some links:
+STOP, and read docs/enduser-utf8.html
 
-* http://www.joelonsoftware.com/articles/Unicode.html
-* http://alistapart.com/stories/doctype/
+
+
+
 
 You may currently be vulnerable to XSS and other security threats, and HTML
 Purifier won't be able to fix that.
@@ -116,27 +116,30 @@ websites):
 
 Note that HTML Purifier's support for non-Unicode encodings is crippled by the
 fact that any character not supported by that encoding will be silently
-dropped, EVEN if it is ampersand escaped.  This is a current limitation of
-HTML Purifier that we are NOT actively working to fix.  Patches are welcome,
-but there are so many other gotchas and problems in I18N for non-Unicode
-encodings that this functionality is low priority.  See
-<http://ppewww.ph.gla.ac.uk/~flavell/charset/form-i18n.html> for a more
-detailed lowdown on the topic.
+dropped, EVEN if it is ampersand escaped.  If you want to work around
+this, you are welcome to read docs/enduser-utf8.html for a workaround,
+but please be cognizant of the issues the "solution" creates.
+
+
+
 
 
 
 4.2. Setting a different doctype
 
-For those of you stuck using HTML 4.01 Transitional, you can disable
+For those of you using HTML 4.01 Transitional, you can disable
 XHTML output like this:
 
-    $config->set('Core', 'XHTML', false);
+    $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
 
-I recommend that you use XHTML, although not as much as I recommend UTF-8.  If
-your HTML 4.01 page validates, good for you!
+Other supported doctypes include:
 
-Currently, we can only guarantee transitional-complaint output, future
-versions will also allow strict-compliant output.
+
+    * HTML 4.01 Strict
+    * HTML 4.01 Transitional
+    * XHTML 1.0 Strict
+    * XHTML 1.0 Transitional
+    * XHTML 1.1
 
 
 
@@ -184,9 +187,17 @@ If your website is in a different encoding or doctype, use this code:
     require_once '/path/to/htmlpurifier/library/HTMLPurifier.auto.php';
     
     $config = HTMLPurifier_Config::createDefault();
-    $config->set('Core', 'Encoding', 'ISO-8859-1'); //replace with your encoding
-    $config->set('Core', 'XHTML', true); //replace with false if HTML 4.01
+    $config->set('Core', 'Encoding', 'ISO-8859-1'); // replace with your encoding
+    $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional'); // replace with your doctype
     $purifier = new HTMLPurifier($config);
     
     $clean_html = $purifier->purify($dirty_html);
 ?>
+
+
+
+7. Caching
+
+HTML Purifier generates some cache files to speed up its execution. For
+maximum performance, make sure that library/HTMLPurifier/DefinitionCache/Serializer
+is writeable by the webserver.

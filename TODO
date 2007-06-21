@@ -1,4 +1,3 @@
-
 TODO List
 
 = KEY ====================
@@ -7,33 +6,34 @@ TODO List
     ? Maybe I'll Do It
 ==========================
 
-1.7 release [Advanced API]
- # Complete advanced API, and fully document it
- # Implement all edge-case attribute transforms
- # Implement all deprecated tags and attributes
- - Parse TinyMCE-style whitelist into our %HTML.Allow* whitelists (possibly
-   do this earlier)
- ? HTML interface for tweaking configuration to see changes
+2.1 release [Refactor, refactor!]
 
-1.8 release [Refactor, refactor!]
+
+
+
+
+
+
+
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
  # Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
  - Configuration profiles: predefined directives set with one func call
  - Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
  - Allow non-ASCII characters in font names
+ - Genericize special cases in RemoveForeignElements
 
-1.9 release [Error'ed]
+2.2 release [Error'ed]
  # Error logging for filtering/cleanup procedures
     - Requires I18N facilities to be created first (COMPLEX)
  - XSS-attempt detection
  - More fine-grained control over escaping behavior
-    - Silently drop content inbetween SCRIPT tags (can be generalized to allow
-      specification of elements that, when detected as foreign, trigger removal
-      of children, although unbalanced tags could wreck havoc (or at least
-      delete the rest of the document)).
 
-1.10 release [Do What I Mean, Not What I Say]
+
+
+
+
+2.3 release [Do What I Mean, Not What I Say]
  # Additional support for poorly written HTML
     - Microsoft Word HTML cleaning (i.e. MsoNormal, but research essential!)
     - Friendly strict handling of <address> (block -> <br>)
@@ -48,9 +48,14 @@ TODO List
  - Append something to duplicate IDs so they're still usable (impl. note: the
    dupe detector would also need to detect the suffix as well)
 
-2.0 release [Beyond HTML]
+2.4 release [It's All About Trust] (floating)
+ # Implement untrusted, dangerous elements/attributes
+
+3.0 release [Beyond HTML]
  # Legit token based CSS parsing (will require revamping almost every
    AttrDef class)
+ # More control over allowed CSS properties (maybe modularize it in the
+   same fashion!)
  # Formatters for plaintext (COMPLEX)
     - Auto-paragraphing (be sure to leverage fact that we know when things
       shouldn't be paragraphed, such as lists and tables).
@@ -65,7 +70,7 @@ TODO List
  - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
    Also, enable disabling of directionality
 
-3.0 release [To XML and Beyond]
+4.0 release [To XML and Beyond]
  - Extended HTML capabilities based on namespacing and tag transforms (COMPLEX)
     - Hooks for adding custom processors to custom namespaced tags and
       attributes, offer default implementation
@@ -78,12 +83,18 @@ Ongoing
     - WordPress (mostly written, needs beta-testing)
     - eFiction
     - more! (look for ones that use WYSIWYGs)
+ - Complete basic smoketests
 
 Unknown release (on a scratch-an-itch basis)
  ? Semi-lossy dumb alternate character encoding transfor
  ? Have 'lang' attribute be checked against official lists, achieved by
    encoding all characters that have string entity equivalents
  - Explain how to use HTML Purifier in non-PHP languages
+ - Abstract ChildDef_BlockQuote to work with all elements that only
+   allow blocks in them, required or optional
+ - Reorganize Unit Tests
+    - Refactor loop tests (esp. AttrDef_URI)
+ - Reorganize configuration directives (Create more namespaces! Get messy!)
 
 Requested
  ? Native content compression, whitespace stripping (don't rely on Tidy, make
