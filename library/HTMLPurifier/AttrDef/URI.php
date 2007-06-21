@@ -93,7 +93,6 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
 {
     
     var $host;
-    var $PercentEncoder;
     var $embeds_resource;
     
     /**
@@ -101,11 +100,13 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
      */
     function HTMLPurifier_AttrDef_URI($embeds_resource = false) {
         $this->host = new HTMLPurifier_AttrDef_URI_Host();
-        $this->PercentEncoder = new HTMLPurifier_PercentEncoder();
         $this->embeds_resource = (bool) $embeds_resource;
     }
     
     function validate($uri, $config, &$context) {
+        
+        static $PercentEncoder = null;
+        if ($PercentEncoder === null) $PercentEncoder = new HTMLPurifier_PercentEncoder();
         
         // We'll write stack-based parsers later, for now, use regexps to
         // get things working as fast as possible (irony)
@@ -116,7 +117,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         $uri = $this->parseCDATA($uri);
         
         // fix up percent-encoding
-        $uri = $this->PercentEncoder->normalize($uri);
+        $uri = $PercentEncoder->normalize($uri);
         
         // while it would be nice to use parse_url(), that's specifically
         // for HTTP and thus won't work for our generic URI parsing
@@ -157,6 +158,14 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             );
         }
         
+        // something funky weird happened in the registry, abort!
+        if (!$scheme_obj) {
+            trigger_error(
+                'Default scheme object "' . $config->get('URI', 'DefaultScheme') . '" was not readable',
+                E_USER_WARNING
+            );
+            return false;
+        }
         
         // the URI we're processing embeds_resource a resource in the page, but the URI
         // it references cannot be located

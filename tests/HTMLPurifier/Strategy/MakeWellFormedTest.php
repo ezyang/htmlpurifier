@@ -11,11 +11,12 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
         $this->obj = new HTMLPurifier_Strategy_MakeWellFormed();
     }
     
-    function test() {
-        
+    function testNormalIntegration() {
         $this->assertResult('');
         $this->assertResult('This is <b>bold text</b>.');
-        
+    }
+    
+    function testUnclosedTagIntegration() {
         $this->assertResult(
             '<b>Unclosed tag, gasp!',
             '<b>Unclosed tag, gasp!</b>'
@@ -30,7 +31,9 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
             'Unused end tags... recycle!</b>',
             'Unused end tags... recycle!'
         );
-        
+    }
+    
+    function testEmptyTagDetectionIntegration() {
         $this->assertResult(
             '<br style="clear:both;">',
             '<br style="clear:both;" />'
@@ -40,8 +43,10 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
             '<div style="clear:both;" />',
             '<div style="clear:both;"></div>'
         );
-        
-        // test automatic paragraph closing
+    }
+    
+    function testAutoClose() {
+        // paragraph
         
         $this->assertResult(
             '<p>Paragraph 1<p>Paragraph 2',
@@ -53,12 +58,20 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
             '<div><p>Paragraphs</p><p>In</p><p>A</p><p>Div</p></div>'
         );
         
-        // automatic list closing
+        // list
         
         $this->assertResult(
             '<ol><li>Item 1<li>Item 2</ol>',
             '<ol><li>Item 1</li><li>Item 2</li></ol>'
         );
+        
+        // colgroup
+        
+        $this->assertResult(
+            '<table><colgroup><col /><tr></tr></table>',
+            '<table><colgroup><col /></colgroup><tr></tr></table>'
+        );
+        
     }
     
 }

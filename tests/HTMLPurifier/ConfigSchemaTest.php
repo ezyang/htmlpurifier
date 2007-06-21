@@ -288,6 +288,10 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         $this->assertValid(array(1 => 'moo'), 'hash');
         $this->assertInvalid(array(0 => 'moo'), 'hash');
         $this->assertValid('', 'hash', array());
+        $this->assertValid('foo:bar,too:two', 'hash', array('foo' => 'bar', 'too' => 'two'));
+        $this->assertValid('foo:bar,too', 'hash', array('foo' => 'bar'));
+        $this->assertValid('foo:bar,', 'hash', array('foo' => 'bar'));
+        $this->assertValid('foo:bar:baz', 'hash', array('foo' => 'bar:baz'));
         
         $this->assertValid(23, 'mixed');
         

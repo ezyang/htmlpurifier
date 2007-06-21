@@ -6,6 +6,11 @@
  * writes the whole kaboodle to a file. The resulting file should be versioned.
  */
 
+if (php_sapi_name() != 'cli') {
+    echo 'Script cannot be called from web-browser.';
+    exit;
+}
+
 chdir( dirname(__FILE__) );
 
 // here's where the entity files are located, assuming working directory

@@ -42,6 +42,7 @@ $xml = simplexml_load_file('attrTransform.xml');
 
 // attr transform enabled HTML Purifier
 $config = HTMLPurifier_Config::createDefault();
+$config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
 $purifier = new HTMLPurifier($config);
 
 $title = isset($_GET['title']) ? $_GET['title'] : true;

@@ -4,7 +4,7 @@ require_once 'HTMLPurifier.php';
 
 // integration test
 
-class HTMLPurifier_Test extends UnitTestCase
+class HTMLPurifierTest extends UnitTestCase
 {
     var $purifier;
     
@@ -29,7 +29,7 @@ class HTMLPurifier_Test extends UnitTestCase
         
         $this->assertPurification(
             '<u>Illegal underline</u>',
-            'Illegal underline'
+            '<span style="text-decoration:underline;">Illegal underline</span>'
         );
         
         $this->assertPurification(
@@ -76,7 +76,7 @@ class HTMLPurifier_Test extends UnitTestCase
             $this->purifier->purifyArray(
                 array('Good', '<b>Sketchy', 'foo' => '<script>bad</script>')
             ),
-            array('Good', '<b>Sketchy</b>', 'foo' => 'bad')
+            array('Good', '<b>Sketchy</b>', 'foo' => '')
         );
         
         $this->assertIsA($this->purifier->context, 'array');

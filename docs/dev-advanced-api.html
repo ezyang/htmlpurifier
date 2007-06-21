@@ -17,9 +17,12 @@
 <div id="home"><a href="http://htmlpurifier.org/">HTML Purifier</a> End-User Documentation</div>
 
 <p>HTML Purifier currently natively supports only a subset of HTML's
-allowed elements, attributes, and behavior. This is by design,
-but as the user is always right, they'll need some method to overload
-these behaviors.</p>
+allowed elements, attributes, and behavior; specifically, this subset
+is the set of elements that are safe for untrusted users to use.
+However, HTML Purifier is often utilized to ensure standards-compliance
+from input that is trusted (making it a sort of Tidy substitute),
+and often users need to define new elements or attributes. The
+advanced API is oriented specifically for these use-cases.</p>
 
 <p>Our goals are to let the user:</p>
 
@@ -27,20 +30,15 @@ these behaviors.</p>
     <dt>Select</dt>
     <dd><ul>
         <li>Doctype</li>
-        <li>Mode: Lenient / Correctional</li>
+        <!-- <li>Filterset</li> -->
         <li>Elements / Attributes / Modules</li>
-        <li>Filterset</li>
+        <li>Tidy</li>
     </ul></dd>
     <dt>Customize</dt>
     <dd><ul>
         <li>Attributes</li>
         <li>Elements</li>
-    </ul></dd>
-    <dt>Internals</dt>
-    <dd><ul>
-        <li>Modules / Elements / Attributes / Attribute Types</li>
-        <li>Filtersets</li>
-        <li>Doctype</li>
+        <!--<li>Doctypes</li>-->
     </ul></dd>
 </dl>
 
@@ -68,136 +66,64 @@ Transitional, however, we really shouldn't be guessing what the user's
 doctype is. Fortunantely, people who can't be bothered to set this won't
 be bothered when their pages stop validating.</p>
 
-<h3>Selecting Mode</h3>
-
-<p>Within doctypes, there are various <strong>modes</strong> of operation.
-These indicate variant behaviors that, while not strictly changing the
-allowed set of elements and attributes, definitely affect the output.
-Currently, we have two modes, which may be used together:</p>
-
-<dl>
-    <dt>Lenient</dt>
-    <dd>
-        <p>Deprecated elements and attributes will be transformed into
-        standards-compliant alternatives when explicitly disallowed.</p>
-        <p>For example, in the XHTML 1.0 Strict doctype, a <code>center</code>
-        element would be turned into a <code>div</code> with the CSS property
-        <code>text-align:center;</code>, but in XHTML 1.0 Transitional
-        the element would be preserved.</p>
-        <p>This mode is on by default.</p>
-    </dd>
-    <dt>Correctional[items to correct]</dt>
-    <dd>
-        <p>Deprecated elements and attributes will be transformed into
-        standards-compliant alternatives whenever possible.
-        It may have various levels of operation.</p>
-        <p>Referring back to the previous example, the <code>center</code> element would
-        be transformed in both cases. However, elements without a
-        reasonable standards-compliant alternative will be preserved
-        in their form.</p>
-        <p>A user may want to correct certain deprecated attributes, but
-        not others. For example, the <code>bgcolor</code> attribute may be
-        acceptable, but the <code>center</code> element not; also, possibly,
-        an HTML Purifier transformation may be buggy, so the user wants
-        to forgo it. Thus, correctional accepts an array defining which
-        elements and attributes to cleanup, or no parameter at all, which
-        means everything gets corrected. This also means that each
-        correction needs to be given a unique ID that can be referenced
-        in this manner. (We may also allow globbing, like *.name or a.*
-        for mass-enabling correction, and subtractive mode, where things
-        specified stop correction.) This array gets passed into the
-        constructor of the mode's module.</p>
-        <p>This mode is on by default.</p>
-    </dd>
-</dl>
-
-<p>A possible call to select modes would be:</p>
-
-<pre>$config->set('HTML', 'Mode', array('correctional', 'lenient'));</pre>
-
-<p>If modes have extra parameters, a hash is necessary:</p>
-
-<pre>$config->set('HTML', 'Mode', array(
-    'correctional' => 'center,a.name',
-    'lenient' => true // this one's just boolean
-));</pre>
-
-<p>Modes may be specified along with the doctype declaration (we may want
-to get a better set of separator characters):</p>
-
-<pre>$config->setDoctype('XHTML Transitional 1.0', '+correctional[center,a.name] -lenient');</pre>
-
-<p>
-With regards to the various levels of operation conjectured in the
-Correctional mode, this is prompted by the fact that a user may want to
-correct certain problems but not others, for example, fix the <code>center</code>
-element but not the <code>u</code> element, both of which are deprecated.
-Having an integer <q>level</q> will not work very well for such fine
-grained tweaking, but an array of specific settings might.</p>
-
 <h3>Selecting Elements / Attributes / Modules</h3>
 
-<p></p>
+<p>HTML Purifier will, by default, allow as many elements and attributes
+as possible. However, a user may decide to roll their own filterset by
+selecting modules, elements and attributes to allow for their own
+specific use-case. This can be done using %HTML.Allowed:</p>
 
-<p>If this cookie cutter approach doesn't appeal to a user, they may
-decide to roll their own filterset by selecting modules, elements and
-attributes to allow.</p>
+<pre>$config->set('HTML', 'Allowed', 'a[href|title],em,p,blockquote');</pre>
 
-<p class="technical">This would make use of the same facilities
-as a filterset author would use, except that it would go under an
-<q>anonymous</q> filterset that would be auto-selected if any of the
-relevant module/elements/attribute selection configuration directives were
-non-null.</p>
+<p class="technical">The directive %HTML.Allowed is a convenience feature
+that may be fully expressed with the legacy interface.</p>
 
-<p>In practice, this is the most commonly demanded feature. Most users are
-perfectly happy defining a filterset that looks like:</p>
-
-<pre>$config->setAllowedHTML('a[href,title];em;p;blockquote');</pre>
-
-<p class="technical">The directive %HTML.Allowed is a convenience function
-that may be fully expressed with the legacy interface, and thus is
-given its own setter.</p>
-
-<p>We currently support a separated interface, which also must be preserved:</p>
+<p>We currently support another interface from older versions:</p>
 
 <pre>$config->set('HTML', 'AllowedElements', 'a,em,p,blockquote');
 $config->set('HTML', 'AllowedAttributes', 'a.href,a.title');</pre>
 
-<p>A user may also choose to allow modules:</p>
+<p>A user may also choose to allow modules using a specialized
+directive:</p>
 
-<pre>$config->set('HTML', 'AllowedModules', 'Hypertext,Text,Lists'); // or
-$config->setAllowedHTML('Hypertext,Text,Lists');</pre>
+<pre>$config->set('HTML', 'AllowedModules', 'Hypertext,Text,Lists');</pre>
 
 <p>But it is not expected that this feature will be widely used.</p>
 
-<p class="fixme">The granularity of these modules is too coarse for
-the average user (for example, the core module loads everything from
-the essential <code>p</code> element to the not-so-safe <code>h1</code>
-element). How do we make this still a viable solution? Possible answers
-may be sub-modules or module parameters. This may not even be a problem,
-considering that most people won't be selecting modules.</p>
+<p class="technical">Module selection will work slightly differently
+from the other AllowedElements and AllowedAttributes directives by
+directly modifying the doctype you are operating in, in the spirit of
+XHTML 1.1's modularization. We stop users from shooting themselves in the
+foot by mandating the modules in %HTML.CoreModules be used.</p>
 
 <p class="technical">Modules are distinguished from regular elements by the
 case of their first letter. While XML distinguishes between and allows
-lower and uppercase letters in element names, most well-known XML
-languages use only lower-case
+lower and uppercase letters in element names, XHTML uses only lower-case
 element names for sake of consistency.</p>
 
-<p class="technical">Considering that, internally speaking, as mandated by
-the XHTML 1.1 Modularization specification, we have organized our
-elements around modules, considerable gymnastics will be needed to
-get this sort of functionality working.</p>
+<h3>Selecting Tidy</h3>
 
+<p>The name of this segment of functionality is inspired off of Dave
+Ragget's program HTML Tidy, which purported to help clean up HTML. In
+HTML Purifier, Tidy functionality involves turning unsupported and
+deprecated elements into standards-compliant ones, maintaining
+backwards compatibility, and enforcing best practices.</p>
+
+<p>This is a complicated feature, and is explained more in depth at
+<a href="enduser-tidy.html">the Tidy documentation page</a>.</p>
+
+<!--
 <h3>Unified selector</h3>
 
 <p>Because selecting each and every one of these configuration options
 is a chore, we may wish to offer a specialized configuration method
 for selecting a filterset. Possibility:</p>
 
-<pre>function selectFilter($doctype, $filterset, $mode)</pre>
+<pre>function selectFilter($doctype, $filterset, $tidy)</pre>
 
 <p>...which is simply a light wrapper over the individual configuration
 calls. A custom config file format or text format could also be adopted.</p>
+-->
 
 <h2>Customize</h2>
 
@@ -209,37 +135,33 @@ use-cases.</p>
 
 <p>Note that the functions described here are only available if
 a raw copy of <code>HTMLPurifier_HTMLDefinition</code> was retrieved.
-<code>addAttribute</code> may work on a processed copy, but for
-consistency's sake we will mandate this for everything.</p>
+Furthermore, caching may prevent your changes from immediately
+being seen: consult <a href="enduser-customize.html">enduser-customize.html</a> on how
+to work around this.</p>
 
 <h3>Attributes</h3>
 
 <p>An attribute is bound to an element by a name and has a specific
-<code>AttrDef</code> that validates it. Thus, the interface should
-be:</p>
+<code>AttrDef</code> that validates it. The interface is therefore:</p>
 
 <pre>function addAttribute($element, $attribute, $attribute_def);</pre>
 
-<p>With a use-case that looks like:</p>
+<p>Example of the functionality in action:</p>
 
-<pre>$def->addAttribute('a', 'rel', new HTMLPurifier_AttrDef_Enum(array('nofollow')));</pre>
+<pre>$def->addAttribute('a', 'rel', 'Enum#nofollow');</pre>
 
-<p>The <code>$attribute_def</code> value can be a little flexible,
-to make things simpler. We'll let it also be:</p>
+<p>The <code>$attribute_def</code> value is flexible,
+to make things simpler. It can be a literal object or:</p>
 
 <ul>
-    <li>Class name: We'll instantiate it for you</li>
+    <!--<li>Class name: We'll instantiate it for you</li>
     <li>Function name: We'll create an <code>HTMLPurifier_AttrDef_Anonymous</code>
-        class with that function registered as a callback.</li>
+        class with that function registered as a callback.</li>-->
     <li>String attribute type: We'll use <code>HTMLPurifier_AttrTypes</code>
-        </li>
-    <li>String starting with <code>enum(</code>: We'll explode it and stuff it in an
-        <code>HTMLPurifier_AttrDef_Enum</code> for you.</li>
+        to resolve it for you. Any data that follows a hash mark (#) will
+        be used to customize the attribute type: in the example above, 
+        we specify which values for Enum to allow.</li>
 </ul>
-
-<p>Making the previous example written as:</p>
-
-<pre>$def->addAttribute('a', 'rel', 'enum(nofollow)');</pre>
 
 <h3>Elements</h3>
 
@@ -255,7 +177,8 @@ the usual things required are:</p>
 
 <p>This suggests an API like this:</p>
 
-<pre>function addElement($element, $type, $content_model, $attributes = array());</pre>
+<pre>function addElement($element, $type, $contents,
+    $attr_collections = array(); $attributes = array());</pre>
 
 <p>Each parameter explained in depth:</p>
 
@@ -264,11 +187,15 @@ the usual things required are:</p>
     <dd>Element name, ex. 'label'</dd>
     <dt><code>$type</code></dt>
     <dd>Content set to register in, ex. 'Inline' or 'Flow'</dd>
-    <dt><code>$content_model</code></dt>
+    <dt><code>$contents</code></dt>
     <dd>Description of allowed children. This is a merged form of
         <code>HTMLPurifier_ElementDef</code>'s member variables
         <code>$content_model</code> and <code>$content_model_type</code>,
-        where the form is <q>Type: Model</q>, ex. 'Optional: Inline'.</dd>
+        where the form is <q>Type: Model</q>, ex. 'Optional: Inline'.
+        There are also a number of predefined templates one may use.</dd>
+    <dt><code>$attr_collections</code></dt>
+    <dd>Array (or string if only one) of attribute collection(s) to
+        merge into the attributes array.</dd>
     <dt><code>$attributes</code></dt>
     <dd>Array of attribute names to attribute definitions, much like
         the above-described attribute customization.</dd>
@@ -276,11 +203,10 @@ the usual things required are:</p>
 
 <p>A possible usage:</p>
 
-<pre>$def->addElement('font', 'Inline', 'Optional: Inline',
-    array(0 => array('Common'), 'color' => 'Color'));</pre>
+<pre>$def->addElement('font', 'Inline', 'Optional: Inline', 'Common',
+    array('color' => 'Color'));</pre>
 
-<p>We may want to Common attribute collection inclusion to be added
-by default.</p>
+<p>See <code>HTMLPurifier/HTMLModule.php</code> for details.</p>
 
 <div id="version">$Id$</div>
 

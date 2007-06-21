@@ -100,15 +100,15 @@ class HTMLPurifier_LanguageFactory
             // you can bypass the conditional include by loading the
             // file yourself
             if (file_exists($file) && !class_exists($class)) {
-				include_once $file;
-			}
+                include_once $file;
+         			}
         }
         
         if (!class_exists($class)) {
             // go fallback
-            $fallback = HTMLPurifier_Language::getFallbackFor($code);
+            $fallback = HTMLPurifier_LanguageFactory::getFallbackFor($code);
             $depth++;
-            $lang = Language::factory( $fallback );
+            $lang = HTMLPurifier_LanguageFactory::factory( $fallback );
             $depth--;
         } else {
             $lang = new $class;
@@ -172,15 +172,15 @@ class HTMLPurifier_LanguageFactory
             
             // merge fallback with current language
             foreach ( $this->keys as $key ) {
-				if (isset($cache[$key]) && isset($fallback_cache[$key])) {
+                if (isset($cache[$key]) && isset($fallback_cache[$key])) {
                     if (isset($this->mergeable_keys_map[$key])) {
                         $cache[$key] = $cache[$key] + $fallback_cache[$key];
                     } elseif (isset($this->mergeable_keys_list[$key])) {
                         $cache[$key] = array_merge( $fallback_cache[$key], $cache[$key] );
                     }
-				} else {
-					$cache[$key] = $fallback_cache[$key];
-				}
+                } else {
+                    $cache[$key] = $fallback_cache[$key];
+                }
             }
             
         }

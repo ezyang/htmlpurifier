@@ -38,8 +38,11 @@ if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {
 }
 
 // initialize and load HTML Purifier
-set_include_path('../library' . PATH_SEPARATOR . get_include_path());
-require_once 'HTMLPurifier.php';
+require_once '../library/HTMLPurifier.auto.php';
+
+// setup special DefinitionCacheFactory decorator
+$factory =& HTMLPurifier_DefinitionCacheFactory::instance();
+$factory->addDecorator('Memory'); // since we deal with a lot of config objects
 
 // load tests
 $test_files = array();
@@ -61,19 +64,17 @@ if (isset($_GET['f']) && isset($test_file_lookup[$_GET['f']])) {
 // we can't use addTestFile because SimpleTest chokes on E_STRICT warnings
 if ($test_file = $GLOBALS['HTMLPurifierTest']['File']) {
     
-    $test = new GroupTest($test_file . ' - HTML Purifier');
-    $path = 'HTMLPurifier/' . $test_file;
-    require_once $path;
-    $test->addTestClass(path2class($path));
+    $test = new GroupTest($test_file);
+    require_once $test_file;
+    $test->addTestClass(path2class($test_file));
     
 } else {
     
-    $test = new GroupTest('All Tests - HTML Purifier');
+    $test = new GroupTest('All Tests');
 
     foreach ($test_files as $test_file) {
-        $path = 'HTMLPurifier/' . $test_file;
-        require_once $path;
-        $test->addTestClass(path2class($path));
+        require_once $test_file;
+        $test->addTestClass(path2class($test_file));
     }
     
 }

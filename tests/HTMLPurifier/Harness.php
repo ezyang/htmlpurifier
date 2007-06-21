@@ -42,6 +42,11 @@ class HTMLPurifier_Harness extends UnitTestCase
      */
     var $generator;
     
+    /**
+     * Default config to fall back on if no config is available
+     */
+    var $config;
+    
     function HTMLPurifier_Harness() {
         $this->lexer     = new HTMLPurifier_Lexer_DirectLex();
         $this->generator = new HTMLPurifier_Generator();
@@ -52,9 +57,8 @@ class HTMLPurifier_Harness extends UnitTestCase
      * Asserts a specific result from a one parameter + config/context function
      * @param $input Input parameter
      * @param $expect Expectation
-     * @param $config_array Configuration array in form of
-     *                      Namespace.Directive => Value or an actual config
-     *                      object.
+     * @param $config Configuration array in form of Ns.Directive => Value.
+     *                Has no effect if $this->config is set.
      * @param $context_array Context array in form of Key => Value or an actual
      *                       context object.
      */
@@ -62,23 +66,32 @@ class HTMLPurifier_Harness extends UnitTestCase
         $config_array = array(), $context_array = array()
     ) {
         
-        // setup config object
-        $config  = HTMLPurifier_Config::createDefault();
-        $config->loadArray($config_array);
+        // setup config 
+        if ($this->config) {
+            $config = HTMLPurifier_Config::create($this->config);
+            $config->loadArray($config_array);
+        } else {
+            $config = HTMLPurifier_Config::create($config_array);
+        }
         
         // setup context object. Note that we are operating on a copy of it!
-        // We will extend the test harness to allow you to do post-tests
+        // When necessary, extend the test harness to allow post-tests
         // on the context object
         $context = new HTMLPurifier_Context();
         $context->loadArray($context_array);
         
         if ($this->to_tokens && is_string($input)) {
-            $input = $this->lexer->tokenizeHTML($input, $config, $context);
+            // $func may cause $input to change, so "clone" another copy
+            // to sacrifice
+            $input   = $this->lexer->tokenizeHTML($s = $input, $config, $context);
+            $input_c = $this->lexer->tokenizeHTML($s, $config, $context);
+        } else {
+            $input_c = $input;
         }
         
         // call the function
         $func = $this->func;
-        $result = $this->obj->$func($input, $config, $context);
+        $result = $this->obj->$func($input_c, $config, $context);
         
         // test a bool result
         if (is_bool($result)) {

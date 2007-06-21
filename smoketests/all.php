@@ -29,6 +29,7 @@ while (false !== ($filename = readdir($dh))) {
     if (strpos($filename, '.php') === false) continue;
     if ($filename == 'common.php') continue;
     if ($filename == 'all.php') continue;
+    if ($filename == 'testSchema.php') continue;
     ?>
     <iframe src="<?php echo escapeHTML($filename); ?>"></iframe>
     <?php

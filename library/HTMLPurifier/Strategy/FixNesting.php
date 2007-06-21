@@ -42,14 +42,16 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
         $definition = $config->getHTMLDefinition();
         
         // insert implicit "parent" node, will be removed at end.
-        // ! we might want to move this to configuration
         // DEFINITION CALL
         $parent_name = $definition->info_parent;
         array_unshift($tokens, new HTMLPurifier_Token_Start($parent_name));
         $tokens[] = new HTMLPurifier_Token_End($parent_name);
         
-        // setup the context variables
-        $is_inline = false; // reference var that we alter
+        // setup the context variable 'IsInline', for chameleon processing
+        // is 'false' when we are not inline, 'true' when it must always
+        // be inline, and an integer when it is inline for a certain
+        // branch of the document tree
+        $is_inline = $definition->info_parent_def->descendants_are_inline;
         $context->register('IsInline', $is_inline);
         
         //####################################################################//
@@ -60,8 +62,9 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
         $stack = array();
         
         // stack that contains all elements that are excluded
-        // same structure as $stack, but it is only populated when an element
-        // with exclusions is processed, i.e. there won't be empty exclusions.
+        // it is organized by parent elements, similar to $stack, 
+        // but it is only populated when an element with exclusions is
+        // processed, i.e. there won't be empty exclusions.
         $exclude_stack = array();
         
         //####################################################################//
@@ -110,7 +113,10 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                     $parent_def   = $definition->info[$parent_name];
                 }
             } else {
-                // unknown info, it won't be used anyway
+                // processing as if the parent were the "root" node
+                // unknown info, it won't be used anyway, in the future,
+                // we may want to enforce one element only (this is 
+                // necessary for HTML Purifier to clean entire documents
                 $parent_index = $parent_name = $parent_def = null;
             }
             
@@ -207,6 +213,12 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 // current node is now the next possible start node
                 // unless it turns out that we need to do a double-check
                 
+                // this is a rought heuristic that covers 100% of HTML's
+                // cases and 99% of all other cases. A child definition
+                // that would be tricked by this would be something like:
+                // ( | a b c) where it's all or nothing. Fortunantely,
+                // our current implementation claims that that case would
+                // not allow empty, even if it did
                 if (!$parent_def->child->allow_empty) {
                     // we need to do a double-check
                     $i = $parent_index;

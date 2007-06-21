@@ -34,6 +34,12 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         
     }
     
+    function test_create() {
+        $config = HTMLPurifier_Config::create(array('Core.MaintainLineNumbers' => true));
+        $lexer = HTMLPurifier_Lexer::create($config);
+        $this->assertIsA($lexer, 'HTMLPurifier_Lexer_DirectLex');
+    }
+    
     function assertExtractBody($text, $extract = true) {
         $result = $this->Lexer->extractBody($text);
         if ($extract === true) $extract = $text;

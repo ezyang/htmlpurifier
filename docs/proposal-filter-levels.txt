@@ -2,23 +2,16 @@
 Filter Levels
     When one size *does not* fit all
 
-The more I think about it, the less sense it makes for maintaining one huge
-monolithic HTMLDefinition class.  There's simply so much variation that
-could go into this definition: the set of HTML good for blog entries is
-definitely too large for HTML that would be allowed in blog comments. Going
-from Transitional to Strict requires changes to the definition.
+It makes little sense to constrain users to one set of HTML elements and
+attributes and tell them that they are not allowed to mold this in
+any fashion.  Many users demand to be able to custom-select which elements
+and attributes they want.  This is fine: because HTML Purifier keeps close
+track of what elements are safe to use, there is no way for them to
+accidently allow an XSS-able tag.
 
-Allowing users to specify their own whitelists is one step (implemented, btw), 
-but I have doubts on only doing this. Simply put, the typical programmer is too 
-lazy to actually go through the trouble of investigating which tags, attributes 
-and properties to allow. HTMLDefinition makes a big part of what HTMLPurifier 
-is. 
-
-The idea, then, is to setup fundamentally different set of definitions, which
-can further be customized using simpler configuration options.  Alternatively,
-they could be implemented as configuration profiles, which simply load
-a set of recommended directives to acheive a desired affect (no simpler
-config options though).
+However, combing through the HTML spec to make your own whitelist can
+be a daunting task.  HTML Purifier ought to offer pre-canned filter levels
+that amateur users can select based on what they think is their use-case.
 
 Here are some fuzzy levels you could set:
 
@@ -45,6 +38,10 @@ make forbidden element to text transformations desirable (for example, images).
 
 
 == Element Risk Analysis ==
+
+Although none of the currently supported elements presents a security
+threat per-say, some can cause problems for page layouts or be
+extremely complicated.
 
 Legend:
     [danger level] - regular tags / uncommon tags ~ deprecated tags
@@ -114,6 +111,10 @@ Partially presentational - table.cellpadding, table.cellspacing,
 
 == CSS Risk Analysis ==
 
+Currently, there is no support for fine-grained "allowed CSS" specification,
+mainly because I'm lazy, partially because no one has asked for it. However,
+this will be added eventually.
+
 There are certain CSS elements that are extremely useful inline, but then
 as you get to more presentation oriented styling it may not always be
 appropriate to inline them.
@@ -126,6 +127,7 @@ any CSS properties that are not currently implemented (such as position).
 Dangerous, can go outside container - float
 Easy to abuse - font-size, font-family (font), width
 Colored - background-color (background), border-color (border), color
+    (see proposal-colors.html)
 Dramatic - border, list-style-position (list-style), margin, padding,
     text-align, text-indent, text-transform, vertical-align, line-height
 

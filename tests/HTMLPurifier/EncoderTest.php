@@ -39,7 +39,9 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         );
         $this->assertNoErrors();
         
-        $config->set('Core', 'Encoding', 'ISO-8859-1');
+        $config = HTMLPurifier_Config::create(array(
+            'Core.Encoding' => 'ISO-8859-1'
+        ));
         
         // Now it gets converted
         $this->assertIdentical(
@@ -47,8 +49,10 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
             "\xC3\xB6"
         );
         
-        $config->set('Test', 'ForceNoIconv', true);
-        
+        $config = HTMLPurifier_Config::create(array(
+            'Core.Encoding' => 'ISO-8859-1',
+            'Test.ForceNoIconv' => true
+        ));
         $this->assertIdentical(
             HTMLPurifier_Encoder::convertToUTF8("\xF6", $config, $context),
             "\xC3\xB6"
@@ -69,7 +73,9 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
             "\xC3\xB6"
         );
         
-        $config->set('Core', 'Encoding', 'ISO-8859-1');
+        $config = HTMLPurifier_Config::create(array(
+            'Core.Encoding' => 'ISO-8859-1'
+        ));
         
         // Now it gets converted
         $this->assertIdentical(
@@ -86,7 +92,10 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         }
         
         // Plain PHP implementation has slightly different behavior
-        $config->set('Test', 'ForceNoIconv', true);
+        $config = HTMLPurifier_Config::create(array(
+            'Core.Encoding' => 'ISO-8859-1',
+            'Test.ForceNoIconv' => true
+        ));
         $this->assertIdentical(
             HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
             "\xF6"
@@ -98,8 +107,10 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
         );
         
         // Preserve the characters!
-        
-        $config->set('Core', 'EscapeNonASCIICharacters', true);
+        $config = HTMLPurifier_Config::create(array(
+            'Core.Encoding' => 'ISO-8859-1',
+            'Core.EscapeNonASCIICharacters' => true
+        ));
         $this->assertIdentical(
             HTMLPurifier_Encoder::convertFromUTF8($chinese, $config, $context),
             "&#20013;&#25991; (Chinese)"

@@ -17,6 +17,14 @@ class HTMLPurifier_AttrDefTest extends UnitTestCase
         
     }
     
+    function test_make() {
+        
+        $def = new HTMLPurifier_AttrDef();
+        $def2 = $def->make('');
+        $this->assertIdentical($def, $def2);
+        
+    }
+    
 }
 
 ?>

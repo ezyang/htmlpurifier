@@ -42,6 +42,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         CS::define('Element', 'Object', new stdClass(), 'mixed', 'Model representation.');
         
         $config = HTMLPurifier_Config::createDefault();
+        $config->autoFinalize = false;
         
         // test default value retrieval
         $this->assertIdentical($config->get('Element', 'Abbr'), 'H');
@@ -65,6 +66,12 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $config->set('Element', 'IsotopeNames', array(238 => 'Plutonium-238', 239 => 'Plutonium-239'));
         $config->set('Element', 'Object', false); // unmodeled
         
+        $this->expectError('Cannot set undefined directive Element.Metal to value');
+        $config->set('Element', 'Metal', true);
+        
+        $this->expectError('Value for Element.Radioactive is of invalid type, should be bool');
+        $config->set('Element', 'Radioactive', 'very');
+        
         // test value retrieval
         $this->assertIdentical($config->get('Element', 'Abbr'), 'Pu');
         $this->assertIdentical($config->get('Element', 'Name'), 'plutonium');
@@ -76,16 +83,8 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $this->assertIdentical($config->get('Element', 'IsotopeNames'), array(238 => 'Plutonium-238', 239 => 'Plutonium-239'));
         $this->assertIdentical($config->get('Element', 'Object'), false);
         
-        // errors
-        
-        $this->expectError('Cannot retrieve value of undefined directive');
+        $this->expectError('Cannot retrieve value of undefined directive Element.Metal');
         $config->get('Element', 'Metal');
-        
-        $this->expectError('Cannot set undefined directive to value');
-        $config->set('Element', 'Metal', true);
-        
-        $this->expectError('Value is of invalid type');
-        $config->set('Element', 'Radioactive', 'very');
         
     }
     
@@ -108,6 +107,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
             'synth' => 'electronic'));
         
         $config = HTMLPurifier_Config::createDefault();
+        $config->autoFinalize = false;
         
         // case sensitive
         
@@ -117,7 +117,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $config->set('Instrument', 'Manufacturer', 'Selmer');
         $this->assertIdentical($config->get('Instrument', 'Manufacturer'), 'Conn-Selmer');
         
-        $this->expectError('Value not supported');
+        $this->expectError('Value not supported, valid values are: Yamaha, Conn-Selmer, Vandoren, Laubin, Buffet, other');
         $config->set('Instrument', 'Manufacturer', 'buffet');
         
         // case insensitive
@@ -143,6 +143,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         CS::define('ReportCard', 'Absences', 0, 'int', 'How many times missing from school?');
         
         $config = HTMLPurifier_Config::createDefault();
+        $config->autoFinalize = false;
         
         $config->set('ReportCard', 'English', 'B-');
         $this->assertIdentical($config->get('ReportCard', 'English'), 'B-');
@@ -151,22 +152,23 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $this->assertIdentical($config->get('ReportCard', 'English'), null);
         
         // error
-        $this->expectError('Value is of invalid type');
+        $this->expectError('Value for ReportCard.Absences is of invalid type, should be int');
         $config->set('ReportCard', 'Absences', null);
         
     }
     
     function testAliases() {
         
-        HTMLPurifier_ConfigSchema::defineNamespace('Home', 'Sweet home.');
-        HTMLPurifier_ConfigSchema::define('Home', 'Rug', 3, 'int', 'ID.');
-        HTMLPurifier_ConfigSchema::defineAlias('Home', 'Carpet', 'Home', 'Rug');
+        CS::defineNamespace('Home', 'Sweet home.');
+        CS::define('Home', 'Rug', 3, 'int', 'ID.');
+        CS::defineAlias('Home', 'Carpet', 'Home', 'Rug');
         
         $config = HTMLPurifier_Config::createDefault();
+        $config->autoFinalize = false;
         
         $this->assertIdentical($config->get('Home', 'Rug'), 3);
         
-        $this->expectError('Cannot get value from aliased directive, use real name');
+        $this->expectError('Cannot get value from aliased directive, use real name Home.Rug');
         $config->get('Home', 'Carpet');
         
         $config->set('Home', 'Carpet', 999);
@@ -183,6 +185,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         CS::define('Variables', 'AngularAcceleration', 'alpha', 'string', 'In rad/s^2');
         
         $config = HTMLPurifier_Config::createDefault();
+        $config->autoFinalize = false;
         
         // grab a namespace
         $this->assertIdentical(
@@ -194,7 +197,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         );
         
         // grab a non-existant namespace
-        $this->expectError('Cannot retrieve undefined namespace');
+        $this->expectError('Cannot retrieve undefined namespace Constants');
         $config->getBatch('Constants');
         
     }
@@ -207,6 +210,7 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         CS::define('Shortcut', 'Cut', 'x', 'istring', 'Cut text');
         
         $config = HTMLPurifier_Config::createDefault();
+        $config->autoFinalize = false;
         
         $config->loadIni(dirname(__FILE__) . '/ConfigTest-loadIni.ini');
         
@@ -224,24 +228,30 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
         
         $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
+        $config->autoFinalize = false;
         
         $def = $config->getCSSDefinition();
         $this->assertIsA($def, 'HTMLPurifier_CSSDefinition');
         
-        $def = $config->getHTMLDefinition();
-        $def2 = $config->getHTMLDefinition();
+        $def  =& $config->getHTMLDefinition();
+        $def2 =& $config->getHTMLDefinition();
         $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
-        $this->assertIdentical($def, $def2);
+        $this->assertReference($def, $def2);
         $this->assertTrue($def->setup);
         
         // test re-calculation if HTML changes
-        $config->set('HTML', 'Strict', true);
+        unset($def, $def2);
+        $def2 = $config->getHTMLDefinition(); // forcibly de-reference
+        
+        $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
         $def = $config->getHTMLDefinition();
         $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
         $this->assertNotEqual($def, $def2);
         $this->assertTrue($def->setup);
         
         // test retrieval of raw definition
+        $config->set('HTML', 'DefinitionID', 'HTMLPurifier_ConfigTest->test_getHTMLDefinition()');
         $def =& $config->getHTMLDefinition(true);
         $this->assertNotEqual($def, $def2);
         $this->assertFalse($def->setup);
@@ -252,22 +262,36 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
     }
     
+    function test_getHTMLDefinition_rawError() {
+        $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
+        $config = HTMLPurifier_Config::createDefault();
+        $this->expectError('Cannot retrieve raw version without specifying %HTML.DefinitionID');
+        $def =& $config->getHTMLDefinition(true);
+    }
+    
     function test_getCSSDefinition() {
         $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
-        
         $config = HTMLPurifier_Config::createDefault();
-        
         $def = $config->getCSSDefinition();
         $this->assertIsA($def, 'HTMLPurifier_CSSDefinition');
     }
     
+    function test_getDefinition() {
+        CS::defineNamespace('Core', 'Core stuff');
+        CS::define('Core', 'DefinitionCache', null, 'string/null', 'Cache?');
+        CS::defineNamespace('Crust', 'Krusty Krabs');
+        $config = HTMLPurifier_Config::createDefault();
+        $this->expectError("Definition of Crust type not supported");
+        $config->getDefinition('Crust');
+    }
+    
     function test_loadArray() {
         // setup a few dummy namespaces/directives for our testing
-        HTMLPurifier_ConfigSchema::defineNamespace('Zoo', 'Animals we have.');
-        HTMLPurifier_ConfigSchema::define('Zoo', 'Aadvark', 0, 'int', 'Have?');
-        HTMLPurifier_ConfigSchema::define('Zoo', 'Boar',    0, 'int', 'Have?');
-        HTMLPurifier_ConfigSchema::define('Zoo', 'Camel',   0, 'int', 'Have?');
-        HTMLPurifier_ConfigSchema::define(
+        CS::defineNamespace('Zoo', 'Animals we have.');
+        CS::define('Zoo', 'Aadvark', 0, 'int', 'Have?');
+        CS::define('Zoo', 'Boar',    0, 'int', 'Have?');
+        CS::define('Zoo', 'Camel',   0, 'int', 'Have?');
+        CS::define(
             'Zoo', 'Others', array(), 'list', 'Other animals we have one of.'
         );
         
@@ -305,9 +329,9 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
     
     function test_create() {
         
-        HTMLPurifier_ConfigSchema::defineNamespace('Cake', 'Properties of it.');
-        HTMLPurifier_ConfigSchema::define('Cake', 'Sprinkles', 666, 'int', 'Number of.');
-        HTMLPurifier_ConfigSchema::define('Cake', 'Flavor', 'vanilla', 'string', 'Flavor of the batter.');
+        CS::defineNamespace('Cake', 'Properties of it.');
+        CS::define('Cake', 'Sprinkles', 666, 'int', 'Number of.');
+        CS::define('Cake', 'Flavor', 'vanilla', 'string', 'Flavor of the batter.');
         
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Cake', 'Sprinkles', 42);
@@ -323,6 +347,31 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         // test loadIni
         $created_config = HTMLPurifier_Config::create(dirname(__FILE__) . '/ConfigTest-create.ini');
         $this->assertIdentical($config, $created_config);
+        
+    }
+    
+    function test_finalize() {
+        
+        // test finalization
+        
+        CS::defineNamespace('Poem', 'Violets are red, roses are blue...');
+        CS::define('Poem', 'Meter', 'iambic', 'string', 'Rhythm of poem.');
+        
+        $config = HTMLPurifier_Config::createDefault();
+        $config->autoFinalize = false;
+        
+        $config->set('Poem', 'Meter', 'irregular');
+        
+        $config->finalize();
+        
+        $this->expectError('Cannot set directive after finalization');
+        $config->set('Poem', 'Meter', 'vedic');
+        
+        $this->expectError('Cannot load directives after finalization');
+        $config->loadArray(array('Poem.Meter' => 'octosyllable'));
+        
+        $this->expectError('Cannot load directives after finalization');
+        $config->loadIni(dirname(__FILE__) . '/ConfigTest-finalize.ini');
         
     }
     

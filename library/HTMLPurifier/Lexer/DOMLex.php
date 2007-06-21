@@ -53,20 +53,17 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             '</head><body><div>'.$string.'</div></body></html>';
         
         $doc = new DOMDocument();
-        $doc->encoding = 'UTF-8'; // technically does nothing, but whatever
+        $doc->encoding = 'UTF-8'; // theoretically, the above has this covered
         
-        // DOM will toss errors if the HTML its parsing has really big
-        // problems, so we're going to mute them. This can cause problems
-        // if a custom error handler that doesn't implement error_reporting
-        // is set, as noted by a Drupal plugin of HTML Purifier. Consider
-        // making our own error reporter to temporarily load in
-        @$doc->loadHTML($string);
+        set_error_handler(array($this, 'muteErrorHandler'));
+        $doc->loadHTML($string);
+        restore_error_handler();
         
         $tokens = array();
         $this->tokenizeDOM(
-            $doc->getElementsByTagName('html')->item(0)-> // html
-                  getElementsByTagName('body')->item(0)-> // body
-                  getElementsByTagName('div')->item(0) // div
+            $doc->getElementsByTagName('html')->item(0)-> // <html>
+                  getElementsByTagName('body')->item(0)-> //   <body>
+                  getElementsByTagName('div')->item(0)    //     <div>
             , $tokens);
         return $tokens;
     }
@@ -82,7 +79,6 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      * @returns Tokens of node appended to previously passed tokens.
      */
     protected function tokenizeDOM($node, &$tokens, $collect = false) {
-        // recursive goodness!
         
         // intercept non element nodes. WE MUST catch all of them,
         // but we're not getting the character reference nodes because
@@ -146,6 +142,11 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         }
         return $array;
     }
+    
+    /**
+     * An error handler that mutes all errors
+     */
+    public function muteErrorHandler($errno, $errstr) {}
     
 }
 

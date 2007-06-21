@@ -11,13 +11,12 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
         $this->obj = new HTMLPurifier_Strategy_FixNesting();
     }
     
-    function test() {
+    function testBlockAndInlineIntegration() {
         
         // legal inline
         $this->assertResult('<b>Bold text</b>');
         
-        // legal inline and block
-        // as the parent element is considered FLOW
+        // legal inline and block (default parent element is FLOW)
         $this->assertResult('<a href="about:blank">Blank</a><div>Block</div>');
         
         // illegal block in inline
@@ -33,6 +32,10 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
             array('Core.EscapeInvalidChildren' => true)
         );
         
+    }
+    
+    function testNodeRemovalIntegration() {
+        
         // test of empty set that's required, resulting in removal of node
         $this->assertResult('<ul></ul>', '');
         
@@ -42,27 +45,17 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
             '<ul><li>Legal item</li></ul>'
         );
         
+    }
+    
+    function testTableIntegration() {
         // test custom table definition
         $this->assertResult(
-            '<table><tr><td>Cell 1</td></tr></table>',
             '<table><tr><td>Cell 1</td></tr></table>'
         );
         $this->assertResult('<table></table>', '');
-        
-        // breaks without the redundant checking code
-        $this->assertResult('<table><tr></tr></table>', '');
-        
-        // special case, prevents scrolling one back to find parent
-        $this->assertResult('<table><tr></tr><tr></tr></table>', '');
-        
-        // cascading rollbacks
-        $this->assertResult(
-          '<table><tbody><tr></tr><tr></tr></tbody><tr></tr><tr></tr></table>',
-          ''
-        );
-        
-        // rollbacks twice
-        $this->assertResult('<table></table><table></table>', '');
+    }
+    
+    function testChameleonIntegration() {
         
         // block in inline ins not allowed
         $this->assertResult(
@@ -82,12 +75,6 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
           '<h1><ins>Not allowed!</ins></h1>'
         );
         
-        // test exclusions
-        $this->assertResult(
-          '<a><span><a>Not allowed</a></span></a>',
-          '<a><span></span></a>'
-        );
-        
         // stacked ins/del
         $this->assertResult(
           '<h1><ins><del><div>Not allowed!</div></del></ins></h1>',
@@ -97,6 +84,17 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
           '<div><ins><del><div>Allowed!</div></del></ins></div>'
         );
         
+    }
+    
+    function testExclusionsIntegration() {
+        // test exclusions
+        $this->assertResult(
+          '<a><span><a>Not allowed</a></span></a>',
+          '<a><span></span></a>'
+        );
+    }
+   
+    function testCustomParentIntegration() {
         // test inline parent
         $this->assertResult(
             '<b>Bold</b>', true, array('HTML.Parent' => 'span')
@@ -105,11 +103,29 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
             '<div>Reject</div>', 'Reject', array('HTML.Parent' => 'span')
         );
         
+        // test fallback to div
         $this->expectError('Cannot use unrecognized element as parent.');
         $this->assertResult(
-            '<div>Accept</div>', true, array('HTML.Parent' => 'script')
+            '<div>Accept</div>', true, array('HTML.Parent' => 'obviously-impossible')
         );
         
+    }
+    
+    function testDoubleCheckIntegration() {
+        // breaks without the redundant checking code
+        $this->assertResult('<table><tr></tr></table>', '');
+        
+        // special case, prevents scrolling one back to find parent
+        $this->assertResult('<table><tr></tr><tr></tr></table>', '');
+        
+        // cascading rollbacks
+        $this->assertResult(
+          '<table><tbody><tr></tr><tr></tr></tbody><tr></tr><tr></tr></table>',
+          ''
+        );
+        
+        // rollbacks twice
+        $this->assertResult('<table></table><table></table>', '');
     }
     
 }

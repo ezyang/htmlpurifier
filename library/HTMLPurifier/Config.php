@@ -1,5 +1,28 @@
 <?php
 
+require_once 'HTMLPurifier/ConfigSchema.php';
+
+// member variables
+require_once 'HTMLPurifier/HTMLDefinition.php';
+require_once 'HTMLPurifier/CSSDefinition.php';
+require_once 'HTMLPurifier/Doctype.php';
+require_once 'HTMLPurifier/DefinitionCacheFactory.php';
+
+// accomodations for versions earlier than 4.3.10 and 5.0.2
+// borrowed from PHP_Compat, LGPL licensed, by Aidan Lister <aidan@php.net>
+if (!defined('PHP_EOL')) {
+    switch (strtoupper(substr(PHP_OS, 0, 3))) {
+        case 'WIN':
+            define('PHP_EOL', "\r\n");
+            break;
+        case 'DAR':
+            define('PHP_EOL', "\r");
+            break;
+        default:
+            define('PHP_EOL', "\n");
+    }
+}
+
 /**
  * Configuration object that triggers customizable behavior.
  *
@@ -16,6 +39,11 @@ class HTMLPurifier_Config
 {
     
     /**
+     * HTML Purifier's version
+     */
+    var $version = '2.0.0';
+    
+    /**
      * Two-level associative array of configuration directives
      */
     var $conf;
@@ -26,14 +54,26 @@ class HTMLPurifier_Config
     var $def;
     
     /**
-     * Cached instance of HTMLPurifier_HTMLDefinition
+     * Indexed array of definitions
      */
-    var $html_definition;
+    var $definitions;
     
     /**
-     * Cached instance of HTMLPurifier_CSSDefinition
+     * Bool indicator whether or not config is finalized
      */
-    var $css_definition;
+    var $finalized = false;
+    
+    /**
+     * Bool indicator whether or not to automatically finalize 
+     * the object if a read operation is done
+     */
+    var $autoFinalize = true;
+    
+    /**
+     * Namespace indexed array of serials for specific namespaces (see
+     * getSerial for more info).
+     */
+    var $serials = array();
     
     /**
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
@@ -58,6 +98,7 @@ class HTMLPurifier_Config
         $ret = HTMLPurifier_Config::createDefault();
         if (is_string($config)) $ret->loadIni($config);
         elseif (is_array($config)) $ret->loadArray($config);
+        if (isset($revision)) $ret->revision = $revision;
         return $ret;
     }
     
@@ -78,13 +119,16 @@ class HTMLPurifier_Config
      * @param $key String key
      */
     function get($namespace, $key, $from_alias = false) {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
         if (!isset($this->def->info[$namespace][$key])) {
-            trigger_error('Cannot retrieve value of undefined directive',
+            // can't add % due to SimpleTest bug
+            trigger_error('Cannot retrieve value of undefined directive ' . htmlspecialchars("$namespace.$key"),
                 E_USER_WARNING);
             return;
         }
         if ($this->def->info[$namespace][$key]->class == 'alias') {
-            trigger_error('Cannot get value from aliased directive, use real name',
+            $d = $this->def->info[$namespace][$key];
+            trigger_error('Cannot get value from aliased directive, use real name ' . $d->namespace . '.' . $d->name,
                 E_USER_ERROR);
             return;
         }
@@ -96,12 +140,33 @@ class HTMLPurifier_Config
      * @param $namespace String namespace
      */
     function getBatch($namespace) {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
         if (!isset($this->def->info[$namespace])) {
-            trigger_error('Cannot retrieve undefined namespace',
+            trigger_error('Cannot retrieve undefined namespace ' . htmlspecialchars($namespace),
                 E_USER_WARNING);
             return;
         }
         return $this->conf[$namespace];
+    }
+    
+    /**
+     * Returns a md5 signature of a segment of the configuration object
+     * that uniquely identifies that particular configuration
+     * @param $namespace Namespace to get serial for
+     */
+    function getBatchSerial($namespace) {
+        if (empty($this->serials[$namespace])) {
+            $this->serials[$namespace] = md5(serialize($this->getBatch($namespace)));
+        }
+        return $this->serials[$namespace];
+    }
+    
+    /**
+     * Retrieves all directives, organized by namespace
+     */
+    function getAll() {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
+        return $this->conf;
     }
     
     /**
@@ -111,15 +176,16 @@ class HTMLPurifier_Config
      * @param $value Mixed value
      */
     function set($namespace, $key, $value, $from_alias = false) {
+        if ($this->isFinalized('Cannot set directive after finalization')) return;
         if (!isset($this->def->info[$namespace][$key])) {
-            trigger_error('Cannot set undefined directive to value',
+            trigger_error('Cannot set undefined directive ' . htmlspecialchars("$namespace.$key") . ' to value',
                 E_USER_WARNING);
             return;
         }
         if ($this->def->info[$namespace][$key]->class == 'alias') {
             if ($from_alias) {
                 trigger_error('Double-aliases not allowed, please fix '.
-                    'ConfigSchema bug');
+                    'ConfigSchema bug with' . "$namespace.$key");
             }
             $this->set($this->def->info[$namespace][$key]->namespace,
                        $this->def->info[$namespace][$key]->name,
@@ -128,7 +194,7 @@ class HTMLPurifier_Config
         }
         $value = $this->def->validate(
                     $value,
-                    $this->def->info[$namespace][$key]->type,
+                    $type = $this->def->info[$namespace][$key]->type,
                     $this->def->info[$namespace][$key]->allow_null
                  );
         if (is_string($value)) {
@@ -139,23 +205,36 @@ class HTMLPurifier_Config
             if ($this->def->info[$namespace][$key]->allowed !== true) {
                 // check to see if the value is allowed
                 if (!isset($this->def->info[$namespace][$key]->allowed[$value])) {
-                    trigger_error('Value not supported', E_USER_WARNING);
+                    trigger_error('Value not supported, valid values are: ' .
+                        $this->_listify($this->def->info[$namespace][$key]->allowed), E_USER_WARNING);
                     return;
                 }
             }
         }
         if ($this->def->isError($value)) {
-            trigger_error('Value is of invalid type', E_USER_WARNING);
+            trigger_error('Value for ' . "$namespace.$key" . ' is of invalid type, should be ' . $type, E_USER_WARNING);
             return;
         }
         $this->conf[$namespace][$key] = $value;
-        if ($namespace == 'HTML' || $namespace == 'Attr') {
-            // reset HTML definition if relevant attributes changed
-            $this->html_definition = null;
+        
+        // reset definitions if the directives they depend on changed
+        // this is a very costly process, so it's discouraged 
+        // with finalization
+        if ($namespace == 'HTML' || $namespace == 'CSS') {
+            $this->definitions[$namespace] = null;
         }
-        if ($namespace == 'CSS') {
-            $this->css_definition = null;
-        }
+        
+        $this->serials[$namespace] = false;
+    }
+    
+    /**
+     * Convenience function for error reporting
+     * @private
+     */
+    function _listify($lookup) {
+        $list = array();
+        foreach ($lookup as $name => $b) $list[] = $name;
+        return implode(', ', $list);
     }
     
     /**
@@ -164,26 +243,71 @@ class HTMLPurifier_Config
      *             called before it's been setup, otherwise won't work.
      */
     function &getHTMLDefinition($raw = false) {
-        if (
-            empty($this->html_definition) || // hasn't ever been setup
-            ($raw && $this->html_definition->setup) // requesting new one
-        ) {
-            $this->html_definition = new HTMLPurifier_HTMLDefinition($this);
-            if ($raw) return $this->html_definition; // no setup!
-        }
-        if (!$this->html_definition->setup) $this->html_definition->setup();
-        return $this->html_definition;
+        return $this->getDefinition('HTML', $raw);
     }
     
     /**
      * Retrieves reference to the CSS definition
      */
-    function &getCSSDefinition() {
-        if ($this->css_definition === null) {
-            $this->css_definition = new HTMLPurifier_CSSDefinition();
-            $this->css_definition->setup($this);
+    function &getCSSDefinition($raw = false) {
+        return $this->getDefinition('CSS', $raw);
+    }
+    
+    /**
+     * Retrieves a definition
+     * @param $type Type of definition: HTML, CSS, etc
+     * @param $raw  Whether or not definition should be returned raw
+     */
+    function &getDefinition($type, $raw = false) {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
+        $factory = HTMLPurifier_DefinitionCacheFactory::instance();
+        $cache = $factory->create($type, $this);
+        if (!$raw) {
+            // see if we can quickly supply a definition
+            if (!empty($this->definitions[$type])) {
+                if (!$this->definitions[$type]->setup) {
+                    $this->definitions[$type]->setup($this);
+                }
+                return $this->definitions[$type];
+            }
+            // memory check missed, try cache
+            $this->definitions[$type] = $cache->get($this);
+            if ($this->definitions[$type]) {
+                // definition in cache, return it
+                return $this->definitions[$type];
+            }
+        } elseif (
+            !empty($this->definitions[$type]) &&
+            !$this->definitions[$type]->setup
+        ) {
+            // raw requested, raw in memory, quick return
+            return $this->definitions[$type];
         }
-        return $this->css_definition;
+        // quick checks failed, let's create the object
+        if ($type == 'HTML') {
+            $this->definitions[$type] = new HTMLPurifier_HTMLDefinition();
+        } elseif ($type == 'CSS') {
+            $this->definitions[$type] = new HTMLPurifier_CSSDefinition();
+        } else {
+            trigger_error("Definition of $type type not supported");
+            $false = false;
+            return $false;
+        }
+        // quick abort if raw
+        if ($raw) {
+            if (is_null($this->get($type, 'DefinitionID'))) {
+                // fatally error out if definition ID not set
+                trigger_error("Cannot retrieve raw version without specifying %$type.DefinitionID", E_USER_ERROR);
+                $false = false;
+                return $false;
+            }
+            return $this->definitions[$type];
+        }
+        // set it up
+        $this->definitions[$type]->setup($this);
+        // save in cache
+        $cache->set($this->definitions[$type], $this);
+        return $this->definitions[$type];
     }
     
     /**
@@ -192,6 +316,7 @@ class HTMLPurifier_Config
      * @param $config_array Configuration associative array
      */
     function loadArray($config_array) {
+        if ($this->isFinalized('Cannot load directives after finalization')) return;
         foreach ($config_array as $key => $value) {
             $key = str_replace('_', '.', $key);
             if (strpos($key, '.') !== false) {
@@ -209,12 +334,60 @@ class HTMLPurifier_Config
     }
     
     /**
+     * Loads configuration values from $_GET/$_POST that were posted
+     * via ConfigForm
+     * @param $array $_GET or $_POST array to import
+     * @param $index Index/name that the config variables are in
+     * @param $mq_fix Boolean whether or not to enable magic quotes fix
+     * @static
+     */
+    function loadArrayFromForm($array, $index, $mq_fix = true) {
+        $array = (isset($array[$index]) && is_array($array[$index])) ? $array[$index] : array();
+        $mq = get_magic_quotes_gpc() && $mq_fix;
+        foreach ($array as $key => $value) {
+            if (!strncmp($key, 'Null_', 5) && !empty($value)) {
+                unset($array[substr($key, 5)]);
+                unset($array[$key]);
+            }
+            if ($mq) $array[$key] = stripslashes($value);
+        }
+        return @HTMLPurifier_Config::create($array);
+    }
+    
+    /**
      * Loads configuration values from an ini file
      * @param $filename Name of ini file
      */
     function loadIni($filename) {
+        if ($this->isFinalized('Cannot load directives after finalization')) return;
         $array = parse_ini_file($filename, true);
         $this->loadArray($array);
+    }
+    
+    /**
+     * Checks whether or not the configuration object is finalized.
+     * @param $error String error message, or false for no error
+     */
+    function isFinalized($error = false) {
+        if ($this->finalized && $error) {
+            trigger_error($error, E_USER_ERROR);
+        }
+        return $this->finalized;
+    }
+    
+    /**
+     * Finalizes configuration only if auto finalize is on and not
+     * already finalized
+     */
+    function autoFinalize() {
+        if (!$this->finalized && $this->autoFinalize) $this->finalize();
+    }
+    
+    /**
+     * Finalizes a configuration object, prohibiting further change
+     */
+    function finalize() {
+        $this->finalized = true;
     }
     
 }

@@ -62,6 +62,8 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     $parent_name = $parent->name;
                     $parent_info = $definition->info[$parent_name];
                     
+                    // we need to replace this with a more general
+                    // algorithm
                     if (isset($parent_info->auto_close[$token->name])) {
                         $result[] = new HTMLPurifier_Token_End($parent_name);
                         $result[] = $token;

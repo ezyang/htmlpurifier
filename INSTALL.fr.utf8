@@ -17,7 +17,7 @@ ce document pour quelques choses.
 
 1.  Compatibilité
 
-HTML Purifier fonctionne dans PHP 4 et PHP 5. PHP 4.3.9 est le dernier
+HTML Purifier fonctionne dans PHP 4 et PHP 5. PHP 4.3.2 est le dernier
 version que je le testais.  Il ne dépend de les autre librairies.
 
 Les extensions optionnel est iconv (en général déjà installer) et 

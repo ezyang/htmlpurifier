@@ -8,15 +8,11 @@ to be effective. Things to remember:
 
 1. Character Encoding: see enduser-utf8.html for more info.
 
-2. Doctype: document pending feature completion
-Not strictly necessary, actually. More in-depth discussion once we figure
-out how to get strict loose mode working.
+2. IDs: see enduser-id.html for more info
 
-3. IDs: see enduser-id.html for more info
-
-4. Links: document pending feature completion
+3. Links: document pending feature completion
 Rudimentary blacklisting, we should also allow only relative URIs. We
 need a doc to explain the stuff.
 
-5. CSS: document pending
+4. CSS: document pending
 Explain which CSS styles we blocked and why.

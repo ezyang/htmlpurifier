@@ -89,11 +89,19 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         $expect[4] = 'title="Theta is ' . $theta_char . '"';
         
         foreach ($inputs as $i => $input) {
-            $result = $this->obj->generateAttributes($input);
+            $result = $this->obj->generateAttributes($input, 'irrelevant');
             $this->assertIdentical($result, $expect[$i]);
             paintIf($result, $result != $expect[$i]);
         }
         
+    }
+    
+    function test_generateAttributes_minimized() {
+        $gen = new HTMLPurifier_Generator();
+        $context = new HTMLPurifier_Context();
+        $gen->generateFromTokens(array(), HTMLPurifier_Config::create(array('HTML.Doctype' => 'HTML 4.01 Transitional')), $context);
+        $result = $gen->generateAttributes(array('compact' => 'compact'), 'menu');
+        $this->assertIdentical($result, 'compact');
     }
     
     function test_generateFromTokens() {
@@ -122,6 +130,31 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         $result = str_replace("\r\n", "\n", $result);
         $result = str_replace("\r", "\n", $result);
         $this->assertIdentical($expect, $result);
+    }
+    
+    function test_generateFromTokens_Scripting() {
+        $this->config = HTMLPurifier_Config::createDefault();
+        
+        $this->assertGeneration(
+            array(
+                new HTMLPurifier_Token_Start('script'),
+                new HTMLPurifier_Token_Text('alert(3 < 5);'),
+                new HTMLPurifier_Token_End('script')
+            ),
+            "<script><!--\nalert(3 < 5);\n// --></script>"
+        );
+        
+        $this->config = HTMLPurifier_Config::createDefault();
+        $this->config->set('Core', 'CommentScriptContents', false);
+        
+        $this->assertGeneration(
+            array(
+                new HTMLPurifier_Token_Start('script'),
+                new HTMLPurifier_Token_Text('alert(3 < 5);'),
+                new HTMLPurifier_Token_End('script')
+            ),
+            "<script>alert(3 &lt; 5);</script>"
+        );
     }
     
     function test_generateFromTokens_XHTMLoff() {

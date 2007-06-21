@@ -1,10 +1,8 @@
 
-XHTML 1.1 and HTML Purifier
+The Modularization of HTMLDefinition in HTML Purifier
 
 Todo for XHTML 1.1 support <http://www.w3.org/TR/xhtml11/changes.html>
-1. Scratch lang entirely in favor of xml:lang
-2. Scratch name entirely in favor of id (partially-done)
-3. Support Ruby <http://www.w3.org/TR/2001/REC-ruby-20010531/>
+1. Support Ruby <http://www.w3.org/TR/2001/REC-ruby-20010531/>
 
 HTML Purifier uses the modularization of XHTML
 <http://www.w3.org/TR/xhtml-modularization/> to organize the internals
@@ -12,25 +10,10 @@ of HTMLDefinition into a more manageable and extensible fashion. Rather
 than have one super-object, HTMLDefinition is split into HTMLModules,
 each of which are responsible for defining elements, their attributes,
 and other properties (for a more indepth coverage, see
-/library/HTMLPurifier/HTMLModule.php's docblock comments).
+/library/HTMLPurifier/HTMLModule.php's docblock comments). These modules
+are managed by HTMLModuleManager.
 
-The modules that W3C defines and we support are:
-
-    * 5.1. Attribute Collections (technically not a module
-    * 5.2. Core Modules
-          o 5.2.2. Text Module
-          o 5.2.3. Hypertext Module
-          o 5.2.4. List Module
-    * 5.4. Text Extension Modules
-          o 5.4.1. Presentation Module
-          o 5.4.2. Edit Module
-          o 5.4.3. Bi-directional Text Module
-    * 5.6. Table Modules
-          o 5.6.2. Tables Module
-    * 5.7. Image Module
-    * 5.18. Style Attribute Module
-
-Modules that we don't support but coul support are:
+Modules that we don't support but could support are:
 
     * 5.6. Table Modules
           o 5.6.1. Basic Tables Module [?]
@@ -38,10 +21,8 @@ Modules that we don't support but coul support are:
     * 5.9. Server-side Image Map Module [?]
     * 5.12. Target Module [?]
     * 5.21. Name Identification Module [deprecated]
-    * 5.22. Legacy Module [deprecated]
 
-These modules will not be implemented due to their dangerousness or
-inapplicability as an XHTML fragment:
+These modules would be implemented as "unsafe":
 
     * 5.2. Core Modules
           o 5.2.1. Structure Module
@@ -64,11 +45,7 @@ of robust tools for handling them (the main problem is that all the
 current parsers are usually PHP 5 only and solely-validating, not
 correcting).
 
-The abstraction of the HTMLDefinition creation process will also
-contribute to a need for a caching system. Cache invalidation would be
-difficult, but could be done by comparing the HTML and Attr config
-namespaces with a copy that was packaged along with the serialized
-HTMLDefinition object.
+This system may be generalized and ported over for CSS.
 
 == General Use-Case ==
 
@@ -91,7 +68,7 @@ like this:
 <?php
     $config = HTMLPurifier_Config::createDefault();
     $def =& $config->getHTMLDefinition(true); // reference to raw
-    unset($def->modules['Hypertext']); // rm ''a'' link
+    $def->addElement('marquee', 'Block', 'Flow', 'Common');
     $purifier = new HTMLPurifier($config);
     $purifier->purify($html); // now the definition is finalized
 ?>

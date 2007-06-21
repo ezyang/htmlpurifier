@@ -4,12 +4,66 @@ require_once 'HTMLPurifier/Token.php';
 require_once 'HTMLPurifier/Encoder.php';
 require_once 'HTMLPurifier/EntityParser.php';
 
+// implementations
+require_once 'HTMLPurifier/Lexer/DirectLex.php';
+if (version_compare(PHP_VERSION, "5", ">=")) {
+    // You can remove the if statement if you are running PHP 5 only.
+    // We ought to get the strict version to follow those rules.
+    require_once 'HTMLPurifier/Lexer/DOMLex.php';
+}
+
 HTMLPurifier_ConfigSchema::define(
     'Core', 'AcceptFullDocuments', true, 'bool',
     'This parameter determines whether or not the filter should accept full '.
     'HTML documents, not just HTML fragments.  When on, it will '.
     'drop all sections except the content between body.'
 );
+
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'LexerImpl', null, 'mixed/null', '
+<p>
+  This parameter determines what lexer implementation can be used. The
+  valid values are:
+</p>
+<dl>
+  <dt><em>null</em></dt>
+  <dd>
+    Recommended, the lexer implementation will be auto-detected based on
+    your PHP-version and configuration.
+  </dd>
+  <dt><em>string</em> lexer identifier</dt>
+  <dd>
+    This is a slim way of manually overridding the implementation.
+    Currently recognized values are: DOMLex (the default PHP5 implementation)
+    and DirectLex (the default PHP4 implementation). Only use this if
+    you know what you are doing: usually, the auto-detection will
+    manage things for cases you aren\'t even aware of.
+  </dd>
+  <dt><em>object</em> lexer instance</dt>
+  <dd>
+    Super-advanced: you can specify your own, custom, implementation that
+    implements the interface defined by <code>HTMLPurifier_Lexer</code>.
+    I may remove this option simply because I don\'t expect anyone
+    to use it.
+  </dd>
+</dl>
+<p>
+  This directive has been available since 2.0.0.
+</p>
+'
+);
+
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'MaintainLineNumbers', false, 'bool', '
+<p>
+  If true, HTML Purifier will add line number information to all tokens.
+  This is useful when error reporting is turned on, but can result in
+  significant performance degradation and should not be used when
+  unnecessary. This directive must be used with the DirectLex lexer,
+  as the DOMLex lexer does not (yet) support this functionality. This directive
+  has been available since 2.0.0.
+</p>
+');
 
 /**
  * Forgivingly lexes HTML (SGML-style) markup into tokens.
@@ -55,10 +109,82 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_Lexer
 {
     
+    // -- STATIC ----------------------------------------------------------
+    
+    /**
+     * Retrieves or sets the default Lexer as a Prototype Factory.
+     * 
+     * Depending on what PHP version you are running, the abstract base
+     * Lexer class will determine which concrete Lexer is best for you:
+     * HTMLPurifier_Lexer_DirectLex for PHP 4, and HTMLPurifier_Lexer_DOMLex
+     * for PHP 5 and beyond.  This general rule has a few exceptions to it
+     * involving special features that only DirectLex implements.
+     * 
+     * @static
+     * 
+     * @note The behavior of this class has changed, rather than accepting
+     *       a prototype object, it now accepts a configuration object.
+     *       To specify your own prototype, set %Core.LexerImpl to it.
+     *       This change in behavior de-singletonizes the lexer object.
+     * 
+     * @note In PHP4, it is possible to call this factory method from 
+     *       subclasses, such usage is not recommended and not
+     *       forwards-compatible.
+     * 
+     * @param $prototype Optional prototype lexer or configuration object
+     * @return Concrete lexer.
+     */
+    static function create($config) {
+        
+        if (!($config instanceof HTMLPurifier_Config)) {
+            $lexer = $config;
+            trigger_error("Passing a prototype to 
+              HTMLPurifier_Lexer::create() is deprecated, please instead
+              use %Core.LexerImpl", E_USER_WARNING);
+        } else {
+            $lexer = $config->get('Core', 'LexerImpl');
+        }
+        
+        if (is_object($lexer)) {
+            return $lexer;
+        }
+        
+        if (is_null($lexer)) { do {
+            // auto-detection algorithm
+            
+            // once PHP DOM implements native line numbers, or we
+            // hack out something using XSLT, remove this stipulation
+            if ($config->get('Core', 'MaintainLineNumbers')) {
+                $lexer = 'DirectLex';
+                break;
+            }
+            
+            if (version_compare(PHP_VERSION, "5", ">=") && // check for PHP5
+                class_exists('DOMDocument')) { // check for DOM support
+                $lexer = 'DOMLex';
+            } else {
+                $lexer = 'DirectLex';
+            }
+            
+        } while(0); } // do..while so we can break
+        
+        // instantiate recognized string names
+        switch ($lexer) {
+            case 'DOMLex':
+                return new HTMLPurifier_Lexer_DOMLex();
+            case 'DirectLex':
+                return new HTMLPurifier_Lexer_DirectLex();
+            default:
+                trigger_error("Cannot instantiate unrecognized Lexer type " . htmlspecialchars($lexer), E_USER_ERROR);
+        }
+        
+    }
+    
+    // -- CONVENIENCE MEMBERS ---------------------------------------------
+    
     function HTMLPurifier_Lexer() {
         $this->_entity_parser = new HTMLPurifier_EntityParser();
     }
-    
     
     /**
      * Most common entity to raw value conversion table for special entities.
@@ -121,46 +247,6 @@ class HTMLPurifier_Lexer
      */
     function tokenizeHTML($string, $config, &$context) {
         trigger_error('Call to abstract class', E_USER_ERROR);
-    }
-    
-    /**
-     * Retrieves or sets the default Lexer as a Prototype Factory.
-     * 
-     * Depending on what PHP version you are running, the abstract base
-     * Lexer class will determine which concrete Lexer is best for you:
-     * HTMLPurifier_Lexer_DirectLex for PHP 4, and HTMLPurifier_Lexer_DOMLex
-     * for PHP 5 and beyond.
-     * 
-     * Passing the optional prototype lexer parameter will override the
-     * default with your own implementation.  A copy/reference of the prototype
-     * lexer will now be returned when you request a new lexer.
-     * 
-     * @static
-     * 
-     * @note
-     * Though it is possible to call this factory method from subclasses,
-     * such usage is not recommended.
-     * 
-     * @param $prototype Optional prototype lexer.
-     * @return Concrete lexer.
-     */
-    static function create($prototype = null) {
-        // we don't really care if it's a reference or a copy
-        static $lexer = null;
-        if ($prototype) {
-            $lexer = $prototype;
-        }
-        if (empty($lexer)) {
-            if (version_compare(PHP_VERSION, "5", ">=") && // check for PHP5
-                class_exists('DOMDocument')) { // check for DOM support
-                require_once 'HTMLPurifier/Lexer/DOMLex.php';
-                $lexer = new HTMLPurifier_Lexer_DOMLex();
-            } else {
-                require_once 'HTMLPurifier/Lexer/DirectLex.php';
-                $lexer = new HTMLPurifier_Lexer_DirectLex();
-            }
-        }
-        return $lexer;
     }
     
     /**

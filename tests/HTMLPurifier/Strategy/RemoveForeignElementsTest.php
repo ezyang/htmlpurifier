@@ -14,6 +14,7 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
     
     function test() {
         
+        $this->config = array('HTML.Doctype' => 'XHTML 1.0 Strict');
         
         $this->assertResult('');
         
@@ -22,6 +23,17 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
         $this->assertResult(
             '<asdf>Bling</asdf><d href="bang">Bong</d><foobar />',
             'BlingBong'
+        );
+        
+        $this->assertResult(
+            '<script>alert();</script>',
+            ''
+        );
+        
+        $this->assertResult(
+            '<script>alert();</script>',
+            'alert();',
+            array('Core.RemoveScriptContents' => false)
         );
         
         $this->assertResult(
@@ -49,7 +61,7 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
         );
         
         // test preservation of valid img tag
-        $this->assertResult('<img src="foobar.gif" />');
+        $this->assertResult('<img src="foobar.gif" alt="foobar.gif" />');
         
         // test preservation of invalid img tag when removal is disabled
         $this->assertResult(
@@ -58,6 +70,13 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
             array(
                 'Core.RemoveInvalidImg' => false
             )
+        );
+        
+        // test transform to unallowed element
+        $this->assertResult(
+            '<font color="red" face="Arial" size="6">Big Warning!</font>',
+            'Big Warning!',
+            array('HTML.Allowed' => 'div')
         );
         
     }

@@ -41,14 +41,32 @@ class HTMLPurifier_Language
     }
     
     /**
-     * Retrieves a localised message. Does not perform any operations.
+     * Retrieves a localised message.
      * @param $key string identifier of message
      * @return string localised message
      */
     function getMessage($key) {
         if (!$this->_loaded) $this->load();
-        if (!isset($this->messages[$key])) return '';
+        if (!isset($this->messages[$key])) return "[$key]";
         return $this->messages[$key];
+    }
+    
+    /**
+     * Formats a localised message with passed parameters
+     * @param $key string identifier of message
+     * @param $param Parameter to substitute in (arbitrary number)
+     * @return string localised message
+     */
+    function formatMessage($key) {
+        if (!$this->_loaded) $this->load();
+        if (!isset($this->messages[$key])) return "[$key]";
+        $raw = $this->messages[$key];
+        $args = func_get_args();
+        $substitutions = array();
+        for ($i = 1; $i < count($args); $i++) {
+            $substitutions['$' . $i] = $args[$i];
+        }
+        return strtr($raw, $substitutions);
     }
     
 }

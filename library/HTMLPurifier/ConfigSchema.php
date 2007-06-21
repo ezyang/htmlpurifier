@@ -8,6 +8,7 @@ require_once 'HTMLPurifier/ConfigDef/DirectiveAlias.php';
 
 /**
  * Configuration definition, defines directives and their defaults.
+ * @note If you update this, please update Printer_ConfigForm
  * @todo The ability to define things multiple times is confusing and should
  *       be factored out to its own function named registerDependency() or 
  *       addNote(), where only the namespace.name and an extra descriptions
@@ -66,6 +67,8 @@ class HTMLPurifier_ConfigSchema {
         $this->defineNamespace('URI', 'Features regarding Uniform Resource Identifiers.');
         $this->defineNamespace('HTML', 'Configuration regarding allowed HTML.');
         $this->defineNamespace('CSS', 'Configuration regarding allowed CSS.');
+        $this->defineNamespace('Output', 'Configuration relating to the generation of (X)HTML.');
+        $this->defineNamespace('Cache', 'Configuration for DefinitionCache and related subclasses.');
         $this->defineNamespace('Test', 'Developer testing configuration for our unit tests.');
     }
     
@@ -303,6 +306,7 @@ class HTMLPurifier_ConfigSchema {
         if ($allow_null && $var === null) return null;
         switch ($type) {
             case 'mixed':
+                //if (is_string($var)) $var = unserialize($var);
                 return $var;
             case 'istring':
             case 'string':
@@ -343,6 +347,16 @@ class HTMLPurifier_ConfigSchema {
                     $var = explode(',',$var);
                     // remove spaces
                     foreach ($var as $i => $j) $var[$i] = trim($j);
+                    if ($type === 'hash') {
+                        // key:value,key2:value2
+                        $nvar = array();
+                        foreach ($var as $keypair) {
+                            $c = explode(':', $keypair, 2);
+                            if (!isset($c[1])) continue;
+                            $nvar[$c[0]] = $c[1];
+                        }
+                        $var = $nvar;
+                    }
                 }
                 if (!is_array($var)) break;
                 $keys = array_keys($var);

@@ -11,6 +11,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     function setUp() {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_ValidateAttributes();
+        $this->config = array('HTML.Doctype' => 'XHTML 1.0 Strict');
     }
     
     function testEmpty() {
@@ -155,8 +156,8 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         );
         // lengths
         $this->assertResult(
-            '<td height="10" width="5%" /><th height="5%" width="10" /><hr width="10" height="10" />',
-            '<td style="height:10px;width:5%;" /><th style="height:5%;width:10px;" /><hr style="width:10px;" />'
+            '<td width="5%" height="10" /><th width="10" height="5%" /><hr width="10" height="10" />',
+            '<td style="width:5%;height:10px;" /><th style="width:10px;height:5%;" /><hr style="width:10px;" />'
         );
         // td boolean transformation
         $this->assertResult(
@@ -216,11 +217,10 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
     
     function testImg() {
-        // (this should never happen, as RemoveForeignElements
-        //  should have removed the offending image tag)
         $this->assertResult(
             '<img />',
-            '<img src="" alt="Invalid image" />'
+            '<img src="" alt="Invalid image" />',
+            array('Core.RemoveInvalidImg' => false)
         );
         
         $this->assertResult(
@@ -230,12 +230,14 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         
         $this->assertResult(
             '<img alt="pretty picture" />',
-            '<img alt="pretty picture" src="" />'
+            '<img alt="pretty picture" src="" />',
+            array('Core.RemoveInvalidImg' => false)
         );
         // mailto in image is not allowed
         $this->assertResult(
             '<img src="mailto:foo@example.com" />',
-            '<img src="" alt="Invalid image" />'
+            '<img alt="mailto:foo@example.com" src="" />',
+            array('Core.RemoveInvalidImg' => false)
         );
         // align transformation
         $this->assertResult(
@@ -297,7 +299,8 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         $this->assertResult(
             '<a href="foo" target="_top" />',
             true,
-            array('Attr.AllowedFrameTargets' => '_top')
+            array('Attr.AllowedFrameTargets' => '_top',
+                'HTML.Doctype' => 'XHTML 1.0 Transitional')
         );
         $this->assertResult(
             '<a href="foo" target="_top" />',
