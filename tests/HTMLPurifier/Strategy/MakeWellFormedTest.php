@@ -74,6 +74,83 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
         
     }
     
+    function testAutoParagraph() {
+        $this->config = array('Core.AutoParagraph' => true);
+        
+        $this->assertResult(
+            'Foobar',
+            '<p>Foobar</p>'
+        );
+        
+        $this->assertResult(
+'Par 1
+Par 1 still',
+'<p>Par 1
+Par 1 still</p>'
+        );
+        
+        $this->assertResult(
+'Par1
+
+Par2',
+            '<p>Par1</p><p>Par2</p>'
+        );
+        
+        $this->assertResult(
+'<b>Par1</b>
+
+<i>Par2</i>',
+            '<p><b>Par1</b></p><p><i>Par2</i></p>'
+        );
+        
+        
+        $this->assertResult(
+'<b>Par1
+
+Par2</b>',
+'<p><b>Par1
+
+Par2</b></p>'
+        );
+        
+        $this->assertResult(
+            'Par1<p>Par2</p>',
+            '<p>Par1</p><p>Par2</p>'
+        );
+        
+        $this->assertResult(
+            '<b>Par1',
+            '<p><b>Par1</b></p>'
+        );
+        
+        $this->assertResult(
+'<pre>Par1
+
+Par1</pre>'
+        );
+        
+        $this->assertResult(
+'Par1
+
+  ',
+'<p>Par1</p>'
+        );
+        $this->assertResult(
+'Par1
+
+<div>Par2</div>
+
+Par3',
+'<p>Par1</p><div>Par2</div><p>Par3</p>'
+        );
+        
+        $this->assertResult(
+'Par<b>1</b>',
+            '<p>Par<b>1</b></p>'
+        );
+        
+    }
+    
 }
 
 ?>

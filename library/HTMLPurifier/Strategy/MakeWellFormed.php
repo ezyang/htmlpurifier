@@ -4,6 +4,16 @@ require_once 'HTMLPurifier/Strategy.php';
 require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/Generator.php';
 
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'AutoParagraph', false, 'bool', '
+<p>
+  This directive will cause HTML Purifier to automatically paragraph text
+  in the document fragment root based on two newlines and block tags.
+  This directive has been available since 2.0.1.
+</p>
+'
+);
+
 /**
  * Takes tokens makes them well-formed (balance end tags, etc.)
  */
@@ -15,10 +25,17 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $generator = new HTMLPurifier_Generator();
         $result = array();
         $current_nesting = array();
+        
         $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
-        foreach ($tokens as $token) {
+        $auto_paragraph      = $config->get('Core', 'AutoParagraph');
+        
+        for ($k = 0, $tokens_count = count($tokens); $k < $tokens_count; $k++) {
+            $token = $tokens[$k];
             if (empty( $token->is_tag )) {
-                $result[] = $token;
+                if ($auto_paragraph && $token->type === 'text') {
+                    $this->autoParagraphText($result, $current_nesting, $tokens, $k, $token, $context, $config);
+                }
+                if ($token) $result[] = $token;
                 continue;
             }
             
@@ -73,6 +90,8 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     
                     $current_nesting[] = $parent; // undo the pop
                 }
+                
+                if ($auto_paragraph) $this->autoParagraphStart($result, $current_nesting, $tokens, $k, $token, $context, $config);
                 
                 $result[] = $token;
                 $current_nesting[] = $token;
@@ -153,6 +172,117 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         }
         
         return $result;
+    }
+    
+    /**
+     * Sub-function call for auto-paragraphing for any old text node.
+     * This will eventually
+     * be factored out into a generic Formatter class
+     * @note This function does not care at all about ending paragraph
+     *       tags: the rest of MakeWellFormed handles that!
+     */
+    function autoParagraphText(&$result, &$current_nesting, $tokens, $k, &$token, &$context, $config) {
+        $dnl = PHP_EOL . PHP_EOL; // double-newline
+        // paragraphing is on
+        if (empty($current_nesting)) {
+            // we're in root node, great time to start a paragraph
+            // since we're also dealing with a text node
+            $result[] = new HTMLPurifier_Token_Start('p');
+            $current_nesting[] = new HTMLPurifier_Token_Start('p');
+            $this->autoParagraphSplitText($result, $current_nesting, $tokens, $k, $token, $context, $config);
+        } else {
+            // we're not in root node, so let's see whether or not
+            // we're in a paragraph
+            
+            // losslessly access the parent element
+            $parent = array_pop($current_nesting);
+            $current_nesting[] = $parent;
+            
+            if ($parent->name === 'p') {
+                $this->autoParagraphSplitText($result, $current_nesting, $tokens, $k, $token, $context, $config);
+            }
+        }
+    }
+    
+    /**
+     * Sub-function for auto-paragraphing that takes a token and splits it 
+     * up into paragraphs unconditionally. Requires that a paragraph was
+     * already started
+     */
+    function autoParagraphSplitText(&$result, &$current_nesting, $tokens, $k, &$token, &$context, $config) {
+        $dnl = PHP_EOL . PHP_EOL; // double-newline
+        $definition = $config->getHTMLDefinition();
+        
+        $raw_paragraphs = explode($dnl, $token->data);
+        
+        $token = false; // token has been completely dismantled
+        
+        // remove empty paragraphs
+        $paragraphs = array();
+        foreach ($raw_paragraphs as $par) {
+            if (trim($par) !== '') $paragraphs[] = $par;
+        }
+        
+        if (empty($paragraphs) && count($raw_paragraphs) > 1) {
+            $result[] = new HTMLPurifier_Token_End('p');
+            array_pop($current_nesting);
+            return;
+        }
+        
+        foreach ($paragraphs as $data) {
+            $result[] = new HTMLPurifier_Token_Text($data);
+            $result[] = new HTMLPurifier_Token_End('p');
+            $result[] = new HTMLPurifier_Token_Start('p');
+        }
+        array_pop($result); // remove trailing start token
+        
+        // check the outside to determine whether or not
+        // another start tag is needed
+        $end_paragraph = $this->autoParagraphEndParagraph($tokens, $k, $definition);
+        if (!$end_paragraph) {
+            array_pop($result);
+        } else {
+            array_pop($current_nesting);
+        }
+        
+    }
+    
+    /**
+     * Determines if up-coming code requires an end-paragraph tag,
+     * otherwise, keep the paragraph open (don't make another one)
+     * @protected
+     */
+    function autoParagraphEndParagraph($tokens, $k, $definition) {
+        $end_paragraph = false;
+        for ($j = $k + 1; isset($tokens[$j]); $j++) {
+            if ($tokens[$j]->type == 'start' || $tokens[$j]->type == 'empty') {
+                if ($tokens[$j]->name == 'p') $end_paragraph = true;
+                else $end_paragraph = isset($definition->info['p']->auto_close[$tokens[$j]->name]);
+                break;
+            } elseif ($tokens[$j]->type == 'text') {
+                if (!$tokens[$j]->is_whitespace) {
+                    $end_paragraph = false;
+                    break;
+                }
+            } elseif ($tokens[$j]->type == 'end') {
+                // nonsensical case
+                $end_paragraph = false;
+                break;
+            }
+        }
+        return $end_paragraph;
+    }
+    
+    /**
+     * Sub-function for auto-paragraphing that processes element starts
+     */
+    function autoParagraphStart(&$result, &$current_nesting, $tokens, $k, &$token, &$context, $config) {
+        if (!empty($current_nesting)) return;
+        $definition = $config->getHTMLDefinition();
+        // a better check would be to use the projected new algorithm
+        // for auto_close
+        if (isset($definition->info['p']->auto_close[$token->name])) return;
+        $result[] = $current_nesting[] = new HTMLPurifier_Token_Start('p');
     }
     
 }
