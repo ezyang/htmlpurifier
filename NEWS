@@ -11,7 +11,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 2.0.1, unknown release date
 - Clean up special case code for <script> tags
-
+- Reorder includes for DefinitionCache decorators, fixes a possible
+  missing class error
 . Rewire some test-cases to swallow errors rather than expect them
 . HTMLDefinition printer updated with some of the new attributes
 
