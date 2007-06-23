@@ -97,6 +97,15 @@ Par2',
         );
         
         $this->assertResult(
+'Par1
+
+ 
+
+Par2',
+            '<p>Par1</p><p>Par2</p>'
+        );
+        
+        $this->assertResult(
 '<b>Par1</b>
 
 <i>Par2</i>',
@@ -147,6 +156,22 @@ Par3',
         $this->assertResult(
 'Par<b>1</b>',
             '<p>Par<b>1</b></p>'
+        );
+        
+        $this->assertResult(
+'
+
+Par',
+            '<p>Par</p>'
+        );
+        
+        $this->assertResult(
+'
+
+Par
+
+',
+            '<p>Par</p>'
         );
         
     }

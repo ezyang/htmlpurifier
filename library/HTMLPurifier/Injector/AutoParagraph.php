@@ -10,27 +10,21 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
 {
     
     function handleText(&$token, $config, &$context) {
-        $dnl = PHP_EOL . PHP_EOL; // double-newline
         $current_nesting =& $context->get('CurrentNesting');
-        // paragraphing is on
+        $text = $token->data;
+        // $token is the focus: if processing is needed, it gets
+        // turned into an array of tokens that will replace the
+        // original token
         if (empty($current_nesting)) {
             // we're in root node, great time to start a paragraph
             // since we're also dealing with a text node
-            $result =& $context->get('OutputTokens');
-            $result[] = new HTMLPurifier_Token_Start('p');
-            $current_nesting[] = new HTMLPurifier_Token_Start('p');
-            $this->_splitText($token, $config, $context);
-        } else {
-            // we're not in root node, so let's see whether or not
-            // we're in a paragraph
-            
-            // losslessly access the parent element
-            $parent = array_pop($current_nesting);
-            $current_nesting[] = $parent;
-            
-            if ($parent->name === 'p') {
-                $this->_splitText($token, $config, $context);
-            }
+            $token = array(new HTMLPurifier_Token_Start('p'));
+            $this->_splitText($text, $token, $config, $context);
+        } elseif ($current_nesting[count($current_nesting)-1]->name == 'p') {
+            // we're not in root node but we're in a paragraph, so don't 
+            // add a paragraph start tag but still perform processing
+            $token = array();
+            $this->_splitText($text, $token, $config, $context);
         }
     }
     
@@ -41,26 +35,25 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         if (!empty($current_nesting)) return;
         
         // check if the start tag counts as a "block" element
-        $definition = $config->getHTMLDefinition();
-        if (isset($definition->info['p']->auto_close[$token->name])) return;
+        if (!$this->_isInline($token, $config)) return;
         
         // append a paragraph tag before the token
         $token = array(new HTMLPurifier_Token_Start('p'), $token);
     }
     
     /**
-     * Sub-function for auto-paragraphing that takes a token and splits it 
-     * up into paragraphs unconditionally. Requires that a paragraph was
-     * already started
+     * Splits up a text in paragraph tokens and appends them
+     * to the result stream that will replace the original
+     * @param $data String text data that will be processed
+     *    into paragraphs
+     * @param $result Reference to array of tokens that the
+     *    tags will be appended onto
+     * @param $config Instance of HTMLPurifier_Config
+     * @param $context Instance of HTMLPurifier_Context
+     * @private
      */
-    function _splitText(&$token, $config, &$context) {
-        $dnl = PHP_EOL . PHP_EOL; // double-newline
-        $definition = $config->getHTMLDefinition();
-        $current_nesting =& $context->get('CurrentNesting');
-        
-        $raw_paragraphs = explode($dnl, $token->data);
-        
-        $token = false; // token has been completely dismantled
+    function _splitText($data, &$result, $config, &$context) {
+        $raw_paragraphs = explode(PHP_EOL . PHP_EOL, $data);
         
         // remove empty paragraphs
         $paragraphs = array();
@@ -68,67 +61,62 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
             if (trim($par) !== '') $paragraphs[] = $par;
         }
         
-        $result =& $context->get('OutputTokens');
-        
+        // check if there are no "real" paragraphs to be processed
         if (empty($paragraphs) && count($raw_paragraphs) > 1) {
             $result[] = new HTMLPurifier_Token_End('p');
-            array_pop($current_nesting);
             return;
         }
         
-        foreach ($paragraphs as $data) {
-            $result[] = new HTMLPurifier_Token_Text($data);
+        // append the paragraphs onto the result
+        foreach ($paragraphs as $par) {
+            $result[] = new HTMLPurifier_Token_Text($par);
             $result[] = new HTMLPurifier_Token_End('p');
             $result[] = new HTMLPurifier_Token_Start('p');
         }
         array_pop($result); // remove trailing start token
         
-        // check the outside to determine whether or not end
-        // paragraph tag is needed (it's already there)
-        $end_paragraph = $this->_needsEndTag(
-            $context->get('InputTokens'),
-            $context->get('InputIndex'),
-            $definition
-        );
-        
-        if ($end_paragraph) {
-            // things are good as they stand, remove top-level parent
-            // that we deferred
-            array_pop($current_nesting);
-        } else {
-            // remove the ending tag, no nesting modifications necessary
+        // check the outside to determine whether or not the
+        // end paragraph tag should be removed
+        if ($this->_removeParagraphEnd($config, $context)) {
             array_pop($result);
         }
+        
         
     }
     
     /**
-     * Determines if up-coming code requires an end-paragraph tag,
-     * otherwise, keep the paragraph open (don't make another one)
-     * @protected
+     * Returns boolean whether or not to remove the paragraph end tag
+     * that was automatically added. The paragraph end tag should be
+     * removed unless the next token is a paragraph or block element.
+     * @param $config Instance of HTMLPurifier_Config
+     * @param $context Instance of HTMLPurifier_Context
+     * @private
      */
-    function _needsEndTag($tokens, $k, $definition) {
-        $end_paragraph = false;
-        for ($j = $k + 1; isset($tokens[$j]); $j++) {
-            if ($tokens[$j]->type == 'start' || $tokens[$j]->type == 'empty') {
-                if ($tokens[$j]->name == 'p') {
-                    $end_paragraph = true;
-                } else {
-                    $end_paragraph = isset($definition->info['p']->auto_close[$tokens[$j]->name]);
-                }
-                break;
-            } elseif ($tokens[$j]->type == 'text') {
-                if (!$tokens[$j]->is_whitespace) {
-                    $end_paragraph = false;
-                    break;
-                }
-            } elseif ($tokens[$j]->type == 'end') {
-                // nonsensical case
-                $end_paragraph = false;
+    function _removeParagraphEnd($config, &$context) {
+        $tokens = $context->get('InputTokens');
+        $i = $context->get('InputIndex');
+        $remove_paragraph_end = true;
+        // Start of the checks one after the current token's index
+        for ($i++; isset($tokens[$i]); $i++) {
+            if ($tokens[$i]->type == 'start' || $tokens[$i]->type == 'empty') {
+                $definition = $config->getHTMLDefinition();
+                $remove_paragraph_end = $this->_isInline($tokens[$i], $config);
                 break;
             }
+            // check if we can abort early (whitespace means we carry-on!)
+            if ($tokens[$i]->type == 'text' && !$tokens[$i]->is_whitespace) break;
+            if ($tokens[$i]->type == 'end') break; // nonsensical
         }
-        return $end_paragraph;
+        return $remove_paragraph_end;
+    }
+    
+    /**
+     * Returns true if passed token is inline (and, ergo, allowed in
+     * paragraph tags)
+     */
+    function _isInline($token, $config) {
+        $definition = $config->getHTMLDefinition();
+        return !isset($definition->info['p']->auto_close[$token->name]);
     }
     
 }

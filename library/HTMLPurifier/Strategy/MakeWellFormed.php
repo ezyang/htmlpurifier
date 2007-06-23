@@ -225,7 +225,8 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 $current_nesting[] = $token;
             } elseif ($token->type == 'end') {
                 // theoretical: this isn't used because performing
-                // the calculations otherwise is more efficient
+                // the calculations inline is more efficient, and
+                // end tokens currently do not cause a handler invocation
                 array_pop($current_nesting);
             }
         }
