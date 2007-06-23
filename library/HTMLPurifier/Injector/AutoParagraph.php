@@ -34,6 +34,20 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         }
     }
     
+    function handleStart(&$token, $config, &$context) {
+        // check if we're inside a tag already, if so, don't add
+        // paragraph tags
+        $current_nesting = $context->get('CurrentNesting');
+        if (!empty($current_nesting)) return;
+        
+        // check if the start tag counts as a "block" element
+        $definition = $config->getHTMLDefinition();
+        if (isset($definition->info['p']->auto_close[$token->name])) return;
+        
+        // append a paragraph tag before the token
+        $token = array(new HTMLPurifier_Token_Start('p'), $token);
+    }
+    
     /**
      * Sub-function for auto-paragraphing that takes a token and splits it 
      * up into paragraphs unconditionally. Requires that a paragraph was
@@ -115,16 +129,6 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
             }
         }
         return $end_paragraph;
-    }
-    
-    function handleStart(&$token, $config, &$context) {
-        $current_nesting =& $context->get('CurrentNesting');
-        if (!empty($current_nesting)) return;
-        $definition = $config->getHTMLDefinition();
-        // to be replaced with new auto-auto_close algorithm
-        if (isset($definition->info['p']->auto_close[$token->name])) return;
-        $result =& $context->get('OutputTokens');
-        $result[] = $current_nesting[] = new HTMLPurifier_Token_Start('p');
     }
     
 }
