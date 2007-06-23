@@ -38,17 +38,33 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
         $auto_paragraph      = $config->get('Core', 'AutoParagraph');
         
+        $auto_paragraph_skip = 0;
+        $auto_paragraph_disabled = false;
+        $context->register('AutoParagraphSkip', $auto_paragraph_skip);
+        
         for ($tokens_index = 0; isset($tokens[$tokens_index]); $tokens_index++) {
             
             // if all goes well, this token will be passed through unharmed
             $token = $tokens[$tokens_index];
             
+            // this will be more complicated
+            if ($auto_paragraph_skip > 0) {
+                $auto_paragraph_skip--;
+                $auto_paragraph_disabled = true;
+            } else {
+                $auto_paragraph_disabled = false;
+            }
+            
             // quick-check: if it's not a tag, no need to process
             if (empty( $token->is_tag )) {
-                if ($auto_paragraph && $token->type === 'text') {
-                    $this->autoParagraphText($token, $context, $config);
+                
+                if ($token->type === 'text') {
+                     if ($auto_paragraph && !$auto_paragraph_disabled) {
+                         $this->autoParagraphText($token, $config, $context);
+                     }
                 }
-                if ($token) $result[] = $token;
+                
+                $this->processToken($token, $config, $context);
                 continue;
             }
             
@@ -96,10 +112,11 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     $current_nesting[] = $parent; // undo the pop
                 }
                 
-                if ($auto_paragraph) $this->autoParagraphStart($token, $context, $config);
+                if ($auto_paragraph && !$auto_paragraph_disabled) {
+                    $this->autoParagraphStart($token, $config, $context);
+                }
                 
-                if ($token) $result[] = $token;
-                $current_nesting[] = $token;
+                $this->processToken($token, $config, $context);
                 continue;
             }
             
@@ -117,7 +134,6 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             }
             
             // first, check for the simplest case: everything closes neatly
-            
             $current_parent = array_pop($current_nesting);
             if ($current_parent->name == $token->name) {
                 $result[] = $token;
@@ -162,7 +178,8 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         }
         
         // we're at the end now, fix all still unclosed tags
-        
+        // not using processToken() because at this point we don't
+        // care about current nesting
         if (!empty($current_nesting)) {
             $size = count($current_nesting);
             for ($i = $size - 1; $i >= 0; $i--) {
@@ -179,6 +196,37 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         return $result;
     }
     
+    function processToken($token, $config, &$context) {
+        if (is_array($token)) {
+            // the original token was overloaded by a formatter, time
+            // to some fancy acrobatics
+            
+            $tokens              =& $context->get('InputTokens');
+            $tokens_index        =& $context->get('InputIndex');
+            // $tokens_index is decremented so that the entire set gets
+            // re-processed
+            array_splice($tokens, $tokens_index--, 1, $token);
+            
+            // this will be a bit more complicated when we add more formatters
+            // we need to prevent the same formatter from running twice on it
+            $auto_paragraph_skip =& $context->get('AutoParagraphSkip');
+            $auto_paragraph_skip = count($token);
+            
+        } elseif ($token) {
+            // regular case
+            $result =& $context->get('OutputTokens');
+            $current_nesting =& $context->get('CurrentNesting');
+            $result[] = $token;
+            if ($token->type == 'start') {
+                $current_nesting[] = $token;
+            } elseif ($token->type == 'end') {
+                // theoretical: this isn't used because performing
+                // the calculations otherwise is more efficient
+                array_pop($current_nesting);
+            }
+        }
+    }
+    
     /**
      * Sub-function call for auto-paragraphing for any old text node.
      * This will eventually
@@ -186,7 +234,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
      * @note This function does not care at all about ending paragraph
      *       tags: the rest of MakeWellFormed handles that!
      */
-    function autoParagraphText(&$token, &$context, $config) {
+    function autoParagraphText(&$token, $config, &$context) {
         $dnl = PHP_EOL . PHP_EOL; // double-newline
         $current_nesting =& $context->get('CurrentNesting');
         // paragraphing is on
@@ -196,7 +244,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             $result =& $context->get('OutputTokens');
             $result[] = new HTMLPurifier_Token_Start('p');
             $current_nesting[] = new HTMLPurifier_Token_Start('p');
-            $this->autoParagraphSplitText($token, $context, $config);
+            $this->autoParagraphSplitText($token, $config, $context);
         } else {
             // we're not in root node, so let's see whether or not
             // we're in a paragraph
@@ -206,7 +254,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             $current_nesting[] = $parent;
             
             if ($parent->name === 'p') {
-                $this->autoParagraphSplitText($token, $context, $config);
+                $this->autoParagraphSplitText($token, $config, $context);
             }
         }
     }
@@ -216,7 +264,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
      * up into paragraphs unconditionally. Requires that a paragraph was
      * already started
      */
-    function autoParagraphSplitText(&$token, &$context, $config) {
+    function autoParagraphSplitText(&$token, $config, &$context) {
         $dnl = PHP_EOL . PHP_EOL; // double-newline
         $definition = $config->getHTMLDefinition();
         $current_nesting =& $context->get('CurrentNesting');
@@ -234,10 +282,12 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $result =& $context->get('OutputTokens');
         
         if (empty($paragraphs) && count($raw_paragraphs) > 1) {
-            $result[] = new HTMLPurifier_Token_End('p');
-            array_pop($current_nesting);
+            $this->processToken(new HTMLPurifier_Token_End('p'), $config, $context);
             return;
         }
+        
+        // this could be rewritten to use processToken, but it would
+        // be slightly less efficient
         
         foreach ($paragraphs as $data) {
             $result[] = new HTMLPurifier_Token_Text($data);
@@ -246,17 +296,21 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         }
         array_pop($result); // remove trailing start token
         
-        // check the outside to determine whether or not
-        // another start tag is needed
+        // check the outside to determine whether or not end
+        // paragraph tag is needed (it's already there)
         $end_paragraph = $this->autoParagraphEndParagraph(
             $context->get('InputTokens'),
             $context->get('InputIndex'),
             $definition
         );
-        if (!$end_paragraph) {
-            array_pop($result);
-        } else {
+        
+        if ($end_paragraph) {
+            // things are good as they stand, remove top-level parent
+            // that we deferred
             array_pop($current_nesting);
+        } else {
+            // remove the ending tag, no nesting modifications necessary
+            array_pop($result);
         }
         
     }
@@ -293,14 +347,14 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     /**
      * Sub-function for auto-paragraphing that processes element starts
      */
-    function autoParagraphStart(&$token, &$context, $config) {
+    function autoParagraphStart(&$token, $config, &$context) {
         $current_nesting =& $context->get('CurrentNesting');
         if (!empty($current_nesting)) return;
         $definition = $config->getHTMLDefinition();
         // to be replaced with new auto-auto_close algorithm
         if (isset($definition->info['p']->auto_close[$token->name])) return;
         $result =& $context->get('OutputTokens');
-        $result[] = $current_nesting[] = new HTMLPurifier_Token_Start('p');
+        $this->processToken(new HTMLPurifier_Token_Start('p'), $config, $context);
     }
     
 }
