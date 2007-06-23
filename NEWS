@@ -17,6 +17,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   (mostly harmless, except for the fact that it would be a little slower)
 - Configuration objects with different serials do not clobber each
   others when revision numbers are unequal
+- Improve Serializer DefinitionCache directory permissions checks
 . Rewire some test-cases to swallow errors rather than expect them
 . HTMLDefinition printer updated with some of the new attributes
 . DefinitionCache keys reordered to reflect precedence: version number,
