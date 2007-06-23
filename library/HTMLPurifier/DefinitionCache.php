@@ -49,7 +49,7 @@ class HTMLPurifier_DefinitionCache
      * @param $config Instance of HTMLPurifier_Config to test against
      */
     function isOld($key, $config) {
-        if (substr_count($key, '-') < 3) return true;
+        if (substr_count($key, '-') < 2) return true;
         list($version, $hash, $revision) = explode('-', $key, 3);
         $compare = version_compare($version, $config->version);
         // version mismatch, is always old
