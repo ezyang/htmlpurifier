@@ -44,6 +44,12 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
         // COMPLICATED! AND MIGHT BE BUGGY! I HAVE NO CLUE WHAT I'M
         // DOING! Seriously: if there's problems, please report them.
         
+        // collect all elements into the $elements array
+        preg_match_all("/$el/", $reg, $matches);
+        foreach ($matches[0] as $match) {
+            $this->elements[$match] = true;
+        }
+        
         // setup all elements as parentheticals with leading commas
         $reg = preg_replace("/$el/", '(,\\0)', $reg);
         

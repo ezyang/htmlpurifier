@@ -10,6 +10,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 2.0.1, unknown release date
+! Tag auto-closing now based on a ChildDef heuristic rather than a
+  manually set auto_close array; some behavior may change
 - Clean up special case code for <script> tags
 - Reorder includes for DefinitionCache decorators, fixes a possible
   missing class error

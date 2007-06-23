@@ -56,10 +56,7 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
             $cell_align
         );
         $this->addElement('col',      true, false, 'Empty',         'Common', $cell_col);
-        $colgroup =& $this->addElement('colgroup', true, false, 'Optional: col', 'Common', $cell_col);
-        $colgroup->auto_close = $this->makeLookup(
-            'thead', 'tbody', 'tfoot', 'tr'
-        );
+        $this->addElement('colgroup', true, false, 'Optional: col', 'Common', $cell_col);
         
         $this->addElement('tbody', true, false, 'Required: tr', 'Common', $cell_align);
         $this->addElement('thead', true, false, 'Required: tr', 'Common', $cell_align);

@@ -72,13 +72,6 @@ class HTMLPurifier_ElementDef
     
     
     /**
-     * Lookup table of tags that close this tag. Used during parsing
-     * to make sure we don't attempt to nest unclosed tags.
-     * @public
-     */
-    var $auto_close = array();
-    
-    /**
      * Does the element have a content model (#PCDATA | Inline)*? This
      * is important for chameleon ins and del processing in 
      * HTMLPurifier_ChildDef_Chameleon. Dynamically set: modules don't
@@ -151,7 +144,6 @@ class HTMLPurifier_ElementDef
         }
         $this->_mergeAssocArray($this->attr_transform_pre, $def->attr_transform_pre);
         $this->_mergeAssocArray($this->attr_transform_post, $def->attr_transform_post);
-        $this->_mergeAssocArray($this->auto_close, $def->auto_close);
         $this->_mergeAssocArray($this->excludes, $def->excludes);
         
         if(!empty($def->content_model)) {

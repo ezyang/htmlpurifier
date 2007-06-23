@@ -116,7 +116,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
      */
     function _isInline($token, $config) {
         $definition = $config->getHTMLDefinition();
-        return !isset($definition->info['p']->auto_close[$token->name]);
+        return isset($definition->info['p']->child->elements[$token->name]);
     }
     
 }

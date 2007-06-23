@@ -105,8 +105,8 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     // this can be replaced with a more general algorithm:
                     // if the token is not allowed by the parent, auto-close
                     // the parent
-                    if (isset($parent_info->auto_close[$token->name])) {
-                        // close th e parent, then append the token
+                    if (!isset($parent_info->child->elements[$token->name])) {
+                        // close the parent, then append the token
                         $result[] = new HTMLPurifier_Token_End($parent->name);
                         $result[] = $token;
                         $current_nesting[] = $token;
