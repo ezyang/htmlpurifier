@@ -14,7 +14,7 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $config->setReturnValue('get', 2, array('Test', 'DefinitionRev'));
         $config->version = '1.0.0';
         
-        $config_md5   = '1.0.0-2-serial';
+        $config_md5   = '1.0.0-serial-2';
         
         $file = realpath(
             $rel_file = dirname(__FILE__) .
@@ -138,6 +138,32 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         
     }
     
+    function testCleanupOnlySameID() {
+        
+        $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
+        
+        $config1 = $this->generateConfigMock('serial1');
+        $config1->version = '1.0.0';
+        $config1->setReturnValue('get', 1, array('Test', 'DefinitionRev'));
+        $def1 = $this->generateDefinition(array('info' => 1));
+        
+        $config2 = $this->generateConfigMock('serial2');
+        $config2->version = '1.0.0';
+        $config2->setReturnValue('get', 34, array('Test', 'DefinitionRev'));
+        $def2 = $this->generateDefinition(array('info' => 3));
+        
+        $cache->set($def1, $config1);
+        $cache->cleanup($config1);
+        $this->assertEqual($def1, $cache->get($config1)); // no change
+        
+        $cache->set($def2, $config2);
+        $cache->cleanup($config2);
+        $this->assertEqual($def1, $cache->get($config1));
+        $this->assertEqual($def2, $cache->get($config2));
+        
+        $cache->flush($config1);
+    }
+    
     /**
      * Asserts that a file exists, ignoring the stat cache
      */
@@ -164,9 +190,9 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         
         $def_original = $this->generateDefinition();
         $cache->add($def_original, $config);
-        $this->assertFileExist($dir . '/Test/1.0.0-1-serial.ser');
+        $this->assertFileExist($dir . '/Test/1.0.0-serial-1.ser');
         
-        unlink($dir . '/Test/1.0.0-1-serial.ser');
+        unlink($dir . '/Test/1.0.0-serial-1.ser');
         rmdir( $dir . '/Test');
         
     }

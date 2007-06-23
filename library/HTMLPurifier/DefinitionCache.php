@@ -38,8 +38,8 @@ class HTMLPurifier_DefinitionCache
      */
     function generateKey($config) {
         return $config->version . '-' . // possibly replace with function calls
-               $config->get($this->type, 'DefinitionRev') . '-' .
-               $config->getBatchSerial($this->type);
+               $config->getBatchSerial($this->type) . '-' .
+               $config->get($this->type, 'DefinitionRev');
     }
     
     /**
@@ -49,11 +49,16 @@ class HTMLPurifier_DefinitionCache
      * @param $config Instance of HTMLPurifier_Config to test against
      */
     function isOld($key, $config) {
-        list($version, $revision, $hash) = explode('-', $key, 3);
+        list($version, $hash, $revision) = explode('-', $key, 3);
         $compare = version_compare($version, $config->version);
-        if ($compare > 0) return false;
-        if ($compare == 0 && $revision >= $config->get($this->type, 'DefinitionRev')) return false;
-        return true;
+        // version mismatch, is always old
+        if ($compare != 0) return true;
+        // versions match, ids match, check revision number
+        if (
+            $hash == $config->getBatchSerial($this->type) &&
+            $revision < $config->get($this->type, 'DefinitionRev')
+        ) return true;
+        return false;
     }
     
     /**

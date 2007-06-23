@@ -252,9 +252,10 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
         // test retrieval of raw definition
         $config->set('HTML', 'DefinitionID', 'HTMLPurifier_ConfigTest->test_getHTMLDefinition()');
+        $config->set('HTML', 'DefinitionRev', 3);
         $def =& $config->getHTMLDefinition(true);
         $this->assertNotEqual($def, $def2);
-        $this->assertFalse($def->setup);
+        $this->assertEqual(false, $def->setup);
         
         // auto initialization
         $config->getHTMLDefinition();

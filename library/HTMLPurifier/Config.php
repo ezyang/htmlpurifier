@@ -155,11 +155,15 @@ class HTMLPurifier_Config
     /**
      * Returns a md5 signature of a segment of the configuration object
      * that uniquely identifies that particular configuration
+     * @note Revision is handled specially and is removed from the batch
+     *       before processing!
      * @param $namespace Namespace to get serial for
      */
     function getBatchSerial($namespace) {
         if (empty($this->serials[$namespace])) {
-            $this->serials[$namespace] = md5(serialize($this->getBatch($namespace)));
+            $batch = $this->getBatch($namespace);
+            unset($batch['DefinitionRev']);
+            $this->serials[$namespace] = md5(serialize($batch));
         }
         return $this->serials[$namespace];
     }
@@ -270,6 +274,7 @@ class HTMLPurifier_Config
             if (!empty($this->definitions[$type])) {
                 if (!$this->definitions[$type]->setup) {
                     $this->definitions[$type]->setup($this);
+                    $cache->set($this->definitions[$type], $this);
                 }
                 return $this->definitions[$type];
             }

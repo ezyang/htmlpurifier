@@ -88,9 +88,18 @@ class HTMLPurifier_DefinitionCache_Serializer extends
      * @note No trailing slash
      */
     function generateDirectoryPath($config) {
+        $base = $this->generateBaseDirectoryPath($config);
+        return $base . '/' . $this->type;
+    }
+    
+    /**
+     * Generates path to base directory that contains all definition type
+     * serials
+     */
+    function generateBaseDirectoryPath($config) {
         $base = $config->get('Cache', 'SerializerPath');
         $base = is_null($base) ? dirname(__FILE__) . '/Serializer' : $base;
-        return $base . '/' . $this->type;
+        return $base;
     }
     
     /**

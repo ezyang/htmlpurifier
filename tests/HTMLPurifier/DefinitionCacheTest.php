@@ -15,16 +15,22 @@ class HTMLPurifier_DefinitionCacheTest extends UnitTestCase
         HTMLPurifier_ConfigSchema::defineNamespace('Test', 'Test namespace');
         HTMLPurifier_ConfigSchema::define('Test', 'DefinitionRev', 1, 'int', 'Definition revision.');
         
-        $config = HTMLPurifier_Config::createDefault();
-        $config->version = '1.0.0';
-        $config->set('Test', 'DefinitionRev', 10);
+        generate_mock_once('HTMLPurifier_Config');
+        $config = new HTMLPurifier_ConfigMock();
+        $config->version = '1.0.0'; // hopefully no conflicts
+        $config->setReturnValue('get', 10, array('Test', 'DefinitionRev'));
+        $config->setReturnValue('getBatchSerial', 'hash', array('Test'));
         
-        $this->assertIdentical($cache->isOld('1.0.0-10-hashstuffhere', $config), false);
-        $this->assertIdentical($cache->isOld('1.5.0-1-hashstuffhere', $config), false);
+        $this->assertIdentical($cache->isOld('1.0.0-hash-10', $config), false);
+        $this->assertIdentical($cache->isOld('1.5.0-hash-1', $config), true);
         
-        $this->assertIdentical($cache->isOld('0.9.0-1-hashstuffhere', $config), true);
-        $this->assertIdentical($cache->isOld('1.0.0-1-hashstuffhere', $config), true);
-        $this->assertIdentical($cache->isOld('1.0.0beta-11-hashstuffhere', $config), true);
+        $this->assertIdentical($cache->isOld('0.9.0-hash-1', $config), true);
+        $this->assertIdentical($cache->isOld('1.0.0-hash-1', $config), true);
+        $this->assertIdentical($cache->isOld('1.0.0beta-hash-11', $config), true);
+        
+        $this->assertIdentical($cache->isOld('0.9.0-hash2-1', $config), true);
+        $this->assertIdentical($cache->isOld('1.0.0-hash2-1', $config), false); // if hash is different, don't touch!
+        $this->assertIdentical($cache->isOld('1.0.0beta-hash2-11', $config), true);
         
         HTMLPurifier_ConfigSchema::instance($old_copy);
         

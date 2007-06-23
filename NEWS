@@ -13,8 +13,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Clean up special case code for <script> tags
 - Reorder includes for DefinitionCache decorators, fixes a possible
   missing class error
+- Fixed bug where manually modified definitions were not saved via cache
+  (mostly harmless, except for the fact that it would be a little slower)
+- Configuration objects with different serials do not clobber each
+  others when revision numbers are unequal
 . Rewire some test-cases to swallow errors rather than expect them
 . HTMLDefinition printer updated with some of the new attributes
+. DefinitionCache keys reordered to reflect precedence: version number,
+  hash, then revision number
 
 2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety
