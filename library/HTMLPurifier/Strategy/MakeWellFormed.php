@@ -7,26 +7,6 @@ require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Injector/AutoParagraph.php';
 require_once 'HTMLPurifier/Injector/Linkify.php';
 
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'AutoParagraph', false, 'bool', '
-<p>
-  This directive will cause HTML Purifier to automatically paragraph text
-  in the document fragment root based on two newlines and block tags.
-  This directive has been available since 2.0.1.
-</p>
-'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'AutoLinkify', false, 'bool', '
-<p>
-  This directive will cause HTML Purifier to automatically linkify
-  text that looks like URLs. This directive has been available since
-  2.0.1.
-</p>
-'
-);
-
 /**
  * Takes tokens makes them well-formed (balance end tags, etc.)
  */
@@ -70,11 +50,11 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         
         // we need a generic way of adding injectors, and also its own
         // configuration namespace
-        if ($config->get('Core', 'AutoParagraph')) {
+        if ($config->get('AutoFormat', 'AutoParagraph')) {
             $this->injectors[] = new HTMLPurifier_Injector_AutoParagraph();
         }
         
-        if ($config->get('Core', 'AutoLinkify')) {
+        if ($config->get('AutoFormat', 'Linkify')) {
             $this->injectors[] = new HTMLPurifier_Injector_Linkify();
         }
         
@@ -163,7 +143,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 
                 // injector handler code; duplicated for performance reasons
                 foreach ($this->injectors as $i => $x) {
-                    if (!$x->skip[$i]) $x->handleStart($token, $config, $context);
+                    if (!$x->skip) $x->handleStart($token, $config, $context);
                     if (is_array($token)) {
                         $this->currentInjector = $i;
                         break;

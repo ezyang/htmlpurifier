@@ -76,7 +76,7 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
     }
     
     function testAutoParagraph() {
-        $this->config = array('Core.AutoParagraph' => true);
+        $this->config = array('AutoFormat.AutoParagraph' => true);
         
         $this->assertResult(
             'Foobar',
@@ -176,18 +176,139 @@ Par
         );
         
         $this->assertResult(
+'<div>Par1
+
+Par2</div>',
+            '<div><p>Par1</p><p>Par2</p></div>'
+        );
+        
+        $this->assertResult(
+'<div><b>Par1</b>
+
+Par2</div>',
+            '<div><p><b>Par1</b></p><p>Par2</p></div>'
+        );
+        
+        $this->assertResult('<div>Par1</div>');
+        
+        $this->assertResult(
+'<div><b>Par1</b>
+
+<i>Par2</i></div>',
+            '<div><p><b>Par1</b></p><p><i>Par2</i></p></div>'
+        );
+        
+        $this->assertResult(
+'<pre><b>Par1</b>
+
+<i>Par2</i></pre>',
+            true
+        );
+        
+        $this->assertResult(
+'<div><p>Foo
+
+Bar</p></div>',
+            '<div><p>Foo</p><p>Bar</p></div>'
+        );
+        
+        $this->assertResult(
+'<div><p><b>Foo</b>
+
+<i>Bar</i></p></div>',
+            '<div><p><b>Foo</b></p><p><i>Bar</i></p></div>'
+        );
+        
+        $this->assertResult(
+'<div><b>Foo</b></div>',
+            '<div><b>Foo</b></div>'
+        );
+        
+        $this->assertResult(
+'<blockquote>Par1
+
+Par2</blockquote>',
+            '<blockquote><p>Par1</p><p>Par2</p></blockquote>'
+        );
+        
+        $this->assertResult(
+'<ul><li>Foo</li>
+
+<li>Bar</li></ul>', true
+        );
+        
+        $this->assertResult(
+'<div>
+
+Bar
+
+</div>', 
+        '<div><p>Bar</p></div>'
+        );
+        
+        $this->assertResult(
+'<b>Par1</b>a
+
+
+
+Par2', 
+        '<p><b>Par1</b>a</p><p>Par2</p>'
+        );
+        
+        $this->assertResult(
+'Par1
+
+Par2</p>', 
+        '<p>Par1</p><p>Par2</p>'
+        );
+        
+        $this->assertResult(
+'Par1
+
+Par2</div>', 
+        '<p>Par1</p><p>Par2</p>'
+        );
+        
+        $this->assertResult(
+'<div>
+Par1
+</div>', true
+        );
+        
+        $this->assertResult(
+'<div>Par1
+
+<div>Par2</div></div>',
+'<div><p>Par1</p><div>Par2</div></div>'
+        );
+        
+        $this->assertResult(
+'<div>Par1
+<div>Par2</div></div>',
+'<div><p>Par1
+</p><div>Par2</div></div>'
+        );
+        
+        $this->assertResult(
+'Par1
+<div>Par2</div>',
+'<p>Par1
+</p><div>Par2</div>'
+        );
+        
+        $this->assertResult(
 'Par
 
 Par2',
             true,
-            array('Core.AutoParagraph' => true, 'HTML.Parent' => 'span')
+            array('AutoFormat.AutoParagraph' => true, 'HTML.Parent' => 'span')
         );
         
     }
     
     function testLinkify() {
         
-        $this->config = array('Core.AutoLinkify' => true);
+        $this->config = array('AutoFormat.Linkify' => true);
         
         $this->assertResult(
             'http://example.com',
@@ -212,7 +333,7 @@ Par2',
     
     function testMultipleInjectors() {
         
-        $this->config = array('Core.AutoParagraph' => true, 'Core.AutoLinkify' => true);
+        $this->config = array('AutoFormat.AutoParagraph' => true, 'AutoFormat.Linkify' => true);
         
         $this->assertResult(
             'Foobar',

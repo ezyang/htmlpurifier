@@ -12,6 +12,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 2.0.1, unknown release date
 ! Tag auto-closing now based on a ChildDef heuristic rather than a
   manually set auto_close array; some behavior may change
+! Experimental AutoFormat functionality added: auto-paragraph and
+  linkify your HTML input by setting %AutoFormat.AutoParagraph and
+  %AutoFormat.Linkify to true
 - Clean up special case code for <script> tags
 - Reorder includes for DefinitionCache decorators, fixes a possible
   missing class error
@@ -26,6 +29,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . HTMLDefinition printer updated with some of the new attributes
 . DefinitionCache keys reordered to reflect precedence: version number,
   hash, then revision number
+. %Core.DefinitionCache renamed to %Cache.DefinitionImpl
 
 2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety

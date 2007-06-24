@@ -2,6 +2,14 @@
 
 require_once 'HTMLPurifier/Injector.php';
 
+HTMLPurifier_ConfigSchema::define(
+    'AutoFormat', 'Linkify', false, 'bool', '
+<p>
+  This directive turns on linkification, auto-linking http, ftp and
+  https URLs. This directive has been available since 2.0.1.
+</p>
+');
+
 /**
  * Injector that converts http, https and ftp text URLs to actual links.
  */

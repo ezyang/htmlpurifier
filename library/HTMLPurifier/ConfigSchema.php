@@ -67,6 +67,7 @@ class HTMLPurifier_ConfigSchema {
         $this->defineNamespace('URI', 'Features regarding Uniform Resource Identifiers.');
         $this->defineNamespace('HTML', 'Configuration regarding allowed HTML.');
         $this->defineNamespace('CSS', 'Configuration regarding allowed CSS.');
+        $this->defineNamespace('AutoFormat', 'Configuration regarding auto-formatting functionality such as auto-paragraphing or linkification.');
         $this->defineNamespace('Output', 'Configuration relating to the generation of (X)HTML.');
         $this->defineNamespace('Cache', 'Configuration for DefinitionCache and related subclasses.');
         $this->defineNamespace('Test', 'Developer testing configuration for our unit tests.');

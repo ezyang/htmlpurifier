@@ -278,8 +278,8 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
     }
     
     function test_getDefinition() {
-        CS::defineNamespace('Core', 'Core stuff');
-        CS::define('Core', 'DefinitionCache', null, 'string/null', 'Cache?');
+        CS::defineNamespace('Cache', 'Cache stuff');
+        CS::define('Cache', 'DefinitionImpl', null, 'string/null', 'Cache?');
         CS::defineNamespace('Crust', 'Krusty Krabs');
         $config = HTMLPurifier_Config::createDefault();
         $this->expectError("Definition of Crust type not supported");

@@ -2,6 +2,24 @@
 
 require_once 'HTMLPurifier/Injector.php';
 
+HTMLPurifier_ConfigSchema::define(
+    'AutoFormat', 'AutoParagraph', false, 'bool', '
+<p>
+  This directive turns on auto-paragraphing, where double newlines are
+  converted in to paragraphs whenever possible. Auto-paragraphing
+  applies when:
+</p>
+<ul>
+  <li>There are inline elements or text in the root node</li>
+  <li>There are inline elements or text with double newlines or
+      block elements in nodes that allow paragraph tags</li>
+  <li>There are double newlines in paragraph tags</li>
+</ul>
+<p>
+  This directive has been available since 2.0.1.
+</p>
+');
+
 /**
  * Injector that auto paragraphs text in the root node based on
  * double-spacing.
@@ -11,27 +29,94 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
     
     function handleText(&$token) {
         $text = $token->data;
-        // $token is the focus: if processing is needed, it gets
-        // turned into an array of tokens that will replace the
-        // original token
         if (empty($this->currentNesting)) {
             if (!$this->allowsElement('p')) return;
-            // we're in root node, and the root node allows paragraphs
-            // start a paragraph since we just hit some text
+            // case 1: we're in root node (and it allows paragraphs)
             $token = array(new HTMLPurifier_Token_Start('p'));
             $this->_splitText($text, $token);
         } elseif ($this->currentNesting[count($this->currentNesting)-1]->name == 'p') {
-            // we're not in root node but we're in a paragraph, so don't 
-            // add a paragraph start tag but still perform processing
+            // case 2: we're in a paragraph
             $token = array();
             $this->_splitText($text, $token);
+        } elseif ($this->allowsElement('p')) {
+            // case 3: we're in an element that allows paragraphs
+            if (strpos($text, PHP_EOL . PHP_EOL) !== false) {
+                // case 3.1: this text node has a double-newline
+                $token = array(new HTMLPurifier_Token_Start('p'));
+                $this->_splitText($text, $token);
+            } else {
+                $ok = false;
+                // test if up-coming tokens are either block or have
+                // a double newline in them
+                for ($i = $this->inputIndex + 1; isset($this->inputTokens[$i]); $i++) {
+                    if ($this->inputTokens[$i]->type == 'start'){
+                        if (!$this->_isInline($this->inputTokens[$i])) {
+                            $ok = true;
+                        }
+                        break;
+                    }
+                    if ($this->inputTokens[$i]->type == 'end') break;
+                    if ($this->inputTokens[$i]->type == 'text') {
+                        if (strpos($this->inputTokens[$i]->data, PHP_EOL . PHP_EOL) !== false) {
+                            $ok = true;
+                        }
+                        if (!$this->inputTokens[$i]->is_whitespace) break;
+                    }
+                }
+                if ($ok) {
+                    // case 3.2: this text node is next to another node
+                    // that will start a paragraph
+                    $token = array(new HTMLPurifier_Token_Start('p'), $token);
+                }
+            }
         }
+        
     }
     
     function handleStart(&$token) {
-        // check if we're inside a tag already, if so, don't add
-        // paragraph tags
-        if (!empty($this->currentNesting)) return;
+        // check if we're inside a tag already
+        if (!empty($this->currentNesting)) {
+            if ($this->allowsElement('p')) {
+                // special case: we're in an element that allows paragraphs
+                
+                // this token is already paragraph, abort
+                if ($token->name == 'p') return;
+                
+                // check if this token is adjacent to the parent
+                if ($this->inputTokens[$this->inputIndex - 1]->type != 'start') {
+                    // not adjacent, we can abort early
+                    // add lead paragraph tag if our token is inline
+                    if ($this->_isInline($token)) {
+                        $token = array(new HTMLPurifier_Token_Start('p'), $token);
+                    }
+                    return;
+                }
+                
+                // this token is the first child of the element that allows
+                // paragraph. We have to peek ahead and see whether or not
+                // there is anything inside that suggests that a paragraph
+                // will be needed
+                $ok = false;
+                // maintain a mini-nesting counter, this lets us bail out
+                // early if possible
+                $j = 2; // current nesting, is two due to parent and this start
+                for ($i = $this->inputIndex + 1; isset($this->inputTokens[$i]); $i++) {
+                    if ($this->inputTokens[$i]->type == 'start') $j++;
+                    if ($this->inputTokens[$i]->type == 'end') $j--;
+                    if ($this->inputTokens[$i]->type == 'text') {
+                        if (strpos($this->inputTokens[$i]->data, PHP_EOL . PHP_EOL) !== false) {
+                            $ok = true;
+                            break;
+                        }
+                    }
+                    if ($j <= 0) break;
+                }
+                if ($ok) {
+                    $token = array(new HTMLPurifier_Token_Start('p'), $token);
+                }
+            }
+            return;
+        }
         
         // check if the start tag counts as a "block" element
         if (!$this->_isInline($token)) return;
@@ -56,15 +141,39 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         
         // remove empty paragraphs
         $paragraphs = array();
+        $needs_start = false;
+        $first = true;
         foreach ($raw_paragraphs as $par) {
-            if (trim($par) !== '') $paragraphs[] = $par;
+            if (trim($par) !== '') {
+               $paragraphs[] = $par;
+            } elseif (empty($result) && $first) {
+                // The empty result indicates that the AutoParagraph
+                // injector did not add any start paragraph tokens.
+                // The fact that the first paragraph is empty indicates
+                // that there was a double-newline at the start of the
+                // data.
+                // Combined together, this means that we are in a paragraph,
+                // and the newline means we should start a new one.
+                $result[] = new HTMLPurifier_Token_End('p');
+                // However, the start token should only be added if 
+                // there is more processing to be done (i.e. there are
+                // real paragraphs in here). If there are none, the
+                // next start paragraph tag will be handled by the
+                // next run-around the injector
+                $needs_start = true;
+            }
+            $first = false;
         }
         
         // check if there are no "real" paragraphs to be processed
-        if (empty($paragraphs) && count($raw_paragraphs) > 1) {
-            $result[] = new HTMLPurifier_Token_End('p');
+        if (empty($paragraphs)) {
             return;
         }
+        
+        // add a start tag if an end tag was added while processing
+        // the raw paragraphs (that happens if there's a leading double
+        // newline)
+        if ($needs_start) $result[] = new HTMLPurifier_Token_Start('p');
         
         // append the paragraphs onto the result
         foreach ($paragraphs as $par) {
@@ -72,37 +181,37 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
             $result[] = new HTMLPurifier_Token_End('p');
             $result[] = new HTMLPurifier_Token_Start('p');
         }
-        array_pop($result); // remove trailing start token
+        
+        // remove trailing start token, if one is needed, it will
+        // be handled the next time this injector is called
+        array_pop($result);
+        
+        // check the outside to determine whether or not the
+        // end paragraph tag should be removed. It should be removed
+        // unless the next non-whitespace token is a paragraph
+        // or a block element.
+        
+        $remove_paragraph_end = true;
+        // Start of the checks one after the current token's index
+        for ($i = $this->inputIndex + 1; isset($this->inputTokens[$i]); $i++) {
+            if ($this->inputTokens[$i]->type == 'start' || $this->inputTokens[$i]->type == 'empty') {
+                $remove_paragraph_end = $this->_isInline($this->inputTokens[$i]);
+                break;
+            }
+            // check if we can abort early (whitespace means we carry-on!)
+            if ($this->inputTokens[$i]->type == 'text' && !$this->inputTokens[$i]->is_whitespace) break;
+            // end tags will automatically be handled by MakeWellFormed,
+            // so we don't have to worry about them
+            if ($this->inputTokens[$i]->type == 'end') break;
+        }
         
         // check the outside to determine whether or not the
         // end paragraph tag should be removed
-        if ($this->_removeParagraphEnd()) {
+        if ($remove_paragraph_end) {
             array_pop($result);
         }
         
         
-    }
-    
-    /**
-     * Returns boolean whether or not to remove the paragraph end tag
-     * that was automatically added. The paragraph end tag should be
-     * removed unless the next token is a paragraph or block element.
-     * @private
-     */
-    function _removeParagraphEnd() {
-        $tokens =& $this->inputTokens;
-        $remove_paragraph_end = true;
-        // Start of the checks one after the current token's index
-        for ($i = $this->inputIndex + 1; isset($tokens[$i]); $i++) {
-            if ($tokens[$i]->type == 'start' || $tokens[$i]->type == 'empty') {
-                $remove_paragraph_end = $this->_isInline($tokens[$i]);
-                break;
-            }
-            // check if we can abort early (whitespace means we carry-on!)
-            if ($tokens[$i]->type == 'text' && !$tokens[$i]->is_whitespace) break;
-            if ($tokens[$i]->type == 'end') break; // nonsensical
-        }
-        return $remove_paragraph_end;
     }
     
     /**
