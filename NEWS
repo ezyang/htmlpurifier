@@ -25,11 +25,15 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Improve Serializer DefinitionCache directory permissions checks
 - DefinitionCache no longer throws errors when it encounters old
   serial files that do not conform to the current style
+- Stray xmlns attributes removed from configuration documentation
 . Rewire some test-cases to swallow errors rather than expect them
 . HTMLDefinition printer updated with some of the new attributes
 . DefinitionCache keys reordered to reflect precedence: version number,
   hash, then revision number
 . %Core.DefinitionCache renamed to %Cache.DefinitionImpl
+. Interlinking in configuration documentation added using
+  Injector_PurifierLinkify
+. Directives now keep track of aliases to themselves
 
 2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety

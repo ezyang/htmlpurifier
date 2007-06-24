@@ -83,6 +83,7 @@ $test_files[] = 'HTMLPurifier/HTMLModule/TidyTest.php';
 $test_files[] = 'HTMLPurifier/IDAccumulatorTest.php';
 $test_files[] = 'HTMLPurifier/Injector/AutoParagraphTest.php';
 $test_files[] = 'HTMLPurifier/Injector/LinkifyTest.php';
+$test_files[] = 'HTMLPurifier/Injector/PurifierLinkifyTest.php';
 $test_files[] = 'HTMLPurifier/LanguageFactoryTest.php';
 $test_files[] = 'HTMLPurifier/LanguageTest.php';
 $test_files[] = 'HTMLPurifier/Lexer/DirectLexTest.php';

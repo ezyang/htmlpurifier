@@ -43,7 +43,7 @@ HTMLPurifier_ConfigSchema::define(
     'Technically speaking this is not actually a doctype (as it does '.
     'not identify a corresponding DTD), but we are using this name '.
     'for sake of simplicity. This will override any older directives '.
-    'like %Core.XHTML or %HTML.Strict.'
+    'like %HTML.XHTML or %HTML.Strict.'
 );
 
 HTMLPurifier_ConfigSchema::define(

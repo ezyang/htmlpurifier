@@ -36,6 +36,7 @@ class ConfigDoc_HTMLXSLTProcessor
         // fudges for HTML backwards compatibility
         $out = str_replace('/>', ' />', $out); // <br /> not <br/>
         $out = str_replace(' xmlns=""', '', $out); // rm unnecessary xmlns
+        $out = str_replace(' xmlns="http://www.w3.org/1999/xhtml"', '', $out); // rm unnecessary xmlns
         if (class_exists('Tidy')) {
             // cleanup output
             $config = array(

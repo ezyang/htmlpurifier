@@ -6,6 +6,7 @@ require_once 'HTMLPurifier/Generator.php';
 
 require_once 'HTMLPurifier/Injector/AutoParagraph.php';
 require_once 'HTMLPurifier/Injector/Linkify.php';
+require_once 'HTMLPurifier/Injector/PurifierLinkify.php';
 
 HTMLPurifier_ConfigSchema::define(
     'AutoFormat', 'Custom', array(), 'list', '

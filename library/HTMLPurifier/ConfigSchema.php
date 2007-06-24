@@ -295,6 +295,7 @@ class HTMLPurifier_ConfigSchema {
         $def->info[$namespace][$name] =
             new HTMLPurifier_ConfigDef_DirectiveAlias(
                 $new_namespace, $new_name);
+        $def->info[$new_namespace][$new_name]->directiveAliases[] = "$namespace.$name";
     }
     
     /**

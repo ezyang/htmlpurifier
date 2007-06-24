@@ -72,8 +72,16 @@
         <xsl:apply-templates />
     </xsl:template>
     <xsl:template match="directive/name">
+        <xsl:apply-templates select="../aliases/alias" mode="anchor" />
         <h3 id="{../@id}"><xsl:value-of select="../@id" /></h3>
     </xsl:template>
+    <xsl:template match="alias" mode="anchor">
+        <a id="{.}"></a>
+    </xsl:template>
+    
+    <!-- Do not pass through -->
+    <xsl:template match="alias"></xsl:template>
+    
     <xsl:template match="directive/constraints">
         <table class="constraints">
             <xsl:apply-templates />
@@ -89,7 +97,19 @@
                     </td>
                 </tr>
             </xsl:if>
+            <xsl:if test="../aliases/alias">
+                <xsl:apply-templates select="../aliases" mode="constraints" />
+            </xsl:if>
         </table>
+    </xsl:template>
+    <xsl:template match="directive/aliases" mode="constraints">
+        <th>Aliases:</th>
+        <td>
+            <xsl:for-each select="alias">
+                <xsl:if test="position()&gt;1">, </xsl:if>
+                <xsl:value-of select="." />
+            </xsl:for-each>
+        </td>
     </xsl:template>
     <xsl:template match="directive//description">
         <div class="description">

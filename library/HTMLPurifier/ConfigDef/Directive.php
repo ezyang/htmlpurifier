@@ -62,6 +62,12 @@ class HTMLPurifier_ConfigDef_Directive extends HTMLPurifier_ConfigDef
     var $aliases = array();
     
     /**
+     * Advisory list of directive aliases, i.e. other directives that
+     * redirect here
+     */
+    var $directiveAliases = array();
+    
+    /**
      * Adds a description to the array
      */
     function addDescription($file, $line, $description) {
