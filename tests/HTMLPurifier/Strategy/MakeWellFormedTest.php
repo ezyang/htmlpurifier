@@ -235,7 +235,7 @@ http://dev.example.com',
         
         $this->assertResult(
             'http://example.com <div>http://example.com</div>',
-            '<p><a href="http://example.com">http://example.com</a></p><div><a href="http://example.com">http://example.com</a></div>'
+            '<p><a href="http://example.com">http://example.com</a> </p><div><a href="http://example.com">http://example.com</a></div>'
         );
         
         $this->assertResult(
