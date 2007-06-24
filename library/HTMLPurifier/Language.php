@@ -21,6 +21,11 @@ class HTMLPurifier_Language
     var $messages = array();
     
     /**
+     * Array of localizable error codes
+     */
+    var $errorNames = array();
+    
+    /**
      * Has the language object been loaded yet?
      * @private
      */
@@ -49,6 +54,18 @@ class HTMLPurifier_Language
         if (!$this->_loaded) $this->load();
         if (!isset($this->messages[$key])) return "[$key]";
         return $this->messages[$key];
+    }
+    
+    /**
+     * Retrieves a localised error name.
+     * @param $int integer error number, corresponding to PHP's error
+     *             reporting
+     * @return string localised message
+     */
+    function getErrorName($int) {
+        if (!$this->_loaded) $this->load();
+        if (!isset($this->errorNames[$int])) return "[Error: $int]";
+        return $this->errorNames[$int];
     }
     
     /**

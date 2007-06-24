@@ -14,11 +14,12 @@ class HTMLPurifier_ErrorCollector
     /**
      * Sends an error message to the collector for later use
      * @param string Error message text
+     * @param int Error severity, PHP error style (don't use E_USER_)
      * @param HTMLPurifier_Token Token that caused error
      * @param array Tokens surrounding the offending token above, use true as placeholder
      */
-    function send($msg, $token, $context_tokens = array(true)) {
-        $this->errors[] = array($msg, $token, $context_tokens);
+    function send($msg, $severity, $token, $context_tokens = array(true)) {
+        $this->errors[] = array($msg, $severity, $token, $context_tokens);
     }
     
     /**
@@ -34,32 +35,35 @@ class HTMLPurifier_ErrorCollector
      * Default HTML formatting implementation for error messages
      * @param $config Configuration array, vital for HTML output nature
      */
-    function getHTMLFormatted($config) {
+    function getHTMLFormatted($config, &$context) {
         $generator = new HTMLPurifier_Generator();
-        $context = new HTMLPurifier_Context();
         $generator->generateFromTokens(array(), $config, $context); // initialize
         $ret = array();
         
         $errors = $this->errors;
+        $locale = $context->get('Locale');
         
         // sort error array by line
         if ($config->get('Core', 'MaintainLineNumbers')) {
             $lines  = array();
-            foreach ($errors as $error) $lines[] = $error[1]->line;
+            foreach ($errors as $error) $lines[] = $error[2]->line;
             array_multisort($lines, SORT_ASC, $errors);
         }
         
         foreach ($errors as $error) {
-            $string = $generator->escape($error[0]); // message
-            if (!empty($error[1]->line)) {
-                $string .= ' at line ' . $error[1]->line;
+            list($msg, $severity, $token, $context_tokens) = $error;
+            $string = '';
+            $string .= $locale->getErrorName($severity) . ': ';
+            $string .= $generator->escape($msg); 
+            if (!empty($token->line)) {
+                $string .= ' at line ' . $token->line;
             }
             $string .= ' (<code>';
-            foreach ($error[2] as $token) {
-                if ($token !== true) {
-                    $string .= $generator->escape($generator->generateFromToken($token));
+            foreach ($context_tokens as $context_token) {
+                if ($context_token !== true) {
+                    $string .= $generator->escape($generator->generateFromToken($context_token));
                 } else {
-                    $string .= '<strong>' . $generator->escape($generator->generateFromToken($error[1])) . '</strong>';
+                    $string .= '<strong>' . $generator->escape($generator->generateFromToken($token)) . '</strong>';
                 }
             }
             $string .= '</code>)';

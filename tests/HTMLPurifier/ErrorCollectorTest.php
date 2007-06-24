@@ -17,23 +17,32 @@ class HTMLPurifier_ErrorCollectorTest extends UnitTestCase
         $tok4->line = 3;
         
         $collector = new HTMLPurifier_ErrorCollector();
-        $collector->send('Big fat error', $tok1);
-        $collector->send('Another <error>', $tok2, array($tok3, true, $tok4));
+        $collector->send('Big fat error', E_ERROR, $tok1);
+        $collector->send('Another <warning>', E_WARNING, $tok2, array($tok3, true, $tok4));
         
         $result = array(
-            0 => array('Big fat error', $tok1, array(true)),
-            1 => array('Another <error>', $tok2, array($tok3, true, $tok4))
+            0 => array('Big fat error', E_ERROR, $tok1, array(true)),
+            1 => array('Another <warning>', E_WARNING, $tok2, array($tok3, true, $tok4))
         );
         
         $this->assertIdentical($collector->getRaw(), $result);
         
         $formatted_result = array(
-            0 => 'Another &lt;error&gt; at line 3 (<code>Context before<strong>&lt;a&gt;</strong>Context after</code>)',
-            1 => 'Big fat error at line 23 (<code><strong>Token that caused error</strong></code>)'
+            0 => 'Warning: Another &lt;warning&gt; at line 3 (<code>Context before<strong>&lt;a&gt;</strong>Context after</code>)',
+            1 => 'Error: Big fat error at line 23 (<code><strong>Token that caused error</strong></code>)'
         );
         
         $config = HTMLPurifier_Config::create(array('Core.MaintainLineNumbers' => true));
-        $this->assertIdentical($collector->getHTMLFormatted($config), $formatted_result);
+        
+        $context = new HTMLPurifier_Context();
+        
+        generate_mock_once('HTMLPurifier_Language');
+        $language = new HTMLPurifier_LanguageMock();
+        $language->setReturnValue('getErrorName', 'Error', array(E_ERROR));
+        $language->setReturnValue('getErrorName', 'Warning', array(E_WARNING));
+        $context->register('Locale', $language);
+        
+        $this->assertIdentical($collector->getHTMLFormatted($config, $context), $formatted_result);
         
     }
     

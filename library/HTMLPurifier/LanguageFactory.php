@@ -43,7 +43,7 @@ class HTMLPurifier_LanguageFactory
      * Keys whose contents are a hash map and can be merged
      * @value array lookup
      */
-    var $mergeable_keys_map = array('messages' => true);
+    var $mergeable_keys_map = array('messages' => true, 'errorNames' => true);
     
     /**
      * Keys whose contents are a list and can be merged

@@ -11,4 +11,10 @@ $messages = array(
 
 );
 
+$errorNames = array(
+    E_ERROR => 'Error',
+    E_WARNING => 'Warning',
+    E_NOTICE => 'Notice'
+);
+
 ?>

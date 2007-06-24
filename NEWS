@@ -34,6 +34,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Interlinking in configuration documentation added using
   Injector_PurifierLinkify
 . Directives now keep track of aliases to themselves
+. Error collector now requires a severity to be passed, use PHP's internal
+  error constants for this
 
 2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety
