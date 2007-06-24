@@ -5,6 +5,7 @@ require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/Generator.php';
 
 require_once 'HTMLPurifier/Injector/AutoParagraph.php';
+require_once 'HTMLPurifier/Injector/Linkify.php';
 
 HTMLPurifier_ConfigSchema::define(
     'Core', 'AutoParagraph', false, 'bool', '
@@ -12,6 +13,16 @@ HTMLPurifier_ConfigSchema::define(
   This directive will cause HTML Purifier to automatically paragraph text
   in the document fragment root based on two newlines and block tags.
   This directive has been available since 2.0.1.
+</p>
+'
+);
+
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'AutoLinkify', false, 'bool', '
+<p>
+  This directive will cause HTML Purifier to automatically linkify
+  text that looks like URLs. This directive has been available since
+  2.0.1.
 </p>
 '
 );
@@ -49,6 +60,12 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             $injector_disabled[] = false;
         }
         
+        if ($config->get('Core', 'AutoLinkify')) {
+            $injector[] = new HTMLPurifier_Injector_Linkify();
+            $injector_skip[] = 0;
+            $injector_disabled[] = false;
+        }
+        
         $current_injector = 0;
         
         $context->register('Injector', $injector);
@@ -60,13 +77,12 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // if all goes well, this token will be passed through unharmed
             $token = $tokens[$tokens_index];
             
-            // this will be more complicated
-            if (isset($injector[$current_injector])) {
-                if ($injector_skip[$current_injector] > 0) {
-                    $injector_skip[$current_injector]--;
-                    $injector_disabled[$current_injector] = true;
+            foreach ($injector as $i => $x) {
+                if ($injector_skip[$i] > 0) {
+                    $injector_skip[$i]--;
+                    $injector_disabled[$i] = true;
                 } else {
-                    $injector_disabled[$current_injector] = false;
+                    $injector_disabled[$i] = false;
                 }
             }
             
@@ -74,8 +90,14 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             if (empty( $token->is_tag )) {
                 
                 if ($token->type === 'text') {
-                     if (isset($injector[$current_injector]) && !$injector_disabled[$current_injector]) {
-                         $injector[$current_injector]->handleText($token, $config, $context);
+                     foreach ($injector as $i => $x) {
+                         if (!$injector_disabled[$i]) {
+                             $x->handleText($token, $config, $context);
+                         }
+                         if (is_array($token)) {
+                             $current_injector = $i;
+                             break;
+                         }
                      }
                 }
                 
@@ -127,8 +149,14 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     $current_nesting[] = $parent; // undo the pop
                 }
                 
-                if (isset($injector[$current_injector]) && !$injector_disabled[$current_injector]) {
-                    $injector[$current_injector]->handleStart($token, $config, $context);
+                foreach ($injector as $i => $x) {
+                    if (!$injector_disabled[$i]) {
+                        $x->handleStart($token, $config, $context);
+                    }
+                    if (is_array($token)) {
+                        $current_injector = $i;
+                        break;
+                    }
                 }
                 
                 $this->processToken($token, $config, $context);
