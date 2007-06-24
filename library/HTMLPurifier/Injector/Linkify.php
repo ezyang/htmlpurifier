@@ -19,7 +19,7 @@ class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
         } else {
             $parent = $definition->info_parent_def;
         }
-        if (!isset($parent->child->elements['a'])) {
+        if (!isset($parent->child->elements['a']) || isset($parent->excludes['a'])) {
             // parent element does not allow link elements, don't bother
             return;
         }
@@ -29,8 +29,8 @@ class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
             // "google.com"
             return;
         }
-        // there is/are URL(s). Let's split the string:
         
+        // there is/are URL(s). Let's split the string:
         $bits = preg_split('#((?:https?|ftp)://[^\s\'"<>()]+)#S', $token->data, -1, PREG_SPLIT_DELIM_CAPTURE);
         
         $token = array();

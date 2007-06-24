@@ -196,6 +196,10 @@ Par
             'This URL <a href="http://example.com">http://example.com</a> is what you need'
         );
         
+        $this->assertResult(
+            '<a>http://example.com/</a>'
+        );
+        
     }
     
     function testMultipleInjectors() {

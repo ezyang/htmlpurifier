@@ -256,8 +256,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             $injector =& $context->get('Injector');
             $current_injector =& $context->get('CurrentInjector');
             
-            if (isset($injector[$current_injector])) {
-                $injector_skip[$current_injector] = count($token);
+            $offset = count($token);
+            for ($i = 0; $i <= $current_injector; $i++) {
+                $injector_skip[$i] += $offset;
             }
             
         } elseif ($token) {
