@@ -38,14 +38,22 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $context->register('OutputTokens', $result);
         
         $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
-        $auto_paragraph      = $config->get('Core', 'AutoParagraph');
         
         $injector = array();
-        $injector['AutoParagraph'] = new HTMLPurifier_Injector_AutoParagraph();
-        $injector_skip['AutoParagraph'] = 0;
-        $injector_disabled['AutoParagraph'] = false;
+        $injector_skip = array();
+        $injector_disabled = array();
         
+        if ($config->get('Core', 'AutoParagraph')) {
+            $injector[] = new HTMLPurifier_Injector_AutoParagraph();
+            $injector_skip[] = 0;
+            $injector_disabled[] = false;
+        }
+        
+        $current_injector = 0;
+        
+        $context->register('Injector', $injector);
         $context->register('InjectorSkip', $injector_skip);
+        $context->register('CurrentInjector', $current_injector);
         
         for ($tokens_index = 0; isset($tokens[$tokens_index]); $tokens_index++) {
             
@@ -53,19 +61,21 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             $token = $tokens[$tokens_index];
             
             // this will be more complicated
-            if ($injector_skip['AutoParagraph'] > 0) {
-                $injector_skip['AutoParagraph']--;
-                $injector_disabled['AutoParagraph'] = true;
-            } else {
-                $injector_disabled['AutoParagraph'] = false;
+            if (isset($injector[$current_injector])) {
+                if ($injector_skip[$current_injector] > 0) {
+                    $injector_skip[$current_injector]--;
+                    $injector_disabled[$current_injector] = true;
+                } else {
+                    $injector_disabled[$current_injector] = false;
+                }
             }
             
             // quick-check: if it's not a tag, no need to process
             if (empty( $token->is_tag )) {
                 
                 if ($token->type === 'text') {
-                     if ($auto_paragraph && !$injector_disabled['AutoParagraph']) {
-                         $injector['AutoParagraph']->handleText($token, $config, $context);
+                     if (isset($injector[$current_injector]) && !$injector_disabled[$current_injector]) {
+                         $injector[$current_injector]->handleText($token, $config, $context);
                      }
                 }
                 
@@ -117,8 +127,8 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     $current_nesting[] = $parent; // undo the pop
                 }
                 
-                if ($auto_paragraph && !$injector_disabled['AutoParagraph']) {
-                    $injector['AutoParagraph']->handleStart($token, $config, $context);
+                if (isset($injector[$current_injector]) && !$injector_disabled[$current_injector]) {
+                    $injector[$current_injector]->handleStart($token, $config, $context);
                 }
                 
                 $this->processToken($token, $config, $context);
@@ -215,7 +225,12 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // this will be a bit more complicated when we add more formatters
             // we need to prevent the same formatter from running twice on it
             $injector_skip =& $context->get('InjectorSkip');
-            $injector_skip['AutoParagraph'] = count($token);
+            $injector =& $context->get('Injector');
+            $current_injector =& $context->get('CurrentInjector');
+            
+            if (isset($injector[$current_injector])) {
+                $injector_skip[$current_injector] = count($token);
+            }
             
         } elseif ($token) {
             // regular case
