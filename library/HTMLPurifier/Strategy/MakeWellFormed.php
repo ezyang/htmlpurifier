@@ -33,38 +33,49 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
 {
     
+    /**
+     * Locally shared variable references
+     * @private
+     */
+    var $inputTokens, $inputIndex, $outputTokens, $currentNesting,
+        $currentInjector, $injectors;
+    
     function execute($tokens, $config, &$context) {
         
         $definition = $config->getHTMLDefinition();
+        
+        // CurrentNesting
+        $this->currentNesting = array();
+        $context->register('CurrentNesting', $this->currentNesting);
+        
+        // InputIndex
+        $this->inputIndex = false;
+        $context->register('InputIndex', $this->inputIndex);
+        
+        // InputTokens
+        $context->register('InputTokens', $tokens);
+        $this->inputTokens =& $tokens;
+        
+        // OutputTokens
+        $result = array();
+        $this->outputTokens =& $result;
+        
+        // %Core.EscapeInvalidTags
+        $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
         $generator = new HTMLPurifier_Generator();
         
-        $current_nesting = array();
-        $context->register('CurrentNesting', $current_nesting);
-        
-        $tokens_index = null;
-        $context->register('InputIndex', $tokens_index);
-        $context->register('InputTokens', $tokens);
-        
-        $result = array();
-        $context->register('OutputTokens', $result);
-        
-        $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
-        
         // -- begin INJECTOR --
-        // factor this stuff out to its own class
         
-        $injector = array();
-        $injector_skip = array();
+        $this->injectors = array();
         
+        // we need a generic way of adding injectors, and also its own
+        // configuration namespace
         if ($config->get('Core', 'AutoParagraph')) {
-            $injector[] = new HTMLPurifier_Injector_AutoParagraph();
-            // decrement happens first, so set to one so we start at zero
-            $injector_skip[] = 1;
+            $this->injectors[] = new HTMLPurifier_Injector_AutoParagraph();
         }
         
         if ($config->get('Core', 'AutoLinkify')) {
-            $injector[] = new HTMLPurifier_Injector_Linkify();
-            $injector_skip[] = 1;
+            $this->injectors[] = new HTMLPurifier_Injector_Linkify();
         }
         
         // array index of the injector that resulted in an array
@@ -72,64 +83,55 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         // injectors are affected by the added tokens and which are
         // not (namely, the ones after the current injector are not
         // affected)
-        $current_injector = false;
+        $this->currentInjector = false;
         
-        $context->register('Injector', $injector);
-        $context->register('CurrentInjector', $current_injector);
-        
-        // number of tokens to skip + 1
-        // before processing, this gets decremented: if it equals zero,
-        // it means the injector is active and is processing tokens, if
-        // it is greater than zero, then it is inactive, presumably having
-        // been the source of the tokens
-        $context->register('InjectorSkip', $injector_skip);
+        // give the injectors references to the definition and context
+        // variables for performance reasons
+        foreach ($this->injectors as $i => $x) {
+            $this->injectors[$i]->prepare($config, $context);
+        }
         
         // -- end INJECTOR --
         
-        for ($tokens_index = 0; isset($tokens[$tokens_index]); $tokens_index++) {
+        for ($this->inputIndex = 0; isset($tokens[$this->inputIndex]); $this->inputIndex++) {
             
             // if all goes well, this token will be passed through unharmed
-            $token = $tokens[$tokens_index];
+            $token = $tokens[$this->inputIndex];
             
-            foreach ($injector as $i => $x) {
-                if ($injector_skip[$i] > 0) $injector_skip[$i]--;
+            foreach ($this->injectors as $i => $x) {
+                if ($x->skip > 0) $this->injectors[$i]->skip--;
             }
             
             // quick-check: if it's not a tag, no need to process
             if (empty( $token->is_tag )) {
-                
-                // duplicated with handleStart
                 if ($token->type === 'text') {
-                     foreach ($injector as $i => $x) {
-                         if (!$injector_skip[$i]) {
-                             $x->handleText($token, $config, $context);
-                         }
+                     // injector handler code; duplicated for performance reasons
+                     foreach ($this->injectors as $i => $x) {
+                         if (!$x->skip) $x->handleText($token, $config, $context);
                          if (is_array($token)) {
-                             $current_injector = $i;
+                             $this->currentInjector = $i;
                              break;
                          }
                      }
                 }
-                
                 $this->processToken($token, $config, $context);
                 continue;
             }
             
             $info = $definition->info[$token->name]->child;
             
+            // quick checks:
             // test if it claims to be a start tag but is empty
             if ($info->type == 'empty' && $token->type == 'start') {
                 $result[] = new HTMLPurifier_Token_Empty($token->name, $token->attr);
                 continue;
             }
-            
             // test if it claims to be empty but really is a start tag
             if ($info->type != 'empty' && $token->type == 'empty' ) {
                 $result[] = new HTMLPurifier_Token_Start($token->name, $token->attr);
                 $result[] = new HTMLPurifier_Token_End($token->name);
                 continue;
             }
-            
             // automatically insert empty tags
             if ($token->type == 'empty') {
                 $result[] = $token;
@@ -140,9 +142,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             if ($token->type == 'start') {
                 
                 // ...unless they also have to close their parent
-                if (!empty($current_nesting)) {
+                if (!empty($this->currentNesting)) {
                     
-                    $parent = array_pop($current_nesting);
+                    $parent = array_pop($this->currentNesting);
                     $parent_info = $definition->info[$parent->name];
                     
                     // this can be replaced with a more general algorithm:
@@ -152,20 +154,18 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                         // close the parent, then append the token
                         $result[] = new HTMLPurifier_Token_End($parent->name);
                         $result[] = $token;
-                        $current_nesting[] = $token;
+                        $this->currentNesting[] = $token;
                         continue;
                     }
                     
-                    $current_nesting[] = $parent; // undo the pop
+                    $this->currentNesting[] = $parent; // undo the pop
                 }
                 
-                // injectors
-                foreach ($injector as $i => $x) {
-                    if (!$injector_skip[$i]) {
-                        $x->handleStart($token, $config, $context);
-                    }
+                // injector handler code; duplicated for performance reasons
+                foreach ($this->injectors as $i => $x) {
+                    if (!$x->skip[$i]) $x->handleStart($token, $config, $context);
                     if (is_array($token)) {
-                        $current_injector = $i;
+                        $this->currentInjector = $i;
                         break;
                     }
                 }
@@ -178,7 +178,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             if ($token->type != 'end') continue;
             
             // make sure that we have something open
-            if (empty($current_nesting)) {
+            if (empty($this->currentNesting)) {
                 if ($escape_invalid_tags) {
                     $result[] = new HTMLPurifier_Token_Text(
                         $generator->generateFromToken($token, $config, $context)
@@ -188,7 +188,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             }
             
             // first, check for the simplest case: everything closes neatly
-            $current_parent = array_pop($current_nesting);
+            $current_parent = array_pop($this->currentNesting);
             if ($current_parent->name == $token->name) {
                 $result[] = $token;
                 continue;
@@ -197,17 +197,17 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // okay, so we're trying to close the wrong tag
             
             // undo the pop previous pop
-            $current_nesting[] = $current_parent;
+            $this->currentNesting[] = $current_parent;
             
             // scroll back the entire nest, trying to find our tag.
             // (feature could be to specify how far you'd like to go)
-            $size = count($current_nesting);
+            $size = count($this->currentNesting);
             // -2 because -1 is the last element, but we already checked that
             $skipped_tags = false;
             for ($i = $size - 2; $i >= 0; $i--) {
-                if ($current_nesting[$i]->name == $token->name) {
+                if ($this->currentNesting[$i]->name == $token->name) {
                     // current nesting is modified
-                    $skipped_tags = array_splice($current_nesting, $i);
+                    $skipped_tags = array_splice($this->currentNesting, $i);
                     break;
                 }
             }
@@ -234,22 +234,20 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         // we're at the end now, fix all still unclosed tags
         // not using processToken() because at this point we don't
         // care about current nesting
-        if (!empty($current_nesting)) {
-            $size = count($current_nesting);
+        if (!empty($this->currentNesting)) {
+            $size = count($this->currentNesting);
             for ($i = $size - 1; $i >= 0; $i--) {
                 $result[] =
-                    new HTMLPurifier_Token_End($current_nesting[$i]->name);
+                    new HTMLPurifier_Token_End($this->currentNesting[$i]->name);
             }
         }
         
         $context->destroy('CurrentNesting');
         $context->destroy('InputTokens');
         $context->destroy('InputIndex');
-        $context->destroy('OutputTokens');
         
-        $context->destroy('Injector');
-        $context->destroy('CurrentInjector');
-        $context->destroy('InjectorSkip');
+        unset($this->outputTokens, $this->injectors, $this->currentInjector,
+          $this->currentNesting, $this->inputTokens, $this->inputIndex);
         
         return $result;
     }
@@ -259,33 +257,22 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // the original token was overloaded by an injector, time
             // to some fancy acrobatics
             
-            $tokens              =& $context->get('InputTokens');
-            $tokens_index        =& $context->get('InputIndex');
-            // $tokens_index is decremented so that the entire set gets
+            // $this->inputIndex is decremented so that the entire set gets
             // re-processed
-            array_splice($tokens, $tokens_index--, 1, $token);
+            array_splice($this->inputTokens, $this->inputIndex--, 1, $token);
             
             // adjust the injector skips based on the array substitution
-            $injector_skip    =& $context->get('InjectorSkip');
-            $current_injector =& $context->get('CurrentInjector');
-            
             $offset = count($token) + 1;
-            for ($i = 0; $i <= $current_injector; $i++) {
-                $injector_skip[$i] += $offset;
+            for ($i = 0; $i <= $this->currentInjector; $i++) {
+                $this->injectors[$i]->skip += $offset;
             }
-            
         } elseif ($token) {
             // regular case
-            $result =& $context->get('OutputTokens');
-            $current_nesting =& $context->get('CurrentNesting');
-            $result[] = $token;
+            $this->outputTokens[] = $token;
             if ($token->type == 'start') {
-                $current_nesting[] = $token;
+                $this->currentNesting[] = $token;
             } elseif ($token->type == 'end') {
-                // theoretical: this code doesn't get run because performing
-                // the calculations inline is more efficient, and
-                // end tokens (currently) do not cause a handler invocation
-                array_pop($current_nesting);
+                array_pop($this->currentNesting); // not actually used
             }
         }
     }

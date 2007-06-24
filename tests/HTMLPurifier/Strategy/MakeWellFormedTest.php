@@ -175,6 +175,14 @@ Par
             '<p>Par</p>'
         );
         
+        $this->assertResult(
+'Par
+
+Par2',
+            true,
+            array('Core.AutoParagraph' => true, 'HTML.Parent' => 'span')
+        );
+        
     }
     
     function testLinkify() {

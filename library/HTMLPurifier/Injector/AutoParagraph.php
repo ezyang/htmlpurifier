@@ -5,38 +5,36 @@ require_once 'HTMLPurifier/Injector.php';
 /**
  * Injector that auto paragraphs text in the root node based on
  * double-spacing.
- * @todo Don't assume that root node means paragraphing is alright
  */
 class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
 {
     
-    function handleText(&$token, $config, &$context) {
-        $current_nesting =& $context->get('CurrentNesting');
+    function handleText(&$token) {
         $text = $token->data;
         // $token is the focus: if processing is needed, it gets
         // turned into an array of tokens that will replace the
         // original token
-        if (empty($current_nesting)) {
-            // we're in root node, great time to start a paragraph
-            // since we're also dealing with a text node
+        if (empty($this->currentNesting)) {
+            if (!$this->allowsElement('p')) return;
+            // we're in root node, and the root node allows paragraphs
+            // start a paragraph since we just hit some text
             $token = array(new HTMLPurifier_Token_Start('p'));
-            $this->_splitText($text, $token, $config, $context);
-        } elseif ($current_nesting[count($current_nesting)-1]->name == 'p') {
+            $this->_splitText($text, $token);
+        } elseif ($this->currentNesting[count($this->currentNesting)-1]->name == 'p') {
             // we're not in root node but we're in a paragraph, so don't 
             // add a paragraph start tag but still perform processing
             $token = array();
-            $this->_splitText($text, $token, $config, $context);
+            $this->_splitText($text, $token);
         }
     }
     
-    function handleStart(&$token, $config, &$context) {
+    function handleStart(&$token) {
         // check if we're inside a tag already, if so, don't add
         // paragraph tags
-        $current_nesting = $context->get('CurrentNesting');
-        if (!empty($current_nesting)) return;
+        if (!empty($this->currentNesting)) return;
         
         // check if the start tag counts as a "block" element
-        if (!$this->_isInline($token, $config)) return;
+        if (!$this->_isInline($token)) return;
         
         // append a paragraph tag before the token
         $token = array(new HTMLPurifier_Token_Start('p'), $token);
@@ -53,7 +51,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
      * @param $context Instance of HTMLPurifier_Context
      * @private
      */
-    function _splitText($data, &$result, $config, &$context) {
+    function _splitText($data, &$result) {
         $raw_paragraphs = explode(PHP_EOL . PHP_EOL, $data);
         
         // remove empty paragraphs
@@ -78,7 +76,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         
         // check the outside to determine whether or not the
         // end paragraph tag should be removed
-        if ($this->_removeParagraphEnd($config, $context)) {
+        if ($this->_removeParagraphEnd()) {
             array_pop($result);
         }
         
@@ -89,19 +87,15 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
      * Returns boolean whether or not to remove the paragraph end tag
      * that was automatically added. The paragraph end tag should be
      * removed unless the next token is a paragraph or block element.
-     * @param $config Instance of HTMLPurifier_Config
-     * @param $context Instance of HTMLPurifier_Context
      * @private
      */
-    function _removeParagraphEnd($config, &$context) {
-        $tokens = $context->get('InputTokens');
-        $i = $context->get('InputIndex');
+    function _removeParagraphEnd() {
+        $tokens =& $this->inputTokens;
         $remove_paragraph_end = true;
         // Start of the checks one after the current token's index
-        for ($i++; isset($tokens[$i]); $i++) {
+        for ($i = $this->inputIndex + 1; isset($tokens[$i]); $i++) {
             if ($tokens[$i]->type == 'start' || $tokens[$i]->type == 'empty') {
-                $definition = $config->getHTMLDefinition();
-                $remove_paragraph_end = $this->_isInline($tokens[$i], $config);
+                $remove_paragraph_end = $this->_isInline($tokens[$i]);
                 break;
             }
             // check if we can abort early (whitespace means we carry-on!)
@@ -114,10 +108,10 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
     /**
      * Returns true if passed token is inline (and, ergo, allowed in
      * paragraph tags)
+     * @private
      */
-    function _isInline($token, $config) {
-        $definition = $config->getHTMLDefinition();
-        return isset($definition->info['p']->child->elements[$token->name]);
+    function _isInline($token) {
+        return isset($this->htmlDefinition->info['p']->child->elements[$token->name]);
     }
     
 }
