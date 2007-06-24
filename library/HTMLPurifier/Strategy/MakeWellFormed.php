@@ -7,6 +7,17 @@ require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Injector/AutoParagraph.php';
 require_once 'HTMLPurifier/Injector/Linkify.php';
 
+HTMLPurifier_ConfigSchema::define(
+    'AutoFormat', 'Custom', array(), 'list', '
+<p>
+  This directive can be used to add custom auto-format injectors.
+  Specify an array of injector names (class name minus the prefix)
+  or concrete implementations. Injector class must exist. This directive
+  has been available since 2.0.1.
+</p>
+'
+);
+
 /**
  * Takes tokens makes them well-formed (balance end tags, etc.)
  */
@@ -48,14 +59,19 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         
         $this->injectors = array();
         
-        // we need a generic way of adding injectors, and also its own
-        // configuration namespace
-        if ($config->get('AutoFormat', 'AutoParagraph')) {
-            $this->injectors[] = new HTMLPurifier_Injector_AutoParagraph();
+        $injectors = $config->getBatch('AutoFormat');
+        $custom_injectors = $injectors['Custom'];
+        unset($injectors['Custom']); // special case
+        foreach ($injectors as $injector => $b) {
+            $injector = "HTMLPurifier_Injector_$injector";
+            if ($b) $this->injectors[] = new $injector;
         }
-        
-        if ($config->get('AutoFormat', 'Linkify')) {
-            $this->injectors[] = new HTMLPurifier_Injector_Linkify();
+        foreach ($custom_injectors as $injector) {
+            if (is_string($injector)) {
+                $injector = "HTMLPurifier_Injector_$injector";
+                $injector = new $injector;
+            }
+            $this->injectors[] = $injector;
         }
         
         // array index of the injector that resulted in an array

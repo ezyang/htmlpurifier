@@ -46,7 +46,7 @@ TODO List
  # Formatters for plaintext
     - Smileys
     - Linkification for HTML Purifier docs: notably configuration and classes
- - Standardize token armor for all areas of armor
+ - Standardize token armor for all areas of processing
  - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
  - Automatically add non-breaking spaces to empty table cells when
    empty-cells:show is applied to have compatibility with Internet Explorer
