@@ -5,6 +5,7 @@ require_once 'HTMLPurifier/Injector.php';
 /**
  * Injector that auto paragraphs text in the root node based on
  * double-spacing.
+ * @todo Don't assume that root node means paragraphing is alright
  */
 class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
 {
