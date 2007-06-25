@@ -312,7 +312,6 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         $e = false;
         if ($config->get('Core', 'CollectErrors')) {
             $e =& $context->get('ErrorCollector');
-            $current_line =& $context->get('CurrentLine');
         }
         
         // let's see if we can abort as quickly as possible

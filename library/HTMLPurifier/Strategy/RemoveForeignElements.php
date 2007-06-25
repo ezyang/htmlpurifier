@@ -53,6 +53,9 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         // converts comments into text tokens when this is equal to a tag name
         $textify_comments = false;
         
+        $token = false;
+        $context->register('CurrentToken', $token);
+        
         foreach($tokens as $token) {
             if ($remove_until) {
                 if (empty($token->is_tag) || $token->name !== $remove_until) {
@@ -134,6 +137,9 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
             }
             $result[] = $token;
         }
+        
+        $context->destroy('CurrentToken');
+        
         return $result;
     }
     

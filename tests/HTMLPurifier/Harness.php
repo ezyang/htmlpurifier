@@ -47,6 +47,11 @@ class HTMLPurifier_Harness extends UnitTestCase
      */
     var $config;
     
+    /**
+     * Default context to fall back on if no context is available
+     */
+    var $context;
+    
     function HTMLPurifier_Harness() {
         $this->lexer     = new HTMLPurifier_Lexer_DirectLex();
         $this->generator = new HTMLPurifier_Generator();
@@ -77,8 +82,12 @@ class HTMLPurifier_Harness extends UnitTestCase
         // setup context object. Note that we are operating on a copy of it!
         // When necessary, extend the test harness to allow post-tests
         // on the context object
-        $context = new HTMLPurifier_Context();
-        $context->loadArray($context_array);
+        if (empty($this->context)) {
+            $context = new HTMLPurifier_Context();
+            $context->loadArray($context_array);
+        } else {
+            $context =& $this->context;
+        }
         
         if ($this->to_tokens && is_string($input)) {
             // $func may cause $input to change, so "clone" another copy

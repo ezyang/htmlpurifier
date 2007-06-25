@@ -87,6 +87,7 @@ $test_files[] = 'HTMLPurifier/Injector/PurifierLinkifyTest.php';
 $test_files[] = 'HTMLPurifier/LanguageFactoryTest.php';
 $test_files[] = 'HTMLPurifier/LanguageTest.php';
 $test_files[] = 'HTMLPurifier/Lexer/DirectLexTest.php';
+$test_files[] = 'HTMLPurifier/Lexer/DirectLex_ErrorsTest.php';
 $test_files[] = 'HTMLPurifier/LexerTest.php';
 $test_files[] = 'HTMLPurifier/PercentEncoderTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/CompositeTest.php';

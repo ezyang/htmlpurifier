@@ -129,7 +129,6 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         
     }
     
-    
 }
 
 ?>

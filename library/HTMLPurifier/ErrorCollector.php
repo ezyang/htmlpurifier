@@ -37,8 +37,8 @@ class HTMLPurifier_ErrorCollector
             $msg = $this->locale->formatMessage($msg, $args);
         }
         
-        $line  = $this->context->get('CurrentLine', true);
         $token = $this->context->get('CurrentToken', true);
+        $line  = $token ? $token->line : $this->context->get('CurrentLine', true);
         $attr  = $this->context->get('CurrentAttr', true);
         
         $this->errors[] = array($line, $severity, $msg);
