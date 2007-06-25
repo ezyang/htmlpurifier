@@ -35,10 +35,10 @@ class HTMLPurifier_LanguageFactoryTest extends UnitTestCase
         $language->load();
         
         // test overloaded message
-        $this->assertIdentical($language->getMessage('htmlpurifier'), 'HTML Purifier X');
+        $this->assertIdentical($language->getMessage('HTMLPurifier'), 'HTML Purifier X');
         
         // test inherited message
-        $this->assertIdentical($language->getMessage('pizza'), 'Pizza');
+        $this->assertIdentical($language->getMessage('LanguageFactoryTest: Pizza'), 'Pizza');
         
     }
     

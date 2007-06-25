@@ -4,8 +4,8 @@ $fallback = false;
 
 $messages = array(
 
-'htmlpurifier' => 'HTML Purifier',
-'pizza' => 'Pizza', // for unit testing purposes
+'HTMLPurifier' => 'HTML Purifier',
+'LanguageFactoryTest: Pizza' => 'Pizza', // for unit testing purposes
 
 'ErrorCollector: No errors' => 'No errors',
 'ErrorCollector: At line' => ' at line $line',
