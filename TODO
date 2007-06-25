@@ -10,6 +10,7 @@ TODO List
 2.1 release [Refactor, refactor!]
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
  # Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
+ # Ruby support
  - Configuration profiles: predefined directives set with one func call
  - Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
@@ -17,7 +18,6 @@ TODO List
 
 2.2 release [Error'ed]
  # Error logging for filtering/cleanup procedures
-    - Requires I18N facilities to be created first (COMPLEX)
  - XSS-attempt detection
 
 2.3 release [Do What I Mean, Not What I Say]
@@ -45,7 +45,6 @@ TODO List
    same fashion!)
  # Formatters for plaintext
     - Smileys
-    - Linkification for HTML Purifier docs: classes
  - Standardize token armor for all areas of processing
  - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
  - Automatically add non-breaking spaces to empty table cells when
@@ -58,7 +57,6 @@ TODO List
     - Hooks for adding custom processors to custom namespaced tags and
       attributes, offer default implementation
     - Lots of documentation and samples
- - XHTML 1.1 support
 
 Ongoing
  - Lots of profiling, make it faster!

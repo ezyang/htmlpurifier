@@ -65,7 +65,8 @@ class HTMLPurifier_ErrorCollector
         $errors = $this->errors;
         
         // sort error array by line
-        if ($config->get('Core', 'MaintainLineNumbers')) {
+        // line numbers are enabled if they aren't explicitly disabled
+        if ($config->get('Core', 'MaintainLineNumbers') !== false) {
             $lines  = array();
             foreach ($errors as $error) {
                 $lines[] = $error[0];

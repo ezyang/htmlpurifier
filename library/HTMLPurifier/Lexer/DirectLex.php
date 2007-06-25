@@ -44,6 +44,13 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         $array = array(); // result array
         
         $maintain_line_numbers = $config->get('Core', 'MaintainLineNumbers');
+        
+        if ($maintain_line_numbers === null) {
+            // automatically determine line numbering by checking
+            // if error collection is on
+            $maintain_line_numbers = $config->get('Core', 'CollectErrors');
+        }
+        
         if ($maintain_line_numbers) $current_line = 1;
         else $current_line = false;
         $context->register('CurrentLine', $current_line);
