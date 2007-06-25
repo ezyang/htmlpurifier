@@ -15,6 +15,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Experimental AutoFormat functionality added: auto-paragraph and
   linkify your HTML input by setting %AutoFormat.AutoParagraph and
   %AutoFormat.Linkify to true
+! Newlines normalized internally, and then converted back to the
+  value of PHP_EOL. If this is not desired, set your newline format
+  using %Output.Newline.
 - Clean up special case code for <script> tags
 - Reorder includes for DefinitionCache decorators, fixes a possible
   missing class error

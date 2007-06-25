@@ -40,7 +40,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
             $this->_splitText($text, $token);
         } elseif ($this->allowsElement('p')) {
             // case 3: we're in an element that allows paragraphs
-            if (strpos($text, PHP_EOL . PHP_EOL) !== false) {
+            if (strpos($text, "\n\n") !== false) {
                 // case 3.1: this text node has a double-newline
                 $token = array(new HTMLPurifier_Token_Start('p'));
                 $this->_splitText($text, $token);
@@ -57,7 +57,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                     }
                     if ($this->inputTokens[$i]->type == 'end') break;
                     if ($this->inputTokens[$i]->type == 'text') {
-                        if (strpos($this->inputTokens[$i]->data, PHP_EOL . PHP_EOL) !== false) {
+                        if (strpos($this->inputTokens[$i]->data, "\n\n") !== false) {
                             $ok = true;
                         }
                         if (!$this->inputTokens[$i]->is_whitespace) break;
@@ -104,7 +104,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                     if ($this->inputTokens[$i]->type == 'start') $j++;
                     if ($this->inputTokens[$i]->type == 'end') $j--;
                     if ($this->inputTokens[$i]->type == 'text') {
-                        if (strpos($this->inputTokens[$i]->data, PHP_EOL . PHP_EOL) !== false) {
+                        if (strpos($this->inputTokens[$i]->data, "\n\n") !== false) {
                             $ok = true;
                             break;
                         }
@@ -137,7 +137,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
      * @private
      */
     function _splitText($data, &$result) {
-        $raw_paragraphs = explode(PHP_EOL . PHP_EOL, $data);
+        $raw_paragraphs = explode("\n\n", $data);
         
         // remove empty paragraphs
         $paragraphs = array();

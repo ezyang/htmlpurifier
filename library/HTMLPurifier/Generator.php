@@ -35,6 +35,15 @@ HTML
 );
 HTMLPurifier_ConfigSchema::defineAlias('Core', 'TidyFormat', 'Output', 'TidyFormat');
 
+HTMLPurifier_ConfigSchema::define('Output', 'Newline', null, 'string/null', '
+<p>
+    Newline string to format final output with. If left null, HTML Purifier
+    will auto-detect the default newline type of the system and use that;
+    you can manually override it here. Remember, \r\n is Windows, \r
+    is Mac, and \n is Unix. This directive was available since 2.0.1.
+</p>
+');
+
 /**
  * Generates HTML from tokens.
  * @todo Create a configuration-wide instance that all objects retrieve
@@ -114,6 +123,10 @@ class HTMLPurifier_Generator
                 $html = (string) $tidy;
             }
         }
+        // normalize newlines to system
+        $nl = $config->get('Output', 'Newline');
+        if ($nl === null) $nl = PHP_EOL;
+        $html = str_replace("\n", $nl, $html);
         return $html;
     }
     
@@ -153,11 +166,11 @@ class HTMLPurifier_Generator
      */
     function generateScriptFromToken($token) {
         if ($token->type != 'text') return $this->generateFromToken($token);
-        // return '<!--' . PHP_EOL . trim($token->data) . PHP_EOL . '// -->';
+        // return '<!--' . "\n" . trim($token->data) . "\n" . '// -->';
         // more advanced version:
         // thanks <http://lachy.id.au/log/2005/05/script-comments>
         $data = preg_replace('#//\s*$#', '', $token->data);
-        return '<!--//--><![CDATA[//><!--' . PHP_EOL . trim($data) . PHP_EOL . '//--><!]]>';
+        return '<!--//--><![CDATA[//><!--' . "\n" . trim($data) . "\n" . '//--><!]]>';
     }
     
     /**

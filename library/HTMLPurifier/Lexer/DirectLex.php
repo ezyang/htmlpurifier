@@ -47,7 +47,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         if ($maintain_line_numbers) $current_line = 1;
         else $current_line = false;
         $context->register('CurrentLine', $current_line);
-        $nl = PHP_EOL;
+        $nl = "\n";
         // how often to manually recalculate. This will ALWAYS be right,
         // but it's pretty wasteful. Set to 0 to turn off
         $synchronize_interval = $config->get('Core', 'DirectLexLineNumberSyncInterval'); 

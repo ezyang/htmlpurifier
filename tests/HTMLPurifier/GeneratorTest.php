@@ -207,6 +207,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         
         $this->config = HTMLPurifier_Config::createDefault();
         $this->config->set('Core', 'TidyFormat', true);
+        $this->config->set('Output', 'Newline', "\n");
         
         // nice wrapping please
         $this->assertGeneration(

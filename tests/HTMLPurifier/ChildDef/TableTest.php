@@ -38,10 +38,11 @@ class HTMLPurifier_ChildDef_TableTest extends HTMLPurifier_ChildDefHarness
         
         // whitespace sticks to the previous element, last whitespace is
         // stationary
-        $this->assertResult("\n   <tr />\n  <tr />\n ");
+        $this->assertResult("\n   <tr />\n  <tr />\n ", true, array('Output.Newline' => "\n"));
         $this->assertResult(
           "\n\t<tbody />\n\t\t<tfoot />\n\t\t\t",
-          "\n\t\t<tfoot />\n\t<tbody />\n\t\t\t"
+          "\n\t\t<tfoot />\n\t<tbody />\n\t\t\t",
+          array('Output.Newline' => "\n")
         );
         
     }
