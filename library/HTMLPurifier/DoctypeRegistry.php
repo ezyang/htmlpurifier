@@ -44,14 +44,14 @@ class HTMLPurifier_DoctypeRegistry
      * @return Reference to registered doctype (usable for further editing)
      */
     function &register($doctype, $xml = true, $modules = array(),
-        $tidy_modules = array(), $aliases = array()
+        $tidy_modules = array(), $aliases = array(), $dtd_public = null, $dtd_system = null
     ) {
         if (!is_array($modules)) $modules = array($modules);
         if (!is_array($tidy_modules)) $tidy_modules = array($tidy_modules);
         if (!is_array($aliases)) $aliases = array($aliases);
         if (!is_object($doctype)) {
             $doctype = new HTMLPurifier_Doctype(
-                $doctype, $xml, $modules, $tidy_modules, $aliases
+                $doctype, $xml, $modules, $tidy_modules, $aliases, $dtd_public, $dtd_system
             );
         }
         $this->doctypes[$doctype->name] =& $doctype;
@@ -76,7 +76,7 @@ class HTMLPurifier_DoctypeRegistry
     function &get($doctype) {
         if (isset($this->aliases[$doctype])) $doctype = $this->aliases[$doctype];
         if (!isset($this->doctypes[$doctype])) {
-            trigger_error('Doctype ' . htmlspecialchars($doctype) . ' does not exist');
+            trigger_error('Doctype ' . htmlspecialchars($doctype) . ' does not exist', E_USER_ERROR);
             $anon = new HTMLPurifier_Doctype($doctype);
             return $anon;
         }
@@ -103,9 +103,9 @@ class HTMLPurifier_DoctypeRegistry
     function getDoctypeFromConfig($config) {
         // recommended test
         $doctype = $config->get('HTML', 'Doctype');
-        if ($doctype !== null) {
-            return $doctype;
-        }
+        if (!empty($doctype)) return $doctype;
+        $doctype = $config->get('HTML', 'CustomDoctype');
+        if (!empty($doctype)) return $doctype;
         // backwards-compatibility
         if ($config->get('HTML', 'XHTML')) {
             $doctype = 'XHTML 1.0';

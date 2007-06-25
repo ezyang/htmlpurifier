@@ -38,7 +38,7 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML', 'Trusted', false);
-        $config->set('HTML', 'Doctype', 'Blank');
+        $config->set('HTML', 'CustomDoctype', 'Blank');
         
         $manager->setup($config);
         
@@ -94,7 +94,7 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         $manager->registerModule($magic_module);
         
         $config = HTMLPurifier_Config::create(array(
-            'HTML.Doctype' => 'Fantasy Inventory 1.0',
+            'HTML.CustomDoctype' => 'Fantasy Inventory 1.0',
             'HTML.AllowedModules' => 'Weapons'
         ));
         $manager->setup($config);

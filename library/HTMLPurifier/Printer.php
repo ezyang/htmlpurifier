@@ -27,6 +27,16 @@ class HTMLPurifier_Printer
     }
     
     /**
+     * Give generator necessary configuration if possible
+     */
+    function prepareGenerator($config) {
+        // hack for smoketests/configForm.php
+        if (empty($config->conf['HTML'])) return;
+        $context = new HTMLPurifier_Context();
+        $this->generator->generateFromTokens(array(), $config, $context);
+    }
+    
+    /**
      * Main function that renders object or aspect of that object
      * @note Parameters vary depending on printer
      */

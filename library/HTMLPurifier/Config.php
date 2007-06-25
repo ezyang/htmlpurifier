@@ -342,24 +342,77 @@ class HTMLPurifier_Config
     }
     
     /**
+     * Returns a list of array(namespace, directive) for all directives
+     * that are allowed in a web-form context as per an allowed
+     * namespaces/directives list.
+     * @param $allowed List of allowed namespaces/directives
+     * @static
+     */
+    function getAllowedDirectivesForForm($allowed) {
+        $schema = HTMLPurifier_ConfigSchema::instance();
+        if ($allowed !== true) {
+             if (is_string($allowed)) $allowed = array($allowed);
+             $allowed_ns = array();
+             $allowed_directives = array();
+             $blacklisted_directives = array();
+             foreach ($allowed as $ns_or_directive) {
+                 if (strpos($ns_or_directive, '.') !== false) {
+                     // directive
+                     if ($ns_or_directive[0] == '-') {
+                         $blacklisted_directives[substr($ns_or_directive, 1)] = true;
+                     } else {
+                         $allowed_directives[$ns_or_directive] = true;
+                     }
+                 } else {
+                     // namespace
+                     $allowed_ns[$ns_or_directive] = true;
+                 }
+             }
+        }
+        $ret = array();
+        foreach ($schema->info as $ns => $keypairs) {
+            foreach ($keypairs as $directive => $def) {
+                if ($allowed !== true) {
+                    if (isset($blacklisted_directives["$ns.$directive"])) continue;
+                    if (!isset($allowed_directives["$ns.$directive"]) && !isset($allowed_ns[$ns])) continue;
+                }
+                if ($def->class == 'alias') continue;
+                if ($directive == 'DefinitionID' || $directive == 'DefinitionRev') continue;
+                $ret[] = array($ns, $directive);
+            }
+        }
+        return $ret;
+    }
+    
+    /**
      * Loads configuration values from $_GET/$_POST that were posted
      * via ConfigForm
      * @param $array $_GET or $_POST array to import
      * @param $index Index/name that the config variables are in
+     * @param $allowed List of allowed namespaces/directives 
      * @param $mq_fix Boolean whether or not to enable magic quotes fix
      * @static
      */
-    function loadArrayFromForm($array, $index, $mq_fix = true) {
+    function loadArrayFromForm($array, $index, $allowed = true, $mq_fix = true) {
         $array = (isset($array[$index]) && is_array($array[$index])) ? $array[$index] : array();
         $mq = get_magic_quotes_gpc() && $mq_fix;
-        foreach ($array as $key => $value) {
-            if (!strncmp($key, 'Null_', 5) && !empty($value)) {
-                unset($array[substr($key, 5)]);
-                unset($array[$key]);
+        
+        $allowed = HTMLPurifier_Config::getAllowedDirectivesForForm($allowed);
+        $ret = array();
+        foreach ($allowed as $key) {
+            list($ns, $directive) = $key;
+            $skey = "$ns.$directive";
+            if (!empty($array["Null_$skey"])) {
+                $ret[$ns][$directive] = null;
+                continue;
             }
-            if ($mq) $array[$key] = stripslashes($value);
+            if (!isset($array[$skey])) continue;
+            $value = $mq ? stripslashes($array[$skey]) : $array[$skey];
+            $ret[$ns][$directive] = $value;
         }
-        return @HTMLPurifier_Config::create($array);
+        
+        $config = HTMLPurifier_Config::create($ret);
+        return $config;
     }
     
     /**

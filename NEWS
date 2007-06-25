@@ -26,6 +26,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - DefinitionCache no longer throws errors when it encounters old
   serial files that do not conform to the current style
 - Stray xmlns attributes removed from configuration documentation
+- configForm.php smoketest no longer has XSS vulnerability due to
+  unescaped print_r output
+- Printer adheres to configuration's directives on output format
+- Fix improperly named form field in ConfigForm printer
 . Rewire some test-cases to swallow errors rather than expect them
 . HTMLDefinition printer updated with some of the new attributes
 . DefinitionCache keys reordered to reflect precedence: version number,
@@ -36,6 +40,13 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Directives now keep track of aliases to themselves
 . Error collector now requires a severity to be passed, use PHP's internal
   error constants for this
+. HTMLPurifier_Config::getAllowedDirectivesForForm implemented, allows
+  much easier selective embedding of configuration values
+. Doctype objects now accept public and system DTD identifiers
+. %HTML.Doctype is now constrained by specific values, to specify a custom
+  doctype use new %HTML.CustomDoctype
+. ConfigForm truncates long directives to keep the form small, and does
+  not re-output namespaces
 
 2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety

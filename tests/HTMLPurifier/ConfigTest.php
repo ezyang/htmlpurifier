@@ -376,6 +376,84 @@ class HTMLPurifier_ConfigTest extends UnitTestCase
         
     }
     
+    function test_loadArrayFromForm() {
+        
+        CS::defineNamespace('Pancake', 'This should not be user customizable');
+        CS::define('Pancake', 'Mix', 'buttermilk', 'string', 'Type of pancake mix to use.');
+        CS::define('Pancake', 'Served', true, 'bool', 'But this is customizable by user.');
+        CS::defineNamespace('Toppings', 'This is user customizable');
+        CS::define('Toppings', 'Syrup', true, 'bool', 'Absolutely standard!');
+        CS::define('Toppings', 'Flavor', 'maple', 'string', 'What flavor is the syrup?');
+        CS::define('Toppings', 'Strawberries', 3, 'int', 'Quite delightful fruit.');
+        CS::define('Toppings', 'Calories', 2000, 'int/null', 'Some things are best left unknown.');
+        CS::define('Toppings', 'DefinitionID', null, 'string/null', 'Do not let this be set');
+        CS::define('Toppings', 'DefinitionRev', 1, 'int', 'Do not let this be set');
+        CS::define('Toppings', 'Protected', 1, 'int', 'Do not let this be set');
+        
+        $get = array(
+            'breakfast' => array(
+                'Pancake.Mix' => 'nasty',
+                'Pancake.Served' => '0',
+                'Toppings.Syrup' => '0',
+                'Toppings.Flavor' => "Bug\\'s juice",
+                'Toppings.Strawberries' => '999',
+                'Toppings.Calories' => '',
+                'Null_Toppings.Calories' => '1',
+                'Toppings.DefinitionID' => '<argh>',
+                'Toppings.DefinitionRev' => '65',
+                'Toppings.Protected' => '4',
+            )
+        );
+        
+        $config_expect = HTMLPurifier_Config::create(array(
+            'Pancake.Served' => false,
+            'Toppings.Syrup' => false,
+            'Toppings.Flavor' => "Bug's juice",
+            'Toppings.Strawberries' => 999,
+            'Toppings.Calories' => null
+        ));
+        
+        $config_result = HTMLPurifier_Config::loadArrayFromForm($get, 'breakfast', array('Pancake.Served', 'Toppings', '-Toppings.Protected'), true);
+        
+        $this->assertEqual($config_expect, $config_result);
+        
+        
+        $get = array(
+            'breakfast' => array(
+                'Pancake.Mix' => 'n\\asty'
+            )
+        );
+        $config_expect = HTMLPurifier_Config::create(array(
+            'Pancake.Mix' => 'n\\asty'
+        ));
+        $config_result = HTMLPurifier_Config::loadArrayFromForm($get, 'breakfast', true, false);
+        $this->assertEqual($config_expect, $config_result);
+        
+    }
+    
+    function test_getAllowedDirectivesForForm() {
+        CS::defineNamespace('Unused', 'Not mentioned, so deny');
+        CS::define('Unused', 'Unused', 'Foobar', 'string', 'Not mentioned, do not allow');
+        CS::defineNamespace('Partial', 'Some are mentioned, allow only those');
+        CS::define('Partial', 'Allowed', true, 'bool', 'Mentioned, allowed');
+        CS::define('Partial', 'Unused', 'Foobar', 'string', 'Not mentioned, do not allow');
+        CS::defineNamespace('All', 'Entire namespace allowed, allow all unless...');
+        CS::define('All', 'Allowed', true, 'bool', 'Not mentioned, allowed');
+        CS::define('All', 'Blacklisted', 'Foobar', 'string', 'Specifically blacklisted');
+        CS::define('All', 'DefinitionID', 'Foobar', 'string/null', 'Special case, auto-blacklisted');
+        CS::define('All', 'DefinitionRev', 2, 'int', 'Special case, auto-blacklisted');
+        
+        $input = array('Partial.Allowed', 'All', '-All.Blacklisted');
+        $output = HTMLPurifier_Config::getAllowedDirectivesForForm($input);
+        $expect = array(
+            array('Partial', 'Allowed'),
+            array('All', 'Allowed')
+        );
+        
+        $this->assertEqual($output, $expect);
+        
+    }
+    
 }
 
 ?>

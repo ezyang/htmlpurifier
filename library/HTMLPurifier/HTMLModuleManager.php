@@ -37,13 +37,26 @@ require_once 'HTMLPurifier/HTMLModule/Tidy/XHTMLStrict.php';
 require_once 'HTMLPurifier/HTMLModule/Tidy/Proprietary.php';
 
 HTMLPurifier_ConfigSchema::define(
-    'HTML', 'Doctype', null, 'string/null',
-    'Doctype to use, pre-defined values are HTML 4.01 Transitional, HTML 4.01 '.
-    'Strict, XHTML 1.0 Transitional, XHTML 1.0 Strict, XHTML 1.1. '.
+    'HTML', 'Doctype', '', 'string',
+    'Doctype to use during filtering. '.
     'Technically speaking this is not actually a doctype (as it does '.
     'not identify a corresponding DTD), but we are using this name '.
-    'for sake of simplicity. This will override any older directives '.
+    'for sake of simplicity. When non-blank, this will override any older directives '.
     'like %HTML.XHTML or %HTML.Strict.'
+);
+HTMLPurifier_ConfigSchema::defineAllowedValues('HTML', 'Doctype', array(
+    '', 'HTML 4.01 Transitional', 'HTML 4.01 Strict',
+    'XHTML 1.0 Transitional', 'XHTML 1.0 Strict',
+    'XHTML 1.1'
+));
+
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'CustomDoctype', null, 'string/null',
+'
+A custom doctype for power-users who defined there own document
+type. This directive only applies when %HTML.Doctype is blank.
+This directive has been available since 2.0.1.
+'
 );
 
 HTMLPurifier_ConfigSchema::define(
@@ -167,31 +180,46 @@ class HTMLPurifier_HTMLModuleManager
         $this->doctypes->register(
             'HTML 4.01 Transitional', false,
             array_merge($common, $transitional, $non_xml),
-            array('Tidy_Transitional', 'Tidy_Proprietary')
+            array('Tidy_Transitional', 'Tidy_Proprietary'),
+            array(),
+            '-//W3C//DTD HTML 4.01 Transitional//EN',
+            'http://www.w3.org/TR/html4/loose.dtd'
         );
         
         $this->doctypes->register(
             'HTML 4.01 Strict', false,
             array_merge($common, $non_xml),
-            array('Tidy_Strict', 'Tidy_Proprietary')
+            array('Tidy_Strict', 'Tidy_Proprietary'),
+            array(),
+            '-//W3C//DTD HTML 4.01//EN',
+            'http://www.w3.org/TR/html4/strict.dtd'
         );
         
         $this->doctypes->register(
             'XHTML 1.0 Transitional', true,
             array_merge($common, $transitional, $xml, $non_xml),
-            array('Tidy_Transitional', 'Tidy_XHTML', 'Tidy_Proprietary')
+            array('Tidy_Transitional', 'Tidy_XHTML', 'Tidy_Proprietary'),
+            array(),
+            '-//W3C//DTD XHTML 1.0 Transitional//EN',
+            'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'
         );
         
         $this->doctypes->register(
             'XHTML 1.0 Strict', true,
             array_merge($common, $xml, $non_xml),
-            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_XHTMLStrict', 'Tidy_Proprietary')
+            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_XHTMLStrict', 'Tidy_Proprietary'),
+            array(),
+            '-//W3C//DTD XHTML 1.0 Strict//EN',
+            'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'
         );
         
         $this->doctypes->register(
             'XHTML 1.1', true,
             array_merge($common, $xml),
-            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_Proprietary') // Tidy_XHTML1_1
+            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_Proprietary'), // Tidy_XHTML1_1
+            array(),
+            '-//W3C//DTD XHTML 1.1//EN',
+            'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'
         );
         
     }

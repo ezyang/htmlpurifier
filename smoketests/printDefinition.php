@@ -6,7 +6,7 @@ require_once 'HTMLPurifier/Printer/HTMLDefinition.php';
 require_once 'HTMLPurifier/Printer/CSSDefinition.php';
 require_once 'HTMLPurifier/Printer/ConfigForm.php';
 
-$config = HTMLPurifier_Config::loadArrayFromForm($_GET, 'config');
+$config = HTMLPurifier_Config::loadArrayFromForm($_GET, 'config', 'HTML');
 
 // you can do custom configuration!
 if (file_exists('printDefinition.settings.php')) {
@@ -22,6 +22,7 @@ $printer_config_form = new HTMLPurifier_Printer_ConfigForm(
 );
 
 echo '<?xml version="1.0" encoding="UTF-8" ?>';
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
