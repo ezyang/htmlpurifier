@@ -53,6 +53,12 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         $input[10] = 'name="input" selected';
         $expect[10] = array('name' => 'input', 'selected' => 'selected');
         
+        $input[11] = '=""';
+        $expect[11] = array();
+        
+        $input[12] = '="" =""';
+        $expect[12] = array('"' => ''); // tough to say, just don't throw a loop
+        
         $config = HTMLPurifier_Config::createDefault();
         $context = new HTMLPurifier_Context();
         $size = count($input);

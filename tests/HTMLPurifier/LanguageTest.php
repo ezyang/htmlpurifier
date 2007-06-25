@@ -19,7 +19,7 @@ class HTMLPurifier_LanguageTest extends UnitTestCase
         $lang = new HTMLPurifier_Language();
         $lang->_loaded = true;
         $lang->messages['error'] = 'Error is $1 on line $2';
-        $this->assertIdentical($lang->formatMessage('error', 'fatal', 32), 'Error is fatal on line 32');
+        $this->assertIdentical($lang->formatMessage('error', array(1=>'fatal', 32)), 'Error is fatal on line 32');
     }
     
 }

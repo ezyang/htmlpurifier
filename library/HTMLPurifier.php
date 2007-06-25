@@ -51,6 +51,7 @@ require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Strategy/Core.php';
 require_once 'HTMLPurifier/Encoder.php';
 
+require_once 'HTMLPurifier/ErrorCollector.php';
 require_once 'HTMLPurifier/LanguageFactory.php';
 
 HTMLPurifier_ConfigSchema::define(
@@ -146,8 +147,8 @@ class HTMLPurifier
             $language = $language_factory->create($config->get('Core', 'Language'));
             $context->register('Locale', $language);
             
-            $error_collector = new HTMLPurifier_ErrorCollector();
-            $context->register('ErrorCollector', $language);
+            $error_collector = new HTMLPurifier_ErrorCollector($language);
+            $context->register('ErrorCollector', $error_collector);
         }
         
         $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);

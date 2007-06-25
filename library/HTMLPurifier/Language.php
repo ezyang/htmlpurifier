@@ -71,17 +71,16 @@ class HTMLPurifier_Language
     /**
      * Formats a localised message with passed parameters
      * @param $key string identifier of message
-     * @param $param Parameter to substitute in (arbitrary number)
+     * @param $args Parameters to substitute in
      * @return string localised message
      */
-    function formatMessage($key) {
+    function formatMessage($key, $args = array()) {
         if (!$this->_loaded) $this->load();
         if (!isset($this->messages[$key])) return "[$key]";
         $raw = $this->messages[$key];
-        $args = func_get_args();
         $substitutions = array();
-        for ($i = 1; $i < count($args); $i++) {
-            $substitutions['$' . $i] = $args[$i];
+        foreach ($args as $i => $value) {
+            $substitutions['$' . $i] = $value;
         }
         return strtr($raw, $substitutions);
     }

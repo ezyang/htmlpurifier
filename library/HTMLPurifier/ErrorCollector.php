@@ -10,16 +10,31 @@ class HTMLPurifier_ErrorCollector
 {
     
     var $errors = array();
+    var $locale;
+    
+    function HTMLPurifier_ErrorCollector(&$locale) {$this->locale =& $locale;}
     
     /**
      * Sends an error message to the collector for later use
-     * @param string Error message text
-     * @param int Error severity, PHP error style (don't use E_USER_)
-     * @param HTMLPurifier_Token Token that caused error
-     * @param array Tokens surrounding the offending token above, use true as placeholder
+     * @param $line Integer line number, or HTMLPurifier_Token that caused error
+     * @param $severity int Error severity, PHP error style (don't use E_USER_)
+     * @param $msg string Error message text
      */
-    function send($msg, $severity, $token, $context_tokens = array(true)) {
-        $this->errors[] = array($msg, $severity, $token, $context_tokens);
+    function send($line, $severity, $msg) {
+        $token = false;
+        if ($line && !is_int($line)) {
+            $token = $line;
+            $line  = $token->line;
+            if (!$line) $line = false;
+        }
+        if (func_num_args() == 3) $msg = $this->locale->getMessage($msg);
+        else {
+            $args = func_get_args();
+            array_splice($args, 0, 2); // one less to make 1-based
+            unset($args[0]);
+            $msg = $this->locale->formatMessage($msg, $args);
+        }
+        $this->errors[] = array($line, $severity, $msg);
     }
     
     /**
@@ -35,41 +50,40 @@ class HTMLPurifier_ErrorCollector
      * Default HTML formatting implementation for error messages
      * @param $config Configuration array, vital for HTML output nature
      */
-    function getHTMLFormatted($config, &$context) {
+    function getHTMLFormatted($config) {
         $generator = new HTMLPurifier_Generator();
-        $generator->generateFromTokens(array(), $config, $context); // initialize
+        $generator->generateFromTokens(array(), $config, $this->context); // initialize
         $ret = array();
         
         $errors = $this->errors;
-        $locale = $context->get('Locale');
         
         // sort error array by line
         if ($config->get('Core', 'MaintainLineNumbers')) {
             $lines  = array();
-            foreach ($errors as $error) $lines[] = $error[2]->line;
+            foreach ($errors as $error) {
+                $lines[] = $error[0];
+            }
             array_multisort($lines, SORT_ASC, $errors);
         }
         
         foreach ($errors as $error) {
-            list($msg, $severity, $token, $context_tokens) = $error;
+            list($line, $severity, $msg) = $error;
             $string = '';
-            $string .= $locale->getErrorName($severity) . ': ';
+            $string .= $this->locale->getErrorName($severity) . ': ';
             $string .= $generator->escape($msg); 
-            if (!empty($token->line)) {
-                $string .= ' at line ' . $token->line;
+            if ($line) {
+                $string .= $this->locale->formatMessage(
+                    'ErrorCollector: At line', array('line' => $line));
             }
-            $string .= ' (<code>';
-            foreach ($context_tokens as $context_token) {
-                if ($context_token !== true) {
-                    $string .= $generator->escape($generator->generateFromToken($context_token));
-                } else {
-                    $string .= '<strong>' . $generator->escape($generator->generateFromToken($token)) . '</strong>';
-                }
-            }
-            $string .= '</code>)';
             $ret[] = $string;
         }
-        return $ret;
+        
+        if (empty($errors)) {
+            return '<p>' . $this->locale->getMessage('ErrorCollector: No errors') . '</p>';
+        } else {
+            return '<ul><li>' . implode('</li><li>', $ret) . '</li></ul>';
+        }
+        
     }
     
 }

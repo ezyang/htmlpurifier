@@ -24,7 +24,7 @@ class HTMLPurifier_LanguageFactory
      * variables to slurp out of a message file.
      * @value array list
      */
-    var $keys = array('fallback', 'messages');
+    var $keys = array('fallback', 'messages', 'errorNames');
     
     /**
      * Instance of HTMLPurifier_AttrDef_Lang to validate language codes
