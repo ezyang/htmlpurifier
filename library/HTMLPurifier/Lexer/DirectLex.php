@@ -138,7 +138,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                         // uh oh, we have a comment that extends to
                         // infinity. Can't be helped: set comment
                         // end position to end of string
-                        if ($e) $e->send($current_line, E_WARNING, 'Lexer: Unclosed comment');
+                        if ($e) $e->send(E_WARNING, 'Lexer: Unclosed comment');
                         $position_comment_end = strlen($html);
                         $end = true;
                     } else {
@@ -181,7 +181,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 // have accidently grabbed an emoticon. Translate into
                 // text and go our merry way
                 if (!ctype_alnum($segment[0])) {
-                    if ($e) $e->send($current_line, E_NOTICE, 'Lexer: Unescaped lt');
+                    if ($e) $e->send(E_NOTICE, 'Lexer: Unescaped lt');
                     $token = new
                         HTMLPurifier_Token_Text(
                             '<' .
@@ -261,7 +261,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 continue;
             } else {
                 // inside tag, but there's no ending > sign
-                if ($e) $e->send($current_line, E_WARNING, 'Lexer: Missing gt');
+                if ($e) $e->send(E_WARNING, 'Lexer: Missing gt');
                 $token = new
                     HTMLPurifier_Token_Text(
                         '<' .
@@ -327,7 +327,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             list($key, $quoted_value) = explode('=', $string);
             $quoted_value = trim($quoted_value);
             if (!$key) {
-                if ($e) $e->send($current_line, E_ERROR, 'Lexer: Missing attribute key');
+                if ($e) $e->send(E_ERROR, 'Lexer: Missing attribute key');
                 return array();
             }
             if (!$quoted_value) return array($key => '');
@@ -343,7 +343,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             } else {
                 // not well behaved
                 if ($open_quote) {
-                    if ($e) $e->send($current_line, E_ERROR, 'Lexer: Missing end quote');
+                    if ($e) $e->send(E_ERROR, 'Lexer: Missing end quote');
                     $value = substr($quoted_value, 1);
                 } else {
                     $value = $quoted_value;
@@ -390,7 +390,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             $key = substr($string, $key_begin, $key_end - $key_begin);
             
             if (!$key) {
-                if ($e) $e->send($current_line, E_ERROR, 'Lexer: Missing attribute key');
+                if ($e) $e->send(E_ERROR, 'Lexer: Missing attribute key');
                 $cursor += strcspn($string, $this->_whitespace, $cursor + 1); // prevent infinite loop
                 continue; // empty key
             }
@@ -440,7 +440,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                     $array[$key] = $key;
                 } else {
                     // purely theoretical
-                    if ($e) $e->send($current_line, E_ERROR, 'Lexer: Missing attribute key');
+                    if ($e) $e->send(E_ERROR, 'Lexer: Missing attribute key');
                 }
                 
             }

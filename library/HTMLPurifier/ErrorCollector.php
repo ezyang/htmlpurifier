@@ -11,8 +11,12 @@ class HTMLPurifier_ErrorCollector
     
     var $errors = array();
     var $locale;
+    var $context;
     
-    function HTMLPurifier_ErrorCollector(&$locale) {$this->locale =& $locale;}
+    function HTMLPurifier_ErrorCollector(&$context) {
+        $this->locale  =& $context->get('Locale');
+        $this->context =& $context;
+    }
     
     /**
      * Sends an error message to the collector for later use
@@ -20,20 +24,23 @@ class HTMLPurifier_ErrorCollector
      * @param $severity int Error severity, PHP error style (don't use E_USER_)
      * @param $msg string Error message text
      */
-    function send($line, $severity, $msg) {
-        $token = false;
-        if ($line && !is_int($line)) {
-            $token = $line;
-            $line  = $token->line;
-            if (!$line) $line = false;
-        }
-        if (func_num_args() == 3) $msg = $this->locale->getMessage($msg);
-        else {
-            $args = func_get_args();
-            array_splice($args, 0, 2); // one less to make 1-based
-            unset($args[0]);
+    function send($severity, $msg, $args = array()) {
+        if (func_num_args() == 2) {
+            $msg = $this->locale->getMessage($msg);
+        } else {
+            // setup one-based array if necessary
+            if (!is_array($args)) {
+                $args = func_get_args();
+                array_shift($args);
+                unset($args[0]);
+            }
             $msg = $this->locale->formatMessage($msg, $args);
         }
+        
+        $line  = $this->context->get('CurrentLine', true);
+        $token = $this->context->get('CurrentToken', true);
+        $attr  = $this->context->get('CurrentAttr', true);
+        
         $this->errors[] = array($line, $severity, $msg);
     }
     

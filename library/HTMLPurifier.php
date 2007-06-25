@@ -147,7 +147,7 @@ class HTMLPurifier
             $language = $language_factory->create($config->get('Core', 'Language'));
             $context->register('Locale', $language);
             
-            $error_collector = new HTMLPurifier_ErrorCollector($language);
+            $error_collector = new HTMLPurifier_ErrorCollector($context);
             $context->register('ErrorCollector', $error_collector);
         }
         
