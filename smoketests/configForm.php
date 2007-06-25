@@ -70,7 +70,7 @@ echo $printer->render($config);
 </form>
 <pre>
 <?php
-print_r($config->getAll());
+echo htmlspecialchars(print_r($config->getAll(), true));
 ?>
 </pre>
 </body>
