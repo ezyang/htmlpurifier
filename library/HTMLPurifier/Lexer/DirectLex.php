@@ -59,7 +59,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         // but it's pretty wasteful. Set to 0 to turn off
         $synchronize_interval = $config->get('Core', 'DirectLexLineNumberSyncInterval'); 
         
-        $e = $l = false;
+        $e = false;
         if ($config->get('Core', 'CollectErrors')) {
             $e =& $context->get('ErrorCollector');
         }
@@ -285,7 +285,6 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         }
         
         $context->destroy('CurrentLine');
-        
         return $array;
     }
     

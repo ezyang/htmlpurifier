@@ -46,7 +46,8 @@ HTMLPurifier_ConfigSchema::define('Output', 'Newline', null, 'string/null', '
 
 /**
  * Generates HTML from tokens.
- * @todo Create a configuration-wide instance that all objects retrieve
+ * @todo Refactor interface so that configuration/context is determined
+ *     upon instantiation, no need for messy generateFromTokens() calls
  */
 class HTMLPurifier_Generator
 {

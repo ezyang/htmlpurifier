@@ -18,6 +18,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Newlines normalized internally, and then converted back to the
   value of PHP_EOL. If this is not desired, set your newline format
   using %Output.Newline.
+! Beta error collection, messages are implemented for Lexer and
+  RemoveForeignElements
 - Clean up special case code for <script> tags
 - Reorder includes for DefinitionCache decorators, fixes a possible
   missing class error

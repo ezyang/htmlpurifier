@@ -24,7 +24,7 @@ class HTMLPurifier_Token {
      * @return Copied token
      */
     function copy() {
-        trigger_error('Cannot copy abstract class', E_USER_ERROR);
+        return unserialize(serialize($this));
     }
 }
 
@@ -89,9 +89,6 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token // abstract
 class HTMLPurifier_Token_Start extends HTMLPurifier_Token_Tag
 {
     var $type = 'start';
-    function copy() {
-        return new HTMLPurifier_Token_Start($this->name, $this->attr);
-    }
 }
 
 /**
@@ -100,9 +97,6 @@ class HTMLPurifier_Token_Start extends HTMLPurifier_Token_Tag
 class HTMLPurifier_Token_Empty extends HTMLPurifier_Token_Tag
 {
     var $type = 'empty';
-    function copy() {
-        return new HTMLPurifier_Token_Empty($this->name, $this->attr);
-    }
 }
 
 /**
@@ -115,9 +109,6 @@ class HTMLPurifier_Token_Empty extends HTMLPurifier_Token_Tag
 class HTMLPurifier_Token_End extends HTMLPurifier_Token_Tag
 {
     var $type = 'end';
-    function copy() {
-        return new HTMLPurifier_Token_End($this->name);
-    }
 }
 
 /**
@@ -146,9 +137,6 @@ class HTMLPurifier_Token_Text extends HTMLPurifier_Token
         $this->data = $data;
         $this->is_whitespace = ctype_space($data);
     }
-    function copy() {
-        return new HTMLPurifier_Token_Text($this->data);
-    }
     
 }
 
@@ -166,9 +154,6 @@ class HTMLPurifier_Token_Comment extends HTMLPurifier_Token
      */
     function HTMLPurifier_Token_Comment($data) {
         $this->data = $data;
-    }
-    function copy() {
-        return new HTMLPurifier_Token_Comment($this->data);
     }
 }
 

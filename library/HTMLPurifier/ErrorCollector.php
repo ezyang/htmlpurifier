@@ -11,10 +11,12 @@ class HTMLPurifier_ErrorCollector
     
     var $errors = array();
     var $locale;
+    var $generator;
     var $context;
     
     function HTMLPurifier_ErrorCollector(&$context) {
         $this->locale  =& $context->get('Locale');
+        $this->generator =& $context->get('Generator');
         $this->context =& $context;
     }
     
@@ -40,7 +42,21 @@ class HTMLPurifier_ErrorCollector
         $token = $this->context->get('CurrentToken', true);
         $line  = $token ? $token->line : $this->context->get('CurrentLine', true);
         $attr  = $this->context->get('CurrentAttr', true);
-        
+        // perform special substitutions
+        // Currently defined: $CurrentToken.Name, $CurrentToken.Serialized,
+        //     $CurrentAttr.Name, $CurrentAttr.Value
+        if (strpos($msg, '$') !== false) {
+            $subst = array();
+            if (!is_null($token)) {
+                if (isset($token->name)) $subst['$CurrentToken.Name'] = $token->name;
+                $subst['$CurrentToken.Serialized'] = $this->generator->generateFromToken($token);
+            }
+            if (!is_null($attr)) {
+                $subst['$CurrentAttr.Name'] = $attr;
+                if (isset($token->attr[$attr])) $subst['$CurrentAttr.Value'] = $token->attr[$attr];
+            }
+            if (!empty($subst)) $msg = strtr($msg, $subst);
+        }
         $this->errors[] = array($line, $severity, $msg);
     }
     
@@ -68,10 +84,12 @@ class HTMLPurifier_ErrorCollector
         // line numbers are enabled if they aren't explicitly disabled
         if ($config->get('Core', 'MaintainLineNumbers') !== false) {
             $lines  = array();
-            foreach ($errors as $error) {
+            $original_order = array();
+            foreach ($errors as $i => $error) {
                 $lines[] = $error[0];
+                $original_order[] = $i;
             }
-            array_multisort($lines, SORT_ASC, $errors);
+            array_multisort($lines, SORT_ASC, $original_order, SORT_ASC, $errors);
         }
         
         foreach ($errors as $error) {
@@ -80,6 +98,8 @@ class HTMLPurifier_ErrorCollector
             $string .= $this->locale->getErrorName($severity) . ': ';
             $string .= $generator->escape($msg); 
             if ($line) {
+                // have javascript link generation that causes 
+                // textarea to skip to the specified line
                 $string .= $this->locale->formatMessage(
                     'ErrorCollector: At line', array('line' => $line));
             }

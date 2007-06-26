@@ -155,7 +155,11 @@ class HTMLPurifier_Lexer
             
             // once PHP DOM implements native line numbers, or we
             // hack out something using XSLT, remove this stipulation
-            if ($config->get('Core', 'MaintainLineNumbers')) {
+            $line_numbers = $config->get('Core', 'MaintainLineNumbers');
+            if (
+                $line_numbers === true ||
+                ($line_numbers === null && $config->get('Core', 'CollectErrors'))
+            ) {
                 $lexer = 'DirectLex';
                 break;
             }

@@ -1,20 +1,10 @@
 <?php
 
+require_once 'HTMLPurifier/ErrorsHarness.php';
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 
-class HTMLPurifier_Lexer_DirectLex_ErrorsTest extends UnitTestCase
+class HTMLPurifier_Lexer_DirectLex_ErrorsTest extends HTMLPurifier_ErrorsHarness
 {
-    
-    var $config, $context;
-    var $collector;
-    
-    function setup() {
-        $this->config = HTMLPurifier_Config::create(array('Core.CollectErrors' => true));
-        $this->context = new HTMLPurifier_Context();
-        generate_mock_once('HTMLPurifier_ErrorCollector');
-        $this->collector = new HTMLPurifier_ErrorCollectorMock($this);
-        $this->context->register('ErrorCollector', $this->collector);
-    }
     
     function invoke($input) {
         $lexer = new HTMLPurifier_Lexer_DirectLex();
@@ -24,10 +14,6 @@ class HTMLPurifier_Lexer_DirectLex_ErrorsTest extends UnitTestCase
     function invokeAttr($input) {
         $lexer = new HTMLPurifier_Lexer_DirectLex();
         $lexer->parseAttributeString($input, $this->config, $this->context);
-    }
-    
-    function expectErrorCollection($severity, $msg) {
-        $this->collector->expectOnce('send', array($severity, $msg));
     }
     
     function testUnclosedComment() {

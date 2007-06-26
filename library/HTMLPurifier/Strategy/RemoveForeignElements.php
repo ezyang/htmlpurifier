@@ -56,6 +56,11 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         $token = false;
         $context->register('CurrentToken', $token);
         
+        $e = false;
+        if ($config->get('Core', 'CollectErrors')) {
+            $e =& $context->get('ErrorCollector');
+        }
+        
         foreach($tokens as $token) {
             if ($remove_until) {
                 if (empty($token->is_tag) || $token->name !== $remove_until) {
@@ -69,11 +74,13 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                 if (
                     isset($definition->info_tag_transform[$token->name])
                 ) {
+                    $original_name = $token->name;
                     // there is a transformation for this tag
                     // DEFINITION CALL
                     $token = $definition->
                                 info_tag_transform[$token->name]->
                                     transform($token, $config, $context);
+                    if ($e) $e->send(E_NOTICE, 'Strategy_RemoveForeignElements: Tag transform', $original_name);
                 }
                 
                 if (isset($definition->info[$token->name])) {
@@ -92,7 +99,10 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                                 break;
                             }
                         }
-                        if (!$ok) continue;
+                        if (!$ok) {
+                            if ($e) $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Missing required attribute', $token->name, $name);
+                            continue;
+                        }
                         $token->armor['ValidateAttributes'] = true;
                     }
                     
@@ -104,7 +114,8 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     }
                     
                 } elseif ($escape_invalid_tags) {
-                    // invalid tag, generate HTML and insert in
+                    // invalid tag, generate HTML representation and insert in
+                    if ($e) $e->send(E_WARNING, 'Strategy_RemoveForeignElements: Foreign element to text', $token->name);
                     $token = new HTMLPurifier_Token_Text(
                         $generator->generateFromToken($token, $config, $context)
                     );
@@ -119,6 +130,9 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                         } else {
                             $remove_until = false;
                         }
+                        if ($e) $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Script removed');
+                    } else {
+                        if ($e) $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Foreign element removed', $token->name);
                     }
                     continue;
                 }
@@ -129,6 +143,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     $token = new HTMLPurifier_Token_Text($data);
                 } else {
                     // strip comments
+                    if ($e) $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Comment removed', $token->data);
                     continue;
                 }
             } elseif ($token->type == 'text') {
@@ -136,6 +151,10 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                 continue;
             }
             $result[] = $token;
+        }
+        if ($remove_until && $e) {
+            // we removed tokens until the end, throw error
+            $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Token removed to end', $remove_until);
         }
         
         $context->destroy('CurrentToken');

@@ -140,6 +140,10 @@ class HTMLPurifier
         
         $context = new HTMLPurifier_Context();
         
+        // our friendly neighborhood generator, all primed with configuration too!
+        $this->generator->generateFromTokens(array(), $config, $context);
+        $context->register('Generator', $this->generator);
+        
         // set up global context variables
         if ($config->get('Core', 'CollectErrors')) {
             // may get moved out if other facilities use it
