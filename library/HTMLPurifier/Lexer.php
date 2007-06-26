@@ -274,7 +274,6 @@ class HTMLPurifier_Lexer
      * Special CDATA case that is especiall convoluted for <script>
      */
     function escapeCommentedCDATA($string) {
-        // <!--//--><![CDATA[//><!--
         return preg_replace_callback(
             '#<!--//--><!\[CDATA\[//><!--(.+?)//--><!\]\]>#s',
             array('HTMLPurifier_Lexer', 'CDATACallback'),

@@ -315,6 +315,17 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $sax_expect[21] = false;
         $dom_expect[21] = false;
         
+        // test CDATA tags
+        $input[22] = '<script>alert("<foo>");</script>';
+        $expect[22] = array(
+            new HTMLPurifier_Token_Start('script')
+           ,new HTMLPurifier_Token_Text('alert("<foo>");')
+           ,new HTMLPurifier_Token_End('script')
+        );
+        $config[22] = HTMLPurifier_Config::create(array('HTML.Trusted' => true));
+        $sax_expect[22] = false;
+        //$dom_expect[22] = false;
+        
         $default_config = HTMLPurifier_Config::createDefault();
         $default_context = new HTMLPurifier_Context();
         foreach($input as $i => $discard) {

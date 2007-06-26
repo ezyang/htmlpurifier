@@ -46,13 +46,6 @@ alert("<This is compatible with XHTML>");
             array('HTML.Trusted' => true, 'Core.CommentScriptContents' => false)
         );
         
-        // invalid children
-        $this->assertResult(
-            '<script type="text/javascript">PCDATA<span</script>',
-            '<script type="text/javascript">PCDATA</script>',
-            array('HTML.Trusted' => true, 'Core.CommentScriptContents' => false)
-        );
-        
     }
     
 }

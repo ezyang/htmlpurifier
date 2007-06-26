@@ -35,7 +35,24 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
      */
     var $_whitespace = "\x20\x09\x0D\x0A";
     
+    /**
+     * Callback function for script CDATA fudge
+     * @param $matches, in form of array(opening tag, contents, closing tag)
+     * @static
+     */
+    function scriptCallback($matches) {
+        return $matches[1] . htmlspecialchars($matches[2], ENT_COMPAT, 'UTF-8') . $matches[3];
+    }
+    
     function tokenizeHTML($html, $config, &$context) {
+        
+        // special normalization for script tags without any armor
+        // our "armor" heurstic is a < sign any number of whitespaces after
+        // the first script tag
+        if ($config->get('HTML', 'Trusted')) {
+            $html = preg_replace_callback('#(<script[^>]*>)(\s*[^<].+?)(</script>)#si',
+                array('HTMLPurifier_Lexer_DirectLex', 'scriptCallback'), $html);
+        }
         
         $html = $this->normalize($html, $config, $context);
         
