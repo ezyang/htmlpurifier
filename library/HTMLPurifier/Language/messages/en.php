@@ -7,7 +7,7 @@ $messages = array(
 'HTMLPurifier' => 'HTML Purifier',
 'LanguageFactoryTest: Pizza' => 'Pizza', // for unit testing purposes
 
-'ErrorCollector: No errors' => 'No errors',
+'ErrorCollector: No errors' => 'No errors detected. However, because error reporting is still incomplete, there may have been errors that the error collector was not notified of; please inspect the output HTML carefully.',
 'ErrorCollector: At line' => ' at line $line',
 
 'Lexer: Unclosed comment' => 'Unclosed comment',
