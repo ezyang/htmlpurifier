@@ -153,6 +153,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     // if the token is not allowed by the parent, auto-close
                     // the parent
                     if (!isset($parent_info->child->elements[$token->name])) {
+                        if ($e) $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag auto closed', $parent);
                         // close the parent, then append the token
                         $result[] = new HTMLPurifier_Token_End($parent->name);
                         $result[] = $token;
@@ -182,12 +183,12 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // make sure that we have something open
             if (empty($this->currentNesting)) {
                 if ($escape_invalid_tags) {
-                    if ($e) $e->send(E_WARNING, 'Strategy_MakeWellFormed: Unnecessary end tag to text', $token->name);
+                    if ($e) $e->send(E_WARNING, 'Strategy_MakeWellFormed: Unnecessary end tag to text');
                     $result[] = new HTMLPurifier_Token_Text(
                         $generator->generateFromToken($token, $config, $context)
                     );
                 } elseif ($e) {
-                    $e->send(E_WARNING, 'Strategy_MakeWellFormed: Unnecessary end tag removed', $token->name);
+                    $e->send(E_WARNING, 'Strategy_MakeWellFormed: Unnecessary end tag removed');
                 }
                 continue;
             }
@@ -223,9 +224,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     $result[] = new HTMLPurifier_Token_Text(
                         $generator->generateFromToken($token, $config, $context)
                     );
-                    if ($e) $e->send(E_WARNING, 'Strategy_MakeWellFormed: Stray end tag to text', $token->name);
+                    if ($e) $e->send(E_WARNING, 'Strategy_MakeWellFormed: Stray end tag to text');
                 } elseif ($e) {
-                    $e->send(E_WARNING, 'Strategy_MakeWellFormed: Stray end tag removed', $token->name);
+                    $e->send(E_WARNING, 'Strategy_MakeWellFormed: Stray end tag removed');
                 }
                 continue;
             }
@@ -235,7 +236,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             $size = count($skipped_tags);
             for ($i = $size - 1; $i > 0; $i--) {
                 if ($e && !isset($skipped_tags[$i]->armor['MakeWellFormed_TagClosedError'])) {
-                    $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by element end', $skipped_tags[$i]->name);
+                    $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by element end', $skipped_tags[$i]);
                 }
                 $result[] = new HTMLPurifier_Token_End($skipped_tags[$i]->name);
             }
@@ -244,24 +245,24 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             
         }
         
+        $context->destroy('CurrentNesting');
+        $context->destroy('InputTokens');
+        $context->destroy('InputIndex');
+        $context->destroy('CurrentToken');
+        
         // we're at the end now, fix all still unclosed tags
         // not using processToken() because at this point we don't
         // care about current nesting
         if (!empty($this->currentNesting)) {
             $size = count($this->currentNesting);
             for ($i = $size - 1; $i >= 0; $i--) {
-                if ($e && !isset($skipped_tags[$i]->armor['MakeWellFormed_TagClosedError'])) {
-                    $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by document end', $this->currentNesting[$i]->name);
+                if ($e && !isset($this->currentNesting[$i]->armor['MakeWellFormed_TagClosedError'])) {
+                    $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by document end', $this->currentNesting[$i]);
                 }
                 $result[] =
                     new HTMLPurifier_Token_End($this->currentNesting[$i]->name);
             }
         }
-        
-        $context->destroy('CurrentNesting');
-        $context->destroy('InputTokens');
-        $context->destroy('InputIndex');
-        $context->destroy('CurrentToken');
         
         unset($this->outputTokens, $this->injectors, $this->currentInjector,
           $this->currentNesting, $this->inputTokens, $this->inputIndex);

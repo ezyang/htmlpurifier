@@ -3,6 +3,14 @@
 require_once 'HTMLPurifier/Language.php';
 require_once 'HTMLPurifier/AttrDef/Lang.php';
 
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'Language', 'en', 'string', '
+ISO 639 language code for localizable things in HTML Purifier to use,
+which is mainly error reporting. There is currently only an English (en)
+translation, so this directive is currently useless.
+This directive has been available since 2.0.0.
+');
+
 /**
  * Class responsible for generating HTMLPurifier_Language objects, managing
  * caching and fallbacks.
@@ -79,12 +87,15 @@ class HTMLPurifier_LanguageFactory
     
     /**
      * Creates a language object, handles class fallbacks
-     * @param $code string language code
+     * @param $config Instance of HTMLPurifier_Config
+     * @param $context Instance of HTMLPurifier_Context
      */
-    function create($code) {
+    function create($config, &$context) {
         
-        $config = $context = false; // hope it doesn't use these!
-        $code = $this->validator->validate($code, $config, $context);
+        // validate language code
+        $code = $this->validator->validate(
+          $config->get('Core', 'Language'), $config, $context
+        );
         if ($code === false) $code = 'en'; // malformed code becomes English
         
         $pcode = str_replace('-', '_', $code); // make valid PHP classname
@@ -111,7 +122,7 @@ class HTMLPurifier_LanguageFactory
             $lang = HTMLPurifier_LanguageFactory::factory( $fallback );
             $depth--;
         } else {
-            $lang = new $class;
+            $lang = new $class($config, $context);
         }
         $lang->code = $code;
         

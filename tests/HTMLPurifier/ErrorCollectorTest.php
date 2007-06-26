@@ -26,7 +26,7 @@ class HTMLPurifier_ErrorCollectorTest extends UnitTestCase
         $context->register('Locale', $language);
         $context->register('CurrentLine', $line);
         
-        $generator = new HTMLPurifier_GeneratorMock();
+        $generator = new HTMLPurifier_Generator();
         $context->register('Generator', $generator);
         
         $collector = new HTMLPurifier_ErrorCollector($context);
@@ -60,7 +60,7 @@ class HTMLPurifier_ErrorCollectorTest extends UnitTestCase
         $context = new HTMLPurifier_Context();
         $context->register('Locale', $language);
         
-        $generator = new HTMLPurifier_GeneratorMock();
+        $generator = new HTMLPurifier_Generator();
         $context->register('Generator', $generator);
         
         $collector = new HTMLPurifier_ErrorCollector($context);
@@ -77,7 +77,7 @@ class HTMLPurifier_ErrorCollectorTest extends UnitTestCase
         $context = new HTMLPurifier_Context();
         $context->register('Locale', $language);
         
-        $generator = new HTMLPurifier_GeneratorMock();
+        $generator = new HTMLPurifier_Generator();
         $context->register('Generator', $generator);
         
         $collector = new HTMLPurifier_ErrorCollector($context);
@@ -100,32 +100,36 @@ class HTMLPurifier_ErrorCollectorTest extends UnitTestCase
     function testContextSubstitutions() {
         
         $language = new HTMLPurifier_LanguageMock();
-        $language->setReturnValue('getMessage',
-            '$CurrentToken.Name, $CurrentToken.Serialized', array('message-token'));
-        $language->setReturnValue('getMessage',
-            '$CurrentAttr.Name => $CurrentAttr.Value', array('message-attr'));
-        $context = new HTMLPurifier_Context();
+        $context  = new HTMLPurifier_Context();
         $context->register('Locale', $language);
         
-        $current_token = new HTMLPurifier_Token_Start('a', array('href' => 'http://example.com'));
-        $current_token->line = 32;
-        $current_attr  = 'href';
-        
-        $generator = new HTMLPurifier_GeneratorMock();
-        $generator->setReturnValue('generateFromToken', '<a href="http://example.com">', array($current_token));
+        $generator = new HTMLPurifier_Generator();
         $context->register('Generator', $generator);
+        
+        $current_token = false;
+        $context->register('CurrentToken', $current_token);
         
         $collector = new HTMLPurifier_ErrorCollector($context);
         
-        $context->register('CurrentToken', $current_token);
-        $collector->send(E_NOTICE, 'message-token');
+        // 0
+        $current_token = new HTMLPurifier_Token_Start('a', array('href' => 'http://example.com'), 32);
+        $language->setReturnValue('formatMessage', 'Token message',
+          array('message-data-token', array('CurrentToken' => $current_token)));
+        $collector->send(E_NOTICE, 'message-data-token');
+        
+        $current_attr  = 'href';
+        $language->setReturnValue('formatMessage', '$CurrentAttr.Name => $CurrentAttr.Value',
+          array('message-attr', array('CurrentToken' => $current_token)));
+        
+        // 1
         $collector->send(E_NOTICE, 'message-attr'); // test when context isn't available
         
+        // 2
         $context->register('CurrentAttr', $current_attr);
         $collector->send(E_NOTICE, 'message-attr');
         
         $result = array(
-            0 => array(32, E_NOTICE, 'a, <a href="http://example.com">'),
+            0 => array(32, E_NOTICE, 'Token message'),
             1 => array(32, E_NOTICE, '$CurrentAttr.Name => $CurrentAttr.Value'),
             2 => array(32, E_NOTICE, 'href => http://example.com')
         );

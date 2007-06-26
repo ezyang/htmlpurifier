@@ -100,7 +100,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                             }
                         }
                         if (!$ok) {
-                            if ($e) $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Missing required attribute', $token->name, $name);
+                            if ($e) $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Missing required attribute', $name);
                             continue;
                         }
                         $token->armor['ValidateAttributes'] = true;
@@ -143,7 +143,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     $token = new HTMLPurifier_Token_Text($data);
                 } else {
                     // strip comments
-                    if ($e) $e->send(E_NOTICE, 'Strategy_RemoveForeignElements: Comment removed', $token->data);
+                    if ($e) $e->send(E_NOTICE, 'Strategy_RemoveForeignElements: Comment removed');
                     continue;
                 }
             } elseif ($token->type == 'text') {

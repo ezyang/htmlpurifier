@@ -16,37 +16,41 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
     }
     
     function testTagTransform() {
-        // uses $CurrentToken.Serialized
         $this->expectErrorCollection(E_NOTICE, 'Strategy_RemoveForeignElements: Tag transform', 'center');
+        $this->expectContext('CurrentToken', new HTMLPurifier_Token_Start('div', array('style' => 'text-align:center;'), 1));
         $this->invoke('<center>');
     }
     
     function testMissingRequiredAttr() {
         // a little fragile, since img has two required attributes
-        $this->expectErrorCollection(E_ERROR, 'Strategy_RemoveForeignElements: Missing required attribute', 'img', 'alt');
+        $this->expectErrorCollection(E_ERROR, 'Strategy_RemoveForeignElements: Missing required attribute', 'alt');
+        $this->expectContext('CurrentToken', new HTMLPurifier_Token_Empty('img', array(), 1));
         $this->invoke('<img />');
     }
     
     function testForeignElementToText() {
-        // uses $CurrentToken.Serialized
         $this->config->set('Core', 'EscapeInvalidTags', true);
         $this->expectErrorCollection(E_WARNING, 'Strategy_RemoveForeignElements: Foreign element to text');
-        $this->invoke('<cannot-possibly-exist-element>');
+        $this->expectContext('CurrentToken', new HTMLPurifier_Token_Start('invalid', array(), 1));
+        $this->invoke('<invalid>');
     }
     
     function testForeignElementRemoved() {
         // uses $CurrentToken.Serialized
         $this->expectErrorCollection(E_ERROR, 'Strategy_RemoveForeignElements: Foreign element removed');
-        $this->invoke('<cannot-possibly-exist-element>');
+        $this->expectContext('CurrentToken', new HTMLPurifier_Token_Start('invalid', array(), 1));
+        $this->invoke('<invalid>');
     }
     
     function testCommentRemoved() {
-        $this->expectErrorCollection(E_NOTICE, 'Strategy_RemoveForeignElements: Comment removed', ' test ');
+        $this->expectErrorCollection(E_NOTICE, 'Strategy_RemoveForeignElements: Comment removed');
+        $this->expectContext('CurrentToken', new HTMLPurifier_Token_Comment(' test ', 1));
         $this->invoke('<!-- test -->');
     }
     
     function testScriptRemoved() {
         $this->collector->expectAt(0, 'send', array(E_ERROR, 'Strategy_RemoveForeignElements: Script removed'));
+        $this->collector->expectContextAt(0, 'CurrentToken', new HTMLPurifier_Token_Start('script', array(), 1));
         $this->collector->expectAt(1, 'send', array(E_ERROR, 'Strategy_RemoveForeignElements: Token removed to end', 'script'));
         $this->invoke('<script>asdf');
     }

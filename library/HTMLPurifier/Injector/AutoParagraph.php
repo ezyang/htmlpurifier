@@ -38,7 +38,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         if (empty($this->currentNesting)) {
             if (!$this->allowsElement('p')) return;
             // case 1: we're in root node (and it allows paragraphs)
-            $token = array(new HTMLPurifier_Token_Start('p'));
+            $token = array($this->_pStart());
             $this->_splitText($text, $token);
         } elseif ($this->currentNesting[count($this->currentNesting)-1]->name == 'p') {
             // case 2: we're in a paragraph
@@ -228,7 +228,6 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         if ($remove_paragraph_end) {
             array_pop($result);
         }
-        
         
     }
     

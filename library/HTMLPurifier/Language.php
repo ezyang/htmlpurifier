@@ -32,6 +32,16 @@ class HTMLPurifier_Language
     var $_loaded = false;
     
     /**
+     * Instances of HTMLPurifier_Config and HTMLPurifier_Context
+     */
+    var $config, $context;
+    
+    function HTMLPurifier_Language($config, &$context) {
+        $this->config  = $config;
+        $this->context =& $context;
+    }
+    
+    /**
      * Loads language object with necessary info from factory cache
      * @note This is a lazy loader
      */
@@ -73,16 +83,38 @@ class HTMLPurifier_Language
      * @param $key string identifier of message
      * @param $args Parameters to substitute in
      * @return string localised message
+     * @todo Implement conditionals? Right now, some messages make
+     *     reference to line numbers, but those aren't always available
      */
     function formatMessage($key, $args = array()) {
         if (!$this->_loaded) $this->load();
         if (!isset($this->messages[$key])) return "[$key]";
         $raw = $this->messages[$key];
-        $substitutions = array();
+        $subst = array();
+        $generator = false;
         foreach ($args as $i => $value) {
-            $substitutions['$' . $i] = $value;
+            if (is_object($value)) {
+                // complicated stuff
+                if (!$generator) $generator = $this->context->get('Generator');
+                // assuming it's a token
+                if (isset($value->name)) $subst['$'.$i.'.Name'] = $value->name;
+                if (isset($value->data)) $subst['$'.$i.'.Data'] = $value->data;
+                $subst['$'.$i.'.Compact'] = 
+                $subst['$'.$i.'.Serialized'] = $generator->generateFromToken($value);
+                // a more complex algorithm for compact representation
+                // could be introduced for all types of tokens. This
+                // may need to be factored out into a dedicated class
+                if (!empty($value->attr)) {
+                    $stripped_token = $value->copy();
+                    $stripped_token->attr = array();
+                    $subst['$'.$i.'.Compact'] = $generator->generateFromToken($stripped_token);
+                }
+                $subst['$'.$i.'.Line'] = $value->line ? $value->line : 'unknown';
+                continue;
+            }
+            $subst['$' . $i] = $value;
         }
-        return strtr($raw, $substitutions);
+        return strtr($raw, $subst);
     }
     
 }
