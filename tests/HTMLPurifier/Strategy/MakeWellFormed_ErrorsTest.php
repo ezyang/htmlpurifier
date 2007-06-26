@@ -3,11 +3,6 @@
 require_once 'HTMLPurifier/Strategy/ErrorsHarness.php';
 require_once 'HTMLPurifier/Strategy/MakeWellFormed.php';
 
-/*
-'Strategy_MakeWellFormed: Tag closed by element end' => '',
-'Strategy_MakeWellFormed: Tag closed by document end' => '',
-*/
-
 class HTMLPurifier_Strategy_MakeWellFormed_ErrorsTest extends HTMLPurifier_Strategy_ErrorsHarness
 {
     
