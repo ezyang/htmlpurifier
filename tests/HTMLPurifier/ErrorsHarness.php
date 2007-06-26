@@ -13,7 +13,7 @@ class HTMLPurifier_ErrorsHarness extends UnitTestCase
         $this->config = HTMLPurifier_Config::create(array('Core.CollectErrors' => true));
         $this->context = new HTMLPurifier_Context();
         generate_mock_once('HTMLPurifier_ErrorCollector');
-        $this->collector = new HTMLPurifier_ErrorCollectorMock($this);
+        $this->collector = new HTMLPurifier_ErrorCollectorMock();
         $this->context->register('ErrorCollector', $this->collector);
     }
     

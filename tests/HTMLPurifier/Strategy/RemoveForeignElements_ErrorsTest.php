@@ -30,13 +30,13 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
     function testForeignElementToText() {
         // uses $CurrentToken.Serialized
         $this->config->set('Core', 'EscapeInvalidTags', true);
-        $this->expectErrorCollection(E_WARNING, 'Strategy_RemoveForeignElements: Foreign element to text', 'cannot-possibly-exist-element');
+        $this->expectErrorCollection(E_WARNING, 'Strategy_RemoveForeignElements: Foreign element to text');
         $this->invoke('<cannot-possibly-exist-element>');
     }
     
     function testForeignElementRemoved() {
         // uses $CurrentToken.Serialized
-        $this->expectErrorCollection(E_ERROR, 'Strategy_RemoveForeignElements: Foreign element removed', 'cannot-possibly-exist-element');
+        $this->expectErrorCollection(E_ERROR, 'Strategy_RemoveForeignElements: Foreign element removed');
         $this->invoke('<cannot-possibly-exist-element>');
     }
     

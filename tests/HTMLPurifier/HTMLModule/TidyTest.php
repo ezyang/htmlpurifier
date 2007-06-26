@@ -45,7 +45,7 @@ class HTMLPurifier_HTMLModule_TidyTest extends UnitTestCase
         $i = 0; // counter, helps us isolate expectations
         
         // initialize partial mock
-        $module = new HTMLPurifier_HTMLModule_Tidy_TestForConstruct($this);
+        $module = new HTMLPurifier_HTMLModule_Tidy_TestForConstruct();
         $module->fixesForLevel['light']  = array('light-fix-1', 'light-fix-2');
         $module->fixesForLevel['medium'] = array('medium-fix-1', 'medium-fix-2');
         $module->fixesForLevel['heavy']  = array('heavy-fix-1', 'heavy-fix-2');

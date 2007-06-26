@@ -13,7 +13,7 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
         $attrdef_nmtokens->_name = 'nmtokens'; // for testing only
         
         generate_mock_once('HTMLPurifier_AttrDef');
-        $attrdef =& new HTMLPurifier_AttrDefMock($this);
+        $attrdef = new HTMLPurifier_AttrDefMock();
         $attrdef->setReturnValue('make', $attrdef_nmtokens);
         $manager->attrTypes->info['NMTOKENS'] =& $attrdef;
         

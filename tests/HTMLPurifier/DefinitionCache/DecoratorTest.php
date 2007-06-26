@@ -9,7 +9,7 @@ class HTMLPurifier_DefinitionCache_DecoratorTest extends HTMLPurifier_Definition
     function test() {
         
         generate_mock_once('HTMLPurifier_DefinitionCache');
-        $mock =& new HTMLPurifier_DefinitionCacheMock($this);
+        $mock = new HTMLPurifier_DefinitionCacheMock();
         $mock->type = 'Test';
         
         $cache = new HTMLPurifier_DefinitionCache_Decorator();

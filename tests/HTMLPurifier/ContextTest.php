@@ -20,7 +20,7 @@ class HTMLPurifier_ContextTest extends UnitTestCase
         
         $this->assertFalse($this->context->exists('IDAccumulator'));
         
-        $accumulator = new HTMLPurifier_IDAccumulatorMock($this);
+        $accumulator = new HTMLPurifier_IDAccumulatorMock();
         $this->context->register('IDAccumulator', $accumulator);
         $this->assertTrue($this->context->exists('IDAccumulator'));
         
