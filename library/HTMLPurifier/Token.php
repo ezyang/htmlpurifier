@@ -15,7 +15,8 @@ class HTMLPurifier_Token {
     
     /**
      * Lookup array of processing that this token is exempt from.
-     * Currently, the only valid value is "ValidateAttributes".
+     * Currently, valid values are "ValidateAttributes" and
+     * "MakeWellFormed_TagClosedError"
      */
     var $armor = array();
     

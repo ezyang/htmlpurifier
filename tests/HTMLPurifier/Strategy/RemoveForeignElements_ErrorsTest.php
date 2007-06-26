@@ -1,9 +1,9 @@
 <?php
 
-require_once 'HTMLPurifier/ErrorsHarness.php';
+require_once 'HTMLPurifier/Strategy/ErrorsHarness.php';
 require_once 'HTMLPurifier/Strategy/RemoveForeignElements.php';
 
-class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifier_ErrorsHarness
+class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifier_Strategy_ErrorsHarness
 {
     
     function setup() {
@@ -11,11 +11,8 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
         $this->config->set('HTML', 'TidyLevel', 'heavy');
     }
     
-    function invoke($input) {
-        $strategy = new HTMLPurifier_Strategy_RemoveForeignElements();
-        $lexer = new HTMLPurifier_Lexer_DirectLex();
-        $tokens = $lexer->tokenizeHTML($input, $this->config, $this->context);
-        $strategy->execute($tokens, $this->config, $this->context);
+    function getStrategy() {
+        return new HTMLPurifier_Strategy_RemoveForeignElements();
     }
     
     function testTagTransform() {
@@ -31,12 +28,14 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
     }
     
     function testForeignElementToText() {
+        // uses $CurrentToken.Serialized
         $this->config->set('Core', 'EscapeInvalidTags', true);
         $this->expectErrorCollection(E_WARNING, 'Strategy_RemoveForeignElements: Foreign element to text', 'cannot-possibly-exist-element');
         $this->invoke('<cannot-possibly-exist-element>');
     }
     
     function testForeignElementRemoved() {
+        // uses $CurrentToken.Serialized
         $this->expectErrorCollection(E_ERROR, 'Strategy_RemoveForeignElements: Foreign element removed', 'cannot-possibly-exist-element');
         $this->invoke('<cannot-possibly-exist-element>');
     }

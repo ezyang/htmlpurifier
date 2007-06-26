@@ -230,6 +230,13 @@ Par1
 </p><div>Par2</div>'
         );
         
+        $this->assertResult(
+'Par1
+
+<b>Par2</b>',
+'<p>Par1</p><p><b>Par2</b></p>'
+        );
+        
     }
     
     function testInlineRootNode() {

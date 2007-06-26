@@ -56,6 +56,8 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
         $generator = new HTMLPurifier_Generator();
         
+        $e =& $context->get('ErrorCollector', true);
+        
         // -- begin INJECTOR --
         
         $this->injectors = array();
@@ -89,6 +91,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         }
         
         // -- end INJECTOR --
+        
+        $token = false;
+        $context->register('CurrentToken', $token);
         
         for ($this->inputIndex = 0; isset($tokens[$this->inputIndex]); $this->inputIndex++) {
             
@@ -177,9 +182,12 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // make sure that we have something open
             if (empty($this->currentNesting)) {
                 if ($escape_invalid_tags) {
+                    if ($e) $e->send(E_WARNING, 'Strategy_MakeWellFormed: Unnecessary end tag to text', $token->name);
                     $result[] = new HTMLPurifier_Token_Text(
                         $generator->generateFromToken($token, $config, $context)
                     );
+                } elseif ($e) {
+                    $e->send(E_WARNING, 'Strategy_MakeWellFormed: Unnecessary end tag removed', $token->name);
                 }
                 continue;
             }
@@ -215,6 +223,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     $result[] = new HTMLPurifier_Token_Text(
                         $generator->generateFromToken($token, $config, $context)
                     );
+                    if ($e) $e->send(E_WARNING, 'Strategy_MakeWellFormed: Stray end tag to text', $token->name);
+                } elseif ($e) {
+                    $e->send(E_WARNING, 'Strategy_MakeWellFormed: Stray end tag removed', $token->name);
                 }
                 continue;
             }
@@ -222,9 +233,14 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // okay, we found it, close all the skipped tags
             // note that skipped tags contains the element we need closed
             $size = count($skipped_tags);
-            for ($i = $size - 1; $i >= 0; $i--) {
+            for ($i = $size - 1; $i > 0; $i--) {
+                if ($e && !isset($skipped_tags[$i]->armor['MakeWellFormed_TagClosedError'])) {
+                    $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by element end', $skipped_tags[$i]->name);
+                }
                 $result[] = new HTMLPurifier_Token_End($skipped_tags[$i]->name);
             }
+            
+            $result[] = new HTMLPurifier_Token_End($skipped_tags[$i]->name);
             
         }
         
@@ -234,6 +250,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         if (!empty($this->currentNesting)) {
             $size = count($this->currentNesting);
             for ($i = $size - 1; $i >= 0; $i--) {
+                if ($e && !isset($skipped_tags[$i]->armor['MakeWellFormed_TagClosedError'])) {
+                    $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by document end', $this->currentNesting[$i]->name);
+                }
                 $result[] =
                     new HTMLPurifier_Token_End($this->currentNesting[$i]->name);
             }
@@ -242,6 +261,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $context->destroy('CurrentNesting');
         $context->destroy('InputTokens');
         $context->destroy('InputIndex');
+        $context->destroy('CurrentToken');
         
         unset($this->outputTokens, $this->injectors, $this->currentInjector,
           $this->currentNesting, $this->inputTokens, $this->inputIndex);

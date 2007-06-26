@@ -94,6 +94,7 @@ $test_files[] = 'HTMLPurifier/Strategy/CompositeTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/CoreTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/FixNestingTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/MakeWellFormedTest.php';
+$test_files[] = 'HTMLPurifier/Strategy/MakeWellFormed_ErrorsTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/RemoveForeignElementsTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/RemoveForeignElements_ErrorsTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/ValidateAttributesTest.php';
