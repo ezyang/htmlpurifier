@@ -42,7 +42,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
     }
     
     function testCommentRemoved() {
-        $this->expectErrorCollection(E_ERROR, 'Strategy_RemoveForeignElements: Comment removed', ' test ');
+        $this->expectErrorCollection(E_NOTICE, 'Strategy_RemoveForeignElements: Comment removed', ' test ');
         $this->invoke('<!-- test -->');
     }
     

@@ -143,7 +143,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     $token = new HTMLPurifier_Token_Text($data);
                 } else {
                     // strip comments
-                    if ($e) $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Comment removed', $token->data);
+                    if ($e) $e->send(E_NOTICE, 'Strategy_RemoveForeignElements: Comment removed', $token->data);
                     continue;
                 }
             } elseif ($token->type == 'text') {
