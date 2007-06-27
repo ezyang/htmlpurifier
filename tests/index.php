@@ -84,4 +84,4 @@ else $reporter = new HTMLPurifier_SimpleTest_Reporter('UTF-8');
 
 $test->run($reporter);
 
-?>
+

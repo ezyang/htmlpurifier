@@ -25,7 +25,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
             $elements = array_flip($elements);
             foreach ($elements as $i => $x) {
                 $elements[$i] = true;
-                if (empty($i)) unset($elements[$i]);
+                if (empty($i)) unset($elements[$i]); // remove blank
             }
         }
         $this->elements = $elements;
@@ -109,4 +109,3 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
     }
 }
 
-?>

@@ -40,4 +40,3 @@ class HTMLPurifier_AttrTransform_BgColorTest extends HTMLPurifier_AttrTransformH
     
 }
 
-?>

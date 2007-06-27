@@ -73,4 +73,3 @@ extends HTMLPurifier_ChildDef_Required
     }
 }
 
-?>

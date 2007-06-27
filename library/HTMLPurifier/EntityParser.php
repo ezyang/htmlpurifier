@@ -154,4 +154,3 @@ class HTMLPurifier_EntityParser
     
 }
 
-?>

@@ -68,4 +68,3 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPositionTest extends HTMLPurifier_AttrD
     
 }
 
-?>

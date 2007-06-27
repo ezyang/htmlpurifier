@@ -439,4 +439,4 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     
 }
 
-?>
+

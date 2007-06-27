@@ -27,4 +27,3 @@ class HTMLPurifier_AttrDefTest extends UnitTestCase
     
 }
 
-?>

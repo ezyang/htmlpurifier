@@ -59,4 +59,3 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
     
 }
 
-?>

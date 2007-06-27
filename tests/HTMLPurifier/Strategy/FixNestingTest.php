@@ -102,12 +102,15 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
         $this->assertResult(
             '<div>Reject</div>', 'Reject', array('HTML.Parent' => 'span')
         );
-        
+   }
+   
+   function testError() {
         // test fallback to div
         $this->expectError('Cannot use unrecognized element as parent.');
         $this->assertResult(
             '<div>Accept</div>', true, array('HTML.Parent' => 'obviously-impossible')
         );
+        $this->swallowErrors();
         
     }
     
@@ -130,4 +133,3 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
     
 }
 
-?>

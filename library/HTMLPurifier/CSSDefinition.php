@@ -226,4 +226,3 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
     
 }
 
-?>

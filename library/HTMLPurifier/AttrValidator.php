@@ -1,38 +1,62 @@
 <?php
 
+/**
+ * Validates the attributes of a token. Doesn't manage required attributes
+ * very well. The only reason we factored this out was because RemoveForeignElements
+ * also needed it besides ValidateAttributes.
+ */
 class HTMLPurifier_AttrValidator
 {
     
-    
-    function validateToken($token, &$config, &$context) {
+    /**
+     * Validates the attributes of a token, returning a modified token
+     * that has valid tokens
+     * @param $token Reference to token to validate. We require a reference
+     *     because the operation this class performs on the token are
+     *     not atomic, so the context CurrentToken to be updated
+     *     throughout
+     * @param $config Instance of HTMLPurifier_Config
+     * @param $context Instance of HTMLPurifier_Context
+     */
+    function validateToken(&$token, &$config, &$context) {
             
         $definition = $config->getHTMLDefinition();
+        $e =& $context->get('ErrorCollector', true);
+        
+        // initialize CurrentToken if necessary
+        $current_token =& $context->get('CurrentToken', true);
+        if (!$current_token) $context->register('CurrentToken', $token);
+        
+        if ($token->type !== 'start' && $token->type !== 'empty') return $token;
         
         // create alias to global definition array, see also $defs
         // DEFINITION CALL
         $d_defs = $definition->info_global_attr;
         
-        // copy out attributes for easy manipulation
-        $attr = $token->attr;
+        // reference attributes for easy manipulation
+        $attr =& $token->attr;
         
         // do global transformations (pre)
         // nothing currently utilizes this
         foreach ($definition->info_attr_transform_pre as $transform) {
-            $attr = $transform->transform($attr, $config, $context);
+            $attr = $transform->transform($o = $attr, $config, $context);
+            if ($e && ($attr != $o)) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
         }
         
         // do local transformations only applicable to this element (pre)
         // ex. <p align="right"> to <p style="text-align:right;">
-        foreach ($definition->info[$token->name]->attr_transform_pre
-            as $transform
-        ) {
-            $attr = $transform->transform($attr, $config, $context);
+        foreach ($definition->info[$token->name]->attr_transform_pre as $transform) {
+            $attr = $transform->transform($o = $attr, $config, $context);
+            if ($e && ($attr != $o)) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
         }
         
         // create alias to this element's attribute definition array, see
         // also $d_defs (global attribute definition array)
         // DEFINITION CALL
         $defs = $definition->info[$token->name]->attr;
+        
+        $attr_key = false;
+        $context->register('CurrentAttr', $attr_key);
         
         // iterate through all the attribute keypairs
         // Watch out for name collisions: $key has previously been used
@@ -67,9 +91,17 @@ class HTMLPurifier_AttrValidator
             
             // put the results into effect
             if ($result === false || $result === null) {
+                // this is a generic error message that should replaced
+                // with more specific ones when possible
+                if ($e) $e->send(E_ERROR, 'AttrValidator: Attribute removed');
+                
                 // remove the attribute
                 unset($attr[$attr_key]);
             } elseif (is_string($result)) {
+                // generally, if a substitution is happening, there
+                // was some sort of implicit correction going on. We'll
+                // delegate it to the attribute classes to say exactly what.
+                
                 // simple substitution
                 $attr[$attr_key] = $result;
             }
@@ -81,25 +113,27 @@ class HTMLPurifier_AttrValidator
             // others would prepend themselves).
         }
         
+        $context->destroy('CurrentAttr');
+        
         // post transforms
         
-        // ex. <x lang="fr"> to <x lang="fr" xml:lang="fr">
+        // global (error reporting untested)
         foreach ($definition->info_attr_transform_post as $transform) {
-            $attr = $transform->transform($attr, $config, $context);
+            $attr = $transform->transform($o = $attr, $config, $context);
+            if ($e && ($attr != $o)) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
         }
         
-        // ex. <bdo> to <bdo dir="ltr">
+        // local (error reporting untested)
         foreach ($definition->info[$token->name]->attr_transform_post as $transform) {
-            $attr = $transform->transform($attr, $config, $context);
+            $attr = $transform->transform($o = $attr, $config, $context);
+            if ($e && ($attr != $o)) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
         }
         
-        // commit changes
-        $token->attr = $attr;
-        return $token;
+        // destroy CurrentToken if we made it ourselves
+        if (!$current_token) $context->destroy('CurrentToken');
         
     }
     
     
 }
 
-?>

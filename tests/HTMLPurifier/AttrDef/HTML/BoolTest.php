@@ -22,4 +22,3 @@ class HTMLPurifier_AttrDef_HTML_BoolTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

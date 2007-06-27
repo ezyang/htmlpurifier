@@ -28,4 +28,3 @@ foreach ($out as $line) {
 $version = trim(file_get_contents('VERSION'));
 echo "Resolve conflicts and then commit as 'Release $version, merged in $last_rev to HEAD.'";
 
-?>

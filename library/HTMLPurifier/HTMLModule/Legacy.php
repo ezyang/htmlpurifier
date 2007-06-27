@@ -138,4 +138,3 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
     
 }
 
-?>

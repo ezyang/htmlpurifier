@@ -202,11 +202,11 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         // $fake_registry isn't the real mock, because due to PHP 4 weirdness
         // I cannot set a default value to function parameters that are passed
         // by reference. So we use the value instance() returns.
-        $fake_registry = new HTMLPurifier_URISchemeRegistryMock($this);
+        $fake_registry = new HTMLPurifier_URISchemeRegistryMock();
         $registry =& HTMLPurifier_URISchemeRegistry::instance($fake_registry);
         
         // now, let's add a pseudo-scheme to the registry
-        $this->scheme = new HTMLPurifier_URISchemeMock($this);
+        $this->scheme = new HTMLPurifier_URISchemeMock();
         
         // here are the schemes we will support with overloaded mocks
         $registry->setReturnReference('getScheme', $this->scheme, array('http', '*', '*'));
@@ -325,4 +325,4 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>
+

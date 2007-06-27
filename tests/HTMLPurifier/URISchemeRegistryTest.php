@@ -18,9 +18,9 @@ class HTMLPurifier_URISchemeRegistryTest extends UnitTestCase
         $registry = new HTMLPurifier_URISchemeRegistry();
         $this->assertIsA($registry->getScheme('http', $config, $context), 'HTMLPurifier_URIScheme_http');
         
-        $scheme_http = new HTMLPurifier_URISchemeMock($this);
-        $scheme_telnet = new HTMLPurifier_URISchemeMock($this);
-        $scheme_foobar = new HTMLPurifier_URISchemeMock($this);
+        $scheme_http = new HTMLPurifier_URISchemeMock();
+        $scheme_telnet = new HTMLPurifier_URISchemeMock();
+        $scheme_foobar = new HTMLPurifier_URISchemeMock();
         
         // register a new scheme
         $registry->register('telnet', $scheme_telnet);
@@ -48,4 +48,3 @@ class HTMLPurifier_URISchemeRegistryTest extends UnitTestCase
     
 }
 
-?>

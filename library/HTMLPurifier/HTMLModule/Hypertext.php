@@ -30,4 +30,3 @@ class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
     
 }
 
-?>

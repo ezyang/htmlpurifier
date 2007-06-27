@@ -9,6 +9,50 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+2.0.1, released 2007-06-27
+! Tag auto-closing now based on a ChildDef heuristic rather than a
+  manually set auto_close array; some behavior may change
+! Experimental AutoFormat functionality added: auto-paragraph and
+  linkify your HTML input by setting %AutoFormat.AutoParagraph and
+  %AutoFormat.Linkify to true
+! Newlines normalized internally, and then converted back to the
+  value of PHP_EOL. If this is not desired, set your newline format
+  using %Output.Newline.
+! Beta error collection, messages are implemented for the most generic
+  cases involving Lexing or Strategies
+- Clean up special case code for <script> tags
+- Reorder includes for DefinitionCache decorators, fixes a possible
+  missing class error
+- Fixed bug where manually modified definitions were not saved via cache
+  (mostly harmless, except for the fact that it would be a little slower)
+- Configuration objects with different serials do not clobber each
+  others when revision numbers are unequal
+- Improve Serializer DefinitionCache directory permissions checks
+- DefinitionCache no longer throws errors when it encounters old
+  serial files that do not conform to the current style
+- Stray xmlns attributes removed from configuration documentation
+- configForm.php smoketest no longer has XSS vulnerability due to
+  unescaped print_r output
+- Printer adheres to configuration's directives on output format
+- Fix improperly named form field in ConfigForm printer
+. Rewire some test-cases to swallow errors rather than expect them
+. HTMLDefinition printer updated with some of the new attributes
+. DefinitionCache keys reordered to reflect precedence: version number,
+  hash, then revision number
+. %Core.DefinitionCache renamed to %Cache.DefinitionImpl
+. Interlinking in configuration documentation added using
+  Injector_PurifierLinkify
+. Directives now keep track of aliases to themselves
+. Error collector now requires a severity to be passed, use PHP's internal
+  error constants for this
+. HTMLPurifier_Config::getAllowedDirectivesForForm implemented, allows
+  much easier selective embedding of configuration values
+. Doctype objects now accept public and system DTD identifiers
+. %HTML.Doctype is now constrained by specific values, to specify a custom
+  doctype use new %HTML.CustomDoctype
+. ConfigForm truncates long directives to keep the form small, and does
+  not re-output namespaces
+
 2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety
   information

@@ -1,7 +1,12 @@
-HTML Purifier 2.0 is the culmination of two major architectural changes. 
-The first is Tidy, which enables HTML Purifier to both natively support 
-deprecated elements and also convert them to standards-compliant 
-alternatives. The second is the Advanced API, which enables users to 
-create new elements and attributes with ease. Keeping in line with a 
-commitment to high quality, there are also five esoteric bug-fixes and a 
-plethora of subtle improvements that enhance the library. 
+The 2.0.1 release introduces a number of stability and usability fixes,
+as well as a number of (disabled by default) experimental features.  The
+security-minded should note that a reflected XSS vulnerability was patched
+in smoketests/configForm.php; if you cannot upgrade immediately, please
+delete that file (if that directory is not publically accessible, there
+is no security risk).  The maintenance changes include more helpful file
+permissions errors, internal newline normalization, reordered includes
+to prevent a missing class definition in some setups, and better cache
+revision and id handling.  The two experimental features are auto-formatting
+(auto-paragraphing and linkification) and error collection, these can
+be enabled with %AutoFormat.AutoParagraph, %AutoFormat.Linkify and
+%Core.CollectErrors respectively.

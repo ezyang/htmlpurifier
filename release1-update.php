@@ -92,4 +92,3 @@ file_put_contents('library/HTMLPurifier/Config.php', $config_c);
 
 echo "Review changes, write something in WHATSNEW, and then SVN commit with log 'Release $version.'" . PHP_EOL;
 
-?>

@@ -177,4 +177,3 @@ class HTMLPurifier_TagTransformTest extends UnitTestCase
     }
 }
 
-?>

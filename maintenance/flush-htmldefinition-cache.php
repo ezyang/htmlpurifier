@@ -21,4 +21,3 @@ $cache->flush($config);
 
 echo 'Cache flushed successfully.';
 
-?>

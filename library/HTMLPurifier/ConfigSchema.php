@@ -67,6 +67,8 @@ class HTMLPurifier_ConfigSchema {
         $this->defineNamespace('URI', 'Features regarding Uniform Resource Identifiers.');
         $this->defineNamespace('HTML', 'Configuration regarding allowed HTML.');
         $this->defineNamespace('CSS', 'Configuration regarding allowed CSS.');
+        $this->defineNamespace('AutoFormat', 'Configuration for activating auto-formatting functionality (also known as <code>Injector</code>s)');
+        $this->defineNamespace('AutoFormatParam', 'Configuration for customizing auto-formatting functionality');
         $this->defineNamespace('Output', 'Configuration relating to the generation of (X)HTML.');
         $this->defineNamespace('Cache', 'Configuration for DefinitionCache and related subclasses.');
         $this->defineNamespace('Test', 'Developer testing configuration for our unit tests.');
@@ -293,6 +295,7 @@ class HTMLPurifier_ConfigSchema {
         $def->info[$namespace][$name] =
             new HTMLPurifier_ConfigDef_DirectiveAlias(
                 $new_namespace, $new_name);
+        $def->info[$new_namespace][$new_name]->directiveAliases[] = "$namespace.$name";
     }
     
     /**
@@ -401,4 +404,4 @@ class HTMLPurifier_ConfigSchema {
     }
 }
 
-?>
+

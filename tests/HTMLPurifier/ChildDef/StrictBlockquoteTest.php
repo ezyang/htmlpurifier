@@ -42,12 +42,14 @@ extends HTMLPurifier_ChildDefHarness
         $this->assertResult('Needs wrap', '<div>Needs wrap</div>',
             array('HTML.BlockWrapper' => 'div'));
         
-        $this->expectError('Cannot use non-block element as block wrapper.');
+    }
+    
+    function testError() {
+        $this->obj = new HTMLPurifier_ChildDef_StrictBlockquote('div | p');
         $this->assertResult('Needs wrap', '<p>Needs wrap</p>',
             array('HTML.BlockWrapper' => 'dav'));
-        
+        $this->swallowErrors();
     }
     
 }
 
-?>

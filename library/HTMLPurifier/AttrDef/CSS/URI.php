@@ -55,4 +55,3 @@ class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
     
 }
 
-?>

@@ -42,4 +42,3 @@ class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme {
     
 }
 
-?>

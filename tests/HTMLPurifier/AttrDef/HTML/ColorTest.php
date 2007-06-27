@@ -20,4 +20,3 @@ class HTMLPurifier_AttrDef_HTML_ColorTest extends HTMLPurifier_AttrDefHarness
     }
 }
 
-?>

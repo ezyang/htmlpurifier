@@ -13,4 +13,3 @@ class HTMLPurifier_StrategyHarness extends HTMLPurifier_Harness
     
 }
 
-?>

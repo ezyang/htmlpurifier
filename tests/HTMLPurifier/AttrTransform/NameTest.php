@@ -25,4 +25,3 @@ class HTMLPurifier_AttrTransform_NameTest extends HTMLPurifier_AttrTransformHarn
     
 }
 
-?>

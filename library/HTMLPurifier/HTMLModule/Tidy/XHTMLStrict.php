@@ -24,4 +24,3 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLStrict extends
     
 }
 
-?>

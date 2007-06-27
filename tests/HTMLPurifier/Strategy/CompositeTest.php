@@ -26,9 +26,9 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
         
         // setup a bunch of mock strategies to inject into our composite test
         
-        $mock_1 = new HTMLPurifier_StrategyMock($this);
-        $mock_2 = new HTMLPurifier_StrategyMock($this);
-        $mock_3 = new HTMLPurifier_StrategyMock($this);
+        $mock_1 = new HTMLPurifier_StrategyMock();
+        $mock_2 = new HTMLPurifier_StrategyMock();
+        $mock_3 = new HTMLPurifier_StrategyMock();
         
         // setup the object
         
@@ -73,4 +73,3 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
     
 }
 
-?>

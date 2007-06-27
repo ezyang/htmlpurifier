@@ -18,6 +18,14 @@ class HTMLPurifier_HTMLModule_ScriptingTest extends HTMLPurifier_HTMLModuleHarne
             array('HTML.Trusted' => true)
         );
         
+        // CDATA
+        $this->assertResult(
+'//<![CDATA[
+alert("<This is compatible with XHTML>");
+//]]> ', true,
+            array('HTML.Trusted' => true)
+        );
+        
         // max
         $this->assertResult(
             '<script
@@ -38,15 +46,7 @@ class HTMLPurifier_HTMLModule_ScriptingTest extends HTMLPurifier_HTMLModuleHarne
             array('HTML.Trusted' => true, 'Core.CommentScriptContents' => false)
         );
         
-        // invalid children
-        $this->assertResult(
-            '<script type="text/javascript">PCDATA<span</script>',
-            '<script type="text/javascript">PCDATA</script>',
-            array('HTML.Trusted' => true, 'Core.CommentScriptContents' => false)
-        );
-        
     }
     
 }
 
-?>

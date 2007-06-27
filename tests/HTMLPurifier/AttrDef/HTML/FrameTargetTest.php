@@ -28,4 +28,3 @@ class HTMLPurifier_AttrDef_HTML_FrameTargetTest extends HTMLPurifier_AttrDefHarn
     
 }
 
-?>

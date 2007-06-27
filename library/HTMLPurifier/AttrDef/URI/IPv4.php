@@ -39,4 +39,3 @@ class HTMLPurifier_AttrDef_URI_IPv4 extends HTMLPurifier_AttrDef
     
 }
 
-?>

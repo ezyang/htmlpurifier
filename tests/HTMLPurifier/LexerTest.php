@@ -70,7 +70,7 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $this->assertExtractBody('<html><body><b>Bold</b></body></html>', '<b>Bold</b>');
         $this->assertExtractBody('<HTML><BODY><B>Bold</B></BODY></HTML>', '<B>Bold</B>');
         $this->assertExtractBody(
-'<?xml version="1.0"?>
+'<?xml version="1.0"
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -298,6 +298,33 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $sax_expect[19] = false; // SAX drops the < character
         $dom_expect[19] = false; // DOM drops the entire pseudo-tag
         
+        // test comment parsing with funky characters inside
+        $input[20] = '<!-- This >< comment --><br />';
+        $expect[20] = array(
+            new HTMLPurifier_Token_Comment(' This >< comment '),
+            new HTMLPurifier_Token_Empty('br')
+        );
+        $sax_expect[20] = false;
+        
+        // test comment parsing of missing end
+        $input[21] = '<!-- This >< comment';
+        $expect[21] = array(
+            new HTMLPurifier_Token_Comment(' This >< comment')
+        );
+        $sax_expect[21] = false;
+        $dom_expect[21] = false;
+        
+        // test CDATA tags
+        $input[22] = '<script>alert("<foo>");</script>';
+        $expect[22] = array(
+            new HTMLPurifier_Token_Start('script')
+           ,new HTMLPurifier_Token_Text('alert("<foo>");')
+           ,new HTMLPurifier_Token_End('script')
+        );
+        $config[22] = HTMLPurifier_Config::create(array('HTML.Trusted' => true));
+        $sax_expect[22] = false;
+        //$dom_expect[22] = false;
+        
         $default_config = HTMLPurifier_Config::createDefault();
         $default_context = new HTMLPurifier_Context();
         foreach($input as $i => $discard) {
@@ -344,4 +371,3 @@ class HTMLPurifier_LexerTest extends UnitTestCase
     
 }
 
-?>

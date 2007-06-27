@@ -10,15 +10,54 @@ class HTMLPurifier_ErrorCollector
 {
     
     var $errors = array();
+    var $locale;
+    var $generator;
+    var $context;
+    
+    function HTMLPurifier_ErrorCollector(&$context) {
+        $this->locale  =& $context->get('Locale');
+        $this->generator =& $context->get('Generator');
+        $this->context =& $context;
+    }
     
     /**
      * Sends an error message to the collector for later use
-     * @param string Error message text
-     * @param HTMLPurifier_Token Token that caused error
-     * @param array Tokens surrounding the offending token above, use true as placeholder
+     * @param $line Integer line number, or HTMLPurifier_Token that caused error
+     * @param $severity int Error severity, PHP error style (don't use E_USER_)
+     * @param $msg string Error message text
      */
-    function send($msg, $token, $context_tokens = array(true)) {
-        $this->errors[] = array($msg, $token, $context_tokens);
+    function send($severity, $msg) {
+        
+        $args = array();
+        if (func_num_args() > 2) {
+            $args = func_get_args();
+            array_shift($args);
+            unset($args[0]);
+        }
+        
+        $token = $this->context->get('CurrentToken', true);
+        $line  = $token ? $token->line : $this->context->get('CurrentLine', true);
+        $attr  = $this->context->get('CurrentAttr', true);
+        
+        // perform special substitutions, also add custom parameters
+        $subst = array();
+        if (!is_null($token)) {
+            $args['CurrentToken'] = $token;
+        }
+        if (!is_null($attr)) {
+            $subst['$CurrentAttr.Name'] = $attr;
+            if (isset($token->attr[$attr])) $subst['$CurrentAttr.Value'] = $token->attr[$attr];
+        }
+        
+        if (empty($args)) {
+            $msg = $this->locale->getMessage($msg);
+        } else {
+            $msg = $this->locale->formatMessage($msg, $args);
+        }
+        
+        if (!empty($subst)) $msg = strtr($msg, $subst);
+        
+        $this->errors[] = array($line, $severity, $msg);
     }
     
     /**
@@ -35,39 +74,45 @@ class HTMLPurifier_ErrorCollector
      * @param $config Configuration array, vital for HTML output nature
      */
     function getHTMLFormatted($config) {
-        $generator = new HTMLPurifier_Generator();
-        $context = new HTMLPurifier_Context();
-        $generator->generateFromTokens(array(), $config, $context); // initialize
         $ret = array();
         
         $errors = $this->errors;
         
         // sort error array by line
-        if ($config->get('Core', 'MaintainLineNumbers')) {
-            $lines  = array();
-            foreach ($errors as $error) $lines[] = $error[1]->line;
-            array_multisort($lines, SORT_ASC, $errors);
+        // line numbers are enabled if they aren't explicitly disabled
+        if ($config->get('Core', 'MaintainLineNumbers') !== false) {
+            $has_line       = array();
+            $lines          = array();
+            $original_order = array();
+            foreach ($errors as $i => $error) {
+                $has_line[] = (int) (bool) $error[0];
+                $lines[] = $error[0];
+                $original_order[] = $i;
+            }
+            array_multisort($has_line, SORT_DESC, $lines, SORT_ASC, $original_order, SORT_ASC, $errors);
         }
         
         foreach ($errors as $error) {
-            $string = $generator->escape($error[0]); // message
-            if (!empty($error[1]->line)) {
-                $string .= ' at line ' . $error[1]->line;
+            list($line, $severity, $msg) = $error;
+            $string = '';
+            $string .= '<strong>' . $this->locale->getErrorName($severity) . '</strong>: ';
+            $string .= $this->generator->escape($msg); 
+            if ($line) {
+                // have javascript link generation that causes 
+                // textarea to skip to the specified line
+                $string .= $this->locale->formatMessage(
+                    'ErrorCollector: At line', array('line' => $line));
             }
-            $string .= ' (<code>';
-            foreach ($error[2] as $token) {
-                if ($token !== true) {
-                    $string .= $generator->escape($generator->generateFromToken($token));
-                } else {
-                    $string .= '<strong>' . $generator->escape($generator->generateFromToken($error[1])) . '</strong>';
-                }
-            }
-            $string .= '</code>)';
             $ret[] = $string;
         }
-        return $ret;
+        
+        if (empty($errors)) {
+            return '<p>' . $this->locale->getMessage('ErrorCollector: No errors') . '</p>';
+        } else {
+            return '<ul><li>' . implode('</li><li>', $ret) . '</li></ul>';
+        }
+        
     }
     
 }
 
-?>

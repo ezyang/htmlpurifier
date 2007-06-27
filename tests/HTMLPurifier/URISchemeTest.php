@@ -155,4 +155,3 @@ class HTMLPurifier_URISchemeTest extends UnitTestCase
     
 }
 
-?>

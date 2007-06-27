@@ -23,4 +23,3 @@ passthru("svn copy --message \"Tag $version release.\" $trunk_url $trunk_tag_url
 echo "Tagging strict to tags/$version-strict...";
 passthru("svn copy --message \"Tag $version-strict release.\" $strict_url $strict_tag_url");
 
-?>

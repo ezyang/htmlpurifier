@@ -15,7 +15,8 @@ class HTMLPurifier_Token {
     
     /**
      * Lookup array of processing that this token is exempt from.
-     * Currently, the only valid value is "ValidateAttributes".
+     * Currently, valid values are "ValidateAttributes" and
+     * "MakeWellFormed_TagClosedError"
      */
     var $armor = array();
     
@@ -24,7 +25,7 @@ class HTMLPurifier_Token {
      * @return Copied token
      */
     function copy() {
-        trigger_error('Cannot copy abstract class', E_USER_ERROR);
+        return unserialize(serialize($this));
     }
 }
 
@@ -65,7 +66,7 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token // abstract
      * @param $name String name.
      * @param $attr Associative array of attributes.
      */
-    function HTMLPurifier_Token_Tag($name, $attr = array()) {
+    function HTMLPurifier_Token_Tag($name, $attr = array(), $line = null) {
         $this->name = ctype_lower($name) ? $name : strtolower($name);
         foreach ($attr as $key => $value) {
             // normalization only necessary when key is not lowercase
@@ -80,6 +81,7 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token // abstract
             }
         }
         $this->attr = $attr;
+        $this->line = $line;
     }
 }
 
@@ -89,9 +91,6 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token // abstract
 class HTMLPurifier_Token_Start extends HTMLPurifier_Token_Tag
 {
     var $type = 'start';
-    function copy() {
-        return new HTMLPurifier_Token_Start($this->name, $this->attr);
-    }
 }
 
 /**
@@ -100,9 +99,6 @@ class HTMLPurifier_Token_Start extends HTMLPurifier_Token_Tag
 class HTMLPurifier_Token_Empty extends HTMLPurifier_Token_Tag
 {
     var $type = 'empty';
-    function copy() {
-        return new HTMLPurifier_Token_Empty($this->name, $this->attr);
-    }
 }
 
 /**
@@ -115,9 +111,6 @@ class HTMLPurifier_Token_Empty extends HTMLPurifier_Token_Tag
 class HTMLPurifier_Token_End extends HTMLPurifier_Token_Tag
 {
     var $type = 'end';
-    function copy() {
-        return new HTMLPurifier_Token_End($this->name);
-    }
 }
 
 /**
@@ -142,12 +135,10 @@ class HTMLPurifier_Token_Text extends HTMLPurifier_Token
      * 
      * @param $data String parsed character data.
      */
-    function HTMLPurifier_Token_Text($data) {
+    function HTMLPurifier_Token_Text($data, $line = null) {
         $this->data = $data;
         $this->is_whitespace = ctype_space($data);
-    }
-    function copy() {
-        return new HTMLPurifier_Token_Text($this->data);
+        $this->line = $line;
     }
     
 }
@@ -164,12 +155,9 @@ class HTMLPurifier_Token_Comment extends HTMLPurifier_Token
      * 
      * @param $data String comment data.
      */
-    function HTMLPurifier_Token_Comment($data) {
+    function HTMLPurifier_Token_Comment($data, $line = null) {
         $this->data = $data;
-    }
-    function copy() {
-        return new HTMLPurifier_Token_Comment($this->data);
+        $this->line = $line;
     }
 }
 
-?>

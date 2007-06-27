@@ -53,6 +53,12 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         $input[10] = 'name="input" selected';
         $expect[10] = array('name' => 'input', 'selected' => 'selected');
         
+        $input[11] = '=""';
+        $expect[11] = array();
+        
+        $input[12] = '="" =""';
+        $expect[12] = array('"' => ''); // tough to say, just don't throw a loop
+        
         $config = HTMLPurifier_Config::createDefault();
         $context = new HTMLPurifier_Context();
         $size = count($input);
@@ -66,32 +72,23 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
     
     function testLineNumbers() {
         
-        $html = '<b>Line 1</b>
-                 <i>Line 2</i>
-                 Still Line 2<br
-                 />Now Line 4
-                 
-                 <br />';
+        $html = "<b>Line 1</b>\n<i>Line 2</i>\nStill Line 2<br\n/>Now Line 4\n\n<br />";
         
         $expect = array(
             // line 1
             0 => new HTMLPurifier_Token_Start('b')
            ,1 => new HTMLPurifier_Token_Text('Line 1')
            ,2 => new HTMLPurifier_Token_End('b')
-           ,3 => new HTMLPurifier_Token_Text('
-                 ')
+           ,3 => new HTMLPurifier_Token_Text("\n")
             // line 2
            ,4 => new HTMLPurifier_Token_Start('i')
            ,5 => new HTMLPurifier_Token_Text('Line 2')
            ,6 => new HTMLPurifier_Token_End('i')
-           ,7 => new HTMLPurifier_Token_Text('
-                 Still Line 2')
+           ,7 => new HTMLPurifier_Token_Text("\nStill Line 2")
             // line 3
            ,8 => new HTMLPurifier_Token_Empty('br')
             // line 4
-           ,9 => new HTMLPurifier_Token_Text('Now Line 4
-                 
-                 ')
+           ,9 => new HTMLPurifier_Token_Text("Now Line 4\n\n")
             // line SIX
            ,10 => new HTMLPurifier_Token_Empty('br')
         );
@@ -123,7 +120,5 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         
     }
     
-    
 }
 
-?>

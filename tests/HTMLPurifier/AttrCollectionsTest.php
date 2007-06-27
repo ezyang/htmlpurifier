@@ -18,7 +18,7 @@ class HTMLPurifier_AttrCollectionsTest extends UnitTestCase
         
         $collections = new HTMLPurifier_AttrCollectionsTest_NoConstructor();
         
-        $types = new HTMLPurifier_AttrTypesMock($this);
+        $types = new HTMLPurifier_AttrTypesMock();
         
         $modules = array();
         
@@ -68,7 +68,7 @@ class HTMLPurifier_AttrCollectionsTest extends UnitTestCase
         
         generate_mock_once('HTMLPurifier_AttrTypes');
         
-        $types = new HTMLPurifier_AttrTypesMock($this);
+        $types = new HTMLPurifier_AttrTypesMock();
         $collections = new HTMLPurifier_AttrCollections($types, array());
         $collections->info = array(
             'Core' => array(0 => array('Inclusion', 'Undefined'), 'attr-original' => 'Type'),
@@ -106,7 +106,7 @@ class HTMLPurifier_AttrCollectionsTest extends UnitTestCase
         
         generate_mock_once('HTMLPurifier_AttrTypes');
         
-        $types = new HTMLPurifier_AttrTypesMock($this);
+        $types = new HTMLPurifier_AttrTypesMock();
         $collections = new HTMLPurifier_AttrCollections($types, array());
         
         $attr = array(
@@ -136,4 +136,3 @@ class HTMLPurifier_AttrCollectionsTest extends UnitTestCase
     
 }
 
-?>

@@ -32,4 +32,3 @@ class HTMLPurifier_IDAccumulatorTest extends UnitTestCase
     
 }
 
-?>

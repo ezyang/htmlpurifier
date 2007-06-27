@@ -22,6 +22,10 @@ error_reporting(E_ALL); // probably not possible to use E_STRICT
 require_once '../library/HTMLPurifier.auto.php';
 require_once 'library/ConfigDoc.auto.php';
 
+$purifier = HTMLPurifier::getInstance(array(
+    'AutoFormat.PurifierLinkify' => true
+));
+
 $schema = HTMLPurifier_ConfigSchema::instance();
 $style = 'plain'; // use $_GET in the future
 $configdoc = new ConfigDoc();
@@ -37,4 +41,3 @@ if (php_sapi_name() != 'cli') {
     echo 'Files generated successfully.';
 }
 
-?>

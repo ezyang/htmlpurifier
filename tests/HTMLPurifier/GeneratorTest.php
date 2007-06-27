@@ -141,8 +141,30 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
                 new HTMLPurifier_Token_Text('alert(3 < 5);'),
                 new HTMLPurifier_Token_End('script')
             ),
-            "<script><!--\nalert(3 < 5);\n// --></script>"
+            "<script><!--//--><![CDATA[//><!--\nalert(3 < 5);\n//--><!]]></script>"
         );
+        
+        // if missing close tag, don't do anything
+        $this->assertGeneration(
+            array(
+                new HTMLPurifier_Token_Start('script'),
+                new HTMLPurifier_Token_Text('alert(3 < 5);'),
+            ),
+            "<script>alert(3 &lt; 5);"
+        );
+        
+        // if two script blocks, don't do anything
+        $this->assertGeneration(
+            array(
+                new HTMLPurifier_Token_Start('script'),
+                new HTMLPurifier_Token_Text('alert(3 < 5);'),
+                new HTMLPurifier_Token_Text('foo();'),
+                new HTMLPurifier_Token_End('script')
+            ),
+            "<script>alert(3 &lt; 5);foo();</script>"
+        );
+        
+        
         
         $this->config = HTMLPurifier_Config::createDefault();
         $this->config->set('Core', 'CommentScriptContents', false);
@@ -185,6 +207,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         
         $this->config = HTMLPurifier_Config::createDefault();
         $this->config->set('Core', 'TidyFormat', true);
+        $this->config->set('Output', 'Newline', "\n");
         
         // nice wrapping please
         $this->assertGeneration(
@@ -200,4 +223,3 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
     
 }
 
-?>

@@ -302,4 +302,4 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
     
 }
 
-?>
+

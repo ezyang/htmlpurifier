@@ -27,6 +27,9 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
         // setup validator
         $validator = new HTMLPurifier_AttrValidator();
         
+        $token = false;
+        $context->register('CurrentToken', $token);
+        
         foreach ($tokens as $key => $token) {
             
             // only process tokens that have attributes,
@@ -36,7 +39,10 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             // skip tokens that are armored
             if (!empty($token->armor['ValidateAttributes'])) continue;
             
-            $tokens[$key] = $validator->validateToken($token, $config, $context);
+            // note that we have no facilities here for removing tokens
+            $validator->validateToken($token, $config, $context);
+            
+            $tokens[$key] = $token; // for PHP 4
         }
         
         $context->destroy('IDAccumulator');
@@ -46,4 +52,3 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
     
 }
 
-?>

@@ -54,6 +54,19 @@ function isInScopes($array = array()) {
 }
 /**#@-*/
 
+function printTokens($tokens, $index) {
+    $string = '<pre>';
+    $generator = new HTMLPurifier_Generator();
+    foreach ($tokens as $i => $token) {
+        if ($index == $i) $string .= '[<strong>';
+        $string .= "<sup>$i</sup>";
+        $string .= $generator->escape($generator->generateFromToken($token));
+        if ($index == $i) $string .= '</strong>]';
+    }
+    $string .= '</pre>';
+    echo $string;
+}
+
 /**
  * The debugging singleton. Most interesting stuff happens here.
  */
@@ -145,4 +158,3 @@ class Debugger
     
 }
 
-?>

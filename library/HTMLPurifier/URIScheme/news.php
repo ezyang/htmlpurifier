@@ -21,4 +21,3 @@ class HTMLPurifier_URIScheme_news extends HTMLPurifier_URIScheme {
     
 }
 
-?>

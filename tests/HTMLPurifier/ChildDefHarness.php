@@ -15,4 +15,4 @@ class HTMLPurifier_ChildDefHarness extends HTMLPurifier_Harness
     
 }
 
-?>
+

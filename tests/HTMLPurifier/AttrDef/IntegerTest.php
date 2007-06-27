@@ -61,4 +61,3 @@ class HTMLPurifier_AttrDef_IntegerTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

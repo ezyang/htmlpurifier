@@ -20,4 +20,3 @@ $pure_html = $purifier->purify($html);
 
 echo '<pre>' . htmlspecialchars($pure_html) . '</pre>';
 
-?>

@@ -13,4 +13,3 @@ class HTMLPurifier_HTMLModule_NonXMLCommonAttributes extends HTMLPurifier_HTMLMo
     );
 }
 
-?>

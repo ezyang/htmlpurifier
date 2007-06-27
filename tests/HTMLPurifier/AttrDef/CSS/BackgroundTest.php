@@ -19,4 +19,3 @@ class HTMLPurifier_AttrDef_CSS_BackgroundTest extends HTMLPurifier_AttrDefHarnes
     
 }
 
-?>

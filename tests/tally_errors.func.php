@@ -15,4 +15,3 @@ function tally_errors($test) {
     $queue->_expectation_queue = array();
 }
 
-?>

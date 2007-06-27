@@ -32,4 +32,3 @@ class HTMLPurifier_AttrDef_HTML_Color extends HTMLPurifier_AttrDef
     
 }
 
-?>

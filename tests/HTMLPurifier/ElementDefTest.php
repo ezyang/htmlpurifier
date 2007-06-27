@@ -33,10 +33,6 @@ class HTMLPurifier_ElementDefTest extends UnitTestCase
         $def1->child = $overloaded_old;
         $def1->content_model = 'old';
         $def1->content_model_type = $overloaded_old;
-        $def1->auto_close = array(
-            'old' => true,
-            'removed-old' => true
-        );
         $def1->descendants_are_inline = false;
         $def1->excludes = array(
             'old' => true,
@@ -60,10 +56,6 @@ class HTMLPurifier_ElementDefTest extends UnitTestCase
         $def2->child = $new;
         $def2->content_model = 'new';
         $def2->content_model_type = $overloaded_new;
-        $def2->auto_close = array(
-            'new' => true,
-            'removed-old' => false
-        );
         $def2->descendants_are_inline = true;
         $def2->excludes = array(
             'new' => true,
@@ -90,10 +82,6 @@ class HTMLPurifier_ElementDefTest extends UnitTestCase
         $this->assertIdentical($def1->child, $new);
         $this->assertIdentical($def1->content_model, 'old | new');
         $this->assertIdentical($def1->content_model_type, $overloaded_new);
-        $this->assertIdentical($def1->auto_close, array(
-            'old' => true,
-            'new' => true
-        ));
         $this->assertIdentical($def1->descendants_are_inline, true);
         $this->assertIdentical($def1->excludes, array(
             'old' => true,
@@ -105,4 +93,3 @@ class HTMLPurifier_ElementDefTest extends UnitTestCase
     
 }
 
-?>

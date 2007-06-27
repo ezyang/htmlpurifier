@@ -32,4 +32,3 @@ class HTMLPurifier_AttrDef_HTML_LengthTest extends HTMLPurifier_AttrDef_HTML_Pix
     
 }
 
-?>

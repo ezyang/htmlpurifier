@@ -22,7 +22,7 @@
  */
 
 /*
-    HTML Purifier 2.0.0 - Standards Compliant HTML Filtering
+    HTML Purifier 2.0.1 - Standards Compliant HTML Filtering
     Copyright (C) 2006 Edward Z. Yang
 
     This library is free software; you can redistribute it and/or
@@ -51,15 +51,8 @@ require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/Strategy/Core.php';
 require_once 'HTMLPurifier/Encoder.php';
 
+require_once 'HTMLPurifier/ErrorCollector.php';
 require_once 'HTMLPurifier/LanguageFactory.php';
-
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'Language', 'en', 'string', '
-ISO 639 language code for localizable things in HTML Purifier to use,
-which is mainly error reporting. There is currently only an English (en)
-translation, so this directive is currently useless.
-This directive has been available since 2.0.0.
-');
 
 HTMLPurifier_ConfigSchema::define(
     'Core', 'CollectErrors', false, 'bool', '
@@ -81,7 +74,7 @@ This directive has been available since 2.0.0.
 class HTMLPurifier
 {
     
-    var $version = '2.0.0';
+    var $version = '2.0.1';
     
     var $config;
     var $filters;
@@ -139,15 +132,19 @@ class HTMLPurifier
         
         $context = new HTMLPurifier_Context();
         
+        // our friendly neighborhood generator, all primed with configuration too!
+        $this->generator->generateFromTokens(array(), $config, $context);
+        $context->register('Generator', $this->generator);
+        
         // set up global context variables
         if ($config->get('Core', 'CollectErrors')) {
             // may get moved out if other facilities use it
             $language_factory = HTMLPurifier_LanguageFactory::instance();
-            $language = $language_factory->create($config->get('Core', 'Language'));
+            $language = $language_factory->create($config, $context);
             $context->register('Locale', $language);
             
-            $error_collector = new HTMLPurifier_ErrorCollector();
-            $context->register('ErrorCollector', $language);
+            $error_collector = new HTMLPurifier_ErrorCollector($context);
+            $context->register('ErrorCollector', $error_collector);
         }
         
         $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);
@@ -216,4 +213,3 @@ class HTMLPurifier
     
 }
 
-?>

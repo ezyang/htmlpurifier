@@ -7,31 +7,17 @@ TODO List
 ==========================
 
 2.1 release [Refactor, refactor!]
-
-
-
-
-
-
-
-
  # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
  # Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
+ # Ruby support
  - Configuration profiles: predefined directives set with one func call
  - Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
  - Allow non-ASCII characters in font names
- - Genericize special cases in RemoveForeignElements
 
 2.2 release [Error'ed]
  # Error logging for filtering/cleanup procedures
-    - Requires I18N facilities to be created first (COMPLEX)
  - XSS-attempt detection
- - More fine-grained control over escaping behavior
-
-
-
-
 
 2.3 release [Do What I Mean, Not What I Say]
  # Additional support for poorly written HTML
@@ -56,14 +42,9 @@ TODO List
    AttrDef class)
  # More control over allowed CSS properties (maybe modularize it in the
    same fashion!)
- # Formatters for plaintext (COMPLEX)
-    - Auto-paragraphing (be sure to leverage fact that we know when things
-      shouldn't be paragraphed, such as lists and tables).
-    - Linkify URLs
+ # Formatters for plaintext
     - Smileys
-    - Linkification for HTML Purifier docs: notably configuration and classes
- - Allow tags to be "armored", an internal flag that protects them
-   from validation and passes them out unharmed
+ - Standardize token armor for all areas of processing
  - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
  - Automatically add non-breaking spaces to empty table cells when
    empty-cells:show is applied to have compatibility with Internet Explorer
@@ -75,12 +56,13 @@ TODO List
     - Hooks for adding custom processors to custom namespaced tags and
       attributes, offer default implementation
     - Lots of documentation and samples
- - XHTML 1.1 support
 
 Ongoing
  - Lots of profiling, make it faster!
  - Plugins for major CMSes (COMPLEX)
     - WordPress (mostly written, needs beta-testing)
+    - phpBB
+    - Phorum
     - eFiction
     - more! (look for ones that use WYSIWYGs)
  - Complete basic smoketests
@@ -89,7 +71,8 @@ Unknown release (on a scratch-an-itch basis)
  ? Semi-lossy dumb alternate character encoding transfor
  ? Have 'lang' attribute be checked against official lists, achieved by
    encoding all characters that have string entity equivalents
- - Explain how to use HTML Purifier in non-PHP languages
+ - Explain how to use HTML Purifier in non-PHP languages / create
+   a simple command line stub
  - Abstract ChildDef_BlockQuote to work with all elements that only
    allow blocks in them, required or optional
  - Reorganize Unit Tests
@@ -97,10 +80,11 @@ Unknown release (on a scratch-an-itch basis)
  - Reorganize configuration directives (Create more namespaces! Get messy!)
 
 Requested
- ? Native content compression, whitespace stripping (don't rely on Tidy, make
-   sure we don't remove from <pre> or related tags)
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations (unless
    patch provided)
  - Pretty-printing HTML, users can use Tidy on the output on entire page
+ - Native content compression, whitespace stripping (don't rely on Tidy, make
+   sure we don't remove from <pre> or related tags): use gzip if this is
+   really important

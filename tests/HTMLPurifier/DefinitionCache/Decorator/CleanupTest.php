@@ -56,4 +56,3 @@ class HTMLPurifier_DefinitionCache_Decorator_CleanupTest extends HTMLPurifier_De
     
 }
 
-?>

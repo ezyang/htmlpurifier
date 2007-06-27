@@ -9,7 +9,9 @@ class HTMLPurifier_LanguageFactoryTest extends UnitTestCase
         
         $factory = HTMLPurifier_LanguageFactory::instance();
         
-        $language = $factory->create('en');
+        $config = HTMLPurifier_Config::create(array('Core.Language' => 'en'));
+        $context = new HTMLPurifier_Context();
+        $language = $factory->create($config, $context);
         
         $this->assertIsA($language, 'HTMLPurifier_Language');
         $this->assertIdentical($language->code, 'en');
@@ -27,7 +29,10 @@ class HTMLPurifier_LanguageFactoryTest extends UnitTestCase
         
         $factory = HTMLPurifier_LanguageFactory::instance();
         
-        $language = $factory->create('en-x-test');
+        $config = HTMLPurifier_Config::create(array('Core.Language' => 'en-x-test'));
+        $context = new HTMLPurifier_Context();
+        
+        $language = $factory->create($config, $context);
         
         $this->assertIsA($language, 'HTMLPurifier_Language_en_x_test');
         $this->assertIdentical($language->code, 'en-x-test');
@@ -35,13 +40,12 @@ class HTMLPurifier_LanguageFactoryTest extends UnitTestCase
         $language->load();
         
         // test overloaded message
-        $this->assertIdentical($language->getMessage('htmlpurifier'), 'HTML Purifier X');
+        $this->assertIdentical($language->getMessage('HTMLPurifier'), 'HTML Purifier X');
         
         // test inherited message
-        $this->assertIdentical($language->getMessage('pizza'), 'Pizza');
+        $this->assertIdentical($language->getMessage('LanguageFactoryTest: Pizza'), 'Pizza');
         
     }
     
 }
 
-?>

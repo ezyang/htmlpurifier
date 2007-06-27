@@ -3,6 +3,8 @@
 /**
  * Structure that stores an HTML element definition. Used by
  * HTMLPurifier_HTMLDefinition and HTMLPurifier_HTMLModule.
+ * @note This class is inspected by HTMLPurifier_Printer_HTMLDefinition.
+ *       Please update that class too.
  */
 class HTMLPurifier_ElementDef
 {
@@ -68,13 +70,6 @@ class HTMLPurifier_ElementDef
     var $content_model_type;
     
     
-    
-    /**
-     * Lookup table of tags that close this tag. Used during parsing
-     * to make sure we don't attempt to nest unclosed tags.
-     * @public
-     */
-    var $auto_close = array();
     
     /**
      * Does the element have a content model (#PCDATA | Inline)*? This
@@ -149,7 +144,6 @@ class HTMLPurifier_ElementDef
         }
         $this->_mergeAssocArray($this->attr_transform_pre, $def->attr_transform_pre);
         $this->_mergeAssocArray($this->attr_transform_post, $def->attr_transform_post);
-        $this->_mergeAssocArray($this->auto_close, $def->auto_close);
         $this->_mergeAssocArray($this->excludes, $def->excludes);
         
         if(!empty($def->content_model)) {
@@ -190,4 +184,4 @@ class HTMLPurifier_ElementDef
     
 }
 
-?>
+

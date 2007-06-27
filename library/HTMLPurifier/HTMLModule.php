@@ -221,4 +221,3 @@ class HTMLPurifier_HTMLModule
     }
 }
 
-?>

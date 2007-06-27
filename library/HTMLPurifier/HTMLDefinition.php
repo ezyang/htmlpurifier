@@ -145,8 +145,8 @@ HTMLPurifier_ConfigSchema::define(
  * Purifier internals. Many of them, however, are public, and may be
  * edited by userspace code to tweak the behavior of HTMLDefinition.
  * 
- * HTMLPurifier_Printer_HTMLDefinition is a notable exception to this
- * rule: in the interest of comprehensiveness, it will sniff everything.
+ * @note This class is inspected by Printer_HTMLDefinition; please
+ *       update that class if things here change.
  */
 class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
 {
@@ -451,4 +451,4 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     
 }
 
-?>
+

@@ -34,4 +34,3 @@ class HTMLPurifier_DefinitionCache_Null extends HTMLPurifier_DefinitionCache
     
 }
 
-?>

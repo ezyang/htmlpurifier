@@ -46,4 +46,3 @@ class HTMLPurifier_AttrTransform_LangTest
     
 }
 
-?>

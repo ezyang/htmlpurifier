@@ -25,4 +25,3 @@ class HTMLPurifier_AttrTypesTest extends UnitTestCase
     
 }
 
-?>

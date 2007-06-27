@@ -33,4 +33,3 @@ class HTMLPurifier_TokenTest extends UnitTestCase
     
 }
 
-?>

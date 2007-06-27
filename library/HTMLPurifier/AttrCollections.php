@@ -127,4 +127,3 @@ class HTMLPurifier_AttrCollections
     
 }
 
-?>

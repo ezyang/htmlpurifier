@@ -55,17 +55,10 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
         $this->addElement('h6', true, 'Heading', 'Inline', 'Common');
         
         // Block Structural -----------------------------------------------
-        $p =& $this->addElement('p', true, 'Block', 'Inline', 'Common');
-        // this seems really ad hoc: implementing some general
-        // heuristics would probably be better
-        $p->auto_close = $this->makeLookup(
-            'address', 'blockquote', 'dd', 'dir', 'div', 'dl', 'dt',
-            'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'ol', 'p', 'pre',
-            'table', 'ul' );
+        $this->addElement('p', true, 'Block', 'Inline', 'Common');
         $this->addElement('div', true, 'Block', 'Flow', 'Common');
         
     }
     
 }
 
-?>

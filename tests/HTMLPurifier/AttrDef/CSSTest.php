@@ -108,4 +108,3 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

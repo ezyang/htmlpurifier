@@ -336,4 +336,3 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
     
 }
 
-?>

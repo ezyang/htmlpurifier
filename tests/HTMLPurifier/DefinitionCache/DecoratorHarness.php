@@ -9,7 +9,7 @@ class HTMLPurifier_DefinitionCache_DecoratorHarness extends HTMLPurifier_Definit
 {
     
     function setup() {
-        $this->mock     = new HTMLPurifier_DefinitionCacheMock($this);
+        $this->mock     = new HTMLPurifier_DefinitionCacheMock();
         $this->mock->type = 'Test';
         $this->cache    = $this->cache->decorate($this->mock);
         $this->def      = $this->generateDefinition();
@@ -23,4 +23,3 @@ class HTMLPurifier_DefinitionCache_DecoratorHarness extends HTMLPurifier_Definit
     
 }
 
-?>

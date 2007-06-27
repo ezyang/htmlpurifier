@@ -28,4 +28,3 @@ class HTMLPurifier_AttrDef_HTML_MultiLengthTest extends HTMLPurifier_AttrDef_HTM
     
 }
 
-?>

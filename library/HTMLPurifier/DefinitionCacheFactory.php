@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/DefinitionCache.php';
 
 HTMLPurifier_ConfigSchema::define(
-    'Core', 'DefinitionCache', 'Serializer', 'string/null', '
+    'Cache', 'DefinitionImpl', 'Serializer', 'string/null', '
 This directive defines which method to use when caching definitions,
 the complex data-type that makes HTML Purifier tick. Set to null
 to disable caching (not recommended, as you will see a definite
@@ -11,7 +11,12 @@ performance degradation). This directive has been available since 2.0.0.
 ');
 
 HTMLPurifier_ConfigSchema::defineAllowedValues(
-    'Core', 'DefinitionCache', array('Serializer')
+    'Cache', 'DefinitionImpl', array('Serializer')
+);
+
+HTMLPurifier_ConfigSchema::defineAlias(
+    'Core', 'DefinitionCache',
+    'Cache', 'DefinitionImpl'
 );
 
 
@@ -54,7 +59,7 @@ class HTMLPurifier_DefinitionCacheFactory
     function &create($type, $config) {
         // only one implementation as for right now, $config will
         // be used to determine implementation
-        $method = $config->get('Core', 'DefinitionCache');
+        $method = $config->get('Cache', 'DefinitionImpl');
         if ($method === null) {
             $null = new HTMLPurifier_DefinitionCache_Null($type);
             return $null;
@@ -87,4 +92,3 @@ class HTMLPurifier_DefinitionCacheFactory
     
 }
 
-?>

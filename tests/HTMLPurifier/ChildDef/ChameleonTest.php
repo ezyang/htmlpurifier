@@ -32,4 +32,3 @@ class HTMLPurifier_ChildDef_ChameleonTest extends HTMLPurifier_ChildDefHarness
     
 }
 
-?>

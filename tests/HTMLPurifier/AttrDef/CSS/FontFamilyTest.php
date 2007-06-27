@@ -21,4 +21,3 @@ class HTMLPurifier_AttrDef_CSS_FontFamilyTest extends HTMLPurifier_AttrDefHarnes
     
 }
 
-?>

@@ -21,4 +21,3 @@ class HTMLPurifier_URIScheme_nntp extends HTMLPurifier_URIScheme {
     
 }
 
-?>

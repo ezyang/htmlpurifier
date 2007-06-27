@@ -30,4 +30,3 @@ class HTMLPurifier_AttrDef_CSS_MultipleTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

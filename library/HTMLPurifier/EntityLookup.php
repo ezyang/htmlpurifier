@@ -43,4 +43,3 @@ class HTMLPurifier_EntityLookup {
     
 }
 
-?>

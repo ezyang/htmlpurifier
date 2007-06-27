@@ -52,6 +52,7 @@ $test_files[] = 'HTMLPurifier/AttrTransform/LangTest.php';
 $test_files[] = 'HTMLPurifier/AttrTransform/LengthTest.php';
 $test_files[] = 'HTMLPurifier/AttrTransform/NameTest.php';
 $test_files[] = 'HTMLPurifier/AttrTypesTest.php';
+$test_files[] = 'HTMLPurifier/AttrValidator_ErrorsTest.php';
 $test_files[] = 'HTMLPurifier/ChildDef/ChameleonTest.php';
 $test_files[] = 'HTMLPurifier/ChildDef/CustomTest.php';
 $test_files[] = 'HTMLPurifier/ChildDef/OptionalTest.php';
@@ -81,16 +82,23 @@ $test_files[] = 'HTMLPurifier/HTMLModuleTest.php';
 $test_files[] = 'HTMLPurifier/HTMLModule/ScriptingTest.php';
 $test_files[] = 'HTMLPurifier/HTMLModule/TidyTest.php';
 $test_files[] = 'HTMLPurifier/IDAccumulatorTest.php';
+$test_files[] = 'HTMLPurifier/Injector/AutoParagraphTest.php';
+$test_files[] = 'HTMLPurifier/Injector/LinkifyTest.php';
+$test_files[] = 'HTMLPurifier/Injector/PurifierLinkifyTest.php';
 $test_files[] = 'HTMLPurifier/LanguageFactoryTest.php';
 $test_files[] = 'HTMLPurifier/LanguageTest.php';
 $test_files[] = 'HTMLPurifier/Lexer/DirectLexTest.php';
+$test_files[] = 'HTMLPurifier/Lexer/DirectLex_ErrorsTest.php';
 $test_files[] = 'HTMLPurifier/LexerTest.php';
 $test_files[] = 'HTMLPurifier/PercentEncoderTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/CompositeTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/CoreTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/FixNestingTest.php';
+$test_files[] = 'HTMLPurifier/Strategy/FixNesting_ErrorsTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/MakeWellFormedTest.php';
+$test_files[] = 'HTMLPurifier/Strategy/MakeWellFormed_ErrorsTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/RemoveForeignElementsTest.php';
+$test_files[] = 'HTMLPurifier/Strategy/RemoveForeignElements_ErrorsTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/ValidateAttributesTest.php';
 $test_files[] = 'HTMLPurifier/TagTransformTest.php';
 $test_files[] = 'HTMLPurifier/TokenTest.php';
@@ -106,4 +114,3 @@ if (version_compare(PHP_VERSION, '5', '>=')) {
 
 // ... none yet
 
-?>

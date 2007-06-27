@@ -54,14 +54,15 @@ HTMLPurifier_ConfigSchema::define(
 );
 
 HTMLPurifier_ConfigSchema::define(
-    'Core', 'MaintainLineNumbers', false, 'bool', '
+    'Core', 'MaintainLineNumbers', null, 'bool/null', '
 <p>
   If true, HTML Purifier will add line number information to all tokens.
   This is useful when error reporting is turned on, but can result in
   significant performance degradation and should not be used when
   unnecessary. This directive must be used with the DirectLex lexer,
-  as the DOMLex lexer does not (yet) support this functionality. This directive
-  has been available since 2.0.0.
+  as the DOMLex lexer does not (yet) support this functionality. 
+  If the value is null, an appropriate value will be selected based
+  on other configuration. This directive has been available since 2.0.0.
 </p>
 ');
 
@@ -154,7 +155,11 @@ class HTMLPurifier_Lexer
             
             // once PHP DOM implements native line numbers, or we
             // hack out something using XSLT, remove this stipulation
-            if ($config->get('Core', 'MaintainLineNumbers')) {
+            $line_numbers = $config->get('Core', 'MaintainLineNumbers');
+            if (
+                $line_numbers === true ||
+                ($line_numbers === null && $config->get('Core', 'CollectErrors'))
+            ) {
                 $lexer = 'DirectLex';
                 break;
             }
@@ -259,7 +264,18 @@ class HTMLPurifier_Lexer
      */
     static function escapeCDATA($string) {
         return preg_replace_callback(
-            '/<!\[CDATA\[(.+?)\]\]>/',
+            '/<!\[CDATA\[(.+?)\]\]>/s',
+            array('HTMLPurifier_Lexer', 'CDATACallback'),
+            $string
+        );
+    }
+    
+    /**
+     * Special CDATA case that is especiall convoluted for <script>
+     */
+    function escapeCommentedCDATA($string) {
+        return preg_replace_callback(
+            '#<!--//--><!\[CDATA\[//><!--(.+?)//--><!\]\]>#s',
             array('HTMLPurifier_Lexer', 'CDATACallback'),
             $string
         );
@@ -291,6 +307,15 @@ class HTMLPurifier_Lexer
             $html = $this->extractBody($html);
         }
         
+        // normalize newlines to \n
+        $html = str_replace("\r\n", "\n", $html);
+        $html = str_replace("\r", "\n", $html);
+        
+        if ($config->get('HTML', 'Trusted')) {
+            // escape convoluted CDATA
+            $html = $this->escapeCommentedCDATA($html);
+        }
+        
         // escape CDATA
         $html = $this->escapeCDATA($html);
         
@@ -320,4 +345,3 @@ class HTMLPurifier_Lexer
     
 }
 
-?>

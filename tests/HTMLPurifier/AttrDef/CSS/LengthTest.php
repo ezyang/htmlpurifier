@@ -40,4 +40,3 @@ class HTMLPurifier_AttrDef_CSS_LengthTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

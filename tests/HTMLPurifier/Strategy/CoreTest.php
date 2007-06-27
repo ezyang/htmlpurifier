@@ -20,7 +20,7 @@ class HTMLPurifier_Strategy_CoreTest extends HTMLPurifier_StrategyHarness
         );
         $this->assertResult(
             '<b><div>Fix nesting.</div></b>',
-            '<b>Fix nesting.</b>'
+            '<b></b><div>Fix nesting.</div>'
         );
         $this->assertResult(
             '<asdf>Foreign element removal.</asdf>',
@@ -28,11 +28,10 @@ class HTMLPurifier_Strategy_CoreTest extends HTMLPurifier_StrategyHarness
         );
         $this->assertResult(
             '<foo><b><div>All three.</div></b>',
-            '<b>All three.</b>'
+            '<b></b><div>All three.</div>'
         );
         
     }
     
 }
 
-?>

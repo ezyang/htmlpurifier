@@ -10,6 +10,9 @@ class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
         
         $this->obj = new HTMLPurifier_ChildDef_Custom('(a,b?,c*,d+,(a,b)*)');
         
+        $this->assertEqual($this->obj->elements, array('a' => true,
+            'b' => true, 'c' => true, 'd' => true));
+        
         $this->assertResult('', false);
         $this->assertResult('<a /><a />', false);
         
@@ -21,6 +24,8 @@ class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
     
     function testNesting() {
         $this->obj = new HTMLPurifier_ChildDef_Custom('(a,b,(c|d))+');
+        $this->assertEqual($this->obj->elements, array('a' => true,
+            'b' => true, 'c' => true, 'd' => true));
         $this->assertResult('', false);
         $this->assertResult('<a /><b /><c /><a /><b /><d />');
         $this->assertResult('<a /><b /><c /><d />', false);
@@ -28,6 +33,8 @@ class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
     
     function testNestedEitherOr() {
         $this->obj = new HTMLPurifier_ChildDef_Custom('b,(a|(c|d))+');
+        $this->assertEqual($this->obj->elements, array('a' => true,
+            'b' => true, 'c' => true, 'd' => true));
         $this->assertResult('', false);
         $this->assertResult('<b /><a /><c /><d />');
         $this->assertResult('<b /><d /><a /><a />');
@@ -37,6 +44,7 @@ class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
     
     function testNestedQuantifier() {
         $this->obj = new HTMLPurifier_ChildDef_Custom('(b,c+)*');
+        $this->assertEqual($this->obj->elements, array('b' => true, 'c' => true));
         $this->assertResult('');
         $this->assertResult('<b /><c />');
         $this->assertResult('<b /><c /><c /><c />');
@@ -47,6 +55,7 @@ class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
     function testEitherOr() {
         
         $this->obj = new HTMLPurifier_ChildDef_Custom('a|b');
+        $this->assertEqual($this->obj->elements, array('a' => true, 'b' => true));
         $this->assertResult('', false);
         $this->assertResult('<a />');
         $this->assertResult('<b />');
@@ -57,6 +66,7 @@ class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
     function testCommafication() {
         
         $this->obj = new HTMLPurifier_ChildDef_Custom('a,b');
+        $this->assertEqual($this->obj->elements, array('a' => true, 'b' => true));
         $this->assertResult('<a /><b />');
         $this->assertResult('<ab />', false);
         
@@ -64,4 +74,3 @@ class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
     
 }
 
-?>

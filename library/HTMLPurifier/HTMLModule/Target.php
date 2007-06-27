@@ -22,4 +22,3 @@ class HTMLPurifier_HTMLModule_Target extends HTMLPurifier_HTMLModule
     
 }
 
-?>

@@ -50,6 +50,12 @@ class ConfigDoc_XMLSerializer_ConfigSchema extends ConfigDoc_XMLSerializer
                     $dom_document->createElement('name', $name)
                 );
                 
+                $dom_aliases = $dom_document->createElement('aliases');
+                $dom_directive->appendChild($dom_aliases);
+                foreach ($info->directiveAliases as $alias) {
+                    $dom_aliases->appendChild($dom_document->createElement('alias', $alias));
+                }
+                
                 $dom_constraints = $dom_document->createElement('constraints');
                 $dom_directive->appendChild($dom_constraints);
                 
@@ -115,4 +121,3 @@ class ConfigDoc_XMLSerializer_ConfigSchema extends ConfigDoc_XMLSerializer
     
 }
 
-?>
