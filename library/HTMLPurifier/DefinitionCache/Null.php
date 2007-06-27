@@ -24,7 +24,7 @@ class HTMLPurifier_DefinitionCache_Null extends HTMLPurifier_DefinitionCache
         return false;
     }
     
-    function flush() {
+    function flush($config) {
         return false;
     }
     
