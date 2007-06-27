@@ -250,14 +250,16 @@ class HTMLPurifier_Config
      *             called before it's been setup, otherwise won't work.
      */
     function &getHTMLDefinition($raw = false) {
-        return $this->getDefinition('HTML', $raw);
+        $def =& $this->getDefinition('HTML', $raw);
+        return $def; // prevent PHP 4.4.0 from complaining
     }
     
     /**
      * Retrieves reference to the CSS definition
      */
     function &getCSSDefinition($raw = false) {
-        return $this->getDefinition('CSS', $raw);
+        $def =& $this->getDefinition('CSS', $raw);
+        return $def;
     }
     
     /**
@@ -306,7 +308,7 @@ class HTMLPurifier_Config
             if (is_null($this->get($type, 'DefinitionID'))) {
                 // fatally error out if definition ID not set
                 trigger_error("Cannot retrieve raw version without specifying %$type.DefinitionID", E_USER_ERROR);
-                $false = false;
+                $false = new HTMLPurifier_Error();
                 return $false;
             }
             return $this->definitions[$type];
