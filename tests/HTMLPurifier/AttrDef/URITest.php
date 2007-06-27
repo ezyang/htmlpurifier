@@ -325,4 +325,4 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>
+

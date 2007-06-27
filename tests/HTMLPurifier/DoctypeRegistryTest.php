@@ -76,4 +76,3 @@ class HTMLPurifier_DoctypeRegistryTest extends UnitTestCase
     
 }
 
-?>

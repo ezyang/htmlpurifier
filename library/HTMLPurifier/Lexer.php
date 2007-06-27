@@ -345,4 +345,3 @@ class HTMLPurifier_Lexer
     
 }
 
-?>

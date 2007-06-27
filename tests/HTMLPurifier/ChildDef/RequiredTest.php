@@ -66,4 +66,3 @@ class HTMLPurifier_ChildDef_RequiredTest extends HTMLPurifier_ChildDefHarness
     
 }
 
-?>

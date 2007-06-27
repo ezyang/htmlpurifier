@@ -151,4 +151,3 @@ class HTMLPurifier_Language
     
 }
 
-?>

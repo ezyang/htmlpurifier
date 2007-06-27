@@ -70,4 +70,3 @@ class HTMLPurifier_AttrDef_HTML_LinkTypes extends HTMLPurifier_AttrDef
     
 }
 
-?>

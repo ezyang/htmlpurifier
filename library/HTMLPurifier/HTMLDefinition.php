@@ -451,4 +451,4 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     
 }
 
-?>
+

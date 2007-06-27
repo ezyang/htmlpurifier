@@ -31,4 +31,3 @@ class HTMLPurifier_DefinitionCacheHarness extends UnitTestCase
     
 }
 
-?>

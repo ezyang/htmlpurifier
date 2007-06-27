@@ -38,4 +38,3 @@ class HTMLPurifier_TagTransform
     
 }
 
-?>

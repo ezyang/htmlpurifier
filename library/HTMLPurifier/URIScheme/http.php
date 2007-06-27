@@ -21,4 +21,3 @@ class HTMLPurifier_URIScheme_http extends HTMLPurifier_URIScheme {
     
 }
 
-?>

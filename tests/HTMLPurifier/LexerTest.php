@@ -71,7 +71,7 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $this->assertExtractBody('<html><body><b>Bold</b></body></html>', '<b>Bold</b>');
         $this->assertExtractBody('<HTML><BODY><B>Bold</B></BODY></HTML>', '<B>Bold</B>');
         $this->assertExtractBody(
-'<?xml version="1.0"?>
+'<?xml version="1.0"
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -372,4 +372,3 @@ class HTMLPurifier_LexerTest extends UnitTestCase
     
 }
 
-?>

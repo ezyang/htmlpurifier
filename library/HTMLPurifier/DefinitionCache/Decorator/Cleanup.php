@@ -42,4 +42,3 @@ class HTMLPurifier_DefinitionCache_Decorator_Cleanup extends
     
 }
 
-?>

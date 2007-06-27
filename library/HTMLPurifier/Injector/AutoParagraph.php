@@ -242,4 +242,3 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
     
 }
 
-?>

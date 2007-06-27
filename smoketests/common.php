@@ -11,4 +11,3 @@ function escapeHTML($string) {
     return $string;
 }
 
-?>

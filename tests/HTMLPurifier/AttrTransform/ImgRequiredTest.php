@@ -48,4 +48,3 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
     
 }
 
-?>

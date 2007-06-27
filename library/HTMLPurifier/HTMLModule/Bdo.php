@@ -31,4 +31,3 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
     
 }
 
-?>

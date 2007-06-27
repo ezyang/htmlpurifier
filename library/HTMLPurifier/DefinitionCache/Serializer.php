@@ -188,4 +188,3 @@ class HTMLPurifier_DefinitionCache_Serializer extends
     
 }
 
-?>

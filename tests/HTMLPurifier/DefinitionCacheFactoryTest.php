@@ -62,4 +62,3 @@ class HTMLPurifier_DefinitionCacheFactoryTest extends UnitTestCase
     
 }
 
-?>

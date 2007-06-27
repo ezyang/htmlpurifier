@@ -11,4 +11,3 @@ function path2class($path) {
     return $temp;
 }
 
-?>

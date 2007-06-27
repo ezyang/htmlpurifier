@@ -71,4 +71,3 @@ fclose($fh);
 
 echo "Completed successfully.";
 
-?>

@@ -184,4 +184,4 @@ class HTMLPurifier_ElementDef
     
 }
 
-?>
+

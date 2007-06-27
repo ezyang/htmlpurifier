@@ -455,4 +455,4 @@ class HTMLPurifier_Config
     
 }
 
-?>
+

@@ -24,4 +24,3 @@ class ConfigDoc_XMLSerializer_Types extends ConfigDoc_XMLSerializer
     
 }
 
-?>

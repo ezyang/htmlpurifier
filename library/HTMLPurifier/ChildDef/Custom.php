@@ -91,4 +91,3 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
     }
 }
 
-?>

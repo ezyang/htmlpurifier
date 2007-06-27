@@ -29,4 +29,3 @@ class HTMLPurifier_ErrorsHarness extends UnitTestCase
     
 }
 
-?>

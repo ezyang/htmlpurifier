@@ -84,4 +84,3 @@ class HTMLPurifier_AttrDef
     
 }
 
-?>

@@ -109,4 +109,3 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

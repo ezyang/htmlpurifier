@@ -8,4 +8,3 @@ function generate_mock_once($name) {
     Mock::generate($name, $mock_name);
 }
 
-?>

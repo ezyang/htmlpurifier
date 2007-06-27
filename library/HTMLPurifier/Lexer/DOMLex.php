@@ -153,4 +153,3 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     
 }
 
-?>

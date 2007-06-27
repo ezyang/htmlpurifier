@@ -77,4 +77,3 @@ class HTMLPurifier_ConfigDef_Directive extends HTMLPurifier_ConfigDef
     
 }
 
-?>

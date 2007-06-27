@@ -49,4 +49,3 @@ class HTMLPurifier_ChildDef_TableTest extends HTMLPurifier_ChildDefHarness
     
 }
 
-?>

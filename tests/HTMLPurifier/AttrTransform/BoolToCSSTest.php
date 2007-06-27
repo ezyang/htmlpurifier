@@ -36,4 +36,3 @@ class HTMLPurifier_AttrTransform_BoolToCSSTest extends HTMLPurifier_AttrTransfor
     
 }
 
-?>

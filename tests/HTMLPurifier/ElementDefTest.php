@@ -93,4 +93,3 @@ class HTMLPurifier_ElementDefTest extends UnitTestCase
     
 }
 
-?>

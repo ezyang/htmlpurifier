@@ -45,4 +45,3 @@ class HTMLPurifier_DefinitionCache_Decorator_Memory extends
     
 }
 
-?>

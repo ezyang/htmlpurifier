@@ -35,4 +35,3 @@ class HTMLPurifier_Strategy_CoreTest extends HTMLPurifier_StrategyHarness
     
 }
 
-?>

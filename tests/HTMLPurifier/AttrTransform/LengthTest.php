@@ -34,4 +34,3 @@ class HTMLPurifier_AttrTransform_LengthTest extends HTMLPurifier_AttrTransformHa
     
 }
 
-?>

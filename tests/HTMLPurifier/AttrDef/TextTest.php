@@ -17,4 +17,3 @@ class HTMLPurifier_AttrDef_TextTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

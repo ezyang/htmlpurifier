@@ -57,4 +57,4 @@ class HTMLPurifier_ChildDef
     }
 }
 
-?>
+

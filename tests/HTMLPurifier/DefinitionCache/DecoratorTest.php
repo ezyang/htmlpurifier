@@ -42,4 +42,3 @@ class HTMLPurifier_DefinitionCache_DecoratorTest extends HTMLPurifier_Definition
     
 }
 
-?>

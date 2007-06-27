@@ -62,4 +62,3 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
     
 }
 
-?>

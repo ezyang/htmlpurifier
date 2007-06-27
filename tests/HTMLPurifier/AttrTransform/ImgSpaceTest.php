@@ -54,4 +54,3 @@ class HTMLPurifier_AttrTransform_ImgSpaceTest extends HTMLPurifier_AttrTransform
     
 }
 
-?>

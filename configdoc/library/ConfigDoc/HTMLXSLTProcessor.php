@@ -60,4 +60,3 @@ class ConfigDoc_HTMLXSLTProcessor
     
 }
 
-?>

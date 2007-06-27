@@ -137,4 +137,3 @@ class HTMLPurifier_AttrValidator
     
 }
 
-?>

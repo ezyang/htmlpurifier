@@ -37,4 +37,3 @@ class HTMLPurifier_AttrDef_EnumTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

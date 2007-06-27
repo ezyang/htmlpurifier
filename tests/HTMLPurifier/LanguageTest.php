@@ -75,4 +75,3 @@ class HTMLPurifier_LanguageTest extends UnitTestCase
     
 }
 
-?>

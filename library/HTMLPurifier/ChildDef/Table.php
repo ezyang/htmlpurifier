@@ -141,4 +141,3 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
     }
 }
 
-?>

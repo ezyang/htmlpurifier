@@ -40,4 +40,3 @@ class HTMLPurifier_Injector_PurifierLinkifyTest extends HTMLPurifier_InjectorHar
     
 }
 
-?>

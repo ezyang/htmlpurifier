@@ -64,4 +64,3 @@ class HTMLPurifier_Doctype
     }
 }
 
-?>

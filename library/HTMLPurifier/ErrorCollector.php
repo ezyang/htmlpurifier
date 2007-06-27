@@ -116,4 +116,3 @@ class HTMLPurifier_ErrorCollector
     
 }
 
-?>

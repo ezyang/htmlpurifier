@@ -53,4 +53,3 @@ class HTMLPurifier_Lexer_DirectLex_ErrorsTest extends HTMLPurifier_ErrorsHarness
     
 }
 
-?>

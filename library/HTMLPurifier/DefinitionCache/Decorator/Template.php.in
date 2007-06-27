@@ -44,4 +44,3 @@ class HTMLPurifier_DefinitionCache_Decorator_Template extends
     
 }
 
-?>

@@ -90,4 +90,3 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

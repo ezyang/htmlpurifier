@@ -148,4 +148,3 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
     
 }
 
-?>

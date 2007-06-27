@@ -272,4 +272,3 @@ class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer {
     }
 }
 
-?>

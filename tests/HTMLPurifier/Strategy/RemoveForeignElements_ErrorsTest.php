@@ -57,4 +57,3 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
     
 }
 
-?>

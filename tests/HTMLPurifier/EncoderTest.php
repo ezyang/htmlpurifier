@@ -141,4 +141,3 @@ class HTMLPurifier_EncoderTest extends UnitTestCase
     
 }
 
-?>

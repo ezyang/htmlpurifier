@@ -11,4 +11,3 @@ class HTMLPurifier_AttrTransformHarness extends HTMLPurifier_Harness
     
 }
 
-?>

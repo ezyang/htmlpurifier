@@ -18,4 +18,3 @@ class HTMLPurifier_HTMLModule_Tidy_XHTML extends
     
 }
 
-?>

@@ -34,4 +34,3 @@ class HTMLPurifier_AttrDef_CSS_URITest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

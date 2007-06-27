@@ -31,4 +31,3 @@ class HTMLPurifier_AttrDef_URI_EmailHarness extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

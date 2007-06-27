@@ -489,4 +489,4 @@ class HTMLPurifier_HTMLModuleManager
     
 }
 
-?>
+

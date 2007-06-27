@@ -13,4 +13,3 @@ class HTMLPurifier_InjectorHarness extends HTMLPurifier_StrategyHarness
     
 }
 
-?>

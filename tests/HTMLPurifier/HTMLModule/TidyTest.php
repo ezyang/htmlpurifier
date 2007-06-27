@@ -227,4 +227,3 @@ class HTMLPurifier_HTMLModule_TidyTest extends UnitTestCase
     
 }
 
-?>

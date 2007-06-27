@@ -85,4 +85,3 @@ class HTMLPurifier_AttrDef_LangTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

@@ -199,4 +199,3 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
     
 }
 
-?>

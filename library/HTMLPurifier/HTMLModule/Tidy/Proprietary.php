@@ -15,4 +15,3 @@ class HTMLPurifier_HTMLModule_Tidy_Proprietary extends
     
 }
 
-?>

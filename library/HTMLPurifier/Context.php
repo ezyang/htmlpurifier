@@ -78,4 +78,3 @@ class HTMLPurifier_Context
     
 }
 
-?>

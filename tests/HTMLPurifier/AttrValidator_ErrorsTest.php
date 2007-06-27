@@ -47,4 +47,3 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
     
 }
 
-?>

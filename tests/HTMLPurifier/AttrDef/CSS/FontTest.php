@@ -34,4 +34,3 @@ class HTMLPurifier_AttrDef_CSS_FontTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

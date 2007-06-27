@@ -101,4 +101,4 @@ class HTMLPurifier_URISchemeRegistry
     
 }
 
-?>
+

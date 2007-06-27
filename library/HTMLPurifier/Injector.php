@@ -83,4 +83,3 @@ class HTMLPurifier_Injector
     
 }
 
-?>

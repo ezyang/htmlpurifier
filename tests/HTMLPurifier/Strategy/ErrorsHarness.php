@@ -17,4 +17,3 @@ class HTMLPurifier_Strategy_ErrorsHarness extends HTMLPurifier_ErrorsHarness
     
 }
 
-?>

@@ -133,4 +133,3 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
     
 }
 
-?>

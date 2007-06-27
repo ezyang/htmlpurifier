@@ -60,4 +60,3 @@ class HTMLPurifier_Injector_PurifierLinkify extends HTMLPurifier_Injector
     
 }
 
-?>

@@ -404,4 +404,4 @@ class HTMLPurifier_ConfigSchema {
     }
 }
 
-?>
+

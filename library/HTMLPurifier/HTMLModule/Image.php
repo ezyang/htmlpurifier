@@ -34,4 +34,3 @@ class HTMLPurifier_HTMLModule_Image extends HTMLPurifier_HTMLModule
     
 }
 
-?>

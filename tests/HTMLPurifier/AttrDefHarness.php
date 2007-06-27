@@ -30,4 +30,3 @@ class HTMLPurifier_AttrDefHarness extends UnitTestCase
     
 }
 
-?>

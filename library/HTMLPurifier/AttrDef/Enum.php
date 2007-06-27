@@ -63,4 +63,3 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
     
 }
 
-?>

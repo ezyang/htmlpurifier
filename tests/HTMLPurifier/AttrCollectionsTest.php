@@ -135,4 +135,3 @@ class HTMLPurifier_AttrCollectionsTest extends UnitTestCase
     
 }
 
-?>

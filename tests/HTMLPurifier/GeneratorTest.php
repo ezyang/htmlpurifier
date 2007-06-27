@@ -223,4 +223,3 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
     
 }
 
-?>

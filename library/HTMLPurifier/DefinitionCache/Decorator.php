@@ -57,4 +57,3 @@ class HTMLPurifier_DefinitionCache_Decorator extends HTMLPurifier_DefinitionCach
     
 }
 
-?>

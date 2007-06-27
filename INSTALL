@@ -48,7 +48,7 @@ be standards compliant.  HTML Purifier can deal with these doctypes:
 * XHTML 1.0 Strict
 * HTML 4.01 Transitional
 * HTML 4.01 Strict
-* XHTML 1.1 sans Ruby
+* XHTML 1.1 (sans Ruby)
 
 ...and these character encodings:
 
@@ -112,8 +112,9 @@ websites):
 Note that HTML Purifier's support for non-Unicode encodings is crippled by the
 fact that any character not supported by that encoding will be silently
 dropped, EVEN if it is ampersand escaped.  If you want to work around
-this, you are welcome to read docs/enduser-utf8.html for a workaround,
-but please be cognizant of the issues the "solution" creates.
+this, you are welcome to read docs/enduser-utf8.html for a fix,
+but please be cognizant of the issues the "solution" creates (for this
+reason, I do not include the solution in this document).
 
 
 
@@ -139,7 +140,9 @@ Other supported doctypes include:
 There are more configuration directives which can be read about
 here: <http://htmlpurifier.org/live/configdoc/plain.html>  They're a bit boring,
 but they can help out for those of you who like to exert maximum control over
-your code.
+your code.  Some of the more interesting ones are configurable at the
+demo <http://htmlpurifier.org/demo.php> and are well worth looking into
+for your own system.
 
 
 
@@ -156,13 +159,15 @@ The interface is mind-numbingly simple:
     $clean_html = $purifier->purify( $dirty_html );
 
 That's it!  For more examples, check out docs/examples/ (they aren't very
-different though).  Also, SLOW gives advice on what to do if HTML Purifier
-is slowing down your application.
+different though).  Also, docs/enduser-slow.html gives advice on what to
+do if HTML Purifier is slowing down your application.
 
 
 
 6.   Quick install
 
+First, make sure library/HTMLPurifier/DefinitionCache/Serializer is
+writable by the webserver (see Section 7: Caching below for details).
 If your website is in UTF-8 and XHTML Transitional, use this code:
 
 <?php
@@ -189,6 +194,37 @@ If your website is in a different encoding or doctype, use this code:
 
 7. Caching
 
-HTML Purifier generates some cache files to speed up its execution. For
-maximum performance, make sure that library/HTMLPurifier/DefinitionCache/Serializer
-is writeable by the webserver.
+HTML Purifier generates some cache files (generally one or two) to speed up
+its execution. For maximum performance, make sure that
+library/HTMLPurifier/DefinitionCache/Serializer is writeable by the webserver.
+
+If you are in the library/ folder of HTML Purifier, you can set the
+appropriate permissions using:
+
+    chmod -R 0755 HTMLPurifier/DefinitionCache/Serializer
+
+If the above command doesn't work, you may need to assign write permissions
+to all. This may be necessary if your webserver runs as nobody, but is
+not recommended since it means any other user can write files in the
+directory. Use:
+
+    chmod -R 0777 HTMLPurifier/DefinitionCache/Serializer
+
+You can also chmod files via your FTP client; this option
+is usually accessible by right clicking the corresponding directory and
+then selecting "chmod" or "file permissions".
+
+Starting with 2.0.1, HTML Purifier will generate friendly error messages
+that will tell you exactly what you have to chmod the directory to, if in doubt,
+follow its advice.
+
+If you are unable or unwilling to give write permissions to the cache
+directory, you can either disable the cache (and suffer a performance
+hit):
+
+    $config->set('Core', 'DefinitionCache', null);
+
+Or move the cache directory somewhere else (no trailing slash):
+
+    $config->set('Cache', 'SerializerPath', '/home/user/absolute/path');
+

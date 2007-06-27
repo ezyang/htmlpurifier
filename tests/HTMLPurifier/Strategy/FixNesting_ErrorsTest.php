@@ -36,4 +36,3 @@ class HTMLPurifier_Strategy_FixNesting_ErrorsTest extends HTMLPurifier_Strategy_
     
 }
 
-?>

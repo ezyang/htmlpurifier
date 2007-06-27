@@ -170,4 +170,3 @@ class HTMLPurifier_Printer
     
 }
 
-?>

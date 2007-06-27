@@ -164,4 +164,3 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
     
 }
 
-?>

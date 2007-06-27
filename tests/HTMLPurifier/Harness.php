@@ -125,4 +125,4 @@ class HTMLPurifier_Harness extends UnitTestCase
     
 }
 
-?>
+

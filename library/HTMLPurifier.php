@@ -213,4 +213,3 @@ class HTMLPurifier
     
 }
 
-?>

@@ -8,4 +8,3 @@ $messages = array(
     'HTMLPurifier' => 'HTML Purifier X'
 );
 
-?>

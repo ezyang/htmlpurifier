@@ -16,4 +16,3 @@ class HTMLPurifier_TokenFactoryTest extends UnitTestCase
     }
 }
 
-?>

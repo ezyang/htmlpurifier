@@ -134,4 +134,3 @@ alert("<This is compatible with XHTML>");
     
 }
 
-?>

@@ -44,4 +44,3 @@ class HTMLPurifier_ErrorCollectorEMock extends HTMLPurifier_ErrorCollectorMock
     
 }
 
-?>

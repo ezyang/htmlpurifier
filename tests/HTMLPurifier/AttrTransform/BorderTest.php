@@ -37,4 +37,3 @@ class HTMLPurifier_AttrTransform_BorderTest extends HTMLPurifier_AttrTransformHa
     
 }
 
-?>

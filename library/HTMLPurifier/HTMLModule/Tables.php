@@ -66,4 +66,3 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
     
 }
 
-?>

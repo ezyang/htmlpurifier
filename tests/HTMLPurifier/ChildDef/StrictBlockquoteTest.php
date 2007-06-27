@@ -53,4 +53,3 @@ extends HTMLPurifier_ChildDefHarness
     
 }
 
-?>

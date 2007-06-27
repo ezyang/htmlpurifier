@@ -34,4 +34,3 @@ class HTMLPurifier_AttrDef_CSS_ColorTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

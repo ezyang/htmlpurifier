@@ -75,4 +75,3 @@ class HTMLPurifier_AttrTransform_EnumToCSSTest extends HTMLPurifier_AttrTransfor
     
 }
 
-?>

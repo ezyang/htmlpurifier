@@ -92,4 +92,3 @@ class HTMLPurifier_DefinitionCacheFactory
     
 }
 
-?>

@@ -24,4 +24,3 @@ class HTMLPurifier_AttrDef_CSS_PercentageTest extends HTMLPurifier_AttrDefHarnes
     
 }
 
-?>

@@ -55,4 +55,3 @@ $errorNames = array(
     E_NOTICE => 'Notice'
 );
 
-?>

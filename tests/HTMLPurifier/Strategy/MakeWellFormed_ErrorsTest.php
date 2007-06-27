@@ -54,4 +54,3 @@ class HTMLPurifier_Strategy_MakeWellFormed_ErrorsTest extends HTMLPurifier_Strat
     
 }
 
-?>

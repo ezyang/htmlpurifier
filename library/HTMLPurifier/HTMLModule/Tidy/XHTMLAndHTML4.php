@@ -190,4 +190,3 @@ class HTMLPurifier_HTMLModule_Tidy_Strict extends
     var $defaultLevel = 'light';
 }
 
-?>

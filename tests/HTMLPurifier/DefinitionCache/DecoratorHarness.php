@@ -23,4 +23,3 @@ class HTMLPurifier_DefinitionCache_DecoratorHarness extends HTMLPurifier_Definit
     
 }
 
-?>

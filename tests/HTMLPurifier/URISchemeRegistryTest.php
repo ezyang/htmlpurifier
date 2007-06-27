@@ -48,4 +48,3 @@ class HTMLPurifier_URISchemeRegistryTest extends UnitTestCase
     
 }
 
-?>

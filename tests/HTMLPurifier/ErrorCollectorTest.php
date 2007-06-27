@@ -139,4 +139,3 @@ class HTMLPurifier_ErrorCollectorTest extends UnitTestCase
     
 }
 
-?>

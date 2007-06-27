@@ -297,4 +297,3 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     
 }
 
-?>

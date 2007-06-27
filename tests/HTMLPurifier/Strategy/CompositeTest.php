@@ -73,4 +73,3 @@ class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
     
 }
 
-?>

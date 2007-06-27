@@ -32,4 +32,3 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
     
 }
 
-?>

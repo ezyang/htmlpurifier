@@ -126,4 +126,3 @@ class HTMLPurifier_DefinitionCache
     }
 }
 
-?>

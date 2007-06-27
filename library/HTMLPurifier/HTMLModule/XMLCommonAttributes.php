@@ -13,4 +13,3 @@ class HTMLPurifier_HTMLModule_XMLCommonAttributes extends HTMLPurifier_HTMLModul
     );
 }
 
-?>

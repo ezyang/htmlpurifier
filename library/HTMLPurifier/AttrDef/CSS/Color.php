@@ -98,4 +98,3 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
     
 }
 
-?>

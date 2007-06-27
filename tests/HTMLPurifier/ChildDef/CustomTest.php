@@ -74,4 +74,3 @@ class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
     
 }
 
-?>

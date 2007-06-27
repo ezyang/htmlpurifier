@@ -85,4 +85,3 @@ class HTMLPurifier_ContextTest extends UnitTestCase
     
 }
 
-?>

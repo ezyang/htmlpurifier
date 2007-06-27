@@ -21,4 +21,3 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

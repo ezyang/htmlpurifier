@@ -11,4 +11,3 @@ function svn_info($dir) {
     return $svn_info;
 }
 
-?>

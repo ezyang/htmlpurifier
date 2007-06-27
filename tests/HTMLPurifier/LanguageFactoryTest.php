@@ -49,4 +49,3 @@ class HTMLPurifier_LanguageFactoryTest extends UnitTestCase
     
 }
 
-?>

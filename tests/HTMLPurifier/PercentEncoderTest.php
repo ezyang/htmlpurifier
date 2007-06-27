@@ -39,4 +39,3 @@ class HTMLPurifier_PercentEncoderTest extends UnitTestCase
     
 }
 
-?>

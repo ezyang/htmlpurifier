@@ -36,4 +36,3 @@ class HTMLPurifier_Injector_LinkifyTest extends HTMLPurifier_InjectorHarness
     
 }
 
-?>

@@ -37,4 +37,3 @@ HTMLPurifier_ConfigSchema::defineNamespace('ReportCard', 'It is for grades.');
 HTMLPurifier_ConfigSchema::define('ReportCard', 'English', null, 'string/null', 'Grade from English class.');
 HTMLPurifier_ConfigSchema::define('ReportCard', 'Absences', 0, 'int', 'How many times missing from school?');
 
-?>

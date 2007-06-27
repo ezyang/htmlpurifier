@@ -53,4 +53,3 @@ $compat =& $pkg->exportCompatiblePackageFile1();
 $compat->writePackageFile();
 $pkg->writePackageFile();
 
-?>

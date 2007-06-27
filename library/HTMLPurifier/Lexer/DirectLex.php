@@ -472,4 +472,3 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     
 }
 
-?>

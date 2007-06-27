@@ -92,4 +92,3 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
     }
 }
 
-?>

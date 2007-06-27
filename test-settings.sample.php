@@ -14,4 +14,3 @@ $GLOBALS['HTMLPurifierTest']['Runs'] = 2;
 // Where is SimpleTest located?
 $simpletest_location = '/path/to/simpletest/';
 
-?>

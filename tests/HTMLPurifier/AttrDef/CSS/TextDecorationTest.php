@@ -24,4 +24,3 @@ class HTMLPurifier_AttrDef_CSS_TextDecorationTest extends HTMLPurifier_AttrDefHa
     
 }
 
-?>

@@ -49,4 +49,3 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
     }
 }
 
-?>

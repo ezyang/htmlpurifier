@@ -206,4 +206,3 @@ class HTMLPurifier_Generator
     
 }
 
-?>

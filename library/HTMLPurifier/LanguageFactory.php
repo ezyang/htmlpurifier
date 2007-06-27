@@ -204,4 +204,3 @@ class HTMLPurifier_LanguageFactory
     
 }
 
-?>

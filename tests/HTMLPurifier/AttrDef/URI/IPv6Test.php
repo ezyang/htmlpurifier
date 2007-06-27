@@ -43,4 +43,3 @@ class HTMLPurifier_AttrDef_URI_IPv6Test extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

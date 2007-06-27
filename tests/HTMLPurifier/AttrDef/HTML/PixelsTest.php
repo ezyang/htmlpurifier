@@ -38,4 +38,3 @@ class HTMLPurifier_AttrDef_HTML_PixelsTest extends HTMLPurifier_AttrDefHarness
     
 }
 
-?>

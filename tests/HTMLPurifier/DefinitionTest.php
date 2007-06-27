@@ -30,4 +30,3 @@ class HTMLPurifier_DefinitionTest extends UnitTestCase
     }
 }
 
-?>

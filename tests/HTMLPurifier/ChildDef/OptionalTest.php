@@ -17,4 +17,3 @@ class HTMLPurifier_ChildDef_OptionalTest extends HTMLPurifier_ChildDefHarness
     
 }
 
-?>

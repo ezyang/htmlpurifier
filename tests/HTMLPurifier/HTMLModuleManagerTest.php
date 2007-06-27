@@ -106,4 +106,3 @@ class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
     
 }
 
-?>

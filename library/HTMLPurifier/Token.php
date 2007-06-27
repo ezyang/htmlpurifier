@@ -161,4 +161,3 @@ class HTMLPurifier_Token_Comment extends HTMLPurifier_Token
     }
 }
 
-?>
