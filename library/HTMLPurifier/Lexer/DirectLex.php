@@ -204,7 +204,8 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 // Check leading character is alnum, if not, we may
                 // have accidently grabbed an emoticon. Translate into
                 // text and go our merry way
-                if (!ctype_alnum($segment[0])) {
+                if (!ctype_alpha($segment[0])) {
+                    // XML:  $segment[0] !== '_' && $segment[0] !== ':'
                     if ($e) $e->send(E_NOTICE, 'Lexer: Unescaped lt');
                     $token = new
                         HTMLPurifier_Token_Text(

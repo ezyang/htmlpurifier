@@ -3,6 +3,16 @@
 require_once 'HTMLPurifier/Lexer.php';
 require_once 'HTMLPurifier/TokenFactory.php';
 
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'AggressivelyFixLt', false, 'bool', '
+This directive enables aggressive pre-filter fixes HTML Purifier can
+perform in order to ensure that open angled-brackets do not get killed
+during parsing stage. Enabling this will result in two preg_replace_callback
+calls and one preg_replace call for every bit of HTML passed through here.
+It is not necessary and will have no effect for PHP 4.
+This directive has been available since 2.1.0.
+');
+
 /**
  * Parser that uses PHP 5's DOM extension (part of the core).
  * 
@@ -41,6 +51,16 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     public function tokenizeHTML($html, $config, &$context) {
         
         $html = $this->normalize($html, $config, $context);
+        
+        // attempt to armor stray angled brackets that cannot possibly
+        // form tags and thus are probably being used as emoticons
+        if ($config->get('Core', 'AggressivelyFixLt')) {
+            $char = '[^a-z!\/]';
+            $comment = "/<!--(.*?)(-->|\z)/is";
+            $html = preg_replace_callback($comment, array('HTMLPurifier_Lexer_DOMLex', 'callbackArmorCommentEntities'), $html);
+            $html = preg_replace("/<($char)/i", '&lt;\\1', $html);
+            $html = preg_replace_callback($comment, array('HTMLPurifier_Lexer_DOMLex', 'callbackUndoCommentSubst'), $html); // fix comments
+        }
         
         // preprocess html, essential for UTF-8
         $html =
@@ -150,6 +170,22 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      * An error handler that mutes all errors
      */
     public function muteErrorHandler($errno, $errstr) {}
+    
+    /**
+     * Callback function for undoing escaping of stray angled brackets
+     * in comments
+     */
+    function callbackUndoCommentSubst($matches) {
+        return '<!--' . strtr($matches[1], array('&amp;'=>'&','&lt;'=>'<')) . $matches[2];
+    }
+    
+    /**
+     * Callback function that entity-izes ampersands in comments so that
+     * callbackUndoCommentSubst doesn't clobber them
+     */
+    function callbackArmorCommentEntities($matches) {
+        return '<!--' . str_replace('&', '&amp;', $matches[1]) . $matches[2];
+    }
     
 }
 

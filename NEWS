@@ -10,7 +10,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 2.1.0, unknown release date
-(none)
+! With %Core.AggressivelyFixLt, <3 and similar emoticons no longer
+  trigger HTML removal in PHP5 (DOMLex). This directive is not necessary
+  for PHP4 (DirectLex).
 
 2.0.2, unknown release date
 (none)
