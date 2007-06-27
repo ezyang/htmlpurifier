@@ -41,7 +41,7 @@ class HTMLPurifier_Config
     /**
      * HTML Purifier's version
      */
-    var $version = '2.0.0';
+    var $version = '2.0.1';
     
     /**
      * Two-level associative array of configuration directives

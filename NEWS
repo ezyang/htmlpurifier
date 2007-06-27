@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-2.0.1, unknown release date
+2.0.1, released 2007-06-27
 ! Tag auto-closing now based on a ChildDef heuristic rather than a
   manually set auto_close array; some behavior may change
 ! Experimental AutoFormat functionality added: auto-paragraph and
