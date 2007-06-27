@@ -5,7 +5,14 @@ $fallback = false;
 $messages = array(
 
 'HTMLPurifier' => 'HTML Purifier',
-'LanguageFactoryTest: Pizza' => 'Pizza', // for unit testing purposes
+
+// for unit testing purposes
+'LanguageFactoryTest: Pizza' => 'Pizza',
+'LanguageTest: List' => '$1',
+'LanguageTest: Hash' => '$1.Keys; $1.Values',
+
+'Item separator' => ', ',
+'Item separator last' => ' and ', // non-Harvard style
 
 'ErrorCollector: No errors' => 'No errors detected. However, because error reporting is still incomplete, there may have been errors that the error collector was not notified of; please inspect the output HTML carefully.',
 'ErrorCollector: At line' => ' at line $line',
@@ -36,6 +43,9 @@ $messages = array(
 'Strategy_FixNesting: Node excluded'         => '$CurrentToken.Compact node removed due to descendant exclusion by ancestor element',
 'Strategy_FixNesting: Node reorganized'      => 'Contents of $CurrentToken.Compact node reorganized to enforce its content model',
 'Strategy_FixNesting: Node contents removed' => 'Contents of $CurrentToken.Compact node removed',
+
+'AttrValidator: Attributes transformed' => 'Attributes on $CurrentToken.Compact transformed from $1.Keys to $2.Keys',
+'AttrValidator: Attribute removed' => '$CurrentAttr.Name attribute on $CurrentToken.Compact removed',
 
 );
 

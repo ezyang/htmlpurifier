@@ -45,8 +45,8 @@ class HTMLPurifier_ErrorCollectorTest extends UnitTestCase
         $this->assertIdentical($collector->getRaw(), $result);
         
         $formatted_result = 
-            '<ul><li>Warning: Message 2 at line 3</li>'.
-            '<li>Error: Message 1 at line 23</li></ul>';
+            '<ul><li><strong>Warning</strong>: Message 2 at line 3</li>'.
+            '<li><strong>Error</strong>: Message 1 at line 23</li></ul>';
         
         $config = HTMLPurifier_Config::create(array('Core.MaintainLineNumbers' => true));
         
@@ -91,8 +91,8 @@ class HTMLPurifier_ErrorCollectorTest extends UnitTestCase
         $this->assertIdentical($collector->getRaw(), $result);
         
         $formatted_result = 
-            '<ul><li>Error: Message 1</li>'.
-            '<li>Error: Message 2</li></ul>';
+            '<ul><li><strong>Error</strong>: Message 1</li>'.
+            '<li><strong>Error</strong>: Message 2</li></ul>';
         $config = HTMLPurifier_Config::createDefault();
         $this->assertIdentical($collector->getHTMLFormatted($config), $formatted_result);
     }

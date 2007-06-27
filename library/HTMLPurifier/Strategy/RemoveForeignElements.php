@@ -91,7 +91,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                         $definition->info[$token->name]->required_attr &&
                         ($token->name != 'img' || $remove_invalid_img) // ensure config option still works
                     ) {
-                        $token = $attr_validator->validateToken($token, $config, $context);
+                        $attr_validator->validateToken($token, $config, $context);
                         $ok = true;
                         foreach ($definition->info[$token->name]->required_attr as $name) {
                             if (!isset($token->attr[$name])) {

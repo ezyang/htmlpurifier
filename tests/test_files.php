@@ -52,6 +52,7 @@ $test_files[] = 'HTMLPurifier/AttrTransform/LangTest.php';
 $test_files[] = 'HTMLPurifier/AttrTransform/LengthTest.php';
 $test_files[] = 'HTMLPurifier/AttrTransform/NameTest.php';
 $test_files[] = 'HTMLPurifier/AttrTypesTest.php';
+$test_files[] = 'HTMLPurifier/AttrValidator_ErrorsTest.php';
 $test_files[] = 'HTMLPurifier/ChildDef/ChameleonTest.php';
 $test_files[] = 'HTMLPurifier/ChildDef/CustomTest.php';
 $test_files[] = 'HTMLPurifier/ChildDef/OptionalTest.php';

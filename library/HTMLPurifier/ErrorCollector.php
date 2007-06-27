@@ -26,9 +26,10 @@ class HTMLPurifier_ErrorCollector
      * @param $severity int Error severity, PHP error style (don't use E_USER_)
      * @param $msg string Error message text
      */
-    function send($severity, $msg, $args = array()) {
+    function send($severity, $msg) {
         
-        if (!is_array($args)) {
+        $args = array();
+        if (func_num_args() > 2) {
             $args = func_get_args();
             array_shift($args);
             unset($args[0]);
@@ -94,7 +95,7 @@ class HTMLPurifier_ErrorCollector
         foreach ($errors as $error) {
             list($line, $severity, $msg) = $error;
             $string = '';
-            $string .= $this->locale->getErrorName($severity) . ': ';
+            $string .= '<strong>' . $this->locale->getErrorName($severity) . '</strong>: ';
             $string .= $this->generator->escape($msg); 
             if ($line) {
                 // have javascript link generation that causes 

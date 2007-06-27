@@ -79,6 +79,25 @@ class HTMLPurifier_Language
     }
     
     /**
+     * Converts an array list into a string readable representation
+     */
+    function listify($array) {
+        $sep      = $this->getMessage('Item separator');
+        $sep_last = $this->getMessage('Item separator last');
+        $ret = '';
+        for ($i = 0, $c = count($array); $i < $c; $i++) {
+            if ($i == 0) {
+            } elseif ($i + 1 < $c) {
+                $ret .= $sep;
+            } else {
+                $ret .= $sep_last;
+            }
+            $ret .= $array[$i];
+        }
+        return $ret;
+    }
+    
+    /**
      * Formats a localised message with passed parameters
      * @param $key string identifier of message
      * @param $args Parameters to substitute in
@@ -94,22 +113,35 @@ class HTMLPurifier_Language
         $generator = false;
         foreach ($args as $i => $value) {
             if (is_object($value)) {
-                // complicated stuff
-                if (!$generator) $generator = $this->context->get('Generator');
-                // assuming it's a token
-                if (isset($value->name)) $subst['$'.$i.'.Name'] = $value->name;
-                if (isset($value->data)) $subst['$'.$i.'.Data'] = $value->data;
-                $subst['$'.$i.'.Compact'] = 
-                $subst['$'.$i.'.Serialized'] = $generator->generateFromToken($value);
-                // a more complex algorithm for compact representation
-                // could be introduced for all types of tokens. This
-                // may need to be factored out into a dedicated class
-                if (!empty($value->attr)) {
-                    $stripped_token = $value->copy();
-                    $stripped_token->attr = array();
-                    $subst['$'.$i.'.Compact'] = $generator->generateFromToken($stripped_token);
+                if (is_a($value, 'HTMLPurifier_Token')) {
+                    // factor this out some time
+                    if (!$generator) $generator = $this->context->get('Generator');
+                    if (isset($value->name)) $subst['$'.$i.'.Name'] = $value->name;
+                    if (isset($value->data)) $subst['$'.$i.'.Data'] = $value->data;
+                    $subst['$'.$i.'.Compact'] = 
+                    $subst['$'.$i.'.Serialized'] = $generator->generateFromToken($value);
+                    // a more complex algorithm for compact representation
+                    // could be introduced for all types of tokens. This
+                    // may need to be factored out into a dedicated class
+                    if (!empty($value->attr)) {
+                        $stripped_token = $value->copy();
+                        $stripped_token->attr = array();
+                        $subst['$'.$i.'.Compact'] = $generator->generateFromToken($stripped_token);
+                    }
+                    $subst['$'.$i.'.Line'] = $value->line ? $value->line : 'unknown';
                 }
-                $subst['$'.$i.'.Line'] = $value->line ? $value->line : 'unknown';
+                continue;
+            } elseif (is_array($value)) {
+                $keys = array_keys($value);
+                if (array_keys($keys) === $keys) {
+                    // list
+                    $subst['$'.$i] = $this->listify($value);
+                } else {
+                    // associative array
+                    // no $i implementation yet, sorry
+                    $subst['$'.$i.'.Keys'] = $this->listify($keys);
+                    $subst['$'.$i.'.Values'] = $this->listify(array_values($value));
+                }
                 continue;
             }
             $subst['$' . $i] = $value;
