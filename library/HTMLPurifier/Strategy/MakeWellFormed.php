@@ -109,7 +109,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 if ($token->type === 'text') {
                      // injector handler code; duplicated for performance reasons
                      foreach ($this->injectors as $i => $x) {
-                         if (!$x->skip) $x->handleText($token, $config, $context);
+                         if (!$x->skip) $x->handleText($token);
                          if (is_array($token)) {
                              $this->currentInjector = $i;
                              break;
@@ -166,7 +166,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 
                 // injector handler code; duplicated for performance reasons
                 foreach ($this->injectors as $i => $x) {
-                    if (!$x->skip) $x->handleStart($token, $config, $context);
+                    if (!$x->skip) $x->handleStart($token);
                     if (is_array($token)) {
                         $this->currentInjector = $i;
                         break;

@@ -16,7 +16,7 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
 {
     
-    function handleText(&$token, $config, &$context) {
+    function handleText(&$token) {
         if (!$this->allowsElement('a')) return;
         
         if (strpos($token->data, '://') === false) {

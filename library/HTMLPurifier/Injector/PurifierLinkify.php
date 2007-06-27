@@ -34,7 +34,7 @@ class HTMLPurifier_Injector_PurifierLinkify extends HTMLPurifier_Injector
         $this->docURL = $config->get('AutoFormatParam', 'PurifierLinkifyDocURL');
     }
     
-    function handleText(&$token, $config, &$context) {
+    function handleText(&$token) {
         if (!$this->allowsElement('a')) return;
         if (strpos($token->data, '%') === false) return;
         
