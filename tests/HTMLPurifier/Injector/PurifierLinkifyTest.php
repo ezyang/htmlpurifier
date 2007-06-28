@@ -38,5 +38,10 @@ class HTMLPurifier_Injector_PurifierLinkifyTest extends HTMLPurifier_InjectorHar
         
     }
     
+    function testNeeded() {
+        $this->expectError('Cannot enable PurifierLinkify injector because a is not allowed');
+        $this->assertResult('%Namespace.Directive', true, array('AutoFormat.PurifierLinkify' => true, 'HTML.Allowed' => 'b'));
+    }
+    
 }
 

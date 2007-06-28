@@ -6,7 +6,8 @@ HTMLPurifier_ConfigSchema::define(
     'AutoFormat', 'Linkify', false, 'bool', '
 <p>
   This directive turns on linkification, auto-linking http, ftp and
-  https URLs. This directive has been available since 2.0.1.
+  https URLs. <code>a</code> tags with the <code>href</code> attribute
+  must be allowed. This directive has been available since 2.0.1.
 </p>
 ');
 
@@ -15,6 +16,9 @@ HTMLPurifier_ConfigSchema::define(
  */
 class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
 {
+    
+    var $name = 'Linkify';
+    var $needed = array('a' => array('href'));
     
     function handleText(&$token) {
         if (!$this->allowsElement('a')) return;

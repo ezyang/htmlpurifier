@@ -9,6 +9,11 @@ class HTMLPurifier_Injector
 {
     
     /**
+     * Advisory name of injector, this is for friendly error messages
+     */
+    var $name;
+    
+    /**
      * Amount of tokens the injector needs to skip + 1. Because
      * the decrement is the first thing that happens, this needs to
      * be one greater than the "real" skip count.
@@ -40,16 +45,37 @@ class HTMLPurifier_Injector
     var $inputIndex;
     
     /**
-     * Prepares the injector by giving it the config and context objects,
-     * so that important variables can be extracted and not passed via
-     * parameter constantly. Remember: always instantiate a new injector
-     * when handling a set of HTML.
+     * Array of elements and attributes this injector creates and therefore
+     * need to be allowed by the definition. Takes form of
+     * array('element' => array('attr', 'attr2'), 'element2')
+     */
+    var $needed = array();
+    
+    /**
+     * Prepares the injector by giving it the config and context objects:
+     * this allows references to important variables to be made within
+     * the injector. This function also checks if the HTML environment
+     * will work with the Injector: if p tags are not allowed, the
+     * Auto-Paragraphing injector should not be enabled.
+     * @param $config Instance of HTMLPurifier_Config
+     * @param $context Instance of HTMLPurifier_Context
+     * @return Boolean false if success, string of missing needed element/attribute if failure
      */
     function prepare($config, &$context) {
         $this->htmlDefinition = $config->getHTMLDefinition();
+        // perform $needed checks
+        foreach ($this->needed as $element => $attributes) {
+            if (is_int($element)) $element = $attributes;
+            if (!isset($this->htmlDefinition->info[$element])) return $element;
+            if (!is_array($attributes)) continue;
+            foreach ($attributes as $name) {
+                if (!isset($this->htmlDefinition->info[$element]->attr[$name])) return "$element.$name";
+            }
+        }
         $this->currentNesting =& $context->get('CurrentNesting');
         $this->inputTokens    =& $context->get('InputTokens');
         $this->inputIndex     =& $context->get('InputIndex');
+        return false;
     }
     
     /**

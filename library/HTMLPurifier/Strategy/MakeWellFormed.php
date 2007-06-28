@@ -67,7 +67,8 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         unset($injectors['Custom']); // special case
         foreach ($injectors as $injector => $b) {
             $injector = "HTMLPurifier_Injector_$injector";
-            if ($b) $this->injectors[] = new $injector;
+            if (!$b) continue;
+            $this->injectors[] = new $injector;
         }
         foreach ($custom_injectors as $injector) {
             if (is_string($injector)) {
@@ -87,7 +88,11 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         // give the injectors references to the definition and context
         // variables for performance reasons
         foreach ($this->injectors as $i => $x) {
-            $this->injectors[$i]->prepare($config, $context);
+            $error = $this->injectors[$i]->prepare($config, $context);
+            if (!$error) continue;
+            list($injector) = array_splice($this->injectors, $i, 1);
+            $name = $injector->name;
+            trigger_error("Cannot enable $name injector because $error is not allowed", E_USER_WARNING);
         }
         
         // -- end INJECTOR --

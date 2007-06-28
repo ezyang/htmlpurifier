@@ -249,5 +249,10 @@ Par2',
         );
     }
     
+    function testNeeded() {
+        $this->expectError('Cannot enable AutoParagraph injector because p is not allowed');
+        $this->assertResult('<b>foobar</b>', true, array('AutoFormat.AutoParagraph' => true, 'HTML.Allowed' => 'b'));
+    }
+    
 }
 

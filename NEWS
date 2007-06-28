@@ -13,6 +13,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! With %Core.AggressivelyFixLt, <3 and similar emoticons no longer
   trigger HTML removal in PHP5 (DOMLex). This directive is not necessary
   for PHP4 (DirectLex).
+- AutoFormatters emit friendly error messages if tags or attributes they
+  need are not allowed
 
 2.0.2, unknown release date
 (none)

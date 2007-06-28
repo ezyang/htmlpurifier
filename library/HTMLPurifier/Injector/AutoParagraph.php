@@ -16,6 +16,11 @@ HTMLPurifier_ConfigSchema::define(
   <li>There are double newlines in paragraph tags</li>
 </ul>
 <p>
+  <code>p</code> tags must be allowed for this directive to take effect.
+  We do not use <code>br</code> tags for paragraphing, as that is
+  semantically incorrect.
+</p>
+<p>
   This directive has been available since 2.0.1.
 </p>
 ');
@@ -26,6 +31,9 @@ HTMLPurifier_ConfigSchema::define(
  */
 class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
 {
+    
+    var $name = 'AutoParagraph';
+    var $needed = array('p');
     
     function _pStart() {
         $par = new HTMLPurifier_Token_Start('p');
