@@ -24,15 +24,38 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
     var $name;
     
     /**
+     * Whether or not to compress directive names, clipping them off
+     * after a certain amount of letters
+     */
+    var $compress = false;
+    
+    /**
      * @param $name Form element name for directives to be stuffed into
      * @param $doc_url String documentation URL, will have fragment tagged on
+     * @param $compress Integer max length before compressing a directive name, set to false to turn off
      */
-    function HTMLPurifier_Printer_ConfigForm($name, $doc_url = null) {
+    function HTMLPurifier_Printer_ConfigForm($name, $doc_url = null, $compress = false) {
         parent::HTMLPurifier_Printer();
         $this->docURL = $doc_url;
         $this->name   = $name;
+        $this->compress = $compress;
         $this->fields['default']    = new HTMLPurifier_Printer_ConfigForm_default();
         $this->fields['bool']       = new HTMLPurifier_Printer_ConfigForm_bool();
+    }
+    
+    /**
+     * Retrieves styling, in case the directory it's in is not publically
+     * available
+     */
+    function getCSS() {
+        return file_get_contents(dirname(__FILE__) . '/ConfigForm.css');
+    }
+    
+    /**
+     * Retrieves JavaScript, in case directory is not public
+     */
+    function getJavaScript() {
+        return file_get_contents(dirname(__FILE__) . '/ConfigForm.js');
     }
     
     /**
@@ -98,11 +121,12 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
                 $ret .= $this->start('a', array('href' => $url));
             }
                 $attr = array('for' => "{$this->name}:$ns.$directive");
+                
                 // crop directive name if it's too long
-                if (strlen($directive) < 14) {
+                if (!$this->compress || (strlen($directive) < $this->compress)) {
                     $directive_disp = $directive;
                 } else {
-                    $directive_disp = substr($directive, 0, 12) . '...';
+                    $directive_disp = substr($directive, 0, $this->compress - 2) . '...';
                     $attr['title'] = $directive;
                 }
                 

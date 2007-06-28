@@ -76,6 +76,11 @@ class HTMLPurifier_Config
     var $serials = array();
     
     /**
+     * Serial for entire configuration object
+     */
+    var $serial;
+    
+    /**
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
      */
@@ -166,6 +171,17 @@ class HTMLPurifier_Config
             $this->serials[$namespace] = md5(serialize($batch));
         }
         return $this->serials[$namespace];
+    }
+    
+    /**
+     * Returns a md5 signature for the entire configuration object
+     * that uniquely identifies that particular configuration
+     */
+    function getSerial() {
+        if (empty($this->serial)) {
+            $this->serial = md5(serialize($this->getAll()));
+        }
+        return $this->serial;
     }
     
     /**
@@ -396,6 +412,26 @@ class HTMLPurifier_Config
      * @static
      */
     function loadArrayFromForm($array, $index, $allowed = true, $mq_fix = true) {
+        $ret = HTMLPurifier_Config::prepareArrayFromForm($array, $index, $allowed, $mq_fix);
+        $config = HTMLPurifier_Config::create($ret);
+        return $config;
+    }
+    
+    /**
+     * Merges in configuration values from $_GET/$_POST to object. NOT STATIC.
+     * @note Same parameters as loadArrayFromForm
+     */
+    function mergeArrayFromForm($array, $index, $allowed = true, $mq_fix = true) {
+         $ret = HTMLPurifier_Config::prepareArrayFromForm($array, $index, $allowed, $mq_fix);
+         $this->loadArray($ret);
+    }
+    
+    /**
+     * Prepares an array from a form into something usable for the more
+     * strict parts of HTMLPurifier_Config
+     * @static
+     */
+    function prepareArrayFromForm($array, $index, $allowed = true, $mq_fix = true) {
         $array = (isset($array[$index]) && is_array($array[$index])) ? $array[$index] : array();
         $mq = get_magic_quotes_gpc() && $mq_fix;
         
@@ -412,9 +448,7 @@ class HTMLPurifier_Config
             $value = $mq ? stripslashes($array[$skey]) : $array[$skey];
             $ret[$ns][$directive] = $value;
         }
-        
-        $config = HTMLPurifier_Config::create($ret);
-        return $config;
+        return $ret;
     }
     
     /**

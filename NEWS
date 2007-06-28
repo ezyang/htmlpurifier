@@ -10,11 +10,17 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 2.1.0, unknown release date
+! Phorum mod implemented for HTML Purifier
 ! With %Core.AggressivelyFixLt, <3 and similar emoticons no longer
   trigger HTML removal in PHP5 (DOMLex). This directive is not necessary
   for PHP4 (DirectLex).
 - AutoFormatters emit friendly error messages if tags or attributes they
   need are not allowed
+- ConfigForm's compactification of directive names is now configurable
+. HTMLPurifier_Config->getSerial() implemented, this is extremely useful
+  for output cache invalidation
+. ConfigForm printer now can retrieve CSS and JS files as strings, in
+  case HTML Purifier's directory is not publically accessible
 
 2.0.2, unknown release date
 (none)
