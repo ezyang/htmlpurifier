@@ -9,7 +9,7 @@ $config->set('HTML', 'Allowed',
   // common semantic markup
   'del,ins,strong,em,'.
   // commmon presentational markup
-  's,strike,sub,sup,u,br,tt,div[class],'. // div because bbcode [quote] uses it
+  's,strike,sub,sup,u,br,tt,div[class],img[src|alt|title|class],'. // div because bbcode [quote] uses it, img for smileys
   // uncommon semantic markup
   'abbr[title],acronym[title],caption,code,dfn,cite,kbd,var,'.
   // lists

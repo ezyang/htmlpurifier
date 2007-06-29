@@ -18,39 +18,10 @@
 
 if(!defined('PHORUM')) exit;
 
-// load library
-require_once (dirname(__FILE__).'/htmlpurifier/HTMLPurifier.auto.php');
-
-$config_exists = file_exists(dirname(__FILE__) . '/config.php');
-if ($config_exists || !isset($PHORUM['mod_htmlpurifier']['config'])) {
-    $config = HTMLPurifier_Config::createDefault();
-    include(dirname(__FILE__) . '/config.default.php');
-    if ($config_exists) {
-        include(dirname(__FILE__) . '/config.php');
-    }
-} else {
-    // used cached version that was constructed from web interface
-    $config = HTMLPurifier_Config::create($PHORUM['mod_htmlpurifier']['config']);
-}
-HTMLPurifier::getInstance($config);
-
-// increment revision.txt if you want to invalidate the cache
-$GLOBALS['PHORUM']['mod_htmlpurifier']['body_cache_serial'] = $config->getSerial();
-
-// load migration
-if (file_exists(dirname(__FILE__) . '/migrate.php')) {
-    include(dirname(__FILE__) . '/migrate.php');
-} else {
-    echo '<strong>Error:</strong> No migration path specified for HTML Purifier, please check
-    <tt>modes/htmlpurifier/migrate.bbcode.php</tt> for instructions on
-    how to migrate from your previous markup language.';
-    exit;
-}
-
 /**
  * Purifies a data array
  */
-function phorum_htmlpurifier($data)
+function phorum_htmlpurifier_format($data)
 {
     $PHORUM = $GLOBALS["PHORUM"];
     
@@ -58,7 +29,13 @@ function phorum_htmlpurifier($data)
     $cache_serial = $PHORUM['mod_htmlpurifier']['body_cache_serial'];
     
     foreach($data as $message_id => $message){
-        if(isset($message['body'])){
+        if(isset($message['body'])) {
+            if (isset($message['meta']['htmlpurifier_light'])) {
+                // format hook was called outside of Phorum's normal
+                // functions, do the abridged purification
+                $data[$message_id]['body'] = $purifier->purify($message['body']);
+                continue;
+            }
             
             if (
                 isset($message['meta']['body_cache']) &&
@@ -120,8 +97,11 @@ function phorum_htmlpurifier($data)
  */
 function phorum_htmlpurifier_posting($message) {
     $PHORUM = $GLOBALS["PHORUM"];
-    $purifier =& HTMLPurifier::getInstance();
-    $message['meta']['body_cache'] = $purifier->purify($message['body']);
+    $fake_data = array($message);
+    // this is a temporary attribute
+    $fake_data[0]['meta']['htmlpurifier_light'] = true; // only purify, please
+    list($changed_message) = phorum_hook('format', $fake_data);
+    $message['meta']['body_cache'] = $changed_message['body'];
     $message['meta']['body_cache_serial'] = $PHORUM['mod_htmlpurifier']['body_cache_serial'];
     return $message;
 }
@@ -137,29 +117,56 @@ function phorum_htmlpurifier_quote($array) {
 }
 
 /**
- * Ensure that our format hook is processed last
+ * Ensure that our format hook is processed last. Also, loads the library.
  * @credits <http://secretsauce.phorum.org/snippets/make_bbcode_last_formatter.php.txt>
  */
 function phorum_htmlpurifier_common() {
+    
+    require_once (dirname(__FILE__).'/htmlpurifier/HTMLPurifier.auto.php');
+    
+    $config_exists = file_exists(dirname(__FILE__) . '/config.php');
+    if ($config_exists || !isset($PHORUM['mod_htmlpurifier']['config'])) {
+        $config = HTMLPurifier_Config::createDefault();
+        include(dirname(__FILE__) . '/config.default.php');
+        if ($config_exists) {
+            include(dirname(__FILE__) . '/config.php');
+        }
+    } else {
+        // used cached version that was constructed from web interface
+        $config = HTMLPurifier_Config::create($PHORUM['mod_htmlpurifier']['config']);
+    }
+    HTMLPurifier::getInstance($config);
+
+    // increment revision.txt if you want to invalidate the cache
+    $GLOBALS['PHORUM']['mod_htmlpurifier']['body_cache_serial'] = $config->getSerial();
+
+    // load migration
+    if (file_exists(dirname(__FILE__) . '/migrate.php')) {
+        include(dirname(__FILE__) . '/migrate.php');
+    } else {
+        echo '<strong>Error:</strong> No migration path specified for HTML Purifier, please check
+        <tt>modes/htmlpurifier/migrate.bbcode.php</tt> for instructions on
+        how to migrate from your previous markup language.';
+        exit;
+    }
+    
+    // see if our hooks need to be bubbled to the end
+    phorum_htmlpurifier_bubble_hook('format');
+    
+}
+
+function phorum_htmlpurifier_bubble_hook($hook) {
     global $PHORUM;
-    
-    if (! isset($PHORUM['hooks']['format']['mods'])) return;
-    
-    $hp_idx = null;
+    $our_idx = null;
     $last_idx = null;
-    foreach ($PHORUM['hooks']['format']['mods'] as $idx => $mod) {
-        if ($mod == 'htmlpurifier') $hp_idx = $idx;
+    if (!isset($PHORUM['hooks'][$hook]['mods'])) return;
+    foreach ($PHORUM['hooks'][$hook]['mods'] as $idx => $mod) {
+        if ($mod == 'htmlpurifier') $our_idx = $idx;
         $last_idx = $idx;
     }
-    
-    if ($hp_idx !== null && $hp_idx != $last_idx) {
-        
-        $hp_mod = array_splice($PHORUM['hooks']['format']['mods'], $hp_idx, 1);
-        $PHORUM['hooks']['format']['mods'][] = $hp_mod;
-        
-        $hp_func = array_splice($PHORUM['hooks']['format']['funcs'], $hp_idx, 1);
-        $PHORUM['hooks']['format']['funcs'][] = $hp_func;
-        
-    }
+    list($mod) = array_splice($PHORUM['hooks'][$hook]['mods'], $our_idx, 1);
+    $PHORUM['hooks'][$hook]['mods'][] = $mod;
+    list($func) = array_splice($PHORUM['hooks'][$hook]['funcs'], $our_idx, 1);
+    $PHORUM['hooks'][$hook]['funcs'][] = $func;
 }
 

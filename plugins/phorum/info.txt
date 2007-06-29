@@ -1,4 +1,4 @@
-hook:  format|phorum_htmlpurifier
+hook:  format|phorum_htmlpurifier_format
 hook:  quote|phorum_htmlpurifier_quote
 hook:  posting_custom_action|phorum_htmlpurifier_posting
 hook:  common|phorum_htmlpurifier_common

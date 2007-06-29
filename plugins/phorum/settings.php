@@ -32,6 +32,10 @@ $directives = array(
     'Output.TidyFormat',
 );
 
+if (isset($_POST['reset'])) {
+    unset($PHORUM['mod_htmlpurifier']['config']);
+}
+
 // instantiate $config object
 $config_exists = file_exists(dirname(__FILE__) . '/config.php');
 if ($config_exists || !isset($PHORUM['mod_htmlpurifier']['config'])) {
@@ -51,7 +55,7 @@ if(!empty($_POST)){
         echo "Cannot update settings, <code>mods/htmlpurifier/config.php</code> already exists. To change
         settings, edit that file. To use the web form, delete that file.<br />";
     } else {
-        $config->mergeArrayFromForm($_POST, 'config', $directives);
+        if (!isset($_POST['reset'])) $config->mergeArrayFromForm($_POST, 'config', $directives);
         $PHORUM['mod_htmlpurifier']['config'] = $config->getAll();
         if(!phorum_db_update_settings(array("mod_htmlpurifier"=>$PHORUM["mod_htmlpurifier"]))){
             $error="Database error while updating settings.";
@@ -114,6 +118,8 @@ if ($config_exists) {
     $frm->addMessage($htmlpurifier_form->render($config, $directives, false));
 
     $frm->addMessage($warning);
+    
+    $frm->addrow('Reset to defaults:', $frm->checkbox("reset", "1", "", false));
 
     // hack to include extra styling
     echo '<style type="text/css">' . $htmlpurifier_form->getCSS() . '
