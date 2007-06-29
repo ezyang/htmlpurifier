@@ -87,7 +87,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         
     }
     
-    function handleStart(&$token) {
+    function handleElement(&$token) {
         // check if we're inside a tag already
         if (!empty($this->currentNesting)) {
             if ($this->allowsElement('p')) {
@@ -113,8 +113,8 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 $ok = false;
                 // maintain a mini-nesting counter, this lets us bail out
                 // early if possible
-                $j = 2; // current nesting, is two due to parent and this start
-                for ($i = $this->inputIndex + 1; isset($this->inputTokens[$i]); $i++) {
+                $j = 1; // current nesting, one is due to parent (we recalculate current token)
+                for ($i = $this->inputIndex; isset($this->inputTokens[$i]); $i++) {
                     if ($this->inputTokens[$i]->type == 'start') $j++;
                     if ($this->inputTokens[$i]->type == 'end') $j--;
                     if ($this->inputTokens[$i]->type == 'text') {

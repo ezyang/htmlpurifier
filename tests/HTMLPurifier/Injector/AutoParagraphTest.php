@@ -237,6 +237,11 @@ Par1
 '<p>Par1</p><p><b>Par2</b></p>'
         );
         
+        $this->assertResult(
+'<img /> Foo',
+'<p><img /> Foo</p>'
+        );
+        
     }
     
     function testInlineRootNode() {

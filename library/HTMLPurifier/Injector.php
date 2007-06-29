@@ -103,9 +103,9 @@ class HTMLPurifier_Injector
     function handleText(&$token) {}
     
     /**
-     * Handler that is called when a start token is processed
+     * Handler that is called when a start or empty token is processed
      */
-    function handleStart(&$token) {}
+    function handleElement(&$token) {}
     
 }
 

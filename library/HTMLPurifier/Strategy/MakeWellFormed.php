@@ -127,26 +127,24 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             
             $info = $definition->info[$token->name]->child;
             
-            // quick checks:
-            // test if it claims to be a start tag but is empty
+            // quick tag checks: anything that's *not* an end tag
+            $ok = false;
             if ($info->type == 'empty' && $token->type == 'start') {
-                $result[] = new HTMLPurifier_Token_Empty($token->name, $token->attr);
-                continue;
-            }
-            // test if it claims to be empty but really is a start tag
-            if ($info->type != 'empty' && $token->type == 'empty' ) {
-                $result[] = new HTMLPurifier_Token_Start($token->name, $token->attr);
-                $result[] = new HTMLPurifier_Token_End($token->name);
-                continue;
-            }
-            // automatically insert empty tags
-            if ($token->type == 'empty') {
-                $result[] = $token;
-                continue;
-            }
-            
-            // start tags have precedence, so they get passed through...
-            if ($token->type == 'start') {
+                // test if it claims to be a start tag but is empty
+                $token = new HTMLPurifier_Token_Empty($token->name, $token->attr);
+                $ok = true;
+            } elseif ($info->type != 'empty' && $token->type == 'empty' ) {
+                // claims to be empty but really is a start tag
+                $token = array(
+                    new HTMLPurifier_Token_Start($token->name, $token->attr),
+                    new HTMLPurifier_Token_End($token->name)
+                );
+                $ok = true;
+            } elseif ($token->type == 'empty') {
+                // real empty token
+                $ok = true;
+            } elseif ($token->type == 'start') {
+                // start tag
                 
                 // ...unless they also have to close their parent
                 if (!empty($this->currentNesting)) {
@@ -168,16 +166,18 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     
                     $this->currentNesting[] = $parent; // undo the pop
                 }
-                
-                // injector handler code; duplicated for performance reasons
+                $ok = true;
+            }
+            
+            // injector handler code; duplicated for performance reasons
+            if ($ok) {
                 foreach ($this->injectors as $i => $x) {
-                    if (!$x->skip) $x->handleStart($token);
+                    if (!$x->skip) $x->handleElement($token);
                     if (is_array($token)) {
                         $this->currentInjector = $i;
                         break;
                     }
                 }
-                
                 $this->processToken($token, $config, $context);
                 continue;
             }
@@ -285,9 +285,11 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             array_splice($this->inputTokens, $this->inputIndex--, 1, $token);
             
             // adjust the injector skips based on the array substitution
-            $offset = count($token) + 1;
-            for ($i = 0; $i <= $this->currentInjector; $i++) {
-                $this->injectors[$i]->skip += $offset;
+            if ($this->injectors) {
+                $offset = count($token) + 1;
+                for ($i = 0; $i <= $this->currentInjector; $i++) {
+                    $this->injectors[$i]->skip += $offset;
+                }
             }
         } elseif ($token) {
             // regular case
