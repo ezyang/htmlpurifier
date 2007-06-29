@@ -155,8 +155,6 @@ function phorum_htmlpurifier_common() {
     // increment revision.txt if you want to invalidate the cache
     $GLOBALS['PHORUM']['mod_htmlpurifier']['body_cache_serial'] = $config->getSerial();
     
-    $GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'] = true;
-    
     // load migration
     if (file_exists(dirname(__FILE__) . '/migrate.php')) {
         include(dirname(__FILE__) . '/migrate.php');
