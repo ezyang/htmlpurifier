@@ -21,6 +21,11 @@
  * to be upgraded when Phorum 6 rolls around.
  */
 
+// Note: Cache data is base64 encoded because Phorum insists on flinging
+// to the user and expecting it to come back unharmed, newlines and
+// all, which ain't happening. It's slower, it takes up more space, but
+// at least it won't get mutilated
+
 if(!defined('PHORUM')) exit;
 
 /**
@@ -48,7 +53,7 @@ function phorum_htmlpurifier_format($data)
                 $message['meta']['body_cache_serial'] == $cache_serial
             ) {
                 // cached version is present, bail out early
-                $data[$message_id]['body'] = $message['meta']['body_cache'];
+                $data[$message_id]['body'] = base64_decode($message['meta']['body_cache']);
                 continue;
             }
             
@@ -65,7 +70,7 @@ function phorum_htmlpurifier_format($data)
                 $fake_data[$message_id] = $message;
                 $fake_data = phorum_htmlpurifier_migrate($fake_data);
                 $body = $fake_data[$message_id]['body'];
-                $body = str_replace("<phorum break>", "\n", $body); // dupe, but this needs to be applied early
+                $body = str_replace("<phorum break>", '', $body);
                 $updated_message['body'] = $body; // save it in
             } else {
                 // reverse Phorum's pre-processing
@@ -84,7 +89,7 @@ function phorum_htmlpurifier_format($data)
             // this should ONLY be called on read, for posting and preview
             // phorum_htmlpurifier_posting should do the trick
             $updated_message['meta'] = $message['meta'];
-            $updated_message['meta']['body_cache'] = $body;
+            $updated_message['meta']['body_cache'] = base64_encode($body);
             $updated_message['meta']['body_cache_serial'] = $cache_serial;
             phorum_db_update_message($message_id, $updated_message);
             
@@ -106,7 +111,7 @@ function phorum_htmlpurifier_posting($message) {
     // this is a temporary attribute
     $fake_data[0]['meta']['htmlpurifier_light'] = true; // only purify, please
     list($changed_message) = phorum_hook('format', $fake_data);
-    $message['meta']['body_cache'] = $changed_message['body'];
+    $message['meta']['body_cache'] = base64_encode($changed_message['body']);
     $message['meta']['body_cache_serial'] = $PHORUM['mod_htmlpurifier']['body_cache_serial'];
     return $message;
 }
