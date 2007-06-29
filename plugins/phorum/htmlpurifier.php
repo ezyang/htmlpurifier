@@ -47,6 +47,11 @@ function phorum_htmlpurifier_format($data)
                 continue;
             }
             
+            if (isset($_GET['purge'])) {
+                // purge the cache
+                unset($message['meta']['body_cache']);
+            }
+            
             if (
                 isset($message['meta']['body_cache']) &&
                 isset($message['meta']['body_cache_serial']) &&
@@ -199,5 +204,16 @@ function phorum_htmlpurifier_before_editor($message) {
         }
     }
     return $message;
+}
+
+function phorum_htmlpurifier_editor_after_subject() {
+    if (!empty($GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'])) return;
+    ?><tr><td colspan="2" style="padding:1em 0.3em;">
+  HTML input is <strong>on</strong>. Make sure you escape all HTML and
+  angled-brackets with &amp;lt; and &amp;gt; (you can also use CDATA
+  tags, simply wrap the suspect text with
+&lt;![CDATA[<em>text</em>]]&gt;. Paragraphs will only be applied to 
+double-spaces; single-spaces will not generate <tt>&lt;br&gt;</tt> tags.
+    </td></tr><?php
 }
 
