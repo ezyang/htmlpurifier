@@ -21,6 +21,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   for output cache invalidation
 . ConfigForm printer now can retrieve CSS and JS files as strings, in
   case HTML Purifier's directory is not publically accessible
+. Introduce new text/itext configuration directive values: these represent
+  longer strings that would be more appropriately edited with a textarea
+. Allow newlines to act as separators for lists, hashes, lookups and
+  %HTML.Allowed
 
 2.0.2, unknown release date
 (none)

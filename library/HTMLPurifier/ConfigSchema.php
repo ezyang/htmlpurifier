@@ -49,6 +49,8 @@ class HTMLPurifier_ConfigSchema {
     var $types = array(
         'string'    => 'String',
         'istring'   => 'Case-insensitive string',
+        'text'      => 'Text',
+        'itext'      => 'Case-insensitive text',
         'int'       => 'Integer',
         'float'     => 'Float',
         'bool'      => 'Boolean',
@@ -313,8 +315,10 @@ class HTMLPurifier_ConfigSchema {
                 return $var;
             case 'istring':
             case 'string':
+            case 'text': // no difference, just is longer/multiple line string
+            case 'itext':
                 if (!is_string($var)) break;
-                if ($type === 'istring') $var = strtolower($var);
+                if ($type === 'istring' || $type === 'itext') $var = strtolower($var);
                 return $var;
             case 'int':
                 if (is_string($var) && ctype_digit($var)) $var = (int) $var;
@@ -345,9 +349,13 @@ class HTMLPurifier_ConfigSchema {
                     // a single empty string item, but having an empty
                     // array is more intuitive
                     if ($var == '') return array();
-                    // simplistic string to array method that only works
-                    // for simple lists of tag names or alphanumeric characters
-                    $var = explode(',',$var);
+                    if (strpos($var, "\n") === false && strpos($var, "\r") === false) {
+                        // simplistic string to array method that only works
+                        // for simple lists of tag names or alphanumeric characters
+                        $var = explode(',',$var);
+                    } else {
+                        $var = preg_split('/(,|[\n\r]+)/', $var);
+                    }
                     // remove spaces
                     foreach ($var as $i => $j) $var[$i] = trim($j);
                     if ($type === 'hash') {

@@ -110,12 +110,13 @@ HTMLPurifier_ConfigSchema::define(
 ');
 
 HTMLPurifier_ConfigSchema::define(
-    'HTML', 'Allowed', null, 'string/null', '
+    'HTML', 'Allowed', null, 'itext/null', '
 <p>
     This is a convenience directive that rolls the functionality of
     %HTML.AllowedElements and %HTML.AllowedAttributes into one directive.
     Specify elements and attributes that are allowed using:
-    <code>element1[attr1|attr2],element2...</code>.
+    <code>element1[attr1|attr2],element2...</code>. You can also use
+    newlines instead of commas to separate elements.
 </p>
 <p>
     <strong>Warning</strong>:
@@ -426,8 +427,9 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         $elements = array();
         $attributes = array();
         
-        $chunks = explode(',', $list);
+        $chunks = preg_split('/(,|[\n\r]+)/', $list);
         foreach ($chunks as $chunk) {
+            if (empty($chunk)) continue;
             // remove TinyMCE element control characters
             if (!strpos($chunk, '[')) {
                 $element = $chunk;

@@ -9,6 +9,10 @@ class HTMLPurifier_HTMLDefinitionTest extends UnitTestCase
         
         $def = new HTMLPurifier_HTMLDefinition();
         
+        // note: this is case-sensitive, but its config schema 
+        // counterpart is not. This is generally a good thing for users,
+        // but it's a slight internal inconsistency
+        
         $this->assertEqual(
             $def->parseTinyMCEAllowedList('a,b,c'),
             array(array('a' => true, 'b' => true, 'c' => true), array())
@@ -31,6 +35,17 @@ class HTMLPurifier_HTMLDefinitionTest extends UnitTestCase
         
         $this->assertEqual(
             $def->parseTinyMCEAllowedList('span[style],strong,a[href|title]'),
+            array(array('span' => true, 'strong' => true, 'a' => true),
+            array('span.style' => true, 'a.href' => true, 'a.title' => true))
+        );
+        
+        $this->assertEqual(
+            // alternate form:
+            $def->parseTinyMCEAllowedList(
+'span[style]
+strong
+a[href|title]
+'),
             array(array('span' => true, 'strong' => true, 'a' => true),
             array('span.style' => true, 'a.href' => true, 'a.title' => true))
         );

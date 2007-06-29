@@ -260,7 +260,9 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
     function testValidate() {
         
         $this->assertValid('foobar', 'string');
+        $this->assertValid('foobar', 'text'); // aliases, lstring = long string
         $this->assertValid('FOOBAR', 'istring', 'foobar');
+        $this->assertValid('FOOBAR', 'itext', 'foobar');
         
         $this->assertValid(34, 'int');
         
@@ -278,10 +280,14 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         $this->assertValid(array('1', '2', '3'), 'list');
         $this->assertValid('foo,bar, cow', 'list', array('foo', 'bar', 'cow'));
         $this->assertValid('', 'list', array());
+        $this->assertValid("foo\nbar", 'list', array('foo', 'bar'));
+        $this->assertValid("foo\nbar,baz", 'list', array('foo', 'bar', 'baz'));
         
         $this->assertValid(array('1' => true, '2' => true), 'lookup');
         $this->assertValid(array('1', '2'), 'lookup', array('1' => true, '2' => true));
         $this->assertValid('foo,bar', 'lookup', array('foo' => true, 'bar' => true));
+        $this->assertValid("foo\nbar", 'lookup', array('foo' => true, 'bar' => true));
+        $this->assertValid("foo\nbar,baz", 'lookup', array('foo' => true, 'bar' => true, 'baz' => true));
         $this->assertValid('', 'lookup', array());
         
         $this->assertValid(array('foo' => 'bar'), 'hash');
@@ -289,6 +295,7 @@ class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
         $this->assertInvalid(array(0 => 'moo'), 'hash');
         $this->assertValid('', 'hash', array());
         $this->assertValid('foo:bar,too:two', 'hash', array('foo' => 'bar', 'too' => 'two'));
+        $this->assertValid("foo:bar\ntoo:two,three:free", 'hash', array('foo' => 'bar', 'too' => 'two', 'three' => 'free'));
         $this->assertValid('foo:bar,too', 'hash', array('foo' => 'bar'));
         $this->assertValid('foo:bar,', 'hash', array('foo' => 'bar'));
         $this->assertValid('foo:bar:baz', 'hash', array('foo' => 'bar:baz'));
