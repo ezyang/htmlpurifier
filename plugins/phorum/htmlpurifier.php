@@ -26,8 +26,6 @@
 // all, which ain't happening. It's slower, it takes up more space, but
 // at least it won't get mutilated
 
-if(!defined('PHORUM')) exit;
-
 /**
  * Purifies a data array
  */
@@ -201,19 +199,10 @@ function phorum_htmlpurifier_quote($array) {
  */
 function phorum_htmlpurifier_common() {
     
-    require_once (dirname(__FILE__).'/htmlpurifier/HTMLPurifier.auto.php');
+    require_once(dirname(__FILE__).'/htmlpurifier/HTMLPurifier.auto.php');
+    require(dirname(__FILE__).'/init-config.php');
     
-    $config_exists = file_exists(dirname(__FILE__) . '/config.php');
-    if ($config_exists || !isset($PHORUM['mod_htmlpurifier']['config'])) {
-        $config = HTMLPurifier_Config::createDefault();
-        include(dirname(__FILE__) . '/config.default.php');
-        if ($config_exists) {
-            include(dirname(__FILE__) . '/config.php');
-        }
-    } else {
-        // used cached version that was constructed from web interface
-        $config = HTMLPurifier_Config::create($PHORUM['mod_htmlpurifier']['config']);
-    }
+    $config = phorum_htmlpurifier_get_config();
     HTMLPurifier::getInstance($config);
     
     // increment revision.txt if you want to invalidate the cache
