@@ -96,11 +96,19 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 // this token is already paragraph, abort
                 if ($token->name == 'p') return;
                 
-                // check if this token is adjacent to the parent
-                if ($this->inputTokens[$this->inputIndex - 1]->type != 'start') {
+                // this token is a block level, abort
+                if (!$this->_isInline($token)) return;
+                
+                // check if this token is adjacent to the parent token
+                $prev = $this->inputTokens[$this->inputIndex - 1];
+                if ($prev->type != 'start') {
                     // not adjacent, we can abort early
                     // add lead paragraph tag if our token is inline
-                    if ($this->_isInline($token)) {
+                    // and the previous tag was an end paragraph
+                    if (
+                        $prev->name == 'p' && $prev->type == 'end' &&
+                        $this->_isInline($token)
+                    ) {
                         $token = array($this->_pStart(), $token);
                     }
                     return;

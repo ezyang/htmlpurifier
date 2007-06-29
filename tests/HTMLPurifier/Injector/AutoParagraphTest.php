@@ -242,6 +242,25 @@ Par1
 '<p><img /> Foo</p>'
         );
         
+        $this->assertResult(
+'<li>Foo <a>bar</a></li>'
+        );
+        
+        $this->assertResult(
+'<li><b>baz</b><a>bar</a></li>'
+        );
+        
+        $this->assertResult(
+'<div><div>asdf</div><b>asdf</b></div>'
+        );
+        
+        $this->assertResult(
+'<div><div>asdf</div>
+
+<b>asdf</b></div>',
+'<div><div>asdf</div><p><b>asdf</b></p></div>'
+        );
+        
     }
     
     function testInlineRootNode() {

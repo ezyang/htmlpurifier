@@ -17,6 +17,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - AutoFormatters emit friendly error messages if tags or attributes they
   need are not allowed
 - ConfigForm's compactification of directive names is now configurable
+- AutoParagraph autoformatter algorithm refined after field-testing
 . HTMLPurifier_Config->getSerial() implemented, this is extremely useful
   for output cache invalidation
 . ConfigForm printer now can retrieve CSS and JS files as strings, in
