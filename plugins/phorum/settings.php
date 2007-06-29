@@ -106,8 +106,8 @@ if ($config_exists) {
 
     $frm->addbreak("Edit settings for the HTML Purifier module");
     
-    $frm->addMessage('<p>Click on directive links to read what each option does.
-    <strong>Warning: This will navigate you to a new page.</strong></p>
+    $frm->addMessage('<p>Click on directive links to read what each option does
+    (links do not open in new windows).</p>
     <p>For more flexibility (for instance, you want to edit the full
     range of configuration directives), you can create a <tt>config.php</tt>
     file in your <tt>mods/htmlpurifier/</tt> directory. Doing so will,

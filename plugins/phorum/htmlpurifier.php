@@ -12,6 +12,11 @@
  * For help migrating from your previous markup language to pure HTML
  * please check the migrate.bbcode.php file.
  * 
+ * If you'd like to use this with a WYSIWYG editor, make sure that
+ * editor sets $PHORUM['mod_htmlpurifier']['wysiwyg'] to true. Otherwise,
+ * administrators who need to edit other people's comments may be at
+ * risk for some nasty attacks.
+ * 
  * Tested with Phorum 5.1.22. This module will almost definitely need
  * to be upgraded when Phorum 6 rolls around.
  */
@@ -136,10 +141,12 @@ function phorum_htmlpurifier_common() {
         $config = HTMLPurifier_Config::create($PHORUM['mod_htmlpurifier']['config']);
     }
     HTMLPurifier::getInstance($config);
-
+    
     // increment revision.txt if you want to invalidate the cache
     $GLOBALS['PHORUM']['mod_htmlpurifier']['body_cache_serial'] = $config->getSerial();
-
+    
+    $GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'] = true;
+    
     // load migration
     if (file_exists(dirname(__FILE__) . '/migrate.php')) {
         include(dirname(__FILE__) . '/migrate.php');
@@ -168,5 +175,24 @@ function phorum_htmlpurifier_bubble_hook($hook) {
     $PHORUM['hooks'][$hook]['mods'][] = $mod;
     list($func) = array_splice($PHORUM['hooks'][$hook]['funcs'], $our_idx, 1);
     $PHORUM['hooks'][$hook]['funcs'][] = $func;
+}
+
+/**
+ * Pre-emptively performs purification if it looks like a WYSIWYG editor
+ * is being used
+ */
+function phorum_htmlpurifier_before_editor($message) {
+    if (!empty($GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'])) {
+        if (!empty($message['body'])) {
+            $body = $message['body'];
+            // de-entity-ize contents
+            $body = str_replace(array('&lt;','&gt;','&amp;'), array('<','>','&'), $body);
+            $purifier =& HTMLPurifier::getInstance();
+            $body = $purifier->purify($message['body']);
+            // re-entity-ize contents
+            $body = htmlspecialchars($body, ENT_QUOTES, $GLOBALS['PHORUM']['DATA']['CHARSET']);
+        }
+    }
+    return $message;
 }
 

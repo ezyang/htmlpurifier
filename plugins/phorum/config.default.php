@@ -20,5 +20,8 @@ $config->set('AutoFormat', 'AutoParagraph', true);
 $config->set('AutoFormat', 'Linkify', true);
 $config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');
 $config->set('Core', 'AggressivelyFixLt', true);
-$config->set('Core', 'Encoding', 'iso-8859-1'); // we'll change this eventually
+$config->set('Core', 'Encoding', $GLOBALS['PHORUM']['DATA']['CHARSET']); // we'll change this eventually
+if (strtolower($GLOBALS['PHORUM']['DATA']['CHARSET']) !== 'utf-8') {
+  $config->set('Core', 'EscapeNonASCIICharacters', true);
+}
 
