@@ -40,26 +40,32 @@ function phorum_htmlpurifier_format($data)
     
     foreach($data as $message_id => $message){
         if(isset($message['body'])) {
-            if (isset($message['meta']['htmlpurifier_light'])) {
-                // format hook was called outside of Phorum's normal
-                // functions, do the abridged purification
-                $data[$message_id]['body'] = $purifier->purify($message['body']);
-                continue;
-            }
             
-            if (isset($_GET['purge'])) {
-                // purge the cache
-                unset($message['meta']['body_cache']);
-            }
-            
-            if (
-                isset($message['meta']['body_cache']) &&
-                isset($message['meta']['body_cache_serial']) &&
-                $message['meta']['body_cache_serial'] == $cache_serial
-            ) {
-                // cached version is present, bail out early
-                $data[$message_id]['body'] = base64_decode($message['meta']['body_cache']);
-                continue;
+            if ($message_id) {
+                // we're dealing with a real message, not a fake, so
+                // there a number of shortcuts that can be taken
+                
+                if (isset($message['meta']['htmlpurifier_light'])) {
+                    // format hook was called outside of Phorum's normal
+                    // functions, do the abridged purification
+                    $data[$message_id]['body'] = $purifier->purify($message['body']);
+                    continue;
+                }
+                
+                if (!empty($PHORUM['args']['purge'])) {
+                    // purge the cache, must be below the following if
+                    unset($message['meta']['body_cache']);
+                }
+                
+                if (
+                    isset($message['meta']['body_cache']) &&
+                    isset($message['meta']['body_cache_serial']) &&
+                    $message['meta']['body_cache_serial'] == $cache_serial
+                ) {
+                    // cached version is present, bail out early
+                    $data[$message_id]['body'] = base64_decode($message['meta']['body_cache']);
+                    continue;
+                }
             }
             
             // migration might edit this array, that's why it's defined
@@ -68,37 +74,42 @@ function phorum_htmlpurifier_format($data)
             
             // create the $body variable
             if (
+                $message_id && // message must be real to migrate
                 !isset($message['meta']['body_cache_serial'])
             ) {
                 // perform migration
                 $fake_data = array();
+                list($signature, $edit_message) = phorum_htmlpurifier_remove_sig_and_editmessage($message);
                 $fake_data[$message_id] = $message;
                 $fake_data = phorum_htmlpurifier_migrate($fake_data);
                 $body = $fake_data[$message_id]['body'];
                 $body = str_replace("<phorum break>", '', $body);
                 $updated_message['body'] = $body; // save it in
+                $body .= $signature . $edit_message; // add it back in
             } else {
                 // reverse Phorum's pre-processing
                 $body = $message['body'];
                 // order is important
-                $body = str_replace(array('&lt;','&gt;','&amp;'), array('<','>','&'), $body);
                 $body = str_replace("<phorum break>\n", "\n", $body);
+                $body = str_replace(array('&lt;','&gt;','&amp;'), array('<','>','&'), $body);
             }
             
             $body = $purifier->purify($body);
             
-            // dynamically update the cache
-            // this is inefficient on the first read, but the cache
-            // catches will more than make up for it
+            // dynamically update the cache (MUST BE DONE HERE!)
+            // this is inefficient because it's one db call per
+            // cache miss, but once the cache is in place things are
+            // a lot zippier.
             
-            // this should ONLY be called on read, for posting and preview
-            // phorum_htmlpurifier_posting should do the trick
-            $updated_message['meta'] = $message['meta'];
-            $updated_message['meta']['body_cache'] = base64_encode($body);
-            $updated_message['meta']['body_cache_serial'] = $cache_serial;
-            phorum_db_update_message($message_id, $updated_message);
+            if ($message_id) { // make sure it's not a fake id
+                $updated_message['meta'] = $message['meta'];
+                $updated_message['meta']['body_cache'] = base64_encode($body);
+                $updated_message['meta']['body_cache_serial'] = $cache_serial;
+                phorum_db_update_message($message_id, $updated_message);
+            }
             
-            // must not get overloaded until after we cache it
+            // must not get overloaded until after we cache it, otherwise
+            // we'll inadvertently change the original text
             $data[$message_id]['body'] = $body;
             
         }
@@ -107,16 +118,65 @@ function phorum_htmlpurifier_format($data)
     return $data;
 }
 
+// -----------------------------------------------------------------------
+// This is fragile code, copied from read.php:359. It will break if
+// that is changed
+
 /**
- * Generate necessary cache and serial entries when a posting action happens
+ * Generates a signature based on a message array
+ */
+function phorum_htmlpurifier_generate_sig($row) {
+    $phorum_sig = '';
+    if(isset($row["user"]["signature"])
+       && isset($row['meta']['show_signature']) && $row['meta']['show_signature']==1){
+           $phorum_sig=trim($row["user"]["signature"]);
+           if(!empty($phorum_sig)){
+               $phorum_sig="\n\n$phorum_sig";
+           }
+    }
+    return $phorum_sig;
+}
+
+/**
+ * Generates an edit message based on a message array
+ */
+function phorum_htmlpurifier_generate_editmessage($row) {
+    $PHORUM = $GLOBALS['PHORUM'];
+    $editmessage = '';
+    if(isset($row['meta']['edit_count']) && $row['meta']['edit_count'] > 0) {
+        $editmessage = str_replace ("%count%", $row['meta']['edit_count'], $PHORUM["DATA"]["LANG"]["EditedMessage"]);
+        $editmessage = str_replace ("%lastedit%", phorum_date($PHORUM["short_date"],$row['meta']['edit_date']),  $editmessage);
+        $editmessage = str_replace ("%lastuser%", $row['meta']['edit_username'],  $editmessage);
+        $editmessage="\n\n\n\n$editmessage";
+    }
+    return $editmessage;
+}
+
+// End fragile code
+// -----------------------------------------------------------------------
+
+/**
+ * Removes the signature and edit message from a message
+ * @param $row Message passed by reference
+ */
+function phorum_htmlpurifier_remove_sig_and_editmessage(&$row) {
+    // attempt to remove the Phorum's pre-processing:
+    // we must not process the signature or editmessage
+    $signature = phorum_htmlpurifier_generate_sig($row);
+    $editmessage = phorum_htmlpurifier_generate_editmessage($row);
+    $row['body'] = strtr($row['body'], array($signature => '', $editmessage => ''));
+    return array($signature, $editmessage);
+}
+
+/**
+ * Indicate that data is fully HTML and not from migration, invalidate
+ * previous caches
+ * @note This function used to generate the actual cache entries, but
+ * since there's data missing that must be deferred to the first read
  */
 function phorum_htmlpurifier_posting($message) {
     $PHORUM = $GLOBALS["PHORUM"];
-    $fake_data = array($message);
-    // this is a temporary attribute
-    $fake_data[0]['meta']['htmlpurifier_light'] = true; // only purify, please
-    list($changed_message) = phorum_hook('format', $fake_data);
-    $message['meta']['body_cache'] = base64_encode($changed_message['body']);
+    unset($message['meta']['body_cache']); // invalidate the cache
     $message['meta']['body_cache_serial'] = $PHORUM['mod_htmlpurifier']['body_cache_serial'];
     return $message;
 }
@@ -205,6 +265,8 @@ function phorum_htmlpurifier_before_editor($message) {
 }
 
 function phorum_htmlpurifier_editor_after_subject() {
+    // don't show this message if it's a WYSIWYG editor, since it will
+    // then be handled automatically
     if (!empty($GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'])) return;
     ?><tr><td colspan="2" style="padding:1em 0.3em;">
   HTML input is <strong>on</strong>. Make sure you escape all HTML and
