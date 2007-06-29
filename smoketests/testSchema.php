@@ -37,3 +37,7 @@ HTMLPurifier_ConfigSchema::defineNamespace('ReportCard', 'It is for grades.');
 HTMLPurifier_ConfigSchema::define('ReportCard', 'English', null, 'string/null', 'Grade from English class.');
 HTMLPurifier_ConfigSchema::define('ReportCard', 'Absences', 0, 'int', 'How many times missing from school?');
 
+HTMLPurifier_ConfigSchema::defineNamespace('Text', 'This stuff is long, boring, and English.');
+HTMLPurifier_ConfigSchema::define('Text', 'AboutUs', 'Nothing much, but this should be decently long so that a textarea would be better', 'text', 'Who are we? What are we up to?');
+HTMLPurifier_ConfigSchema::define('Text', 'Hash', "not-case-sensitive\nstill-not-case-sensitive\nsuper-not-case-sensitive", 'itext', 'This is of limited utility, but of course it ends up being used.');
+

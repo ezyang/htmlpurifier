@@ -25,6 +25,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   longer strings that would be more appropriately edited with a textarea
 . Allow newlines to act as separators for lists, hashes, lookups and
   %HTML.Allowed
+. ConfigForm generates textareas instead of text inputs for lists, hashes,
+  lookups, text and itext fields
 
 2.0.2, unknown release date
 (none)
