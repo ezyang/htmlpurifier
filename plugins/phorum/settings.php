@@ -115,6 +115,8 @@ if ($config_exists) {
     
     require_once 'HTMLPurifier/Printer/ConfigForm.php';
     $htmlpurifier_form = new HTMLPurifier_Printer_ConfigForm('config', 'http://htmlpurifier.org/live/configdoc/plain.html#%s');
+    $htmlpurifier_form->setTextareaDimensions(23, 7); // widen a little, since we have space
+    
     $frm->addMessage($htmlpurifier_form->render($config, $directives, false));
 
     $frm->addMessage($warning);

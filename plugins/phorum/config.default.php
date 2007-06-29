@@ -4,18 +4,47 @@ if(!defined("PHORUM")) exit;
 
 // default HTML Purifier configuration settings
 $config->set('HTML', 'Allowed',
-  // definitely needed
-  'a[href|title],blockquote[cite],b,pre,i,p,'.
-  // common semantic markup
-  'del,ins,strong,em,'.
-  // commmon presentational markup
-  's,strike,sub,sup,u,br,tt,div[class],img[src|alt|title|class],'. // div because bbcode [quote] uses it, img for smileys
-  // uncommon semantic markup
-  'abbr[title],acronym[title],caption,code,dfn,cite,kbd,var,'.
-  // lists
-  'dd,dl,dt,ul,li,ol,'.
-  // tables
-  'table,tr,tbody,thead,tfoot,td,th');
+  // alphabetically sorted
+'a[href|title]
+abbr[title]
+acronym[title]
+b
+blockquote[cite]
+br
+caption
+cite
+code
+dd
+del
+dfn
+div
+dl
+dt
+em
+i
+img[src|alt|title|class]
+ins
+kbd
+li
+ol
+p
+pre
+s
+strike
+strong
+sub
+sup
+table
+tbody
+td
+tfoot
+th
+thead
+tr
+tt
+u
+ul
+var');
 $config->set('AutoFormat', 'AutoParagraph', true);
 $config->set('AutoFormat', 'Linkify', true);
 $config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');
