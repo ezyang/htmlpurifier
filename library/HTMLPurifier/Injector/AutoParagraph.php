@@ -166,7 +166,14 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         $needs_start = false;
         $needs_end   = false;
         
-        for ($i = 0, $c = count($raw_paragraphs); $i < $c; $i++) {
+        $c = count($raw_paragraphs);
+        if ($c == 1) {
+            // there were no double-newlines, abort quickly
+            $result[] = new HTMLPurifier_Token_Text($data);
+            return;
+        }
+        
+        for ($i = 0; $i < $c; $i++) {
             $par = $raw_paragraphs[$i];
             if (trim($par) !== '') {
                 $paragraphs[] = $par;

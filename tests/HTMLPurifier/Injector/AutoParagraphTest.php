@@ -261,6 +261,11 @@ Par1
 '<div><div>asdf</div><p><b>asdf</b></p></div>'
         );
         
+        $this->assertResult(
+'<b>One</b> <i>Two</i>',
+'<p><b>One</b> <i>Two</i></p>'
+        );
+        
     }
     
     function testInlineRootNode() {
