@@ -59,6 +59,12 @@ class HTMLPurifier_Lexer_DirectLexTest extends UnitTestCase
         $input[12] = '="" =""';
         $expect[12] = array('"' => ''); // tough to say, just don't throw a loop
         
+        $input[13] = 'href="';
+        $expect[13] = array('href' => '');
+        
+        $input[14] = 'href=" <';
+        $expect[14] = array('href' => ' <');
+        
         $config = HTMLPurifier_Config::createDefault();
         $context = new HTMLPurifier_Context();
         $size = count($input);

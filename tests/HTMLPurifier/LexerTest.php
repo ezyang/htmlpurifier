@@ -335,10 +335,21 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         // test escaping
         $input[23] = '<!-- This comment < &lt; & -->';
         $expect[23] = array(
-            new HTMLPurifier_Token_Comment(' This comment < &lt; & ')
+            new HTMLPurifier_Token_Comment(' This comment < &lt; & ') );
+        $sax_expect[23] = false; $config[23] =
+        HTMLPurifier_Config::create(array('Core.AggressivelyFixLt' =>
+        true));
+        
+        // more DirectLex edge-cases 
+        $input[24] = '<a href="><>">';
+        $expect[24] = array(
+            new HTMLPurifier_Token_Start('a', array('href' => '')),
+            new HTMLPurifier_Token_Text('<">')
         );
-        $sax_expect[23] = false;
-        $config[21] = HTMLPurifier_Config::create(array('Core.AggressivelyFixLt' => true));
+        $sax_expect[24] = false;
+        $dom_expect[24] = array(
+            new HTMLPurifier_Token_Empty('a', array('href' => '><>'))
+        );
         
         $default_config = HTMLPurifier_Config::createDefault();
         $default_context = new HTMLPurifier_Context();
