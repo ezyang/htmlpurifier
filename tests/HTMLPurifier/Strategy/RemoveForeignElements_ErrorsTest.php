@@ -48,8 +48,8 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
         $this->invoke('<!-- test -->');
     }
     
-    function testScriptRemoved() {
-        $this->collector->expectAt(0, 'send', array(E_ERROR, 'Strategy_RemoveForeignElements: Script removed'));
+    function testForeignMetaElementRemoved() {
+        $this->collector->expectAt(0, 'send', array(E_ERROR, 'Strategy_RemoveForeignElements: Foreign meta element removed'));
         $this->collector->expectContextAt(0, 'CurrentToken', new HTMLPurifier_Token_Start('script', array(), 1));
         $this->collector->expectAt(1, 'send', array(E_ERROR, 'Strategy_RemoveForeignElements: Token removed to end', 'script'));
         $this->invoke('<script>asdf');

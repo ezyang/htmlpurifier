@@ -31,6 +31,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   %HTML.Allowed
 . ConfigForm generates textareas instead of text inputs for lists, hashes,
   lookups, text and itext fields
+. Hidden element content removal genericized: %Core.HiddenElements can
+  be used to customize this behavior, by default <script> and <style> are
+  hidden
 
 2.0.1, released 2007-06-27
 ! Tag auto-closing now based on a ChildDef heuristic rather than a

@@ -31,9 +31,20 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest
         );
         
         $this->assertResult(
+            '<style>.foo {blink;}</style>',
+            ''
+        );
+        
+        $this->assertResult(
             '<script>alert();</script>',
             'alert();',
             array('Core.RemoveScriptContents' => false)
+        );
+        
+        $this->assertResult(
+            '<script>alert();</script>',
+            'alert();',
+            array('Core.HiddenElements' => array())
         );
         
         $this->assertResult(
