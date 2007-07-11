@@ -122,7 +122,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                 } else {
                     // check if we need to destroy all of the tag's children
                     // CAN BE GENERICIZED
-                    if ($token->name == 'script' && $remove_script_contents) {
+                    if (($token->name == 'script' && $remove_script_contents) || $token->name == 'style') {
                         if ($token->type == 'start') {
                             $remove_until = $token->name;
                         } elseif ($token->type == 'empty') {

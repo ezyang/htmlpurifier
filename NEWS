@@ -18,6 +18,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   need are not allowed
 - ConfigForm's compactification of directive names is now configurable
 - AutoParagraph autoformatter algorithm refined after field-testing
+- XHTML 1.1 now applies XHTML 1.0 Strict cleanup routines, namely
+  blockquote wrapping
+- Contents of <style> tags removed by default when tags are removed
 . HTMLPurifier_Config->getSerial() implemented, this is extremely useful
   for output cache invalidation
 . ConfigForm printer now can retrieve CSS and JS files as strings, in
@@ -28,9 +31,6 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   %HTML.Allowed
 . ConfigForm generates textareas instead of text inputs for lists, hashes,
   lookups, text and itext fields
-
-2.0.2, unknown release date
-(none)
 
 2.0.1, released 2007-06-27
 ! Tag auto-closing now based on a ChildDef heuristic rather than a
