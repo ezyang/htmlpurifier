@@ -17,8 +17,7 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $config_md5   = '1.0.0-serial-2';
         
         $file = realpath(
-            $rel_file = dirname(__FILE__) .
-            '/../../../library/HTMLPurifier/DefinitionCache/Serializer/Test/' .
+            $rel_file = HTMLPURIFIER_PREFIX . '/HTMLPurifier/DefinitionCache/Serializer/Test/' .
             $config_md5 . '.ser'
         );
         if($file && file_exists($file)) unlink($file); // prevent previous failures from causing problems

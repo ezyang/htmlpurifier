@@ -14,6 +14,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! With %Core.AggressivelyFixLt, <3 and similar emoticons no longer
   trigger HTML removal in PHP5 (DOMLex). This directive is not necessary
   for PHP4 (DirectLex).
+! Standalone file now available, which greatly reduces the amount of
+  includes (although there are still a few files that reside in the
+  standalone folder)
 - AutoFormatters emit friendly error messages if tags or attributes they
   need are not allowed
 - ConfigForm's compactification of directive names is now configurable
@@ -34,6 +37,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Hidden element content removal genericized: %Core.HiddenElements can
   be used to customize this behavior, by default <script> and <style> are
   hidden
+. Added HTMLPURIFIER_PREFIX constant, should be used instead of dirname(__FILE__)
+. Custom ChildDef added to default include list
+. URIScheme reflection improved: will not attempt to include file if class
+  already exists. May clobber autoload, so I need to keep an eye on it
 
 2.0.1, released 2007-06-27
 ! Tag auto-closing now based on a ChildDef heuristic rather than a

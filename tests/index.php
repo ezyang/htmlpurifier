@@ -38,7 +38,13 @@ if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {
 }
 
 // initialize and load HTML Purifier
-require_once '../library/HTMLPurifier.auto.php';
+// use ?standalone to load the alterative standalone stub
+if (isset($_GET['standalone']) || (isset($argv[1]) && $argv[1] == 'standalone')) {
+    set_include_path(realpath('blanks') . PATH_SEPARATOR . get_include_path());
+    require_once '../library/HTMLPurifier.standalone.php';
+} else {
+    require_once '../library/HTMLPurifier.auto.php';
+}
 
 // setup special DefinitionCacheFactory decorator
 $factory =& HTMLPurifier_DefinitionCacheFactory::instance();

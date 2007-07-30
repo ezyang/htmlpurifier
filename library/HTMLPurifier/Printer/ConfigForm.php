@@ -59,14 +59,14 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
      * available
      */
     function getCSS() {
-        return file_get_contents(dirname(__FILE__) . '/ConfigForm.css');
+        return file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/Printer/ConfigForm.css');
     }
     
     /**
      * Retrieves JavaScript, in case directory is not public
      */
     function getJavaScript() {
-        return file_get_contents(dirname(__FILE__) . '/ConfigForm.js');
+        return file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/Printer/ConfigForm.js');
     }
     
     /**

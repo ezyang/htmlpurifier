@@ -40,6 +40,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+// constants are slow, but we'll make one exception
+define('HTMLPURIFIER_PREFIX', dirname(__FILE__));
+
 // almost every class has an undocumented dependency to these, so make sure
 // they get included
 require_once 'HTMLPurifier/ConfigSchema.php'; // important
