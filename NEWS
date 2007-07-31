@@ -41,6 +41,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Custom ChildDef added to default include list
 . URIScheme reflection improved: will not attempt to include file if class
   already exists. May clobber autoload, so I need to keep an eye on it
+. ConfigSchema heavily optimized, will only collect information and validate
+  definitions when HTMLPURIFIER_SCHEMA_STRICT is true.
 
 2.0.1, released 2007-06-27
 ! Tag auto-closing now based on a ChildDef heuristic rather than a

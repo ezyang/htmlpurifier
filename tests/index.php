@@ -5,6 +5,7 @@
 
 error_reporting(E_ALL);
 define('HTMLPurifierTest', 1);
+define('HTMLPURIFIER_SCHEMA_STRICT', true);
 
 // wishlist: automated calling of this file from multiple PHP versions so we
 // don't have to constantly switch around

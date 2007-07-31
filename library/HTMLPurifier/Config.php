@@ -106,7 +106,6 @@ class HTMLPurifier_Config
         $ret = HTMLPurifier_Config::createDefault();
         if (is_string($config)) $ret->loadIni($config);
         elseif (is_array($config)) $ret->loadArray($config);
-        if (isset($revision)) $ret->revision = $revision;
         return $ret;
     }
     
