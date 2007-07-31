@@ -175,16 +175,15 @@ create_blank('HTMLPurifier.php');
 
 echo 'Creating full file...';
 $contents = replace_includes(file_get_contents('HTMLPurifier.php'));
-file_put_contents('HTMLPurifier.standalone.php', $contents);
-echo ' done!' . PHP_EOL;
-
-echo 'Creating standalone directory...';
-// rearrange things that can't be put in our standalone file
 $contents = str_replace(
     "define('HTMLPURIFIER_PREFIX', dirname(__FILE__));",
     "define('HTMLPURIFIER_PREFIX', dirname(__FILE__) . '/standalone');",
     $contents
 );
+file_put_contents('HTMLPurifier.standalone.php', $contents);
+echo ' done!' . PHP_EOL;
+
+echo 'Creating standalone directory...';
 rmdirr('standalone'); // ensure a clean copy
 mkdir_deep('standalone/HTMLPurifier/DefinitionCache/Serializer');
 make_dir_standalone('HTMLPurifier/EntityLookup');
