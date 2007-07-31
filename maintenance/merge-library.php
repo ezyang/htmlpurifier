@@ -53,7 +53,13 @@ function mkdir_deep($folder) {
     $folders = preg_split("#[\\\\/]#", $folder);
     $base = '';
     for($i = 0, $c = count($folders); $i < $c; $i++) {
-        if(empty($folders[$i])) continue;
+        if(empty($folders[$i])) {
+            if (!$i) {
+                // special case for root level
+                $base .= DIRECTORY_SEPARATOR;
+            }
+            continue;
+        }
         $base .= $folders[$i];
         if(!is_dir($base)){
             mkdir($base);
