@@ -134,7 +134,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         $matches = array();
         $result = preg_match($r_URI, $uri, $matches);
         
-        if (!$result) return false; // invalid URI
+        if (!$result) return false; // *really* invalid URI
         
         // seperate out parts
         $scheme     = !empty($matches[1]) ? $matches[2] : null;
@@ -146,6 +146,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         
         
         $registry =& HTMLPurifier_URISchemeRegistry::instance();
+        $default_scheme = $config->get('URI', 'DefaultScheme');
         if ($scheme !== null) {
             // no need to validate the scheme's fmt since we do that when we
             // retrieve the specific scheme object from the registry
@@ -154,7 +155,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             if (!$scheme_obj) return false; // invalid scheme, clean it out
         } else {
             $scheme_obj = $registry->getScheme(
-                $config->get('URI', 'DefaultScheme'), $config, $context
+                $default_scheme, $config, $context
             );
         }
         
@@ -175,6 +176,8 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         
         
         if ($authority !== null) {
+            
+            // ridiculously inefficient
             
             // remove URI if it's absolute and we disabled externals or
             // if it's absolute and embedded and we disabled external resources
@@ -259,6 +262,8 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             if($userinfo !== null) $authority .= $userinfo . '@';
             $authority .= $host;
             if($port !== null) $authority .= ':' . $port;
+        } else {
+            if ($default_scheme == $scheme) $scheme = null; // munge scheme off when unnecessary
         }
         
         // reconstruct the result

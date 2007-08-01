@@ -90,6 +90,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   doctype use new %HTML.CustomDoctype
 . ConfigForm truncates long directives to keep the form small, and does
   not re-output namespaces
+. URI scheme is munged off if there is no authority and the scheme is the
+  default one
 
 2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety

@@ -183,12 +183,9 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         );
     }
     
-    // scheme munging (i.e. removal when unnecessary) not implemented
-    
     function testParsingPathAbsolute() { // note this is different from path-rootless
         $this->assertParsing(
             'http:/this/is/path',
-            // do not munge scheme off
             null, null, null, '/this/is/path', null
         );
     }
@@ -199,7 +196,6 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
             'http:this/is/path',
             null, null, null, 'this/is/path', null
         );
-        // TODO: scheme should be munged off
     }
     
     function testParsingPathEmpty() {
@@ -207,7 +203,6 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
             'http:',
             null, null, null, '', null
         );
-        // TODO: scheme should be munged off
     }
     
     function testParsingRelativeURI() {
@@ -229,30 +224,65 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
             '',
             null, null, null, '', null
         );
-        // TODO: should be returned unharmed
     }
     
     // OUTPUT RELATED TESTS
+    // scheme is mocked to ensure only the URI is being tested
     
-    function assertOutput($expect_uri, $userinfo, $host, $port, $path, $query, $config = null, $context = null) {
+    function assertOutput($input_uri, $expect_uri, $userinfo, $host, $port, $path, $query, $config = null, $context = null) {
         
         // prepare mock machinery
         $this->prepareCommon($config, $context);
         $scheme =& $this->generateSchemeMock();
-        $components = array($userinfo, $host, $port, $path, $query, '*', '*');
+        $components = array($userinfo, $host, $port, $path, $query);
         $scheme->setReturnValue('validateComponents', $components);
         
-        // dummy URI is passed as input, MUST NOT HAVE FRAGMENT
         $def = new HTMLPurifier_AttrDef_URI();
-        $result_uri = $def->validate('http://example.com/', $config, $context);
+        $result_uri = $def->validate($input_uri, $config, $context);
+        if ($expect_uri === true) $expect_uri = $input_uri;
         $this->assertEqual($result_uri, $expect_uri);
         
     }
     
     function testOutputRegular() {
         $this->assertOutput(
-            'http://user@authority.part:8080/now/the/path?query',
+            'http://user@authority.part:8080/now/the/path?query#frag', true,
             'user', 'authority.part', 8080, '/now/the/path', 'query'
+        );
+    }
+    
+    function testOutputEmpty() {
+        $this->assertOutput(
+            '', true,
+            null, null, null, '', null
+        );
+    }
+    
+    function testOutputNullPath() {
+        $this->assertOutput(
+            '', true,
+            null, null, null, null, null // usually shouldn't happen
+        );
+    }
+    
+    function testOutputPathAbsolute() { 
+        $this->assertOutput(
+            'http:/this/is/path', '/this/is/path',
+            null, null, null, '/this/is/path', null
+        );
+    }
+    
+    function testOutputPathRootless() {
+        $this->assertOutput(
+            'http:this/is/path', 'this/is/path',
+            null, null, null, 'this/is/path', null
+        );
+    }
+    
+    function testOutputPathEmpty() {
+        $this->assertOutput(
+            'http:', '',
+            null, null, null, '', null
         );
     }
     
@@ -260,6 +290,8 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
     
     function testIntegration() {
         $this->assertDef('http://www.google.com/');
+        $this->assertDef('http:', '');
+        $this->assertDef('http:/foo', '/foo');
         $this->assertDef('javascript:bad_stuff();', false);
         $this->assertDef('ftp://www.example.com/');
         $this->assertDef('news:rec.alt');
@@ -336,7 +368,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
     }
     
     function testWhitelist() {
-        /*
+        /* unimplemented
         $this->config->set('URI', 'HostPolicy', 'DenyAll');
         $this->config->set('URI', 'HostWhitelist', array(null, 'google.com'));
         
