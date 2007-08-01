@@ -240,16 +240,12 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->prepareCommon($config, $context);
         $scheme =& $this->generateSchemeMock();
         $components = array($userinfo, $host, $port, $path, $query, '*', '*');
-        $scheme->expectOnce('validateComponents');
         $scheme->setReturnValue('validateComponents', $components);
         
-        $def = new HTMLPurifier_AttrDef_URI();
         // dummy URI is passed as input, MUST NOT HAVE FRAGMENT
+        $def = new HTMLPurifier_AttrDef_URI();
         $result_uri = $def->validate('http://example.com/', $config, $context);
-        
         $this->assertEqual($result_uri, $expect_uri);
-        
-        $scheme->tally();
         
     }
     
