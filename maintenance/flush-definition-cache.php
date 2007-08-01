@@ -10,14 +10,18 @@ if (php_sapi_name() != 'cli') {
     exit;
 }
 
-echo 'Flushing cache... ';
+echo "Flushing cache... \n";
 
 require_once(dirname(__FILE__) . '/../library/HTMLPurifier.auto.php');
 
 $config = HTMLPurifier_Config::createDefault();
 
-$cache = new HTMLPurifier_DefinitionCache_Serializer('HTML');
-$cache->flush($config);
+$names = array('HTML', 'CSS', 'Test');
+foreach ($names as $name) {
+    echo " - Flushing $name\n";
+    $cache = new HTMLPurifier_DefinitionCache_Serializer($name);
+    $cache->flush($config);
+}
 
 echo 'Cache flushed successfully.';
 

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/AttrDef.php';
+require_once 'HTMLPurifier/URIParser.php';
 require_once 'HTMLPurifier/URIScheme.php';
 require_once 'HTMLPurifier/URISchemeRegistry.php';
 require_once 'HTMLPurifier/AttrDef/URI/Host.php';
@@ -92,7 +93,7 @@ HTMLPurifier_ConfigSchema::defineAlias('Attr', 'DisableURI', 'URI', 'Disable');
 class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
 {
     
-    var $host;
+    var $host, $parser;
     var $embeds_resource;
     
     /**
@@ -100,6 +101,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
      */
     function HTMLPurifier_AttrDef_URI($embeds_resource = false) {
         $this->host = new HTMLPurifier_AttrDef_URI_Host();
+        $this->parser = new HTMLPurifier_URIParser();
         $this->embeds_resource = (bool) $embeds_resource;
     }
     
@@ -108,43 +110,18 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         static $PercentEncoder = null;
         if ($PercentEncoder === null) $PercentEncoder = new HTMLPurifier_PercentEncoder();
         
-        // We'll write stack-based parsers later, for now, use regexps to
-        // get things working as fast as possible (irony)
-        
         if ($config->get('URI', 'Disable')) return false;
         
-        // parse as CDATA
+        // initial operations
         $uri = $this->parseCDATA($uri);
-        
-        // fix up percent-encoding
         $uri = $PercentEncoder->normalize($uri);
         
-        // while it would be nice to use parse_url(), that's specifically
-        // for HTTP and thus won't work for our generic URI parsing
+        // parse the URI
+        $parsed_uri = $this->parser->parse($uri);
+        if ($parsed_uri === false) return false;
+        list($scheme, $userinfo, $host, $port, $path, $query, $fragment) = $parsed_uri;
         
-        // according to the RFC... (but this cuts corners, i.e. non-validating)
-        $r_URI = '!'.
-            '(([^:/?#<>\'"]+):)?'. // 2. Scheme
-            '(//([^/?#<>\'"]*))?'. // 4. Authority
-            '([^?#<>\'"]*)'.       // 5. Path
-            '(\?([^#<>\'"]*))?'.   // 7. Query
-            '(#([^<>\'"]*))?'.     // 8. Fragment
-            '!';
-        
-        $matches = array();
-        $result = preg_match($r_URI, $uri, $matches);
-        
-        if (!$result) return false; // *really* invalid URI
-        
-        // seperate out parts
-        $scheme     = !empty($matches[1]) ? $matches[2] : null;
-        $authority  = !empty($matches[3]) ? $matches[4] : null;
-        $path       = $matches[5]; // always present, can be empty
-        $query      = !empty($matches[6]) ? $matches[7] : null;
-        $fragment   = !empty($matches[8]) ? $matches[9] : null;
-        
-        
-        
+        // retrieve the scheme object
         $registry =& HTMLPurifier_URISchemeRegistry::instance();
         $default_scheme = $config->get('URI', 'DefaultScheme');
         if ($scheme !== null) {
@@ -154,31 +131,25 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             $scheme_obj = $registry->getScheme($scheme, $config, $context);
             if (!$scheme_obj) return false; // invalid scheme, clean it out
         } else {
-            $scheme_obj = $registry->getScheme(
-                $default_scheme, $config, $context
-            );
+            // no scheme: retrieve the default one
+            $scheme_obj = $registry->getScheme($default_scheme, $config, $context);
+            if (!$scheme_obj) {
+                // something funky happened to the default scheme object
+                trigger_error(
+                    'Default scheme object "' . $config->get('URI', 'DefaultScheme') . '" was not readable',
+                    E_USER_WARNING
+                );
+                return false;
+            }
         }
-        
-        // something funky weird happened in the registry, abort!
-        if (!$scheme_obj) {
-            trigger_error(
-                'Default scheme object "' . $config->get('URI', 'DefaultScheme') . '" was not readable',
-                E_USER_WARNING
-            );
-            return false;
-        }
-        
-        // the URI we're processing embeds_resource a resource in the page, but the URI
-        // it references cannot be located
         if ($this->embeds_resource && !$scheme_obj->browsable) {
+            // the URI we're processing embeds_resource a resource in the 
+            // page, but the URI it references cannot be physically retrieved
             return false;
         }
         
-        
-        if ($authority !== null) {
-            
-            // ridiculously inefficient
-            
+        // validate host
+        if ($host !== null) {
             // remove URI if it's absolute and we disabled externals or
             // if it's absolute and embedded and we disabled external resources
             unset($our_host);
@@ -192,29 +163,10 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
                 $our_host = $config->get('URI', 'Host');
                 if ($our_host === null) return false;
             }
-            
-            $HEXDIG = '[A-Fa-f0-9]';
-            $unreserved = 'A-Za-z0-9-._~'; // make sure you wrap with []
-            $sub_delims = '!$&\'()'; // needs []
-            $pct_encoded = "%$HEXDIG$HEXDIG";
-            $r_userinfo = "(?:[$unreserved$sub_delims:]|$pct_encoded)*";
-            $r_authority = "/^(($r_userinfo)@)?(\[[^\]]+\]|[^:]*)(:(\d*))?/";
-            $matches = array();
-            preg_match($r_authority, $authority, $matches);
-            // overloads regexp!
-            $userinfo   = !empty($matches[1]) ? $matches[2] : null;
-            $host       = !empty($matches[3]) ? $matches[3] : null;
-            $port       = !empty($matches[4]) ? $matches[5] : null;
-            
-            // validate port
-            if ($port !== null) {
-                $port = (int) $port;
-                if ($port < 1 || $port > 65535) $port = null;
-            }
-            
             $host = $this->host->validate($host, $config, $context);
             if ($host === false) $host = null;
             
+            // check host against blacklist
             if ($this->checkBlacklist($host, $config, $context)) return false;
             
             // more lenient absolute checking
@@ -227,11 +179,11 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
                     if ($host_parts[$i] != $our_host_parts[$i]) return false;
                 }
             }
-            
-            // userinfo and host are validated within the regexp
-            
-        } else {
-            $port = $host = $userinfo = null;
+        }
+        
+        // validate port
+        if ($port !== null) {
+            if ($port < 1 || $port > 65535) $port = null;
         }
         
         

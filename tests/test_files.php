@@ -102,6 +102,7 @@ $test_files[] = 'HTMLPurifier/Strategy/RemoveForeignElements_ErrorsTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/ValidateAttributesTest.php';
 $test_files[] = 'HTMLPurifier/TagTransformTest.php';
 $test_files[] = 'HTMLPurifier/TokenTest.php';
+$test_files[] = 'HTMLPurifier/URIParserTest.php';
 $test_files[] = 'HTMLPurifier/URISchemeRegistryTest.php';
 $test_files[] = 'HTMLPurifier/URISchemeTest.php';
 $test_files[] = 'HTMLPurifierTest.php';

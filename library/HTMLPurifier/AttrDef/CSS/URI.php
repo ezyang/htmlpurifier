@@ -15,7 +15,7 @@ class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
 {
     
     function HTMLPurifier_AttrDef_CSS_URI() {
-        $this->HTMLPurifier_AttrDef_URI(true); // always embedded
+        parent::HTMLPurifier_AttrDef_URI(true); // always embedded
     }
     
     function validate($uri_string, $config, &$context) {

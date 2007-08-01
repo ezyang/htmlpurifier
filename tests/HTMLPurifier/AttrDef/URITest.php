@@ -66,48 +66,6 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         
     }
     
-    function testParsingRegular() {
-        $this->assertParsing(
-            'http://www.example.com/webhp?q=foo#result2',
-            null, 'www.example.com', null, '/webhp', 'q=foo'
-        );
-    }
-    
-    function testParsingPortAndUsername() {
-        $this->assertParsing(
-            'http://user@authority.part:80/now/the/path?query#fragment',
-            'user', 'authority.part', 80, '/now/the/path', 'query'
-        );
-    }
-    
-    function testParsingPercentEncoding() {
-        $this->assertParsing(
-            'http://en.wikipedia.org/wiki/Clich%C3%A9',
-            null, 'en.wikipedia.org', null, '/wiki/Clich%C3%A9', null
-        );
-    }
-    
-    function testParsingEmptyQuery() {
-        $this->assertParsing(
-            'http://www.example.com/?#',
-            null, 'www.example.com', null, '/', ''
-        );
-    }
-    
-    function testParsingEmptyPath() {
-        $this->assertParsing(
-            'http://www.example.com',
-            null, 'www.example.com', null, '', null
-        );
-    }
-    
-    function testParsingOpaqueURI() {
-        $this->assertParsing(
-            'mailto:bob@example.com',
-            null, null, null, 'bob@example.com', null
-        );
-    }
-    
     function testParsingImproperPercentEncoding() {
         // even though we don't resolve percent entities, we have to fix
         // improper percent-encodes. Taken one at a time:
@@ -125,38 +83,6 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         );
     }
     
-    function testParsingIPv4Address() {
-        $this->assertParsing(
-            'http://192.0.34.166/',
-            null, '192.0.34.166', null, '/', null
-        );
-    }
-    
-    function testParsingFakeIPv4Address() {
-        $this->assertParsing(
-            'http://333.123.32.123/',
-            null, '333.123.32.123', null, '/', null
-        );
-    }
-    
-    function testParsingIPv6Address() {
-        $this->assertParsing(
-            'http://[2001:db8::7]/c=GB?objectClass?one',
-            null, '[2001:db8::7]', null, '/c=GB', 'objectClass?one'
-        );
-    }
-    
-    // We will not implement punycode encoding, that's up to the browsers
-    // We also will not implement percent to IDNA encoding transformations:
-    // if you need to use an international domain in a link, make sure that
-    // you've got it in UTF-8 and send it in raw (no encoding).
-    function testParsingInternationalizedDomainName() {
-        $this->assertParsing(
-            "http://t\xC5\xABdali\xC5\x86.lv",
-            null, "t\xC5\xABdali\xC5\x86.lv", null, '', null
-        );
-    }
-    
     function testParsingInvalidHostThatLooksLikeIPv6Address() {
         $this->assertParsing(
             'http://[2001:0db8:85z3:08d3:1319:8a2e:0370:7334]',
@@ -164,60 +90,10 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         );
     }
     
-    function testParsingInvalidPort() {
-        $this->assertParsing(
-            'http://example.com:foobar',
-            null, 'example.com', null, '', null
-        );
-    }
-    
     function testParsingOverLargePort() {
         $this->assertParsing(
             'http://example.com:65536',
             null, 'example.com', null, '', null
-        );
-    }
-    
-    function testParsingPathAbsolute() { // note this is different from path-rootless
-        $this->assertParsing(
-            'http:/this/is/path',
-            null, null, null, '/this/is/path', null
-        );
-    }
-    
-    function testParsingPathRootless() {
-        // this should not be used but is allowed
-        $this->assertParsing(
-            'http:this/is/path',
-            null, null, null, 'this/is/path', null
-        );
-    }
-    
-    function testParsingPathEmpty() {
-        $this->assertParsing(
-            'http:',
-            null, null, null, '', null
-        );
-    }
-    
-    function testParsingRelativeURI() {
-        $this->assertParsing(
-            '/a/b',
-            null, null, null, '/a/b', null
-        );
-    }
-    
-    function testParsingMalformedTag() {
-        $this->assertParsing(
-            'http://www.google.com/\'>"',
-            null, 'www.google.com', null, '/', null
-        );
-    }
-    
-    function testParsingEmpty() {
-        $this->assertParsing(
-            '',
-            null, null, null, '', null
         );
     }
     
