@@ -8,7 +8,7 @@ Mock::generatePartial(
     array('performInclusions', 'expandIdentifiers')
 );
 
-class HTMLPurifier_AttrCollectionsTest extends UnitTestCase
+class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
 {
     
     function testConstruction() {

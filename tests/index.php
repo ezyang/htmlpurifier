@@ -21,6 +21,7 @@ require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
 require_once $simpletest_location . 'mock_objects.php';
 require_once 'HTMLPurifier/SimpleTest/Reporter.php';
+require_once 'HTMLPurifier/Harness.php';
 
 // load Debugger
 require_once 'Debugger.php';

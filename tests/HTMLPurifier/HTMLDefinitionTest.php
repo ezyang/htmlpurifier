@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/HTMLDefinition.php';
 
-class HTMLPurifier_HTMLDefinitionTest extends UnitTestCase
+class HTMLPurifier_HTMLDefinitionTest extends HTMLPurifier_Harness
 {
     
     function test_parseTinyMCEAllowedList() {

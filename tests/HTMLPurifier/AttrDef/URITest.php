@@ -27,11 +27,6 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         HTMLPurifier_URISchemeRegistry::instance($this->oldRegistry);
     }
     
-    function prepareCommon(&$config, &$context) {
-        $config = HTMLPurifier_Config::create($config);
-        if (!$context) $context = new HTMLPurifier_Context();
-    }
-    
     function &generateSchemeMock($scheme_names = array('http', 'mailto')) {
         generate_mock_once('HTMLPurifier_URIScheme');
         generate_mock_once('HTMLPurifier_URISchemeRegistry');

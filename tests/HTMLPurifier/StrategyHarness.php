@@ -1,8 +1,8 @@
 <?php
 
-require_once 'HTMLPurifier/Harness.php';
+require_once 'HTMLPurifier/ComplexHarness.php';
 
-class HTMLPurifier_StrategyHarness extends HTMLPurifier_Harness
+class HTMLPurifier_StrategyHarness extends HTMLPurifier_ComplexHarness
 {
     
     function setUp() {

@@ -1,6 +1,6 @@
 <?php
 
-class HTMLPurifier_AttrDefHarness extends UnitTestCase
+class HTMLPurifier_AttrDefHarness extends HTMLPurifier_Harness
 {
     
     var $def;

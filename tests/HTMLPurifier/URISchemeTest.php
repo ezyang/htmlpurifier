@@ -12,7 +12,7 @@ require_once 'HTMLPurifier/URIScheme/nntp.php';
 // WARNING: All the URI schemes are far to relaxed, we need to tighten
 // the checks.
 
-class HTMLPurifier_URISchemeTest extends UnitTestCase
+class HTMLPurifier_URISchemeTest extends HTMLPurifier_Harness
 {
     
     function test_http() {

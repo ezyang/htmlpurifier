@@ -48,6 +48,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   run the tests via command line
 . URI scheme is munged off if there is no authority and the scheme is the
   default one
+. All unit tests inherit from HTMLPurifier_Harness, not UnitTestCase
 
 2.0.1, released 2007-06-27
 ! Tag auto-closing now based on a ChildDef heuristic rather than a

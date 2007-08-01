@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/Language.php';
 
-class HTMLPurifier_LanguageTest extends UnitTestCase
+class HTMLPurifier_LanguageTest extends HTMLPurifier_Harness
 {
     
     var $lang;
