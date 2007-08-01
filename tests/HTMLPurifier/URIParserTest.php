@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/URIParser.php';
+require_once 'HTMLPurifier/URI.php';
 
 class HTMLPurifier_URIParserTest extends HTMLPurifier_Harness
 {
@@ -11,7 +12,8 @@ class HTMLPurifier_URIParserTest extends HTMLPurifier_Harness
         $this->prepareCommon($config, $context);
         $parser = new HTMLPurifier_URIParser();
         $result = $parser->parse($uri, $config, $context);
-        $this->assertEqual($result, array($scheme, $userinfo, $host, $port, $path, $query, $fragment));
+        $expect = new HTMLPurifier_URI($scheme, $userinfo, $host, $port, $path, $query, $fragment);
+        $this->assertEqual($result, $expect);
     }
     
     function testRegular() {

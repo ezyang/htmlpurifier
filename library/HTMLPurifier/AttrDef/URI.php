@@ -93,168 +93,57 @@ HTMLPurifier_ConfigSchema::defineAlias('Attr', 'DisableURI', 'URI', 'Disable');
 class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
 {
     
-    var $host, $parser;
-    var $embeds_resource;
+    var $parser, $percentEncoder;
+    var $embedsResource;
     
     /**
      * @param $embeds_resource_resource Does the URI here result in an extra HTTP request?
      */
     function HTMLPurifier_AttrDef_URI($embeds_resource = false) {
-        $this->host = new HTMLPurifier_AttrDef_URI_Host();
         $this->parser = new HTMLPurifier_URIParser();
-        $this->embeds_resource = (bool) $embeds_resource;
+        $this->percentEncoder = new HTMLPurifier_PercentEncoder();
+        $this->embedsResource = (bool) $embeds_resource;
     }
     
     function validate($uri, $config, &$context) {
-        
-        static $PercentEncoder = null;
-        if ($PercentEncoder === null) $PercentEncoder = new HTMLPurifier_PercentEncoder();
         
         if ($config->get('URI', 'Disable')) return false;
         
         // initial operations
         $uri = $this->parseCDATA($uri);
-        $uri = $PercentEncoder->normalize($uri);
+        $uri = $this->percentEncoder->normalize($uri);
         
         // parse the URI
-        $parsed_uri = $this->parser->parse($uri);
-        if ($parsed_uri === false) return false;
-        list($scheme, $userinfo, $host, $port, $path, $query, $fragment) = $parsed_uri;
+        $uri = $this->parser->parse($uri);
+        if ($uri === false) return false;
         
-        // retrieve the scheme object
-        $registry =& HTMLPurifier_URISchemeRegistry::instance();
-        $default_scheme = $config->get('URI', 'DefaultScheme');
-        if ($scheme !== null) {
-            // no need to validate the scheme's fmt since we do that when we
-            // retrieve the specific scheme object from the registry
-            $scheme = ctype_lower($scheme) ? $scheme : strtolower($scheme);
-            $scheme_obj = $registry->getScheme($scheme, $config, $context);
-            if (!$scheme_obj) return false; // invalid scheme, clean it out
-        } else {
-            // no scheme: retrieve the default one
-            $scheme_obj = $registry->getScheme($default_scheme, $config, $context);
-            if (!$scheme_obj) {
-                // something funky happened to the default scheme object
-                trigger_error(
-                    'Default scheme object "' . $config->get('URI', 'DefaultScheme') . '" was not readable',
-                    E_USER_WARNING
-                );
-                return false;
-            }
-        }
-        if ($this->embeds_resource && !$scheme_obj->browsable) {
-            // the URI we're processing embeds_resource a resource in the 
-            // page, but the URI it references cannot be physically retrieved
-            return false;
-        }
+        // generic validation
+        $context->register('EmbeddedURI', $this->embedsResource); // flag
+        $result = $uri->validate($config, $context);
+        $context->destroy('EmbeddedURI');
+        if (!$result) return false;
         
-        // validate host
-        if ($host !== null) {
-            // remove URI if it's absolute and we disabled externals or
-            // if it's absolute and embedded and we disabled external resources
-            unset($our_host);
-            if (
-                $config->get('URI', 'DisableExternal') ||
-                (
-                    $config->get('URI', 'DisableExternalResources') &&
-                    $this->embeds_resource
-                )
-            ) {
-                $our_host = $config->get('URI', 'Host');
-                if ($our_host === null) return false;
-            }
-            $host = $this->host->validate($host, $config, $context);
-            if ($host === false) $host = null;
-            
-            // check host against blacklist
-            if ($this->checkBlacklist($host, $config, $context)) return false;
-            
-            // more lenient absolute checking
-            if (isset($our_host)) {
-                $host_parts = array_reverse(explode('.', $host));
-                // could be cached
-                $our_host_parts = array_reverse(explode('.', $our_host));
-                foreach ($our_host_parts as $i => $discard) {
-                    if (!isset($host_parts[$i])) return false;
-                    if ($host_parts[$i] != $our_host_parts[$i]) return false;
-                }
-            }
-        }
+        // scheme-specific validation 
+        $scheme_obj = $uri->getSchemeObj($config, $context);
+        if (!$scheme_obj) return false;
+        if ($this->embedsResource && !$scheme_obj->browsable) return false;
+        $result = $scheme_obj->validate($uri, $config, $context);
+        if (!$result) return false;
         
-        // validate port
-        if ($port !== null) {
-            if ($port < 1 || $port > 65535) $port = null;
-        }
-        
-        
-        // query and fragment are quite simple in terms of definition:
-        // *( pchar / "/" / "?" ), so define their validation routines
-        // when we start fixing percent encoding
-        
-        
-        
-        // path gets to be validated against a hodge-podge of rules depending
-        // on the status of authority and scheme, but it's not that important,
-        // esp. since it won't be applicable to everyone
-        
-        
-        
-        // okay, now we defer execution to the subobject for more processing
-        // note that $fragment is omitted
-        list($userinfo, $host, $port, $path, $query) = 
-            $scheme_obj->validateComponents(
-                $userinfo, $host, $port, $path, $query, $config, $context
-            );
-        
-        
-        // reconstruct authority
-        $authority = null;
-        if (!is_null($userinfo) || !is_null($host) || !is_null($port)) {
-            $authority = '';
-            if($userinfo !== null) $authority .= $userinfo . '@';
-            $authority .= $host;
-            if($port !== null) $authority .= ':' . $port;
-        } else {
-            if ($default_scheme == $scheme) $scheme = null; // munge scheme off when unnecessary
-        }
-        
-        // reconstruct the result
-        $result = '';
-        if ($scheme !== null) $result .= "$scheme:";
-        if ($authority !== null) $result .= "//$authority";
-        $result .= $path;
-        if ($query !== null) $result .= "?$query";
-        if ($fragment !== null) $result .= "#$fragment";
+        // back to string
+        $result = $uri->toString();
         
         // munge if necessary
-        $munge = $config->get('URI', 'Munge');
-        if (!empty($scheme_obj->browsable) && $munge !== null) {
-            if ($authority !== null) {
-                $result = str_replace('%s', rawurlencode($result), $munge);
-            }
+        if (
+            !is_null($uri->host) && // indicator for authority
+            !empty($scheme_obj->browsable) &&
+            !is_null($munge = $config->get('URI', 'Munge'))
+        ) {
+            $result = str_replace('%s', rawurlencode($result), $munge);
         }
         
         return $result;
         
-    }
-    
-    /**
-     * Checks a host against an array blacklist
-     * @param $host Host to check
-     * @param $config HTMLPurifier_Config instance
-     * @param $context HTMLPurifier_Context instance
-     * @return bool Is spam?
-     */
-    function checkBlacklist($host, &$config, &$context) {
-        $blacklist = $config->get('URI', 'HostBlacklist');
-        if (!empty($blacklist)) {
-            foreach($blacklist as $blacklisted_host_fragment) {
-                if (strpos($host, $blacklisted_host_fragment) !== false) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
     
 }

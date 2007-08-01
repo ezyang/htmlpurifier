@@ -105,6 +105,7 @@ $test_files[] = 'HTMLPurifier/TokenTest.php';
 $test_files[] = 'HTMLPurifier/URIParserTest.php';
 $test_files[] = 'HTMLPurifier/URISchemeRegistryTest.php';
 $test_files[] = 'HTMLPurifier/URISchemeTest.php';
+$test_files[] = 'HTMLPurifier/URITest.php';
 $test_files[] = 'HTMLPurifierTest.php';
 
 if (version_compare(PHP_VERSION, '5', '>=')) {

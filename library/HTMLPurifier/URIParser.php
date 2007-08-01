@@ -1,8 +1,11 @@
 <?php
 
+require_once 'HTMLPurifier/URI.php';
+
 /**
  * Parses a URI into the components and fragment identifier as specified
  * by RFC 2396.
+ * @todo Replace regexps with a native PHP parser
  */
 class HTMLPurifier_URIParser
 {
@@ -10,7 +13,7 @@ class HTMLPurifier_URIParser
     /**
      * Parses a URI
      * @param $uri string URI to parse
-     * @return array(userinfo, host, int port, path, query, fragment) components
+     * @return HTMLPurifier_URI representation of URI
      */
     function parse($uri) {
         $r_URI = '!'.
@@ -51,7 +54,8 @@ class HTMLPurifier_URIParser
             $port = $host = $userinfo = null;
         }
         
-        return array($scheme, $userinfo, $host, $port, $path, $query, $fragment);
+        return new HTMLPurifier_URI(
+            $scheme, $userinfo, $host, $port, $path, $query, $fragment);
     }
     
 }

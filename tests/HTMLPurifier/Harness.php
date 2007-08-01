@@ -10,9 +10,19 @@ class HTMLPurifier_Harness extends UnitTestCase
         parent::UnitTestCase();
     }
     
+    var $config, $context;
+    
+    function setUp() {
+        list($this->config, $this->context) = $this->createCommon();
+    }
+    
     function prepareCommon(&$config, &$context) {
         $config = HTMLPurifier_Config::create($config);
         if (!$context) $context = new HTMLPurifier_Context();
+    }
+    
+    function createCommon() {
+        return array(HTMLPurifier_Config::createDefault(), new HTMLPurifier_Context);
     }
     
 }
