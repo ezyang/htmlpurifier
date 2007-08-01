@@ -46,6 +46,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . AttrDef_URI unit tests refactored
 . benchmarks/ directory now protected from public view with .htaccess file;
   run the tests via command line
+. URI scheme is munged off if there is no authority and the scheme is the
+  default one
 
 2.0.1, released 2007-06-27
 ! Tag auto-closing now based on a ChildDef heuristic rather than a
@@ -90,8 +92,6 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   doctype use new %HTML.CustomDoctype
 . ConfigForm truncates long directives to keep the form small, and does
   not re-output namespaces
-. URI scheme is munged off if there is no authority and the scheme is the
-  default one
 
 2.0.0, released 2007-06-20
 # Completely refactored HTMLModuleManager, decentralizing safety
