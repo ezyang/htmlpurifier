@@ -43,6 +43,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   already exists. May clobber autoload, so I need to keep an eye on it
 . ConfigSchema heavily optimized, will only collect information and validate
   definitions when HTMLPURIFIER_SCHEMA_STRICT is true.
+. AttrDef_URI unit tests refactored
+. benchmarks/ directory now protected from public view with .htaccess file;
+  run the tests via command line
 
 2.0.1, released 2007-06-27
 ! Tag auto-closing now based on a ChildDef heuristic rather than a
