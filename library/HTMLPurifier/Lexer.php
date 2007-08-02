@@ -66,6 +66,16 @@ HTMLPurifier_ConfigSchema::define(
 </p>
 ');
 
+HTMLPurifier_ConfigSchema::define(
+    'Core', 'AggressivelyFixLt', false, 'bool', '
+This directive enables aggressive pre-filter fixes HTML Purifier can
+perform in order to ensure that open angled-brackets do not get killed
+during parsing stage. Enabling this will result in two preg_replace_callback
+calls and one preg_replace call for every bit of HTML passed through here.
+It is not necessary and will have no effect for PHP 4.
+This directive has been available since 2.1.0.
+');
+
 /**
  * Forgivingly lexes HTML (SGML-style) markup into tokens.
  * 
