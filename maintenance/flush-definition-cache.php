@@ -1,17 +1,14 @@
 #!/usr/bin/php
 <?php
 
+require_once 'common.php';
+assertCli();
+
 /**
  * Flushes the default HTMLDefinition serial cache
  * @param Accepts one argument, cache type to flush; otherwise flushes all
  *      the caches.
  */
-
-if (php_sapi_name() != 'cli' && !getenv('PHP_IS_CLI')) {
-    echo 'Script cannot be called from web-browser (if you are calling via cli,
-set environment variable PHP_IS_CLI to work around this).';
-    exit;
-}
 
 echo "Flushing cache... \n";
 
