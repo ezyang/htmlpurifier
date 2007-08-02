@@ -1,6 +1,9 @@
 #!/usr/bin/php
 <?php
 
+require_once 'common.php';
+assertCli();
+
 /**
  * Compiles all of HTML Purifier's library files into one big file
  * named HTMLPurifier.standalone.php. Operates recursively, and will
