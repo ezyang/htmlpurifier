@@ -151,22 +151,6 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
         }
     }
     
-    function test_validate_defaultSchemeRemovedInBlank() {
-        $this->assertValidation('http:', '');
-    }
-    
-    function test_validate_defaultSchemeRemovedInRelativeURI() {
-        $this->assertValidation('http:/foo/bar', '/foo/bar');
-    }
-    
-    function test_validate_defaultSchemeNotRemovedInAbsoluteURI() {
-        $this->assertValidation('http://example.com/foo/bar');
-    }
-    
-    function test_validate_altSchemeNotRemoved() {
-        $this->assertValidation('mailto:this-looks-like-a-path@example.com');
-    }
-    
     function test_validate_overlongPort() {
         $this->assertValidation('http://example.com:65536', 'http://example.com');
     }
@@ -176,7 +160,7 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
     }
     
     function test_validate_invalidHostThatLooksLikeIPv6() {
-        $this->assertValidation('http://[2001:0db8:85z3:08d3:1319:8a2e:0370:7334]', '');
+        $this->assertValidation('http://[2001:0db8:85z3:08d3:1319:8a2e:0370:7334]', 'http:');
     }
     
 }

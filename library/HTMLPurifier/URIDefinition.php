@@ -5,6 +5,16 @@ require_once 'HTMLPurifier/URIFilter.php';
 
 require_once 'HTMLPurifier/URIFilter/DisableExternal.php';
 require_once 'HTMLPurifier/URIFilter/DisableExternalResources.php';
+require_once 'HTMLPurifier/URIFilter/HostBlacklist.php';
+
+HTMLPurifier_ConfigSchema::define(
+    'URI', 'DefinitionID', null, 'string/null', '
+<p>
+    Unique identifier for a custom-built URI definition. If you  want
+    to add custom URIFilters, you must specify this value.
+    This directive has been available since 2.1.0.
+</p>
+');
 
 HTMLPurifier_ConfigSchema::define(
     'URI', 'DefinitionRev', 1, 'int', '
@@ -25,6 +35,7 @@ class HTMLPurifier_URIDefinition extends HTMLPurifier_Definition
     function HTMLPurifier_URIDefinition() {
         $this->registerFilter(new HTMLPurifier_URIFilter_DisableExternal());
         $this->registerFilter(new HTMLPurifier_URIFilter_DisableExternalResources());
+        $this->registerFilter(new HTMLPurifier_URIFilter_HostBlacklist());
     }
     
     function registerFilter($filter) {

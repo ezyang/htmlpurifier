@@ -48,14 +48,6 @@ HTMLPurifier_ConfigSchema::define(
 );
 
 HTMLPurifier_ConfigSchema::define(
-    'URI', 'HostBlacklist', array(), 'list',
-    'List of strings that are forbidden in the host of any URI. Use it to '.
-    'kill domain names of spam, etc. Note that it will catch anything in '.
-    'the domain, so <tt>moo.com</tt> will catch <tt>moo.com.example.com</tt>. '.
-    'This directive has been available since 1.3.0.'
-);
-
-HTMLPurifier_ConfigSchema::define(
     'URI', 'Disable', false, 'bool',
     'Disables all URIs in all forms. Not sure why you\'d want to do that '.
     '(after all, the Internet\'s founded on the notion of a hyperlink). '.
@@ -124,10 +116,17 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         $context->destroy('EmbeddedURI');
         if (!$ok) return false;
         
+        // munge scheme off if necessary (this must be last)
+        if (!is_null($uri->scheme) && is_null($uri->host)) {
+            if ($config->get('URI', 'DefaultScheme') == $uri->scheme) {
+                $uri->scheme = null;
+            }
+        }
+        
         // back to string
         $result = $uri->toString();
         
-        // munge if necessary
+        // munge entire URI if necessary
         if (
             !is_null($uri->host) && // indicator for authority
             !empty($scheme_obj->browsable) &&

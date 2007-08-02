@@ -2,6 +2,7 @@
 
 require_once 'HTMLPurifier/AttrDefHarness.php';
 require_once 'HTMLPurifier/AttrDef/URI.php';
+require_once 'HTMLPurifier/URIParser.php';
 
 /**
  * @todo Aim for complete code coverage with mocks
@@ -48,48 +49,34 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('javascript:foobar();', false);
     }
     
-    function test_validate_configDisableExternal() {
-        
-        $this->def = new HTMLPurifier_AttrDef_URI();
-        
-        $this->config->set('URI', 'DisableExternal', true);
-        $this->config->set('URI', 'Host', 'sub.example.com');
-        
-        $this->assertDef('/foobar.txt');
-        $this->assertDef('http://google.com/', false);
-        $this->assertDef('http://sub.example.com/alas?foo=asd');
-        $this->assertDef('http://example.com/teehee', false);
-        $this->assertDef('http://www.example.com/#man', false);
-        $this->assertDef('http://go.sub.example.com/perhaps?p=foo');
-        
+    function testDefaultSchemeRemovedInBlank() {
+        $this->assertDef('http:', '');
     }
     
-    function test_validate_configDisableExternalResources() {
-        
-        $this->config->set('URI', 'DisableExternalResources', true);
-        
-        $this->assertDef('http://sub.example.com/alas?foo=asd');
-        $this->assertDef('/img.png');
-        
-        $this->def = new HTMLPurifier_AttrDef_URI(true);
-        
-        $this->assertDef('http://sub.example.com/alas?foo=asd', false);
-        $this->assertDef('/img.png');
-        
+    function testDefaultSchemeRemovedInRelativeURI() {
+        $this->assertDef('http:/foo/bar', '/foo/bar');
     }
     
-    function test_validate_configBlacklist() {
-        
-        $this->config->set('URI', 'HostBlacklist', array('example.com', 'moo'));
-        
-        $this->assertDef('foo.txt');
-        $this->assertDef('http://www.google.com/example.com/moo');
-        
-        $this->assertDef('http://example.com/#23', false);
-        $this->assertDef('https://sub.domain.example.com/foobar', false);
-        $this->assertDef('http://example.com.example.net/?whoo=foo', false);
-        $this->assertDef('ftp://moo-moo.net/foo/foo/', false);
-        
+    function testDefaultSchemeNotRemovedInAbsoluteURI() {
+        $this->assertDef('http://example.com/foo/bar');
+    }
+    
+    function testAltSchemeNotRemoved() {
+        $this->assertDef('mailto:this-looks-like-a-path@example.com');
+    }
+    
+    function testURIDefinitionValidation() {
+        $parser = new HTMLPurifier_URIParser();
+        $uri = $parser->parse('http://example.com');
+        $this->config->set('URI', 'DefinitionID', 'HTMLPurifier_AttrDef_URITest->testURIDefinitionValidation');
+        $uri_def =& $this->config->getDefinition('URI');
+        // overload with mock
+        generate_mock_once('HTMLPurifier_URIDefinition');
+        $uri_def = new HTMLPurifier_URIDefinitionMock();
+        $uri_def->expectOnce('filter', array($uri, '*', '*'));
+        $uri_def->setReturnValue('filter', true, array($uri, '*', '*'));
+        $uri_def->setup = true;
+        $this->assertDef('http://example.com');
     }
     
     /*

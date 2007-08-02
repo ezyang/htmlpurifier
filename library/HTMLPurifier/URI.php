@@ -24,6 +24,12 @@ class HTMLPurifier_URI
         $this->fragment = $fragment;
     }
     
+    /**
+     * Retrieves a scheme object corresponding to the URI's scheme/default
+     * @param $config Instance of HTMLPurifier_Config
+     * @param $context Instance of HTMLPurifier_Context
+     * @return Scheme object appropriate for validating this URI
+     */
     function getSchemeObj($config, &$context) {
         $registry =& HTMLPurifier_URISchemeRegistry::instance();
         if ($this->scheme !== null) {
@@ -46,26 +52,17 @@ class HTMLPurifier_URI
     
     /**
      * Generic validation method applicable for all schemes
+     * @param $config Instance of HTMLPurifier_Config
+     * @param $context Instance of HTMLPurifier_Context
+     * @return True if validation/filtering succeeds, false if failure
      */
     function validate($config, &$context) {
         
         // validate host
         if (!is_null($this->host)) {
-            
             $host_def = new HTMLPurifier_AttrDef_URI_Host();
             $this->host = $host_def->validate($this->host, $config, $context);
             if ($this->host === false) $this->host = null;
-            
-            // check host against blacklist
-            if ($this->checkBlacklist($this->host, $config, $context)) return false;
-            
-        }
-        
-        // munge scheme off if necessary
-        if (!is_null($this->scheme) && is_null($this->host)) {
-            if ($config->get('URI', 'DefaultScheme') == $this->scheme) {
-                $this->scheme = null;
-            }
         }
         
         // validate port
@@ -86,26 +83,8 @@ class HTMLPurifier_URI
     }
     
     /**
-     * Checks a host against an array blacklist
-     * @param $host Host to check
-     * @param $config HTMLPurifier_Config instance
-     * @param $context HTMLPurifier_Context instance
-     * @return bool Is spam?
-     */
-    function checkBlacklist($host, $config, &$context) {
-        $blacklist = $config->get('URI', 'HostBlacklist');
-        if (!empty($blacklist)) {
-            foreach($blacklist as $blacklisted_host_fragment) {
-                if (strpos($host, $blacklisted_host_fragment) !== false) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    
-    /**
      * Convert URI back to string
+     * @return String URI appropriate for output
      */
     function toString() {
         // reconstruct authority
