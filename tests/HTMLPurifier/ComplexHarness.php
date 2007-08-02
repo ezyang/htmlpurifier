@@ -74,6 +74,7 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
         // setup config 
         if ($this->config) {
             $config = HTMLPurifier_Config::create($this->config);
+            $config->autoFinalize = false;
             $config->loadArray($config_array);
         } else {
             $config = HTMLPurifier_Config::create($config_array);

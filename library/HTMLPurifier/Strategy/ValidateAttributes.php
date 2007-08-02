@@ -46,6 +46,7 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
         }
         
         $context->destroy('IDAccumulator');
+        $context->destroy('CurrentToken');
         
         return $tokens;
     }

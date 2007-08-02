@@ -79,6 +79,7 @@ $test_files[] = 'HTMLPurifier/GeneratorTest.php';
 $test_files[] = 'HTMLPurifier/HTMLDefinitionTest.php';
 $test_files[] = 'HTMLPurifier/HTMLModuleManagerTest.php';
 $test_files[] = 'HTMLPurifier/HTMLModuleTest.php';
+$test_files[] = 'HTMLPurifier/HTMLModule/RubyTest.php';
 $test_files[] = 'HTMLPurifier/HTMLModule/ScriptingTest.php';
 $test_files[] = 'HTMLPurifier/HTMLModule/TidyTest.php';
 $test_files[] = 'HTMLPurifier/IDAccumulatorTest.php';
