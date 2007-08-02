@@ -13,7 +13,7 @@ class HTMLPurifier_URIHarness extends HTMLPurifier_Harness
      */
     function prepareURI(&$uri, &$expect_uri) {
         $parser = new HTMLPurifier_URIParser();
-        if ($expect_uri === true) $uri = $expect_uri;
+        if ($expect_uri === true) $expect_uri = $uri;
         $uri = $parser->parse($uri);
         if ($expect_uri !== false) {
             $expect_uri = $parser->parse($expect_uri);

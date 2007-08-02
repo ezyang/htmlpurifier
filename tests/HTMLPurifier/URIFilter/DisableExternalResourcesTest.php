@@ -9,6 +9,7 @@ class HTMLPurifier_URIFilter_DisableExternalResourcesTest extends
     
     function setUp() {
         parent::setUp();
+        $this->filter = new HTMLPurifier_URIFilter_DisableExternalResources();
         $var = true;
         $this->context->register('EmbeddedURI', $var);
     }

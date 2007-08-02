@@ -7,53 +7,58 @@ require_once 'HTMLPurifier/URISchemeRegistry.php';
 require_once 'HTMLPurifier/AttrDef/URI/Host.php';
 require_once 'HTMLPurifier/PercentEncoder.php';
 
-HTMLPurifier_ConfigSchema::define(
-    'URI', 'DefaultScheme', 'http', 'string',
-    'Defines through what scheme the output will be served, in order to '.
-    'select the proper object validator when no scheme information is present.'
-);
+// special case filtering directives 
 
 HTMLPurifier_ConfigSchema::define(
-    'URI', 'Host', null, 'string/null',
-    'Defines the domain name of the server, so we can determine whether or '.
-    'an absolute URI is from your website or not.  Not strictly necessary, '.
-    'as users should be using relative URIs to reference resources on your '.
-    'website.  It will, however, let you use absolute URIs to link to '.
-    'subdomains of the domain you post here: i.e. example.com will allow '.
-    'sub.example.com.  However, higher up domains will still be excluded: '.
-    'if you set %URI.Host to sub.example.com, example.com will be blocked. '.
-    'This directive has been available since 1.2.0.'
-);
+    'URI', 'Munge', null, 'string/null', '
+<p>
+    Munges all browsable (usually http, https and ftp)
+    absolute URI\'s into another URI, usually a URI redirection service.
+    This directive accepts a URI, formatted with a <code>%s</code> where 
+    the url-encoded original URI should be inserted (sample: 
+    <code>http://www.google.com/url?q=%s</code>).
+</p>
+<p>
+    Uses for this directive:
+</p>
+<ul>
+    <li>
+        Prevent PageRank leaks, while being fairly transparent 
+        to users (you may also want to add some client side JavaScript to 
+        override the text in the statusbar). <strong>Notice</strong>:
+        Many security experts believe that this form of protection does not deter spam-bots. 
+    </li>
+    <li>
+        Redirect users to a splash page telling them they are leaving your
+        website. While this is poor usability practice, it is often mandated
+        in corporate environments.
+    </li>
+</ul>
+<p>
+    This directive has been available since 1.3.0.
+</p>
+');
+
+// disabling directives
 
 HTMLPurifier_ConfigSchema::define(
-    'URI', 'DisableResources', false, 'bool',
-    'Disables embedding resources, essentially meaning no pictures. You can '.
-    'still link to them though. See %URI.DisableExternalResources for why '.
-    'this might be a good idea. This directive has been available since 1.3.0.'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'URI', 'Munge', null, 'string/null',
-    'Munges all browsable (usually http, https and ftp) URI\'s into some URL '.
-    'redirection service. Pass this directive a URI, with %s inserted where '.
-    'the url-encoded original URI should be inserted (sample: '.
-    '<code>http://www.google.com/url?q=%s</code>). '.
-    'This prevents PageRank leaks, while being as transparent as possible '.
-    'to users (you may also want to add some client side JavaScript to '.
-    'override the text in the statusbar). Warning: many security experts '.
-    'believe that this form of protection does not deter spam-bots. '.
-    'You can also use this directive to redirect users to a splash page '.
-    'telling them they are leaving your website. '.
-    'This directive has been available since 1.3.0.'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'URI', 'Disable', false, 'bool',
-    'Disables all URIs in all forms. Not sure why you\'d want to do that '.
-    '(after all, the Internet\'s founded on the notion of a hyperlink). '.
-    'This directive has been available since 1.3.0.'
-);
+    'URI', 'Disable', false, 'bool', '
+<p>
+    Disables all URIs in all forms. Not sure why you\'d want to do that 
+    (after all, the Internet\'s founded on the notion of a hyperlink). 
+    This directive has been available since 1.3.0.
+</p>
+');
 HTMLPurifier_ConfigSchema::defineAlias('Attr', 'DisableURI', 'URI', 'Disable');
+
+HTMLPurifier_ConfigSchema::define(
+    'URI', 'DisableResources', false, 'bool', '
+<p>
+    Disables embedding resources, essentially meaning no pictures. You can 
+    still link to them though. See %URI.DisableExternalResources for why 
+    this might be a good idea. This directive has been available since 1.3.0.
+</p>
+');
 
 /**
  * Validates a URI as defined by RFC 3986.
@@ -118,7 +123,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         
         // munge scheme off if necessary (this must be last)
         if (!is_null($uri->scheme) && is_null($uri->host)) {
-            if ($config->get('URI', 'DefaultScheme') == $uri->scheme) {
+            if ($uri_def->defaultScheme == $uri->scheme) {
                 $uri->scheme = null;
             }
         }

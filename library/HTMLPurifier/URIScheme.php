@@ -20,6 +20,12 @@ class HTMLPurifier_URIScheme
     var $browsable = false;
     
     /**
+     * Whether or not the URI always uses <hier_part>, resolves edge cases
+     * with making relative URIs absolute
+     */
+    var $hierarchical = false;
+    
+    /**
      * Validates the components of a URI
      * @note This implementation should be called by children if they define
      *       a default port, as it does port processing.

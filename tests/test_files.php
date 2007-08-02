@@ -106,6 +106,7 @@ $test_files[] = 'HTMLPurifier/URIDefinitionTest.php';
 $test_files[] = 'HTMLPurifier/URIFilter/DisableExternalTest.php';
 $test_files[] = 'HTMLPurifier/URIFilter/DisableExternalResourcesTest.php';
 $test_files[] = 'HTMLPurifier/URIFilter/HostBlacklistTest.php';
+$test_files[] = 'HTMLPurifier/URIFilter/MakeAbsoluteTest.php';
 $test_files[] = 'HTMLPurifier/URIParserTest.php';
 $test_files[] = 'HTMLPurifier/URISchemeRegistryTest.php';
 $test_files[] = 'HTMLPurifier/URISchemeTest.php';

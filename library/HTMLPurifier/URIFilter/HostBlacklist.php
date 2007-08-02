@@ -10,7 +10,7 @@ HTMLPurifier_ConfigSchema::define(
     'This directive has been available since 1.3.0.'
 );
 
-class HTMLPurifier_URIFilter_HostBlacklist
+class HTMLPurifier_URIFilter_HostBlacklist extends HTMLPurifier_URIFilter
 {
     var $name = 'HostBlacklist';
     var $blacklist = array();

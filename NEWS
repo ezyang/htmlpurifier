@@ -20,6 +20,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Standalone file now available, which greatly reduces the amount of
   includes (although there are still a few files that reside in the
   standalone folder)
+! Relative URIs can now be transformed into their absolute equivalents
+  using %URI.Base and %URI.MakeAbsolute
 - AutoFormatters emit friendly error messages if tags or attributes they
   need are not allowed
 - ConfigForm's compactification of directive names is now configurable

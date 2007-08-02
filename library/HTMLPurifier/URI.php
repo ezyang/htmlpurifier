@@ -37,11 +37,12 @@ class HTMLPurifier_URI
             if (!$scheme_obj) return false; // invalid scheme, clean it out
         } else {
             // no scheme: retrieve the default one
-            $scheme_obj = $registry->getScheme($config->get('URI', 'DefaultScheme'), $config, $context);
+            $def = $config->getDefinition('URI');
+            $scheme_obj = $registry->getScheme($def->defaultScheme, $config, $context);
             if (!$scheme_obj) {
                 // something funky happened to the default scheme object
                 trigger_error(
-                    'Default scheme object "' . $config->get('URI', 'DefaultScheme') . '" was not readable',
+                    'Default scheme object "' . $def->defaultScheme . '" was not readable',
                     E_USER_WARNING
                 );
                 return false;
@@ -105,6 +106,13 @@ class HTMLPurifier_URI
         if (!is_null($this->fragment))  $result .= '#' . $this->fragment;
         
         return $result;
+    }
+    
+    /**
+     * Returns a copy of the URI object
+     */
+    function copy() {
+        return unserialize(serialize($this));
     }
     
 }

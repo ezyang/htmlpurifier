@@ -9,6 +9,7 @@ class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme {
     
     var $default_port = 21;
     var $browsable = true; // usually
+    var $hierarchical = true;
     
     function validate(&$uri, $config, &$context) {
         parent::validate($uri, $config, $context);
