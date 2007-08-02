@@ -14,6 +14,11 @@ class HTMLPurifier_HTMLDefinitionTest extends HTMLPurifier_Harness
         // but it's a slight internal inconsistency
         
         $this->assertEqual(
+            $def->parseTinyMCEAllowedList(''),
+            array(array(), array())
+        );
+        
+        $this->assertEqual(
             $def->parseTinyMCEAllowedList('a,b,c'),
             array(array('a' => true, 'b' => true, 'c' => true), array())
         );
