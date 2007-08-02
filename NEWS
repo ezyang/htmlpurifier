@@ -11,7 +11,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 2.1.0, unknown release date
 # flush-htmldefinition-cache.php superseded in favor of a generic
-  flush-definition-cache.php script
+  flush-definition-cache.php script, you can clear a specific cache
+  by passing its name as a parameter to the script
 ! Phorum mod implemented for HTML Purifier
 ! With %Core.AggressivelyFixLt, <3 and similar emoticons no longer
   trigger HTML removal in PHP5 (DOMLex). This directive is not necessary
