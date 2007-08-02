@@ -22,6 +22,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   standalone folder)
 ! Relative URIs can now be transformed into their absolute equivalents
   using %URI.Base and %URI.MakeAbsolute
+! Ruby implemented for XHTML 1.1
+! You can now define custom URI filtering behavior, see enduser-uri-filter.html
+  for more details
 - AutoFormatters emit friendly error messages if tags or attributes they
   need are not allowed
 - ConfigForm's compactification of directive names is now configurable

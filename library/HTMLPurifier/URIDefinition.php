@@ -102,6 +102,11 @@ class HTMLPurifier_URIDefinition extends HTMLPurifier_Definition
         $this->registeredFilters[$filter->name] = $filter;
     }
     
+    function addFilter($filter, $config) {
+        $filter->setup($config);
+        $this->filter[$filter->name] = $filter;
+    }
+    
     function doSetup($config) {
         $this->setupFilters($config);
         $this->setupMemberVariables($config);
