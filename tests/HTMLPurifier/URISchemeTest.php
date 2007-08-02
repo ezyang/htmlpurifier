@@ -1,7 +1,6 @@
 <?php
 
 require_once 'HTMLPurifier/URI.php';
-require_once 'HTMLPurifier/URIParser.php';
 
 require_once 'HTMLPurifier/URIScheme.php';
 require_once 'HTMLPurifier/URISchemeRegistry.php';
@@ -16,25 +15,15 @@ require_once 'HTMLPurifier/URIScheme/nntp.php';
 // WARNING: All the URI schemes are far to relaxed, we need to tighten
 // the checks.
 
-class HTMLPurifier_URISchemeTest extends HTMLPurifier_Harness
+class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
 {
     
     function assertValidation($uri, $expect_uri = true) {
-        $parser = new HTMLPurifier_URIParser();
-        if ($expect_uri === true) $uri = $expect_uri;
-        $uri = $parser->parse($uri);
-        if ($expect_uri !== false) {
-            $expect_uri = $parser->parse($expect_uri);
-        }
+        $this->prepareURI($uri, $expect_uri);
         // convenience hack: the scheme should be explicitly specified
         $scheme = $uri->getSchemeObj($this->config, $this->context);
         $result = $scheme->validate($uri, $this->config, $this->context);
-        if ($expect_uri !== false) {
-            $this->assertTrue($result);
-            $this->assertIdentical($uri, $expect_uri);
-        } else {
-            $this->assertFalse($result);
-        }
+        $this->assertEitherFailOrIdentical($result, $uri, $expect_uri);
     }
     
     function test_http_regular() {

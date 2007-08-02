@@ -26,29 +26,6 @@ HTMLPurifier_ConfigSchema::define(
 );
 
 HTMLPurifier_ConfigSchema::define(
-    'URI', 'DisableExternal', false, 'bool',
-    'Disables links to external websites.  This is a highly effective '.
-    'anti-spam and anti-pagerank-leech measure, but comes at a hefty price: no'.
-    'links or images outside of your domain will be allowed.  Non-linkified '.
-    'URIs will still be preserved.  If you want to be able to link to '.
-    'subdomains or use absolute URIs, specify %URI.Host for your website. '.
-    'This directive has been available since 1.2.0.'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'URI', 'DisableExternalResources', false, 'bool',
-    'Disables the embedding of external resources, preventing users from '.
-    'embedding things like images from other hosts. This prevents '.
-    'access tracking (good for email viewers), bandwidth leeching, '.
-    'cross-site request forging, goatse.cx posting, and '.
-    'other nasties, but also results in '.
-    'a loss of end-user functionality (they can\'t directly post a pic '.
-    'they posted from Flickr anymore). Use it if you don\'t have a '.
-    'robust user-content moderation team. This directive has been '.
-    'available since 1.3.0.'
-);
-
-HTMLPurifier_ConfigSchema::define(
     'URI', 'DisableResources', false, 'bool',
     'Disables embedding resources, essentially meaning no pictures. You can '.
     'still link to them though. See %URI.DisableExternalResources for why '.
@@ -117,18 +94,35 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         $uri = $this->parser->parse($uri);
         if ($uri === false) return false;
         
-        // generic validation
-        $context->register('EmbeddedURI', $this->embedsResource); // flag
-        $result = $uri->validate($config, $context);
-        $context->destroy('EmbeddedURI');
-        if (!$result) return false;
+        // add embedded flag to context for validators
+        $context->register('EmbeddedURI', $this->embedsResource); 
         
-        // scheme-specific validation 
-        $scheme_obj = $uri->getSchemeObj($config, $context);
-        if (!$scheme_obj) return false;
-        if ($this->embedsResource && !$scheme_obj->browsable) return false;
-        $result = $scheme_obj->validate($uri, $config, $context);
-        if (!$result) return false;
+        $ok = false;
+        do {
+            
+            // generic validation
+            $result = $uri->validate($config, $context);
+            if (!$result) break;
+            
+            // chained validation
+            $uri_def =& $config->getDefinition('URI');
+            $result = $uri_def->filter($uri, $config, $context);
+            if (!$result) break;
+            
+            // scheme-specific validation 
+            $scheme_obj = $uri->getSchemeObj($config, $context);
+            if (!$scheme_obj) break;
+            if ($this->embedsResource && !$scheme_obj->browsable) break;
+            $result = $scheme_obj->validate($uri, $config, $context);
+            if (!$result) break;
+            
+            // survived gauntlet
+            $ok = true;
+            
+        } while (false);
+        
+        $context->destroy('EmbeddedURI');
+        if (!$ok) return false;
         
         // back to string
         $result = $uri->toString();

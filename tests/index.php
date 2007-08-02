@@ -21,7 +21,6 @@ require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
 require_once $simpletest_location . 'mock_objects.php';
 require_once 'HTMLPurifier/SimpleTest/Reporter.php';
-require_once 'HTMLPurifier/Harness.php';
 
 // load Debugger
 require_once 'Debugger.php';
@@ -47,6 +46,7 @@ if (isset($_GET['standalone']) || (isset($argv[1]) && $argv[1] == 'standalone'))
 } else {
     require_once '../library/HTMLPurifier.auto.php';
 }
+require_once 'HTMLPurifier/Harness.php';
 
 // setup special DefinitionCacheFactory decorator
 $factory =& HTMLPurifier_DefinitionCacheFactory::instance();

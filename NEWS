@@ -54,6 +54,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Interface for URIScheme changed
 . Generic URI object to hold components of URI added, most systems involved
   in URI validation have been migrated to use it
+. Custom filtering for URIs factored out to URIDefinition interface for
+  maximum extensibility
 
 2.0.1, released 2007-06-27
 ! Tag auto-closing now based on a ChildDef heuristic rather than a

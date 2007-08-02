@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/URI.php';
 require_once 'HTMLPurifier/URIParser.php';
 
-class HTMLPurifier_URITest extends HTMLPurifier_Harness
+class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
 {
     
     function createURI($uri) {
@@ -178,63 +178,5 @@ class HTMLPurifier_URITest extends HTMLPurifier_Harness
     function test_validate_invalidHostThatLooksLikeIPv6() {
         $this->assertValidation('http://[2001:0db8:85z3:08d3:1319:8a2e:0370:7334]', '');
     }
-    
-    function test_validate_configDisableExternal() {
-        
-        $this->def = new HTMLPurifier_AttrDef_URI();
-        
-        $this->config->set('URI', 'DisableExternal', true);
-        $this->config->set('URI', 'Host', 'sub.example.com');
-        
-        $this->assertValidation('/foobar.txt');
-        $this->assertValidation('http://google.com/', false);
-        $this->assertValidation('http://sub.example.com/alas?foo=asd');
-        $this->assertValidation('http://example.com/teehee', false);
-        $this->assertValidation('http://www.example.com/#man', false);
-        $this->assertValidation('http://go.sub.example.com/perhaps?p=foo');
-        
-    }
-    
-    function test_validate_configDisableExternalResources() {
-        
-        $this->config->set('URI', 'DisableExternalResources', true);
-        
-        $this->assertValidation('http://sub.example.com/alas?foo=asd');
-        $this->assertValidation('/img.png');
-        
-        $embeds = true; // passed by reference
-        $this->context->register('EmbeddedURI', $embeds);
-        $this->assertValidation('http://sub.example.com/alas?foo=asd', false);
-        $this->assertValidation('/img.png');
-        
-    }
-    
-    function test_validate_configBlacklist() {
-        
-        $this->config->set('URI', 'HostBlacklist', array('example.com', 'moo'));
-        
-        $this->assertValidation('foo.txt');
-        $this->assertValidation('http://www.google.com/example.com/moo');
-        
-        $this->assertValidation('http://example.com/#23', false);
-        $this->assertValidation('https://sub.domain.example.com/foobar', false);
-        $this->assertValidation('http://example.com.example.net/?whoo=foo', false);
-        $this->assertValidation('ftp://moo-moo.net/foo/foo/', false);
-        
-    }
-    
-    /*
-    function test_validate_configWhitelist() {
-        
-        $this->config->set('URI', 'HostPolicy', 'DenyAll');
-        $this->config->set('URI', 'HostWhitelist', array(null, 'google.com'));
-        
-        $this->assertValidation('http://example.com/fo/google.com', false);
-        $this->assertValidation('server.txt');
-        $this->assertValidation('ftp://www.google.com/?t=a');
-        $this->assertValidation('http://google.com.tricky.spamsite.net', false);
-        
-    }
-    */
     
 }

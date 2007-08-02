@@ -16,7 +16,8 @@ require_once(dirname(__FILE__) . '/../library/HTMLPurifier.auto.php');
 
 $config = HTMLPurifier_Config::createDefault();
 
-$names = array('HTML', 'CSS', 'Test');
+//$names = array('HTML', 'CSS', 'URI', 'Test');
+$names = array('URI');
 foreach ($names as $name) {
     echo " - Flushing $name\n";
     $cache = new HTMLPurifier_DefinitionCache_Serializer($name);

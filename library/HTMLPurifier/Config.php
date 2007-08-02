@@ -5,6 +5,7 @@ require_once 'HTMLPurifier/ConfigSchema.php';
 // member variables
 require_once 'HTMLPurifier/HTMLDefinition.php';
 require_once 'HTMLPurifier/CSSDefinition.php';
+require_once 'HTMLPurifier/URIDefinition.php';
 require_once 'HTMLPurifier/Doctype.php';
 require_once 'HTMLPurifier/DefinitionCacheFactory.php';
 
@@ -313,6 +314,8 @@ class HTMLPurifier_Config
             $this->definitions[$type] = new HTMLPurifier_HTMLDefinition();
         } elseif ($type == 'CSS') {
             $this->definitions[$type] = new HTMLPurifier_CSSDefinition();
+        } elseif ($type == 'URI') {
+            $this->definitions[$type] = new HTMLPurifier_URIDefinition();
         } else {
             trigger_error("Definition of $type type not supported");
             $false = false;

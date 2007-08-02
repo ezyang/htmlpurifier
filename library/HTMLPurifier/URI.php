@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/URIParser.php';
+require_once 'HTMLPurifier/URIFilter.php';
 
 /**
  * HTML Purifier's internal representation of a URI
@@ -50,19 +51,7 @@ class HTMLPurifier_URI
         
         // validate host
         if (!is_null($this->host)) {
-            // remove URI if it's absolute and we disabled externals or
-            // if it's absolute and embedded and we disabled external resources
-            unset($our_host); // ensure this variable is not set
-            if (
-                $config->get('URI', 'DisableExternal') ||
-                (
-                    $config->get('URI', 'DisableExternalResources') &&
-                    $context->get('EmbeddedURI', true) // suppress errors
-                )
-            ) {
-                $our_host = $config->get('URI', 'Host');
-                if ($our_host === null) return false;
-            }
+            
             $host_def = new HTMLPurifier_AttrDef_URI_Host();
             $this->host = $host_def->validate($this->host, $config, $context);
             if ($this->host === false) $this->host = null;
@@ -70,16 +59,6 @@ class HTMLPurifier_URI
             // check host against blacklist
             if ($this->checkBlacklist($this->host, $config, $context)) return false;
             
-            // more lenient absolute checking
-            if (isset($our_host)) {
-                $host_parts = array_reverse(explode('.', $this->host));
-                // could be cached
-                $our_host_parts = array_reverse(explode('.', $our_host));
-                foreach ($our_host_parts as $i => $discard) {
-                    if (!isset($host_parts[$i])) return false;
-                    if ($host_parts[$i] != $our_host_parts[$i]) return false;
-                }
-            }
         }
         
         // munge scheme off if necessary
