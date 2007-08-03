@@ -103,23 +103,22 @@ class HTMLPurifier_URIDefinition extends HTMLPurifier_Definition
     }
     
     function addFilter($filter, $config) {
-        $filter->setup($config);
+        $filter->prepare($config);
         $this->filter[$filter->name] = $filter;
     }
     
     function doSetup($config) {
-        $this->setupFilters($config);
         $this->setupMemberVariables($config);
+        $this->setupFilters($config);
     }
     
     function setupFilters($config) {
         foreach ($this->registeredFilters as $name => $filter) {
             $conf = $config->get('URI', $name);
             if ($conf !== false && $conf !== null) {
-                $this->filters[$name] = $filter;
+                $this->addFilter($filter, $config);
             }
         }
-        foreach ($this->filters as $n => $x) $this->filters[$n]->prepare($config);
         unset($this->registeredFilters);
     }
     

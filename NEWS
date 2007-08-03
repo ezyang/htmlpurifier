@@ -13,6 +13,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 [ no items ]
 
 2.1.1, unknown release date
+- Fix show-stopper bug in %URI.MakeAbsolute functionality
 . Add prefix directory to include path for standalone, this prevents
   other installations from clobbering the standalone's URI schemes
 

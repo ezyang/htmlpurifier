@@ -138,5 +138,16 @@ alert("<This is compatible with XHTML>");
         $this->assertReference($purifier, $purifier2);
     }
     
+    function testMakeAbsolute() {
+        $this->assertPurification(
+            '<a href="foo.txt">Foobar</a>',
+            '<a href="http://example.com/bar/foo.txt">Foobar</a>',
+            array(
+                'URI.Base' => 'http://example.com/bar/baz.php',
+                'URI.MakeAbsolute' => true
+            )
+        );
+    }
+    
 }
 
