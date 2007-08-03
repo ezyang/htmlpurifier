@@ -141,7 +141,7 @@
     var $name = 'ConvertIDNToPunycode';
     function filter(&$uri, $config, &$context) {
         if (is_null($uri->host)) return true;
-        if ($uri->host == utf8_decode($uri->host) {
+        if ($uri->host == utf8_decode($uri->host)) {
             // is ASCII, abort
             return true;
         }
