@@ -11,12 +11,6 @@ If no interest is expressed for a feature that may required a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
-2.1 release [Refactor, refactor!]
- - Configuration profiles: predefined directives set with one func call
- - Allow non-ASCII characters in font names
- - Explain how to use HTML Purifier in non-PHP languages / create
-   a simple command line stub
-
 2.2 release [Error'ed]
  # Error logging for filtering/cleanup procedures
  - XSS-attempt detection
@@ -80,6 +74,8 @@ Unknown release (on a scratch-an-itch basis)
  - Reorganize configuration directives (Create more namespaces! Get messy!)
  - Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
  - Implement lenient <ruby> child validation
+ - Explain how to use HTML Purifier in non-PHP languages / create
+   a simple command line stub (or complicated?)
 
 Requested
 

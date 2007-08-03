@@ -38,19 +38,24 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
                 $quote = $font[0];
                 if ($font[$length - 1] !== $quote) continue;
                 $font = substr($font, 1, $length - 2);
+                // double-backslash processing is buggy
+                $font = str_replace("\\$quote", $quote, $font); // de-escape quote
+                $font = str_replace("\\\n", "\n", $font);       // de-escape newlines
             }
-            // process font
+            // $font is a pure representation of the font name
+            
             if (ctype_alnum($font)) {
                 // very simple font, allow it in unharmed
                 $final .= $font . ', ';
                 continue;
             }
-            $nospace = str_replace(array(' ', '.', '!'), '', $font);
-            if (ctype_alnum($nospace)) {
-                // font with spaces in it
-                $final .= "'$font', ";
-                continue;
-            }
+            
+            // complicated font, requires quoting
+            
+            // armor single quotes and new lines
+            $font = str_replace("'", "\\'", $font);
+            $font = str_replace("\n", "\\\n", $font);
+            $final .= "'$font', ";
         }
         $final = rtrim($final, ', ');
         if ($final === '') return false;

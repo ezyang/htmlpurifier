@@ -25,6 +25,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Ruby implemented for XHTML 1.1
 ! You can now define custom URI filtering behavior, see enduser-uri-filter.html
   for more details
+! UTF-8 font names now supported in CSS
 - AutoFormatters emit friendly error messages if tags or attributes they
   need are not allowed
 - ConfigForm's compactification of directive names is now configurable
