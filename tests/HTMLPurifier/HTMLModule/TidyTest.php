@@ -8,7 +8,7 @@ Mock::generatePartial(
     array('makeFixes', 'makeFixesForLevel', 'populate')
 );
 
-class HTMLPurifier_HTMLModule_TidyTest extends UnitTestCase
+class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
 {
     
     function test_getFixesForLevel() {

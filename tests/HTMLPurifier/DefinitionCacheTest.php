@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/DefinitionCache.php';
 
-class HTMLPurifier_DefinitionCacheTest extends UnitTestCase
+class HTMLPurifier_DefinitionCacheTest extends HTMLPurifier_Harness
 {
     
     function test_isOld() {

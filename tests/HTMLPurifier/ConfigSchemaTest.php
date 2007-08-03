@@ -6,7 +6,7 @@ if (!class_exists('CS')) {
     class CS extends HTMLPurifier_ConfigSchema {}
 }
 
-class HTMLPurifier_ConfigSchemaTest extends UnitTestCase
+class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
 {
     
     /**

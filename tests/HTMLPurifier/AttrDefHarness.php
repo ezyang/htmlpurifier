@@ -1,11 +1,10 @@
 <?php
 
-class HTMLPurifier_AttrDefHarness extends UnitTestCase
+class HTMLPurifier_AttrDefHarness extends HTMLPurifier_Harness
 {
     
     var $def;
-    var $context;
-    var $config;
+    var $context, $config;
     
     function setUp() {
         $this->config = HTMLPurifier_Config::createDefault();
@@ -13,20 +12,15 @@ class HTMLPurifier_AttrDefHarness extends UnitTestCase
     }
     
     // cannot be used for accumulator
-    function assertDef($string, $expect = true, $ini = false, $message = '%s') {
+    function assertDef($string, $expect = true) {
         // $expect can be a string or bool
-        if ($ini) $this->setUpAssertDef();
         $result = $this->def->validate($string, $this->config, $this->context);
         if ($expect === true) {
-            $this->assertIdentical($string, $result, $message);
+            $this->assertIdentical($string, $result);
         } else {
-            $this->assertIdentical($expect, $result, $message);
+            $this->assertIdentical($expect, $result);
         }
-        if ($ini) $this->tearDownAssertDef();
     }
-    
-    function setUpAssertDef() {}
-    function tearDownAssertDef() {}
     
 }
 

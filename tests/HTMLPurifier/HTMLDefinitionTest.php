@@ -2,12 +2,17 @@
 
 require_once 'HTMLPurifier/HTMLDefinition.php';
 
-class HTMLPurifier_HTMLDefinitionTest extends UnitTestCase
+class HTMLPurifier_HTMLDefinitionTest extends HTMLPurifier_Harness
 {
     
     function test_parseTinyMCEAllowedList() {
         
         $def = new HTMLPurifier_HTMLDefinition();
+        
+        $this->assertEqual(
+            $def->parseTinyMCEAllowedList(''),
+            array(array(), array())
+        );
         
         $this->assertEqual(
             $def->parseTinyMCEAllowedList('a,b,c'),

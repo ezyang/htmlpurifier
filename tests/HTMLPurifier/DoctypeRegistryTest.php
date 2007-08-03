@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/DoctypeRegistry.php';
 
-class HTMLPurifier_DoctypeRegistryTest extends UnitTestCase
+class HTMLPurifier_DoctypeRegistryTest extends HTMLPurifier_Harness
 {
     
     function test_register() {

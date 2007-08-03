@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/LanguageFactory.php';
 
-class HTMLPurifier_LanguageFactoryTest extends UnitTestCase
+class HTMLPurifier_LanguageFactoryTest extends HTMLPurifier_Harness
 {
     
     function test() {

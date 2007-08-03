@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/URISchemeRegistry.php';
 
-class HTMLPurifier_URISchemeRegistryTest extends UnitTestCase
+class HTMLPurifier_URISchemeRegistryTest extends HTMLPurifier_Harness
 {
     
     function test() {

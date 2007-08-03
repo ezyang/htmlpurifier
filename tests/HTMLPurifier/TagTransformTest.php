@@ -6,7 +6,7 @@ require_once 'HTMLPurifier/TagTransform.php';
 require_once 'HTMLPurifier/TagTransform/Font.php';
 require_once 'HTMLPurifier/TagTransform/Simple.php';
 
-class HTMLPurifier_TagTransformTest extends UnitTestCase
+class HTMLPurifier_TagTransformTest extends HTMLPurifier_Harness
 {
     
     /**

@@ -3,16 +3,16 @@
 require_once 'HTMLPurifier/Generator.php';
 require_once 'HTMLPurifier/EntityLookup.php';
 
-require_once 'HTMLPurifier/Harness.php';
+require_once 'HTMLPurifier/ComplexHarness.php';
 
-class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
+class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
 {
     
     var $gen;
     var $_entity_lookup;
     
     function HTMLPurifier_GeneratorTest() {
-        $this->UnitTestCase();
+        $this->HTMLPurifier_Harness();
         $this->gen = new HTMLPurifier_Generator();
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
     }

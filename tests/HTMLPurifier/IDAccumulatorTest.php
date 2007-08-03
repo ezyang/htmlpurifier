@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/IDAccumulator.php';
 
-class HTMLPurifier_IDAccumulatorTest extends UnitTestCase
+class HTMLPurifier_IDAccumulatorTest extends HTMLPurifier_Harness
 {
     
     function test() {

@@ -4,7 +4,7 @@
 
 require_once 'HTMLPurifier/EntityLookup.php';
 
-class HTMLPurifier_EntityLookupTest extends UnitTestCase
+class HTMLPurifier_EntityLookupTest extends HTMLPurifier_Harness
 {
     
     function test() {
