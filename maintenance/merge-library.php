@@ -180,7 +180,8 @@ echo 'Creating full file...';
 $contents = replace_includes(file_get_contents('HTMLPurifier.php'));
 $contents = str_replace(
     "define('HTMLPURIFIER_PREFIX', dirname(__FILE__));",
-    "define('HTMLPURIFIER_PREFIX', dirname(__FILE__) . '/standalone');",
+    "define('HTMLPURIFIER_PREFIX', dirname(__FILE__) . '/standalone');
+set_include_path(HTMLPURIFIER_PREFIX . PATH_SEPARATOR . get_include_path());",
     $contents
 );
 file_put_contents('HTMLPurifier.standalone.php', $contents);

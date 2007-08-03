@@ -9,6 +9,13 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+2.2.0, unknown release date
+[ no items ]
+
+2.1.1, unknown release date
+. Add prefix directory to include path for standalone, this prevents
+  other installations from clobbering the standalone's URI schemes
+
 2.1.0, released 2007-08-02
 # flush-htmldefinition-cache.php superseded in favor of a generic
   flush-definition-cache.php script, you can clear a specific cache

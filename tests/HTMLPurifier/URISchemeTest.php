@@ -1,6 +1,7 @@
 <?php
 
 require_once 'HTMLPurifier/URI.php';
+require_once 'HTMLPurifier/URIHarness.php';
 
 require_once 'HTMLPurifier/URIScheme.php';
 require_once 'HTMLPurifier/URISchemeRegistry.php';
