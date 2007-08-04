@@ -16,6 +16,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix show-stopper bug in %URI.MakeAbsolute functionality
 . Add prefix directory to include path for standalone, this prevents
   other installations from clobbering the standalone's URI schemes
+. Single test methods can be invoked by prefixing with __only
 
 2.1.0, released 2007-08-02
 # flush-htmldefinition-cache.php superseded in favor of a generic
