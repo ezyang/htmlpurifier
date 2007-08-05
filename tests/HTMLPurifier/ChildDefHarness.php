@@ -1,9 +1,9 @@
 <?php
 
-require_once 'HTMLPurifier/Harness.php';
+require_once 'HTMLPurifier/ComplexHarness.php';
 require_once 'HTMLPurifier/ChildDef.php';
 
-class HTMLPurifier_ChildDefHarness extends HTMLPurifier_Harness
+class HTMLPurifier_ChildDefHarness extends HTMLPurifier_ComplexHarness
 {
     
     function setUp() {

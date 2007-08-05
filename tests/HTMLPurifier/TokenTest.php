@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/Token.php';
 
-class HTMLPurifier_TokenTest extends UnitTestCase
+class HTMLPurifier_TokenTest extends HTMLPurifier_Harness
 {
     
     function assertTokenConstruction($name, $attr,

@@ -237,6 +237,35 @@ Par1
 '<p>Par1</p><p><b>Par2</b></p>'
         );
         
+        $this->assertResult(
+'<img /> Foo',
+'<p><img /> Foo</p>'
+        );
+        
+        $this->assertResult(
+'<li>Foo <a>bar</a></li>'
+        );
+        
+        $this->assertResult(
+'<li><b>baz</b><a>bar</a></li>'
+        );
+        
+        $this->assertResult(
+'<div><div>asdf</div><b>asdf</b></div>'
+        );
+        
+        $this->assertResult(
+'<div><div>asdf</div>
+
+<b>asdf</b></div>',
+'<div><div>asdf</div><p><b>asdf</b></p></div>'
+        );
+        
+        $this->assertResult(
+'<b>One</b> <i>Two</i>',
+'<p><b>One</b> <i>Two</i></p>'
+        );
+        
     }
     
     function testInlineRootNode() {
@@ -247,6 +276,11 @@ Par2',
             true,
             array('AutoFormat.AutoParagraph' => true, 'HTML.Parent' => 'span')
         );
+    }
+    
+    function testNeeded() {
+        $this->expectError('Cannot enable AutoParagraph injector because p is not allowed');
+        $this->assertResult('<b>foobar</b>', true, array('AutoFormat.AutoParagraph' => true, 'HTML.Allowed' => 'b'));
     }
     
 }

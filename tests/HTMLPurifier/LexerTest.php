@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 
-class HTMLPurifier_LexerTest extends UnitTestCase
+class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 {
     
     var $Lexer;
@@ -287,16 +287,21 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         $expect[18] = array( new HTMLPurifier_Token_Empty('br', array('test' => 'x < 6')) );
         
         // test emoticon protection
-        $input[19] = '<b>Whoa! >.< That\'s not good >.></b>';
+        $input[19] = '<b>Whoa! <3 That\'s not good >.></b>';
         $expect[19] = array(
             new HTMLPurifier_Token_Start('b'),
-            new HTMLPurifier_Token_Text('Whoa! >.'),
-            new HTMLPurifier_Token_Text('< That\'s not good >'),
+            new HTMLPurifier_Token_Text('Whoa! '),
+            new HTMLPurifier_Token_Text('<3 That\'s not good >'),
             new HTMLPurifier_Token_Text('.>'),
             new HTMLPurifier_Token_End('b'),
         );
+        $dom_expect[19] = array(
+            new HTMLPurifier_Token_Start('b'),
+            new HTMLPurifier_Token_Text('Whoa! <3 That\'s not good >.>'),
+            new HTMLPurifier_Token_End('b'),
+        );
         $sax_expect[19] = false; // SAX drops the < character
-        $dom_expect[19] = false; // DOM drops the entire pseudo-tag
+        $config[19] = HTMLPurifier_Config::create(array('Core.AggressivelyFixLt' => true));
         
         // test comment parsing with funky characters inside
         $input[20] = '<!-- This >< comment --><br />';
@@ -305,6 +310,7 @@ class HTMLPurifier_LexerTest extends UnitTestCase
             new HTMLPurifier_Token_Empty('br')
         );
         $sax_expect[20] = false;
+        $config[20] = HTMLPurifier_Config::create(array('Core.AggressivelyFixLt' => true));
         
         // test comment parsing of missing end
         $input[21] = '<!-- This >< comment';
@@ -313,6 +319,7 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         );
         $sax_expect[21] = false;
         $dom_expect[21] = false;
+        $config[21] = HTMLPurifier_Config::create(array('Core.AggressivelyFixLt' => true));
         
         // test CDATA tags
         $input[22] = '<script>alert("<foo>");</script>';
@@ -323,7 +330,25 @@ class HTMLPurifier_LexerTest extends UnitTestCase
         );
         $config[22] = HTMLPurifier_Config::create(array('HTML.Trusted' => true));
         $sax_expect[22] = false;
-        //$dom_expect[22] = false;
+        
+        // test escaping
+        $input[23] = '<!-- This comment < &lt; & -->';
+        $expect[23] = array(
+            new HTMLPurifier_Token_Comment(' This comment < &lt; & ') );
+        $sax_expect[23] = false; $config[23] =
+        HTMLPurifier_Config::create(array('Core.AggressivelyFixLt' =>
+        true));
+        
+        // more DirectLex edge-cases 
+        $input[24] = '<a href="><>">';
+        $expect[24] = array(
+            new HTMLPurifier_Token_Start('a', array('href' => '')),
+            new HTMLPurifier_Token_Text('<">')
+        );
+        $sax_expect[24] = false;
+        $dom_expect[24] = array(
+            new HTMLPurifier_Token_Empty('a', array('href' => '><>'))
+        );
         
         $default_config = HTMLPurifier_Config::createDefault();
         $default_context = new HTMLPurifier_Context();

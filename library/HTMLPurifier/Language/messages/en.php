@@ -28,7 +28,7 @@ $messages = array(
 'Strategy_RemoveForeignElements: Foreign element to text'    => 'Unrecognized $CurrentToken.Serialized tag converted to text',
 'Strategy_RemoveForeignElements: Foreign element removed'    => 'Unrecognized $CurrentToken.Serialized tag removed',
 'Strategy_RemoveForeignElements: Comment removed'            => 'Comment containing "$CurrentToken.Data" removed',
-'Strategy_RemoveForeignElements: Script removed'             => 'Script removed',
+'Strategy_RemoveForeignElements: Foreign meta element removed' => 'Unrecognized $CurrentToken.Serialized meta tag and all descendants removed',
 'Strategy_RemoveForeignElements: Token removed to end'       => 'Tags and text starting from $1 element where removed to end',
 
 'Strategy_MakeWellFormed: Unnecessary end tag removed' => 'Unnecessary $CurrentToken.Serialized tag removed',

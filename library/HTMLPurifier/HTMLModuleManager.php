@@ -28,6 +28,7 @@ require_once 'HTMLPurifier/HTMLModule/Target.php';
 require_once 'HTMLPurifier/HTMLModule/Scripting.php';
 require_once 'HTMLPurifier/HTMLModule/XMLCommonAttributes.php';
 require_once 'HTMLPurifier/HTMLModule/NonXMLCommonAttributes.php';
+require_once 'HTMLPurifier/HTMLModule/Ruby.php';
 
 // tidy modules
 require_once 'HTMLPurifier/HTMLModule/Tidy.php';
@@ -215,8 +216,8 @@ class HTMLPurifier_HTMLModuleManager
         
         $this->doctypes->register(
             'XHTML 1.1', true,
-            array_merge($common, $xml),
-            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_Proprietary'), // Tidy_XHTML1_1
+            array_merge($common, $xml, array('Ruby')),
+            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_Proprietary', 'Tidy_XHTMLStrict'), // Tidy_XHTML1_1
             array(),
             '-//W3C//DTD XHTML 1.1//EN',
             'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'

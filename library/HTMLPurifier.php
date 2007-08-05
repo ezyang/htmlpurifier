@@ -22,7 +22,7 @@
  */
 
 /*
-    HTML Purifier 2.0.1 - Standards Compliant HTML Filtering
+    HTML Purifier 2.1.1 - Standards Compliant HTML Filtering
     Copyright (C) 2006 Edward Z. Yang
 
     This library is free software; you can redistribute it and/or
@@ -39,6 +39,9 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+// constants are slow, but we'll make one exception
+define('HTMLPURIFIER_PREFIX', dirname(__FILE__));
 
 // almost every class has an undocumented dependency to these, so make sure
 // they get included
@@ -74,7 +77,7 @@ This directive has been available since 2.0.0.
 class HTMLPurifier
 {
     
-    var $version = '2.0.1';
+    var $version = '2.1.1';
     
     var $config;
     var $filters;
@@ -196,13 +199,13 @@ class HTMLPurifier
     /**
      * Singleton for enforcing just one HTML Purifier in your system
      */
-    function &getInstance($prototype = null) {
+    static function &getInstance($prototype = null) {
         static $htmlpurifier;
         if (!$htmlpurifier || $prototype) {
-            if (is_a($prototype, 'HTMLPurifier')) {
+            if ($prototype instanceof HTMLPurifier) {
                 $htmlpurifier = $prototype;
             } elseif ($prototype) {
-                $htmlpurifier = new HTMLPurifier(HTMLPurifier_Config::create($prototype));
+                $htmlpurifier = new HTMLPurifier($prototype);
             } else {
                 $htmlpurifier = new HTMLPurifier();
             }

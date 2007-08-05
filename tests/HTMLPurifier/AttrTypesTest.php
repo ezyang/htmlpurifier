@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/AttrTypes.php';
 
-class HTMLPurifier_AttrTypesTest extends UnitTestCase
+class HTMLPurifier_AttrTypesTest extends HTMLPurifier_Harness
 {
     
     function test_get() {

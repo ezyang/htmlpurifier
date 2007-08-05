@@ -9,6 +9,68 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+2.1.1, released 2007-08-04
+- Fix show-stopper bug in %URI.MakeAbsolute functionality
+- Fix PHP4 syntax error in standalone version
+. Add prefix directory to include path for standalone, this prevents
+  other installations from clobbering the standalone's URI schemes
+. Single test methods can be invoked by prefixing with __only
+
+2.1.0, released 2007-08-02
+# flush-htmldefinition-cache.php superseded in favor of a generic
+  flush-definition-cache.php script, you can clear a specific cache
+  by passing its name as a parameter to the script
+! Phorum mod implemented for HTML Purifier
+! With %Core.AggressivelyFixLt, <3 and similar emoticons no longer
+  trigger HTML removal in PHP5 (DOMLex). This directive is not necessary
+  for PHP4 (DirectLex).
+! Standalone file now available, which greatly reduces the amount of
+  includes (although there are still a few files that reside in the
+  standalone folder)
+! Relative URIs can now be transformed into their absolute equivalents
+  using %URI.Base and %URI.MakeAbsolute
+! Ruby implemented for XHTML 1.1
+! You can now define custom URI filtering behavior, see enduser-uri-filter.html
+  for more details
+! UTF-8 font names now supported in CSS
+- AutoFormatters emit friendly error messages if tags or attributes they
+  need are not allowed
+- ConfigForm's compactification of directive names is now configurable
+- AutoParagraph autoformatter algorithm refined after field-testing
+- XHTML 1.1 now applies XHTML 1.0 Strict cleanup routines, namely
+  blockquote wrapping
+- Contents of <style> tags removed by default when tags are removed
+. HTMLPurifier_Config->getSerial() implemented, this is extremely useful
+  for output cache invalidation
+. ConfigForm printer now can retrieve CSS and JS files as strings, in
+  case HTML Purifier's directory is not publically accessible
+. Introduce new text/itext configuration directive values: these represent
+  longer strings that would be more appropriately edited with a textarea
+. Allow newlines to act as separators for lists, hashes, lookups and
+  %HTML.Allowed
+. ConfigForm generates textareas instead of text inputs for lists, hashes,
+  lookups, text and itext fields
+. Hidden element content removal genericized: %Core.HiddenElements can
+  be used to customize this behavior, by default <script> and <style> are
+  hidden
+. Added HTMLPURIFIER_PREFIX constant, should be used instead of dirname(__FILE__)
+. Custom ChildDef added to default include list
+. URIScheme reflection improved: will not attempt to include file if class
+  already exists. May clobber autoload, so I need to keep an eye on it
+. ConfigSchema heavily optimized, will only collect information and validate
+  definitions when HTMLPURIFIER_SCHEMA_STRICT is true.
+. AttrDef_URI unit tests and implementation refactored
+. benchmarks/ directory now protected from public view with .htaccess file;
+  run the tests via command line
+. URI scheme is munged off if there is no authority and the scheme is the
+  default one
+. All unit tests inherit from HTMLPurifier_Harness, not UnitTestCase
+. Interface for URIScheme changed
+. Generic URI object to hold components of URI added, most systems involved
+  in URI validation have been migrated to use it
+. Custom filtering for URIs factored out to URIDefinition interface for
+  maximum extensibility
+
 2.0.1, released 2007-06-27
 ! Tag auto-closing now based on a ChildDef heuristic rather than a
   manually set auto_close array; some behavior may change

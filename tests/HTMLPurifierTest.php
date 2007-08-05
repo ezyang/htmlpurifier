@@ -4,7 +4,7 @@ require_once 'HTMLPurifier.php';
 
 // integration test
 
-class HTMLPurifierTest extends UnitTestCase
+class HTMLPurifierTest extends HTMLPurifier_Harness
 {
     var $purifier;
     
@@ -129,6 +129,23 @@ alert("<This is compatible with XHTML>");
 alert("<This is compatible with XHTML>");
 //]]></script>',
             $ideal
+        );
+    }
+    
+    function testGetInstance() {
+        $purifier  =& HTMLPurifier::getInstance();
+        $purifier2 =& HTMLPurifier::getInstance();
+        $this->assertReference($purifier, $purifier2);
+    }
+    
+    function testMakeAbsolute() {
+        $this->assertPurification(
+            '<a href="foo.txt">Foobar</a>',
+            '<a href="http://example.com/bar/foo.txt">Foobar</a>',
+            array(
+                'URI.Base' => 'http://example.com/bar/baz.php',
+                'URI.MakeAbsolute' => true
+            )
         );
     }
     

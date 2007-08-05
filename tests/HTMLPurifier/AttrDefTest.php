@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/AttrDef.php';
 
-class HTMLPurifier_AttrDefTest extends UnitTestCase
+class HTMLPurifier_AttrDefTest extends HTMLPurifier_Harness
 {
     
     function test_parseCDATA() {

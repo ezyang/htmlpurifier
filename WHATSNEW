@@ -1,12 +1,10 @@
-The 2.0.1 release introduces a number of stability and usability fixes,
-as well as a number of (disabled by default) experimental features.  The
-security-minded should note that a reflected XSS vulnerability was patched
-in smoketests/configForm.php; if you cannot upgrade immediately, please
-delete that file (if that directory is not publically accessible, there
-is no security risk).  The maintenance changes include more helpful file
-permissions errors, internal newline normalization, reordered includes
-to prevent a missing class definition in some setups, and better cache
-revision and id handling.  The two experimental features are auto-formatting
-(auto-paragraphing and linkification) and error collection, these can
-be enabled with %AutoFormat.AutoParagraph, %AutoFormat.Linkify and
-%Core.CollectErrors respectively.
+In version 2.1, HTML Purifier's URI validation and filtering handling
+system has been revamped with a new, extensible URIFilter system. Also
+notable features include preservation of emoticons in PHP5 with
+%Core.AggressivelyFixLt, standalone and lite download versions,
+transforming relative URIs to absolute URIs, Ruby in XHTML 1.1, a Phorum
+mod, and UTF-8 font names.  Notable bug-fixes include refinement of
+the auto-paragraphing algorithm (no longer experimental), better XHTML
+1.1 support and the removal of the contents of <style> elements. Version
+2.1.1 amends a few bugs in some of newly introduced features, namely
+running the standalone download version in PHP4 and %URI.MakeAbsolute.

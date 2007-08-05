@@ -16,6 +16,11 @@ HTMLPurifier_ConfigSchema::define(
   <li>There are double newlines in paragraph tags</li>
 </ul>
 <p>
+  <code>p</code> tags must be allowed for this directive to take effect.
+  We do not use <code>br</code> tags for paragraphing, as that is
+  semantically incorrect.
+</p>
+<p>
   This directive has been available since 2.0.1.
 </p>
 ');
@@ -27,13 +32,16 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
 {
     
+    var $name = 'AutoParagraph';
+    var $needed = array('p');
+    
     function _pStart() {
         $par = new HTMLPurifier_Token_Start('p');
         $par->armor['MakeWellFormed_TagClosedError'] = true;
         return $par;
     }
     
-    function handleText(&$token, $config, &$context) {
+    function handleText(&$token) {
         $text = $token->data;
         if (empty($this->currentNesting)) {
             if (!$this->allowsElement('p')) return;
@@ -79,7 +87,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         
     }
     
-    function handleStart(&$token, $config, &$context) {
+    function handleElement(&$token) {
         // check if we're inside a tag already
         if (!empty($this->currentNesting)) {
             if ($this->allowsElement('p')) {
@@ -88,11 +96,19 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 // this token is already paragraph, abort
                 if ($token->name == 'p') return;
                 
-                // check if this token is adjacent to the parent
-                if ($this->inputTokens[$this->inputIndex - 1]->type != 'start') {
+                // this token is a block level, abort
+                if (!$this->_isInline($token)) return;
+                
+                // check if this token is adjacent to the parent token
+                $prev = $this->inputTokens[$this->inputIndex - 1];
+                if ($prev->type != 'start') {
                     // not adjacent, we can abort early
                     // add lead paragraph tag if our token is inline
-                    if ($this->_isInline($token)) {
+                    // and the previous tag was an end paragraph
+                    if (
+                        $prev->name == 'p' && $prev->type == 'end' &&
+                        $this->_isInline($token)
+                    ) {
                         $token = array($this->_pStart(), $token);
                     }
                     return;
@@ -105,8 +121,8 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 $ok = false;
                 // maintain a mini-nesting counter, this lets us bail out
                 // early if possible
-                $j = 2; // current nesting, is two due to parent and this start
-                for ($i = $this->inputIndex + 1; isset($this->inputTokens[$i]); $i++) {
+                $j = 1; // current nesting, one is due to parent (we recalculate current token)
+                for ($i = $this->inputIndex; isset($this->inputTokens[$i]); $i++) {
                     if ($this->inputTokens[$i]->type == 'start') $j++;
                     if ($this->inputTokens[$i]->type == 'end') $j--;
                     if ($this->inputTokens[$i]->type == 'text') {
@@ -150,7 +166,14 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         $needs_start = false;
         $needs_end   = false;
         
-        for ($i = 0, $c = count($raw_paragraphs); $i < $c; $i++) {
+        $c = count($raw_paragraphs);
+        if ($c == 1) {
+            // there were no double-newlines, abort quickly
+            $result[] = new HTMLPurifier_Token_Text($data);
+            return;
+        }
+        
+        for ($i = 0; $i < $c; $i++) {
             $par = $raw_paragraphs[$i];
             if (trim($par) !== '') {
                 $paragraphs[] = $par;

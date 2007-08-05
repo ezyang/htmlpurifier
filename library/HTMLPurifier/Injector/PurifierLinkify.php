@@ -6,8 +6,9 @@ HTMLPurifier_ConfigSchema::define(
     'AutoFormat', 'PurifierLinkify', false, 'bool', '
 <p>
   Internal auto-formatter that converts configuration directives in
-  syntax <a>%Namespace.Directive</a> to links. This directive has been available
-  since 2.0.1.
+  syntax <a>%Namespace.Directive</a> to links. <code>a</code> tags
+  with the <code>href</code> attribute must be allowed.
+  This directive has been available since 2.0.1.
 </p>
 ');
 
@@ -27,14 +28,16 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_Injector_PurifierLinkify extends HTMLPurifier_Injector
 {
     
+    var $name = 'PurifierLinkify';
     var $docURL;
+    var $needed = array('a' => array('href'));
     
     function prepare($config, &$context) {
-        parent::prepare($config, $context);
         $this->docURL = $config->get('AutoFormatParam', 'PurifierLinkifyDocURL');
+        return parent::prepare($config, $context);
     }
     
-    function handleText(&$token, $config, &$context) {
+    function handleText(&$token) {
         if (!$this->allowsElement('a')) return;
         if (strpos($token->data, '%') === false) return;
         

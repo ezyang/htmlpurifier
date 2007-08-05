@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/ElementDef.php';
 
-class HTMLPurifier_ElementDefTest extends UnitTestCase
+class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
 {
     
     function test_mergeIn() {

@@ -42,6 +42,16 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         
         $html = $this->normalize($html, $config, $context);
         
+        // attempt to armor stray angled brackets that cannot possibly
+        // form tags and thus are probably being used as emoticons
+        if ($config->get('Core', 'AggressivelyFixLt')) {
+            $char = '[^a-z!\/]';
+            $comment = "/<!--(.*?)(-->|\z)/is";
+            $html = preg_replace_callback($comment, array('HTMLPurifier_Lexer_DOMLex', 'callbackArmorCommentEntities'), $html);
+            $html = preg_replace("/<($char)/i", '&lt;\\1', $html);
+            $html = preg_replace_callback($comment, array('HTMLPurifier_Lexer_DOMLex', 'callbackUndoCommentSubst'), $html); // fix comments
+        }
+        
         // preprocess html, essential for UTF-8
         $html =
             '<!DOCTYPE html '.
@@ -150,6 +160,22 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      * An error handler that mutes all errors
      */
     public function muteErrorHandler($errno, $errstr) {}
+    
+    /**
+     * Callback function for undoing escaping of stray angled brackets
+     * in comments
+     */
+    static public function callbackUndoCommentSubst($matches) {
+        return '<!--' . strtr($matches[1], array('&amp;'=>'&','&lt;'=>'<')) . $matches[2];
+    }
+    
+    /**
+     * Callback function that entity-izes ampersands in comments so that
+     * callbackUndoCommentSubst doesn't clobber them
+     */
+    static public function callbackArmorCommentEntities($matches) {
+        return '<!--' . str_replace('&', '&amp;', $matches[1]) . $matches[2];
+    }
     
 }
 

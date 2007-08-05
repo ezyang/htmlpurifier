@@ -82,7 +82,7 @@ class HTMLPurifier_LanguageFactory
      */
     function setup() {
         $this->validator = new HTMLPurifier_AttrDef_Lang();
-        $this->dir = dirname(__FILE__);
+        $this->dir = HTMLPURIFIER_PREFIX . '/HTMLPurifier';
     }
     
     /**

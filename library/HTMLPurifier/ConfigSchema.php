@@ -6,6 +6,8 @@ require_once 'HTMLPurifier/ConfigDef/Namespace.php';
 require_once 'HTMLPurifier/ConfigDef/Directive.php';
 require_once 'HTMLPurifier/ConfigDef/DirectiveAlias.php';
 
+if (!defined('HTMLPURIFIER_SCHEMA_STRICT')) define('HTMLPURIFIER_SCHEMA_STRICT', false);
+
 /**
  * Configuration definition, defines directives and their defaults.
  * @note If you update this, please update Printer_ConfigForm
@@ -49,6 +51,8 @@ class HTMLPurifier_ConfigSchema {
     var $types = array(
         'string'    => 'String',
         'istring'   => 'Case-insensitive string',
+        'text'      => 'Text',
+        'itext'      => 'Case-insensitive text',
         'int'       => 'Integer',
         'float'     => 'Float',
         'bool'      => 'Boolean',
@@ -100,27 +104,30 @@ class HTMLPurifier_ConfigSchema {
      *      HTMLPurifier_DirectiveDef::$type for allowed values
      * @param $description Description of directive for documentation
      */
-    static function define(
-        $namespace, $name, $default, $type, 
-        $description
-    ) {
+    static function define($namespace, $name, $default, $type, $description) {
         $def =& HTMLPurifier_ConfigSchema::instance();
-        if (!isset($def->info[$namespace])) {
-            trigger_error('Cannot define directive for undefined namespace',
-                E_USER_ERROR);
-            return;
+        
+        // basic sanity checks
+        if (HTMLPURIFIER_SCHEMA_STRICT) {
+            if (!isset($def->info[$namespace])) {
+                trigger_error('Cannot define directive for undefined namespace',
+                    E_USER_ERROR);
+                return;
+            }
+            if (!ctype_alnum($name)) {
+                trigger_error('Directive name must be alphanumeric',
+                    E_USER_ERROR);
+                return;
+            }
+            if (empty($description)) {
+                trigger_error('Description must be non-empty',
+                    E_USER_ERROR);
+                return;
+            }
         }
-        if (!ctype_alnum($name)) {
-            trigger_error('Directive name must be alphanumeric',
-                E_USER_ERROR);
-            return;
-        }
-        if (empty($description)) {
-            trigger_error('Description must be non-empty',
-                E_USER_ERROR);
-            return;
-        }
+        
         if (isset($def->info[$namespace][$name])) {
+            // already defined
             if (
                 $def->info[$namespace][$name]->type !== $type ||
                 $def->defaults[$namespace][$name]   !== $default
@@ -129,29 +136,35 @@ class HTMLPurifier_ConfigSchema {
                 return;
             }
         } else {
-            // process modifiers
+            // needs defining
+            
+            // process modifiers (OPTIMIZE!)
             $type_values = explode('/', $type, 2);
             $type = $type_values[0];
             $modifier = isset($type_values[1]) ? $type_values[1] : false;
             $allow_null = ($modifier === 'null');
             
-            if (!isset($def->types[$type])) {
-                trigger_error('Invalid type for configuration directive',
-                    E_USER_ERROR);
-                return;
+            if (HTMLPURIFIER_SCHEMA_STRICT) {
+                if (!isset($def->types[$type])) {
+                    trigger_error('Invalid type for configuration directive',
+                        E_USER_ERROR);
+                    return;
+                }
+                $default = $def->validate($default, $type, $allow_null);
+                if ($def->isError($default)) {
+                    trigger_error('Default value does not match directive type',
+                        E_USER_ERROR);
+                    return;
+                }
             }
-            $default = $def->validate($default, $type, $allow_null);
-            if ($def->isError($default)) {
-                trigger_error('Default value does not match directive type',
-                    E_USER_ERROR);
-                return;
-            }
+            
             $def->info[$namespace][$name] =
                 new HTMLPurifier_ConfigDef_Directive();
             $def->info[$namespace][$name]->type = $type;
             $def->info[$namespace][$name]->allow_null = $allow_null;
             $def->defaults[$namespace][$name]   = $default;
         }
+        if (!HTMLPURIFIER_SCHEMA_STRICT) return;
         $backtrace = debug_backtrace();
         $file = $def->mungeFilename($backtrace[0]['file']);
         $line = $backtrace[0]['line'];
@@ -166,19 +179,21 @@ class HTMLPurifier_ConfigSchema {
      */
     static function defineNamespace($namespace, $description) {
         $def =& HTMLPurifier_ConfigSchema::instance();
-        if (isset($def->info[$namespace])) {
-            trigger_error('Cannot redefine namespace', E_USER_ERROR);
-            return;
-        }
-        if (!ctype_alnum($namespace)) {
-            trigger_error('Namespace name must be alphanumeric',
-                E_USER_ERROR);
-            return;
-        }
-        if (empty($description)) {
-            trigger_error('Description must be non-empty',
-                E_USER_ERROR);
-            return;
+        if (HTMLPURIFIER_SCHEMA_STRICT) {
+            if (isset($def->info[$namespace])) {
+                trigger_error('Cannot redefine namespace', E_USER_ERROR);
+                return;
+            }
+            if (!ctype_alnum($namespace)) {
+                trigger_error('Namespace name must be alphanumeric',
+                    E_USER_ERROR);
+                return;
+            }
+            if (empty($description)) {
+                trigger_error('Description must be non-empty',
+                    E_USER_ERROR);
+                return;
+            }
         }
         $def->info[$namespace] = array();
         $def->info_namespace[$namespace] = new HTMLPurifier_ConfigDef_Namespace();
@@ -199,23 +214,25 @@ class HTMLPurifier_ConfigSchema {
      */
     static function defineValueAliases($namespace, $name, $aliases) {
         $def =& HTMLPurifier_ConfigSchema::instance();
-        if (!isset($def->info[$namespace][$name])) {
+        if (HTMLPURIFIER_SCHEMA_STRICT && !isset($def->info[$namespace][$name])) {
             trigger_error('Cannot set value alias for non-existant directive',
                 E_USER_ERROR);
             return;
         }
         foreach ($aliases as $alias => $real) {
-            if (!$def->info[$namespace][$name] !== true &&
-                !isset($def->info[$namespace][$name]->allowed[$real])
-            ) {
-                trigger_error('Cannot define alias to value that is not allowed',
-                    E_USER_ERROR);
-                return;
-            }
-            if (isset($def->info[$namespace][$name]->allowed[$alias])) {
-                trigger_error('Cannot define alias over allowed value',
-                    E_USER_ERROR);
-                return;
+            if (HTMLPURIFIER_SCHEMA_STRICT) {
+                if (!$def->info[$namespace][$name] !== true &&
+                    !isset($def->info[$namespace][$name]->allowed[$real])
+                ) {
+                    trigger_error('Cannot define alias to value that is not allowed',
+                        E_USER_ERROR);
+                    return;
+                }
+                if (isset($def->info[$namespace][$name]->allowed[$alias])) {
+                    trigger_error('Cannot define alias over allowed value',
+                        E_USER_ERROR);
+                    return;
+                }
             }
             $def->info[$namespace][$name]->aliases[$alias] = $real;
         }
@@ -230,14 +247,14 @@ class HTMLPurifier_ConfigSchema {
      */
     static function defineAllowedValues($namespace, $name, $allowed_values) {
         $def =& HTMLPurifier_ConfigSchema::instance();
-        if (!isset($def->info[$namespace][$name])) {
+        if (HTMLPURIFIER_SCHEMA_STRICT && !isset($def->info[$namespace][$name])) {
             trigger_error('Cannot define allowed values for undefined directive',
                 E_USER_ERROR);
             return;
         }
         $directive =& $def->info[$namespace][$name];
         $type = $directive->type;
-        if ($type != 'string' && $type != 'istring') {
+        if (HTMLPURIFIER_SCHEMA_STRICT && $type != 'string' && $type != 'istring') {
             trigger_error('Cannot define allowed values for directive whose type is not string',
                 E_USER_ERROR);
             return;
@@ -248,8 +265,11 @@ class HTMLPurifier_ConfigSchema {
         foreach ($allowed_values as $value) {
             $directive->allowed[$value] = true;
         }
-        if ($def->defaults[$namespace][$name] !== null &&
-            !isset($directive->allowed[$def->defaults[$namespace][$name]])) {
+        if (
+            HTMLPURIFIER_SCHEMA_STRICT &&
+            $def->defaults[$namespace][$name] !== null &&
+            !isset($directive->allowed[$def->defaults[$namespace][$name]])
+        ) {
             trigger_error('Default value must be in allowed range of variables',
                 E_USER_ERROR);
             $directive->allowed = true; // undo undo!
@@ -267,30 +287,32 @@ class HTMLPurifier_ConfigSchema {
      */
     static function defineAlias($namespace, $name, $new_namespace, $new_name) {
         $def =& HTMLPurifier_ConfigSchema::instance();
-        if (!isset($def->info[$namespace])) {
-            trigger_error('Cannot define directive alias in undefined namespace',
-                E_USER_ERROR);
-            return;
-        }
-        if (!ctype_alnum($name)) {
-            trigger_error('Directive name must be alphanumeric',
-                E_USER_ERROR);
-            return;
-        }
-        if (isset($def->info[$namespace][$name])) {
-            trigger_error('Cannot define alias over directive',
-                E_USER_ERROR);
-            return;
-        }
-        if (!isset($def->info[$new_namespace][$new_name])) {
-            trigger_error('Cannot define alias to undefined directive',
-                E_USER_ERROR);
-            return;
-        }
-        if ($def->info[$new_namespace][$new_name]->class == 'alias') {
-            trigger_error('Cannot define alias to alias',
-                E_USER_ERROR);
-            return;
+        if (HTMLPURIFIER_SCHEMA_STRICT) {
+            if (!isset($def->info[$namespace])) {
+                trigger_error('Cannot define directive alias in undefined namespace',
+                    E_USER_ERROR);
+                return;
+            }
+            if (!ctype_alnum($name)) {
+                trigger_error('Directive name must be alphanumeric',
+                    E_USER_ERROR);
+                return;
+            }
+            if (isset($def->info[$namespace][$name])) {
+                trigger_error('Cannot define alias over directive',
+                    E_USER_ERROR);
+                return;
+            }
+            if (!isset($def->info[$new_namespace][$new_name])) {
+                trigger_error('Cannot define alias to undefined directive',
+                    E_USER_ERROR);
+                return;
+            }
+            if ($def->info[$new_namespace][$new_name]->class == 'alias') {
+                trigger_error('Cannot define alias to alias',
+                    E_USER_ERROR);
+                return;
+            }
         }
         $def->info[$namespace][$name] =
             new HTMLPurifier_ConfigDef_DirectiveAlias(
@@ -313,8 +335,10 @@ class HTMLPurifier_ConfigSchema {
                 return $var;
             case 'istring':
             case 'string':
+            case 'text': // no difference, just is longer/multiple line string
+            case 'itext':
                 if (!is_string($var)) break;
-                if ($type === 'istring') $var = strtolower($var);
+                if ($type === 'istring' || $type === 'itext') $var = strtolower($var);
                 return $var;
             case 'int':
                 if (is_string($var) && ctype_digit($var)) $var = (int) $var;
@@ -345,9 +369,13 @@ class HTMLPurifier_ConfigSchema {
                     // a single empty string item, but having an empty
                     // array is more intuitive
                     if ($var == '') return array();
-                    // simplistic string to array method that only works
-                    // for simple lists of tag names or alphanumeric characters
-                    $var = explode(',',$var);
+                    if (strpos($var, "\n") === false && strpos($var, "\r") === false) {
+                        // simplistic string to array method that only works
+                        // for simple lists of tag names or alphanumeric characters
+                        $var = explode(',',$var);
+                    } else {
+                        $var = preg_split('/(,|[\n\r]+)/', $var);
+                    }
                     // remove spaces
                     foreach ($var as $i => $j) $var[$i] = trim($j);
                     if ($type === 'hash') {
@@ -388,6 +416,7 @@ class HTMLPurifier_ConfigSchema {
      * Takes an absolute path and munges it into a more manageable relative path
      */
     function mungeFilename($filename) {
+        if (!HTMLPURIFIER_SCHEMA_STRICT) return $filename;
         $offset = strrpos($filename, 'HTMLPurifier');
         $filename = substr($filename, $offset);
         $filename = str_replace('\\', '/', $filename);

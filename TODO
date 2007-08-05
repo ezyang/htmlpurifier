@@ -6,14 +6,9 @@ TODO List
     ? Maybe I'll Do It
 ==========================
 
-2.1 release [Refactor, refactor!]
- # URI validation routines tighter (see docs/dev-code-quality.html) (COMPLEX)
- # Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
- # Ruby support
- - Configuration profiles: predefined directives set with one func call
- - Implement IDREF support (harder than it seems, since you cannot have
-   IDREFs to non-existent IDs)
- - Allow non-ASCII characters in font names
+If no interest is expressed for a feature that may required a considerable
+amount of effort to implement, it may get endlessly delayed. Do not be
+afraid to cast your vote for the next feature to be implemented!
 
 2.2 release [Error'ed]
  # Error logging for filtering/cleanup procedures
@@ -36,6 +31,8 @@ TODO List
 
 2.4 release [It's All About Trust] (floating)
  # Implement untrusted, dangerous elements/attributes
+ # Implement IDREF support (harder than it seems, since you cannot have
+   IDREFs to non-existent IDs)
 
 3.0 release [Beyond HTML]
  # Legit token based CSS parsing (will require revamping almost every
@@ -60,9 +57,7 @@ TODO List
 Ongoing
  - Lots of profiling, make it faster!
  - Plugins for major CMSes (COMPLEX)
-    - WordPress (mostly written, needs beta-testing)
     - phpBB
-    - Phorum
     - eFiction
     - more! (look for ones that use WYSIWYGs)
  - Complete basic smoketests
@@ -71,13 +66,15 @@ Unknown release (on a scratch-an-itch basis)
  ? Semi-lossy dumb alternate character encoding transfor
  ? Have 'lang' attribute be checked against official lists, achieved by
    encoding all characters that have string entity equivalents
- - Explain how to use HTML Purifier in non-PHP languages / create
-   a simple command line stub
  - Abstract ChildDef_BlockQuote to work with all elements that only
    allow blocks in them, required or optional
  - Reorganize Unit Tests
-    - Refactor loop tests (esp. AttrDef_URI)
+    - Refactor loop tests: Lexer
  - Reorganize configuration directives (Create more namespaces! Get messy!)
+ - Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
+ - Implement lenient <ruby> child validation
+ - Explain how to use HTML Purifier in non-PHP languages / create
+   a simple command line stub (or complicated?)
 
 Requested
 
