@@ -1,13 +1,15 @@
 #!/usr/bin/php
 <?php
 
-require_once 'common.php';
-assertCli();
-
 /**
  * Parses *.ent files into an entity lookup table, and then serializes and
  * writes the whole kaboodle to a file. The resulting file should be versioned.
  */
+
+if (php_sapi_name() != 'cli') {
+    echo 'Script cannot be called from web-browser.';
+    exit;
+}
 
 chdir( dirname(__FILE__) );
 

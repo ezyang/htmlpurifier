@@ -18,8 +18,6 @@ TODO:
 if (version_compare('5', PHP_VERSION, '>')) exit('Requires PHP 5 or higher.');
 error_reporting(E_ALL); // probably not possible to use E_STRICT
 
-define('HTMLPURIFIER_SCHEMA_STRICT', true); // description data needs to be collected
-
 // load dual-libraries
 require_once '../library/HTMLPurifier.auto.php';
 require_once 'library/ConfigDoc.auto.php';

@@ -9,7 +9,7 @@ class HTMLPurifier_AttrCollectionsTest_NoConstructor extends HTMLPurifier_AttrCo
     function performInclusions(&$a) {}
 }
 
-class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
+class HTMLPurifier_AttrCollectionsTest extends UnitTestCase
 {
     
     function testConstruction() {

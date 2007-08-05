@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/ErrorCollector.php';
 
-class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
+class HTMLPurifier_ErrorCollectorTest extends UnitTestCase
 {
     
     function setup() {

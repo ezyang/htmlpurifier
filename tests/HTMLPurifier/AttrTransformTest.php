@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/AttrTransform.php';
 
-class HTMLPurifier_AttrTransformTest extends HTMLPurifier_Harness
+class HTMLPurifier_AttrTransformTest extends UnitTestCase
 {
     
     function test_prependCSS() {

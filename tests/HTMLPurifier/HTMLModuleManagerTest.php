@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/HTMLModuleManager.php';
 
-class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
+class HTMLPurifier_HTMLModuleManagerTest extends UnitTestCase
 {
     
     function test_addModule() {

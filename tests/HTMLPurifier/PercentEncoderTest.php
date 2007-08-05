@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/PercentEncoder.php';
 
-class HTMLPurifier_PercentEncoderTest extends HTMLPurifier_Harness
+class HTMLPurifier_PercentEncoderTest extends UnitTestCase
 {
     
     var $PercentEncoder;

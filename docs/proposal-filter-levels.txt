@@ -32,7 +32,7 @@ Here are some fuzzy levels you could set:
 
 One final note: when you start axing tags that are more commonly used, you
 run the risk of accidentally destroying user data, especially if the data
-is incoming from a WYSIWYG editor that hasn't been synced accordingly. This may
+is incoming from a WYSIWYG eidtor that hasn't been synced accordingly. This may
 make forbidden element to text transformations desirable (for example, images).
 
 

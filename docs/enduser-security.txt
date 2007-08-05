@@ -10,7 +10,9 @@ to be effective. Things to remember:
 
 2. IDs: see enduser-id.html for more info
 
-3. URIs: see enduser-uri-filter.html
+3. Links: document pending feature completion
+Rudimentary blacklisting, we should also allow only relative URIs. We
+need a doc to explain the stuff.
 
 4. CSS: document pending
 Explain which CSS styles we blocked and why.

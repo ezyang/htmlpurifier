@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/EntityParser.php';
 
-class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
+class HTMLPurifier_EntityParserTest extends UnitTestCase
 {
     
     var $EntityParser;

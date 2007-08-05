@@ -11,7 +11,8 @@ docs/examples/demo.php - ad hoc HTML/PHP soup to the extreme
 
 AttrDef - a lot of duplication, more generic classes need to be created;
 a lot of strtolower() calls, no legit casing
-    Class - doesn't support Unicode characters (fringe); uses regular expressions
+    Class - doesn't support Unicode characters (fringe); uses regular
+        expressions
     Lang - code duplication; premature optimization
     Length - easily mistaken for CSSLength
     URI - multiple regular expressions; missing validation for parts (?)
@@ -21,6 +22,9 @@ ConfigSchema - redefinition is a mess
 Strategy
     FixNesting - cannot bubble nodes out of structures, duplicated checks
         for special-case parent node
+    MakeWellFormed - insufficient automatic closing definitions (check HTML
+        spec for optional end tags, also, closing based on type (block/inline)
+        might be efficient).
     RemoveForeignElements - should be run in parallel with MakeWellFormed
 URIScheme - needs to have callable generic checks
     mailto - doesn't validate emails, doesn't validate querystring

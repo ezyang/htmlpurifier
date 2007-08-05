@@ -15,7 +15,7 @@ class HTMLPurifier_Strategy_Composite_Test
 }
 
 // doesn't use Strategy harness
-class HTMLPurifier_Strategy_CompositeTest extends HTMLPurifier_Harness
+class HTMLPurifier_Strategy_CompositeTest extends UnitTestCase
 {
     
     function test() {

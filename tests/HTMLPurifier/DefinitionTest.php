@@ -7,7 +7,7 @@ Mock::generatePartial(
         'HTMLPurifier_Definition_Testable',
         array('doSetup'));
 
-class HTMLPurifier_DefinitionTest extends HTMLPurifier_Harness
+class HTMLPurifier_DefinitionTest extends UnitTestCase
 {
     function test_setup() {
         $def = new HTMLPurifier_Definition_Testable();

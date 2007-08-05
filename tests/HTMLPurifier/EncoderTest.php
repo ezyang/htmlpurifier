@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/Encoder.php';
 
-class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
+class HTMLPurifier_EncoderTest extends UnitTestCase
 {
     
     var $_entity_lookup;

@@ -1,12 +1,11 @@
 <?php
 
-require_once 'HTMLPurifier/ComplexHarness.php';
+require_once 'HTMLPurifier/Harness.php';
 
-class HTMLPurifier_StrategyHarness extends HTMLPurifier_ComplexHarness
+class HTMLPurifier_StrategyHarness extends HTMLPurifier_Harness
 {
     
     function setUp() {
-        parent::setUp();
         $this->func      = 'execute';
         $this->to_tokens = true;
         $this->to_html   = true;

@@ -3,7 +3,7 @@
 require_once 'HTMLPurifier/ErrorCollectorEMock.php';
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 
-class HTMLPurifier_ErrorsHarness extends HTMLPurifier_Harness
+class HTMLPurifier_ErrorsHarness extends UnitTestCase
 {
     
     var $config, $context;

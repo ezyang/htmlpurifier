@@ -33,9 +33,6 @@ blockquote .label {font-weight:bold; font-size:1em; margin:0 0 .1em;
 .table thead th:first-child {-moz-border-radius-topleft:1em;}
 .table tbody td {border-bottom:1px solid #CCC; padding-right:0.6em;padding-left:0.6em;}
 
-/* A quick table*/
-table.quick tbody th {text-align:right; padding-right:1em;}
-
 /* Category of the file */
 #filing {font-weight:bold; font-size:smaller; }
 

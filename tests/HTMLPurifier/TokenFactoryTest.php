@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/TokenFactory.php';
 
-class HTMLPurifier_TokenFactoryTest extends HTMLPurifier_Harness
+class HTMLPurifier_TokenFactoryTest extends UnitTestCase
 {
     public function test() {
         

@@ -1,6 +1,6 @@
 <?php
 
-class HTMLPurifier_DefinitionCacheHarness extends HTMLPurifier_Harness
+class HTMLPurifier_DefinitionCacheHarness extends UnitTestCase
 {
     
     /**

@@ -2,7 +2,7 @@
 
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 
-class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
+class HTMLPurifier_LexerTest extends UnitTestCase
 {
     
     var $Lexer;
