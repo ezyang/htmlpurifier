@@ -5,4 +5,6 @@ notable features include preservation of emoticons in PHP5 with
 transforming relative URIs to absolute URIs, Ruby in XHTML 1.1, a Phorum
 mod, and UTF-8 font names.  Notable bug-fixes include refinement of
 the auto-paragraphing algorithm (no longer experimental), better XHTML
-1.1 support and the removal of the contents of <style> elements.
+1.1 support and the removal of the contents of <style> elements. Version
+2.1.1 amends a few bugs in some of newly introduced features, namely
+running the standalone download version in PHP4 and %URI.MakeAbsolute.

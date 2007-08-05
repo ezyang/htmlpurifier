@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-2.1.1, unknown release date
+2.1.1, released 2007-08-04
 - Fix show-stopper bug in %URI.MakeAbsolute functionality
 - Fix PHP4 syntax error in standalone version
 . Add prefix directory to include path for standalone, this prevents
