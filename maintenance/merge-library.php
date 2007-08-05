@@ -167,6 +167,10 @@ function make_file_standalone($file) {
  */
 function replace_includes_callback($matches) {
     $file = $matches[1];
+    // PHP 5 only file
+    if ($file == 'HTMLPurifier/Lexer/DOMLex.php') {
+        return $matches[0];
+    }
     if (isset($GLOBALS['loaded'][$file])) return '';
     $GLOBALS['loaded'][$file] = true;
     create_blank($file);
@@ -195,5 +199,9 @@ make_dir_standalone('HTMLPurifier/Language');
 make_file_standalone('HTMLPurifier/Printer/ConfigForm.js');
 make_file_standalone('HTMLPurifier/Printer/ConfigForm.css');
 make_dir_standalone('HTMLPurifier/URIScheme');
+// PHP 5 only file
+mkdir_deep('standalone/HTMLPurifier/Lexer');
+make_file_standalone('HTMLPurifier/Lexer/DOMLex.php');
+make_file_standalone('HTMLPurifier/TokenFactory.php');
 echo ' done!' . PHP_EOL;
 

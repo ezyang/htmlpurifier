@@ -205,7 +205,7 @@ class HTMLPurifier
             if (is_a($prototype, 'HTMLPurifier')) {
                 $htmlpurifier = $prototype;
             } elseif ($prototype) {
-                $htmlpurifier = new HTMLPurifier(HTMLPurifier_Config::create($prototype));
+                $htmlpurifier = new HTMLPurifier($prototype);
             } else {
                 $htmlpurifier = new HTMLPurifier();
             }

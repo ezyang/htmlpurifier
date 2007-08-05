@@ -9,11 +9,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-2.2.0, unknown release date
-[ no items ]
-
 2.1.1, unknown release date
 - Fix show-stopper bug in %URI.MakeAbsolute functionality
+- Fix PHP4 syntax error in standalone version
 . Add prefix directory to include path for standalone, this prevents
   other installations from clobbering the standalone's URI schemes
 . Single test methods can be invoked by prefixing with __only
