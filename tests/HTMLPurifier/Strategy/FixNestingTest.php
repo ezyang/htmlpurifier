@@ -11,79 +11,81 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
         $this->obj = new HTMLPurifier_Strategy_FixNesting();
     }
     
-    function testBlockAndInlineIntegration() {
-        
-        // legal inline
+    function testPreserveInlineInRoot() {
         $this->assertResult('<b>Bold text</b>');
-        
-        // legal inline and block (default parent element is FLOW)
+    }
+    
+    function testPreserveInlineAndBlockInRoot() {
         $this->assertResult('<a href="about:blank">Blank</a><div>Block</div>');
-        
-        // illegal block in inline
+    }
+    
+    function testRemoveBlockInInline() {
         $this->assertResult(
             '<b><div>Illegal div.</div></b>',
             '<b>Illegal div.</b>'
         );
-        
-        // same test with different configuration (fragile)
-        $this->assertResult(
-            '<b><div>Illegal div.</div></b>',
-            '<b>&lt;div&gt;Illegal div.&lt;/div&gt;</b>',
-            array('Core.EscapeInvalidChildren' => true)
-        );
-        
     }
     
-    function testNodeRemovalIntegration() {
-        
-        // test of empty set that's required, resulting in removal of node
+    function testEscapeBlockInInline() {
+        $this->config->set('Core', 'EscapeInvalidChildren', true);
+        $this->assertResult(
+            '<b><div>Illegal div.</div></b>',
+            '<b>&lt;div&gt;Illegal div.&lt;/div&gt;</b>'
+        );
+    }
+    
+    function testRemoveNodeWithMissingRequiredElements() {
         $this->assertResult('<ul></ul>', '');
-        
-        // test illegal text which gets removed
+    }
+    
+    function testRemoveIllegalPCDATA() {
         $this->assertResult(
             '<ul>Illegal text<li>Legal item</li></ul>',
             '<ul><li>Legal item</li></ul>'
         );
-        
     }
     
-    function testTableIntegration() {
-        // test custom table definition
-        $this->assertResult(
-            '<table><tr><td>Cell 1</td></tr></table>'
-        );
+    function testCustomTableDefinition() {
+        $this->assertResult('<table><tr><td>Cell 1</td></tr></table>');
+    }
+    
+    function testRemoveEmptyTable() {
         $this->assertResult('<table></table>', '');
     }
     
-    function testChameleonIntegration() {
-        
-        // block in inline ins not allowed
+    function testChameleonRemoveBlockInNodeInInline() {
         $this->assertResult(
           '<span><ins><div>Not allowed!</div></ins></span>',
           '<span><ins>Not allowed!</ins></span>'
         );
-        
-        // test block element that has inline content
+    }
+    
+    function testChameleonRemoveBlockInBlockNodeWithInlineContent() {
         $this->assertResult(
           '<h1><ins><div>Not allowed!</div></ins></h1>',
           '<h1><ins>Not allowed!</ins></h1>'
         );
-        
-        // stacked ins/del
+    }
+    
+    function testNestedChameleonRemoveBlockInNodeWithInlineContent() {
         $this->assertResult(
           '<h1><ins><del><div>Not allowed!</div></del></ins></h1>',
           '<h1><ins><del>Not allowed!</del></ins></h1>'
         );
+    }
+    
+    function testNestedChameleonPreserveBlockInBlock() {
         $this->assertResult(
           '<div><ins><del><div>Allowed!</div></del></ins></div>'
         );
-        
+    }
+    
+    function testChameleonEscapeInvalidBlockInInline() {
+        $this->config->set('Core', 'EscapeInvalidChildren', true);
         $this->assertResult( // alt config
           '<span><ins><div>Not allowed!</div></ins></span>',
-          '<span><ins>&lt;div&gt;Not allowed!&lt;/div&gt;</ins></span>',
-          array('Core.EscapeInvalidChildren' => true)
+          '<span><ins>&lt;div&gt;Not allowed!&lt;/div&gt;</ins></span>'
         );
-        
     }
     
     function testExclusionsIntegration() {
@@ -93,41 +95,37 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
           '<a><span></span></a>'
         );
     }
-   
-    function testCustomParentIntegration() {
-        // test inline parent
-        $this->assertResult(
-            '<b>Bold</b>', true, array('HTML.Parent' => 'span')
-        );
-        $this->assertResult(
-            '<div>Reject</div>', 'Reject', array('HTML.Parent' => 'span')
-        );
-   }
-   
-   function testError() {
-        // test fallback to div
-        $this->expectError('Cannot use unrecognized element as parent.');
-        $this->assertResult(
-            '<div>Accept</div>', true, array('HTML.Parent' => 'obviously-impossible')
-        );
-        $this->swallowErrors();
-        
+    
+    function testPreserveInlineNodeInInlineRootNode() {
+        $this->config->set('HTML', 'Parent', 'span');
+        $this->assertResult('<b>Bold</b>');
     }
     
-    function testDoubleCheckIntegration() {
-        // breaks without the redundant checking code
+    function testRemoveBlockNodeInInlineRootNode() {
+        $this->config->set('HTML', 'Parent', 'span');
+        $this->assertResult('<div>Reject</div>', 'Reject');
+   }
+   
+   function testInvalidParentError() {
+        // test fallback to div
+        $this->config->set('HTML', 'Parent', 'obviously-impossible');
+        $this->expectError('Cannot use unrecognized element as parent.');
+        $this->assertResult('<div>Accept</div>');
+    }
+    
+    function testCascadingRemovalOfNodesMissingRequiredChildren() {
         $this->assertResult('<table><tr></tr></table>', '');
-        
-        // special case, prevents scrolling one back to find parent
+    }
+    
+    function testCascadingRemovalSpecialCaseCannotScrollOneBack() {
         $this->assertResult('<table><tr></tr><tr></tr></table>', '');
-        
-        // cascading rollbacks
-        $this->assertResult(
-          '<table><tbody><tr></tr><tr></tr></tbody><tr></tr><tr></tr></table>',
-          ''
-        );
-        
-        // rollbacks twice
+    }
+    
+    function testLotsOfCascadingRemovalOfNodes() {
+        $this->assertResult('<table><tbody><tr></tr><tr></tr></tbody><tr></tr><tr></tr></table>', '');
+    }
+    
+    function testAdjacentRemovalOfNodeMissingRequiredChildren() {
         $this->assertResult('<table></table><table></table>', '');
     }
     

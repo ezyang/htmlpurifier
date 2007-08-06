@@ -16,6 +16,7 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
             ?>><?php echo $file ?></option>
         <?php } ?>
     </select>
+    <input type="checkbox" name="standalone" title="Standalone version?" <?php if(isset($_GET['standalone'])) {echo 'checked="checked" ';} ?>/>
     <input type="submit" value="Go">
 </form>
 <?php

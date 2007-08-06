@@ -11,18 +11,19 @@ class HTMLPurifier_AttrTransform_BdoDirTest extends HTMLPurifier_AttrTransformHa
         $this->obj = new HTMLPurifier_AttrTransform_BdoDir();
     }
     
-    function test() {
-        
+    function testAddDefaultDir() {
         $this->assertResult( array(), array('dir' => 'ltr') );
-        
-        // leave existing dir alone
+    }
+    
+    function testPreserveExistingDir() {
         $this->assertResult( array('dir' => 'rtl') );
-        
-        // use a different default
+    }
+    
+    function testAlternateDefault() {
+        $this->config->set('Attr', 'DefaultTextDir', 'rtl');
         $this->assertResult(
             array(),
-            array('dir' => 'rtl'),
-            array('Attr.DefaultTextDir' => 'rtl')
+            array('dir' => 'rtl')
         );
         
     }

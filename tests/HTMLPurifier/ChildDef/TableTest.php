@@ -6,10 +6,12 @@ require_once 'HTMLPurifier/ChildDef/Table.php';
 class HTMLPurifier_ChildDef_TableTest extends HTMLPurifier_ChildDefHarness
 {
     
-    function test() {
-        
+    function setUp() {
+        parent::setUp();
         $this->obj = new HTMLPurifier_ChildDef_Table();
-        
+    }
+    
+    function test() {
         $this->assertResult('', false);
         
         // we're using empty tags to compact the tests: under real circumstances
