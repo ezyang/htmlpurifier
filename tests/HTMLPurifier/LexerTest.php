@@ -351,6 +351,12 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             new HTMLPurifier_Token_Empty('a', array('href' => '><>'))
         );
         
+        // empty tag with attributes
+        $input[25] = '<param name="src" value="http://example.com/video.wmv" />';
+        $expect[25] = array(
+            new HTMLPurifier_Token_Empty('param', array('name' => 'src', 'value' => 'http://example.com/video.wmv'))
+        );
+        
         $default_config = HTMLPurifier_Config::createDefault();
         $default_context = new HTMLPurifier_Context();
         foreach($input as $i => $discard) {
