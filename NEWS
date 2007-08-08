@@ -10,6 +10,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 2.1.2, unknown release date
+! Implemented Object module for trusted users
 - Fix non-visible parsing error in DirectLex with empty tags that have
   slashes inside attribute values.
 
