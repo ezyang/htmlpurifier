@@ -204,7 +204,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         $this->info['border-right'] = new HTMLPurifier_AttrDef_CSS_Border($config);
         
         $this->info['border-collapse'] = new HTMLPurifier_AttrDef_Enum(array(
-            'collapse', 'seperate'));
+            'collapse', 'separate'));
         
         $this->info['caption-side'] = new HTMLPurifier_AttrDef_Enum(array(
             'top', 'bottom'));

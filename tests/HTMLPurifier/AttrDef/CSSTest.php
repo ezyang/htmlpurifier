@@ -67,6 +67,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('border:1px solid #000;');
         $this->assertDef('border-bottom:2em double #FF00FA;');
         $this->assertDef('border-collapse:collapse;');
+        $this->assertDef('border-collapse:separate;');
         $this->assertDef('caption-side:top;');
         $this->assertDef('vertical-align:middle;');
         $this->assertDef('vertical-align:12px;');

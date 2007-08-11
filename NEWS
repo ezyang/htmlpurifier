@@ -13,6 +13,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Implemented Object module for trusted users
 - Fix non-visible parsing error in DirectLex with empty tags that have
   slashes inside attribute values.
+- Fix typo in CSS definition: border-collapse:seperate; was incorrectly
+  accepted as valid CSS. Usually non-visible, because this styling is the
+  default for tables in most browsers. Thanks Brett Zamir for pointing
+  this out.
 . Unit test refactoring for one logical test per test function
 . Config and context parameters in ComplexHarness deprecated: instead, edit
   the $config and $context member variables
