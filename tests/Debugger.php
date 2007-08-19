@@ -54,14 +54,14 @@ function isInScopes($array = array()) {
 }
 /**#@-*/
 
-function printTokens($tokens, $index) {
+function printTokens($tokens, $index = null) {
     $string = '<pre>';
     $generator = new HTMLPurifier_Generator();
     foreach ($tokens as $i => $token) {
-        if ($index == $i) $string .= '[<strong>';
+        if ($index === $i) $string .= '[<strong>';
         $string .= "<sup>$i</sup>";
         $string .= $generator->escape($generator->generateFromToken($token));
-        if ($index == $i) $string .= '</strong>]';
+        if ($index === $i) $string .= '</strong>]';
     }
     $string .= '</pre>';
     echo $string;

@@ -11,6 +11,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 2.1.2, unknown release date
 ! Implemented Object module for trusted users
+! Implemented experimental HTML5 parsing mode using PH5P. To use, add
+  this to your code:
+        require_once 'HTMLPurifier/Lexer/PH5P.php';
+        $config->set('Core', 'LexerImpl', PH5P');
+  Note that this Lexer introduces some classes not in the HTMLPurifier
+  namespace.
 - Fix non-visible parsing error in DirectLex with empty tags that have
   slashes inside attribute values.
 - Fix typo in CSS definition: border-collapse:seperate; was incorrectly
@@ -21,6 +27,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Unit test refactoring for one logical test per test function
 . Config and context parameters in ComplexHarness deprecated: instead, edit
   the $config and $context member variables
+. HTML wrapper in DOMLex now takes DTD identifiers into account; doesn't
+  really make a difference, but is good for completeness sake
 
 2.1.1, released 2007-08-04
 - Fix show-stopper bug in %URI.MakeAbsolute functionality
