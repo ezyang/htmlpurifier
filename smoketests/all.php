@@ -31,7 +31,7 @@ while (false !== ($filename = readdir($dh))) {
     if ($filename == 'all.php') continue;
     if ($filename == 'testSchema.php') continue;
     ?>
-    <iframe src="<?php echo escapeHTML($filename); ?>"></iframe>
+    <iframe src="<?php echo escapeHTML($filename); if (isset($_GET['standalone'])) {echo '?standalone';} ?>"></iframe>
     <?php
 }
 

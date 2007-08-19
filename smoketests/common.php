@@ -2,7 +2,11 @@
 
 header('Content-type: text/html; charset=UTF-8');
 
-require_once '../library/HTMLPurifier.auto.php';
+if (!isset($_GET['standalone'])) {
+    require_once '../library/HTMLPurifier.auto.php';
+} else {
+    require_once '../library/HTMLPurifier.standalone.php';
+}
 error_reporting(E_ALL);
 
 function escapeHTML($string) {

@@ -84,7 +84,7 @@ function mkdir_deep($folder) {
 function copyr($source, $dest) {
     // Simple copy for a file
     if (is_file($source)) {
-        return copy($source, $dest);
+        return copy_and_remove_includes($source, $dest);
     }
     // Make destination directory
     if (!is_dir($dest)) {
@@ -158,7 +158,14 @@ function make_dir_standalone($dir) {
 
 function make_file_standalone($file) {
     mkdir_deep('standalone/' . dirname($file));
-    return copy($file, 'standalone/' . $file);
+    copy_and_remove_includes($file, 'standalone/' . $file);
+    return true;
+}
+
+function copy_and_remove_includes($file, $sfile) {
+    $contents = file_get_contents($file);
+    if (strrchr($file, '.') === '.php') $contents = replace_includes($contents);
+    return file_put_contents($sfile, $contents);
 }
 
 /**
@@ -168,7 +175,7 @@ function make_file_standalone($file) {
 function replace_includes_callback($matches) {
     $file = $matches[1];
     // PHP 5 only file
-    if ($file == 'HTMLPurifier/Lexer/DOMLex.php') {
+    if ($file == 'HTMLPurifier/Lexer/DOMLex.php' || $file == 'HTMLPurifier/Printer.php') {
         return $matches[0];
     }
     if (isset($GLOBALS['loaded'][$file])) return '';
@@ -196,12 +203,12 @@ rmdirr('standalone'); // ensure a clean copy
 mkdir_deep('standalone/HTMLPurifier/DefinitionCache/Serializer');
 make_dir_standalone('HTMLPurifier/EntityLookup');
 make_dir_standalone('HTMLPurifier/Language');
-make_file_standalone('HTMLPurifier/Printer/ConfigForm.js');
-make_file_standalone('HTMLPurifier/Printer/ConfigForm.css');
+make_file_standalone('HTMLPurifier/Printer.php'); 
+make_dir_standalone('HTMLPurifier/Printer');
 make_dir_standalone('HTMLPurifier/URIScheme');
-// PHP 5 only file
-mkdir_deep('standalone/HTMLPurifier/Lexer');
+make_dir_standalone('HTMLPurifier/Filter');
+// PHP 5 only files
 make_file_standalone('HTMLPurifier/Lexer/DOMLex.php');
-make_file_standalone('HTMLPurifier/TokenFactory.php');
+make_file_standalone('HTMLPurifier/Lexer/PH5P.php');
 echo ' done!' . PHP_EOL;
 
