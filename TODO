@@ -64,6 +64,7 @@ Ongoing
  - Complete basic smoketests
 
 Unknown release (on a scratch-an-itch basis)
+ # CHMOD install script for PEAR installs
  ? Semi-lossy dumb alternate character encoding transfor
  ? Have 'lang' attribute be checked against official lists, achieved by
    encoding all characters that have string entity equivalents
