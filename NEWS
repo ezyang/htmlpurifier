@@ -16,7 +16,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
         require_once 'HTMLPurifier/Lexer/PH5P.php';
         $config->set('Core', 'LexerImpl', PH5P');
   Note that this Lexer introduces some classes not in the HTMLPurifier
-  namespace.
+  namespace.  Also, this is PHP5 only.
 - Fix non-visible parsing error in DirectLex with empty tags that have
   slashes inside attribute values.
 - Fix typo in CSS definition: border-collapse:seperate; was incorrectly
