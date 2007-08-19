@@ -17,6 +17,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   accepted as valid CSS. Usually non-visible, because this styling is the
   default for tables in most browsers. Thanks Brett Zamir for pointing
   this out.
+- Fix validation errors in configuration form
 . Unit test refactoring for one logical test per test function
 . Config and context parameters in ComplexHarness deprecated: instead, edit
   the $config and $context member variables

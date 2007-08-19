@@ -100,14 +100,14 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
             $ret .= $this->renderNamespace($ns, $directives);
         }
         if ($render_controls) {
-             $ret .= $this->start('tfoot');
+             $ret .= $this->start('tbody');
              $ret .= $this->start('tr');
                  $ret .= $this->start('td', array('colspan' => 2, 'class' => 'controls'));
-                     $ret .= $this->elementEmpty('input', array('type' => 'Submit', 'value' => 'Submit'));
+                     $ret .= $this->elementEmpty('input', array('type' => 'submit', 'value' => 'Submit'));
                      $ret .= '[<a href="?">Reset</a>]';
                  $ret .= $this->end('td');
              $ret .= $this->end('tr');
-             $ret .= $this->end('tfoot');
+             $ret .= $this->end('tbody');
         }
         $ret .= $this->end('table');
         return $ret;
