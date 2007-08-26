@@ -174,8 +174,9 @@ function copy_and_remove_includes($file, $sfile) {
  */
 function replace_includes_callback($matches) {
     $file = $matches[1];
-    // PHP 5 only file
-    if ($file == 'HTMLPurifier/Lexer/DOMLex.php' || $file == 'HTMLPurifier/Printer.php') {
+    // PHP 5 only file / PEAR files
+    $preserve = array('HTMLPurifier/Lexer/DOMLex.php'=>1, 'HTMLPurifier/Printer.php'=>1, 'XML/HTMLSax3.php'=>1);
+    if (isset($preserve[$file])) {
         return $matches[0];
     }
     if (isset($GLOBALS['loaded'][$file])) return '';
@@ -205,8 +206,8 @@ make_dir_standalone('HTMLPurifier/EntityLookup');
 make_dir_standalone('HTMLPurifier/Language');
 make_file_standalone('HTMLPurifier/Printer.php'); 
 make_dir_standalone('HTMLPurifier/Printer');
-make_dir_standalone('HTMLPurifier/URIScheme');
 make_dir_standalone('HTMLPurifier/Filter');
+make_file_standalone('HTMLPurifier/Lexer/PEARSax3.php'); // not incl by default
 // PHP 5 only files
 make_file_standalone('HTMLPurifier/Lexer/DOMLex.php');
 make_file_standalone('HTMLPurifier/Lexer/PH5P.php');

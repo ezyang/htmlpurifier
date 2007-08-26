@@ -25,6 +25,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   this out.
 - Fix validation errors in configuration form
 - Hammer out a bunch of edge-case bugs in the standalone distribution
+- Inclusion reflection removed from URISchemeRegistry; you must manually
+  include any new schema files you wish to use
 . Unit test refactoring for one logical test per test function
 . Config and context parameters in ComplexHarness deprecated: instead, edit
   the $config and $context member variables
