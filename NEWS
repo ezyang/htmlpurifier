@@ -32,6 +32,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   the $config and $context member variables
 . HTML wrapper in DOMLex now takes DTD identifiers into account; doesn't
   really make a difference, but is good for completeness sake
+. merge-library.php script refactored for greater code reusability and
+  PHP4 compatibility
 
 2.1.1, released 2007-08-04
 - Fix show-stopper bug in %URI.MakeAbsolute functionality
