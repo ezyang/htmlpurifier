@@ -58,7 +58,7 @@ appear elsewhere on the document.  The method is simple:</p>
 
 <pre>$config->set('HTML', 'EnableAttrID', true);
 $config->set('Attr', 'IDBlacklist' array(
-    'list', 'of', 'attributes', 'that', 'are', 'forbidden'
+    'list', 'of', 'attribute', 'values', 'that', 'are', 'forbidden'
 ));</pre>
 
 <p>That being said, there are some notable drawbacks.  First of all, you have to
@@ -71,9 +71,9 @@ to possible standards-compliance issues.</p>
 <p>Furthermore, this position becomes untenable when a single web page must hold
 multiple portions of user-submitted content.  Since there's obviously no way
 to find out before-hand what IDs users will use, the blacklist is helpless.
-And even since HTML Purifier validates each segment seperately, perhaps doing
+And since HTML Purifier validates each segment separately, perhaps doing
 so at different times, it would be extremely difficult to dynamically update
-the blacklist inbetween runs.</p>
+the blacklist in between runs.</p>
 
 <p>Finally, simply destroying the ID is extremely un-userfriendly behavior: after
 all, they might have simply specified a duplicate ID by accident.</p>
