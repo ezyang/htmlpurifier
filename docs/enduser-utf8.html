@@ -516,7 +516,7 @@ usage in one language sometimes requires the occasional special character
 that, without surprise, is not available in your character set. Sometimes
 developers get around this by adding support for multiple encodings: when
 using Chinese, use Big5, when using Japanese, use Shift-JIS, when
-using Greek, etc. Other times, they use character entities with great
+using Greek, etc. Other times, they use character references with great
 zeal.</p>
 
 <p>UTF-8, however, obviates the need for any of these complicated
@@ -530,14 +530,14 @@ you don't have to use those user-unfriendly entities.</p>
 
 <p>Websites encoded in Latin-1 (ISO-8859-1) which ocassionally need
 a special character outside of their scope often will use a character
-entity to achieve the desired effect. For instance, &theta; can be
+entity reference to achieve the desired effect. For instance, &theta; can be
 written <code>&amp;theta;</code>, regardless of the character encoding's
 support of Greek letters.</p>
 
 <p>This works nicely for limited use of special characters, but
 say you wanted this sentence of Chinese text: &#28608;&#20809;,
 &#36889;&#20841;&#20491;&#23383;&#26159;&#29978;&#40636;&#24847;&#24605;.
-The entity-ized version would look like this:</p>
+The ampersand encoded version would look like this:</p>
 
 <pre>&amp;#28608;&amp;#20809;, &amp;#36889;&amp;#20841;&amp;#20491;&amp;#23383;&amp;#26159;&amp;#29978;&amp;#40636;&amp;#24847;&amp;#24605;</pre>
 
@@ -603,7 +603,7 @@ browser you're using, they might:</p>
 <ul>
     <li>Replace the unsupported characters with useless question marks,</li>
     <li>Attempt to fix the characters (example: smart quotes to regular quotes),</li>
-    <li>Replace the character with a character entity, or</li>
+    <li>Replace the character with a character entity reference, or</li>
     <li>Send it anyway as a different character encoding mixed in
         with the original encoding (usually Windows-1252 rather than
         iso-8859-1 or UTF-8 interspersed in 8-bit)</li>
@@ -632,9 +632,9 @@ Each method has deficiencies, especially the former.</p>
 <p>If you tell the browser to send the form in the same encoding as
 the page, you still have the trouble of what to do with characters
 that are outside of the character encoding's range. The behavior, once
-again, varies: Firefox 2.0 entity-izes them while Internet Explorer
-7.0 mangles them beyond intelligibility. For serious internationalization purposes,
-this is not an option.</p>
+again, varies: Firefox 2.0 converts them to character entity references
+while Internet Explorer 7.0 mangles them beyond intelligibility. For
+serious internationalization purposes, this is not an option.</p>
 
 <p>The other possibility is to set Accept-Encoding to UTF-8, which
 begs the question: Why aren't you using UTF-8 for everything then?
@@ -674,12 +674,12 @@ it up to the module iconv to do the dirty work.</p>
 <p>This approach, however, is not perfect. iconv is blithely unaware
 of HTML character entities. HTML Purifier, in order to
 protect against sophisticated escaping schemes, normalizes all character
-and numeric entities before processing the text. This leads to
+and numeric entitie references before processing the text. This leads to
 one important ramification:</p>
 
 <p><strong>Any character that is not supported by the target character
 set, regardless of whether or not it is in the form of a character
-entity or a raw character, will be silently ignored.</strong></p>
+entity reference or a raw character, will be silently ignored.</strong></p>
 
 <p>Example of this principle at work: say you have <code>&amp;theta;</code>
 in your HTML, but the output is in Latin-1 (which, understandably,
@@ -711,7 +711,7 @@ Purifier has provided a slightly more palatable workaround using
     <li>The <code>EntityParser</code> transforms entities: <code>&theta;</code></li>
     <li>HTML Purifier processes the code: <code>&theta;</code></li>
     <li>The <code>Encoder</code> replaces all non-ASCII characters
-        with numeric entities: <code>&amp;#952;</code></li>
+        with numeric entity reference: <code>&amp;#952;</code></li>
     <li>For good measure, <code>Encoder</code> transforms encoding back to
         original (which is strictly unnecessary for 99% of encodings
         out there): <code>&amp;#952;</code> (remember, it's all ASCII!)</li>
@@ -721,12 +721,12 @@ Purifier has provided a slightly more palatable workaround using
 the land of Unicode characters, and is totally unacceptable for Chinese
 or Japanese texts. The even bigger kicker is that, supposing the
 input encoding was actually ISO-8859-7, which <em>does</em> support
-theta, the character would get entity-ized anyway! (The Encoder does
-not discriminate).</p>
+theta, the character would get converted into a character entity reference
+anyway! (The Encoder does not discriminate).</p>
 
 <p>The current functionality is about where HTML Purifier will be for
 the rest of eternity. HTML Purifier could attempt to preserve the original
-form of the entities so that they could be substituted back in, only the
+form of the character references so that they could be substituted back in, only the
 DOM extension kills them off irreversibly. HTML Purifier could also attempt
 to be smart and only convert non-ASCII characters that weren't supported
 by the target encoding, but that would require reimplementing iconv
@@ -1009,7 +1009,7 @@ when dealing with Unicode text:</p>
     <li>Think twice before using functions that:<ul>
         <li>...count characters (strlen will return bytes, not characters;
             str_split and word_wrap may corrupt)</li>
-        <li>...entity-ize things (UTF-8 doesn't need entities)</li>
+        <li>...convert characters to entity references (UTF-8 doesn't need entities)</li>
         <li>...do very complex string processing (*printf)</li>
     </ul></li>
 </ul>
