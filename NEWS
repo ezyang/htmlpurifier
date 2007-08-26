@@ -14,7 +14,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Implemented experimental HTML5 parsing mode using PH5P. To use, add
   this to your code:
         require_once 'HTMLPurifier/Lexer/PH5P.php';
-        $config->set('Core', 'LexerImpl', PH5P');
+        $config->set('Core', 'LexerImpl', 'PH5P');
   Note that this Lexer introduces some classes not in the HTMLPurifier
   namespace.  Also, this is PHP5 only.
 - Fix non-visible parsing error in DirectLex with empty tags that have
