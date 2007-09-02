@@ -11,6 +11,9 @@ If no interest is expressed for a feature that may required a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
+ASAP release [As Soon As Possible]
+ - Add border-spacing CSS property
+
 2.2 release [Error'ed]
  # Error logging for filtering/cleanup procedures
  - XSS-attempt detection
@@ -29,23 +32,22 @@ afraid to cast your vote for the next feature to be implemented!
  - Remove empty inline tags<i></i>
  - Append something to duplicate IDs so they're still usable (impl. note: the
    dupe detector would also need to detect the suffix as well)
+ - Externalize inline CSS to promote clean HTML
 
 2.4 release [It's All About Trust] (floating)
  # Implement untrusted, dangerous elements/attributes
  # Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
+ # Frameset XHTML 1.0 and HTML 4.01 doctypes
 
 3.0 release [Beyond HTML]
  # Legit token based CSS parsing (will require revamping almost every
-   AttrDef class)
+   AttrDef class). Probably will use CSSTidy class
  # More control over allowed CSS properties (maybe modularize it in the
    same fashion!)
  # Formatters for plaintext
     - Smileys
  - Standardize token armor for all areas of processing
- - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
- - Automatically add non-breaking spaces to empty table cells when
-   empty-cells:show is applied to have compatibility with Internet Explorer
  - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
    Also, enable disabling of directionality
 
@@ -71,12 +73,15 @@ Unknown release (on a scratch-an-itch basis)
  - Abstract ChildDef_BlockQuote to work with all elements that only
    allow blocks in them, required or optional
  - Reorganize Unit Tests
-    - Refactor loop tests: Lexer
  - Reorganize configuration directives (Create more namespaces! Get messy!)
  - Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
  - Implement lenient <ruby> child validation
  - Explain how to use HTML Purifier in non-PHP languages / create
    a simple command line stub (or complicated?)
+ - Improve __autoload integration, remove directory inclusion
+ - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
+ - Automatically add non-breaking spaces to empty table cells when
+   empty-cells:show is applied to have compatibility with Internet Explorer
 
 Requested
 
