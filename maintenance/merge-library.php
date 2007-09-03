@@ -6,15 +6,11 @@ assertCli();
 
 /**
  * Compiles all of HTML Purifier's library files into one big file
- * named HTMLPurifier.standalone.php. Operates recursively, and will
- * barf if there are conditional includes.
- * 
- * Details: also creates blank "include" files in the test/blank directory
- * in order to simulate require_once's inside the test files.
+ * named HTMLPurifier.standalone.php.
  */
 
 /**
- * Global array that tracks already loaded includes
+ * Global hash that tracks already loaded includes
  */
 $GLOBALS['loaded'] = array('HTMLPurifier.php' => true);
 
