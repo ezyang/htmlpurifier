@@ -67,6 +67,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('border:1px solid #000;');
         $this->assertDef('border-bottom:2em double #FF00FA;');
         $this->assertDef('border-collapse:collapse;');
+        $this->assertDef('border-collapse:separate;');
         $this->assertDef('caption-side:top;');
         $this->assertDef('vertical-align:middle;');
         $this->assertDef('vertical-align:12px;');
@@ -79,6 +80,8 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('background-repeat:repeat-y;');
         $this->assertDef('background-attachment:fixed;');
         $this->assertDef('background-position:left 90%;');
+        $this->assertDef('border-spacing:1em;');
+        $this->assertDef('border-spacing:1em 2em;');
         
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',

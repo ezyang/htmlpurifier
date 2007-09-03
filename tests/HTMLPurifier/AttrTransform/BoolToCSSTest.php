@@ -11,27 +11,29 @@ class HTMLPurifier_AttrTransform_BoolToCSSTest extends HTMLPurifier_AttrTransfor
         $this->obj = new HTMLPurifier_AttrTransform_BoolToCSS('foo', 'bar:3in;');
     }
     
-    function test() {
-        
+    function testEmptyInput() {
         $this->assertResult( array() );
-        
+    }
+    
+    function testBasicTransform() {
         $this->assertResult(
             array('foo' => 'foo'),
             array('style' => 'bar:3in;')
         );
-        
-        // boolean attribute just has to be set: we don't care about
-        // anything else
+    }
+    
+    function testIgnoreValueOfBooleanAttribute() {
         $this->assertResult(
             array('foo' => 'no'),
             array('style' => 'bar:3in;')
         );
-        
+    }
+    
+    function testPrependCSS() {
         $this->assertResult(
             array('foo' => 'foo', 'style' => 'background-color:#F00;'),
             array('style' => 'bar:3in;background-color:#F00;')
         );
-        
     }
     
 }

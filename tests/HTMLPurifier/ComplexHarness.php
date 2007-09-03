@@ -67,41 +67,20 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
      * @param $context_array Context array in form of Key => Value or an actual
      *                       context object.
      */
-    function assertResult($input, $expect = true,
-        $config_array = array(), $context_array = array()
-    ) {
-        
-        // setup config 
-        if ($this->config) {
-            $config = HTMLPurifier_Config::create($this->config);
-            $config->autoFinalize = false;
-            $config->loadArray($config_array);
-        } else {
-            $config = HTMLPurifier_Config::create($config_array);
-        }
-        
-        // setup context object. Note that we are operating on a copy of it!
-        // When necessary, extend the test harness to allow post-tests
-        // on the context object
-        if (empty($this->context)) {
-            $context = new HTMLPurifier_Context();
-            $context->loadArray($context_array);
-        } else {
-            $context =& $this->context;
-        }
+    function assertResult($input, $expect = true) {
         
         if ($this->to_tokens && is_string($input)) {
             // $func may cause $input to change, so "clone" another copy
             // to sacrifice
-            $input   = $this->lexer->tokenizeHTML($s = $input, $config, $context);
-            $input_c = $this->lexer->tokenizeHTML($s, $config, $context);
+            $input   = $this->tokenize($temp = $input);
+            $input_c = $this->tokenize($temp);
         } else {
             $input_c = $input;
         }
         
         // call the function
         $func = $this->func;
-        $result = $this->obj->$func($input_c, $config, $context);
+        $result = $this->obj->$func($input_c, $this->config, $this->context);
         
         // test a bool result
         if (is_bool($result)) {
@@ -112,16 +91,28 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
         }
         
         if ($this->to_html) {
-            $result = $this->generator->
-              generateFromTokens($result, $config, $context);
+            $result = $this->generate($result);
             if (is_array($expect)) {
-                $expect = $this->generator->
-                  generateFromTokens($expect, $config, $context);
+                $expect = $this->generate($expect);
             }
         }
         
         $this->assertIdentical($expect, $result);
         
+    }
+    
+    /**
+     * Tokenize HTML into tokens, uses member variables for common variables
+     */
+    function tokenize($html) {
+        return $this->lexer->tokenizeHTML($html, $this->config, $this->context);
+    }
+    
+    /**
+     * Generate textual HTML from tokens
+     */
+    function generate($tokens) {
+        return $this->generator->generateFromTokens($tokens, $this->config, $this->context);
     }
     
 }

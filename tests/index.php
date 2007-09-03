@@ -5,7 +5,7 @@
 
 error_reporting(E_ALL | E_STRICT);
 define('HTMLPurifierTest', 1);
-define('HTMLPURIFIER_SCHEMA_STRICT', true);
+define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
 
 // wishlist: automated calling of this file from multiple PHP versions so we
 // don't have to constantly switch around
@@ -13,10 +13,11 @@ define('HTMLPURIFIER_SCHEMA_STRICT', true);
 // default settings (protect against register_globals)
 $GLOBALS['HTMLPurifierTest'] = array();
 $GLOBALS['HTMLPurifierTest']['PEAR'] = false; // do PEAR tests
+$GLOBALS['HTMLPurifierTest']['PH5P'] = version_compare(PHP_VERSION, "5", ">=") && class_exists('DOMDocument');
 $simpletest_location = 'simpletest/'; // reasonable guess
 
 // load SimpleTest
-@include '../test-settings.php'; // don't mind if it isn't there
+if (file_exists('../test-settings.php')) include '../test-settings.php';
 require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
 require_once $simpletest_location . 'mock_objects.php';
@@ -79,7 +80,6 @@ if ($test_file = $GLOBALS['HTMLPurifierTest']['File']) {
 } else {
     
     $test = new GroupTest('All Tests');
-
     foreach ($test_files as $test_file) {
         require_once $test_file;
         $test->addTestClass(path2class($test_file));

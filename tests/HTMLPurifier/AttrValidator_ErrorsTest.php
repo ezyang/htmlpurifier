@@ -35,7 +35,7 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
         $this->invoke($token);
     }
     
-    // to lazy to check for global post and global pre
+    // too lazy to check for global post and global pre
     
     function testAttributeRemoved() {
         $this->expectErrorCollection(E_ERROR, 'AttrValidator: Attribute removed');

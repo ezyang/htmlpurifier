@@ -28,23 +28,22 @@ afraid to cast your vote for the next feature to be implemented!
  - Remove empty inline tags<i></i>
  - Append something to duplicate IDs so they're still usable (impl. note: the
    dupe detector would also need to detect the suffix as well)
+ - Externalize inline CSS to promote clean HTML
 
 2.4 release [It's All About Trust] (floating)
  # Implement untrusted, dangerous elements/attributes
  # Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
+ # Frameset XHTML 1.0 and HTML 4.01 doctypes
 
 3.0 release [Beyond HTML]
  # Legit token based CSS parsing (will require revamping almost every
-   AttrDef class)
+   AttrDef class). Probably will use CSSTidy class
  # More control over allowed CSS properties (maybe modularize it in the
    same fashion!)
  # Formatters for plaintext
     - Smileys
  - Standardize token armor for all areas of processing
- - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
- - Automatically add non-breaking spaces to empty table cells when
-   empty-cells:show is applied to have compatibility with Internet Explorer
  - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
    Also, enable disabling of directionality
 
@@ -63,25 +62,27 @@ Ongoing
  - Complete basic smoketests
 
 Unknown release (on a scratch-an-itch basis)
- ? Semi-lossy dumb alternate character encoding transfor
+ # CHMOD install script for PEAR installs
  ? Have 'lang' attribute be checked against official lists, achieved by
    encoding all characters that have string entity equivalents
  - Abstract ChildDef_BlockQuote to work with all elements that only
    allow blocks in them, required or optional
  - Reorganize Unit Tests
-    - Refactor loop tests: Lexer
  - Reorganize configuration directives (Create more namespaces! Get messy!)
  - Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
  - Implement lenient <ruby> child validation
  - Explain how to use HTML Purifier in non-PHP languages / create
    a simple command line stub (or complicated?)
+ - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
+ - Automatically add non-breaking spaces to empty table cells when
+   empty-cells:show is applied to have compatibility with Internet Explorer
 
 Requested
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations (unless
    patch provided)
- - Pretty-printing HTML, users can use Tidy on the output on entire page
+ - Pretty-printing HTML: users can use Tidy on the output on entire page
  - Native content compression, whitespace stripping (don't rely on Tidy, make
    sure we don't remove from <pre> or related tags): use gzip if this is
    really important

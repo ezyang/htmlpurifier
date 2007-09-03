@@ -13,35 +13,36 @@ class HTMLPurifier_AttrTransform_LangTest
         $this->obj = new HTMLPurifier_AttrTransform_Lang();
     }
     
-    function test() {
-        
-        // leave non-lang'ed elements alone
-        $this->assertResult(array(), true);
-        
-        // copy lang to xml:lang
+    function testEmptyInput() {
+        $this->assertResult(array());
+    }
+    
+    function testCopyLangToXMLLang() {
         $this->assertResult(
             array('lang' => 'en'),
             array('lang' => 'en', 'xml:lang' => 'en')
         );
-        
-        // preserve attributes
+    }
+    
+    function testPreserveAttributes() {
         $this->assertResult(
             array('src' => 'vert.png', 'lang' => 'fr'),
             array('src' => 'vert.png', 'lang' => 'fr', 'xml:lang' => 'fr')
         );
-        
-        // copy xml:lang to lang
+    }
+    
+    function testCopyXMLLangToLang() {
         $this->assertResult(
             array('xml:lang' => 'en'),
             array('xml:lang' => 'en', 'lang' => 'en')
         );
-        
-        // both set, override lang with xml:lang
+    }
+    
+    function testXMLLangOverridesLang() {
         $this->assertResult(
             array('lang' => 'fr', 'xml:lang' => 'de'),
             array('lang' => 'de', 'xml:lang' => 'de')
         );
-        
     }
     
 }

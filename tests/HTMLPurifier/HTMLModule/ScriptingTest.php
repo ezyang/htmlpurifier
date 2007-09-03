@@ -5,47 +5,51 @@ require_once 'HTMLPurifier/HTMLModuleHarness.php';
 class HTMLPurifier_HTMLModule_ScriptingTest extends HTMLPurifier_HTMLModuleHarness
 {
     
-    function test() {
-        
-        // default (remove everything)
+    function setUp() {
+        parent::setUp();
+        $this->config->set('HTML', 'Trusted', true);
+        $this->config->set('Core', 'CommentScriptContents', false);
+    }
+    
+    function testDefaultRemoval() {
+        $this->config->set('HTML', 'Trusted', false);
         $this->assertResult(
             '<script type="text/javascript">foo();</script>', ''
         );
-        
-        // enabled
+    }
+    
+    function testPreserve() {
         $this->assertResult(
-            '<script type="text/javascript">foo();</script>', true,
-            array('HTML.Trusted' => true)
+            '<script type="text/javascript">foo();</script>'
         );
-        
-        // CDATA
+    }
+    
+    function testCDATAEnclosure() {
         $this->assertResult(
-'//<![CDATA[
+'<script type="text/javascript">//<![CDATA[
 alert("<This is compatible with XHTML>");
-//]]> ', true,
-            array('HTML.Trusted' => true)
+//]]></script>'
         );
-        
-        // max
+    }
+    
+    function testAllAttributes() {
         $this->assertResult(
             '<script
                 defer="defer"
                 src="test.js"
                 type="text/javascript"
-            >PCDATA</script>', true,
-            array('HTML.Trusted' => true, 'Core.CommentScriptContents' => false)
+            >PCDATA</script>'
         );
-        
-        // unsupported
+    }
+    
+    function testUnsupportedAttributes() {
         $this->assertResult(
             '<script
                 type="text/javascript"
                 charset="utf-8"
             >PCDATA</script>',
-            '<script type="text/javascript">PCDATA</script>',
-            array('HTML.Trusted' => true, 'Core.CommentScriptContents' => false)
+            '<script type="text/javascript">PCDATA</script>'
         );
-        
     }
     
 }

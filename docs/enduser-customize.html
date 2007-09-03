@@ -32,7 +32,7 @@
   Before we even write any code, it is paramount to consider whether or
   not the code we're writing is necessary or not. HTML Purifier, by default,
   contains a large set of elements and attributes: large enough so that
-  <em>any</em> element or attribute in XHTML 1.0 (and its HTML variant)
+  <em>any</em> element or attribute in XHTML 1.0 or 1.1 (and its HTML variants)
   that can be safely used by the general public is implemented.
 </p>
 
@@ -76,11 +76,12 @@
 <h3>XHTML 1.1</h3>
 
 <p>
-  We have not implemented the
+  As of HTMLPurifier 2.1.0, we have implemented the
   <a href="http://www.w3.org/TR/2001/REC-ruby-20010531/">Ruby module</a>,
   which defines a set of tags
   for publishing short annotations for text, used mostly in Japanese
-  and Chinese school texts.
+  and Chinese school texts, but applicable for positioning any text (not
+  limited to translations) above or below other corresponding text.
 </p>
 
 <h3>XHTML 2.0</h3>
@@ -492,10 +493,11 @@ $def =& $config->getHTMLDefinition(true);
 <p>
   The <code>(%flow;)*</code> indicates the allowed children of the
   <code>li</code> tag: <code>li</code> allows any number of flow
-  elements as its children. In HTML Purifier, we'd write it like
-  <code>Flow</code> (here's where the content sets we were
-  discussing earlier come into play). There are three shorthand content models you
-  can specify:
+  elements as its children. (The <code>- O</code> allows the closing tag to be 
+  omitted, though in XML this is not allowed.) In HTML Purifier, 
+  we'd write it like <code>Flow</code> (here's where the content sets 
+  we were discussing earlier come into play). There are three shorthand
+  content models you can specify:
 </p>
 
 <table class="table">
@@ -668,12 +670,22 @@ $def =& $config->getHTMLDefinition(true);
   Common is a combination of the above-mentioned collections.
 </p>
 
+<p class="aside">
+  Readers familiar with the modularization may have noticed that the Core
+  attribute collection differs from that specified by the <a
+  href="http://www.w3.org/TR/xhtml-modularization/abstract_modules.html#s_commonatts">abstract
+  modules of the XHTML Modularization 1.1</a>. We believe this section
+  to be in error, as <code>br</code> permits the use of the <code>style</code>
+  attribute even though it uses the <code>Core</code> collection, and 
+  the DTD and XML Schemas supplied by W3C support our interpretation.
+</p>
+
 <h3>Attributes</h3>
 
 <p>
-  If you didn't read the <a href="#addAttribute">previous section on
+  If you didn't read the <a href="#addAttribute">earlier section on
   adding attributes</a>, read it now.  The last parameter is simply
-  array of attribute names to attribute implementations, in the exact
+  an array of attribute names to attribute implementations, in the exact
   same format as <code>addAttribute()</code>.
 </p>
 

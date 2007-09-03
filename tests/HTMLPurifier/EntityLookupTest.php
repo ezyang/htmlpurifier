@@ -17,7 +17,7 @@ class HTMLPurifier_EntityLookupTest extends HTMLPurifier_Harness
         // special char
         $this->assertIdentical('"', $lookup->table['quot']);
         $this->assertIdentical('“', $lookup->table['ldquo']);
-        $this->assertIdentical('<', $lookup->table['lt']); //expressed strangely
+        $this->assertIdentical('<', $lookup->table['lt']); // expressed strangely in source file
         
         // symbol char
         $this->assertIdentical('θ', $lookup->table['theta']);

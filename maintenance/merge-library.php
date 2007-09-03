@@ -6,20 +6,38 @@ assertCli();
 
 /**
  * Compiles all of HTML Purifier's library files into one big file
- * named HTMLPurifier.standalone.php. Operates recursively, and will
- * barf if there are conditional includes.
- * 
- * Details: also creates blank "include" files in the test/blank directory
- * in order to simulate require_once's inside the test files.
+ * named HTMLPurifier.standalone.php.
  */
 
 /**
- * Global array that tracks already loaded includes
+ * Global hash that tracks already loaded includes
  */
 $GLOBALS['loaded'] = array('HTMLPurifier.php' => true);
 
 /**
- * @param $text Text to replace includes from
+ * Custom FSTools for this script that overloads some behavior
+ * @warning The overloading of copy() is not necessarily global for
+ *          this script. Watch out!
+ */
+class MergeLibraryFSTools extends FSTools
+{
+    function copyable($entry) {
+        // Skip hidden files
+        if ($entry[0] == '.') {
+            return false;
+        }
+        return true;
+    }
+    function copy($source, $dest) {
+        copy_and_remove_includes($source, $dest);
+    }
+}
+$FS = new MergeLibraryFSTools();
+
+/**
+ * Replaces the includes inside PHP source code with the corresponding
+ * source.
+ * @param string $text PHP source code to replace includes from
  */
 function replace_includes($text) {
     return preg_replace_callback(
@@ -32,6 +50,8 @@ function replace_includes($text) {
 /**
  * Removes leading PHP tags from included files. Assumes that there is
  * no trailing tag.
+ * @note This is safe for files that have internal <?php
+ * @param string $text Text to have leading PHP tag from
  */
 function remove_php_tags($text) {
     return substr($text, 5);
@@ -40,125 +60,48 @@ function remove_php_tags($text) {
 /**
  * Creates an appropriate blank file, recursively generating directories
  * if necessary
+ * @param string $file Filename to create blank for
  */
 function create_blank($file) {
+    global $FS;
     $dir = dirname($file);
     $base = realpath('../tests/blanks/') . DIRECTORY_SEPARATOR ;
-    if ($dir != '.') mkdir_deep($base . $dir);
+    if ($dir != '.') {
+        $FS->mkdir($base . $dir);
+    }
     file_put_contents($base . $file, '');
 }
 
 /**
- * Recursively creates a directory
- * @note Adapted from the PHP manual comment 76612
+ * Copies the contents of a directory to the standalone directory
+ * @param string $dir Directory to copy
  */
-function mkdir_deep($folder) {
-    $folders = preg_split("#[\\\\/]#", $folder);
-    $base = '';
-    for($i = 0, $c = count($folders); $i < $c; $i++) {
-        if(empty($folders[$i])) {
-            if (!$i) {
-                // special case for root level
-                $base .= DIRECTORY_SEPARATOR;
-            }
-            continue;
-        }
-        $base .= $folders[$i];
-        if(!is_dir($base)){
-            mkdir($base);
-        }
-        $base .= DIRECTORY_SEPARATOR;
-    }
+function make_dir_standalone($dir) {
+    global $FS;
+    return $FS->copyr($dir, 'standalone/' . $dir);
 }
 
 /**
- * Copy a file, or recursively copy a folder and its contents
- *
- * @author      Aidan Lister <aidan@php.net>
- * @version     1.0.1
- * @link        http://aidanlister.com/repos/v/function.copyr.php
- * @param       string   $source    Source path
- * @param       string   $dest      Destination path
- * @return      bool     Returns TRUE on success, FALSE on failure
+ * Copies the contents of a file to the standalone directory
+ * @param string $file File to copy
  */
-function copyr($source, $dest) {
-    // Simple copy for a file
-    if (is_file($source)) {
-        return copy($source, $dest);
-    }
-    // Make destination directory
-    if (!is_dir($dest)) {
-        mkdir($dest);
-    }
-    // Loop through the folder
-    $dir = dir($source);
-    while (false !== $entry = $dir->read()) {
-        // Skip pointers
-        if ($entry == '.' || $entry == '..') {
-            continue;
-        }
-        // Skip hidden files
-        if ($entry[0] == '.') {
-            continue;
-        }
-        // Deep copy directories
-        if ($dest !== "$source/$entry") {
-            copyr("$source/$entry", "$dest/$entry");
-        }
-    }
-    // Clean up
-    $dir->close();
+function make_file_standalone($file) {
+    global $FS;
+    $FS->mkdir('standalone/' . dirname($file));
+    copy_and_remove_includes($file, 'standalone/' . $file);
     return true;
 }
 
 /**
- * Delete a file, or a folder and its contents
- *
- * @author      Aidan Lister <aidan@php.net>
- * @version     1.0.3
- * @link        http://aidanlister.com/repos/v/function.rmdirr.php
- * @param       string   $dirname    Directory to delete
- * @return      bool     Returns TRUE on success, FALSE on failure
+ * Copies a file to another location recursively, if it is a PHP file
+ * remove includes
+ * @param string $file Original file
+ * @param string $sfile New location of file
  */
-function rmdirr($dirname)
-{
-    // Sanity check
-    if (!file_exists($dirname)) {
-        return false;
-    }
- 
-    // Simple delete for a file
-    if (is_file($dirname) || is_link($dirname)) {
-        return unlink($dirname);
-    }
- 
-    // Loop through the folder
-    $dir = dir($dirname);
-    while (false !== $entry = $dir->read()) {
-        // Skip pointers
-        if ($entry == '.' || $entry == '..') {
-            continue;
-        }
- 
-        // Recurse
-        rmdirr($dirname . DIRECTORY_SEPARATOR . $entry);
-    }
- 
-    // Clean up
-    $dir->close();
-    return rmdir($dirname);
-}
-
-/**
- * Copies the contents of a directory to the standalone directory
- */
-function make_dir_standalone($dir) {
-    return copyr($dir, 'standalone/' . $dir);
-}
-
-function make_file_standalone($file) {
-    mkdir_deep('standalone/' . dirname($file));
-    return copy($file, 'standalone/' . $file);
+function copy_and_remove_includes($file, $sfile) {
+    $contents = file_get_contents($file);
+    if (strrchr($file, '.') === '.php') $contents = replace_includes($contents);
+    return file_put_contents($sfile, $contents);
 }
 
 /**
@@ -167,8 +110,14 @@ function make_file_standalone($file) {
  */
 function replace_includes_callback($matches) {
     $file = $matches[1];
-    // PHP 5 only file
-    if ($file == 'HTMLPurifier/Lexer/DOMLex.php') {
+    $preserve = array(
+      // PHP 5 only
+      'HTMLPurifier/Lexer/DOMLex.php' => 1,
+      'HTMLPurifier/Printer.php' => 1,
+      // PEAR (external)
+      'XML/HTMLSax3.php' => 1
+    );
+    if (isset($preserve[$file])) {
         return $matches[0];
     }
     if (isset($GLOBALS['loaded'][$file])) return '';
@@ -192,16 +141,22 @@ file_put_contents('HTMLPurifier.standalone.php', $contents);
 echo ' done!' . PHP_EOL;
 
 echo 'Creating standalone directory...';
-rmdirr('standalone'); // ensure a clean copy
-mkdir_deep('standalone/HTMLPurifier/DefinitionCache/Serializer');
-make_dir_standalone('HTMLPurifier/EntityLookup');
-make_dir_standalone('HTMLPurifier/Language');
-make_file_standalone('HTMLPurifier/Printer/ConfigForm.js');
-make_file_standalone('HTMLPurifier/Printer/ConfigForm.css');
-make_dir_standalone('HTMLPurifier/URIScheme');
-// PHP 5 only file
-mkdir_deep('standalone/HTMLPurifier/Lexer');
-make_file_standalone('HTMLPurifier/Lexer/DOMLex.php');
-make_file_standalone('HTMLPurifier/TokenFactory.php');
-echo ' done!' . PHP_EOL;
+$FS->rmdirr('standalone'); // ensure a clean copy
 
+// data files
+$FS->mkdir('standalone/HTMLPurifier/DefinitionCache/Serializer');
+make_dir_standalone('HTMLPurifier/EntityLookup');
+
+// non-standard inclusion setup
+make_dir_standalone('HTMLPurifier/Language');
+
+// optional components
+make_file_standalone('HTMLPurifier/Printer.php'); 
+make_dir_standalone('HTMLPurifier/Printer');
+make_dir_standalone('HTMLPurifier/Filter');
+make_file_standalone('HTMLPurifier/Lexer/PEARSax3.php');
+
+// PHP 5 only files
+make_file_standalone('HTMLPurifier/Lexer/DOMLex.php');
+make_file_standalone('HTMLPurifier/Lexer/PH5P.php');
+echo ' done!' . PHP_EOL;
