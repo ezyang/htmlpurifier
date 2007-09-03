@@ -1,10 +1,8 @@
-In version 2.1, HTML Purifier's URI validation and filtering handling
-system has been revamped with a new, extensible URIFilter system. Also
-notable features include preservation of emoticons in PHP5 with
-%Core.AggressivelyFixLt, standalone and lite download versions,
-transforming relative URIs to absolute URIs, Ruby in XHTML 1.1, a Phorum
-mod, and UTF-8 font names.  Notable bug-fixes include refinement of
-the auto-paragraphing algorithm (no longer experimental), better XHTML
-1.1 support and the removal of the contents of <style> elements. Version
-2.1.1 amends a few bugs in some of newly introduced features, namely
-running the standalone download version in PHP4 and %URI.MakeAbsolute.
+Version 2.1.2 is a mix of experimental features and stability updates.
+Among new features: an Object module for trusted users, support for the
+CSS property 'border-spacing', and HTML 5 style parsing using PH5P.
+Bug fixes ihave resolved a few obscure issues including border-collapse:seperate,
+a DirectLex parsing error, broken HTML in printDefinition.php, and problems
+with the experimental standalone distribution. Also, there were large
+amounts of behind-the-scenes refactoring and the removal of URIScheme
+inclusion reflection.
