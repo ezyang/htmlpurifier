@@ -20,8 +20,10 @@ function phorum_htmlpurifier_migrate_sigs_check() {
 function phorum_htmlpurifier_migrate_sigs($offset) {
     global $PHORUM;
     
-    if(!$offset) return; // bail out quick of $offset == 0
+    if(!$offset) return; // bail out quick if $offset == 0
     
+    // theoretically, we could get rid of this multi-request
+    // doo-hickery if safe mode is off
     @set_time_limit(0); // attempt to let this run
     $increment = $PHORUM['mod_htmlpurifier']['migrate-sigs-increment'];
     
@@ -52,21 +54,19 @@ function phorum_htmlpurifier_migrate_sigs($offset) {
     
     // query for highest ID in database
     $type = $PHORUM['DBCONFIG']['type'];
+    $sql = "select MAX(user_id) from {$PHORUM['user_table']}";
     if ($type == 'mysql') {
         $conn = phorum_db_mysql_connect();
-        $sql = "select MAX(user_id) from {$PHORUM['user_table']}";
         $res = mysql_query($sql, $conn);
         $row = mysql_fetch_row($res);
-        $top_id = (int) $row[0];
     } elseif ($type == 'mysqli') {
         $conn = phorum_db_mysqli_connect();
-        $sql = "select MAX(user_id) from {$PHORUM['user_table']}";
         $res = mysqli_query($conn, $sql);
         $row = mysqli_fetch_row($res);
-        $top_id = (int) $row[0];
     } else {
         exit('Unrecognized database!');
     }
+    $top_id = (int) $row[0];
     
     $offset += $increment;
     if ($offset > $top_id) { // test for end condition
