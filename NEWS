@@ -14,6 +14,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   on some systems.
 - Injector algorithm further refined: off-by-one error regarding skip 
   counts for dormant injectors fixed
+- Corrective blockquote definition now enabled for HTML 4.01 Strict
 . %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment 
   to better communicate its purpose
 

@@ -129,5 +129,10 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
         $this->assertResult('<table></table><table></table>', '');
     }
     
+    function testStrictBlockquoteInHTML401() {
+        $this->config->set('HTML', 'Doctype', 'HTML 4.01 Strict');
+        $this->assertResult('<blockquote>text</blockquote>', '<blockquote><p>text</p></blockquote>');
+    }
+    
 }
 
