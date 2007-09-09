@@ -12,6 +12,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 2.1.3, unknown release date
 - Fixed poor include ordering for Email URI AttrDefs, causes fatal errors
   on some systems.
+- Injector algorithm further refined: off-by-one error regarding skip 
+  counts for dormant injectors fixed
 
 2.1.2, released 2007-09-03
 ! Implemented Object module for trusted users

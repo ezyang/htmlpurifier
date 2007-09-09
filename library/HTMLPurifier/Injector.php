@@ -4,6 +4,9 @@
  * Injects tokens into the document while parsing for well-formedness.
  * This enables "formatter-like" functionality such as auto-paragraphing,
  * smiley-ification and linkification to take place.
+ * 
+ * @todo Allow injectors to request a re-run on their output. This 
+ *       would help if an operation is recursive.
  */
 class HTMLPurifier_Injector
 {

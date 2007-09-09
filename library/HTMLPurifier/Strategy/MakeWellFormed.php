@@ -286,8 +286,14 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             
             // adjust the injector skips based on the array substitution
             if ($this->injectors) {
-                $offset = count($token) + 1;
+                $offset = count($token);
                 for ($i = 0; $i <= $this->currentInjector; $i++) {
+                    // because of the skip back, we need to add one more
+                    // for uninitialized injectors. I'm not exactly
+                    // sure why this is the case, but I think it has to
+                    // do with the fact that we're decrementing skips
+                    // before re-checking text
+                    if (!$this->injectors[$i]->skip) $this->injectors[$i]->skip++;
                     $this->injectors[$i]->skip += $offset;
                 }
             }

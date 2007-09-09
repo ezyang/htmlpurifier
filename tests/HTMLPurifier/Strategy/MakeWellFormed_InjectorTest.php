@@ -62,4 +62,11 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         );
     }
     
+    function testParagraphAfterLinkifiedURL() {
+        $this->assertResult(
+            "http://google.com\n\n<b>b</b>",
+            "<p><a href=\"http://google.com\">http://google.com</a></p><p><b>b</b></p>"
+        );
+    }
+    
 }
