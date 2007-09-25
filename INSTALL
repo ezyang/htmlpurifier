@@ -2,62 +2,52 @@
 Install
     How to install HTML Purifier
 
-HTML Purifier is designed to run out of the box,  so actually using the library
-is extremely easy. (Although, if you were looking for a step-by-step
-installation GUI, you've come to the wrong place!)  The impatient can scroll
-down to the bottom of this INSTALL document to see the code, but you really
-should make sure a few things are properly done.
+HTML Purifier is designed to run out of the box, so actually using the 
+library is extremely easy.  (Although... if you were looking for a 
+step-by-step installation GUI, you've downloaded the wrong software!)
 
+While the impatient can get going immediately with some of the sample
+code at the bottom of this library, it's well worth performing some
+basic sanity checks to get the most out of this library.
 
+---------------------------------------------------------------------------
 1.  Compatibility
 
-HTML Purifier works in both PHP 4 and PHP 5, from PHP 4.3.2 and up. It has no
-core dependencies with other libraries.
+HTML Purifier works in both PHP 4 and PHP 5, from PHP 4.3.2 and up. It has
+no core dependencies with other libraries.  PHP 4 support will be
+deprecated on December 31, 2007, at which time only essential security
+fixes will be issued for the PHP 4 version until August 8, 2008.
 
-Optional extensions are iconv (usually installed) and tidy (also common).
-If you use UTF-8 and don't plan on pretty-printing HTML, you can get away with
-not having either of these extensions.
+These optional extensions can enhance the capabilities of HTML Purifier:
 
+    * iconv : Converts text to and from non-UTF-8 encodings
+    * tidy  : Used for pretty-printing HTML
 
+---------------------------------------------------------------------------
+2.  Reconnaissance
 
-2.  Including the library
+A big plus of HTML Purifier is its inerrant support of standards, so
+your web-pages should be standards-compliant.  (They should also use
+semantic markup, but that's another issue altogether, one HTML Purifier
+cannot fix without reading your mind.)
 
-Simply use:
-
-    require_once '/path/to/library/HTMLPurifier.auto.php';
-
-...and you're good to go.  Since HTML Purifier's codebase is fairly
-large, I recommend only including HTML Purifier when you need it.
-
-If you don't like your include_path to be fiddled around with, simply set
-HTML Purifier's library/ directory to the include path yourself and then:
-
-    require_once 'HTMLPurifier.php';
-
-Only the contents in the library/ folder are necessary, so you can remove
-everything else when using HTML Purifier in a production environment.  
-
-
-
-3.  Preparing the proper output environment
-
-HTML Purifier is all about web-standards, so accordingly your webpages should
-be standards compliant.  HTML Purifier can deal with these doctypes:
+HTML Purifier can process these doctypes:
 
 * XHTML 1.0 Transitional (default)
 * XHTML 1.0 Strict
 * HTML 4.01 Transitional
 * HTML 4.01 Strict
-* XHTML 1.1 (sans Ruby)
+* XHTML 1.1
 
 ...and these character encodings:
 
 * UTF-8 (default)
-* Any encoding iconv supports (support is crippled for i18n though)
+* Any encoding iconv supports (but crippled internationalization support)
 
-The defaults are there for a reason: they are best-practice choices that
-should not be changed lightly.  For those of you in the dark, you can determine
-the doctype from this code in your HTML documents:
+These defaults reflect what my choices where be if I were authoring an
+HTML document, however, what you choose depends on the nature of your
+codebase.  If you don't know what doctype you are using, you can determine
+the doctype from this identifier at the top of your source code:
 
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -66,14 +56,32 @@ the doctype from this code in your HTML documents:
 
     <meta http-equiv="Content-type" content="text/html;charset=ENCODING">
 
-For legacy codebases these declarations may be missing.  If that is the case,
-STOP, and read docs/enduser-utf8.html
+If the character encoding declaration is missing, STOP NOW, and
+read 'docs/enduser-utf8.html' (web accessible at
+http://htmlpurifier.org/docs/enduser-utf8.html).  In fact, even if it is
+present, read that anyway: most websites specify character encoding
+incorrectly.
 
-You may currently be vulnerable to XSS and other security threats, and HTML
-Purifier won't be able to fix that.
+---------------------------------------------------------------------------
+3.  Including the library
+
+The procedure is quite simple:
+
+    require_once '/path/to/library/HTMLPurifier.auto.php';
+
+I recommend only including HTML Purifier when you need it, because that
+call represents the inclusion of a lot of PHP files.
+
+If you don't like your include_path to be fiddled around with, simply set
+HTML Purifier's library/ directory to the include path yourself and then:
+
+    require_once 'HTMLPurifier.php';
+
+Only the contents in the library/ folder are necessary, so you can remove
+everything else when using HTML Purifier in a production environment. 
 
 
-
+---------------------------------------------------------------------------
 4. Configuration
 
 HTML Purifier is designed to run out-of-the-box, but occasionally HTML
@@ -143,9 +151,9 @@ but they can help out for those of you who like to exert maximum control over
 your code.  Some of the more interesting ones are configurable at the
 demo <http://htmlpurifier.org/demo.php> and are well worth looking into
 for your own system.
+ 
 
-
-
+---------------------------------------------------------------------------
 5.   Using the code
 
 The interface is mind-numbingly simple:
@@ -163,7 +171,7 @@ different though).  Also, docs/enduser-slow.html gives advice on what to
 do if HTML Purifier is slowing down your application.
 
 
-
+---------------------------------------------------------------------------
 6.   Quick install
 
 First, make sure library/HTMLPurifier/DefinitionCache/Serializer is
@@ -191,7 +199,7 @@ If your website is in a different encoding or doctype, use this code:
 ?>
 
 
-
+---------------------------------------------------------------------------
 7. Caching
 
 HTML Purifier generates some cache files (generally one or two) to speed up
