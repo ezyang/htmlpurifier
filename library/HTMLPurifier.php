@@ -159,8 +159,7 @@ class HTMLPurifier
         
         // setup id_accumulator context, necessary due to the fact that
         // AttrValidator can be called from many places
-        $id_accumulator = new HTMLPurifier_IDAccumulator();
-        $id_accumulator->load($config->get('Attr', 'IDBlacklist'));
+        $id_accumulator = HTMLPurifier_IDAccumulator::build($config, $context);
         $context->register('IDAccumulator', $id_accumulator);
         
         $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);

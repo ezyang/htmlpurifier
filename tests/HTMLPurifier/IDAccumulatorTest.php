@@ -30,5 +30,11 @@ class HTMLPurifier_IDAccumulatorTest extends HTMLPurifier_Harness
         
     }
     
+    function testBuild() {
+        $this->config->set('Attr', 'IDBlacklist', array('foo'));
+        $accumulator = HTMLPurifier_IDAccumulator::build($this->config, $this->context);
+        $this->assertTrue( isset($accumulator->ids['foo']) );
+    }
+    
 }
 

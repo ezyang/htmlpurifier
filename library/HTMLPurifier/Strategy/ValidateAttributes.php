@@ -6,10 +6,6 @@ require_once 'HTMLPurifier/IDAccumulator.php';
 
 require_once 'HTMLPurifier/AttrValidator.php';
 
-HTMLPurifier_ConfigSchema::define(
-    'Attr', 'IDBlacklist', array(), 'list',
-    'Array of IDs not allowed in the document.');
-
 /**
  * Validate all attributes in the tokens.
  */
