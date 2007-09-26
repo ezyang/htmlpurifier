@@ -19,11 +19,6 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
     
     function execute($tokens, $config, &$context) {
         
-        // setup id_accumulator context
-        $id_accumulator = new HTMLPurifier_IDAccumulator();
-        $id_accumulator->load($config->get('Attr', 'IDBlacklist'));
-        $context->register('IDAccumulator', $id_accumulator);
-        
         // setup validator
         $validator = new HTMLPurifier_AttrValidator();
         
@@ -44,8 +39,6 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
             
             $tokens[$key] = $token; // for PHP 4
         }
-        
-        $context->destroy('IDAccumulator');
         $context->destroy('CurrentToken');
         
         return $tokens;
