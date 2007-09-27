@@ -105,6 +105,8 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // if all goes well, this token will be passed through unharmed
             $token = $tokens[$this->inputIndex];
             
+            //printTokens($tokens, $this->inputIndex);
+            
             foreach ($this->injectors as $i => $x) {
                 if ($x->skip > 0) $this->injectors[$i]->skip--;
             }

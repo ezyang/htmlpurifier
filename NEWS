@@ -19,6 +19,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   has 'id' attribute fixed, thanks NykO18 for reporting
 - Fix warning emitted when a non-supported URI scheme is passed to the
   MakeAbsolute URIFilter, thanks NykO18 (again)
+- Further refine AutoParagraph injector. Behavior inside of elements
+  allowing paragraph tags clarified: only inline content delimeted by
+  double newlines (not block elements) are paragraphed.
 . %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment 
   to better communicate its purpose
 
