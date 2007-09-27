@@ -17,6 +17,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Corrective blockquote definition now enabled for HTML 4.01 Strict
 - Fatal error when <img> tag (or any other element with required attributes)
   has 'id' attribute fixed, thanks NykO18 for reporting
+- Fix warning emitted when a non-supported URI scheme is passed to the
+  MakeAbsolute URIFilter, thanks NykO18 (again)
 . %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment 
   to better communicate its purpose
 
