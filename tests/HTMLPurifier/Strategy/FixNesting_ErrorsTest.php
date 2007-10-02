@@ -28,6 +28,11 @@ class HTMLPurifier_Strategy_FixNesting_ErrorsTest extends HTMLPurifier_Strategy_
         $this->invoke("<span>Valid<div>Invalid</div></span>");
     }
     
+    function testNoNodeReorganizedForEmptyNode() {
+        $this->expectNoErrorCollection();
+        $this->invoke("<span></span>");
+    }
+    
     function testNodeContentsRemoved() {
         $this->expectErrorCollection(E_ERROR, 'Strategy_FixNesting: Node contents removed');
         $this->expectContext('CurrentToken', new HTMLPurifier_Token_Start('span', array(), 1));

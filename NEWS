@@ -22,8 +22,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Further refine AutoParagraph injector. Behavior inside of elements
   allowing paragraph tags clarified: only inline content delimeted by
   double newlines (not block elements) are paragraphed.
+- Buggy treatment of end tags of elements that have required attributes
+  fixed (does not manifest on default tag-set)
+- Spurious internal content reorganization error suppressed
 . %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment 
   to better communicate its purpose
+. Error unit tests can now specify the expectation of no errors. Future
+  iterations of the harness will be extremely strict about what errors
+  are allowed
 
 2.1.2, released 2007-09-03
 ! Implemented Object module for trusted users
