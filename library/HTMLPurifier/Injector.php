@@ -110,5 +110,12 @@ class HTMLPurifier_Injector
      */
     function handleElement(&$token) {}
     
+    /**
+     * Notifier that is called when an end token is processed
+     * @note This differs from handlers in that the token is read-only
+     */
+    function notifyEnd($token) {}
+    
+    
 }
 
