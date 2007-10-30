@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 PROJECT_NAME           = HTML Purifier
 PROJECT_NUMBER         = 2.1.2
-OUTPUT_DIRECTORY       = "C:/Documents and Settings/Edward/My Documents/My Webs/htmlpurifier/docs/doxygen"
+OUTPUT_DIRECTORY       = "docs/doxygen"
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
@@ -25,7 +25,8 @@ ABBREVIATE_BRIEF       = "The $name class" \
 ALWAYS_DETAILED_SEC    = NO
 INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        = "C:/Documents and Settings/Edward/My Documents/My Webs/htmlpurifier"
+STRIP_FROM_PATH        = "C:/Users/Edward/Webs/htmlpurifier" \
+                         "C:/Documents and Settings/Edward/My Documents/My Webs/htmlpurifier"
 STRIP_FROM_INC_PATH    = 
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = YES
@@ -82,7 +83,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = "C:/Documents and Settings/Edward/My Documents/My Webs/htmlpurifier"
+INPUT                  = "."
 FILE_PATTERNS          = *.php
 RECURSIVE              = YES
 EXCLUDE                = 
@@ -94,7 +95,8 @@ EXCLUDE_PATTERNS       = */tests/* \
                          */configdoc/* \
                          */test-settings.php \
                          */maintenance/* \
-                         */smoketests/*
+                         */smoketests/* \
+                         */library/standalone/*
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO
