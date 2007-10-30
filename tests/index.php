@@ -17,6 +17,7 @@ $GLOBALS['HTMLPurifierTest']['PH5P'] = version_compare(PHP_VERSION, "5", ">=") &
 $simpletest_location = 'simpletest/'; // reasonable guess
 
 // load SimpleTest
+if (file_exists('../conf/test-settings.php')) include '../conf/test-settings.php';
 if (file_exists('../test-settings.php')) include '../test-settings.php';
 require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
