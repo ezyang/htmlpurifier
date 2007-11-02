@@ -27,6 +27,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Spurious internal content reorganization error suppressed
 - HTMLDefinition->addElement now returns a reference to the created
   element object, as implied by the documentation
+- Phorum mod's HTML Purifier help message expanded, however, a new tarball
+  was not released
 . %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment 
   to better communicate its purpose
 . Error unit tests can now specify the expectation of no errors. Future
@@ -35,6 +37,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Extend Injector hooks to allow for more powerful injector routines
 . HTMLDefinition->addBlankElement created, as according to the HTMLModule
   method
+. Doxygen configuration file updated, with minor improvements
+. Test runner now checks for similarly named files in conf/ directory too.
 
 2.1.2, released 2007-09-03
 ! Implemented Object module for trusted users
