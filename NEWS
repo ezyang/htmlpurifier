@@ -27,8 +27,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Spurious internal content reorganization error suppressed
 - HTMLDefinition->addElement now returns a reference to the created
   element object, as implied by the documentation
-- Phorum mod's HTML Purifier help message expanded, however, a new tarball
-  was not released
+- Phorum mod's HTML Purifier help message expanded (unreleased elsewhere)
+- Fix a theoretical class of infinite loops from DirectLex reported
+  by Nate Abele
 . %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment 
   to better communicate its purpose
 . Error unit tests can now specify the expectation of no errors. Future
