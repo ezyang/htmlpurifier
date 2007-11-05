@@ -39,6 +39,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   HTMLDefinition errors, this may indicate problems with error-collecting
   facilities in PHP 5
 - Make ErrorCollectorEMock work in both PHP 4 and PHP 5
+- Make PH5P work with PHP 5.0 by removing unnecessary array parameter typedef
 . %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment 
   to better communicate its purpose
 . Error unit tests can now specify the expectation of no errors. Future
@@ -54,6 +55,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Maintenance script for generating PH5P patch added, original PH5P source
   file also added under version control
 . Full unit test runner script title made more descriptive with PHP version
+. Updated INSTALL file to state that 4.3.7 is the earliest version we
+  are actively testing
 
 2.1.2, released 2007-09-03
 ! Implemented Object module for trusted users
