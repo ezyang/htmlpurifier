@@ -1,5 +1,5 @@
---- old.php	2007-08-19 14:42:33.640625000 -0400
-+++ new.php	2007-08-19 14:41:51.609375000 -0400
+--- C:\Users\Edward\Webs\htmlpurifier\maintenance\PH5P.php	2007-11-04 23:41:49.074543700 -0500
++++ C:\Users\Edward\Webs\htmlpurifier\maintenance/PH5P.new.php	2007-11-04 23:54:19.206543700 -0500
 @@ -211,7 +211,10 @@
          // If nothing is returned, emit a U+0026 AMPERSAND character token.
          // Otherwise, emit the character token that was returned.
@@ -43,3 +43,13 @@
                          $entity = $id;
                          break;
                      }
+@@ -3673,7 +3682,8 @@
+         }
+     }
+ 
+-    private function getElementCategory($name) {
++    private function getElementCategory($node) {
++        $name = $node->tagName;
+         if(in_array($name, $this->special))
+             return self::SPECIAL;
+ 

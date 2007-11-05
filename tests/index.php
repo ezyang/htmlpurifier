@@ -80,7 +80,7 @@ if ($test_file = $GLOBALS['HTMLPurifierTest']['File']) {
     
 } else {
     
-    $test = new GroupTest('All Tests');
+    $test = new GroupTest('All HTML Purifier tests on PHP ' . PHP_VERSION);
     foreach ($test_files as $test_file) {
         require_once $test_file;
         $test->addTestClass(path2class($test_file));
@@ -92,5 +92,3 @@ if (SimpleReporter::inCli()) $reporter = new TextReporter();
 else $reporter = new HTMLPurifier_SimpleTest_Reporter('UTF-8');
 
 $test->run($reporter);
-
-

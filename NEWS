@@ -10,6 +10,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 2.1.3, unknown release date
+! tests/multitest.php allows you to test multiple versions by running
+  tests/index.php through multiple interpreters using `phpv` shell
+  script (you must provide this script!)
 - Fixed poor include ordering for Email URI AttrDefs, causes fatal errors
   on some systems.
 - Injector algorithm further refined: off-by-one error regarding skip 
@@ -30,6 +33,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Phorum mod's HTML Purifier help message expanded (unreleased elsewhere)
 - Fix a theoretical class of infinite loops from DirectLex reported
   by Nate Abele
+- Work around unnecessary DOMElement type-cast in PH5P that caused errors
+  in PHP 5.1
+- Work around PHP 4 SimpleTest lack-of-error complaining for one-time-only
+  HTMLDefinition errors, this may indicate problems with error-collecting
+  facilities in PHP 5
+- Make ErrorCollectorEMock work in both PHP 4 and PHP 5
 . %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment 
   to better communicate its purpose
 . Error unit tests can now specify the expectation of no errors. Future
@@ -40,6 +49,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   method
 . Doxygen configuration file updated, with minor improvements
 . Test runner now checks for similarly named files in conf/ directory too.
+. Minor cosmetic change to flush-definition-cache.php: trailing newline is
+  outputted
+. Maintenance script for generating PH5P patch added, original PH5P source
+  file also added under version control
+. Full unit test runner script title made more descriptive with PHP version
 
 2.1.2, released 2007-09-03
 ! Implemented Object module for trusted users
