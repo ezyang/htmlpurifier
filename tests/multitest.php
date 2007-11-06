@@ -28,11 +28,14 @@ echo str_repeat('-', 70) . "\n";
 echo "HTML Purifier\n";
 echo "Multiple PHP Versions Test\n\n";
 
+passthru("php ../maintenance/merge-library.php");
+
 foreach ($versions_to_test as $version) {
     if ($version === 'FLUSH') {
         shell_exec('php ../maintenance/flush-definition-cache.php');
         continue;
     }
     passthru("phpv $version index.php");
+    passthru("phpv $version index.php standalone");
     echo "\n\n";
 }
