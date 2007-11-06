@@ -1,8 +1,6 @@
-Version 2.1.2 is a mix of experimental features and stability updates.
-Among new features: an Object module for trusted users, support for the
-CSS property 'border-spacing', and HTML 5 style parsing using PH5P.
-Bug fixes ihave resolved a few obscure issues including border-collapse:seperate,
-a DirectLex parsing error, broken HTML in printDefinition.php, and problems
-with the experimental standalone distribution. Also, there were large
-amounts of behind-the-scenes refactoring and the removal of URIScheme
-inclusion reflection.
+Stability release 2.1.3 fixes a slew of minor bugs found in HTML Purifier,
+and also includes some internal code enhancements and refactorings.
+Notably, tests/multitest.php automates testing in multiple versions, 
+fatal AttrDef_URI_Email error fixed, blockquote contents are more lenient
+in HTML 4.01 Strict and fatal errors involving ID tags in img tags were
+fixed.

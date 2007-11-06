@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-2.1.3, unknown release date
+2.1.3, released 2007-11-05
 ! tests/multitest.php allows you to test multiple versions by running
   tests/index.php through multiple interpreters using `phpv` shell
   script (you must provide this script!)
