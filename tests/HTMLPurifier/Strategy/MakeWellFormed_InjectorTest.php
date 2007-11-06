@@ -11,6 +11,19 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         $this->obj = new HTMLPurifier_Strategy_MakeWellFormed();
         $this->config->set('AutoFormat', 'AutoParagraph', true);
         $this->config->set('AutoFormat', 'Linkify', true);
+        generate_mock_once('HTMLPurifier_Injector');
+    }
+    
+    function testEndNotification() {
+        $mock = new HTMLPurifier_InjectorMock();
+        $mock->skip = false;
+        $mock->expectAt(0, 'notifyEnd', array(new HTMLPurifier_Token_End('b')));
+        $mock->expectAt(1, 'notifyEnd', array(new HTMLPurifier_Token_End('i')));
+        $mock->expectCallCount('notifyEnd', 2);
+        $this->config->set('AutoFormat', 'AutoParagraph', false);
+        $this->config->set('AutoFormat', 'Linkify',       false);
+        $this->config->set('AutoFormat', 'Custom', array($mock));
+        $this->assertResult('<i><b>asdf</b>', '<i><b>asdf</b></i>');
     }
     
     function testOnlyAutoParagraph() {
@@ -59,6 +72,13 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         $this->assertResult(
             'This URL http://example.com is what you need',
             '<p>This URL <a href="http://example.com">http://example.com</a> is what you need</p>'
+        );
+    }
+    
+    function testParagraphAfterLinkifiedURL() {
+        $this->assertResult(
+            "http://google.com\n\n<b>b</b>",
+            "<p><a href=\"http://google.com\">http://google.com</a></p><p><b>b</b></p>"
         );
     }
     

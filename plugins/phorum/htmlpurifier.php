@@ -261,12 +261,42 @@ function phorum_htmlpurifier_editor_after_subject() {
     // don't show this message if it's a WYSIWYG editor, since it will
     // then be handled automatically
     if (!empty($GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'])) return;
-    ?><tr><td colspan="2" style="padding:1em 0.3em;">
-  HTML input is <strong>on</strong>. Make sure you escape all HTML and
-  angled-brackets with &amp;lt; and &amp;gt; (you can also use CDATA
-  tags, simply wrap the suspect text with
-&lt;![CDATA[<em>text</em>]]&gt;. Paragraphs will only be applied to 
-double-spaces; single-spaces will not generate <tt>&lt;br&gt;</tt> tags.
+    ?><tr><td colspan="2" style="padding:1em 0.3em;" class="htmlpurifier-help">
+    <p>
+        <strong>HTML input</strong> is enabled. Make sure you escape all HTML and
+        angled brackets with <code>&amp;lt;</code> and <code>&amp;gt;</code>.
+    </p><?php
+            $purifier =& HTMLPurifier::getInstance();
+            $config = $purifier->config;
+            if ($config->get('AutoFormat', 'AutoParagraph')) {
+                ?><p>
+                    <strong>Auto-paragraphing</strong> is enabled. Double
+                    newlines will be converted to paragraphs; for single
+                    newlines, use the <code>pre</code> tag.
+                </p><?php
+            }
+            $html_definition = $config->getDefinition('HTML');
+            $allowed = array();
+            foreach ($html_definition->info as $name => $x) $allowed[] = "<code>$name</code>";
+            sort($allowed);
+            $allowed_text = implode(', ', $allowed);
+            ?><p><strong>Allowed tags:</strong> <?php
+            echo $allowed_text;
+            ?>.</p><?php
+        ?>
+    </p>
+    <p>
+        For inputting literal code such as HTML and PHP for display, use
+        CDATA tags to auto-escape your angled brackets, and <code>pre</code>
+        to preserve newlines:
+    </p>
+    <pre>&lt;pre&gt;&lt;![CDATA[
+<em>Place code here</em>
+]]&gt;&lt;/pre&gt;</pre>
+    <p>
+        Power users, you can hide this notice with:
+        <pre>.htmlpurifier-help {display:none;}</pre>
+    </p>
     </td></tr><?php
 }
 

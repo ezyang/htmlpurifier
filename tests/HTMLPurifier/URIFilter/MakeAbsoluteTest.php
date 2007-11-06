@@ -111,6 +111,12 @@ class HTMLPurifier_URIFilter_MakeAbsoluteTest extends HTMLPurifier_URIFilterHarn
         $this->assertFiltering('.', '../');
     }
     
+    function testRemoveJavaScriptWithEmbeddedLink() {
+        // credits: NykO18
+        $this->setBase('http://www.example.com/');
+        $this->assertFiltering('javascript: window.location = \'http://www.example.com\';', false);
+    }
+    
     // error case
     
     function testErrorNoBase() {

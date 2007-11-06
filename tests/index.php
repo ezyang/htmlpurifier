@@ -3,7 +3,9 @@
 // call one file using /?f=FileTest.php , see $test_files array for
 // valid values
 
-error_reporting(E_ALL | E_STRICT);
+if (version_compare(PHP_VERSION, '5.1', '>=')) error_reporting(E_ALL | E_STRICT);
+else error_reporting(E_ALL);
+
 define('HTMLPurifierTest', 1);
 define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
 
@@ -17,6 +19,7 @@ $GLOBALS['HTMLPurifierTest']['PH5P'] = version_compare(PHP_VERSION, "5", ">=") &
 $simpletest_location = 'simpletest/'; // reasonable guess
 
 // load SimpleTest
+if (file_exists('../conf/test-settings.php')) include '../conf/test-settings.php';
 if (file_exists('../test-settings.php')) include '../test-settings.php';
 require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
@@ -79,7 +82,7 @@ if ($test_file = $GLOBALS['HTMLPurifierTest']['File']) {
     
 } else {
     
-    $test = new GroupTest('All Tests');
+    $test = new GroupTest('All tests on PHP ' . PHP_VERSION);
     foreach ($test_files as $test_file) {
         require_once $test_file;
         $test->addTestClass(path2class($test_file));
@@ -91,5 +94,3 @@ if (SimpleReporter::inCli()) $reporter = new TextReporter();
 else $reporter = new HTMLPurifier_SimpleTest_Reporter('UTF-8');
 
 $test->run($reporter);
-
-

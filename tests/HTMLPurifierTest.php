@@ -94,6 +94,7 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
         
         $this->purifier = new HTMLPurifier(array('HTML.EnableAttrID' => true));
         $this->assertPurification('<span id="moon">foobar</span>');
+        $this->assertPurification('<img id="folly" src="folly.png" alt="Omigosh!" />');
         
     }
     

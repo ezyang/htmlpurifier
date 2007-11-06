@@ -9,6 +9,55 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+2.1.3, released 2007-11-05
+! tests/multitest.php allows you to test multiple versions by running
+  tests/index.php through multiple interpreters using `phpv` shell
+  script (you must provide this script!)
+- Fixed poor include ordering for Email URI AttrDefs, causes fatal errors
+  on some systems.
+- Injector algorithm further refined: off-by-one error regarding skip 
+  counts for dormant injectors fixed
+- Corrective blockquote definition now enabled for HTML 4.01 Strict
+- Fatal error when <img> tag (or any other element with required attributes)
+  has 'id' attribute fixed, thanks NykO18 for reporting
+- Fix warning emitted when a non-supported URI scheme is passed to the
+  MakeAbsolute URIFilter, thanks NykO18 (again)
+- Further refine AutoParagraph injector. Behavior inside of elements
+  allowing paragraph tags clarified: only inline content delimeted by
+  double newlines (not block elements) are paragraphed.
+- Buggy treatment of end tags of elements that have required attributes
+  fixed (does not manifest on default tag-set)
+- Spurious internal content reorganization error suppressed
+- HTMLDefinition->addElement now returns a reference to the created
+  element object, as implied by the documentation
+- Phorum mod's HTML Purifier help message expanded (unreleased elsewhere)
+- Fix a theoretical class of infinite loops from DirectLex reported
+  by Nate Abele
+- Work around unnecessary DOMElement type-cast in PH5P that caused errors
+  in PHP 5.1
+- Work around PHP 4 SimpleTest lack-of-error complaining for one-time-only
+  HTMLDefinition errors, this may indicate problems with error-collecting
+  facilities in PHP 5
+- Make ErrorCollectorEMock work in both PHP 4 and PHP 5
+- Make PH5P work with PHP 5.0 by removing unnecessary array parameter typedef
+. %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment 
+  to better communicate its purpose
+. Error unit tests can now specify the expectation of no errors. Future
+  iterations of the harness will be extremely strict about what errors
+  are allowed
+. Extend Injector hooks to allow for more powerful injector routines
+. HTMLDefinition->addBlankElement created, as according to the HTMLModule
+  method
+. Doxygen configuration file updated, with minor improvements
+. Test runner now checks for similarly named files in conf/ directory too.
+. Minor cosmetic change to flush-definition-cache.php: trailing newline is
+  outputted
+. Maintenance script for generating PH5P patch added, original PH5P source
+  file also added under version control
+. Full unit test runner script title made more descriptive with PHP version
+. Updated INSTALL file to state that 4.3.7 is the earliest version we
+  are actively testing
+
 2.1.2, released 2007-09-03
 ! Implemented Object module for trusted users
 ! Implemented experimental HTML5 parsing mode using PH5P. To use, add

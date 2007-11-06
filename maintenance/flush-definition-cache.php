@@ -32,5 +32,5 @@ foreach ($names as $name) {
     $cache->flush($config);
 }
 
-echo 'Cache flushed successfully.';
+echo "Cache flushed successfully.\n";
 

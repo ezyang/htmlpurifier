@@ -19,5 +19,9 @@ class HTMLPurifier_ChildDef_OptionalTest extends HTMLPurifier_ChildDefHarness
         $this->assertResult('Not allowed text', '');
     }
     
+    function testEmpty() {
+        $this->assertResult('');
+    }
+    
 }
 

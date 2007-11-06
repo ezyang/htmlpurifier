@@ -194,10 +194,7 @@ Bar</p></div>',
     }
     
     function testNoParagraphSingleInlineNodeInBlockNode() {
-        $this->assertResult(
-'<div><b>Foo</b></div>',
-            '<div><b>Foo</b></div>'
-        );
+        $this->assertResult( '<div><b>Foo</b></div>' );
     }
     
     function testParagraphInBlockquote() {
@@ -277,9 +274,7 @@ Par1
     function testBlockNodeTextDelimeterWithoutDoublespaceInBlockNode() {
         $this->assertResult(
 '<div>Par1
-<div>Par2</div></div>',
-'<div><p>Par1
-</p><div>Par2</div></div>'
+<div>Par2</div></div>'
         );
     }
     
@@ -348,6 +343,30 @@ Par1
 'Par
 
 Par2'
+        );
+    }
+    
+    function testInlineAndBlockTagInDivNoParagraph() {
+        $this->assertResult(
+            '<div><code>bar</code> mmm <pre>asdf</pre></div>'
+        );
+    }
+    
+    function testInlineAndBlockTagInDivNeedingParagraph() {
+        $this->assertResult(
+'<div><code>bar</code> mmm
+
+<pre>asdf</pre></div>',
+'<div><p><code>bar</code> mmm</p><pre>asdf</pre></div>'
+        );
+    }
+    
+    function testTextInlineNodeTextThenDoubleNewlineNeedsParagraph() {
+        $this->assertResult(
+'<div>asdf <code>bar</code> mmm
+
+<pre>asdf</pre></div>',
+'<div><p>asdf <code>bar</code> mmm</p><pre>asdf</pre></div>'
         );
     }
     

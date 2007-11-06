@@ -27,11 +27,20 @@ class HTMLPurifier_ErrorCollectorEMock extends HTMLPurifier_ErrorCollectorMock
     
     function send($severity, $msg) {
         // test for context
-        $test = &$this->_getCurrentTestCase();
+        $context =& SimpleTest::getContext();
+        $test =& $context->getTest();
+        
+        // compat
+        if (empty($this->_mock)) {
+            $mock =& $this;
+        } else {
+            $mock =& $this->_mock;
+        }
+        
         foreach ($this->_expected_context as $key => $value) {
             $test->assertEqual($value, $this->_context->get($key));
         }
-        $step = $this->getCallCount('send');
+        $step = $mock->getCallCount('send');
         if (isset($this->_expected_context_at[$step])) {
             foreach ($this->_expected_context_at[$step] as $key => $value) {
                 $test->assertEqual($value, $this->_context->get($key));
@@ -39,7 +48,7 @@ class HTMLPurifier_ErrorCollectorEMock extends HTMLPurifier_ErrorCollectorMock
         }
         // boilerplate mock code, does not have return value or references
         $args = func_get_args();
-        $this->_invoke('send', $args);
+        $mock->_invoke('send', $args);
     }
     
 }

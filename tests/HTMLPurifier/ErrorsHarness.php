@@ -3,11 +3,15 @@
 require_once 'HTMLPurifier/ErrorCollectorEMock.php';
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 
+/**
+ * @todo Make the callCount variable actually work, so we can precisely
+ *       specify what errors we want: no more, no less
+ */
 class HTMLPurifier_ErrorsHarness extends HTMLPurifier_Harness
 {
     
     var $config, $context;
-    var $collector, $generator;
+    var $collector, $generator, $callCount;
     
     function setup() {
         $this->config = HTMLPurifier_Config::create(array('Core.CollectErrors' => true));
@@ -16,6 +20,11 @@ class HTMLPurifier_ErrorsHarness extends HTMLPurifier_Harness
         $this->collector = new HTMLPurifier_ErrorCollectorEMock();
         $this->collector->prepare($this->context);
         $this->context->register('ErrorCollector', $this->collector);
+        $this->callCount = 0;
+    }
+    
+    function expectNoErrorCollection() {
+        $this->collector->expectNever('send');
     }
     
     function expectErrorCollection() {
