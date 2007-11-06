@@ -10,11 +10,11 @@ $pkg->setOptions(
     array(
         'baseinstalldir' => '/',
         'packagefile' => 'package2.xml',
-        'packagedirectory' => dirname(__FILE__) . '/library',
+        'packagedirectory' => realpath(dirname(__FILE__) . '/library'),
         'filelistgenerator' => 'file',
         'include' => array('*'),
         'dir_roles' => array('/' => 'php'), // hack to put .ser in the right place
-        'ignore' => array('HTMLPurifier.auto.php'),
+        'ignore' => array('HTMLPurifier.auto.php', 'HTMLPurifier.standalone.php', 'standalone/'),
     )
 );
 
