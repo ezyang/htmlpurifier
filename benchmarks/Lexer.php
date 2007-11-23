@@ -1,13 +1,11 @@
 <?php
 
-// emulates inserting a dir called HTMLPurifier into your class dir
-set_include_path(get_include_path() . PATH_SEPARATOR . '../library/');
-
+require_once '../library/HTMLPurifier.auto.php';
 @include_once '../test-settings.php';
 
-require_once 'HTMLPurifier/ConfigSchema.php';
-require_once 'HTMLPurifier/Config.php';
-require_once 'HTMLPurifier/Context.php';
+// PEAR
+require_once 'Benchmark/Timer.php'; // to do the timing
+require_once 'Text/Password.php'; // for generating random input
 
 $LEXERS = array();
 $RUNS = isset($GLOBALS['HTMLPurifierTest']['Runs'])
@@ -16,21 +14,10 @@ $RUNS = isset($GLOBALS['HTMLPurifierTest']['Runs'])
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 $LEXERS['DirectLex'] = new HTMLPurifier_Lexer_DirectLex();
 
-if (!empty($GLOBALS['HTMLPurifierTest']['PEAR'])) {
-    require_once 'HTMLPurifier/Lexer/PEARSax3.php';
-    $LEXERS['PEARSax3'] = new HTMLPurifier_Lexer_PEARSax3();
-} else {
-    exit('PEAR required to perform benchmark.');
-}
-
 if (version_compare(PHP_VERSION, '5', '>=')) {
     require_once 'HTMLPurifier/Lexer/DOMLex.php';
     $LEXERS['DOMLex'] = new HTMLPurifier_Lexer_DOMLex();
 }
-
-// PEAR
-require_once 'Benchmark/Timer.php'; // to do the timing
-require_once 'Text/Password.php'; // for generating random input
 
 // custom class to aid unit testing
 class RowTimer extends Benchmark_Timer
