@@ -156,65 +156,56 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     
     /**
      * Associative array of element names to HTMLPurifier_ElementDef
-     * @public
      */
-    var $info = array();
+    public $info = array();
     
     /**
      * Associative array of global attribute name to attribute definition.
-     * @public
      */
-    var $info_global_attr = array();
+    public $info_global_attr = array();
     
     /**
      * String name of parent element HTML will be going into.
-     * @public
      */
-    var $info_parent = 'div';
+    public $info_parent = 'div';
     
     /**
      * Definition for parent element, allows parent element to be a
      * tag that's not allowed inside the HTML fragment.
-     * @public
      */
-    var $info_parent_def;
+    public $info_parent_def;
     
     /**
      * String name of element used to wrap inline elements in block context
      * @note This is rarely used except for BLOCKQUOTEs in strict mode
-     * @public
      */
-    var $info_block_wrapper = 'p';
+    public $info_block_wrapper = 'p';
     
     /**
      * Associative array of deprecated tag name to HTMLPurifier_TagTransform
-     * @public
      */
-    var $info_tag_transform = array();
+    public $info_tag_transform = array();
     
     /**
      * Indexed list of HTMLPurifier_AttrTransform to be performed before validation.
-     * @public
      */
-    var $info_attr_transform_pre = array();
+    public $info_attr_transform_pre = array();
     
     /**
      * Indexed list of HTMLPurifier_AttrTransform to be performed after validation.
-     * @public
      */
-    var $info_attr_transform_post = array();
+    public $info_attr_transform_post = array();
     
     /**
      * Nested lookup array of content set name (Block, Inline) to
      * element name to whether or not it belongs in that content set.
-     * @public
      */
-    var $info_content_sets = array();
+    public $info_content_sets = array();
     
     /**
      * Doctype object
      */
-    var $doctype;
+    public $doctype;
     
     
     
@@ -227,7 +218,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      * @param $def Attribute definition, can be string or object, see
      *             HTMLPurifier_AttrTypes for details
      */
-    function addAttribute($element_name, $attr_name, $def) {
+    public function addAttribute($element_name, $attr_name, $def) {
         $module =& $this->getAnonymousModule();
         $element =& $module->addBlankElement($element_name);
         $element->attr[$attr_name] = $def;
@@ -238,7 +229,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      * @note See HTMLPurifier_HTMLModule::addElement for detailed 
      *       parameter and return value descriptions.
      */
-    function &addElement($element_name, $type, $contents, $attr_collections, $attributes) {
+    public function &addElement($element_name, $type, $contents, $attr_collections, $attributes) {
         $module =& $this->getAnonymousModule();
         // assume that if the user is calling this, the element
         // is safe. This may not be a good idea
@@ -252,7 +243,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      * @note See HTMLPurifier_HTMLModule::addBlankElement for detailed
      *       parameter and return value descriptions.
      */
-    function &addBlankElement($element_name) {
+    public function &addBlankElement($element_name) {
         $module  =& $this->getAnonymousModule();
         $element =& $module->addBlankElement($element_name);
         return $element;
@@ -263,7 +254,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      * bust out advanced features without having to make your own
      * module.
      */
-    function &getAnonymousModule() {
+    public function &getAnonymousModule() {
         if (!$this->_anonModule) {
             $this->_anonModule = new HTMLPurifier_HTMLModule();
             $this->_anonModule->name = 'Anonymous';
@@ -271,22 +262,22 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         return $this->_anonModule;
     }
     
-    var $_anonModule;
+    private $_anonModule;
     
     
     // PUBLIC BUT INTERNAL VARIABLES --------------------------------------
     
-    var $type = 'HTML';
-    var $manager; /**< Instance of HTMLPurifier_HTMLModuleManager */
+    public $type = 'HTML';
+    public $manager; /**< Instance of HTMLPurifier_HTMLModuleManager */
     
     /**
      * Performs low-cost, preliminary initialization.
      */
-    function HTMLPurifier_HTMLDefinition() {
+    public function HTMLPurifier_HTMLDefinition() {
         $this->manager = new HTMLPurifier_HTMLModuleManager();
     }
     
-    function doSetup($config) {
+    protected function doSetup($config) {
         $this->processModules($config);
         $this->setupConfigStuff($config);
         unset($this->manager);
@@ -301,7 +292,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     /**
      * Extract out the information from the manager
      */
-    function processModules($config) {
+    protected function processModules($config) {
         
         if ($this->_anonModule) {
             // for user specific changes
@@ -337,7 +328,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     /**
      * Sets up stuff based on config. We need a better way of doing this.
      */
-    function setupConfigStuff($config) {
+    protected function setupConfigStuff($config) {
         
         $block_wrapper = $config->get('HTML', 'BlockWrapper');
         if (isset($this->info_content_sets['Block'][$block_wrapper])) {
@@ -434,8 +425,9 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      *      it is different, and you'll probably have to modify your lists
      * @param $list String list to parse
      * @param array($allowed_elements, $allowed_attributes)
+     * @todo Give this its own class, probably static interface
      */
-    function parseTinyMCEAllowedList($list) {
+    public function parseTinyMCEAllowedList($list) {
         
         $elements = array();
         $attributes = array();

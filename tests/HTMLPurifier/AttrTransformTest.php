@@ -2,12 +2,17 @@
 
 require_once 'HTMLPurifier/AttrTransform.php';
 
+Mock::generatePartial(
+        'HTMLPurifier_AttrTransform',
+        'HTMLPurifier_AttrTransformTestable',
+        array('transform'));
+
 class HTMLPurifier_AttrTransformTest extends HTMLPurifier_Harness
 {
     
     function test_prependCSS() {
         
-        $t = new HTMLPurifier_AttrTransform();
+        $t = new HTMLPurifier_AttrTransformTestable();
         
         $attr = array();
         $t->prependCSS($attr, 'style:new;');
@@ -25,7 +30,7 @@ class HTMLPurifier_AttrTransformTest extends HTMLPurifier_Harness
     
     function test_confiscateAttr() {
         
-        $t = new HTMLPurifier_AttrTransform();
+        $t = new HTMLPurifier_AttrTransformTestable();
         
         $attr = array('flavor' => 'sweet');
         $this->assertIdentical('sweet', $t->confiscateAttr($attr, 'flavor'));

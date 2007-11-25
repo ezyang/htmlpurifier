@@ -10,9 +10,9 @@ require_once 'HTMLPurifier/HTMLModule.php';
 class HTMLPurifier_HTMLModule_Object extends HTMLPurifier_HTMLModule
 {
     
-    var $name = 'Object';
+    public $name = 'Object';
     
-    function HTMLPurifier_HTMLModule_Object() {
+    public function HTMLPurifier_HTMLModule_Object() {
         
         $this->addElement('object', false, 'Inline', 'Optional: #PCDATA | Flow | param', 'Common', 
             array(

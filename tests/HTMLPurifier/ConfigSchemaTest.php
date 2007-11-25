@@ -12,17 +12,17 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
     /**
      * Munged name of current file.
      */
-    var $file;
+    protected $file;
     
     /**
      * Copy of the real ConfigSchema to revert to.
      */
-    var $old_copy;
+    protected $old_copy;
     
     /**
      * Copy of dummy ConfigSchema for testing purposes.
      */
-    var $our_copy;
+    protected $our_copy;
     
     function setUp() {
         // yes, I know this is slightly convoluted, but that's the price

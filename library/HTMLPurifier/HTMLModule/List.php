@@ -8,7 +8,7 @@ require_once 'HTMLPurifier/HTMLModule.php';
 class HTMLPurifier_HTMLModule_List extends HTMLPurifier_HTMLModule
 {
     
-    var $name = 'List';
+    public $name = 'List';
     
     // According to the abstract schema, the List content set is a fully formed
     // one or more expr, but it invariably occurs in an optional declaration
@@ -19,9 +19,9 @@ class HTMLPurifier_HTMLModule_List extends HTMLPurifier_HTMLModule
     // we don't have support for such nested expressions without using
     // the incredibly inefficient and draconic Custom ChildDef.
     
-    var $content_sets = array('Flow' => 'List');
+    public $content_sets = array('Flow' => 'List');
     
-    function HTMLPurifier_HTMLModule_List() {
+    public function HTMLPurifier_HTMLModule_List() {
         $this->addElement('ol', true, 'List', 'Required: li', 'Common');
         $this->addElement('ul', true, 'List', 'Required: li', 'Common');
         $this->addElement('dl', true, 'List', 'Required: dt | dd', 'Common');

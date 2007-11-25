@@ -17,7 +17,7 @@ class HTMLPurifier_AttrDef_CSS_Composite_Testable extends
 class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
 {
     
-    var $def1, $def2;
+    protected $def1, $def2;
     
     function test() {
         

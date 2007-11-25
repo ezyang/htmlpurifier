@@ -13,9 +13,9 @@ require_once 'HTMLPurifier/AttrTransform/ImgRequired.php';
 class HTMLPurifier_HTMLModule_Image extends HTMLPurifier_HTMLModule
 {
     
-    var $name = 'Image';
+    public $name = 'Image';
     
-    function HTMLPurifier_HTMLModule_Image() {
+    public function HTMLPurifier_HTMLModule_Image() {
         $img =& $this->addElement(
             'img', true, 'Inline', 'Empty', 'Common',
             array(

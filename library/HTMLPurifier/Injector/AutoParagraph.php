@@ -40,16 +40,16 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
 {
     
-    var $name = 'AutoParagraph';
-    var $needed = array('p');
+    public $name = 'AutoParagraph';
+    public $needed = array('p');
     
-    function _pStart() {
+    private function _pStart() {
         $par = new HTMLPurifier_Token_Start('p');
         $par->armor['MakeWellFormed_TagClosedError'] = true;
         return $par;
     }
     
-    function handleText(&$token) {
+    public function handleText(&$token) {
         $text = $token->data;
         if (empty($this->currentNesting)) {
             if (!$this->allowsElement('p')) return;
@@ -103,7 +103,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         
     }
     
-    function handleElement(&$token) {
+    public function handleElement(&$token) {
         // check if we're inside a tag already
         if (!empty($this->currentNesting)) {
             if ($this->allowsElement('p')) {
@@ -172,9 +172,8 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
      *    tags will be appended onto
      * @param $config Instance of HTMLPurifier_Config
      * @param $context Instance of HTMLPurifier_Context
-     * @private
      */
-    function _splitText($data, &$result) {
+    private function _splitText($data, &$result) {
         $raw_paragraphs = explode("\n\n", $data);
         
         // remove empty paragraphs
@@ -273,9 +272,8 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
     /**
      * Returns true if passed token is inline (and, ergo, allowed in
      * paragraph tags)
-     * @private
      */
-    function _isInline($token) {
+    private function _isInline($token) {
         return isset($this->htmlDefinition->info['p']->child->elements[$token->name]);
     }
     

@@ -14,11 +14,12 @@ basic sanity checks to get the most out of this library.
 ---------------------------------------------------------------------------
 1.  Compatibility
 
-HTML Purifier works in both PHP 4 and PHP 5, and is actively tested from 
-PHP 4.3.7 and up (see tests/multitest.php for specific versions). It has 
-no core dependencies with other libraries. PHP 4 support will be 
-deprecated on December 31, 2007, at which time only essential security 
-fixes will be issued for the PHP 4 version until August 8, 2008. 
+HTML Purifier is PHP 5 only, and is actively tested from PHP 5.0.0 and 
+up (see tests/multitest.php for the specific versions that are being 
+actively tested). It has no core dependencies with other libraries. PHP 
+4 support was deprecated on December 31, 2007 with HTML Purifier 3.0.0. 
+Essential security fixes will be issued for the 2.1.x branch until 
+August 8, 2008. 
 
 These optional extensions can enhance the capabilities of HTML Purifier:
 

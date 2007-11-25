@@ -5,7 +5,7 @@ require_once 'HTMLPurifier/Lexer/DirectLex.php';
 class HTMLPurifier_Lexer_DirectLexTest extends HTMLPurifier_Harness
 {
     
-    var $DirectLex;
+    protected $DirectLex;
     
     function setUp() {
         $this->DirectLex = new HTMLPurifier_Lexer_DirectLex();

@@ -11,11 +11,11 @@ If no interest is expressed for a feature that may required a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
-2.2 release [Error'ed]
+3.1 release [Error'ed]
  # Error logging for filtering/cleanup procedures
  - XSS-attempt detection
 
-2.3 release [Do What I Mean, Not What I Say]
+3.2 release [Do What I Mean, Not What I Say]
  # Additional support for poorly written HTML
     - Microsoft Word HTML cleaning (i.e. MsoNormal, but research essential!)
     - Friendly strict handling of <address> (block -> <br>)
@@ -31,13 +31,13 @@ afraid to cast your vote for the next feature to be implemented!
    dupe detector would also need to detect the suffix as well)
  - Externalize inline CSS to promote clean HTML
 
-2.4 release [It's All About Trust] (floating)
+3.3 release [It's All About Trust] (floating)
  # Implement untrusted, dangerous elements/attributes
  # Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
  # Frameset XHTML 1.0 and HTML 4.01 doctypes
 
-3.0 release [Beyond HTML]
+4.0 release [Beyond HTML]
  # Legit token based CSS parsing (will require revamping almost every
    AttrDef class). Probably will use CSSTidy class
  # More control over allowed CSS properties (maybe modularize it in the
@@ -48,7 +48,7 @@ afraid to cast your vote for the next feature to be implemented!
  - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
    Also, enable disabling of directionality
 
-4.0 release [To XML and Beyond]
+5.0 release [To XML and Beyond]
  - Extended HTML capabilities based on namespacing and tag transforms (COMPLEX)
     - Hooks for adding custom processors to custom namespaced tags and
       attributes, offer default implementation

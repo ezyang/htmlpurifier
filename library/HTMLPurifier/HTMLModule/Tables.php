@@ -9,9 +9,9 @@ require_once 'HTMLPurifier/ChildDef/Table.php';
 class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
 {
     
-    var $name = 'Tables';
+    public $name = 'Tables';
     
-    function HTMLPurifier_HTMLModule_Tables() {
+    public function HTMLPurifier_HTMLModule_Tables() {
         
         $this->addElement('caption', true, false, 'Inline', 'Common');
         

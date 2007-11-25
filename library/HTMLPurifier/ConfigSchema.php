@@ -33,22 +33,22 @@ class HTMLPurifier_ConfigSchema {
      * Defaults of the directives and namespaces.
      * @note This shares the exact same structure as HTMLPurifier_Config::$conf
      */
-    var $defaults = array();
+    public $defaults = array();
     
     /**
      * Definition of the directives.
      */
-    var $info = array();
+    public $info = array();
     
     /**
      * Definition of namespaces.
      */
-    var $info_namespace = array();
+    public $info_namespace = array();
     
     /**
      * Lookup table of allowed types.
      */
-    var $types = array(
+    public $types = array(
         'string'    => 'String',
         'istring'   => 'Case-insensitive string',
         'text'      => 'Text',
@@ -65,7 +65,7 @@ class HTMLPurifier_ConfigSchema {
     /**
      * Initializes the default namespaces.
      */
-    function initialize() {
+    public function initialize() {
         $this->defineNamespace('Core', 'Core features that are always available.');
         $this->defineNamespace('Attr', 'Features regarding attribute validation.');
         $this->defineNamespace('URI', 'Features regarding Uniform Resource Identifiers.');
@@ -80,9 +80,8 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Retrieves an instance of the application-wide configuration definition.
-     * @static
      */
-    function &instance($prototype = null) {
+    public static function &instance($prototype = null) {
         static $instance;
         if ($prototype !== null) {
             $instance = $prototype;
@@ -95,7 +94,6 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Defines a directive for configuration
-     * @static
      * @warning Will fail of directive's namespace is defined
      * @param $namespace Namespace the directive is in
      * @param $name Key of directive
@@ -104,7 +102,7 @@ class HTMLPurifier_ConfigSchema {
      *      HTMLPurifier_DirectiveDef::$type for allowed values
      * @param $description Description of directive for documentation
      */
-    function define($namespace, $name, $default, $type, $description) {
+    public static function define($namespace, $name, $default, $type, $description) {
         $def =& HTMLPurifier_ConfigSchema::instance();
         
         // basic sanity checks
@@ -173,11 +171,10 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Defines a namespace for directives to be put into.
-     * @static
      * @param $namespace Namespace's name
      * @param $description Description of the namespace
      */
-    function defineNamespace($namespace, $description) {
+    public static function defineNamespace($namespace, $description) {
         $def =& HTMLPurifier_ConfigSchema::instance();
         if (HTMLPURIFIER_SCHEMA_STRICT) {
             if (isset($def->info[$namespace])) {
@@ -206,13 +203,12 @@ class HTMLPurifier_ConfigSchema {
      * 
      * Directive value aliases are convenient for developers because it lets
      * them set a directive to several values and get the same result.
-     * @static
      * @param $namespace Directive's namespace
      * @param $name Name of Directive
      * @param $alias Name of aliased value
      * @param $real Value aliased value will be converted into
      */
-    function defineValueAliases($namespace, $name, $aliases) {
+    public static function defineValueAliases($namespace, $name, $aliases) {
         $def =& HTMLPurifier_ConfigSchema::instance();
         if (HTMLPURIFIER_SCHEMA_STRICT && !isset($def->info[$namespace][$name])) {
             trigger_error('Cannot set value alias for non-existant directive',
@@ -240,12 +236,11 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Defines a set of allowed values for a directive.
-     * @static
      * @param $namespace Namespace of directive
      * @param $name Name of directive
      * @param $allowed_values Arraylist of allowed values
      */
-    function defineAllowedValues($namespace, $name, $allowed_values) {
+    public static function defineAllowedValues($namespace, $name, $allowed_values) {
         $def =& HTMLPurifier_ConfigSchema::instance();
         if (HTMLPURIFIER_SCHEMA_STRICT && !isset($def->info[$namespace][$name])) {
             trigger_error('Cannot define allowed values for undefined directive',
@@ -279,13 +274,12 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Defines a directive alias for backwards compatibility
-     * @static
      * @param $namespace
      * @param $name Directive that will be aliased
      * @param $new_namespace
      * @param $new_name Directive that the alias will be to
      */
-    function defineAlias($namespace, $name, $new_namespace, $new_name) {
+    public static function defineAlias($namespace, $name, $new_namespace, $new_name) {
         $def =& HTMLPurifier_ConfigSchema::instance();
         if (HTMLPURIFIER_SCHEMA_STRICT) {
             if (!isset($def->info[$namespace])) {
@@ -322,8 +316,9 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Validate a variable according to type. Return null if invalid.
+     * @todo Consider making protected
      */
-    function validate($var, $type, $allow_null = false) {
+    public function validate($var, $type, $allow_null = false) {
         if (!isset($this->types[$type])) {
             trigger_error('Invalid type', E_USER_ERROR);
             return;
@@ -414,8 +409,11 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Takes an absolute path and munges it into a more manageable relative path
+     * @todo Consider making protected
+     * @param $filename Filename to check
+     * @return string munged filename
      */
-    function mungeFilename($filename) {
+    public function mungeFilename($filename) {
         if (!HTMLPURIFIER_SCHEMA_STRICT) return $filename;
         $offset = strrpos($filename, 'HTMLPurifier');
         $filename = substr($filename, $offset);
@@ -425,10 +423,11 @@ class HTMLPurifier_ConfigSchema {
     
     /**
      * Checks if var is an HTMLPurifier_Error object
+     * @todo Consider making protected
      */
-    function isError($var) {
+    public function isError($var) {
         if (!is_object($var)) return false;
-        if (!is_a($var, 'HTMLPurifier_Error')) return false;
+        if (!($var instanceof HTMLPurifier_Error)) return false;
         return true;
     }
 }

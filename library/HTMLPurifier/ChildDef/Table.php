@@ -7,12 +7,12 @@ require_once 'HTMLPurifier/ChildDef.php';
  */
 class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
 {
-    var $allow_empty = false;
-    var $type = 'table';
-    var $elements = array('tr' => true, 'tbody' => true, 'thead' => true,
+    public $allow_empty = false;
+    public $type = 'table';
+    public $elements = array('tr' => true, 'tbody' => true, 'thead' => true,
         'tfoot' => true, 'caption' => true, 'colgroup' => true, 'col' => true);
-    function HTMLPurifier_ChildDef_Table() {}
-    function validateChildren($tokens_of_children, $config, &$context) {
+    public function HTMLPurifier_ChildDef_Table() {}
+    public function validateChildren($tokens_of_children, $config, &$context) {
         if (empty($tokens_of_children)) return false;
         
         // this ensures that the loop gets run one last time before closing

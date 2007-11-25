@@ -33,7 +33,7 @@ This directive has been available since 2.0.0.
 class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
 {
     
-    function validate($color, $config, &$context) {
+    public function validate($color, $config, &$context) {
         
         static $colors = null;
         if ($colors === null) $colors = $config->get('Core', 'ColorKeywords');

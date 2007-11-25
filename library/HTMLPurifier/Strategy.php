@@ -14,7 +14,7 @@ HTMLPurifier_ConfigSchema::define(
     'text.  Otherwise, they are silently dropped.'
 );
  
-class HTMLPurifier_Strategy
+abstract class HTMLPurifier_Strategy
 {
     
     /**
@@ -24,9 +24,7 @@ class HTMLPurifier_Strategy
      * @param $config Configuration options
      * @returns Processed array of token objects.
      */
-    function execute($tokens, $config, &$context) {
-        trigger_error('Cannot call abstract function', E_USER_ERROR);
-    }
+    abstract public function execute($tokens, $config, &$context);
     
 }
 

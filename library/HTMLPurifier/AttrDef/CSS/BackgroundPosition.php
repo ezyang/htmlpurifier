@@ -48,15 +48,15 @@ require_once 'HTMLPurifier/AttrDef/CSS/Percentage.php';
 class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
 {
     
-    var $length;
-    var $percentage;
+    protected $length;
+    protected $percentage;
     
-    function HTMLPurifier_AttrDef_CSS_BackgroundPosition() {
+    public function HTMLPurifier_AttrDef_CSS_BackgroundPosition() {
         $this->length     = new HTMLPurifier_AttrDef_CSS_Length();
         $this->percentage = new HTMLPurifier_AttrDef_CSS_Percentage();
     }
     
-    function validate($string, $config, &$context) {
+    public function validate($string, $config, &$context) {
         $string = $this->parseCDATA($string);
         $bits = explode(' ', $string);
         

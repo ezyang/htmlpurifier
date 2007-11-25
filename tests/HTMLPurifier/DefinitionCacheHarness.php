@@ -1,5 +1,7 @@
 <?php
 
+require_once 'HTMLPurifier/DefinitionTestable.php';
+
 class HTMLPurifier_DefinitionCacheHarness extends HTMLPurifier_Harness
 {
     
@@ -20,7 +22,7 @@ class HTMLPurifier_DefinitionCacheHarness extends HTMLPurifier_Harness
      * Returns an anonymous def that has been setup and named Test
      */
     function generateDefinition($member_vars = array()) {
-        $def = new HTMLPurifier_Definition();
+        $def = new HTMLPurifier_DefinitionTestable();
         $def->setup = true;
         $def->type  = 'Test';
         foreach ($member_vars as $key => $val) {

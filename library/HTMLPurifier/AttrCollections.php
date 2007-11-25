@@ -12,7 +12,7 @@ class HTMLPurifier_AttrCollections
     /**
      * Associative array of attribute collections, indexed by name
      */
-    var $info = array();
+    public $info = array();
     
     /**
      * Performs all expansions on internal data for use by other inclusions
@@ -21,7 +21,7 @@ class HTMLPurifier_AttrCollections
      * @param $attr_types HTMLPurifier_AttrTypes instance
      * @param $modules Hash array of HTMLPurifier_HTMLModule members
      */
-    function HTMLPurifier_AttrCollections($attr_types, $modules) {
+    public function HTMLPurifier_AttrCollections($attr_types, $modules) {
         // load extensions from the modules
         foreach ($modules as $module) {
             foreach ($module->attr_collections as $coll_i => $coll) {
@@ -53,7 +53,7 @@ class HTMLPurifier_AttrCollections
      * all inclusions specified by the zero index.
      * @param &$attr Reference to attribute array
      */
-    function performInclusions(&$attr) {
+    public function performInclusions(&$attr) {
         if (!isset($attr[0])) return;
         $merge = $attr[0];
         $seen  = array(); // recursion guard
@@ -81,7 +81,7 @@ class HTMLPurifier_AttrCollections
      * @param &$attr Reference to attribute array
      * @param $attr_types HTMLPurifier_AttrTypes instance
      */
-    function expandIdentifiers(&$attr, $attr_types) {
+    public function expandIdentifiers(&$attr, $attr_types) {
         
         // because foreach will process new elements we add, make sure we
         // skip duplicates

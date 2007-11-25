@@ -9,6 +9,7 @@ class ConfigDoc_XMLSerializer_ConfigSchema extends ConfigDoc_XMLSerializer
      * Serializes a schema into DOM form
      * @todo Split into sub-serializers
      * @param $schema HTMLPurifier_ConfigSchema to serialize
+     * @return DOMDocument representation of schema
      */
     public function serialize($schema) {
         $dom_document = new DOMDocument('1.0', 'UTF-8');

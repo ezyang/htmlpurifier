@@ -10,7 +10,7 @@ class HTMLPurifier_PercentEncoder
      * Fix up percent-encoding by decoding unreserved characters and normalizing
      * @param $string String to normalize
      */
-    function normalize($string) {
+    public function normalize($string) {
         if ($string == '') return '';
         $parts = explode('%', $string);
         $ret = array_shift($parts);

@@ -17,7 +17,7 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
         $this->assertIdentical($uri1, $uri2);
     }
     
-    var $oldRegistry;
+    protected $oldRegistry;
     
     function &setUpSchemeRegistryMock() {
         $this->oldRegistry = HTMLPurifier_URISchemeRegistry::instance();

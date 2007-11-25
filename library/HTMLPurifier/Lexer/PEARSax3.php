@@ -27,11 +27,10 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
     
     /**
      * Internal accumulator array for SAX parsers.
-     * @protected
      */
-    var $tokens = array();
+    protected $tokens = array();
     
-    function tokenizeHTML($string, $config, &$context) {
+    public function tokenizeHTML($string, $config, &$context) {
         
         $this->tokens = array();
         
@@ -55,7 +54,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
     /**
      * Open tag event handler, interface is defined by PEAR package.
      */
-    function openHandler(&$parser, $name, $attrs, $closed) {
+    public function openHandler(&$parser, $name, $attrs, $closed) {
         // entities are not resolved in attrs
         foreach ($attrs as $key => $attr) {
             $attrs[$key] = $this->parseData($attr);
@@ -71,7 +70,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
     /**
      * Close tag event handler, interface is defined by PEAR package.
      */
-    function closeHandler(&$parser, $name) {
+    public function closeHandler(&$parser, $name) {
         // HTMLSax3 seems to always send empty tags an extra close tag
         // check and ignore if you see it:
         // [TESTME] to make sure it doesn't overreach
@@ -85,7 +84,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
     /**
      * Data event handler, interface is defined by PEAR package.
      */
-    function dataHandler(&$parser, $data) {
+    public function dataHandler(&$parser, $data) {
         $this->tokens[] = new HTMLPurifier_Token_Text($data);
         return true;
     }
@@ -93,7 +92,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
     /**
      * Escaped text handler, interface is defined by PEAR package.
      */
-    function escapeHandler(&$parser, $data) {
+    public function escapeHandler(&$parser, $data) {
         if (strpos($data, '--') === 0) {
             $this->tokens[] = new HTMLPurifier_Token_Comment($data);
         }

@@ -9,9 +9,9 @@ require_once 'HTMLPurifier/HTMLModule.php';
 class HTMLPurifier_HTMLModule_Ruby extends HTMLPurifier_HTMLModule
 {
     
-    var $name = 'Ruby';
+    public $name = 'Ruby';
     
-    function HTMLPurifier_HTMLModule_Ruby() {
+    public function HTMLPurifier_HTMLModule_Ruby() {
         $this->addElement('ruby', true, 'Inline',
             'Custom: ((rb, (rt | (rp, rt, rp))) | (rbc, rtc, rtc?))',
             'Common');

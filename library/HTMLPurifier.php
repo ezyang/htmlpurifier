@@ -83,19 +83,19 @@ since 2.0.0.
 class HTMLPurifier
 {
     
-    var $version = '2.1.3';
+    public $version = '2.1.3';
     
-    var $config;
-    var $filters = array();
+    public $config;
+    public $filters = array();
     
-    var $strategy, $generator;
+    protected $strategy, $generator;
     
     /**
      * Resultant HTMLPurifier_Context of last run purification. Is an array
      * of contexts if the last called method was purifyArray().
      * @public
      */
-    var $context;
+    public $context;
     
     /**
      * Initializes the purifier.
@@ -105,7 +105,7 @@ class HTMLPurifier
      *                The parameter can also be any type that
      *                HTMLPurifier_Config::create() supports.
      */
-    function HTMLPurifier($config = null) {
+    public function HTMLPurifier($config = null) {
         
         $this->config = HTMLPurifier_Config::create($config);
         
@@ -118,7 +118,7 @@ class HTMLPurifier
      * Adds a filter to process the output. First come first serve
      * @param $filter HTMLPurifier_Filter object
      */
-    function addFilter($filter) {
+    public function addFilter($filter) {
         $this->filters[] = $filter;
     }
     
@@ -132,7 +132,7 @@ class HTMLPurifier
      *                that HTMLPurifier_Config::create() supports.
      * @return Purified HTML
      */
-    function purify($html, $config = null) {
+    public function purify($html, $config = null) {
         
         $config = $config ? HTMLPurifier_Config::create($config) : $this->config;
         
@@ -198,7 +198,7 @@ class HTMLPurifier
      *                See HTMLPurifier::purify() for more details.
      * @return Array of purified HTML
      */
-    function purifyArray($array_of_html, $config = null) {
+    public function purifyArray($array_of_html, $config = null) {
         $context_array = array();
         foreach ($array_of_html as $key => $html) {
             $array_of_html[$key] = $this->purify($html, $config);
@@ -213,10 +213,10 @@ class HTMLPurifier
      * @param $prototype Optional prototype HTMLPurifier instance to
      *                   overload singleton with.
      */
-    function &getInstance($prototype = null) {
+    public static function &getInstance($prototype = null) {
         static $htmlpurifier;
         if (!$htmlpurifier || $prototype) {
-            if (is_a($prototype, 'HTMLPurifier')) {
+            if ($prototype instanceof HTMLPurifier) {
                 $htmlpurifier = $prototype;
             } elseif ($prototype) {
                 $htmlpurifier = new HTMLPurifier($prototype);

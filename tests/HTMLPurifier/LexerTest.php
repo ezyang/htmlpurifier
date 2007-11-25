@@ -5,7 +5,7 @@ require_once 'HTMLPurifier/Lexer/DirectLex.php';
 class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 {
     
-    var $_has_pear = false;
+    protected $_has_pear = false;
     
     function HTMLPurifier_LexerTest() {
         parent::HTMLPurifier_Harness();

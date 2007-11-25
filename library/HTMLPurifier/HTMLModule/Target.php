@@ -8,9 +8,9 @@ require_once 'HTMLPurifier/AttrDef/HTML/FrameTarget.php';
 class HTMLPurifier_HTMLModule_Target extends HTMLPurifier_HTMLModule
 {
     
-    var $name = 'Target';
+    public $name = 'Target';
     
-    function HTMLPurifier_HTMLModule_Target() {
+    public function HTMLPurifier_HTMLModule_Target() {
         $elements = array('a');
         foreach ($elements as $name) {
             $e =& $this->addBlankElement($name);

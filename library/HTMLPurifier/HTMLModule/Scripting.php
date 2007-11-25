@@ -12,7 +12,7 @@ INSIDE HTML PURIFIER DOCUMENTS. USE ONLY WITH TRUSTED USER INPUT!!!
  */
 class HTMLPurifier_AttrTransform_ScriptRequired extends HTMLPurifier_AttrTransform
 {
-    function transform($attr, $config, &$context) {
+    public function transform($attr, $config, &$context) {
         if (!isset($attr['type'])) {
             $attr['type'] = 'text/javascript';
         }
@@ -28,11 +28,11 @@ class HTMLPurifier_AttrTransform_ScriptRequired extends HTMLPurifier_AttrTransfo
  */
 class HTMLPurifier_HTMLModule_Scripting extends HTMLPurifier_HTMLModule
 {
-    var $name = 'Scripting';
-    var $elements = array('script', 'noscript');
-    var $content_sets = array('Block' => 'script | noscript', 'Inline' => 'script | noscript');
+    public $name = 'Scripting';
+    public $elements = array('script', 'noscript');
+    public $content_sets = array('Block' => 'script | noscript', 'Inline' => 'script | noscript');
     
-    function HTMLPurifier_HTMLModule_Scripting() {
+    public function HTMLPurifier_HTMLModule_Scripting() {
         // TODO: create custom child-definition for noscript that
         // auto-wraps stray #PCDATA in a similar manner to 
         // blockquote's custom definition (we would use it but

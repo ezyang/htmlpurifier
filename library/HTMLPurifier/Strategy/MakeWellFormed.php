@@ -27,12 +27,11 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     
     /**
      * Locally shared variable references
-     * @private
      */
-    var $inputTokens, $inputIndex, $outputTokens, $currentNesting,
+    protected $inputTokens, $inputIndex, $outputTokens, $currentNesting,
         $currentInjector, $injectors;
     
-    function execute($tokens, $config, &$context) {
+    public function execute($tokens, $config, &$context) {
         
         $definition = $config->getHTMLDefinition();
         

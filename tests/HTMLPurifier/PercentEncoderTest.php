@@ -5,8 +5,8 @@ require_once 'HTMLPurifier/PercentEncoder.php';
 class HTMLPurifier_PercentEncoderTest extends HTMLPurifier_Harness
 {
     
-    var $PercentEncoder;
-    var $func;
+    protected $PercentEncoder;
+    protected $func;
     
     function setUp() {
         $this->PercentEncoder = new HTMLPurifier_PercentEncoder();

@@ -134,8 +134,6 @@ class HTMLPurifier_Lexer
      * for PHP 5 and beyond.  This general rule has a few exceptions to it
      * involving special features that only DirectLex implements.
      * 
-     * @static
-     * 
      * @note The behavior of this class has changed, rather than accepting
      *       a prototype object, it now accepts a configuration object.
      *       To specify your own prototype, set %Core.LexerImpl to it.
@@ -148,9 +146,9 @@ class HTMLPurifier_Lexer
      * @param $prototype Optional prototype lexer or configuration object
      * @return Concrete lexer.
      */
-    function create($config) {
+    public static function create($config) {
         
-        if (!is_a($config, 'HTMLPurifier_Config')) {
+        if (!($config instanceof HTMLPurifier_Config)) {
             $lexer = $config;
             trigger_error("Passing a prototype to 
               HTMLPurifier_Lexer::create() is deprecated, please instead
@@ -203,15 +201,14 @@ class HTMLPurifier_Lexer
     
     // -- CONVENIENCE MEMBERS ---------------------------------------------
     
-    function HTMLPurifier_Lexer() {
+    public function HTMLPurifier_Lexer() {
         $this->_entity_parser = new HTMLPurifier_EntityParser();
     }
     
     /**
      * Most common entity to raw value conversion table for special entities.
-     * @protected
      */
-    var $_special_entity2str =
+    protected $_special_entity2str =
             array(
                     '&quot;' => '"',
                     '&amp;'  => '&',
@@ -236,7 +233,7 @@ class HTMLPurifier_Lexer
      * @param $string String character data to be parsed.
      * @returns Parsed character data.
      */
-    function parseData($string) {
+    public function parseData($string) {
         
         // following functions require at least one character
         if ($string === '') return '';
@@ -266,19 +263,17 @@ class HTMLPurifier_Lexer
      * @param $string String HTML.
      * @return HTMLPurifier_Token array representation of HTML.
      */
-    function tokenizeHTML($string, $config, &$context) {
+    public function tokenizeHTML($string, $config, &$context) {
         trigger_error('Call to abstract class', E_USER_ERROR);
     }
     
     /**
      * Translates CDATA sections into regular sections (through escaping).
      * 
-     * @static
-     * @protected
      * @param $string HTML string to process.
      * @returns HTML with CDATA sections escaped.
      */
-    function escapeCDATA($string) {
+    protected static function escapeCDATA($string) {
         return preg_replace_callback(
             '/<!\[CDATA\[(.+?)\]\]>/s',
             array('HTMLPurifier_Lexer', 'CDATACallback'),
@@ -287,9 +282,9 @@ class HTMLPurifier_Lexer
     }
     
     /**
-     * Special CDATA case that is especiall convoluted for <script>
+     * Special CDATA case that is especially convoluted for <script>
      */
-    function escapeCommentedCDATA($string) {
+    protected static function escapeCommentedCDATA($string) {
         return preg_replace_callback(
             '#<!--//--><!\[CDATA\[//><!--(.+?)//--><!\]\]>#s',
             array('HTMLPurifier_Lexer', 'CDATACallback'),
@@ -300,14 +295,13 @@ class HTMLPurifier_Lexer
     /**
      * Callback function for escapeCDATA() that does the work.
      * 
-     * @static
      * @warning Though this is public in order to let the callback happen,
      *          calling it directly is not recommended.
      * @params $matches PCRE matches array, with index 0 the entire match
      *                  and 1 the inside of the CDATA section.
      * @returns Escaped internals of the CDATA section.
      */
-    function CDATACallback($matches) {
+    protected static function CDATACallback($matches) {
         // not exactly sure why the character set is needed, but whatever
         return htmlspecialchars($matches[1], ENT_COMPAT, 'UTF-8');
     }
@@ -315,8 +309,9 @@ class HTMLPurifier_Lexer
     /**
      * Takes a piece of HTML and normalizes it by converting entities, fixing
      * encoding, extracting bits, and other good stuff.
+     * @todo Consider making protected
      */
-    function normalize($html, $config, &$context) {
+    public function normalize($html, $config, &$context) {
         
         // extract body from document if applicable
         if ($config->get('Core', 'ConvertDocumentToFragment')) {
@@ -348,8 +343,9 @@ class HTMLPurifier_Lexer
     
     /**
      * Takes a string of HTML (fragment or document) and returns the content
+     * @todo Consider making protected
      */
-    function extractBody($html) {
+    public function extractBody($html) {
         $matches = array();
         $result = preg_match('!<body[^>]*>(.+?)</body>!is', $html, $matches);
         if ($result) {

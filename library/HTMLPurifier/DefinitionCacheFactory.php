@@ -26,21 +26,20 @@ HTMLPurifier_ConfigSchema::defineAlias(
 class HTMLPurifier_DefinitionCacheFactory
 {
     
-    var $caches = array('Serializer' => array());
-    var $decorators = array();
+    protected $caches = array('Serializer' => array());
+    protected $decorators = array();
     
     /**
      * Initialize default decorators
      */
-    function setup() {
+    public function setup() {
         $this->addDecorator('Cleanup');
     }
     
     /**
      * Retrieves an instance of global definition cache factory.
-     * @static
      */
-    function &instance($prototype = null) {
+    public static function &instance($prototype = null) {
         static $instance;
         if ($prototype !== null) {
             $instance = $prototype;
@@ -56,7 +55,7 @@ class HTMLPurifier_DefinitionCacheFactory
      * @param $name Name of definitions handled by cache
      * @param $config Instance of HTMLPurifier_Config
      */
-    function &create($type, $config) {
+    public function &create($type, $config) {
         // only one implementation as for right now, $config will
         // be used to determine implementation
         $method = $config->get('Cache', 'DefinitionImpl');
@@ -82,7 +81,7 @@ class HTMLPurifier_DefinitionCacheFactory
      * Registers a decorator to add to all new cache objects
      * @param 
      */
-    function addDecorator($decorator) {
+    public function addDecorator($decorator) {
         if (is_string($decorator)) {
             $class = "HTMLPurifier_DefinitionCache_Decorator_$decorator";
             $decorator = new $class;

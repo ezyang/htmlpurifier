@@ -6,7 +6,8 @@ class HTMLPurifier_DefinitionCacheTest extends HTMLPurifier_Harness
 {
     
     function test_isOld() {
-        $cache = new HTMLPurifier_DefinitionCache('Test'); // non-functional
+        // using null subclass because parent is abstract
+        $cache = new HTMLPurifier_DefinitionCache_Null('Test');
         
         $old_copy = HTMLPurifier_ConfigSchema::instance();
         $o = new HTMLPurifier_ConfigSchema();

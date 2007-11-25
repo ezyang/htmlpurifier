@@ -8,12 +8,12 @@ require_once 'HTMLPurifier/ChildDef/Required.php';
 class   HTMLPurifier_ChildDef_StrictBlockquote
 extends HTMLPurifier_ChildDef_Required
 {
-    var $real_elements;
-    var $fake_elements;
-    var $allow_empty = true;
-    var $type = 'strictblockquote';
-    var $init = false;
-    function validateChildren($tokens_of_children, $config, &$context) {
+    protected $real_elements;
+    protected $fake_elements;
+    public $allow_empty = true;
+    public $type = 'strictblockquote';
+    protected $init = false;
+    public function validateChildren($tokens_of_children, $config, &$context) {
         
         $def = $config->getHTMLDefinition();
         if (!$this->init) {

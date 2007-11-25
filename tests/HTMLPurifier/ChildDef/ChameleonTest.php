@@ -6,7 +6,7 @@ require_once 'HTMLPurifier/ChildDef/Chameleon.php';
 class HTMLPurifier_ChildDef_ChameleonTest extends HTMLPurifier_ChildDefHarness
 {
     
-    var $isInline;
+    protected $isInline;
     
     function setUp() {
         parent::setUp();

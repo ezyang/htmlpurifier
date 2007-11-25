@@ -12,7 +12,7 @@ class HTMLPurifier_Harness extends UnitTestCase
         parent::UnitTestCase();
     }
     
-    var $config, $context;
+    protected $config, $context;
     
     /**
      * Generates easily accessible default config/context

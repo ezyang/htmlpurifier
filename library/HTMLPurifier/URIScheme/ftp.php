@@ -7,11 +7,11 @@ require_once 'HTMLPurifier/URIScheme.php';
  */
 class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme {
     
-    var $default_port = 21;
-    var $browsable = true; // usually
-    var $hierarchical = true;
+    public $default_port = 21;
+    public $browsable = true; // usually
+    public $hierarchical = true;
     
-    function validate(&$uri, $config, &$context) {
+    public function validate(&$uri, $config, &$context) {
         parent::validate($uri, $config, $context);
         $uri->query    = null;
         

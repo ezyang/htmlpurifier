@@ -12,12 +12,12 @@ HTMLPurifier_ConfigSchema::define(
 
 class HTMLPurifier_URIFilter_HostBlacklist extends HTMLPurifier_URIFilter
 {
-    var $name = 'HostBlacklist';
-    var $blacklist = array();
-    function prepare($config) {
+    public $name = 'HostBlacklist';
+    protected $blacklist = array();
+    public function prepare($config) {
         $this->blacklist = $config->get('URI', 'HostBlacklist');
     }
-    function filter(&$uri, $config, &$context) {
+    public function filter(&$uri, $config, &$context) {
         foreach($this->blacklist as $blacklisted_host_fragment) {
             if (strpos($uri->host, $blacklisted_host_fragment) !== false) {
                 return false;

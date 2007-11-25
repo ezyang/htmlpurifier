@@ -8,8 +8,9 @@ require_once 'HTMLPurifier/ComplexHarness.php';
 class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
 {
     
-    var $gen;
-    var $_entity_lookup;
+    protected $gen;
+    protected $_entity_lookup;
+    protected $config;
     
     function HTMLPurifier_GeneratorTest() {
         $this->HTMLPurifier_Harness();
@@ -121,7 +122,6 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
         
     }
     
-    var $config;
     function assertGeneration($tokens, $expect) {
         $context = new HTMLPurifier_Context();
         $result = $this->gen->generateFromTokens(

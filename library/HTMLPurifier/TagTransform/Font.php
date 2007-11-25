@@ -17,9 +17,9 @@ require_once 'HTMLPurifier/TagTransform.php';
 class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
 {
     
-    var $transform_to = 'span';
+    public $transform_to = 'span';
     
-    var $_size_lookup = array(
+    protected $_size_lookup = array(
         '0' => 'xx-small',
         '1' => 'xx-small',
         '2' => 'small',
@@ -36,7 +36,7 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
         '+4' => '300%'
     );
     
-    function transform($tag, $config, &$context) {
+    public function transform($tag, $config, &$context) {
         
         if ($tag->type == 'end') {
             $new_tag = $tag->copy();

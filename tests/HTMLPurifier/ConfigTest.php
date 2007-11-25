@@ -9,7 +9,7 @@ if (!class_exists('CS')) {
 class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 {
     
-    var $our_copy, $old_copy;
+    protected $our_copy, $old_copy;
     
     function setUp() {
         // set up a dummy schema object for testing

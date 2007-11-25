@@ -3,9 +3,10 @@
 // call one file using /?f=FileTest.php , see $test_files array for
 // valid values
 
-error_reporting(E_ALL);
 define('HTMLPurifierTest', 1);
 define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
+
+if (isset($_GET['flush'])) shell_exec('php ../maintenance/flush-definition-cache.php');
 
 // wishlist: automated calling of this file from multiple PHP versions so we
 // don't have to constantly switch around
@@ -22,9 +23,11 @@ if (file_exists('../test-settings.php')) include '../test-settings.php';
 require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
 require_once $simpletest_location . 'mock_objects.php';
-require_once 'HTMLPurifier/SimpleTest/Reporter.php';
+
+error_reporting(E_ALL | E_STRICT); // after SimpleTest is loaded, turn on compile time errors
 
 // load Debugger
+require_once 'HTMLPurifier/SimpleTest/Reporter.php';
 require_once 'Debugger.php';
 
 // load convenience functions

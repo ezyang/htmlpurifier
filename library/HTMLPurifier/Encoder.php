@@ -58,7 +58,7 @@ class HTMLPurifier_Encoder
     /**
      * Constructor throws fatal error if you attempt to instantiate class
      */
-    function HTMLPurifier_Encoder() {
+    private function HTMLPurifier_Encoder() {
         trigger_error('Cannot instantiate encoder, call methods statically', E_USER_ERROR);
     }
     
@@ -68,7 +68,6 @@ class HTMLPurifier_Encoder
      * It will parse according to UTF-8 and return a valid UTF8 string, with
      * non-SGML codepoints excluded.
      * 
-     * @static
      * @note Just for reference, the non-SGML code points are 0 to 31 and
      *       127 to 159, inclusive.  However, we allow code points 9, 10
      *       and 13, which are the tab, line feed and carriage return
@@ -88,7 +87,7 @@ class HTMLPurifier_Encoder
      *       would need that, and I'm probably not going to implement them.
      *       Once again, PHP 6 should solve all our problems.
      */
-    function cleanUTF8($str, $force_php = false) {
+    public static function cleanUTF8($str, $force_php = false) {
         
         static $non_sgml_chars = array();
         if (empty($non_sgml_chars)) {
@@ -246,7 +245,6 @@ class HTMLPurifier_Encoder
     
     /**
      * Translates a Unicode codepoint into its corresponding UTF-8 character.
-     * @static
      * @note Based on Feyd's function at
      *       <http://forums.devnetwork.net/viewtopic.php?p=191404#191404>,
      *       which is in public domain.
@@ -271,7 +269,7 @@ class HTMLPurifier_Encoder
     // | 00000000 | 00010000 | 11111111 | 11111111 | Defined upper limit of legal scalar codes
     // +----------+----------+----------+----------+ 
     
-    function unichr($code) {
+    public static function unichr($code) {
         if($code > 1114111 or $code < 0 or
           ($code >= 55296 and $code <= 57343) ) {
             // bits are set outside the "valid" range as defined
@@ -310,9 +308,8 @@ class HTMLPurifier_Encoder
     
     /**
      * Converts a string to UTF-8 based on configuration.
-     * @static
      */
-    function convertToUTF8($str, $config, &$context) {
+    public static function convertToUTF8($str, $config, &$context) {
         static $iconv = null;
         if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');
@@ -327,11 +324,10 @@ class HTMLPurifier_Encoder
     
     /**
      * Converts a string from UTF-8 based on configuration.
-     * @static
      * @note Currently, this is a lossy conversion, with unexpressable
      *       characters being omitted.
      */
-    function convertFromUTF8($str, $config, &$context) {
+    public static function convertFromUTF8($str, $config, &$context) {
         static $iconv = null;
         if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');
@@ -349,7 +345,6 @@ class HTMLPurifier_Encoder
     
     /**
      * Lossless (character-wise) conversion of HTML to ASCII
-     * @static
      * @param $str UTF-8 string to be converted to ASCII
      * @returns ASCII encoded string with non-ASCII character entity-ized
      * @warning Adapted from MediaWiki, claiming fair use: this is a common
@@ -364,7 +359,7 @@ class HTMLPurifier_Encoder
      * @note Sort of with cleanUTF8() but it assumes that $str is
      *       well-formed UTF-8
      */
-    function convertToASCIIDumbLossless($str) {
+    public static function convertToASCIIDumbLossless($str) {
         $bytesleft = 0;
         $result = '';
         $working = 0;

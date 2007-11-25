@@ -13,16 +13,16 @@ class HTMLPurifier_AttrDef_CSS_ListStyle extends HTMLPurifier_AttrDef
      * Local copy of component validators.
      * @note See HTMLPurifier_AttrDef_CSS_Font::$info for a similar impl.
      */
-    var $info;
+    protected $info;
     
-    function HTMLPurifier_AttrDef_CSS_ListStyle($config) {
+    public function HTMLPurifier_AttrDef_CSS_ListStyle($config) {
         $def = $config->getCSSDefinition();
         $this->info['list-style-type']     = $def->info['list-style-type'];
         $this->info['list-style-position'] = $def->info['list-style-position'];
         $this->info['list-style-image'] = $def->info['list-style-image'];
     }
     
-    function validate($string, $config, &$context) {
+    public function validate($string, $config, &$context) {
         
         // regular pre-processing
         $string = $this->parseCDATA($string);

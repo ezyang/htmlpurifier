@@ -25,47 +25,46 @@ class HTMLPurifier_LanguageFactory
      * Structure is: $factory->cache[$language_code][$key] = $value
      * @value array map
      */
-    var $cache;
+    public $cache;
     
     /**
      * Valid keys in the HTMLPurifier_Language object. Designates which
      * variables to slurp out of a message file.
      * @value array list
      */
-    var $keys = array('fallback', 'messages', 'errorNames');
+    public $keys = array('fallback', 'messages', 'errorNames');
     
     /**
      * Instance of HTMLPurifier_AttrDef_Lang to validate language codes
      * @value object HTMLPurifier_AttrDef_Lang
      */
-    var $validator;
+    protected $validator;
     
     /**
      * Cached copy of dirname(__FILE__), directory of current file without
      * trailing slash
      * @value string filename
      */
-    var $dir;
+    protected $dir;
     
     /**
      * Keys whose contents are a hash map and can be merged
      * @value array lookup
      */
-    var $mergeable_keys_map = array('messages' => true, 'errorNames' => true);
+    protected $mergeable_keys_map = array('messages' => true, 'errorNames' => true);
     
     /**
      * Keys whose contents are a list and can be merged
      * @value array lookup
      */
-    var $mergeable_keys_list = array();
+    protected $mergeable_keys_list = array();
     
     /**
      * Retrieve sole instance of the factory.
-     * @static
      * @param $prototype Optional prototype to overload sole instance with,
      *                   or bool true to reset to default factory.
      */
-    function &instance($prototype = null) {
+    public static function &instance($prototype = null) {
         static $instance = null;
         if ($prototype !== null) {
             $instance = $prototype;
@@ -80,7 +79,7 @@ class HTMLPurifier_LanguageFactory
      * Sets up the singleton, much like a constructor
      * @note Prevents people from getting this outside of the singleton
      */
-    function setup() {
+    public function setup() {
         $this->validator = new HTMLPurifier_AttrDef_Lang();
         $this->dir = HTMLPURIFIER_PREFIX . '/HTMLPurifier';
     }
@@ -90,7 +89,7 @@ class HTMLPurifier_LanguageFactory
      * @param $config Instance of HTMLPurifier_Config
      * @param $context Instance of HTMLPurifier_Context
      */
-    function create($config, &$context) {
+    public function create($config, &$context) {
         
         // validate language code
         $code = $this->validator->validate(
@@ -112,7 +111,7 @@ class HTMLPurifier_LanguageFactory
             // file yourself
             if (file_exists($file) && !class_exists($class)) {
                 include_once $file;
-         			}
+            }
         }
         
         if (!class_exists($class)) {
@@ -135,7 +134,7 @@ class HTMLPurifier_LanguageFactory
      * @note Loads the original language into cache
      * @param $code string language code
      */
-    function getFallbackFor($code) {
+    public function getFallbackFor($code) {
         $this->loadLanguage($code);
         return $this->cache[$code]['fallback'];
     }
@@ -144,7 +143,7 @@ class HTMLPurifier_LanguageFactory
      * Loads language into the cache, handles message file and fallbacks
      * @param $code string language code
      */
-    function loadLanguage($code) {
+    public function loadLanguage($code) {
         static $languages_seen = array(); // recursion guard
         
         // abort if we've already loaded it

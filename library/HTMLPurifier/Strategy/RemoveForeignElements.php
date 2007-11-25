@@ -55,7 +55,7 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
 {
     
-    function execute($tokens, $config, &$context) {
+    public function execute($tokens, $config, &$context) {
         $definition = $config->getHTMLDefinition();
         $generator = new HTMLPurifier_Generator();
         $result = array();

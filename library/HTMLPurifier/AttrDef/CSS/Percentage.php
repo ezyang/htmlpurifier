@@ -12,16 +12,16 @@ class HTMLPurifier_AttrDef_CSS_Percentage extends HTMLPurifier_AttrDef
     /**
      * Instance of HTMLPurifier_AttrDef_CSS_Number to defer number validation
      */
-    var $number_def;
+    protected $number_def;
     
     /**
      * @param Bool indicating whether to forbid negative values
      */
-    function HTMLPurifier_AttrDef_CSS_Percentage($non_negative = false) {
+    public function HTMLPurifier_AttrDef_CSS_Percentage($non_negative = false) {
         $this->number_def = new HTMLPurifier_AttrDef_CSS_Number($non_negative);
     }
     
-    function validate($string, $config, &$context) {
+    public function validate($string, $config, &$context) {
         
         $string = $this->parseCDATA($string);
         

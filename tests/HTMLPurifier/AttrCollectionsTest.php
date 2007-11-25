@@ -112,10 +112,8 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
             'attr1' => 'Color',
             'attr2*' => 'URI'
         );
-        $c_object = new HTMLPurifier_AttrDef();
-        $c_object->_name = 'Color'; // for testing purposes only
-        $u_object = new HTMLPurifier_AttrDef();
-        $u_object->_name = 'URL'; // for testing purposes only
+        $c_object = new HTMLPurifier_AttrDef_HTML_Color();
+        $u_object = new HTMLPurifier_AttrDef_URI();
         
         $types->setReturnValue('get', $c_object, array('Color'));
         $types->setReturnValue('get', $u_object, array('URI'));

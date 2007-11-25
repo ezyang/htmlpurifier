@@ -17,8 +17,8 @@ HTMLPurifier_ConfigSchema::define(
 
 class HTMLPurifier_URIFilter_DisableExternalResources extends HTMLPurifier_URIFilter_DisableExternal
 {
-    var $name = 'DisableExternalResources';
-    function filter(&$uri, $config, &$context) {
+    public $name = 'DisableExternalResources';
+    public function filter(&$uri, $config, &$context) {
         if (!$context->get('EmbeddedURI', true)) return true;
         return parent::filter($uri, $config, $context);
     }

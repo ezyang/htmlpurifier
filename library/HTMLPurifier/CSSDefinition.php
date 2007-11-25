@@ -33,17 +33,17 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
 {
     
-    var $type = 'CSS';
+    public $type = 'CSS';
     
     /**
      * Assoc array of attribute name to definition object.
      */
-    var $info = array();
+    public $info = array();
     
     /**
      * Constructs the info array.  The meat of this class.
      */
-    function doSetup($config) {
+    protected function doSetup($config) {
         
         $this->info['text-align'] = new HTMLPurifier_AttrDef_Enum(
             array('left', 'right', 'center', 'justify'), false);

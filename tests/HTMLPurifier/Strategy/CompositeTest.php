@@ -8,7 +8,7 @@ class HTMLPurifier_Strategy_Composite_Test
     extends HTMLPurifier_Strategy_Composite
 {
     
-    function HTMLPurifier_Strategy_Composite_Test(&$strategies) {
+    public function __construct(&$strategies) {
         $this->strategies =& $strategies;
     }
     

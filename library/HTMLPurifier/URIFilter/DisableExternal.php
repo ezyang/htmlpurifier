@@ -14,13 +14,13 @@ HTMLPurifier_ConfigSchema::define(
 
 class HTMLPurifier_URIFilter_DisableExternal extends HTMLPurifier_URIFilter
 {
-    var $name = 'DisableExternal';
-    var $ourHostParts = false;
-    function prepare($config) {
+    public $name = 'DisableExternal';
+    protected $ourHostParts = false;
+    public function prepare($config) {
         $our_host = $config->get('URI', 'Host');
         if ($our_host !== null) $this->ourHostParts = array_reverse(explode('.', $our_host));
     }
-    function filter(&$uri, $config, &$context) {
+    public function filter(&$uri, $config, &$context) {
         if (is_null($uri->host)) return true;
         if ($this->ourHostParts === false) return false;
         $host_parts = array_reverse(explode('.', $uri->host));

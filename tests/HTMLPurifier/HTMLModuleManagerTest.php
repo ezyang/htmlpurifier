@@ -9,8 +9,7 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         $manager = new HTMLPurifier_HTMLModuleManager();
         $manager->doctypes->register('Blank'); // doctype normally is blank...
         
-        $attrdef_nmtokens = new HTMLPurifier_AttrDef();
-        $attrdef_nmtokens->_name = 'nmtokens'; // for testing only
+        $attrdef_nmtokens = new HTMLPurifier_AttrDef_HTML_Nmtokens();
         
         generate_mock_once('HTMLPurifier_AttrDef');
         $attrdef = new HTMLPurifier_AttrDefMock();

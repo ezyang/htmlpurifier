@@ -15,6 +15,7 @@ TODO
  * Integrate into SimpleTest so it tells us whether or not there were any
    not cleaned up debug calls.
  * Custom var_dump() that ignores blacklisted properties
+ * DEPRECATE AND REMOVE ALL CALLS!
 */
 
 /**#@+
@@ -73,65 +74,62 @@ function printTokens($tokens, $index = null) {
 class Debugger
 {
     
-    var $shouldPaint = false;
-    var $paints  = 0;
-    var $current_scopes = array();
-    var $scope_nextID = 1;
-    var $add_pre = true;
+    public $shouldPaint = false;
+    public $paints  = 0;
+    public $current_scopes = array();
+    public $scope_nextID = 1;
+    public $add_pre = true;
     
-    function Debugger() {
+    public function Debugger() {
         $this->add_pre = !extension_loaded('xdebug');
     }
     
-    /**
-     * @static
-     */
-    function &instance() {
+    public static function &instance() {
         static $soleInstance = false;
         if (!$soleInstance) $soleInstance = new Debugger();
         return $soleInstance;
     }
     
-    function paintIf($mixed, $conditional)  {
+    public function paintIf($mixed, $conditional)  {
         if (!$conditional) return;
         $this->paint($mixed);
     }
     
-    function paintWhen($mixed, $scopes = array()) {
+    public function paintWhen($mixed, $scopes = array()) {
         if (!$this->isInScopes($scopes)) return;
         $this->paint($mixed);
     }
     
-    function paintIfWhen($mixed, $conditional, $scopes = array()) {
+    public function paintIfWhen($mixed, $conditional, $scopes = array()) {
         if (!$conditional) return;
         if (!$this->isInScopes($scopes)) return;
         $this->paint($mixed);
     }
     
-    function paint($mixed) {
+    public function paint($mixed) {
         $this->paints++;
         if($this->add_pre) echo '<pre>';
         var_dump($mixed);
         if($this->add_pre) echo '</pre>';
     }
     
-    function addScope($id = false) {
+    public function addScope($id = false) {
         if ($id == false) {
             $id = $this->scope_nextID++;
         }
         $this->current_scopes[$id] = true;
     }
     
-    function removeScope($id) {
+    public function removeScope($id) {
         if (isset($this->current_scopes[$id])) unset($this->current_scopes[$id]);
     }
     
-    function resetScopes() {
+    public function resetScopes() {
         $this->current_scopes = array();
         $this->scope_nextID = 1;
     }
     
-    function isInScopes($scopes = array()) {
+    public function isInScopes($scopes = array()) {
         if (empty($this->current_scopes)) {
             return false;
         }

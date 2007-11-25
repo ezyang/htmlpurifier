@@ -6,7 +6,7 @@ require_once 'HTMLPurifier.php';
 
 class HTMLPurifierTest extends HTMLPurifier_Harness
 {
-    var $purifier;
+    protected $purifier;
     
     function setUp() {
         $this->purifier = new HTMLPurifier();

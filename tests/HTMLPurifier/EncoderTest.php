@@ -5,7 +5,7 @@ require_once 'HTMLPurifier/Encoder.php';
 class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
 {
     
-    var $_entity_lookup;
+    protected $_entity_lookup;
     
     function setUp() {
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();

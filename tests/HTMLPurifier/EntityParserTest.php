@@ -5,7 +5,7 @@ require_once 'HTMLPurifier/EntityParser.php';
 class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
 {
     
-    var $EntityParser;
+    protected $EntityParser;
     
     function setUp() {
         $this->EntityParser = new HTMLPurifier_EntityParser();
@@ -75,9 +75,11 @@ class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
         
     }
     
-    function test_specialEntityCallback() {
-        $this->assertIdentical("'",$this->EntityParser->specialEntityCallback(
-            array('&#39;', null, '39', null) ));
+    function test_substituteSpecialEntities() {
+        $this->assertIdentical(
+            "'",
+            $this->EntityParser->substituteSpecialEntities('&#39;')
+        );
     }
     
 }

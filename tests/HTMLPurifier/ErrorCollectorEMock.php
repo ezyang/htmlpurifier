@@ -10,22 +10,22 @@ generate_mock_once('HTMLPurifier_ErrorCollector');
 class HTMLPurifier_ErrorCollectorEMock extends HTMLPurifier_ErrorCollectorMock
 {
     
-    var $_context;
-    var $_expected_context = array();
-    var $_expected_context_at = array();
+    private $_context;
+    private $_expected_context = array();
+    private $_expected_context_at = array();
     
-    function prepare(&$context) {
+    public function prepare(&$context) {
         $this->_context =& $context;
     }
     
-    function expectContext($key, $value) {
+    public function expectContext($key, $value) {
         $this->_expected_context[$key] = $value;
     }
-    function expectContextAt($step, $key, $value) {
+    public function expectContextAt($step, $key, $value) {
         $this->_expected_context_at[$step][$key] = $value;
     }
     
-    function send() {
+    public function send($v1, $v2) {
         // test for context
         $context =& SimpleTest::getContext();
         $test =& $context->getTest();

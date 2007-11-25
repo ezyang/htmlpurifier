@@ -4,10 +4,21 @@ require_once 'ConfigDoc/HTMLXSLTProcessor.php';
 require_once 'ConfigDoc/XMLSerializer/Types.php';
 require_once 'ConfigDoc/XMLSerializer/ConfigSchema.php';
 
+/**
+ * Facade class for configuration documentation system
+ */
 class ConfigDoc
 {
     
-    function generate($schema, $xsl_stylesheet_name = 'plain', $parameters = array()) {
+    /**
+     * Generates configuration documentation based on a HTMLPurifier_ConfigSchema
+     * object and styleshet name
+     * @param $schema Instance of HTMLPurifier_ConfigSchema to document
+     * @param $xsl_stylesheet_name Name of XSL stylesheet in ../styles/ directory to use
+     * @param $parameters Extra parameters to pass to the stylesheet
+     * @return string HTML output
+     */
+    public function generate($schema, $xsl_stylesheet_name = 'plain', $parameters = array()) {
         // generate types document, describing type constraints
         $types_serializer = new ConfigDoc_XMLSerializer_Types();
         $types_document = $types_serializer->serialize($schema);
@@ -29,9 +40,10 @@ class ConfigDoc
     
     /**
      * Remove any generated files
+     * @return boolean Success?
      */
-    function cleanup() {
-        unlink('configdoc.xml');
+    public function cleanup() {
+        return unlink('configdoc.xml');
     }
     
 }

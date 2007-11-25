@@ -31,27 +31,25 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     
     /**
      * Whitespace characters for str(c)spn.
-     * @protected
      */
-    var $_whitespace = "\x20\x09\x0D\x0A";
+    protected $_whitespace = "\x20\x09\x0D\x0A";
     
     /**
      * Callback function for script CDATA fudge
      * @param $matches, in form of array(opening tag, contents, closing tag)
-     * @static
      */
-    function scriptCallback($matches) {
+    protected function scriptCallback($matches) {
         return $matches[1] . htmlspecialchars($matches[2], ENT_COMPAT, 'UTF-8') . $matches[3];
     }
     
-    function tokenizeHTML($html, $config, &$context) {
+    public function tokenizeHTML($html, $config, &$context) {
         
         // special normalization for script tags without any armor
         // our "armor" heurstic is a < sign any number of whitespaces after
         // the first script tag
         if ($config->get('HTML', 'Trusted')) {
             $html = preg_replace_callback('#(<script[^>]*>)(\s*[^<].+?)(</script>)#si',
-                array('HTMLPurifier_Lexer_DirectLex', 'scriptCallback'), $html);
+                array($this, 'scriptCallback'), $html);
         }
         
         $html = $this->normalize($html, $config, $context);
@@ -323,7 +321,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     /**
      * PHP 4 compatible substr_count that implements offset and length
      */
-    function substrCount($haystack, $needle, $offset, $length) {
+    protected function substrCount($haystack, $needle, $offset, $length) {
         static $oldVersion;
         if ($oldVersion === null) {
             $oldVersion = version_compare(PHP_VERSION, '5.1', '<');
@@ -342,7 +340,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
      * @param $string Inside of tag excluding name.
      * @returns Assoc array of attributes.
      */
-    function parseAttributeString($string, $config, &$context) {
+    public function parseAttributeString($string, $config, &$context) {
         $string = (string) $string; // quick typecast
         
         if ($string == '') return array(); // no attributes

@@ -17,7 +17,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
       HTMLPurifier_DefinitionCache
 {
     
-    function add($def, $config) {
+    public function add($def, $config) {
         if (!$this->checkDefType($def)) return;
         $file = $this->generateFilePath($config);
         if (file_exists($file)) return false;
@@ -25,14 +25,14 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         return $this->_write($file, serialize($def));
     }
     
-    function set($def, $config) {
+    public function set($def, $config) {
         if (!$this->checkDefType($def)) return;
         $file = $this->generateFilePath($config);
         if (!$this->_prepareDir($config)) return false;
         return $this->_write($file, serialize($def));
     }
     
-    function replace($def, $config) {
+    public function replace($def, $config) {
         if (!$this->checkDefType($def)) return;
         $file = $this->generateFilePath($config);
         if (!file_exists($file)) return false;
@@ -40,19 +40,19 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         return $this->_write($file, serialize($def));
     }
     
-    function get($config) {
+    public function get($config) {
         $file = $this->generateFilePath($config);
         if (!file_exists($file)) return false;
         return unserialize(file_get_contents($file));
     }
     
-    function remove($config) {
+    public function remove($config) {
         $file = $this->generateFilePath($config);
         if (!file_exists($file)) return false;
         return unlink($file);
     }
     
-    function flush($config) {
+    public function flush($config) {
         if (!$this->_prepareDir($config)) return false;
         $dir = $this->generateDirectoryPath($config);
         $dh  = opendir($dir);
@@ -63,7 +63,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         }
     }
     
-    function cleanup($config) {
+    public function cleanup($config) {
         if (!$this->_prepareDir($config)) return false;
         $dir = $this->generateDirectoryPath($config);
         $dh  = opendir($dir);
@@ -78,8 +78,9 @@ class HTMLPurifier_DefinitionCache_Serializer extends
     /**
      * Generates the file path to the serial file corresponding to
      * the configuration and definition name
+     * @todo Make protected
      */
-    function generateFilePath($config) {
+    public function generateFilePath($config) {
         $key = $this->generateKey($config);
         return $this->generateDirectoryPath($config) . '/' . $key . '.ser';
     }
@@ -87,8 +88,9 @@ class HTMLPurifier_DefinitionCache_Serializer extends
     /**
      * Generates the path to the directory contain this cache's serial files
      * @note No trailing slash
+     * @todo Make protected
      */
-    function generateDirectoryPath($config) {
+    public function generateDirectoryPath($config) {
         $base = $this->generateBaseDirectoryPath($config);
         return $base . '/' . $this->type;
     }
@@ -96,8 +98,9 @@ class HTMLPurifier_DefinitionCache_Serializer extends
     /**
      * Generates path to base directory that contains all definition type
      * serials
+     * @todo Make protected
      */
-    function generateBaseDirectoryPath($config) {
+    public function generateBaseDirectoryPath($config) {
         $base = $config->get('Cache', 'SerializerPath');
         $base = is_null($base) ? HTMLPURIFIER_PREFIX . '/HTMLPurifier/DefinitionCache/Serializer' : $base;
         return $base;
@@ -109,7 +112,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
      * @param $data Data to write into file
      * @return Number of bytes written if success, or false if failure.
      */
-    function _write($file, $data) {
+    private function _write($file, $data) {
         static $file_put_contents;
         if ($file_put_contents === null) {
             $file_put_contents = function_exists('file_put_contents');
@@ -128,7 +131,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
      * Prepares the directory that this type stores the serials in
      * @return True if successful
      */
-    function _prepareDir($config) {
+    private function _prepareDir($config) {
         $directory = $this->generateDirectoryPath($config);
         if (!is_dir($directory)) {
             $base = $this->generateBaseDirectoryPath($config);
@@ -151,7 +154,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
      * Tests permissions on a directory and throws out friendly
      * error messages and attempts to chmod it itself if possible
      */
-    function _testPermissions($dir) {
+    private function _testPermissions($dir) {
         // early abort, if it is writable, everything is hunky-dory
         if (is_writable($dir)) return true;
         if (!is_dir($dir)) {

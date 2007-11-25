@@ -13,44 +13,44 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
     /**
      * Instance of the object that will execute the method
      */
-    var $obj;
+    protected $obj;
     
     /**
      * Name of the function to be executed
      */
-    var $func;
+    protected $func;
     
     /**
      * Whether or not the method deals in tokens. If set to true, assertResult()
      * will transparently convert HTML to and back from tokens.
      */
-    var $to_tokens = false;
+    protected $to_tokens = false;
     
     /**
      * Whether or not to convert tokens back into HTML before performing
      * equality check, has no effect on bools.
      */
-    var $to_html = false;
+    protected $to_html = false;
     
     /**
      * Instance of an HTMLPurifier_Lexer implementation.
      */
-    var $lexer;
+    protected $lexer;
     
     /**
      * Instance of HTMLPurifier_Generator
      */
-    var $generator;
+    protected $generator;
     
     /**
      * Default config to fall back on if no config is available
      */
-    var $config;
+    protected $config;
     
     /**
      * Default context to fall back on if no context is available
      */
-    var $context;
+    protected $context;
     
     function HTMLPurifier_ComplexHarness() {
         $this->lexer     = new HTMLPurifier_Lexer_DirectLex();

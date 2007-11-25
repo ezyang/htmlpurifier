@@ -23,15 +23,13 @@ class HTMLPurifier_DoctypeRegistry
     
     /**
      * Hash of doctype names to doctype objects
-     * @protected
      */
-    var $doctypes;
+    protected $doctypes;
     
     /**
      * Lookup table of aliases to real doctype names
-     * @protected
      */
-    var $aliases;
+    protected $aliases;
     
     /**
      * Registers a doctype to the registry
@@ -43,7 +41,7 @@ class HTMLPurifier_DoctypeRegistry
      * @param $aliases Alias names for doctype
      * @return Reference to registered doctype (usable for further editing)
      */
-    function &register($doctype, $xml = true, $modules = array(),
+    public function &register($doctype, $xml = true, $modules = array(),
         $tidy_modules = array(), $aliases = array(), $dtd_public = null, $dtd_system = null
     ) {
         if (!is_array($modules)) $modules = array($modules);
@@ -73,7 +71,7 @@ class HTMLPurifier_DoctypeRegistry
      * @param $doctype Name of doctype
      * @return Reference to doctype object
      */
-    function &get($doctype) {
+    public function &get($doctype) {
         if (isset($this->aliases[$doctype])) $doctype = $this->aliases[$doctype];
         if (!isset($this->doctypes[$doctype])) {
             trigger_error('Doctype ' . htmlspecialchars($doctype) . ' does not exist', E_USER_ERROR);
@@ -91,7 +89,7 @@ class HTMLPurifier_DoctypeRegistry
      *       Generator whether or not the current document is XML
      *       based or not).
      */
-    function make($config) {
+    public function make($config) {
         $original_doctype = $this->get($this->getDoctypeFromConfig($config));
         $doctype = $original_doctype->copy();
         return $doctype;
@@ -100,7 +98,7 @@ class HTMLPurifier_DoctypeRegistry
     /**
      * Retrieves the doctype from the configuration object
      */
-    function getDoctypeFromConfig($config) {
+    public function getDoctypeFromConfig($config) {
         // recommended test
         $doctype = $config->get('HTML', 'Doctype');
         if (!empty($doctype)) return $doctype;

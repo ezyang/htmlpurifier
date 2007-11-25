@@ -66,7 +66,7 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
     
     function test_errors() {
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
-        $def = new HTMLPurifier_Definition();
+        $def = $this->generateDefinition();
         $def->setup = true;
         $def->type = 'NotTest';
         $config = $this->generateConfigMock('testfoo');

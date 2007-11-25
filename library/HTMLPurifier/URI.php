@@ -9,12 +9,12 @@ require_once 'HTMLPurifier/URIFilter.php';
 class HTMLPurifier_URI
 {
     
-    var $scheme, $userinfo, $host, $port, $path, $query, $fragment;
+    public $scheme, $userinfo, $host, $port, $path, $query, $fragment;
     
     /**
      * @note Automatically normalizes scheme and port
      */
-    function HTMLPurifier_URI($scheme, $userinfo, $host, $port, $path, $query, $fragment) {
+    public function HTMLPurifier_URI($scheme, $userinfo, $host, $port, $path, $query, $fragment) {
         $this->scheme = is_null($scheme) || ctype_lower($scheme) ? $scheme : strtolower($scheme);
         $this->userinfo = $userinfo;
         $this->host = $host;
@@ -30,7 +30,7 @@ class HTMLPurifier_URI
      * @param $context Instance of HTMLPurifier_Context
      * @return Scheme object appropriate for validating this URI
      */
-    function getSchemeObj($config, &$context) {
+    public function getSchemeObj($config, &$context) {
         $registry =& HTMLPurifier_URISchemeRegistry::instance();
         if ($this->scheme !== null) {
             $scheme_obj = $registry->getScheme($this->scheme, $config, $context);
@@ -57,7 +57,7 @@ class HTMLPurifier_URI
      * @param $context Instance of HTMLPurifier_Context
      * @return True if validation/filtering succeeds, false if failure
      */
-    function validate($config, &$context) {
+    public function validate($config, &$context) {
         
         // validate host
         if (!is_null($this->host)) {
@@ -87,7 +87,7 @@ class HTMLPurifier_URI
      * Convert URI back to string
      * @return String URI appropriate for output
      */
-    function toString() {
+    public function toString() {
         // reconstruct authority
         $authority = null;
         if (!is_null($this->host)) {
@@ -111,7 +111,7 @@ class HTMLPurifier_URI
     /**
      * Returns a copy of the URI object
      */
-    function copy() {
+    public function copy() {
         return unserialize(serialize($this));
     }
     

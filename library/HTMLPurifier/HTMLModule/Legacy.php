@@ -21,11 +21,9 @@ require_once 'HTMLPurifier/AttrDef/HTML/Bool.php';
 class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
 {
     
-    // incomplete
+    public $name = 'Legacy';
     
-    var $name = 'Legacy';
-    
-    function HTMLPurifier_HTMLModule_Legacy() {
+    public function HTMLPurifier_HTMLModule_Legacy() {
         
         $this->addElement('basefont', true, 'Inline', 'Empty', false, array(
             'color' => 'Color',

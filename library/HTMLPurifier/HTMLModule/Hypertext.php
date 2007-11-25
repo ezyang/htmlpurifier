@@ -9,9 +9,9 @@ require_once 'HTMLPurifier/AttrDef/HTML/LinkTypes.php';
 class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
 {
     
-    var $name = 'Hypertext';
+    public $name = 'Hypertext';
     
-    function HTMLPurifier_HTMLModule_Hypertext() {
+    public function HTMLPurifier_HTMLModule_Hypertext() {
         $a =& $this->addElement(
             'a', true, 'Inline', 'Inline', 'Common',
             array(

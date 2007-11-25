@@ -11,11 +11,11 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
      * Lookup table of allowed elements.
      * @public
      */
-    var $elements = array();
+    public $elements = array();
     /**
      * @param $elements List of allowed element names (lowercase).
      */
-    function HTMLPurifier_ChildDef_Required($elements) {
+    public function HTMLPurifier_ChildDef_Required($elements) {
         if (is_string($elements)) {
             $elements = str_replace(' ', '', $elements);
             $elements = explode('|', $elements);
@@ -30,9 +30,9 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
         }
         $this->elements = $elements;
     }
-    var $allow_empty = false;
-    var $type = 'required';
-    function validateChildren($tokens_of_children, $config, &$context) {
+    public $allow_empty = false;
+    public $type = 'required';
+    public function validateChildren($tokens_of_children, $config, &$context) {
         // if there are no tokens, delete parent node
         if (empty($tokens_of_children)) return false;
         

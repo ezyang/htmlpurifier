@@ -10,8 +10,8 @@ require_once 'HTMLPurifier/Lexer/DirectLex.php';
 class HTMLPurifier_ErrorsHarness extends HTMLPurifier_Harness
 {
     
-    var $config, $context;
-    var $collector, $generator, $callCount;
+    protected $config, $context;
+    protected $collector, $generator, $callCount;
     
     function setup() {
         $this->config = HTMLPurifier_Config::create(array('Core.CollectErrors' => true));

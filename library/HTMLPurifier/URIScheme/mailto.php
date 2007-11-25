@@ -13,9 +13,9 @@ require_once 'HTMLPurifier/URIScheme.php';
 
 class HTMLPurifier_URIScheme_mailto extends HTMLPurifier_URIScheme {
     
-    var $browsable = false;
+    public $browsable = false;
     
-    function validate(&$uri, $config, &$context) {
+    public function validate(&$uri, $config, &$context) {
         parent::validate($uri, $config, $context);
         $uri->userinfo = null;
         $uri->host     = null;

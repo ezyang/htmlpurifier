@@ -47,7 +47,9 @@ HTMLPurifier_ConfigSchema::define('Output', 'Newline', null, 'string/null', '
 /**
  * Generates HTML from tokens.
  * @todo Refactor interface so that configuration/context is determined
- *     upon instantiation, no need for messy generateFromTokens() calls
+ *       upon instantiation, no need for messy generateFromTokens() calls
+ * @todo Make some of the more internal functions protected, and have
+ *       unit tests work around that
  */
 class HTMLPurifier_Generator
 {
@@ -56,19 +58,19 @@ class HTMLPurifier_Generator
      * Bool cache of %HTML.XHTML
      * @private
      */
-    var $_xhtml = true;
+    private $_xhtml = true;
     
     /**
      * Bool cache of %Output.CommentScriptContents
      * @private
      */
-    var $_scriptFix = false;
+    private $_scriptFix = false;
     
     /**
      * Cache of HTMLDefinition
      * @private
      */
-    var $_def;
+    private $_def;
     
     /**
      * Generates HTML from an array of tokens.
@@ -76,7 +78,7 @@ class HTMLPurifier_Generator
      * @param $config HTMLPurifier_Config object
      * @return Generated HTML
      */
-    function generateFromTokens($tokens, $config, &$context) {
+    public function generateFromTokens($tokens, $config, &$context) {
         $html = '';
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $this->_scriptFix   = $config->get('Output', 'CommentScriptContents');
@@ -136,7 +138,7 @@ class HTMLPurifier_Generator
      * @param $token HTMLPurifier_Token object.
      * @return Generated HTML
      */
-    function generateFromToken($token) {
+    public function generateFromToken($token) {
         if (!isset($token->type)) return '';
         if ($token->type == 'start') {
             $attr = $this->generateAttributes($token->attr, $token->name);
@@ -165,7 +167,7 @@ class HTMLPurifier_Generator
      * @warning This runs into problems if there's already a literal
      *          --> somewhere inside the script contents.
      */
-    function generateScriptFromToken($token) {
+    public function generateScriptFromToken($token) {
         if ($token->type != 'text') return $this->generateFromToken($token);
         // return '<!--' . "\n" . trim($token->data) . "\n" . '// -->';
         // more advanced version:
@@ -179,7 +181,7 @@ class HTMLPurifier_Generator
      * @param $assoc_array_of_attributes Attribute array
      * @return Generate HTML fragment for insertion.
      */
-    function generateAttributes($assoc_array_of_attributes, $element) {
+    public function generateAttributes($assoc_array_of_attributes, $element) {
         $html = '';
         foreach ($assoc_array_of_attributes as $key => $value) {
             if (!$this->_xhtml) {
@@ -200,7 +202,7 @@ class HTMLPurifier_Generator
      * @param $string String data to escape for HTML.
      * @return String escaped data.
      */
-    function escape($string) {
+    public function escape($string) {
         return htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
     }
     

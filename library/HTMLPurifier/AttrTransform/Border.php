@@ -7,7 +7,7 @@ require_once 'HTMLPurifier/AttrTransform.php';
  */
 class HTMLPurifier_AttrTransform_Border extends HTMLPurifier_AttrTransform {
 
-    function transform($attr, $config, &$context) {
+    public function transform($attr, $config, &$context) {
         if (!isset($attr['border'])) return $attr;
         $border_width = $this->confiscateAttr($attr, 'border');
         // some validation should happen here

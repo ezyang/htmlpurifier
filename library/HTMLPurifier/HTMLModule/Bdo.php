@@ -10,12 +10,12 @@ require_once 'HTMLPurifier/AttrTransform/BdoDir.php';
 class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
 {
     
-    var $name = 'Bdo';
-    var $attr_collections = array(
+    public $name = 'Bdo';
+    public $attr_collections = array(
         'I18N' => array('dir' => false)
     );
     
-    function HTMLPurifier_HTMLModule_Bdo() {
+    public function HTMLPurifier_HTMLModule_Bdo() {
         $bdo =& $this->addElement(
             'bdo', true, 'Inline', 'Inline', array('Core', 'Lang'),
             array(

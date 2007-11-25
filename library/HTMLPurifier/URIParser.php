@@ -15,7 +15,7 @@ class HTMLPurifier_URIParser
      * @param $uri string URI to parse
      * @return HTMLPurifier_URI representation of URI
      */
-    function parse($uri) {
+    public function parse($uri) {
         $r_URI = '!'.
             '(([^:/?#<>\'"]+):)?'. // 2. Scheme
             '(//([^/?#<>\'"]*))?'. // 4. Authority

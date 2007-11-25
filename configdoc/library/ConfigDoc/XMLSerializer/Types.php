@@ -8,6 +8,7 @@ class ConfigDoc_XMLSerializer_Types extends ConfigDoc_XMLSerializer
     /**
      * Serializes the types in a schema into DOM form
      * @param $schema HTMLPurifier_ConfigSchema owner of types to serialize
+     * @return DOMDocument representing schema types
      */
     public function serialize($schema) {
         $types_document = new DOMDocument('1.0', 'UTF-8');

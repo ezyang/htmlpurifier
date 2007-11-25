@@ -2,10 +2,13 @@
 
 require_once 'HTMLPurifier/Language.php';
 
+/** 
+ * @todo Fix usage of HTMLPurifier_Language->_loaded using something else
+ */
 class HTMLPurifier_LanguageTest extends HTMLPurifier_Harness
 {
     
-    var $lang;
+    protected $lang;
     
     function generateEnLanguage() {
         $factory = HTMLPurifier_LanguageFactory::instance();

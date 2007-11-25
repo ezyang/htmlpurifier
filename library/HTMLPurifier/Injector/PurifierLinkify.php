@@ -28,16 +28,16 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_Injector_PurifierLinkify extends HTMLPurifier_Injector
 {
     
-    var $name = 'PurifierLinkify';
-    var $docURL;
-    var $needed = array('a' => array('href'));
+    public $name = 'PurifierLinkify';
+    public $docURL;
+    public $needed = array('a' => array('href'));
     
-    function prepare($config, &$context) {
+    public function prepare($config, &$context) {
         $this->docURL = $config->get('AutoFormatParam', 'PurifierLinkifyDocURL');
         return parent::prepare($config, $context);
     }
     
-    function handleText(&$token) {
+    public function handleText(&$token) {
         if (!$this->allowsElement('a')) return;
         if (strpos($token->data, '%') === false) return;
         

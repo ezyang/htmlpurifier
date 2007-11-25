@@ -5,8 +5,8 @@ require_once 'HTMLPurifier/DefinitionCacheFactory.php';
 class HTMLPurifier_DefinitionCacheFactoryTest extends HTMLPurifier_Harness
 {
     
-    var $newFactory;
-    var $oldFactory;
+    protected $newFactory;
+    protected $oldFactory;
     
     function setup() {
         $new = new HTMLPurifier_DefinitionCacheFactory();

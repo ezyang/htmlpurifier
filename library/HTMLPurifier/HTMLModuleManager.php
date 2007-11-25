@@ -109,58 +109,55 @@ class HTMLPurifier_HTMLModuleManager
     
     /**
      * Instance of HTMLPurifier_DoctypeRegistry
-     * @public
      */
-    var $doctypes;
+    public $doctypes;
     
     /**
      * Instance of current doctype
-     * @public
      */
-    var $doctype;
+    public $doctype;
     
     /**
      * Instance of HTMLPurifier_AttrTypes
-     * @public
      */
-    var $attrTypes;
+    public $attrTypes;
     
     /**
      * Active instances of modules for the specified doctype are
      * indexed, by name, in this array.
      */
-    var $modules = array();
+    public $modules = array();
     
     /**
      * Array of recognized HTMLPurifier_Module instances, indexed by 
      * module's class name. This array is usually lazy loaded, but a
      * user can overload a module by pre-emptively registering it.
      */
-    var $registeredModules = array();
+    public $registeredModules = array();
     
     /**
      * List of extra modules that were added by the user using addModule().
      * These get unconditionally merged into the current doctype, whatever
      * it may be.
      */
-    var $userModules = array();
+    public $userModules = array();
     
     /**
      * Associative array of element name to list of modules that have
      * definitions for the element; this array is dynamically filled.
      */
-    var $elementLookup = array();
+    public $elementLookup = array();
     
     /** List of prefixes we should use for registering small names */
-    var $prefixes = array('HTMLPurifier_HTMLModule_');
+    public $prefixes = array('HTMLPurifier_HTMLModule_');
     
-    var $contentSets;     /**< Instance of HTMLPurifier_ContentSets */
-    var $attrCollections; /**< Instance of HTMLPurifier_AttrCollections */
+    public $contentSets;     /**< Instance of HTMLPurifier_ContentSets */
+    public $attrCollections; /**< Instance of HTMLPurifier_AttrCollections */
     
     /** If set to true, unsafe elements and attributes will be allowed */
-    var $trusted = false;
+    public $trusted = false;
     
-    function HTMLPurifier_HTMLModuleManager() {
+    public function HTMLPurifier_HTMLModuleManager() {
         
         // editable internal objects
         $this->attrTypes = new HTMLPurifier_AttrTypes();
@@ -246,7 +243,7 @@ class HTMLPurifier_HTMLModuleManager
      *          module, your module will overload the old one WITHOUT
      *          warning.
      */
-    function registerModule($module) {
+    public function registerModule($module) {
         if (is_string($module)) {
             // attempt to load the module
             $original_module = $module;
@@ -279,27 +276,16 @@ class HTMLPurifier_HTMLModuleManager
      * Safely tests for class existence without invoking __autoload in PHP5
      * or greater.
      * @param $name String class name to test
-     * @note If any other class needs it, we'll need to stash in a 
-     *       conjectured "compatibility" class
-     * @private
      */
-    function _classExists($name) {
-        static $is_php_4 = null;
-        if ($is_php_4 === null) {
-            $is_php_4 = version_compare(PHP_VERSION, '5', '<');
-        }
-        if ($is_php_4) {
-            return class_exists($name);
-        } else {
-            return class_exists($name, false);
-        }
+    private function _classExists($name) {
+        return class_exists($name, false);
     }
     
     /**
      * Adds a module to the current doctype by first registering it,
      * and then tacking it on to the active doctype
      */
-    function addModule($module) {
+    public function addModule($module) {
         $this->registerModule($module);
         if (is_object($module)) $module = $module->name;
         $this->userModules[] = $module;
@@ -309,7 +295,7 @@ class HTMLPurifier_HTMLModuleManager
      * Adds a class prefix that registerModule() will use to resolve a
      * string name to a concrete class
      */
-    function addPrefix($prefix) {
+    public function addPrefix($prefix) {
         $this->prefixes[] = $prefix;
     }
     
@@ -318,7 +304,7 @@ class HTMLPurifier_HTMLModuleManager
      * use getElement() and getElements()
      * @param $config Instance of HTMLPurifier_Config
      */
-    function setup($config) {
+    public function setup($config) {
         
         $this->trusted = $config->get('HTML', 'Trusted');
         
@@ -380,7 +366,7 @@ class HTMLPurifier_HTMLModuleManager
      * Takes a module and adds it to the active module collection,
      * registering it if necessary.
      */
-    function processModule($module) {
+    public function processModule($module) {
         if (!isset($this->registeredModules[$module]) || is_object($module)) {
             $this->registerModule($module);
         }
@@ -391,7 +377,7 @@ class HTMLPurifier_HTMLModuleManager
      * Retrieves merged element definitions.
      * @return Array of HTMLPurifier_ElementDef
      */
-    function getElements() {
+    public function getElements() {
         
         $elements = array();
         foreach ($this->modules as $module) {
@@ -420,7 +406,7 @@ class HTMLPurifier_HTMLModuleManager
      *                 if you want the full version of an element
      * @return Merged HTMLPurifier_ElementDef
      */
-    function getElement($name, $trusted = null) {
+    public function getElement($name, $trusted = null) {
         
         $def = false;
         if ($trusted === null) $trusted = $this->trusted;

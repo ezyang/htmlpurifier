@@ -10,18 +10,18 @@ require_once 'HTMLPurifier/TagTransform.php';
 class HTMLPurifier_TagTransform_Simple extends HTMLPurifier_TagTransform
 {
     
-    var $style;
+    protected $style;
     
     /**
      * @param $transform_to Tag name to transform to.
      * @param $style CSS style to add to the tag
      */
-    function HTMLPurifier_TagTransform_Simple($transform_to, $style = null) {
+    public function HTMLPurifier_TagTransform_Simple($transform_to, $style = null) {
         $this->transform_to = $transform_to;
         $this->style = $style;
     }
     
-    function transform($tag, $config, &$context) {
+    public function transform($tag, $config, &$context) {
         $new_tag = $tag->copy();
         $new_tag->name = $this->transform_to;
         if (!is_null($this->style) &&

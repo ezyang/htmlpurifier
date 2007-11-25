@@ -13,7 +13,7 @@ require_once 'HTMLPurifier/Strategy/ValidateAttributes.php';
 class HTMLPurifier_Strategy_Core extends HTMLPurifier_Strategy_Composite
 {
     
-    function HTMLPurifier_Strategy_Core() {
+    public function __construct() {
         $this->strategies[] = new HTMLPurifier_Strategy_RemoveForeignElements();
         $this->strategies[] = new HTMLPurifier_Strategy_MakeWellFormed();
         $this->strategies[] = new HTMLPurifier_Strategy_FixNesting();

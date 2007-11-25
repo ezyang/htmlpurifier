@@ -11,23 +11,23 @@ extends HTMLPurifier_AttrTransform {
     /**
      * Name of boolean attribute that is trigger
      */
-    var $attr;
+    protected $attr;
     
     /**
      * CSS declarations to add to style, needs trailing semicolon
      */
-    var $css;
+    protected $css;
     
     /**
      * @param $attr string attribute name to convert from
      * @param $css string CSS declarations to add to style (needs semicolon)
      */
-    function HTMLPurifier_AttrTransform_BoolToCSS($attr, $css) {
+    public function HTMLPurifier_AttrTransform_BoolToCSS($attr, $css) {
         $this->attr = $attr;
         $this->css  = $css;
     }
     
-    function transform($attr, $config, &$context) {
+    public function transform($attr, $config, &$context) {
         if (!isset($attr[$this->attr])) return $attr;
         unset($attr[$this->attr]);
         $this->prependCSS($attr, $this->css);

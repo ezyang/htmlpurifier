@@ -9,16 +9,16 @@ class HTMLPurifier_AttrDef_CSS_Number extends HTMLPurifier_AttrDef
     /**
      * Bool indicating whether or not only positive values allowed.
      */
-    var $non_negative = false;
+    protected $non_negative = false;
     
     /**
      * @param $non_negative Bool indicating whether negatives are forbidden
      */
-    function HTMLPurifier_AttrDef_CSS_Number($non_negative = false) {
+    public function HTMLPurifier_AttrDef_CSS_Number($non_negative = false) {
         $this->non_negative = $non_negative;
     }
     
-    function validate($number, $config, &$context) {
+    public function validate($number, $config, &$context) {
         
         $number = $this->parseCDATA($number);
         

@@ -14,11 +14,11 @@ require_once 'HTMLPurifier/AttrDef/URI.php';
 class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
 {
     
-    function HTMLPurifier_AttrDef_CSS_URI() {
+    public function HTMLPurifier_AttrDef_CSS_URI() {
         parent::HTMLPurifier_AttrDef_URI(true); // always embedded
     }
     
-    function validate($uri_string, $config, &$context) {
+    public function validate($uri_string, $config, &$context) {
         // parse the URI out of the string and then pass it onto
         // the parent object
         

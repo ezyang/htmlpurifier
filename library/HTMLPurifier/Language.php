@@ -8,35 +8,35 @@ class HTMLPurifier_Language
     /**
      * ISO 639 language code of language. Prefers shortest possible version
      */
-    var $code = 'en';
+    public $code = 'en';
     
     /**
      * Fallback language code
      */
-    var $fallback = false;
+    public $fallback = false;
     
     /**
      * Array of localizable messages
      */
-    var $messages = array();
+    public $messages = array();
     
     /**
      * Array of localizable error codes
      */
-    var $errorNames = array();
+    public $errorNames = array();
     
     /**
      * Has the language object been loaded yet?
-     * @private
+     * @todo Make it private, fix usage in HTMLPurifier_LanguageTest
      */
-    var $_loaded = false;
+    public $_loaded = false;
     
     /**
      * Instances of HTMLPurifier_Config and HTMLPurifier_Context
      */
-    var $config, $context;
+    protected $config, $context;
     
-    function HTMLPurifier_Language($config, &$context) {
+    public function HTMLPurifier_Language($config, &$context) {
         $this->config  = $config;
         $this->context =& $context;
     }
@@ -45,7 +45,7 @@ class HTMLPurifier_Language
      * Loads language object with necessary info from factory cache
      * @note This is a lazy loader
      */
-    function load() {
+    public function load() {
         if ($this->_loaded) return;
         $factory = HTMLPurifier_LanguageFactory::instance();
         $factory->loadLanguage($this->code);
@@ -60,7 +60,7 @@ class HTMLPurifier_Language
      * @param $key string identifier of message
      * @return string localised message
      */
-    function getMessage($key) {
+    public function getMessage($key) {
         if (!$this->_loaded) $this->load();
         if (!isset($this->messages[$key])) return "[$key]";
         return $this->messages[$key];
@@ -72,7 +72,7 @@ class HTMLPurifier_Language
      *             reporting
      * @return string localised message
      */
-    function getErrorName($int) {
+    public function getErrorName($int) {
         if (!$this->_loaded) $this->load();
         if (!isset($this->errorNames[$int])) return "[Error: $int]";
         return $this->errorNames[$int];
@@ -81,7 +81,7 @@ class HTMLPurifier_Language
     /**
      * Converts an array list into a string readable representation
      */
-    function listify($array) {
+    public function listify($array) {
         $sep      = $this->getMessage('Item separator');
         $sep_last = $this->getMessage('Item separator last');
         $ret = '';
@@ -105,7 +105,7 @@ class HTMLPurifier_Language
      * @todo Implement conditionals? Right now, some messages make
      *     reference to line numbers, but those aren't always available
      */
-    function formatMessage($key, $args = array()) {
+    public function formatMessage($key, $args = array()) {
         if (!$this->_loaded) $this->load();
         if (!isset($this->messages[$key])) return "[$key]";
         $raw = $this->messages[$key];
@@ -113,7 +113,7 @@ class HTMLPurifier_Language
         $generator = false;
         foreach ($args as $i => $value) {
             if (is_object($value)) {
-                if (is_a($value, 'HTMLPurifier_Token')) {
+                if ($value instanceof HTMLPurifier_Token) {
                     // factor this out some time
                     if (!$generator) $generator = $this->context->get('Generator');
                     if (isset($value->name)) $subst['$'.$i.'.Name'] = $value->name;

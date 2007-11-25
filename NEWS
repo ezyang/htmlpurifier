@@ -9,6 +9,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+3.0.0, unknown release date
+# HTML Purifier is PHP 5 only! The 2.1.x branch will be maintained
+  until PHP 4 is completely deprecated, but no new features will be added
+  to it.
+  + Visibility declarations added
+
 2.1.3, released 2007-11-05
 ! tests/multitest.php allows you to test multiple versions by running
   tests/index.php through multiple interpreters using `phpv` shell

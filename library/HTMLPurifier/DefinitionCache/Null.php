@@ -8,27 +8,31 @@ require_once 'HTMLPurifier/DefinitionCache.php';
 class HTMLPurifier_DefinitionCache_Null extends HTMLPurifier_DefinitionCache
 {
     
-    function add($def, $config) {
+    public function add($def, $config) {
         return false;
     }
     
-    function set($def, $config) {
+    public function set($def, $config) {
         return false;
     }
     
-    function replace($def, $config) {
+    public function replace($def, $config) {
         return false;
     }
     
-    function get($config) {
+    public function remove($config) {
         return false;
     }
     
-    function flush($config) {
+    public function get($config) {
         return false;
     }
     
-    function cleanup($config) {
+    public function flush($config) {
+        return false;
+    }
+    
+    public function cleanup($config) {
         return false;
     }
     

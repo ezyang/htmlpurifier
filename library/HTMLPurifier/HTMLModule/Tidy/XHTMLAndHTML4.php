@@ -19,7 +19,7 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends
       HTMLPurifier_HTMLModule_Tidy
 {
     
-    function makeFixes() {
+    public function makeFixes() {
         
         $r = array();
         
@@ -181,24 +181,24 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends
 class HTMLPurifier_HTMLModule_Tidy_Transitional extends
       HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4
 {
-    var $name = 'Tidy_Transitional';
-    var $defaultLevel = 'heavy';
+    public $name = 'Tidy_Transitional';
+    public $defaultLevel = 'heavy';
 }
 
 class HTMLPurifier_HTMLModule_Tidy_Strict extends
       HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4
 {
-    var $name = 'Tidy_Strict';
-    var $defaultLevel = 'light';
+    public $name = 'Tidy_Strict';
+    public $defaultLevel = 'light';
     
-    function makeFixes() {
+    public function makeFixes() {
         $r = parent::makeFixes();
         $r['blockquote#content_model_type'] = 'strictblockquote';
         return $r;
     }
     
-    var $defines_child_def = true;
-    function getChildDef($def) {
+    public $defines_child_def = true;
+    public function getChildDef($def) {
         if ($def->content_model_type != 'strictblockquote') return parent::getChildDef($def);
         return new HTMLPurifier_ChildDef_StrictBlockquote($def->content_model);
     }

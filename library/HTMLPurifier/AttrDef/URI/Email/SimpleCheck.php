@@ -9,7 +9,7 @@ require_once 'HTMLPurifier/AttrDef/URI/Email.php';
 class HTMLPurifier_AttrDef_URI_Email_SimpleCheck extends HTMLPurifier_AttrDef_URI_Email
 {
     
-    function validate($string, $config, &$context) {
+    public function validate($string, $config, &$context) {
         // no support for named mailboxes i.e. "Bob <bob@example.com>"
         // that needs more percent encoding to be done
         if ($string == '') return false;

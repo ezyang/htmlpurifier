@@ -17,12 +17,12 @@ require_once 'HTMLPurifier/HTMLModule.php';
 class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
 {
     
-    var $name = 'Text';
-    var $content_sets = array(
+    public $name = 'Text';
+    public $content_sets = array(
         'Flow' => 'Heading | Block | Inline'
     );
     
-    function HTMLPurifier_HTMLModule_Text() {
+    public function HTMLPurifier_HTMLModule_Text() {
         
         // Inline Phrasal -------------------------------------------------
         $this->addElement('abbr',    true, 'Inline', 'Inline', 'Common');

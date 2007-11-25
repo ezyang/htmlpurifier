@@ -38,13 +38,12 @@ class HTMLPurifier_URISchemeRegistry
     
     /**
      * Retrieve sole instance of the registry.
-     * @static
      * @param $prototype Optional prototype to overload sole instance with,
      *                   or bool true to reset to default registry.
      * @note Pass a registry object $prototype with a compatible interface and
      *       the function will copy it and return it all further times.
      */
-    function &instance($prototype = null) {
+    public static function &instance($prototype = null) {
         static $instance = null;
         if ($prototype !== null) {
             $instance = $prototype;
@@ -56,9 +55,8 @@ class HTMLPurifier_URISchemeRegistry
     
     /**
      * Cache of retrieved schemes.
-     * @protected
      */
-    var $schemes = array();
+    protected $schemes = array();
     
     /**
      * Retrieves a scheme validator object
@@ -66,7 +64,7 @@ class HTMLPurifier_URISchemeRegistry
      * @param $config HTMLPurifier_Config object
      * @param $config HTMLPurifier_Context object
      */
-    function &getScheme($scheme, $config, &$context) {
+    public function &getScheme($scheme, $config, &$context) {
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $null = null; // for the sake of passing by reference
         
@@ -92,7 +90,7 @@ class HTMLPurifier_URISchemeRegistry
      * @param $scheme Scheme name
      * @param $scheme_obj HTMLPurifier_URIScheme object
      */
-    function register($scheme, &$scheme_obj) {
+    public function register($scheme, &$scheme_obj) {
         $this->schemes[$scheme] =& $scheme_obj;
     }
     

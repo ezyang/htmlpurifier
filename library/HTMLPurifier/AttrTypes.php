@@ -20,15 +20,14 @@ class HTMLPurifier_AttrTypes
 {
     /**
      * Lookup array of attribute string identifiers to concrete implementations
-     * @protected
      */
-    var $info = array();
+    public $info = array();
     
     /**
      * Constructs the info array, supplying default implementations for attribute
      * types.
      */
-    function HTMLPurifier_AttrTypes() {
+    public function HTMLPurifier_AttrTypes() {
         // pseudo-types, must be instantiated via shorthand
         $this->info['Enum']    = new HTMLPurifier_AttrDef_Enum();
         $this->info['Bool']    = new HTMLPurifier_AttrDef_HTML_Bool();
@@ -57,7 +56,7 @@ class HTMLPurifier_AttrTypes
      * @param $type String type name
      * @return Object AttrDef for type
      */
-    function get($type) {
+    public function get($type) {
         
         // determine if there is any extra info tacked on
         if (strpos($type, '#') !== false) list($type, $string) = explode('#', $type, 2);
@@ -77,7 +76,7 @@ class HTMLPurifier_AttrTypes
      * @param $type String type name
      * @param $impl Object AttrDef for type
      */
-    function set($type, $impl) {
+    public function set($type, $impl) {
         $this->info[$type] = $impl;
     }
 }

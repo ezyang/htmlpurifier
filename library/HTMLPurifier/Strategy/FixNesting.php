@@ -34,7 +34,7 @@ require_once 'HTMLPurifier/HTMLDefinition.php';
 class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 {
     
-    function execute($tokens, $config, &$context) {
+    public function execute($tokens, $config, &$context) {
         //####################################################################//
         // Pre-processing
         

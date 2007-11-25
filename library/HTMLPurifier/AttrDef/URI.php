@@ -68,19 +68,19 @@ HTMLPurifier_ConfigSchema::define(
 class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
 {
     
-    var $parser, $percentEncoder;
-    var $embedsResource;
+    protected $parser, $percentEncoder;
+    protected $embedsResource;
     
     /**
      * @param $embeds_resource_resource Does the URI here result in an extra HTTP request?
      */
-    function HTMLPurifier_AttrDef_URI($embeds_resource = false) {
+    public function HTMLPurifier_AttrDef_URI($embeds_resource = false) {
         $this->parser = new HTMLPurifier_URIParser();
         $this->percentEncoder = new HTMLPurifier_PercentEncoder();
         $this->embedsResource = (bool) $embeds_resource;
     }
     
-    function validate($uri, $config, &$context) {
+    public function validate($uri, $config, &$context) {
         
         if ($config->get('URI', 'Disable')) return false;
         
