@@ -177,8 +177,8 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
     /**
      * @param $obj Printer to decorate
      */
-    public function HTMLPurifier_Printer_ConfigForm_NullDecorator($obj) {
-        parent::HTMLPurifier_Printer();
+    public function __construct($obj) {
+        parent::__construct();
         $this->obj = $obj;
     }
     public function render($ns, $directive, $value, $name, $config) {
