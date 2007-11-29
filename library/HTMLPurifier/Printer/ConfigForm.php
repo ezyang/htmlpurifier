@@ -32,10 +32,10 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
      * @param $doc_url String documentation URL, will have fragment tagged on
      * @param $compress Integer max length before compressing a directive name, set to false to turn off
      */
-    public function HTMLPurifier_Printer_ConfigForm(
+    public function __construct(
         $name, $doc_url = null, $compress = false
     ) {
-        parent::HTMLPurifier_Printer();
+        parent::__construct();
         $this->docURL = $doc_url;
         $this->name   = $name;
         $this->compress = $compress;

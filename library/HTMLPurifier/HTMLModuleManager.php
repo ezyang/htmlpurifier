@@ -157,7 +157,7 @@ class HTMLPurifier_HTMLModuleManager
     /** If set to true, unsafe elements and attributes will be allowed */
     public $trusted = false;
     
-    public function HTMLPurifier_HTMLModuleManager() {
+    public function __construct() {
         
         // editable internal objects
         $this->attrTypes = new HTMLPurifier_AttrTypes();

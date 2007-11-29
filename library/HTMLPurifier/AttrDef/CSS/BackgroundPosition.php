@@ -51,7 +51,7 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
     protected $length;
     protected $percentage;
     
-    public function HTMLPurifier_AttrDef_CSS_BackgroundPosition() {
+    public function __construct() {
         $this->length     = new HTMLPurifier_AttrDef_CSS_Length();
         $this->percentage = new HTMLPurifier_AttrDef_CSS_Percentage();
     }

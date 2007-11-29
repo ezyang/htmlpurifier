@@ -105,7 +105,7 @@ class HTMLPurifier
      *                The parameter can also be any type that
      *                HTMLPurifier_Config::create() supports.
      */
-    public function HTMLPurifier($config = null) {
+    public function __construct($config = null) {
         
         $this->config = HTMLPurifier_Config::create($config);
         

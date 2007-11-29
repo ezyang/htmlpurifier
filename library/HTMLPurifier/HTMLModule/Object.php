@@ -12,7 +12,7 @@ class HTMLPurifier_HTMLModule_Object extends HTMLPurifier_HTMLModule
     
     public $name = 'Object';
     
-    public function HTMLPurifier_HTMLModule_Object() {
+    public function __construct() {
         
         $this->addElement('object', false, 'Inline', 'Optional: #PCDATA | Flow | param', 'Common', 
             array(

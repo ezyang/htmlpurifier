@@ -22,7 +22,7 @@ class HTMLPurifier_Printer
     /**
      * Initialize $generator.
      */
-    public function HTMLPurifier_Printer() {
+    public function __construct() {
         $this->generator = new HTMLPurifier_Generator();
     }
     

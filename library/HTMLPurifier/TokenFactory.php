@@ -42,7 +42,7 @@ class HTMLPurifier_TokenFactory
      */
     public function createStart($name, $attr = array()) {
         $p = clone $this->p_start;
-        $p->HTMLPurifier_Token_Tag($name, $attr);
+        $p->__construct($name, $attr);
         return $p;
     }
     
@@ -53,7 +53,7 @@ class HTMLPurifier_TokenFactory
      */
     public function createEnd($name) {
         $p = clone $this->p_end;
-        $p->HTMLPurifier_Token_Tag($name);
+        $p->__construct($name);
         return $p;
     }
     
@@ -65,7 +65,7 @@ class HTMLPurifier_TokenFactory
      */
     public function createEmpty($name, $attr = array()) {
         $p = clone $this->p_empty;
-        $p->HTMLPurifier_Token_Tag($name, $attr);
+        $p->__construct($name, $attr);
         return $p;
     }
     
@@ -76,7 +76,7 @@ class HTMLPurifier_TokenFactory
      */
     public function createText($data) {
         $p = clone $this->p_text;
-        $p->HTMLPurifier_Token_Text($data);
+        $p->__construct($data);
         return $p;
     }
     
@@ -87,7 +87,7 @@ class HTMLPurifier_TokenFactory
      */
     public function createComment($data) {
         $p = clone $this->p_comment;
-        $p->HTMLPurifier_Token_Comment($data);
+        $p->__construct($data);
         return $p;
     }
     

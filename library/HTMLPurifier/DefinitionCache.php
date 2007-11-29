@@ -24,7 +24,7 @@ abstract class HTMLPurifier_DefinitionCache
      * @param $name Type of definition objects this instance of the
      *      cache will handle.
      */
-    public function HTMLPurifier_DefinitionCache($type) {
+    public function __construct($type) {
         $this->type = $type;
     }
     

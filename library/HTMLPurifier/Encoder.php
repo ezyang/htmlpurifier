@@ -58,7 +58,7 @@ class HTMLPurifier_Encoder
     /**
      * Constructor throws fatal error if you attempt to instantiate class
      */
-    private function HTMLPurifier_Encoder() {
+    private function __construct() {
         trigger_error('Cannot instantiate encoder, call methods statically', E_USER_ERROR);
     }
     

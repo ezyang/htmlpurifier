@@ -21,7 +21,7 @@ class HTMLPurifier_AttrDef_CSS_Composite extends HTMLPurifier_AttrDef
     /**
      * @param $defs List of HTMLPurifier_AttrDef objects
      */
-    public function HTMLPurifier_AttrDef_CSS_Composite($defs) {
+    public function __construct($defs) {
         $this->defs = $defs;
     }
     

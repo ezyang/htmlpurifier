@@ -10,7 +10,7 @@ class HTMLPurifier_DefinitionCache_Decorator extends HTMLPurifier_DefinitionCach
      */
     public $cache;
     
-    public function HTMLPurifier_DefinitionCache_Decorator() {}
+    public function __construct() {}
     
     /**
      * Lazy decorator function

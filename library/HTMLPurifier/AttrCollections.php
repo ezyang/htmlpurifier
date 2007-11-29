@@ -21,7 +21,7 @@ class HTMLPurifier_AttrCollections
      * @param $attr_types HTMLPurifier_AttrTypes instance
      * @param $modules Hash array of HTMLPurifier_HTMLModule members
      */
-    public function HTMLPurifier_AttrCollections($attr_types, $modules) {
+    public function __construct($attr_types, $modules) {
         // load extensions from the modules
         foreach ($modules as $module) {
             foreach ($module->attr_collections as $coll_i => $coll) {

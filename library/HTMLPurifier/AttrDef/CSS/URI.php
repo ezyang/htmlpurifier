@@ -14,8 +14,8 @@ require_once 'HTMLPurifier/AttrDef/URI.php';
 class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
 {
     
-    public function HTMLPurifier_AttrDef_CSS_URI() {
-        parent::HTMLPurifier_AttrDef_URI(true); // always embedded
+    public function __construct() {
+        parent::__construct(true); // always embedded
     }
     
     public function validate($uri_string, $config, &$context) {

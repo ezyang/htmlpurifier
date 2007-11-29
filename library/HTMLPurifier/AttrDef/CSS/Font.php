@@ -18,7 +18,7 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
      */
     protected $info = array();
     
-    public function HTMLPurifier_AttrDef_CSS_Font($config) {
+    public function __construct($config) {
         $def = $config->getCSSDefinition();
         $this->info['font-style']   = $def->info['font-style'];
         $this->info['font-variant'] = $def->info['font-variant'];

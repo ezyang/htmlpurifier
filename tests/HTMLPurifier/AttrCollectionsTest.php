@@ -44,7 +44,7 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
             'Brocolli' => array()
         );
         
-        $collections->HTMLPurifier_AttrCollections($types, $modules);
+        $collections->__construct($types, $modules);
         // this is without identifier expansion or inclusions
         $this->assertIdentical(
             $collections->info,

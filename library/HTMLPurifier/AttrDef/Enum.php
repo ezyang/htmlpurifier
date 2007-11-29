@@ -28,7 +28,7 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
      * @param $valid_values List of valid values
      * @param $case_sensitive Bool indicating whether or not case sensitive
      */
-    public function HTMLPurifier_AttrDef_Enum(
+    public function __construct(
         $valid_values = array(), $case_sensitive = false
     ) {
         $this->valid_values = array_flip($valid_values);

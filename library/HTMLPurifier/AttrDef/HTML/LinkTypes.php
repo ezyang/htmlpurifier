@@ -29,7 +29,7 @@ class HTMLPurifier_AttrDef_HTML_LinkTypes extends HTMLPurifier_AttrDef
     /** Name config attribute to pull. */
     protected $name;
     
-    public function HTMLPurifier_AttrDef_HTML_LinkTypes($name) {
+    public function __construct($name) {
         $configLookup = array(
             'rel' => 'AllowedRel',
             'rev' => 'AllowedRev'

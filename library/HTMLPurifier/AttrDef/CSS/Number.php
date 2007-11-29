@@ -14,7 +14,7 @@ class HTMLPurifier_AttrDef_CSS_Number extends HTMLPurifier_AttrDef
     /**
      * @param $non_negative Bool indicating whether negatives are forbidden
      */
-    public function HTMLPurifier_AttrDef_CSS_Number($non_negative = false) {
+    public function __construct($non_negative = false) {
         $this->non_negative = $non_negative;
     }
     

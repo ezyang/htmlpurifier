@@ -44,7 +44,7 @@ class HTMLPurifier_Doctype
      */
     public $dtdSystem;
     
-    public function HTMLPurifier_Doctype($name = null, $xml = true, $modules = array(),
+    public function __construct($name = null, $xml = true, $modules = array(),
         $tidyModules = array(), $aliases = array(), $dtd_public = null, $dtd_system = null
     ) {
         $this->name         = $name;

@@ -36,7 +36,7 @@ class HTMLPurifier_Language
      */
     protected $config, $context;
     
-    public function HTMLPurifier_Language($config, &$context) {
+    public function __construct($config, &$context) {
         $this->config  = $config;
         $this->context =& $context;
     }

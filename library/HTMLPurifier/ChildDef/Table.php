@@ -11,7 +11,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
     public $type = 'table';
     public $elements = array('tr' => true, 'tbody' => true, 'thead' => true,
         'tfoot' => true, 'caption' => true, 'colgroup' => true, 'col' => true);
-    public function HTMLPurifier_ChildDef_Table() {}
+    public function __construct() {}
     public function validateChildren($tokens_of_children, $config, &$context) {
         if (empty($tokens_of_children)) return false;
         

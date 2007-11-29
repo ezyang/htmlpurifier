@@ -34,7 +34,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     
     public function __construct() {
         // setup the factory
-        parent::HTMLPurifier_Lexer();
+        parent::__construct();
         $this->factory = new HTMLPurifier_TokenFactory();
     }
     

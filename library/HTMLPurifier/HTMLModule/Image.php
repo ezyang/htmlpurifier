@@ -15,7 +15,7 @@ class HTMLPurifier_HTMLModule_Image extends HTMLPurifier_HTMLModule
     
     public $name = 'Image';
     
-    public function HTMLPurifier_HTMLModule_Image() {
+    public function __construct() {
         $img =& $this->addElement(
             'img', true, 'Inline', 'Empty', 'Common',
             array(

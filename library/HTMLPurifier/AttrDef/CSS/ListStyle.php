@@ -15,7 +15,7 @@ class HTMLPurifier_AttrDef_CSS_ListStyle extends HTMLPurifier_AttrDef
      */
     protected $info;
     
-    public function HTMLPurifier_AttrDef_CSS_ListStyle($config) {
+    public function __construct($config) {
         $def = $config->getCSSDefinition();
         $this->info['list-style-type']     = $def->info['list-style-type'];
         $this->info['list-style-position'] = $def->info['list-style-position'];

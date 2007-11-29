@@ -16,7 +16,7 @@ class HTMLPurifier_AttrDef_CSS_Background extends HTMLPurifier_AttrDef
      */
     protected $info;
     
-    public function HTMLPurifier_AttrDef_CSS_Background($config) {
+    public function __construct($config) {
         $def = $config->getCSSDefinition();
         $this->info['background-color'] = $def->info['background-color'];
         $this->info['background-image'] = $def->info['background-image'];

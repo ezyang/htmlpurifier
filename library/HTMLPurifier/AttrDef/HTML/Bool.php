@@ -11,7 +11,7 @@ class HTMLPurifier_AttrDef_HTML_Bool extends HTMLPurifier_AttrDef
     protected $name;
     public $minimized = true;
     
-    public function HTMLPurifier_AttrDef_HTML_Bool($name = false) {$this->name = $name;}
+    public function __construct($name = false) {$this->name = $name;}
     
     public function validate($string, $config, &$context) {
         if (empty($string)) return false;

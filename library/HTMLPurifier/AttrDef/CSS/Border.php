@@ -13,7 +13,7 @@ class HTMLPurifier_AttrDef_CSS_Border extends HTMLPurifier_AttrDef
      */
     protected $info = array();
     
-    public function HTMLPurifier_AttrDef_CSS_Border($config) {
+    public function __construct($config) {
         $def = $config->getCSSDefinition();
         $this->info['border-width'] = $def->info['border-width'];
         $this->info['border-style'] = $def->info['border-style'];

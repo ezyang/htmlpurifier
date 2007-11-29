@@ -20,7 +20,7 @@ class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
      */
     protected $ipv6;
     
-    public function HTMLPurifier_AttrDef_URI_Host() {
+    public function __construct() {
         $this->ipv4 = new HTMLPurifier_AttrDef_URI_IPv4();
         $this->ipv6 = new HTMLPurifier_AttrDef_URI_IPv6();
     }

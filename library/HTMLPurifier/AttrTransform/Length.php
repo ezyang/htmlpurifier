@@ -11,7 +11,7 @@ class HTMLPurifier_AttrTransform_Length extends HTMLPurifier_AttrTransform
     protected $name;
     protected $cssName;
     
-    public function HTMLPurifier_AttrTransform_Length($name, $css_name = null) {
+    public function __construct($name, $css_name = null) {
         $this->name = $name;
         $this->cssName = $css_name ? $css_name : $name;
     }

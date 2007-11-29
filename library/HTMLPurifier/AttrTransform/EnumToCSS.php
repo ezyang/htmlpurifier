@@ -30,7 +30,7 @@ class HTMLPurifier_AttrTransform_EnumToCSS extends HTMLPurifier_AttrTransform {
      * @param $enumToCSS Lookup array of attribute values to CSS
      * @param $case_sensitive Boolean case sensitivity indicator, default false
      */
-    public function HTMLPurifier_AttrTransform_EnumToCSS($attr, $enum_to_css, $case_sensitive = false) {
+    public function __construct($attr, $enum_to_css, $case_sensitive = false) {
         $this->attr = $attr;
         $this->enumToCSS = $enum_to_css;
         $this->caseSensitive = (bool) $case_sensitive;

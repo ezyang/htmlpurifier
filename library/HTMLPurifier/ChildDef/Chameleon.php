@@ -30,7 +30,7 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
      * @param $inline List of elements to allow when inline.
      * @param $block List of elements to allow when block.
      */
-    public function HTMLPurifier_ChildDef_Chameleon($inline, $block) {
+    public function __construct($inline, $block) {
         $this->inline = new HTMLPurifier_ChildDef_Optional($inline);
         $this->block  = new HTMLPurifier_ChildDef_Optional($block);
         $this->elements = $this->block->elements;

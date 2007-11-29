@@ -273,7 +273,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     /**
      * Performs low-cost, preliminary initialization.
      */
-    public function HTMLPurifier_HTMLDefinition() {
+    public function __construct() {
         $this->manager = new HTMLPurifier_HTMLModuleManager();
     }
     

@@ -22,7 +22,7 @@ extends HTMLPurifier_AttrTransform {
      * @param $attr string attribute name to convert from
      * @param $css string CSS declarations to add to style (needs semicolon)
      */
-    public function HTMLPurifier_AttrTransform_BoolToCSS($attr, $css) {
+    public function __construct($attr, $css) {
         $this->attr = $attr;
         $this->css  = $css;
     }

@@ -62,7 +62,7 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token // abstract
      * @param $name String name.
      * @param $attr Associative array of attributes.
      */
-    public function HTMLPurifier_Token_Tag($name, $attr = array(), $line = null) {
+    public function __construct($name, $attr = array(), $line = null) {
         $this->name = ctype_lower($name) ? $name : strtolower($name);
         foreach ($attr as $key => $value) {
             // normalization only necessary when key is not lowercase
@@ -131,7 +131,7 @@ class HTMLPurifier_Token_Text extends HTMLPurifier_Token
      * 
      * @param $data String parsed character data.
      */
-    public function HTMLPurifier_Token_Text($data, $line = null) {
+    public function __construct($data, $line = null) {
         $this->data = $data;
         $this->is_whitespace = ctype_space($data);
         $this->line = $line;
@@ -151,7 +151,7 @@ class HTMLPurifier_Token_Comment extends HTMLPurifier_Token
      * 
      * @param $data String comment data.
      */
-    public function HTMLPurifier_Token_Comment($data, $line = null) {
+    public function __construct($data, $line = null) {
         $this->data = $data;
         $this->line = $line;
     }

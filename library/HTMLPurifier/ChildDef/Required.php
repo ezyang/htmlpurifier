@@ -15,7 +15,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
     /**
      * @param $elements List of allowed element names (lowercase).
      */
-    public function HTMLPurifier_ChildDef_Required($elements) {
+    public function __construct($elements) {
         if (is_string($elements)) {
             $elements = str_replace(' ', '', $elements);
             $elements = explode('|', $elements);

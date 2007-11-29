@@ -38,7 +38,7 @@ class HTMLPurifier_ContentSets
      * sets and populates the keys, values and lookup member variables.
      * @param $modules List of HTMLPurifier_HTMLModule
      */
-    public function HTMLPurifier_ContentSets($modules) {
+    public function __construct($modules) {
         if (!is_array($modules)) $modules = array($modules);
         // populate content_sets based on module hints
         // sorry, no way of overloading

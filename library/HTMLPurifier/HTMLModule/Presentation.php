@@ -17,7 +17,7 @@ class HTMLPurifier_HTMLModule_Presentation extends HTMLPurifier_HTMLModule
     
     public $name = 'Presentation';
     
-    public function HTMLPurifier_HTMLModule_Presentation() {
+    public function __construct() {
         $this->addElement('b',      true, 'Inline', 'Inline', 'Common');
         $this->addElement('big',    true, 'Inline', 'Inline', 'Common');
         $this->addElement('hr',     true, 'Block',  'Empty',  'Common');

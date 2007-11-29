@@ -25,7 +25,7 @@ class HTMLPurifier_AttrDef_CSS_Length extends HTMLPurifier_AttrDef
      * @param $non_negative Bool indication whether or not negative values are
      *                      allowed.
      */
-    public function HTMLPurifier_AttrDef_CSS_Length($non_negative = false) {
+    public function __construct($non_negative = false) {
         $this->number_def = new HTMLPurifier_AttrDef_CSS_Number($non_negative);
     }
     

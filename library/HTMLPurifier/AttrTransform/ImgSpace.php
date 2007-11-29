@@ -13,7 +13,7 @@ class HTMLPurifier_AttrTransform_ImgSpace extends HTMLPurifier_AttrTransform {
         'vspace' => array('top', 'bottom')
     );
     
-    public function HTMLPurifier_AttrTransform_ImgSpace($attr) {
+    public function __construct($attr) {
         $this->attr = $attr;
         if (!isset($this->css[$attr])) {
             trigger_error(htmlspecialchars($attr) . ' is not valid space attribute');

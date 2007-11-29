@@ -32,7 +32,7 @@ class HTMLPurifier_AttrDef_Integer extends HTMLPurifier_AttrDef
      * @param $zero Bool indicating whether or not zero is allowed
      * @param $positive Bool indicating whether or not positive values are allowed
      */
-    public function HTMLPurifier_AttrDef_Integer(
+    public function __construct(
         $negative = true, $zero = true, $positive = true
     ) {
         $this->negative = $negative;

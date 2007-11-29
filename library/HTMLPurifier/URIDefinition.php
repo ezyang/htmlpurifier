@@ -91,7 +91,7 @@ class HTMLPurifier_URIDefinition extends HTMLPurifier_Definition
      */
     public $defaultScheme;
     
-    public function HTMLPurifier_URIDefinition() {
+    public function __construct() {
         $this->registerFilter(new HTMLPurifier_URIFilter_DisableExternal());
         $this->registerFilter(new HTMLPurifier_URIFilter_DisableExternalResources());
         $this->registerFilter(new HTMLPurifier_URIFilter_HostBlacklist());

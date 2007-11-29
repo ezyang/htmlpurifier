@@ -27,7 +27,7 @@ class HTMLPurifier_AttrTypes
      * Constructs the info array, supplying default implementations for attribute
      * types.
      */
-    public function HTMLPurifier_AttrTypes() {
+    public function __construct() {
         // pseudo-types, must be instantiated via shorthand
         $this->info['Enum']    = new HTMLPurifier_AttrDef_Enum();
         $this->info['Bool']    = new HTMLPurifier_AttrDef_HTML_Bool();

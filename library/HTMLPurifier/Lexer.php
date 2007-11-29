@@ -201,7 +201,7 @@ class HTMLPurifier_Lexer
     
     // -- CONVENIENCE MEMBERS ---------------------------------------------
     
-    public function HTMLPurifier_Lexer() {
+    public function __construct() {
         $this->_entity_parser = new HTMLPurifier_EntityParser();
     }
     
