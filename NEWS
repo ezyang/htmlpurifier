@@ -15,6 +15,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   to it.
   + Visibility declarations added
   + Constructor methods renamed to __construct()
+! CSS properties are no case-insensitive
 
 2.1.3, released 2007-11-05
 ! tests/multitest.php allows you to test multiple versions by running
