@@ -8,7 +8,7 @@
  * @todo Allow injectors to request a re-run on their output. This 
  *       would help if an operation is recursive.
  */
-class HTMLPurifier_Injector
+abstract class HTMLPurifier_Injector
 {
     
     /**

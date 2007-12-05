@@ -15,7 +15,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   to it.
   + Visibility declarations added
   + Constructor methods renamed to __construct()
+  + PHP4 reference/foreach cruft removed (in progress)
 ! CSS properties are no case-insensitive
+. Unit tests for Injector improved
 
 2.1.3, released 2007-11-05
 ! tests/multitest.php allows you to test multiple versions by running

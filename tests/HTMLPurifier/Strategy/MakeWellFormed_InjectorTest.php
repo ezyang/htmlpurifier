@@ -26,6 +26,19 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         $this->assertResult('<i><b>asdf</b>', '<i><b>asdf</b></i>');
     }
     
+    function testErrorRequiredElementNotAllowed() {
+        $this->config->set('HTML', 'Allowed', '');
+        $this->expectError('Cannot enable AutoParagraph injector because p is not allowed');
+        $this->expectError('Cannot enable Linkify injector because a is not allowed');
+        $this->assertResult('Foobar');
+    }
+    
+    function testErrorRequiredAttributeNotAllowed() {
+        $this->config->set('HTML', 'Allowed', 'a,p');
+        $this->expectError('Cannot enable Linkify injector because a.href is not allowed');
+        $this->assertResult('<p>http://example.com</p>');
+    }
+    
     function testOnlyAutoParagraph() {
         $this->assertResult(
             'Foobar',

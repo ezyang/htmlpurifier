@@ -11,6 +11,9 @@ If no interest is expressed for a feature that may required a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
+3.0 release [Go PHP5!]
+ - Convert all &$context calls to $context, as PHP5 passes objects by value
+
 3.1 release [Error'ed]
  # Error logging for filtering/cleanup procedures
  - XSS-attempt detection
