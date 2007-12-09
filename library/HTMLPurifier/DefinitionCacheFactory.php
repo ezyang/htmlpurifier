@@ -10,10 +10,6 @@ to disable caching (not recommended, as you will see a definite
 performance degradation). This directive has been available since 2.0.0.
 ');
 
-HTMLPurifier_ConfigSchema::defineAllowedValues(
-    'Cache', 'DefinitionImpl', array('Serializer')
-);
-
 HTMLPurifier_ConfigSchema::defineAlias(
     'Core', 'DefinitionCache',
     'Cache', 'DefinitionImpl'
@@ -27,6 +23,7 @@ class HTMLPurifier_DefinitionCacheFactory
 {
     
     protected $caches = array('Serializer' => array());
+    protected $implementations = array();
     protected $decorators = array();
     
     /**
@@ -51,13 +48,20 @@ class HTMLPurifier_DefinitionCacheFactory
     }
     
     /**
+     * Registers a new definition cache object
+     * @param $short Short name of cache object, for reference
+     * @param $long Full class name of cache object, for construction 
+     */
+    public function register($short, $long) {
+        $this->implementations[$short] = $long;
+    }
+    
+    /**
      * Factory method that creates a cache object based on configuration
      * @param $name Name of definitions handled by cache
      * @param $config Instance of HTMLPurifier_Config
      */
     public function &create($type, $config) {
-        // only one implementation as for right now, $config will
-        // be used to determine implementation
         $method = $config->get('Cache', 'DefinitionImpl');
         if ($method === null) {
             $null = new HTMLPurifier_DefinitionCache_Null($type);
@@ -66,7 +70,17 @@ class HTMLPurifier_DefinitionCacheFactory
         if (!empty($this->caches[$method][$type])) {
             return $this->caches[$method][$type];
         }
-        $cache = new HTMLPurifier_DefinitionCache_Serializer($type);
+        if (
+          isset($this->implementations[$method]) &&
+          class_exists($class = $this->implementations[$method], false)
+        ) {
+            $cache = new $class($type);
+        } else {
+            if ($method != 'Serializer') {
+                trigger_error("Unrecognized DefinitionCache $method, using Serializer instead", E_USER_WARNING);
+            }
+            $cache = new HTMLPurifier_DefinitionCache_Serializer($type);
+        }
         foreach ($this->decorators as $decorator) {
             $new_cache = $decorator->decorate($cache);
             // prevent infinite recursion in PHP 4
