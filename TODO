@@ -45,11 +45,10 @@ afraid to cast your vote for the next feature to be implemented!
    AttrDef class). Probably will use CSSTidy class
  # More control over allowed CSS properties (maybe modularize it in the
    same fashion!)
- # Formatters for plaintext
-    - Smileys
  - Standardize token armor for all areas of processing
  - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
    Also, enable disabling of directionality
+ - Table of Contents generation (XHTML Compiler might be reusable)
 
 5.0 release [To XML and Beyond]
  - Extended HTML capabilities based on namespacing and tag transforms (COMPLEX)
@@ -64,6 +63,11 @@ Ongoing
     - eFiction
     - more! (look for ones that use WYSIWYGs)
  - Complete basic smoketests
+
+AutoFormat
+ - Smileys
+ - Syntax highlighting with <pre> and possibly <?php
+ - Look at http://drupal.org/project/Modules/category/63 for ideas
 
 Unknown release (on a scratch-an-itch basis)
  # CHMOD install script for PEAR installs
