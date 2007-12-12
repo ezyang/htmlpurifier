@@ -14,6 +14,9 @@ set_time_limit(0);
 // Where is SimpleTest located?
 $simpletest_location = '/path/to/simpletest/';
 
+// Where is CSSTidy located?
+$csstidy_location    = '/path/to/csstidy/';
+
 // How many times should profiling scripts iterate over the function? More runs 
 // means more accurate results, but they'll take longer to perform.
 $GLOBALS['HTMLPurifierTest']['Runs'] = 2;

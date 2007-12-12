@@ -75,6 +75,7 @@ $test_files[] = 'HTMLPurifier/ErrorCollectorTest.php';
 $test_files[] = 'HTMLPurifier/EncoderTest.php';
 $test_files[] = 'HTMLPurifier/EntityLookupTest.php';
 $test_files[] = 'HTMLPurifier/EntityParserTest.php';
+$test_files[] = 'HTMLPurifier/Filter/ExtractStyleBlocksTest.php';
 $test_files[] = 'HTMLPurifier/GeneratorTest.php';
 $test_files[] = 'HTMLPurifier/HTMLDefinitionTest.php';
 $test_files[] = 'HTMLPurifier/HTMLModuleManagerTest.php';

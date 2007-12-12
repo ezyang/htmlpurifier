@@ -16,6 +16,7 @@ $GLOBALS['HTMLPurifierTest'] = array();
 $GLOBALS['HTMLPurifierTest']['PEAR'] = false; // do PEAR tests
 $GLOBALS['HTMLPurifierTest']['PH5P'] = version_compare(PHP_VERSION, "5", ">=") && class_exists('DOMDocument');
 $simpletest_location = 'simpletest/'; // reasonable guess
+$csstidy_location = false;
 
 // load SimpleTest
 if (file_exists('../conf/test-settings.php')) include '../conf/test-settings.php';
@@ -23,6 +24,11 @@ if (file_exists('../test-settings.php')) include '../test-settings.php';
 require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
 require_once $simpletest_location . 'mock_objects.php';
+
+if ($csstidy_location !== false) {
+    require_once $csstidy_location . 'class.csstidy.php';
+    require_once $csstidy_location . 'class.csstidy_print.php';
+}
 
 error_reporting(E_ALL | E_STRICT); // after SimpleTest is loaded, turn on compile time errors
 

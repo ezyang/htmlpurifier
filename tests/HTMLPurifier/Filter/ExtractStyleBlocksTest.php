@@ -1,0 +1,112 @@
+<?php
+
+require_once 'HTMLPurifier/Filter/ExtractStyleBlocks.php';
+
+/**
+ * @todo Assimilate CSSTidy into our library
+ */
+class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
+{
+    
+    // usual use case:
+    function test_tokenizeHTML_extractStyleBlocks() {
+        $purifier = new HTMLPurifier($this->config);
+        $purifier->addFilter(new HTMLPurifier_Filter_ExtractStyleBlocks());
+        $result = $purifier->purify('<style type="text/css">.foo {text-align:center;bogus:remove-me;}</style>Test<style>* {font-size:12pt;}</style>');
+        $this->assertIdentical($result, 'Test');
+        $this->assertIdentical($purifier->context->get('StyleBlocks'),
+            array(
+                ".foo {\ntext-align:center;\n}",
+                "* {\nfont-size:12pt;\n}"
+            )
+        );
+    }
+    
+    function assertExtractStyleBlocks($html, $expect = true, $styles = array()) {
+        $filter = new HTMLPurifier_Filter_ExtractStyleBlocks(false); // disable cleaning
+        if ($expect === true) $expect = $html;
+        $result = $filter->preFilter($html, $this->config, $this->context);
+        $this->assertIdentical($result, $expect);
+        $this->assertIdentical($this->context->get('StyleBlocks'), $styles);
+    }
+    
+    function test_extractStyleBlocks_preserve() {
+        $this->assertExtractStyleBlocks('Foobar');
+    }
+    
+    function test_extractStyleBlocks_allStyle() {
+        $this->assertExtractStyleBlocks('<style>foo</style>', '', array('foo'));
+    }
+    
+    function test_extractStyleBlocks_multipleBlocks() {
+        $this->assertExtractStyleBlocks(
+          "<style>1</style><style>2</style>NOP<style>4</style>",
+          "NOP",
+          array('1', '2', '4')
+        );
+    }
+    
+    function test_extractStyleBlocks_blockWithAttributes() {
+        $this->assertExtractStyleBlocks(
+          '<style type="text/css">css</style>',
+          '',
+          array('css')
+        );
+    }
+    
+    function test_extractStyleBlocks_styleWithPadding() {
+        $this->assertExtractStyleBlocks(
+          "Alas<styled>Awesome</styled>\n<style>foo</style> Trendy!",
+          "Alas<styled>Awesome</styled>\n Trendy!",
+          array('foo')
+        );
+    }
+    
+    function assertCleanCSS($input, $expect = true) {
+        $filter = new HTMLPurifier_Filter_ExtractStyleBlocks();
+        if ($expect === true) $expect = $input;
+        $result = $filter->cleanCSS($input, $this->config, $this->context);
+        $this->assertIdentical($result, $expect);
+    }
+    
+    function test_cleanCSS_malformed() {
+        $this->assertCleanCSS('</style>', '');
+    }
+    
+    function test_cleanCSS_selector() {
+        $this->assertCleanCSS("a .foo #id div.cl#foo {\nfont-weight:700;\n}");
+    }
+    
+    function test_cleanCSS_angledBrackets() {
+        $this->assertCleanCSS(
+            ".class {\nfont-family:'</style>';\n}",
+            ".class {\nfont-family:'\\3C /style\\3E ';\n}"
+        );
+    }
+    
+    function test_cleanCSS_angledBrackets2() {
+        // CSSTidy's behavior in this case is wrong, and should be fixed
+        //$this->assertCleanCSS(
+        //    "span[title=\"</style>\"] {\nfont-size:12pt;\n}",
+        //    "span[title=\"\\3C /style\\3E \"] {\nfont-size:12pt;\n}"
+        //);
+    }
+    
+    function test_cleanCSS_bogus() {
+        $this->assertCleanCSS("div {bogus:tree;}", "div {\n}");
+    }
+    
+    function test_cleanCSS_escapeCodes() {
+        $this->assertCleanCSS(
+            ".class {\nfont-family:'\\3C /style\\3E ';\n}"
+        );
+    }
+    
+    function test_cleanCSS_noEscapeCodes() {
+        $filter = new HTMLPurifier_Filter_ExtractStyleBlocks(null, true);
+        $input = ".class {\nfont-family:'</style>';\n}";
+        $result = $filter->cleanCSS($input, $this->config, $this->context);
+        $this->assertIdentical($result, $input);
+    }
+    
+}

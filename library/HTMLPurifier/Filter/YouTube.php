@@ -5,7 +5,7 @@ require_once 'HTMLPurifier/Filter.php';
 class HTMLPurifier_Filter_YouTube extends HTMLPurifier_Filter
 {
     
-    public $name = 'YouTube preservation';
+    public $name = 'YouTube';
     
     public function preFilter($html, $config, &$context) {
         $pre_regex = '#<object[^>]+>.+?'.
