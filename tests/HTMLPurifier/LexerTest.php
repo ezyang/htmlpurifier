@@ -31,6 +31,48 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
         $this->assertIsA($lexer, 'HTMLPurifier_Lexer_DirectLex');
     }
     
+    // HTMLPurifier_Lexer->extractStyleBlocks() --------------------------------
+    
+    function assertExtractStyleBlocks($html, $expect = true, $styles = array()) {
+        $lexer = HTMLPurifier_Lexer::create($this->config);
+        if ($expect === true) $expect = $html;
+        $result = $lexer->extractStyleBlocks($html, $this->config, $this->context);
+        $this->assertIdentical($result, $expect);
+        $this->assertIdentical($this->context->get('StyleBlocks'), $styles);
+    }
+    
+    function test_extractStyleBlocks_preserve() {
+        $this->assertExtractStyleBlocks('Foobar');
+    }
+    
+    function test_extractStyleBlocks_allStyle() {
+        $this->assertExtractStyleBlocks('<style>foo</style>', '', array('foo'));
+    }
+    
+    function test_extractStyleBlocks_multipleBlocks() {
+        $this->assertExtractStyleBlocks(
+          "<style>1</style><style>2</style>NOP<style>4</style>",
+          "NOP",
+          array('1', '2', '4')
+        );
+    }
+    
+    function test_extractStyleBlocks_blockWithAttributes() {
+        $this->assertExtractStyleBlocks(
+          '<style type="text/css">css</style>',
+          '',
+          array('css')
+        );
+    }
+    
+    function test_extractStyleBlocks_styleWithPadding() {
+        $this->assertExtractStyleBlocks(
+          "Alas<styled>Awesome</styled>\n<style>foo</style> Trendy!",
+          "Alas<styled>Awesome</styled>\n Trendy!",
+          array('foo')
+        );
+    }
+    
     // HTMLPurifier_Lexer->parseData() -----------------------------------------
     
     function assertParseData($input, $expect = true) {
@@ -509,6 +551,17 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             '<param name="src" value="http://example.com/video.wmv" />',
             array( new HTMLPurifier_Token_Empty('param', array('name' => 'src', 'value' => 'http://example.com/video.wmv')) )
         );
+    }
+    
+    function test_tokenizeHTML_extractStyleBlocks() {
+        $this->config->set('HTML', 'ExtractStyleBlocks', true);
+        $this->assertTokenization(
+            '<style type="text/css">.foo {text-align:center;}</style>Test',
+            array(
+                new HTMLPurifier_Token_Text('Test')
+            )
+        );
+        $this->assertIdentical($this->context->get('StyleBlocks'), array('.foo {text-align:center;}'));
     }
     
     /*

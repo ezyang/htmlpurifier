@@ -79,6 +79,14 @@ It is not necessary and will have no effect for PHP 4.
 This directive has been available since 2.1.0.
 ');
 
+HTMLPurifier_ConfigSchema::define(
+    'HTML', 'ExtractStyleBlocks', false, 'bool', '
+This directive enables extraction of <code>style</code> tags contents so
+that they can be incorporated in the <code>head</code> of the document,
+after sufficient validation.
+This directive has been available since 3.0.0.
+');
+
 /**
  * Forgivingly lexes HTML (SGML-style) markup into tokens.
  * 
@@ -338,6 +346,34 @@ class HTMLPurifier_Lexer
         // represent non-SGML characters (horror, horror!)
         $html = HTMLPurifier_Encoder::cleanUTF8($html);
         
+        if ($config->get('HTML', 'ExtractStyleBlocks')) {
+            // extract <style> CSS blocks
+            $html = $this->extractStyleBlocks($html, $config, $context);
+        }
+        
+        return $html;
+    }
+    
+    private $_styleMatches = array();
+    
+    /**
+     * Save the contents of CSS blocks to style matches
+     */
+    protected function styleCallback($matches) {
+        $this->_styleMatches[] = $matches[1];
+    }
+    
+    /**
+     * Removes inline <style> tags from HTML, saves them for later use
+     * @todo Extend to indicate non-text/css style blocks
+     */
+    public function extractStyleBlocks($html, $config, $context) {
+        $html = preg_replace_callback('#<style(?:\s.*)?>(.+)</style>#isU', array($this, 'styleCallback'), $html);
+        $style_blocks = $this->_styleMatches;
+        $this->_styleMatches = array(); // reset
+        // this is a persistent context, so we have to overwrite it with every call
+        if ($context->exists('StyleBlocks')) $context->destroy('StyleBlocks');
+        $context->register('StyleBlocks', $style_blocks);
         return $html;
     }
     

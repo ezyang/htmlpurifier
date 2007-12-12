@@ -18,6 +18,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   + PHP4 reference/foreach cruft removed (in progress)
 ! CSS properties are no case-insensitive
 ! DefinitionCacheFactory now can register new implementations
+! <style> tags can now be extracted from input HTML using %HTML.ExtractStyleBlocks.
+  These contents can be retrieved from $context->get('StyleBlocks');
 . Unit tests for Injector improved
 
 2.1.3, released 2007-11-05

@@ -186,6 +186,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         
         $ret .= '<html><head>';
         $ret .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
+        // No protection if $html contains a stray </div>!
         $ret .= '</head><body><div>'.$html.'</div></body></html>';
         return $ret;
     }
