@@ -18,7 +18,7 @@ $pkg->setOptions(
     )
 );
 
-$pkg->setPackage('HTMLPurifier');
+$pkg->setPackage('HTMLPurifier3');
 $pkg->setLicense('LGPL', 'http://www.gnu.org/licenses/lgpl.html');
 $pkg->setSummary('Standards-compliant HTML filter');
 $pkg->setDescription(
@@ -44,7 +44,7 @@ $pkg->addRelease();
 $pkg->setNotes(file_get_contents('WHATSNEW'));
 $pkg->setPackageType('php');
 
-$pkg->setPhpDep('4.3.9');
+$pkg->setPhpDep('5.0.0');
 $pkg->setPearinstallerDep('1.4.3');
 
 $pkg->generateContents();
