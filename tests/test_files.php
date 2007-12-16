@@ -7,11 +7,13 @@ if (!defined('HTMLPurifierTest')) exit;
 // HTML Purifier main library
 
 $test_files[] = 'HTMLPurifier/AttrCollectionsTest.php';
+$test_files[] = 'HTMLPurifier/AttrDef/CSS/AlphaValueTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/BackgroundPositionTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/BackgroundTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/BorderTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/ColorTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/CompositeTest.php';
+$test_files[] = 'HTMLPurifier/AttrDef/CSS/FilterTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/FontFamilyTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/FontTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/LengthTest.php';

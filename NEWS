@@ -22,7 +22,15 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   documents and cleaning their contents up. Requires the CSSTidy library
   <http://csstidy.sourceforge.net/>. You can access the blocks with the
   'StyleBlocks' Context variable ($purifier->context->get('StyleBlocks'))
+! Experimental support for some proprietary CSS attributes allowed:
+  opacity (and all of the browser-specific equivalents) and scrollbar colors.
+  Enable by setting %CSS.Proprietary to true.
+- Colors missing # but in hex form will be corrected
+- CSS Number algorithm improved
 . Unit tests for Injector improved
+. New classes:
+  + HTMLPurifier_AttrDef_CSS_AlphaValue
+  + HTMLPurifier_AttrDef_CSS_Filter
 
 2.1.3, released 2007-11-05
 ! tests/multitest.php allows you to test multiple versions by running

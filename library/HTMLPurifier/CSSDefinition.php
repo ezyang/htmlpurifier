@@ -2,11 +2,13 @@
 
 require_once 'HTMLPurifier/Definition.php';
 
+require_once 'HTMLPurifier/AttrDef/CSS/AlphaValue.php';
 require_once 'HTMLPurifier/AttrDef/CSS/Background.php';
 require_once 'HTMLPurifier/AttrDef/CSS/BackgroundPosition.php';
 require_once 'HTMLPurifier/AttrDef/CSS/Border.php';
 require_once 'HTMLPurifier/AttrDef/CSS/Color.php';
 require_once 'HTMLPurifier/AttrDef/CSS/Composite.php';
+require_once 'HTMLPurifier/AttrDef/CSS/Filter.php';
 require_once 'HTMLPurifier/AttrDef/CSS/Font.php';
 require_once 'HTMLPurifier/AttrDef/CSS/FontFamily.php';
 require_once 'HTMLPurifier/AttrDef/CSS/Length.php';
@@ -23,6 +25,14 @@ HTMLPurifier_ConfigSchema::define(
     Revision identifier for your custom definition. See
     %HTML.DefinitionRev for details. This directive has been available
     since 2.0.0.
+</p>
+');
+
+HTMLPurifier_ConfigSchema::define(
+    'CSS', 'Proprietary', false, 'bool', '
+<p>
+    Whether or not to allow safe, proprietary CSS values. This directive
+    has been available since 3.0.0.
 </p>
 ');
 
@@ -223,6 +233,29 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         
         // partial support
         $this->info['white-space'] = new HTMLPurifier_AttrDef_Enum(array('nowrap'));
+        
+        if ($config->get('CSS', 'Proprietary')) {
+            $this->doSetupProprietary($config);
+        }
+        
+    }
+    
+    protected function doSetupProprietary($config) {
+        // Internet Explorer only scrollbar colors
+        $this->info['scrollbar-arrow-color']        = new HTMLPurifier_AttrDef_CSS_Color();
+        $this->info['scrollbar-base-color']         = new HTMLPurifier_AttrDef_CSS_Color();
+        $this->info['scrollbar-darkshadow-color']   = new HTMLPurifier_AttrDef_CSS_Color();
+        $this->info['scrollbar-face-color']         = new HTMLPurifier_AttrDef_CSS_Color();
+        $this->info['scrollbar-highlight-color']    = new HTMLPurifier_AttrDef_CSS_Color();
+        $this->info['scrollbar-shadow-color']       = new HTMLPurifier_AttrDef_CSS_Color();
+        
+        // technically not proprietary, but CSS3, and no one supports it
+        $this->info['opacity']          = new HTMLPurifier_AttrDef_CSS_AlphaValue();
+        $this->info['-moz-opacity']     = new HTMLPurifier_AttrDef_CSS_AlphaValue();
+        $this->info['-khtml-opacity']   = new HTMLPurifier_AttrDef_CSS_AlphaValue();
+        
+        // only opacity, for now
+        $this->info['filter'] = new HTMLPurifier_AttrDef_CSS_Filter();
         
     }
     

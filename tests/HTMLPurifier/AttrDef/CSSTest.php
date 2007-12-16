@@ -112,5 +112,23 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         
     }
     
+    function testProprietary() {
+        $this->config->set('CSS', 'Proprietary', true);
+        $this->def = new HTMLPurifier_AttrDef_CSS();
+        
+        $this->assertDef('scrollbar-arrow-color:#ff0;');
+        $this->assertDef('scrollbar-base-color:#ff6347;');
+        $this->assertDef('scrollbar-darkshadow-color:#ffa500;');
+        $this->assertDef('scrollbar-face-color:#008080;');
+        $this->assertDef('scrollbar-highlight-color:#ff69b4;');
+        $this->assertDef('scrollbar-shadow-color:#f0f;');
+        
+        $this->assertDef('opacity:.2;');
+        $this->assertDef('-moz-opacity:.2;');
+        $this->assertDef('-khtml-opacity:.2;');
+        $this->assertDef('filter:alpha(opacity=20);');
+        
+    }
+    
 }
 
