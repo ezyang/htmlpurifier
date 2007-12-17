@@ -19,6 +19,7 @@ class HTMLPurifier_AttrDef_CSS_Filter extends HTMLPurifier_AttrDef
     
     public function validate($value, $config, &$context) {
         $value = $this->parseCDATA($value);
+        if ($value === 'none') return $value;
         // if we looped this we could support multiple filters
         $function_length = strcspn($value, '(');
         $function = trim(substr($value, 0, $function_length));

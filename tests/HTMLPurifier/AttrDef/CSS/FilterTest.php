@@ -10,6 +10,8 @@ class HTMLPurifier_AttrDef_CSS_FilterTest extends HTMLPurifier_AttrDefHarness
         
         $this->def = new HTMLPurifier_AttrDef_CSS_Filter();
         
+        $this->assertDef('none');
+        
         $this->assertDef('alpha(opacity=0)');
         $this->assertDef('alpha(opacity=100)');
         $this->assertDef('alpha(opacity=50)');
