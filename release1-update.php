@@ -66,8 +66,8 @@ if (!$c) {
     exit;
 }
 $htmlpurifier_c = preg_replace(
-    '/var \$version = \'.+?\';/',
-    "var \$version = '$version';",
+    '/public \$version = \'.+?\';/',
+    "public \$version = '$version';",
     $htmlpurifier_c,
     1, $c
 );
@@ -79,8 +79,8 @@ file_put_contents('library/HTMLPurifier.php', $htmlpurifier_c);
 
 $config_c = file_get_contents('library/HTMLPurifier/Config.php');
 $config_c = preg_replace(
-    '/var \$version = \'.+?\';/',
-    "var \$version = '$version';",
+    '/public \$version = \'.+?\';/',
+    "public \$version = '$version';",
     $config_c,
     1, $c
 );
