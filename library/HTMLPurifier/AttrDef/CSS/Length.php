@@ -29,7 +29,7 @@ class HTMLPurifier_AttrDef_CSS_Length extends HTMLPurifier_AttrDef
         $this->number_def = new HTMLPurifier_AttrDef_CSS_Number($non_negative);
     }
     
-    public function validate($length, $config, &$context) {
+    public function validate($length, $config, $context) {
         
         $length = $this->parseCDATA($length);
         if ($length === '') return false;

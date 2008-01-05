@@ -42,7 +42,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
      * Removes inline <style> tags from HTML, saves them for later use
      * @todo Extend to indicate non-text/css style blocks
      */
-    public function preFilter($html, $config, &$context) {
+    public function preFilter($html, $config, $context) {
         $html = preg_replace_callback('#<style(?:\s.*)?>(.+)</style>#isU', array($this, 'styleCallback'), $html);
         $style_blocks = $this->_styleMatches;
         $this->_styleMatches = array(); // reset
@@ -63,7 +63,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
      * @param $context Instance of HTMLPurifier_Context
      * @return Cleaned CSS
      */
-    public function cleanCSS($css, $config, &$context) {
+    public function cleanCSS($css, $config, $context) {
         $this->_tidy->parse($css);
         $css_definition = $config->getDefinition('CSS');
         foreach ($this->_tidy->css as &$decls) {

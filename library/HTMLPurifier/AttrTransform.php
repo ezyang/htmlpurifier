@@ -26,7 +26,7 @@ abstract class HTMLPurifier_AttrTransform
      * @param $context Mandatory HTMLPurifier_Context object
      * @returns Processed attribute array.
      */
-    abstract public function transform($attr, $config, &$context);
+    abstract public function transform($attr, $config, $context);
     
     /**
      * Prepends CSS properties to the style attribute, creating the

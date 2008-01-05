@@ -40,7 +40,7 @@ class HTMLPurifier_AttrDef_Integer extends HTMLPurifier_AttrDef
         $this->positive = $positive;
     }
     
-    public function validate($integer, $config, &$context) {
+    public function validate($integer, $config, $context) {
         
         $integer = $this->parseCDATA($integer);
         if ($integer === '') return false;

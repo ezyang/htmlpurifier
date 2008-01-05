@@ -18,7 +18,7 @@ class HTMLPurifier_AttrDef_CSS_Number extends HTMLPurifier_AttrDef
         $this->non_negative = $non_negative;
     }
     
-    public function validate($number, $config, &$context) {
+    public function validate($number, $config, $context) {
         
         $number = $this->parseCDATA($number);
         

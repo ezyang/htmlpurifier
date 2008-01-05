@@ -78,7 +78,7 @@ class HTMLPurifier_Generator
      * @param $config HTMLPurifier_Config object
      * @return Generated HTML
      */
-    public function generateFromTokens($tokens, $config, &$context) {
+    public function generateFromTokens($tokens, $config, $context) {
         $html = '';
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $this->_scriptFix   = $config->get('Output', 'CommentScriptContents');

@@ -32,7 +32,7 @@ abstract class HTMLPurifier_AttrDef
      * @param $config Mandatory HTMLPurifier_Config object.
      * @param $context Mandatory HTMLPurifier_AttrContext object.
      */
-    abstract public function validate($string, $config, &$context);
+    abstract public function validate($string, $config, $context);
     
     /**
      * Convenience method that parses a string as if it were CDATA.

@@ -38,7 +38,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         $this->factory = new HTMLPurifier_TokenFactory();
     }
     
-    public function tokenizeHTML($html, $config, &$context) {
+    public function tokenizeHTML($html, $config, $context) {
         
         $html = $this->normalize($html, $config, $context);
         
@@ -173,7 +173,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     /**
      * Wraps an HTML fragment in the necessary HTML
      */
-    protected function wrapHTML($html, $config, &$context) {
+    protected function wrapHTML($html, $config, $context) {
         $def = $config->getDefinition('HTML');
         $ret = '';
         

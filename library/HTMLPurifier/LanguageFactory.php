@@ -89,7 +89,7 @@ class HTMLPurifier_LanguageFactory
      * @param $config Instance of HTMLPurifier_Config
      * @param $context Instance of HTMLPurifier_Context
      */
-    public function create($config, &$context) {
+    public function create($config, $context) {
         
         // validate language code
         $code = $this->validator->validate(

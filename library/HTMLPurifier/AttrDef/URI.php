@@ -80,7 +80,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         $this->embedsResource = (bool) $embeds_resource;
     }
     
-    public function validate($uri, $config, &$context) {
+    public function validate($uri, $config, $context) {
         
         if ($config->get('URI', 'Disable')) return false;
         

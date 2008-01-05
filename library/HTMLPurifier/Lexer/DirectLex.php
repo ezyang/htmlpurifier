@@ -42,7 +42,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         return $matches[1] . htmlspecialchars($matches[2], ENT_COMPAT, 'UTF-8') . $matches[3];
     }
     
-    public function tokenizeHTML($html, $config, &$context) {
+    public function tokenizeHTML($html, $config, $context) {
         
         // special normalization for script tags without any armor
         // our "armor" heurstic is a < sign any number of whitespaces after
@@ -340,7 +340,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
      * @param $string Inside of tag excluding name.
      * @returns Assoc array of attributes.
      */
-    public function parseAttributeString($string, $config, &$context) {
+    public function parseAttributeString($string, $config, $context) {
         $string = (string) $string; // quick typecast
         
         if ($string == '') return array(); // no attributes

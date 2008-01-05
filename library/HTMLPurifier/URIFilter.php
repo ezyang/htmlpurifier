@@ -28,11 +28,11 @@ abstract class HTMLPurifier_URIFilter
      * Filter a URI object
      * @param &$uri Reference to URI object
      * @param $config Instance of HTMLPurifier_Config
-     * @param &$context Instance of HTMLPurifier_Context
+     * @param $context Instance of HTMLPurifier_Context
      * @return bool Whether or not to continue processing: false indicates
      *         URL is no good, true indicates continue processing. Note that
      *         all changes are committed directly on the URI object
      */
-    abstract public function filter(&$uri, $config, &$context);
+    abstract public function filter(&$uri, $config, $context);
     
 }

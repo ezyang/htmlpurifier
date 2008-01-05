@@ -24,7 +24,7 @@ abstract class HTMLPurifier_Strategy
      * @param $config Configuration options
      * @returns Processed array of token objects.
      */
-    abstract public function execute($tokens, $config, &$context);
+    abstract public function execute($tokens, $config, $context);
     
 }
 

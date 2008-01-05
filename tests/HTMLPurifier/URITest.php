@@ -23,21 +23,21 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
         $this->oldRegistry = HTMLPurifier_URISchemeRegistry::instance();
         generate_mock_once('HTMLPurifier_URIScheme');
         generate_mock_once('HTMLPurifier_URISchemeRegistry');
-        $registry =& HTMLPurifier_URISchemeRegistry::instance(
+        $registry = HTMLPurifier_URISchemeRegistry::instance(
           new HTMLPurifier_URISchemeRegistryMock()
         );
         return $registry;
     }
     
-    function &setUpSchemeMock($name) {
-        $registry =& $this->setUpSchemeRegistryMock();
+    function setUpSchemeMock($name) {
+        $registry = $this->setUpSchemeRegistryMock();
         $scheme_mock = new HTMLPurifier_URISchemeMock();
         $registry->setReturnValue('getScheme', $scheme_mock, array($name, '*', '*'));
         return $scheme_mock;
     }
     
     function setUpNoValidSchemes() {
-        $registry =& $this->setUpSchemeRegistryMock();
+        $registry = $this->setUpSchemeRegistryMock();
         $registry->setReturnValue('getScheme', false, array('*', '*', '*'));
     }
     
@@ -46,7 +46,7 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
     }
     
     function test_getSchemeObj() {
-        $scheme_mock =& $this->setUpSchemeMock('http');
+        $scheme_mock = $this->setUpSchemeMock('http');
         
         $uri = $this->createURI('http:');
         $scheme_obj = $uri->getSchemeObj($this->config, $this->context);
@@ -68,7 +68,7 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
     function test_getSchemaObj_defaultScheme() {
         $scheme = 'foobar';
         
-        $scheme_mock =& $this->setUpSchemeMock($scheme);
+        $scheme_mock = $this->setUpSchemeMock($scheme);
         $this->config->set('URI', 'DefaultScheme', $scheme);
         
         $uri = $this->createURI('hmm');

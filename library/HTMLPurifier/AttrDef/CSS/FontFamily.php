@@ -10,7 +10,7 @@ require_once 'HTMLPurifier/AttrDef.php';
 class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
 {
     
-    public function validate($string, $config, &$context) {
+    public function validate($string, $config, $context) {
         static $generic_names = array(
             'serif' => true,
             'sans-serif' => true,

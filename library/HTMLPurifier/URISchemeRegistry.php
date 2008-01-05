@@ -43,7 +43,7 @@ class HTMLPurifier_URISchemeRegistry
      * @note Pass a registry object $prototype with a compatible interface and
      *       the function will copy it and return it all further times.
      */
-    public static function &instance($prototype = null) {
+    public static function instance($prototype = null) {
         static $instance = null;
         if ($prototype !== null) {
             $instance = $prototype;
@@ -64,7 +64,7 @@ class HTMLPurifier_URISchemeRegistry
      * @param $config HTMLPurifier_Config object
      * @param $config HTMLPurifier_Context object
      */
-    public function &getScheme($scheme, $config, &$context) {
+    public function getScheme($scheme, $config, $context) {
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $null = null; // for the sake of passing by reference
         
@@ -90,8 +90,8 @@ class HTMLPurifier_URISchemeRegistry
      * @param $scheme Scheme name
      * @param $scheme_obj HTMLPurifier_URIScheme object
      */
-    public function register($scheme, &$scheme_obj) {
-        $this->schemes[$scheme] =& $scheme_obj;
+    public function register($scheme, $scheme_obj) {
+        $this->schemes[$scheme] = $scheme_obj;
     }
     
 }

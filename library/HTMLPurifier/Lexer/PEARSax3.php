@@ -30,7 +30,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
      */
     protected $tokens = array();
     
-    public function tokenizeHTML($string, $config, &$context) {
+    public function tokenizeHTML($string, $config, $context) {
         
         $this->tokens = array();
         

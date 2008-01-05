@@ -18,7 +18,7 @@ class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
         parent::__construct(true); // always embedded
     }
     
-    public function validate($uri_string, $config, &$context) {
+    public function validate($uri_string, $config, $context) {
         // parse the URI out of the string and then pass it onto
         // the parent object
         

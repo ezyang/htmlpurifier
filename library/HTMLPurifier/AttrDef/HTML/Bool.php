@@ -13,7 +13,7 @@ class HTMLPurifier_AttrDef_HTML_Bool extends HTMLPurifier_AttrDef
     
     public function __construct($name = false) {$this->name = $name;}
     
-    public function validate($string, $config, &$context) {
+    public function validate($string, $config, $context) {
         if (empty($string)) return false;
         return $this->name;
     }

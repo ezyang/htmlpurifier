@@ -32,7 +32,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
     }
     public $allow_empty = false;
     public $type = 'required';
-    public function validateChildren($tokens_of_children, $config, &$context) {
+    public function validateChildren($tokens_of_children, $config, $context) {
         // if there are no tokens, delete parent node
         if (empty($tokens_of_children)) return false;
         

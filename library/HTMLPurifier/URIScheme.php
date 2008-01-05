@@ -32,7 +32,7 @@ class HTMLPurifier_URIScheme
      * @param $context HTMLPurifier_Context object
      * @return Bool success or failure
      */
-    public function validate(&$uri, $config, &$context) {
+    public function validate(&$uri, $config, $context) {
         if ($this->default_port == $uri->port) $uri->port = null;
         return true;
     }

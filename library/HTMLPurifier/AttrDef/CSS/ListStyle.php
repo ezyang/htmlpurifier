@@ -22,7 +22,7 @@ class HTMLPurifier_AttrDef_CSS_ListStyle extends HTMLPurifier_AttrDef
         $this->info['list-style-image'] = $def->info['list-style-image'];
     }
     
-    public function validate($string, $config, &$context) {
+    public function validate($string, $config, $context) {
         
         // regular pre-processing
         $string = $this->parseCDATA($string);

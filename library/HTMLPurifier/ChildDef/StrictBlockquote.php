@@ -13,7 +13,7 @@ extends HTMLPurifier_ChildDef_Required
     public $allow_empty = true;
     public $type = 'strictblockquote';
     protected $init = false;
-    public function validateChildren($tokens_of_children, $config, &$context) {
+    public function validateChildren($tokens_of_children, $config, $context) {
         
         $def = $config->getHTMLDefinition();
         if (!$this->init) {

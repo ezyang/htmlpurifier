@@ -30,8 +30,8 @@ class HTMLPurifier_URI
      * @param $context Instance of HTMLPurifier_Context
      * @return Scheme object appropriate for validating this URI
      */
-    public function getSchemeObj($config, &$context) {
-        $registry =& HTMLPurifier_URISchemeRegistry::instance();
+    public function getSchemeObj($config, $context) {
+        $registry = HTMLPurifier_URISchemeRegistry::instance();
         if ($this->scheme !== null) {
             $scheme_obj = $registry->getScheme($this->scheme, $config, $context);
             if (!$scheme_obj) return false; // invalid scheme, clean it out
@@ -57,7 +57,7 @@ class HTMLPurifier_URI
      * @param $context Instance of HTMLPurifier_Context
      * @return True if validation/filtering succeeds, false if failure
      */
-    public function validate($config, &$context) {
+    public function validate($config, $context) {
         
         // validate host
         if (!is_null($this->host)) {

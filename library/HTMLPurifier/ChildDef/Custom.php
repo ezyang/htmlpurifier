@@ -61,7 +61,7 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
         
         $this->_pcre_regex = $reg;
     }
-    public function validateChildren($tokens_of_children, $config, &$context) {
+    public function validateChildren($tokens_of_children, $config, $context) {
         $list_of_children = '';
         $nesting = 0; // depth into the nest
         foreach ($tokens_of_children as $token) {

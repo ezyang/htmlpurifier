@@ -18,7 +18,7 @@ class HTMLPurifier_AttrValidator
      * @param $config Instance of HTMLPurifier_Config
      * @param $context Instance of HTMLPurifier_Context
      */
-    public function validateToken(&$token, &$config, &$context) {
+    public function validateToken(&$token, &$config, $context) {
             
         $definition = $config->getHTMLDefinition();
         $e =& $context->get('ErrorCollector', true);

@@ -33,7 +33,7 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
         $stack = $this->_collapseStack($stack); // do pre-parsing
         $this->basePathStack = $stack;
     }
-    public function filter(&$uri, $config, &$context) {
+    public function filter(&$uri, $config, $context) {
         if (is_null($this->base)) return true; // abort early
         if (
             $uri->path === '' && is_null($uri->scheme) &&

@@ -30,14 +30,14 @@ class HTMLPurifier_Filter
     /**
      * Pre-processor function, handles HTML before HTML Purifier 
      */
-    public function preFilter($html, $config, &$context) {
+    public function preFilter($html, $config, $context) {
         return $html;
     }
     
     /**
      * Post-processor function, handles HTML after HTML Purifier
      */
-    public function postFilter($html, $config, &$context) {
+    public function postFilter($html, $config, $context) {
         return $html;
     }
     

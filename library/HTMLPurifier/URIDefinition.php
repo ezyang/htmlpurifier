@@ -134,7 +134,7 @@ class HTMLPurifier_URIDefinition extends HTMLPurifier_Definition
         if (is_null($this->defaultScheme)) $this->defaultScheme = $config->get('URI', 'DefaultScheme');
     }
     
-    public function filter(&$uri, $config, &$context) {
+    public function filter(&$uri, $config, $context) {
         foreach ($this->filters as $name => $x) {
             $result = $this->filters[$name]->filter($uri, $config, $context);
             if (!$result) return false;

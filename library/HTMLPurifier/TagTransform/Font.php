@@ -36,7 +36,7 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
         '+4' => '300%'
     );
     
-    public function transform($tag, $config, &$context) {
+    public function transform($tag, $config, $context) {
         
         if ($tag->type == 'end') {
             $new_tag = $tag->copy();

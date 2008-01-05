@@ -20,7 +20,7 @@ class HTMLPurifier_AttrTransform_ImgSpace extends HTMLPurifier_AttrTransform {
         }
     }
     
-    public function transform($attr, $config, &$context) {
+    public function transform($attr, $config, $context) {
         
         if (!isset($attr[$this->attr])) return $attr;
         

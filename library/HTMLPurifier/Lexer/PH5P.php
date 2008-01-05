@@ -10,7 +10,7 @@ require_once 'HTMLPurifier/Lexer/DOMLex.php';
 
 class HTMLPurifier_Lexer_PH5P extends HTMLPurifier_Lexer_DOMLex {
     
-    public function tokenizeHTML($html, $config, &$context) {
+    public function tokenizeHTML($html, $config, $context) {
         $html = $this->normalize($html, $config, $context);
         $html = $this->wrapHTML( $html, $config, $context);
         $parser = new HTML5($html);

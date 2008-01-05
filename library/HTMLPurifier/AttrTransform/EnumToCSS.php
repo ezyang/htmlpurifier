@@ -36,7 +36,7 @@ class HTMLPurifier_AttrTransform_EnumToCSS extends HTMLPurifier_AttrTransform {
         $this->caseSensitive = (bool) $case_sensitive;
     }
     
-    public function transform($attr, $config, &$context) {
+    public function transform($attr, $config, $context) {
         
         if (!isset($attr[$this->attr])) return $attr;
         

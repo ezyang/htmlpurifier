@@ -16,7 +16,7 @@ class HTMLPurifier_AttrTransform_Length extends HTMLPurifier_AttrTransform
         $this->cssName = $css_name ? $css_name : $name;
     }
     
-    public function transform($attr, $config, &$context) {
+    public function transform($attr, $config, $context) {
         if (!isset($attr[$this->name])) return $attr;
         $length = $this->confiscateAttr($attr, $this->name);
         if(ctype_digit($length)) $length .= 'px';

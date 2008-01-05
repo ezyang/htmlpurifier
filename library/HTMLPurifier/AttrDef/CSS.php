@@ -17,7 +17,7 @@ require_once 'HTMLPurifier/CSSDefinition.php';
 class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
 {
     
-    public function validate($css, $config, &$context) {
+    public function validate($css, $config, $context) {
         
         $css = $this->parseCDATA($css);
         

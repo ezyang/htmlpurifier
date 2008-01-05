@@ -21,7 +21,7 @@ class HTMLPurifier_AttrDef_CSS_Percentage extends HTMLPurifier_AttrDef
         $this->number_def = new HTMLPurifier_AttrDef_CSS_Number($non_negative);
     }
     
-    public function validate($string, $config, &$context) {
+    public function validate($string, $config, $context) {
         
         $string = $this->parseCDATA($string);
         

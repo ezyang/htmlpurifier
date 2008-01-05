@@ -56,7 +56,7 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
         $this->percentage = new HTMLPurifier_AttrDef_CSS_Percentage();
     }
     
-    public function validate($string, $config, &$context) {
+    public function validate($string, $config, $context) {
         $string = $this->parseCDATA($string);
         $bits = explode(' ', $string);
         

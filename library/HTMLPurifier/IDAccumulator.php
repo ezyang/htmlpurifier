@@ -26,7 +26,7 @@ class HTMLPurifier_IDAccumulator
      * @param $context Instance of HTMLPurifier_Context
      * @return Fully initialized HTMLPurifier_IDAccumulator
      */
-    public static function build($config, &$context) {
+    public static function build($config, $context) {
         $id_accumulator = new HTMLPurifier_IDAccumulator();
         $id_accumulator->load($config->get('Attr', 'IDBlacklist'));
         return $id_accumulator;

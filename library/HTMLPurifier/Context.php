@@ -69,7 +69,7 @@ class HTMLPurifier_Context
      * Loads a series of variables from an associative array
      * @param $context_array Assoc array of variables to load
      */
-    public function loadArray(&$context_array) {
+    public function loadArray($context_array) {
         foreach ($context_array as $key => $discard) {
             $this->register($key, $context_array[$key]);
         }

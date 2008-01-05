@@ -28,7 +28,7 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
         $this->info['font-family']  = $def->info['font-family'];
     }
     
-    public function validate($string, $config, &$context) {
+    public function validate($string, $config, $context) {
         
         static $system_fonts = array(
             'caption' => true,

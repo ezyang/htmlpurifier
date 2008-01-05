@@ -12,7 +12,6 @@ amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
 3.0 release [Go PHP5!]
- - Convert all &$context calls to $context, as PHP5 passes objects by value
  - Allow extracted CSS blocks to have a bounding selector prepended to all
    of their declarations. There are two types: a global type and a HTML5
    scoped type. This will allow for <style> while minimizing the risk of
@@ -61,10 +60,10 @@ afraid to cast your vote for the next feature to be implemented!
     - Lots of documentation and samples
 
 Ongoing
+ - More refactoring to take advantage of PHP5's facilities 
  - Lots of profiling, make it faster!
  - Plugins for major CMSes (COMPLEX)
     - phpBB
-    - eFiction
     - more! (look for ones that use WYSIWYGs)
  - Complete basic smoketests
 
@@ -75,6 +74,8 @@ AutoFormat
 
 Unknown release (on a scratch-an-itch basis)
  # CHMOD install script for PEAR installs
+ # Convert multitest to use the XML format
+ # Make test/index.php have better cli flags
  ? Have 'lang' attribute be checked against official lists, achieved by
    encoding all characters that have string entity equivalents
  - Abstract ChildDef_BlockQuote to work with all elements that only

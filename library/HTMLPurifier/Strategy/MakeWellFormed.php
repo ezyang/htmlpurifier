@@ -31,7 +31,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     protected $inputTokens, $inputIndex, $outputTokens, $currentNesting,
         $currentInjector, $injectors;
     
-    public function execute($tokens, $config, &$context) {
+    public function execute($tokens, $config, $context) {
         
         $definition = $config->getHTMLDefinition();
         
@@ -280,7 +280,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         return $result;
     }
     
-    function processToken($token, $config, &$context) {
+    function processToken($token, $config, $context) {
         if (is_array($token)) {
             // the original token was overloaded by an injector, time
             // to some fancy acrobatics

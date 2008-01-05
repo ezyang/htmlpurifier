@@ -1,5 +1,14 @@
 <?php
 
+/** @file
+ * Multiple PHP Versions test
+ * 
+ * This file tests HTML Purifier in all versions of PHP. It requires a
+ * script called phpv that takes an extra argument, $version, before
+ * the filename, is required. Contact me if you'd like to set up a
+ * similar script.
+ */
+
 $versions_to_test = array(
     'FLUSH',
     '5.0.0',

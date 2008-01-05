@@ -20,7 +20,7 @@ class HTMLPurifier_AttrDef_CSS_Border extends HTMLPurifier_AttrDef
         $this->info['border-top-color'] = $def->info['border-top-color'];
     }
     
-    public function validate($string, $config, &$context) {
+    public function validate($string, $config, $context) {
         $string = $this->parseCDATA($string);
         // we specifically will not support rgb() syntax with spaces
         $bits = explode(' ', $string);

@@ -64,7 +64,7 @@ abstract class HTMLPurifier_Injector
      * @param $context Instance of HTMLPurifier_Context
      * @return Boolean false if success, string of missing needed element/attribute if failure
      */
-    public function prepare($config, &$context) {
+    public function prepare($config, $context) {
         $this->htmlDefinition = $config->getHTMLDefinition();
         // perform $needed checks
         foreach ($this->needed as $element => $attributes) {

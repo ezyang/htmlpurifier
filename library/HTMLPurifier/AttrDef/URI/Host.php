@@ -25,7 +25,7 @@ class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
         $this->ipv6 = new HTMLPurifier_AttrDef_URI_IPv6();
     }
     
-    public function validate($string, $config, &$context) {
+    public function validate($string, $config, $context) {
         $length = strlen($string);
         if ($string === '') return '';
         if ($length > 1 && $string[0] === '[' && $string[$length-1] === ']') {

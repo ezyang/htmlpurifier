@@ -19,7 +19,7 @@ abstract class HTMLPurifier_TagTransform
      * @param $config Mandatory HTMLPurifier_Config object
      * @param $context Mandatory HTMLPurifier_Context object
      */
-    abstract public function transform($tag, $config, &$context);
+    abstract public function transform($tag, $config, $context);
     
     /**
      * Prepends CSS properties to the style attribute, creating the

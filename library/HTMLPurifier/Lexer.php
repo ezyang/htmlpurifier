@@ -263,7 +263,7 @@ class HTMLPurifier_Lexer
      * @param $string String HTML.
      * @return HTMLPurifier_Token array representation of HTML.
      */
-    public function tokenizeHTML($string, $config, &$context) {
+    public function tokenizeHTML($string, $config, $context) {
         trigger_error('Call to abstract class', E_USER_ERROR);
     }
     
@@ -311,7 +311,7 @@ class HTMLPurifier_Lexer
      * encoding, extracting bits, and other good stuff.
      * @todo Consider making protected
      */
-    public function normalize($html, $config, &$context) {
+    public function normalize($html, $config, $context) {
         
         // extract body from document if applicable
         if ($config->get('Core', 'ConvertDocumentToFragment')) {
