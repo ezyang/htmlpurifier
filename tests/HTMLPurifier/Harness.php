@@ -40,6 +40,13 @@ class HTMLPurifier_Harness extends UnitTestCase
     }
     
     /**
+     * Normalizes a string to Unix (\n) endings
+     */
+    function normalize(&$string) {
+        $string = str_replace(array("\r\n", "\r"), "\n", $string);
+    }
+    
+    /**
      * If $expect is false, ignore $result and check if status failed.
      * Otherwise, check if $status if true and $result === $expect.
      * @param $status Boolean status

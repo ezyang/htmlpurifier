@@ -73,6 +73,7 @@ class HTMLPurifier_ConfigSchema {
         $this->defineNamespace('CSS', 'Configuration regarding allowed CSS.');
         $this->defineNamespace('AutoFormat', 'Configuration for activating auto-formatting functionality (also known as <code>Injector</code>s)');
         $this->defineNamespace('AutoFormatParam', 'Configuration for customizing auto-formatting functionality');
+        $this->defineNamespace('Filter', 'Configuration for filters');
         $this->defineNamespace('Output', 'Configuration relating to the generation of (X)HTML.');
         $this->defineNamespace('Cache', 'Configuration for DefinitionCache and related subclasses.');
         $this->defineNamespace('Test', 'Developer testing configuration for our unit tests.');

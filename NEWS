@@ -21,7 +21,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! New HTMLPurifier_Filter_ExtractStyleBlocks for extracting <style> from
   documents and cleaning their contents up. Requires the CSSTidy library
   <http://csstidy.sourceforge.net/>. You can access the blocks with the
-  'StyleBlocks' Context variable ($purifier->context->get('StyleBlocks'))
+  'StyleBlocks' Context variable ($purifier->context->get('StyleBlocks')).
+  The output CSS can also be "scoped" for a specific element, use:
+  %Filter.ExtractStyleBlocksScope
 ! Experimental support for some proprietary CSS attributes allowed:
   opacity (and all of the browser-specific equivalents) and scrollbar colors.
   Enable by setting %CSS.Proprietary to true.
