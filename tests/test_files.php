@@ -110,6 +110,7 @@ $test_files[] = 'HTMLPurifier/Strategy/ValidateAttributesTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/ValidateAttributes_IDTest.php';
 $test_files[] = 'HTMLPurifier/Strategy/ValidateAttributes_TidyTest.php';
 $test_files[] = 'HTMLPurifier/TagTransformTest.php';
+$test_files[] = 'HTMLPurifier/TokenFactoryTest.php';
 $test_files[] = 'HTMLPurifier/TokenTest.php';
 $test_files[] = 'HTMLPurifier/URIDefinitionTest.php';
 $test_files[] = 'HTMLPurifier/URIFilter/DisableExternalTest.php';
@@ -121,10 +122,6 @@ $test_files[] = 'HTMLPurifier/URISchemeRegistryTest.php';
 $test_files[] = 'HTMLPurifier/URISchemeTest.php';
 $test_files[] = 'HTMLPurifier/URITest.php';
 $test_files[] = 'HTMLPurifierTest.php';
-
-if (version_compare(PHP_VERSION, '5', '>=')) {
-    $test_files[] = 'HTMLPurifier/TokenFactoryTest.php';
-}
 
 // ConfigDoc auxiliary library
 

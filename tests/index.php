@@ -6,48 +6,10 @@
 define('HTMLPurifierTest', 1);
 define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
 
+require_once 'common.php';
+
+// clean out cache if necessary
 if (isset($_GET['flush'])) shell_exec('php ../maintenance/flush-definition-cache.php');
-
-// wishlist: automated calling of this file from multiple PHP versions so we
-// don't have to constantly switch around
-
-// default settings (protect against register_globals)
-$GLOBALS['HTMLPurifierTest'] = array();
-$GLOBALS['HTMLPurifierTest']['PEAR'] = false; // do PEAR tests
-$GLOBALS['HTMLPurifierTest']['PH5P'] = version_compare(PHP_VERSION, "5", ">=") && class_exists('DOMDocument');
-$simpletest_location = 'simpletest/'; // reasonable guess
-$csstidy_location = false;
-
-// load SimpleTest
-if (file_exists('../conf/test-settings.php')) include '../conf/test-settings.php';
-if (file_exists('../test-settings.php')) include '../test-settings.php';
-require_once $simpletest_location . 'unit_tester.php';
-require_once $simpletest_location . 'reporter.php';
-require_once $simpletest_location . 'mock_objects.php';
-
-if ($csstidy_location !== false) {
-    require_once $csstidy_location . 'class.csstidy.php';
-    require_once $csstidy_location . 'class.csstidy_print.php';
-}
-
-error_reporting(E_ALL | E_STRICT); // after SimpleTest is loaded, turn on compile time errors
-
-// load Debugger
-require_once 'HTMLPurifier/SimpleTest/Reporter.php';
-require_once 'Debugger.php';
-
-// load convenience functions
-require_once 'generate_mock_once.func.php';
-require_once 'path2class.func.php';
-require_once 'tally_errors.func.php'; // compat
-
-// initialize PEAR (optional)
-if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {
-    // if PEAR is true, we assume that there's no need to
-    // add it to the path
-    set_include_path($GLOBALS['HTMLPurifierTest']['PEAR'] . PATH_SEPARATOR .
-        get_include_path());
-}
 
 // initialize and load HTML Purifier
 // use ?standalone to load the alterative standalone stub
