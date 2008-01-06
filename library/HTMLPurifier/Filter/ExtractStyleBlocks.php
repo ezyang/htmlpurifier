@@ -124,12 +124,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                 $selector = trim($selector);
                 if ($selector === '') continue; // should not happen
                 if ($selector[0] === '+') {
-                    while ($selector !== '' && $selector[0] === '+') {
-                        // we need to perform this multiple times
-                        // to prevent +++ from getting through
-                        $selector = trim(substr($selector, 1));
-                    }
-                    if ($selector === '') continue;
+                    if ($selector !== '' && $selector[0] === '+') continue;
                 }
                 if (!empty($scopes)) {
                     $new_selector = array(); // because multiple ones are possible
@@ -160,8 +155,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
         $this->_tidy->import = array();
         $this->_tidy->charset = null;
         $this->_tidy->namespace = null;
-        $printer = new csstidy_print($this->_tidy);
-        $css = $printer->plain();
+        $css = $this->_tidy->print->plain();
         // we are going to escape any special characters <>& to ensure
         // that no funny business occurs (i.e. </style> in a font-family prop).
         if ($config->get('Filter', 'ExtractStyleBlocksEscaping')) {

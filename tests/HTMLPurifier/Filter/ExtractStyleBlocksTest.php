@@ -129,18 +129,12 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     
     function test_cleanCSS_scopeWithNaughtySelector() {
         $this->config->set('Filter', 'ExtractStyleBlocksScope', '#foo');
-        $this->assertCleanCSS(
-            "  + p {\ntext-indent:1em;\n}",
-            "#foo p {\ntext-indent:1em;\n}"
-        );
+        $this->assertCleanCSS("  + p {\ntext-indent:1em;\n}", '');
     }
     
     function test_cleanCSS_scopeWithMultipleNaughtySelectors() {
         $this->config->set('Filter', 'ExtractStyleBlocksScope', '#foo');
-        $this->assertCleanCSS(
-            "  ++ ++ p {\ntext-indent:1em;\n}",
-            "#foo p {\ntext-indent:1em;\n}"
-        );
+        $this->assertCleanCSS("  ++ ++ p {\ntext-indent:1em;\n}", '');
     }
     
     function test_cleanCSS_scopeWithCommas() {
