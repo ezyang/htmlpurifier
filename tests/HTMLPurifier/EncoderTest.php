@@ -35,7 +35,8 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
         // UTF-8 means that we don't touch it
         $this->assertIdentical(
             HTMLPurifier_Encoder::convertToUTF8("\xF6", $config, $context),
-            "\xF6" // this is invalid
+            "\xF6", // this is invalid
+            'Expected identical [Binary: F6]'
         );
         $this->assertNoErrors();
         
@@ -80,7 +81,8 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
         // Now it gets converted
         $this->assertIdentical(
             HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
-            "\xF6"
+            "\xF6",
+            'Expected identical [Binary: F6]'
         );
         
         if (function_exists('iconv')) {
@@ -98,7 +100,8 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
         ));
         $this->assertIdentical(
             HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
-            "\xF6"
+            "\xF6",
+            'Expected identical [Binary: F6]'
         );
         
         $this->assertIdentical(

@@ -17,6 +17,13 @@ $simpletest_location = '/path/to/simpletest/';
 // Where is CSSTidy located?
 $csstidy_location    = '/path/to/csstidy/';
 
+// For tests/multitest.php, which versions to test?
+$versions_to_test    = array();
+
+// For tests/multitest.php, what is the multi-version executable? It must
+// accept an extra parameter (version number) before all other arguments
+$phpv = 'phpv';
+
 // How many times should profiling scripts iterate over the function? More runs 
 // means more accurate results, but they'll take longer to perform.
 $GLOBALS['HTMLPurifierTest']['Runs'] = 2;

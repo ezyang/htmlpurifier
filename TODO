@@ -68,8 +68,6 @@ AutoFormat
 
 Unknown release (on a scratch-an-itch basis)
  # CHMOD install script for PEAR installs
- # Convert multitest to use the XML format
- # Make test/index.php have better cli flags
  ? Have 'lang' attribute be checked against official lists, achieved by
    encoding all characters that have string entity equivalents
  - Abstract ChildDef_BlockQuote to work with all elements that only

@@ -29,6 +29,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   Enable by setting %CSS.Proprietary to true.
 - Colors missing # but in hex form will be corrected
 - CSS Number algorithm improved
+- Unit testing and multi-testing now on steroids: command lines,
+  XML output, and other goodies now added.
 . Unit tests for Injector improved
 . New classes:
   + HTMLPurifier_AttrDef_CSS_AlphaValue

@@ -3,27 +3,33 @@
 class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
 {
     
-    function paintHeader($test_name) {
+    protected $ac;
+    
+    public function __construct($encoding, $ac) {
+        $this->ac = $ac;
+        parent::HTMLReporter($encoding);
+    }
+    
+    public function paintHeader($test_name) {
         parent::paintHeader($test_name);
-        $test_file = $GLOBALS['HTMLPurifierTest']['File'];
 ?>
 <form action="" method="get" id="select">
     <select name="f">
-        <option value="" style="font-weight:bold;"<?php if(!$test_file) {echo ' selected';} ?>>All Tests</option>
+        <option value="" style="font-weight:bold;"<?php if(!$this->ac['file']) {echo ' selected';} ?>>All Tests</option>
         <?php foreach($GLOBALS['HTMLPurifierTest']['Files'] as $file) { ?>
             <option value="<?php echo $file ?>"<?php
-                if ($test_file == $file) echo ' selected';
+                if ($this->ac['file'] == $file) echo ' selected';
             ?>><?php echo $file ?></option>
         <?php } ?>
     </select>
-    <input type="checkbox" name="standalone" title="Standalone version?" <?php if(isset($_GET['standalone'])) {echo 'checked="checked" ';} ?>/>
+    <input type="checkbox" name="standalone" title="Standalone version?" <?php if($this->ac['standalone']) {echo 'checked="checked" ';} ?>/>
     <input type="submit" value="Go">
 </form>
 <?php
         flush();
     }
     
-    function _getCss() {
+    public function _getCss() {
         $css = parent::_getCss();
         $css .= '
         #select {position:absolute;top:0.2em;right:0.2em;}

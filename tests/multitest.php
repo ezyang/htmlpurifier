@@ -3,49 +3,77 @@
 /** @file
  * Multiple PHP Versions test
  * 
- * This file tests HTML Purifier in all versions of PHP. It requires a
- * script called phpv that takes an extra argument, $version, before
- * the filename, is required. Contact me if you'd like to set up a
- * similar script.
+ * This file tests HTML Purifier in all versions of PHP. Arguments
+ * are specified like --arg=opt, allowed arguments are:
+ *   - exclude-normal, excludes normal tests
+ *   - exclude-standalone, excludes standalone tests
+ *   - file (f), specifies a single file to test for all versions
+ *   - xml, if specified output is XML
+ *   - quiet (q), if specified no informative messages are enabled (please use
+ *     this if you're outputting XML)
+ * 
+ * @note
+ *   It requires a script called phpv that takes an extra argument (the
+ *   version number of PHP) before all other arguments. Contact me if you'd
+ *   like to set up a similar script. The name of the script can be
+ *   edited with $phpv
+ * 
+ * @note
+ *   Also, configuration must be set up with a variable called 
+ *   $versions_to_test specifying version numbers to pass to $phpv
  */
 
-$versions_to_test = array(
-    'FLUSH',
-    '5.0.0',
-    '5.0.1',
-    '5.0.2',
-    '5.0.3',
-    '5.0.4',
-    '5.0.5',
-    '5.1.0',
-    '5.1.1',
-    '5.1.2',
-    '5.1.3',
-    '5.1.4',
-    // '5.1.5', // zip appears to be missing
-    '5.1.6',
-    '5.2.0',
-    '5.2.1',
-    '5.2.2',
-    '5.2.3',
-    '5.2.4',
-    '5.2.5',
-    '5.3.0-dev',
-    // '6.0.0-dev',
-);
+define('HTMLPurifierTest', 1);
+require_once 'common.php';
 
-echo str_repeat('-', 70) . "\n";
-echo "HTML Purifier\n";
-echo "Multiple PHP Versions Test\n\n";
-
-passthru("php ../maintenance/merge-library.php");
-
-foreach ($versions_to_test as $version) {
-    if ($version === 'FLUSH') {
-        shell_exec('php ../maintenance/flush-definition-cache.php');
-        continue;
-    }
-    passthru("phpv $version index.php");
-    passthru("phpv $version index.php standalone");
-    echo "\n\n";
+if (!SimpleReporter::inCli()) {
+    echo 'Multitest only available from command line';
+    exit;
 }
+
+$AC = array(); // parameters
+$AC['exclude-normal'] = false;
+$AC['exclude-standalone'] = false;
+$AC['file'] = '';
+$AC['xml'] = false;
+$AC['quiet'] = false;
+$aliases = array(
+    'f' => 'file',
+    'q' => 'quiet',
+);
+htmlpurifier_parse_args($AC, $aliases);
+
+shell_exec("php ../maintenance/merge-library.php");
+shell_exec('php ../maintenance/flush-definition-cache.php');
+
+$test = new TestSuite('HTML Purifier Multiple Versions Test');
+$file = '';
+if ($AC['file']) {
+    $test_files = array();
+    require 'test_files.php';
+    $test_files_lookup = array_flip($test_files);
+    if (isset($test_files_lookup[$AC['file']])) {
+        $file = '--file=' . $AC['file'];
+    } else {
+        echo "Invalid file passed\n";
+        exit;
+    }
+}
+foreach ($versions_to_test as $version) {
+    $flush = '';
+    if (is_array($version)) {
+        $version = $version[0];
+        $flush = '--flush';
+    }
+    if (!$AC['exclude-normal'])     $test->addTestCase(new CliTestCase("$phpv $version index.php --xml $flush $file", $AC['quiet']));
+    if (!$AC['exclude-standalone']) $test->addTestCase(new CliTestCase("$phpv $version index.php --xml --standalone $file", $AC['quiet']));
+}
+
+if ($AC['xml']) {
+    $reporter = new XmlReporter();
+} else {
+    $reporter = new TextReporter();
+}
+$test->run($reporter);
+
+shell_exec('php ../maintenance/flush-definition-cache.php');

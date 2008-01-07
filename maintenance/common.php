@@ -1,7 +1,5 @@
 <?php
 
-require_once 'compat-function-file-put-contents.php';
-
 function assertCli() {
     if (php_sapi_name() != 'cli' && !getenv('PHP_IS_CLI')) {
         echo 'Script cannot be called from web-browser (if you are calling via cli,

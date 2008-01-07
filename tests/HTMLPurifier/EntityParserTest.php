@@ -69,7 +69,7 @@ class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
             $this->assertIdentical(
                 $this->EntityParser->substituteNonSpecialEntities($string),
                 $expect,
-                $arg[0] . ': %s'
+                'Identical expectation [Hex: '. dechex($arg[0]) .']'
             );
         }
         
