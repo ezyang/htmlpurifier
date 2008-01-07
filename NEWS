@@ -9,14 +9,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-3.0.0, unknown release date
+3.0.0, released 2008-01-06
 # HTML Purifier is PHP 5 only! The 2.1.x branch will be maintained
   until PHP 4 is completely deprecated, but no new features will be added
   to it.
   + Visibility declarations added
   + Constructor methods renamed to __construct()
   + PHP4 reference cruft removed (in progress)
-! CSS properties are no case-insensitive
+! CSS properties are now case-insensitive
 ! DefinitionCacheFactory now can register new implementations
 ! New HTMLPurifier_Filter_ExtractStyleBlocks for extracting <style> from
   documents and cleaning their contents up. Requires the CSSTidy library

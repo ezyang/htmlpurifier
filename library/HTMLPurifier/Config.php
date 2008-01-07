@@ -44,7 +44,7 @@ class HTMLPurifier_Config
     /**
      * HTML Purifier's version
      */
-    public $version = '2.1.3';
+    public $version = '3.0.0';
     
     /**
      * Bool indicator whether or not to automatically finalize 
@@ -490,5 +490,6 @@ class HTMLPurifier_Config
     }
     
 }
+
 
 

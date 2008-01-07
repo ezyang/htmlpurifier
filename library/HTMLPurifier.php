@@ -1,7 +1,6 @@
 <?php
 
-/*!
- * @mainpage
+/*! @mainpage
  * 
  * HTML Purifier is an HTML filter that will take an arbitrary snippet of
  * HTML and rigorously test, validate and filter it into a version that
@@ -22,8 +21,8 @@
  */
 
 /*
-    HTML Purifier 2.1.3 - Standards Compliant HTML Filtering
-    Copyright (C) 2006-2007 Edward Z. Yang
+    HTML Purifier 3.0.0 - Standards Compliant HTML Filtering
+    Copyright (C) 2006-2008 Edward Z. Yang
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -83,7 +82,7 @@ since 2.0.0.
 class HTMLPurifier
 {
     
-    public $version = '2.1.3';
+    public $version = '3.0.0';
     
     public $config;
     public $filters = array();
@@ -230,4 +229,5 @@ class HTMLPurifier
     
     
 }
+
 

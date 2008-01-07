@@ -1,6 +1,10 @@
-Stability release 2.1.3 fixes a slew of minor bugs found in HTML Purifier,
-and also includes some internal code enhancements and refactorings.
-Notably, tests/multitest.php automates testing in multiple versions, 
-fatal AttrDef_URI_Email error fixed, blockquote contents are more lenient
-in HTML 4.01 Strict and fatal errors involving ID tags in img tags were
-fixed.
+Release 3.0.0 is the first release of 2008 and also HTML Purifier's first
+PHP 5 only release. The 2.1 series will still be supported for bug and
+security fixes, but will not get new features. This release a number of
+improvements in CSS handling, including the filter
+HTMLPurifier_Filter_ExtractStyleBlocks which integrates HTML Purifier with
+CSSTidy for cleaning style sheets, contains experimental support for
+proprietary CSS properties with %CSS.Proprietary, case-insensitive
+CSS properties, and more lenient hexadecimal color codes. Also, all code
+has been upgraded to full PHP 5 which is E_STRICT clean for all versions
+of PHP 5 (including the 5.0 series).
