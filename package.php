@@ -18,7 +18,7 @@ $pkg->setOptions(
     )
 );
 
-$pkg->setPackage('HTMLPurifier3');
+$pkg->setPackage('HTMLPurifier');
 $pkg->setLicense('LGPL', 'http://www.gnu.org/licenses/lgpl.html');
 $pkg->setSummary('Standards-compliant HTML filter');
 $pkg->setDescription(
@@ -30,7 +30,7 @@ $pkg->setDescription(
 
 $pkg->addMaintainer('lead', 'ezyang', 'Edward Z. Yang', 'admin@htmlpurifier.org', 'yes');
 
-$version = file_get_contents('VERSION');
+$version = trim(file_get_contents('VERSION'));
 $api_version = substr($version, 0, strrpos($version, '.'));
 
 $pkg->setChannel('htmlpurifier.org');

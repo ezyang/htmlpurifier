@@ -1,6 +1,6 @@
 <?php
 
-function svn_info($dir) {
+function my_svn_info($dir) {
     $raw = explode("\n", shell_exec("svn info $dir"));
     $svn_info = array();
     foreach ($raw as $r) {
