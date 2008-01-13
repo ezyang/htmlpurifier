@@ -23,6 +23,6 @@ require_once(dirname(__FILE__) . "/../bbcode/bbcode.php");
  * legacy markup into HTML.
  */
 function phorum_htmlpurifier_migrate($data) {
-    return phorum_bb_code($data); // bbcode's 'format' hook
+    return phorum_mod_bbcode_format($data); // bbcode's 'format' hook
 }
 

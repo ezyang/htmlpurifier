@@ -46,7 +46,7 @@ function phorum_htmlpurifier_migrate_sigs($offset) {
         $fake_data = array(array("author"=>"", "email"=>"", "subject"=>"", 'body' => $sig));
         list($fake_message) = phorum_htmlpurifier_migrate($fake_data);
         $user['signature'] = $fake_message['body'];
-        if (!phorum_user_save($user)) {
+        if (!phorum_api_user_save($user)) {
             exit('Error while saving user data');
         }
     }
@@ -55,17 +55,7 @@ function phorum_htmlpurifier_migrate_sigs($offset) {
     // query for highest ID in database
     $type = $PHORUM['DBCONFIG']['type'];
     $sql = "select MAX(user_id) from {$PHORUM['user_table']}";
-    if ($type == 'mysql') {
-        $conn = phorum_db_mysql_connect();
-        $res = mysql_query($sql, $conn);
-        $row = mysql_fetch_row($res);
-    } elseif ($type == 'mysqli') {
-        $conn = phorum_db_mysqli_connect();
-        $res = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_row($res);
-    } else {
-        exit('Unrecognized database!');
-    }
+    $row = phorum_db_interact(DB_RETURN_ROW, $sql);
     $top_id = (int) $row[0];
     
     $offset += $increment;

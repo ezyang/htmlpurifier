@@ -81,7 +81,7 @@ function phorum_htmlpurifier_format($data)
                 $fake_data[$message_id] = $message;
                 $fake_data = phorum_htmlpurifier_migrate($fake_data);
                 $body = $fake_data[$message_id]['body'];
-                $body = str_replace("<phorum break>", '', $body);
+                $body = str_replace("<phorum break>\n", "\n", $body);
                 $updated_message['body'] = $body; // save it in
                 $body .= $signature . $edit_message; // add it back in
             } else {
@@ -121,7 +121,7 @@ function phorum_htmlpurifier_format($data)
 }
 
 // -----------------------------------------------------------------------
-// This is fragile code, copied from read.php:359. It will break if
+// This is fragile code, copied from read.php:596 (Phorum 5.2.6). It will break if
 // that is changed
 
 /**
@@ -147,9 +147,9 @@ function phorum_htmlpurifier_generate_editmessage($row) {
     $editmessage = '';
     if(isset($row['meta']['edit_count']) && $row['meta']['edit_count'] > 0) {
         $editmessage = str_replace ("%count%", $row['meta']['edit_count'], $PHORUM["DATA"]["LANG"]["EditedMessage"]);
-        $editmessage = str_replace ("%lastedit%", phorum_date($PHORUM["short_date"],$row['meta']['edit_date']),  $editmessage);
+        $editmessage = str_replace ("%lastedit%", phorum_date($PHORUM["short_date_time"],$row['meta']['edit_date']),  $editmessage);
         $editmessage = str_replace ("%lastuser%", $row['meta']['edit_username'],  $editmessage);
-        $editmessage="\n\n\n\n$editmessage";
+        $editmessage = "\n\n\n\n$editmessage";
     }
     return $editmessage;
 }
@@ -166,7 +166,10 @@ function phorum_htmlpurifier_remove_sig_and_editmessage(&$row) {
     // we must not process the signature or editmessage
     $signature = phorum_htmlpurifier_generate_sig($row);
     $editmessage = phorum_htmlpurifier_generate_editmessage($row);
-    $row['body'] = strtr($row['body'], array($signature => '', $editmessage => ''));
+    $replacements = array();
+    if ($signature) $replacements[str_replace("\n", "<phorum break>\n", $signature)] = '';
+    if ($editmessage) $replacements[str_replace("\n", "<phorum break>\n", $editmessage)] = '';
+    $row['body'] = strtr($row['body'], $replacements);
     return array($signature, $editmessage);
 }
 
@@ -174,7 +177,7 @@ function phorum_htmlpurifier_remove_sig_and_editmessage(&$row) {
  * Indicate that data is fully HTML and not from migration, invalidate
  * previous caches
  * @note This function used to generate the actual cache entries, but
- * since there's data missing that must be deferred to the first read
+ *       since there's data missing that must be deferred to the first read
  */
 function phorum_htmlpurifier_posting($message) {
     $PHORUM = $GLOBALS["PHORUM"];
@@ -190,7 +193,8 @@ function phorum_htmlpurifier_quote($array) {
     $PHORUM = $GLOBALS["PHORUM"];
     $purifier =& HTMLPurifier::getInstance();
     $text = $purifier->purify($array[1]);
-    return "<blockquote cite=\"$array[0]\">\n$text\n</blockquote>";
+    $source = htmlspecialchars($array[0]);
+    return "<blockquote cite=\"$source\">\n$text\n</blockquote>";
 }
 
 /**

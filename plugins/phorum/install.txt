@@ -23,11 +23,5 @@ process may take a long time. After installing the HTML Purifier module and
 then configuring 'migrate.php', navigate to Settings and click 'Migrate
 Signatures' to migrate all user signatures.
 
-The version of HTML Purifier bundled with is a custom modified 2.0.1.
-Do not attempt to replace it with a version equal to or less than
-downloaded from the HTML Purifier website: the module will combust
-spectacularly. (Greater versions, however, are okay, because the changes
-made to accomodate this module have been committed to the trunk).
-
 Visit HTML Purifier at <http://htmlpurifier.org/>. May the force
 be with you.
