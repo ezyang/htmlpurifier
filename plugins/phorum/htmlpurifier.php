@@ -265,7 +265,7 @@ function phorum_htmlpurifier_editor_after_subject() {
     // don't show this message if it's a WYSIWYG editor, since it will
     // then be handled automatically
     if (!empty($GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'])) return;
-    ?><tr><td colspan="2" style="padding:1em 0.3em;" class="htmlpurifier-help">
+    ?><div class="htmlpurifier-help">
     <p>
         <strong>HTML input</strong> is enabled. Make sure you escape all HTML and
         angled brackets with <code>&amp;lt;</code> and <code>&amp;gt;</code>.
@@ -301,6 +301,6 @@ function phorum_htmlpurifier_editor_after_subject() {
         Power users, you can hide this notice with:
         <pre>.htmlpurifier-help {display:none;}</pre>
     </p>
-    </td></tr><?php
+    </div><?php
 }
 
