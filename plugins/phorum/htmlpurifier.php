@@ -17,8 +17,7 @@
  * administrators who need to edit other people's comments may be at
  * risk for some nasty attacks.
  * 
- * Tested with Phorum 5.1.22. This module will almost definitely need
- * to be upgraded when Phorum 6 rolls around.
+ * Tested with Phorum 5.2.6.
  */
 
 // Note: Cache data is base64 encoded because Phorum insists on flinging
@@ -121,8 +120,8 @@ function phorum_htmlpurifier_format($data)
 }
 
 // -----------------------------------------------------------------------
-// This is fragile code, copied from read.php:596 (Phorum 5.2.6). It will break if
-// that is changed
+// This is fragile code, copied from read.php:596 (Phorum 5.2.6). Please
+// keep this code in-sync with Phorum
 
 /**
  * Generates a signature based on a message array
@@ -162,11 +161,11 @@ function phorum_htmlpurifier_generate_editmessage($row) {
  * @param $row Message passed by reference
  */
 function phorum_htmlpurifier_remove_sig_and_editmessage(&$row) {
-    // attempt to remove the Phorum's pre-processing:
-    // we must not process the signature or editmessage
     $signature = phorum_htmlpurifier_generate_sig($row);
     $editmessage = phorum_htmlpurifier_generate_editmessage($row);
     $replacements = array();
+    // we need to remove add <phorum break> as that is the form these
+    // extra bits are in.
     if ($signature) $replacements[str_replace("\n", "<phorum break>\n", $signature)] = '';
     if ($editmessage) $replacements[str_replace("\n", "<phorum break>\n", $editmessage)] = '';
     $row['body'] = strtr($row['body'], $replacements);
@@ -176,7 +175,7 @@ function phorum_htmlpurifier_remove_sig_and_editmessage(&$row) {
 /**
  * Indicate that data is fully HTML and not from migration, invalidate
  * previous caches
- * @note This function used to generate the actual cache entries, but
+ * @note This function could generate the actual cache entries, but
  *       since there's data missing that must be deferred to the first read
  */
 function phorum_htmlpurifier_posting($message) {
@@ -222,24 +221,6 @@ function phorum_htmlpurifier_common() {
         exit;
     }
     
-    // see if our hooks need to be bubbled to the end
-    phorum_htmlpurifier_bubble_hook('format');
-    
-}
-
-function phorum_htmlpurifier_bubble_hook($hook) {
-    global $PHORUM;
-    $our_idx = null;
-    $last_idx = null;
-    if (!isset($PHORUM['hooks'][$hook]['mods'])) return;
-    foreach ($PHORUM['hooks'][$hook]['mods'] as $idx => $mod) {
-        if ($mod == 'htmlpurifier') $our_idx = $idx;
-        $last_idx = $idx;
-    }
-    list($mod) = array_splice($PHORUM['hooks'][$hook]['mods'], $our_idx, 1);
-    $PHORUM['hooks'][$hook]['mods'][] = $mod;
-    list($func) = array_splice($PHORUM['hooks'][$hook]['funcs'], $our_idx, 1);
-    $PHORUM['hooks'][$hook]['funcs'][] = $func;
 }
 
 /**
@@ -253,9 +234,10 @@ function phorum_htmlpurifier_before_editor($message) {
             // de-entity-ize contents
             $body = str_replace(array('&lt;','&gt;','&amp;'), array('<','>','&'), $body);
             $purifier =& HTMLPurifier::getInstance();
-            $body = $purifier->purify($message['body']);
+            $body = $purifier->purify($body);
             // re-entity-ize contents
             $body = htmlspecialchars($body, ENT_QUOTES, $GLOBALS['PHORUM']['DATA']['CHARSET']);
+            $message['body'] = $body;
         }
     }
     return $message;
@@ -264,7 +246,22 @@ function phorum_htmlpurifier_before_editor($message) {
 function phorum_htmlpurifier_editor_after_subject() {
     // don't show this message if it's a WYSIWYG editor, since it will
     // then be handled automatically
-    if (!empty($GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'])) return;
+    if (!empty($GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'])) {
+        $i = $GLOBALS['PHORUM']['DATA']['MODE'];
+        if ($i == 'quote' || $i == 'edit' || $i == 'moderation') {
+          ?>
+          <div>
+            <p>
+              <strong>Notice:</strong> HTML has been scrubbed for your safety.
+              If you would like to see the original, turn off WYSIWYG mode
+              (consult your administrator for details.)
+            </p>
+          </div>
+          <?php
+        }
+        return;
+    }
+    if (!empty($GLOBALS['PHORUM']['mod_htmlpurifier']['suppress_message'])) return;
     ?><div class="htmlpurifier-help">
     <p>
         <strong>HTML input</strong> is enabled. Make sure you escape all HTML and

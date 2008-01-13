@@ -38,7 +38,7 @@ $PHORUM['mod_htmlpurifier']['directives'] = array(
     'HTML.Allowed',
     'AutoFormat',
     '-AutoFormat.Custom',
-    '-AutoFormat.PurifierLinkify',
+    'AutoFormatParam',
     'Output.TidyFormat',
 );
 

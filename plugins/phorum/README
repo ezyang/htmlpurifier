@@ -13,15 +13,31 @@ BBCode formatting, simply move migrate.bbcode.php to that place; for
 other markup languages, consult said file for instructions on how
 to adapt it to your needs.
 
+    -- NOTE -------------------------------------------------
+    You can also run this module in parallel with another
+    formatting module; this module attempts to place itself
+    at the end of the filtering chain. However, if any
+    previous modules produce insecure HTML (for instance,
+    a JavaScript email obfuscator) they will get cleaned.
+
 This module will not work if 'migrate.php' is not created, and an improperly
 made migration file may *CORRUPT* Phorum, so please take your time to
 do this correctly. It should go without saying to *BACKUP YOUR DATABASE*
-before attempting anything here.
+before attempting anything here. If no migration is necessary, you can
+simply create a blank migrate.php file. HTML Purifier is smart and will
+not re-migrate already processed messages. However, the original code
+is irretrievably lost (we may change this in the future.)
 
 This module will not automatically migrate user signatures, because this
 process may take a long time. After installing the HTML Purifier module and
 then configuring 'migrate.php', navigate to Settings and click 'Migrate
-Signatures' to migrate all user signatures.
+Signatures' to migrate all user signatures to HTML.
 
-Visit HTML Purifier at <http://htmlpurifier.org/>. May the force
-be with you.
+All of HTML Purifier's usual functions are configurable via the mod settings
+page. If you require custom configuration, create config.php file in
+the mod directory that edits a $config variable. Be sure, also, to
+set $PHORUM['mod_htmlpurifier']['wysiwyg'] to TRUE if you are using a
+WYSIWYG editor (you can do this through a common hook or the web
+configuration form).
+
+Visit HTML Purifier at <http://htmlpurifier.org/>.

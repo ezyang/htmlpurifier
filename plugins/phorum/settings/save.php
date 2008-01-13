@@ -9,11 +9,13 @@ function phorum_htmlpurifier_save_settings() {
         $config = phorum_htmlpurifier_get_config();
         if (!isset($_POST['reset'])) $config->mergeArrayFromForm($_POST, 'config', $PHORUM['mod_htmlpurifier']['directives']);
         $PHORUM['mod_htmlpurifier']['config'] = $config->getAll();
-        if(!phorum_htmlpurifier_commit_settings()){
-            $error="Database error while updating settings.";
-        } else {
-            echo "Settings Updated<br />";
-        }
+    }
+    $PHORUM['mod_htmlpurifier']['wysiwyg'] = !empty($_POST['wysiwyg']);
+    $PHORUM['mod_htmlpurifier']['suppress_message'] = !empty($_POST['suppress_message']);
+    if(!phorum_htmlpurifier_commit_settings()){
+        $error="Database error while updating settings.";
+    } else {
+        echo "Settings Updated<br />";
     }
 }
 

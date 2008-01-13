@@ -17,8 +17,19 @@ function phorum_htmlpurifier_show_form() {
     if (!empty($error)){
         echo "$error<br />";
     }
-
+    
     $frm->addbreak("Edit settings for the HTML Purifier module");
+    
+    $frm->addMessage('<p>The box below sets <code>$PHORUM[\'mod_htmlpurifier\'][\'wysiwyg\']</code>.
+    When checked, contents sent for edit are now purified and the
+    informative message is disabled. If your WYSIWYG editor is disabled for
+    admin edits, you can safely keep this unchecked.</p>');
+    $frm->addRow('Use WYSIWYG?', $frm->checkbox('wysiwyg', '1', '', $PHORUM['mod_htmlpurifier']['wysiwyg']));
+    
+    $frm->addMessage('<p>The box below sets <code>$PHORUM[\'mod_htmlpurifier\'][\'suppress_message\']</code>,
+    which removes the big how-to use
+    HTML Purifier message.</p>');
+    $frm->addRow('Suppress information?', $frm->checkbox('suppress_message', '1', '', $PHORUM['mod_htmlpurifier']['suppress_message']));
     
     $frm->addMessage('<p>Click on directive links to read what each option does
     (links do not open in new windows).</p>
@@ -63,6 +74,8 @@ function phorum_htmlpurifier_show_config_info() {
           A <tt>config.php</tt> file exists in your <tt>mods/htmlpurifier/</tt>
           directory. This file contains your custom configuration: in order to
           change it, please navigate to that file and edit it accordingly.
+          You can also set <code>$GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg']</code>
+          or <code>$GLOBALS['PHORUM']['mod_htmlpurifier']['suppress_message']</code>
         </p>
         <p>
           To use the web interface, delete <tt>config.php</tt> (or rename it to
