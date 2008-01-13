@@ -12,6 +12,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 3.0.1, unknown release date
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
+. Plugins now get their own changelogs according to project conventions.
 
 3.0.0, released 2008-01-06
 # HTML Purifier is PHP 5 only! The 2.1.x branch will be maintained

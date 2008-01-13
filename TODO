@@ -11,6 +11,9 @@ If no interest is expressed for a feature that may required a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
+IMPORTANT
+ - Ensure all configuration goes through HTMLPurifier_Config
+
 3.1 release [Error'ed]
  # Error logging for filtering/cleanup procedures
  - XSS-attempt detection
