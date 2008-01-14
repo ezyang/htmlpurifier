@@ -1,0 +1,59 @@
+
+INCLUDES, AUTOLOAD, BYTECODE CACHES and OPTIMIZATION
+
+The Problem
+-----------
+
+HTML Purifier contains a number of extra components that are not used all
+of the time, only if the user explicitly specifies that we should use
+them.
+
+Some of these optional components are optionally included (Filter,
+Language, Lexer, Printer), while others are included all the time
+(Injector, URIFilter, HTMLModule, URIScheme). We will stipulate that these
+are all developer specified: it is conceivable that certain Tokens are not
+used, but this is user-dependent and should not be trusted.
+
+We should come up with a consistent way to handle these things and ensure
+that we get the maximum performance when there is bytecode caches and
+when there are not. Unfortunately, these two goals seem contrary to each
+other.
+
+A peripheral issue is the performance of ConfigSchema, which has been
+shown take a large, constant amount of initialization time.
+
+Pros and Cons
+-------------
+
+We will assume that user-based extensions will be included by them.
+
+Conditional includes:
+  Pros:
+    - User management is simplified; only a single directive needs to be set
+    - Only necessary code is included
+  Cons:
+    - Doesn't play nicely with opcode caches
+    - Adds complexity to standalone version
+    - Optional configuration directives are not exposed without a little
+      extra coaxing (not implemented yet)
+
+Include it all:
+  Pros:
+    - User management is still simple
+    - Plays nicely with opcode caches and standalone version
+    - All configuration directives are present
+  Cons:
+    - Lots of (how much?) extra code is included
+    - Classes that inherit from external libraries will cause compile
+      errors
+
+Build an include stub:
+  Pros:
+    - Only necessary code is included
+    - Plays nicely with opcode caches and standalone version
+    - require (without once) can be used, see above
+  Cons:
+    - Not implemented yet
+    - Requires user intervention and use of a command line script
+    - Standalone script must be chained to this
+    - More complex and compiled-language-like
