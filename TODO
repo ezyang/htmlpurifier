@@ -12,7 +12,10 @@ amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
 IMPORTANT
- - Ensure all configuration goes through HTMLPurifier_Config
+ - Put our new configuration thing into effect
+ - Get everything into configuration objects (filters, I'm looking at you)
+ - Factor demo.php into a set of Printer classes, and then create a stub
+   file for users here
 
 3.1 release [Error'ed]
  # Error logging for filtering/cleanup procedures
