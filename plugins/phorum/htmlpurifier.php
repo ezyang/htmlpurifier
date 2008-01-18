@@ -88,7 +88,7 @@ function phorum_htmlpurifier_format($data)
                 $body = $message['body'];
                 // order is important
                 $body = str_replace("<phorum break>\n", "\n", $body);
-                $body = str_replace(array('&lt;','&gt;','&amp;'), array('<','>','&'), $body);
+                $body = str_replace(array('&lt;','&gt;','&amp;', '&quot;'), array('<','>','&','"'), $body);
                 if (!$message_id && defined('PHORUM_CONTROL_CENTER')) {
                     // we're in control.php, so it was double-escaped
                     $body = str_replace(array('&lt;','&gt;','&amp;', '&quot;'), array('<','>','&','"'), $body);
