@@ -116,7 +116,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     // mostly everything's good, but
                     // we need to make sure required attributes are in order
                     if (
-                        ($token->type === 'start' || $token->type === 'empty') &&
+                        ($token instanceof HTMLPurifier_Token_Start || $token instanceof HTMLPurifier_Token_Empty) &&
                         $definition->info[$token->name]->required_attr &&
                         ($token->name != 'img' || $remove_invalid_img) // ensure config option still works
                     ) {
@@ -135,9 +135,9 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                         $token->armor['ValidateAttributes'] = true;
                     }
                     
-                    if (isset($hidden_elements[$token->name]) && $token->type == 'start') {
+                    if (isset($hidden_elements[$token->name]) && $token instanceof HTMLPurifier_Token_Start) {
                         $textify_comments = $token->name;
-                    } elseif ($token->name === $textify_comments && $token->type == 'end') {
+                    } elseif ($token->name === $textify_comments && $token instanceof HTMLPurifier_Token_End) {
                         $textify_comments = false;
                     }
                     
@@ -151,9 +151,9 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     // check if we need to destroy all of the tag's children
                     // CAN BE GENERICIZED
                     if (isset($hidden_elements[$token->name])) {
-                        if ($token->type == 'start') {
+                        if ($token instanceof HTMLPurifier_Token_Start) {
                             $remove_until = $token->name;
-                        } elseif ($token->type == 'empty') {
+                        } elseif ($token instanceof HTMLPurifier_Token_Empty) {
                             // do nothing: we're still looking
                         } else {
                             $remove_until = false;
@@ -164,7 +164,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     }
                     continue;
                 }
-            } elseif ($token->type == 'comment') {
+            } elseif ($token instanceof HTMLPurifier_Token_Comment) {
                 // textify comments in script tags when they are allowed
                 if ($textify_comments !== false) {
                     $data = $token->data;
@@ -174,7 +174,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     if ($e) $e->send(E_NOTICE, 'Strategy_RemoveForeignElements: Comment removed');
                     continue;
                 }
-            } elseif ($token->type == 'text') {
+            } elseif ($token instanceof HTMLPurifier_Token_Text) {
             } else {
                 continue;
             }

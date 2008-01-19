@@ -110,7 +110,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             
             // quick-check: if it's not a tag, no need to process
             if (empty( $token->is_tag )) {
-                if ($token->type === 'text') {
+                if ($token instanceof HTMLPurifier_Token_Text) {
                      // injector handler code; duplicated for performance reasons
                      foreach ($this->injectors as $i => $injector) {
                          if (!$injector->skip) $injector->handleText($token);
@@ -128,21 +128,21 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             
             // quick tag checks: anything that's *not* an end tag
             $ok = false;
-            if ($info->type == 'empty' && $token->type == 'start') {
+            if ($info->type === 'empty' && $token instanceof HTMLPurifier_Token_Start) {
                 // test if it claims to be a start tag but is empty
                 $token = new HTMLPurifier_Token_Empty($token->name, $token->attr);
                 $ok = true;
-            } elseif ($info->type != 'empty' && $token->type == 'empty' ) {
+            } elseif ($info->type !== 'empty' && $token instanceof HTMLPurifier_Token_Empty) {
                 // claims to be empty but really is a start tag
                 $token = array(
                     new HTMLPurifier_Token_Start($token->name, $token->attr),
                     new HTMLPurifier_Token_End($token->name)
                 );
                 $ok = true;
-            } elseif ($token->type == 'empty') {
+            } elseif ($token instanceof HTMLPurifier_Token_Empty) {
                 // real empty token
                 $ok = true;
-            } elseif ($token->type == 'start') {
+            } elseif ($token instanceof HTMLPurifier_Token_Start) {
                 // start tag
                 
                 // ...unless they also have to close their parent
@@ -181,7 +181,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             }
             
             // sanity check: we should be dealing with a closing tag
-            if ($token->type != 'end') continue;
+            if (!$token instanceof HTMLPurifier_Token_End) continue;
             
             // make sure that we have something open
             if (empty($this->currentNesting)) {
@@ -304,9 +304,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         } elseif ($token) {
             // regular case
             $this->outputTokens[] = $token;
-            if ($token->type == 'start') {
+            if ($token instanceof HTMLPurifier_Token_Start) {
                 $this->currentNesting[] = $token;
-            } elseif ($token->type == 'end') {
+            } elseif ($token instanceof HTMLPurifier_Token_End) {
                 array_pop($this->currentNesting); // not actually used
             }
         }

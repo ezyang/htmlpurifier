@@ -72,7 +72,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 // a double newline in them
                 $nesting = 0;
                 for ($i = $this->inputIndex + 1; isset($this->inputTokens[$i]); $i++) {
-                    if ($this->inputTokens[$i]->type == 'start'){
+                    if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Start){
                         if (!$this->_isInline($this->inputTokens[$i])) {
                             // we haven't found a double-newline, and
                             // we've hit a block element, so don't paragraph
@@ -81,11 +81,11 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                         }
                         $nesting++;
                     }
-                    if ($this->inputTokens[$i]->type == 'end') {
+                    if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_End) {
                         if ($nesting <= 0) break;
                         $nesting--;
                     }
-                    if ($this->inputTokens[$i]->type == 'text') {
+                    if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Text) {
                         // found it!
                         if (strpos($this->inputTokens[$i]->data, "\n\n") !== false) {
                             $ok = true;
@@ -117,12 +117,12 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 
                 // check if this token is adjacent to the parent token
                 $prev = $this->inputTokens[$this->inputIndex - 1];
-                if ($prev->type != 'start') {
+                if (!$prev instanceof HTMLPurifier_Token_Start) {
                     // not adjacent, we can abort early
                     // add lead paragraph tag if our token is inline
                     // and the previous tag was an end paragraph
                     if (
-                        $prev->name == 'p' && $prev->type == 'end' &&
+                        $prev->name == 'p' && $prev instanceof HTMLPurifier_Token_End &&
                         $this->_isInline($token)
                     ) {
                         $token = array($this->_pStart(), $token);
@@ -139,9 +139,9 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 // early if possible
                 $j = 1; // current nesting, one is due to parent (we recalculate current token)
                 for ($i = $this->inputIndex; isset($this->inputTokens[$i]); $i++) {
-                    if ($this->inputTokens[$i]->type == 'start') $j++;
-                    if ($this->inputTokens[$i]->type == 'end') $j--;
-                    if ($this->inputTokens[$i]->type == 'text') {
+                    if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Start) $j++;
+                    if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_End) $j--;
+                    if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Text) {
                         if (strpos($this->inputTokens[$i]->data, "\n\n") !== false) {
                             $ok = true;
                             break;
@@ -248,14 +248,14 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
         if (!$needs_end) {
             // Start of the checks one after the current token's index
             for ($i = $this->inputIndex + 1; isset($this->inputTokens[$i]); $i++) {
-                if ($this->inputTokens[$i]->type == 'start' || $this->inputTokens[$i]->type == 'empty') {
+                if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Start || $this->inputTokens[$i] instanceof HTMLPurifier_Token_Empty) {
                     $remove_paragraph_end = $this->_isInline($this->inputTokens[$i]);
                 }
                 // check if we can abort early (whitespace means we carry-on!)
-                if ($this->inputTokens[$i]->type == 'text' && !$this->inputTokens[$i]->is_whitespace) break;
+                if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Text && !$this->inputTokens[$i]->is_whitespace) break;
                 // end tags will automatically be handled by MakeWellFormed,
                 // so we don't have to worry about them
-                if ($this->inputTokens[$i]->type == 'end') break;
+                if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_End) break;
             }
         } else {
             $remove_paragraph_end = false;

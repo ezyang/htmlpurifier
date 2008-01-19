@@ -89,7 +89,7 @@ class HTMLPurifier_Generator
         if (!$tokens) return '';
         for ($i = 0, $size = count($tokens); $i < $size; $i++) {
             if ($this->_scriptFix && $tokens[$i]->name === 'script'
-                && $i + 2 < $size && $tokens[$i+2]->type == 'end') {
+                && $i + 2 < $size && $tokens[$i+2] instanceof HTMLPurifier_Token_End) {
                 // script special case
                 // the contents of the script block must be ONE token
                 // for this to work
@@ -139,21 +139,21 @@ class HTMLPurifier_Generator
      * @return Generated HTML
      */
     public function generateFromToken($token) {
-        if (!isset($token->type)) return '';
-        if ($token->type == 'start') {
+        if (!$token instanceof HTMLPurifier_Token) return '';
+        if ($token instanceof HTMLPurifier_Token_Start) {
             $attr = $this->generateAttributes($token->attr, $token->name);
             return '<' . $token->name . ($attr ? ' ' : '') . $attr . '>';
             
-        } elseif ($token->type == 'end') {
+        } elseif ($token instanceof HTMLPurifier_Token_End) {
             return '</' . $token->name . '>';
             
-        } elseif ($token->type == 'empty') {
+        } elseif ($token instanceof HTMLPurifier_Token_Empty) {
             $attr = $this->generateAttributes($token->attr, $token->name);
              return '<' . $token->name . ($attr ? ' ' : '') . $attr .
                 ( $this->_xhtml ? ' /': '' )
                 . '>';
             
-        } elseif ($token->type == 'text') {
+        } elseif ($token instanceof HTMLPurifier_Token_Text) {
             return $this->escape($token->data);
             
         } else {
@@ -168,7 +168,7 @@ class HTMLPurifier_Generator
      *          --> somewhere inside the script contents.
      */
     public function generateScriptFromToken($token) {
-        if ($token->type != 'text') return $this->generateFromToken($token);
+        if (!$token instanceof HTMLPurifier_Token_Text) return $this->generateFromToken($token);
         // return '<!--' . "\n" . trim($token->data) . "\n" . '// -->';
         // more advanced version:
         // thanks <http://lachy.id.au/log/2005/05/script-comments>

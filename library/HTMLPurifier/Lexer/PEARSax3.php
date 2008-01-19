@@ -74,7 +74,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
         // HTMLSax3 seems to always send empty tags an extra close tag
         // check and ignore if you see it:
         // [TESTME] to make sure it doesn't overreach
-        if ($this->tokens[count($this->tokens)-1]->type == 'empty') {
+        if ($this->tokens[count($this->tokens)-1] instanceof HTMLPurifier_Token_Empty) {
             return true;
         }
         $this->tokens[] = new HTMLPurifier_Token_End($name);

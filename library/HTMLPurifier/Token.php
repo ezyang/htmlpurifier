@@ -27,6 +27,20 @@ class HTMLPurifier_Token {
     public function copy() {
         return unserialize(serialize($this));
     }
+    
+    public function __get($n) {
+      if ($n === 'type') {
+        trigger_error('Deprecated type property called; use instanceof', E_USER_NOTICE);
+        switch (get_class($this)) {
+          case 'HTMLPurifier_Token_Start': return 'start';
+          case 'HTMLPurifier_Token_Empty': return 'empty';
+          case 'HTMLPurifier_Token_End': return 'end';
+          case 'HTMLPurifier_Token_Text': return 'text';
+          case 'HTMLPurifier_Token_Comment': return 'comment';
+          default: return null;
+        }
+      }
+    }
 }
 
 /**
@@ -84,18 +98,12 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token // abstract
 /**
  * Concrete start token class.
  */
-class HTMLPurifier_Token_Start extends HTMLPurifier_Token_Tag
-{
-    public $type = 'start';
-}
+class HTMLPurifier_Token_Start extends HTMLPurifier_Token_Tag {}
 
 /**
  * Concrete empty token class.
  */
-class HTMLPurifier_Token_Empty extends HTMLPurifier_Token_Tag
-{
-    public $type = 'empty';
-}
+class HTMLPurifier_Token_Empty extends HTMLPurifier_Token_Tag {}
 
 /**
  * Concrete end token class.
@@ -104,10 +112,7 @@ class HTMLPurifier_Token_Empty extends HTMLPurifier_Token_Tag
  * is for optimization reasons, as under normal circumstances, the Lexers
  * do not pass attributes.
  */
-class HTMLPurifier_Token_End extends HTMLPurifier_Token_Tag
-{
-    public $type = 'end';
-}
+class HTMLPurifier_Token_End extends HTMLPurifier_Token_Tag {}
 
 /**
  * Concrete text token class.
@@ -122,7 +127,6 @@ class HTMLPurifier_Token_Text extends HTMLPurifier_Token
 {
     
     public $name = '#PCDATA'; /**< PCDATA tag name compatible with DTD. */
-    public $type = 'text';
     public $data; /**< Parsed character data of text. */
     public $is_whitespace; /**< Bool indicating if node is whitespace. */
     
@@ -145,7 +149,6 @@ class HTMLPurifier_Token_Text extends HTMLPurifier_Token
 class HTMLPurifier_Token_Comment extends HTMLPurifier_Token
 {
     public $data; /**< Character data within comment. */
-    public $type = 'comment';
     /**
      * Transparent constructor.
      * 

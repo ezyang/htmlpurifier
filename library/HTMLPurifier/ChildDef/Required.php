@@ -71,9 +71,9 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
             
             $is_child = ($nesting == 0);
             
-            if ($token->type == 'start') {
+            if ($token instanceof HTMLPurifier_Token_Start) {
                 $nesting++;
-            } elseif ($token->type == 'end') {
+            } elseif ($token instanceof HTMLPurifier_Token_End) {
                 $nesting--;
             }
             
@@ -81,7 +81,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
                 $is_deleting = false;
                 if (!isset($this->elements[$token->name])) {
                     $is_deleting = true;
-                    if ($pcdata_allowed && $token->type == 'text') {
+                    if ($pcdata_allowed && $token instanceof HTMLPurifier_Token_Text) {
                         $result[] = $token;
                     } elseif ($pcdata_allowed && $escape_invalid_children) {
                         $result[] = new HTMLPurifier_Token_Text(
@@ -91,7 +91,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
                     continue;
                 }
             }
-            if (!$is_deleting || ($pcdata_allowed && $token->type == 'text')) {
+            if (!$is_deleting || ($pcdata_allowed && $token instanceof HTMLPurifier_Token_Text)) {
                 $result[] = $token;
             } elseif ($pcdata_allowed && $escape_invalid_children) {
                 $result[] =
