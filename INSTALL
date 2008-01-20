@@ -7,8 +7,9 @@ library is extremely easy.  (Although... if you were looking for a
 step-by-step installation GUI, you've downloaded the wrong software!)
 
 While the impatient can get going immediately with some of the sample
-code at the bottom of this library, it's well worth performing some
-basic sanity checks to get the most out of this library.
+code at the bottom of this library, it's well worth reading this entire
+document--most of the other documentation assumes that you are familiar
+with these contents.
 
 
 ---------------------------------------------------------------------------
@@ -16,7 +17,7 @@ basic sanity checks to get the most out of this library.
 
 HTML Purifier is PHP 5 only, and is actively tested from PHP 5.0.0 and 
 up (see tests/multitest.php for the specific versions that are being 
-actively tested). It has no core dependencies with other libraries. PHP 
+tested regularly). It has no core dependencies with other libraries. PHP 
 4 support was deprecated on December 31, 2007 with HTML Purifier 3.0.0. 
 Essential security fixes will be issued for the 2.1.x branch until 
 August 8, 2008. 
@@ -48,7 +49,7 @@ HTML Purifier can process these doctypes:
 * UTF-8 (default)
 * Any encoding iconv supports (with crippled internationalization support)
 
-These defaults reflect what my choices where be if I were authoring an
+These defaults reflect what my choices would be if I were authoring an
 HTML document, however, what you choose depends on the nature of your
 codebase.  If you don't know what doctype you are using, you can determine
 the doctype from this identifier at the top of your source code:
@@ -63,8 +64,8 @@ the doctype from this identifier at the top of your source code:
 If the character encoding declaration is missing, STOP NOW, and
 read 'docs/enduser-utf8.html' (web accessible at
 http://htmlpurifier.org/docs/enduser-utf8.html).  In fact, even if it is
-present, read this document anyway, as most websites specify character
-encoding incorrectly.
+present, read this document anyway, as many websites specify their
+document's character encoding incorrectly.
 
 
 ---------------------------------------------------------------------------
