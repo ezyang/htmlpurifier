@@ -22,6 +22,7 @@ $AC['flush'] = false;
 $AC['standalone'] = false;
 $AC['file'] = '';
 $AC['xml'] = false;
+$AC['dry'] = false;
 $aliases = array(
     'f' => 'file',
 );
@@ -86,5 +87,7 @@ if ($AC['xml']) {
 } else {
     $reporter = new HTMLPurifier_SimpleTest_Reporter('UTF-8', $AC);
 }
+
+if ($AC['dry']) $reporter->makeDry();
 
 $test->run($reporter);
