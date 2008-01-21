@@ -10,6 +10,7 @@
  *   - standalone, whether or not to test the standalone version
  *   - file (f), a single file to test
  *   - xml, whether or not to output XML
+ *   - dry, whether or not to do a dry run
  */
 
 define('HTMLPurifierTest', 1);

@@ -25,6 +25,7 @@ require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
 require_once $simpletest_location . 'mock_objects.php';
 require_once $simpletest_location . 'xml.php';
+require_once $simpletest_location . 'remote.php';
 
 // load CSS Tidy
 if ($csstidy_location !== false) {

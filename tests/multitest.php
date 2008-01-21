@@ -34,8 +34,8 @@ if (!SimpleReporter::inCli()) {
 $AC = array(); // parameters
 $AC['exclude-normal'] = false;
 $AC['exclude-standalone'] = false;
-$AC['file'] = '';
-$AC['xml'] = false;
+$AC['file']  = '';
+$AC['xml']   = false;
 $AC['quiet'] = false;
 $aliases = array(
     'f' => 'file',
@@ -48,9 +48,10 @@ shell_exec('php ../maintenance/flush-definition-cache.php');
 
 $test = new TestSuite('HTML Purifier Multiple Versions Test');
 $file = '';
+
+$test_files = array();
+require 'test_files.php';
 if ($AC['file']) {
-    $test_files = array();
-    require 'test_files.php';
     $test_files_lookup = array_flip($test_files);
     if (isset($test_files_lookup[$AC['file']])) {
         $file = '--file=' . $AC['file'];
@@ -59,15 +60,22 @@ if ($AC['file']) {
         exit;
     }
 }
+// This allows us to get out of having to do dry runs.
+$size = count($test_files);
+
 foreach ($versions_to_test as $version) {
     $flush = '';
     if (is_array($version)) {
         $version = $version[0];
         $flush = '--flush';
     }
-    if (!$AC['exclude-normal'])     $test->addTestCase(new CliTestCase("$phpv $version index.php --xml $flush $file", $AC['quiet']));
-    if (!$AC['exclude-standalone']) $test->addTestCase(new CliTestCase("$phpv $version index.php --xml --standalone $file", $AC['quiet']));
+    if (!$AC['exclude-normal'])     $test->addTestCase(new CliTestCase("$phpv $version index.php --xml $flush $file", $AC['quiet'], $size));
+    if (!$AC['exclude-standalone']) $test->addTestCase(new CliTestCase("$phpv $version index.php --xml --standalone $file", $AC['quiet'], $size));
 }
+
+// This is the HTML Purifier website's test XML file. We could
+// add more websites, i.e. more configurations to test.
+$test->addTestCase(new RemoteTestCase('http://localhost/htmlpurifier/tests/?xml', 'http://localhost/htmlpurifier/tests/?xml&dry'));
 
 if ($AC['xml']) {
     $reporter = new XmlReporter();

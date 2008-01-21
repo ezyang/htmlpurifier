@@ -10,23 +10,28 @@ class CliTestCase
     public $_out = false;
     public $_quiet = false;
     public $_errors = array();
+    public $_size = false;
     /**
      * @param $command Command to execute to retrieve XML
      * @param $xml Whether or not to suppress error messages
      */
-    public function __construct($command, $quiet = false) {
+    public function __construct($command, $quiet = false, $size = false) {
         $this->_command = $command;
-        $this->_quiet = $quiet;
+        $this->_quiet   = $quiet;
+        $this->_size    = $size;
     }
     public function getLabel() {
         return $this->_command;
     }
     public function run(&$reporter) {
         if (!$this->_quiet) $reporter->paintFormattedMessage('Running ['.$this->_command.']');
-        $xml = shell_exec($this->_command);
+        return $this->_invokeCommand($this->_command, $reporter);
+    }
+    public function _invokeCommand($command, &$reporter) {
+       $xml = shell_exec($command);
         if (! $xml) {
             if (!$this->_quiet) {
-                trigger_error('Command did not have any output [' . $this->_command . ']');
+                trigger_error('Command did not have any output [' . $command . ']');
             }
             return false;
         }
@@ -59,7 +64,14 @@ class CliTestCase
         return $parser;
     }
     public function getSize() {
-        return 1; // we don't know it
+        // This code properly does the dry run and allows for proper test
+        // case reporting but it's REALLY slow, so I don't recommend it.
+        if ($this->_size === false) {
+            $reporter = new SimpleReporter();
+            $this->_invokeCommand($this->_command . ' --dry', $reporter);
+            $this->_size = $reporter->getTestCaseCount();
+        }
+        return $this->_size;
     }
     public function _errorHandler($a, $b, $c, $d) {
         $this->_errors[] = array($a, $b, $c, $d); // see set_error_handler()
