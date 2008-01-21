@@ -227,7 +227,21 @@ class HTMLPurifier
         return $htmlpurifier;
     }
     
+    /**
+     * Autoload function for HTML Purifier
+     * @param $class Class to load
+     */
+    public static function autoload($class) {
+        if (strncmp('HTMLPurifier', $class, 12) !== 0) return false;
+        // Language classes have an unusual directory structure
+        if (strncmp('HTMLPurifier_Language_', $class, 22) === 0) {
+          $code = str_replace('_', '-', substr($class, 22));
+          require_once 'HTMLPurifier/Language/classes/' . $code . '.php';
+          return true;
+        }
+        require_once str_replace('_', '/', $class) . '.php';
+        return true;
+    }
+    
     
 }
-
-

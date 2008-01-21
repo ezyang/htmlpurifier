@@ -109,12 +109,12 @@ class HTMLPurifier_LanguageFactory
             // PHP5/APC deps bug workaround can go here
             // you can bypass the conditional include by loading the
             // file yourself
-            if (file_exists($file) && !class_exists($class)) {
+            if (file_exists($file) && !class_exists($class, false)) {
                 include_once $file;
             }
         }
         
-        if (!class_exists($class)) {
+        if (!class_exists($class, false)) {
             // go fallback
             $fallback = HTMLPurifier_LanguageFactory::getFallbackFor($code);
             $depth++;

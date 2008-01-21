@@ -9,7 +9,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-3.0.1, unknown release date
+3.1.0, unknown release date
+! Autoload support added
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
 . Plugins now get their own changelogs according to project conventions.
