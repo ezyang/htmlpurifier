@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-require_once 'HTMLPurifier/AttrDef/CSS.php';
-
 /**
  * XHTML 1.1 Edit Module, defines editing-related elements. Text Extension
  * Module.

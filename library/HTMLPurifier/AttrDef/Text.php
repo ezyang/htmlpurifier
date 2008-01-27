@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-
 /**
  * Validates arbitrary text according to the HTML spec.
  */

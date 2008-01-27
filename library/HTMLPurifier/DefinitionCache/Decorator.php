@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/DefinitionCache.php';
-
 class HTMLPurifier_DefinitionCache_Decorator extends HTMLPurifier_DefinitionCache
 {
     

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/DefinitionCache/Decorator.php';
-
 /**
  * Definition cache decorator class that cleans up the cache
  * whenever there is a cache miss.

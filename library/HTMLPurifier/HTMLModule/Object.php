@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-
 /**
  * XHTML 1.1 Object Module, defines elements for generic object inclusion
  * @warning Users will commonly use <embed> to cater to legacy browsers: this

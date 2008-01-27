@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-
 /**
  * Validates the value for the CSS property text-decoration
  * @note This class could be generalized into a version that acts sort of

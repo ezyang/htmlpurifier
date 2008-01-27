@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Number.php';
-
 class HTMLPurifier_AttrDef_CSS_AlphaValue extends HTMLPurifier_AttrDef_CSS_Number
 {
     

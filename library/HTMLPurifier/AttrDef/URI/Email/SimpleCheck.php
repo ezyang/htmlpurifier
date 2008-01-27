@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/URI/Email.php';
-
 /**
  * Primitive email validation class based on the regexp found at 
  * http://www.regular-expressions.info/email.html

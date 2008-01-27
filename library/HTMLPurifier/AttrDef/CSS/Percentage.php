@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Number.php';
-
 /**
  * Validates a Percentage as defined by the CSS spec.
  */

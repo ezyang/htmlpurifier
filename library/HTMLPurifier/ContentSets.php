@@ -1,12 +1,5 @@
 <?php
 
-// common defs that we'll support by default
-require_once 'HTMLPurifier/ChildDef.php';
-require_once 'HTMLPurifier/ChildDef/Empty.php';
-require_once 'HTMLPurifier/ChildDef/Required.php';
-require_once 'HTMLPurifier/ChildDef/Optional.php';
-require_once 'HTMLPurifier/ChildDef/Custom.php';
-
 /**
  * @todo Unit test
  */

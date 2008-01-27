@@ -43,18 +43,6 @@
 define('HTMLPURIFIER_PREFIX', dirname(__FILE__));
 
 // every class has an undocumented dependency to these, must be included!
-require_once 'HTMLPurifier/ConfigSchema.php'; // fatal errors if not included
-require_once 'HTMLPurifier/Config.php';
-require_once 'HTMLPurifier/Context.php';
-
-require_once 'HTMLPurifier/Lexer.php';
-require_once 'HTMLPurifier/Generator.php';
-require_once 'HTMLPurifier/Strategy/Core.php';
-require_once 'HTMLPurifier/Encoder.php';
-
-require_once 'HTMLPurifier/ErrorCollector.php';
-require_once 'HTMLPurifier/LanguageFactory.php';
-
 HTMLPurifier_ConfigSchema::define(
     'Core', 'CollectErrors', false, 'bool', '
 Whether or not to collect errors found while filtering the document. This
@@ -226,29 +214,5 @@ class HTMLPurifier
         }
         return $htmlpurifier;
     }
-    
-    /**
-     * Autoload function for HTML Purifier
-     * @param $class Class to load
-     */
-    public static function autoload($class) {
-        $file = HTMLPurifier::getPath($class);
-        if (!$file) return false;
-        require_once $file;
-        return true;
-    }
-    
-    /**
-     * Returns the path for a specific class.
-     */
-    public static function getPath($class) {
-        if (strncmp('HTMLPurifier', $class, 12) !== 0) return false;
-        if (strncmp('HTMLPurifier_Language_', $class, 22) === 0) {
-          $code = str_replace('_', '-', substr($class, 22));
-          return 'HTMLPurifier/Language/classes/' . $code . '.php';
-        }
-        return str_replace('_', '/', $class) . '.php';
-    }
-    
     
 }

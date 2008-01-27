@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Generator.php';
-
 /**
  * Error collection class that enables HTML Purifier to report HTML
  * problems back to the user

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-
 HTMLPurifier_ConfigSchema::define(
     'Core', 'ColorKeywords', array(
         'maroon'    => '#800000',

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTypes.php';
-
 /**
  * Defines common attribute collections that modules reference
  */

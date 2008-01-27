@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Strategy.php';
-require_once 'HTMLPurifier/HTMLDefinition.php';
-
 /**
  * Takes a well formed list of tokens and fixes their nesting.
  * 

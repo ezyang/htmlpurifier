@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform.php';
-
 /**
  * Pre-transform that changes deprecated border attribute to CSS.
  */

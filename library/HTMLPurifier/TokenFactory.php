@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Token.php';
-
 /**
  * Factory for token generation (PHP 5 only).
  * 

@@ -13,7 +13,7 @@ assertCli();
 /**
  * Global hash that tracks already loaded includes
  */
-$GLOBALS['loaded'] = array('HTMLPurifier.php' => true);
+$GLOBALS['loaded'] = array();
 
 /**
  * Custom FSTools for this script that overloads some behavior
@@ -42,7 +42,7 @@ $FS = new MergeLibraryFSTools();
  */
 function replace_includes($text) {
     return preg_replace_callback(
-        "/require_once ['\"]([^'\"]+)['\"];/",
+        "/require(?:_once)? ['\"]([^'\"]+)['\"];/",
         'replace_includes_callback',
         $text
     );
@@ -112,9 +112,6 @@ function copy_and_remove_includes($file, $sfile) {
 function replace_includes_callback($matches) {
     $file = $matches[1];
     $preserve = array(
-      // PHP 5 only
-      'HTMLPurifier/Lexer/DOMLex.php' => 1,
-      'HTMLPurifier/Printer.php' => 1,
       // PEAR (external)
       'XML/HTMLSax3.php' => 1
     );
@@ -127,11 +124,12 @@ function replace_includes_callback($matches) {
     return replace_includes(remove_php_tags(file_get_contents($file)));
 }
 
+shell_exec('php generate-includes.php');
 chdir(dirname(__FILE__) . '/../library/');
 create_blank('HTMLPurifier.php');
 
 echo 'Creating full file...';
-$contents = replace_includes(file_get_contents('HTMLPurifier.php'));
+$contents = replace_includes(file_get_contents('HTMLPurifier.includes.php'));
 $contents = str_replace(
     "define('HTMLPURIFIER_PREFIX', dirname(__FILE__));",
     "define('HTMLPURIFIER_PREFIX', dirname(__FILE__) . '/standalone');
@@ -150,14 +148,8 @@ make_dir_standalone('HTMLPurifier/EntityLookup');
 
 // non-standard inclusion setup
 make_dir_standalone('HTMLPurifier/Language');
-
-// optional components
-make_file_standalone('HTMLPurifier/Printer.php'); 
-make_dir_standalone('HTMLPurifier/Printer');
 make_dir_standalone('HTMLPurifier/Filter');
+make_file_standalone('HTMLPurifier/Lexer/PH5P.php');
 make_file_standalone('HTMLPurifier/Lexer/PEARSax3.php');
 
-// PHP 5 only files
-make_file_standalone('HTMLPurifier/Lexer/DOMLex.php');
-make_file_standalone('HTMLPurifier/Lexer/PH5P.php');
 echo ' done!' . PHP_EOL;

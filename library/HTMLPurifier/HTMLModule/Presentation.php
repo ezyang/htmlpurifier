@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-
 /**
  * XHTML 1.1 Presentation Module, defines simple presentation-related
  * markup. Text Extension Module.

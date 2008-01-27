@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/DefinitionCache.php';
-
 HTMLPurifier_ConfigSchema::define(
     'Cache', 'SerializerPath', null, 'string/null', '
 <p>

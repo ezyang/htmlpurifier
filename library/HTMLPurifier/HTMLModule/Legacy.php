@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/HTML/Bool.php';
-
 /**
  * XHTML 1.1 Legacy module defines elements that were previously 
  * deprecated.

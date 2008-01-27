@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-
 /**
  * XHTML 1.1 Text Module, defines basic text containers. Core Module.
  * @note In the normative XML Schema specification, this module

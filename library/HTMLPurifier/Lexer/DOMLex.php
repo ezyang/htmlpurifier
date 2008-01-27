@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Lexer.php';
-require_once 'HTMLPurifier/TokenFactory.php';
-
 /**
  * Parser that uses PHP 5's DOM extension (part of the core).
  * 

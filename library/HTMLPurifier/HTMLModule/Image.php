@@ -1,10 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-
-require_once 'HTMLPurifier/AttrDef/URI.php';
-require_once 'HTMLPurifier/AttrTransform/ImgRequired.php';
-
 /**
  * XHTML 1.1 Image Module provides basic image embedding.
  * @note There is specialized code for removing empty images in

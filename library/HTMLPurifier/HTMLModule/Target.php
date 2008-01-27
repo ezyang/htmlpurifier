@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/HTML/FrameTarget.php';
-
 /**
  * XHTML 1.1 Target Module, defines target attribute in link elements.
  */

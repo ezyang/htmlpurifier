@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIFilter.php';
-
 HTMLPurifier_ConfigSchema::define(
     'URI', 'HostBlacklist', array(), 'list',
     'List of strings that are forbidden in the host of any URI. Use it to '.

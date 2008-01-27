@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Lexer/DOMLex.php';
-
 /**
  * Experimental HTML5-based parser using Jeroen van der Meer's PH5P library.
  * Requires PHP5, and occupies space in the HTML5 pseudo-namespace (may

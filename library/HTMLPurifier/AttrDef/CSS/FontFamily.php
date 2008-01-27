@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-
 // whitelisting allowed fonts would be nice
 
 /**

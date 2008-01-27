@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/AttrDef/Integer.php';
-
 /**
  * Microsoft's proprietary filter: CSS property
  * @note Currently supports the alpha filter. In the future, this will

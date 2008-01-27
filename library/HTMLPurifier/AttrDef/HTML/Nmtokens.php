@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/Config.php';
-
 /**
  * Validates contents based on NMTOKENS attribute type.
  * @note The only current use for this is the class attribute in HTML

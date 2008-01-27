@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-require_once 'HTMLPurifier/ChildDef/Table.php';
-
 /**
  * XHTML 1.1 Tables Module, fully defines accessible table elements.
  */

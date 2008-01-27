@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-
 HTMLPurifier_ConfigSchema::define(
     'Attr', 'AllowedRel', array(), 'lookup',
     'List of allowed forward document relationships in the rel attribute. '.

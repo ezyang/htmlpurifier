@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-
 /**
  * Validates an IPv4 address
  * @author Feyd @ forums.devnetwork.net (public domain)

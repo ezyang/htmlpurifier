@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Language.php';
-require_once 'HTMLPurifier/AttrDef/Lang.php';
-
 HTMLPurifier_ConfigSchema::define(
     'Core', 'Language', 'en', 'string', '
 ISO 639 language code for localizable things in HTML Purifier to use,

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Filter.php';
-
 class HTMLPurifier_Filter_YouTube extends HTMLPurifier_Filter
 {
     

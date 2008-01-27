@@ -35,10 +35,11 @@ if ($AC['flush']) shell_exec('php ../maintenance/flush-definition-cache.php');
 // initialize and load HTML Purifier
 // use ?standalone to load the alterative standalone stub
 if ($AC['standalone']) {
-    set_include_path(realpath('blanks') . PATH_SEPARATOR . get_include_path());
+    set_include_path(realpath('../library/standalone') . PATH_SEPARATOR . realpath('blanks') . PATH_SEPARATOR . get_include_path());
     require_once '../library/HTMLPurifier.standalone.php';
 } else {
-    require_once '../library/HTMLPurifier.auto.php';
+    set_include_path(realpath('../library') . PATH_SEPARATOR . get_include_path() );
+    require_once 'HTMLPurifier.includes.php';
 }
 require_once 'HTMLPurifier/Harness.php';
 

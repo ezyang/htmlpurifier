@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-require_once 'HTMLPurifier/AttrTransform/BdoDir.php';
-
 /**
  * XHTML 1.1 Bi-directional Text Module, defines elements that
  * declare directionality of content. Text Extension Module.

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule/Tidy.php';
-
 class HTMLPurifier_HTMLModule_Tidy_Proprietary extends
       HTMLPurifier_HTMLModule_Tidy
 {

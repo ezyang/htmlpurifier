@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-
 /**
  * Validates the border property as defined by CSS.
  */

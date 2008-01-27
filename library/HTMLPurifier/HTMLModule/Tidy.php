@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'TidyLevel', 'medium', 'string', '
 <p>General level of cleanliness the Tidy module should enforce.

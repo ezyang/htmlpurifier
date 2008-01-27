@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform.php';
-
 // must be called POST validation
 
 HTMLPurifier_ConfigSchema::define(

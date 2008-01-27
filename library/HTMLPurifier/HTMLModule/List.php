@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-
 /**
  * XHTML 1.1 List Module, defines list-oriented elements. Core Module.
  */

@@ -6,11 +6,10 @@ require_once 'common.php';
 assertCli();
 
 /**
+ * @file
  * Parses *.ent files into an entity lookup table, and then serializes and
  * writes the whole kaboodle to a file. The resulting file should be versioned.
  */
-
-chdir( dirname(__FILE__) );
 
 // here's where the entity files are located, assuming working directory
 // is the same as the location of this PHP file. Needs trailing slash.

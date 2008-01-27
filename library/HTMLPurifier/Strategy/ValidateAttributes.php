@@ -1,11 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Strategy.php';
-require_once 'HTMLPurifier/HTMLDefinition.php';
-require_once 'HTMLPurifier/IDAccumulator.php';
-
-require_once 'HTMLPurifier/AttrValidator.php';
-
 /**
  * Validate all attributes in the tokens.
  */

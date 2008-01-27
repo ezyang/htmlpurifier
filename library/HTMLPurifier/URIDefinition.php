@@ -1,14 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Definition.php';
-require_once 'HTMLPurifier/URIFilter.php';
-require_once 'HTMLPurifier/URIParser.php';
-
-require_once 'HTMLPurifier/URIFilter/DisableExternal.php';
-require_once 'HTMLPurifier/URIFilter/DisableExternalResources.php';
-require_once 'HTMLPurifier/URIFilter/HostBlacklist.php';
-require_once 'HTMLPurifier/URIFilter/MakeAbsolute.php';
-
 HTMLPurifier_ConfigSchema::define(
     'URI', 'DefinitionID', null, 'string/null', '
 <p>

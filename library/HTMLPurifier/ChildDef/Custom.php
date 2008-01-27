@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ChildDef.php';
-
 /**
  * Custom validation class, accepts DTD child definitions
  * 

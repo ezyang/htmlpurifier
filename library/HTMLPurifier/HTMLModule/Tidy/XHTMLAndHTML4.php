@@ -1,20 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule/Tidy.php';
-
-require_once 'HTMLPurifier/TagTransform/Simple.php';
-require_once 'HTMLPurifier/TagTransform/Font.php';
-
-require_once 'HTMLPurifier/AttrTransform/BgColor.php';
-require_once 'HTMLPurifier/AttrTransform/BoolToCSS.php';
-require_once 'HTMLPurifier/AttrTransform/Border.php';
-require_once 'HTMLPurifier/AttrTransform/Name.php';
-require_once 'HTMLPurifier/AttrTransform/Length.php';
-require_once 'HTMLPurifier/AttrTransform/ImgSpace.php';
-require_once 'HTMLPurifier/AttrTransform/EnumToCSS.php';
-
-require_once 'HTMLPurifier/ChildDef/StrictBlockquote.php';
-
 class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends
       HTMLPurifier_HTMLModule_Tidy
 {

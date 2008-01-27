@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/CSSDefinition.php';
-
 /**
  * Validates the HTML attribute style, otherwise known as CSS.
  * @note We don't implement the whole CSS specification, so it might be

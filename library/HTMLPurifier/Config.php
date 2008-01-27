@@ -1,14 +1,6 @@
 <?php
 
-require_once 'HTMLPurifier/ConfigSchema.php';
-
 // member variables
-require_once 'HTMLPurifier/HTMLDefinition.php';
-require_once 'HTMLPurifier/CSSDefinition.php';
-require_once 'HTMLPurifier/URIDefinition.php';
-require_once 'HTMLPurifier/Doctype.php';
-require_once 'HTMLPurifier/DefinitionCacheFactory.php';
-
 // accomodations for versions earlier than 4.3.10 and 5.0.2
 // borrowed from PHP_Compat, LGPL licensed, by Aidan Lister <aidan@php.net>
 if (!defined('PHP_EOL')) {

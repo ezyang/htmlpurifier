@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Strategy.php';
-require_once 'HTMLPurifier/Config.php';
-
 /**
  * Composite strategy that runs multiple strategies on tokens.
  */

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ConfigDef.php';
-
 /**
  * Structure object containing definition of a directive.
  * @note This structure does not contain default values

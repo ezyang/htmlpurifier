@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Injector.php';
-
 HTMLPurifier_ConfigSchema::define(
     'AutoFormat', 'AutoParagraph', false, 'bool', '
 <p>

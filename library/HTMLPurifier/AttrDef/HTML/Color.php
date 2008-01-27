@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Color.php'; // for %Core.ColorKeywords
-
 /**
  * Validates a color according to the HTML spec.
  */

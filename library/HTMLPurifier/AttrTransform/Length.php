@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform.php';
-
 /**
  * Class for handling width/height length attribute transformations to CSS
  */

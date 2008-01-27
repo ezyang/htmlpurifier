@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-
 /**
  * Validates shorthand CSS property list-style.
  * @warning Does not support url tokens that have internal spaces.

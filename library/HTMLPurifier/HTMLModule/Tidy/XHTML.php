@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule/Tidy.php';
-require_once 'HTMLPurifier/AttrTransform/Lang.php';
-
 class HTMLPurifier_HTMLModule_Tidy_XHTML extends
       HTMLPurifier_HTMLModule_Tidy
 {

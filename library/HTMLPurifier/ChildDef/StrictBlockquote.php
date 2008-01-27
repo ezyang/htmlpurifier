@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ChildDef/Required.php';
-
 /**
  * Takes the contents of blockquote when in strict and reformats for validation.
  */

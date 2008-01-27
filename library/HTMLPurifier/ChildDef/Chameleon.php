@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ChildDef.php';
-
 /**
  * Definition that uses different definitions depending on context.
  * 

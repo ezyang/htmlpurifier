@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIScheme/http.php';
-
 /**
  * Validates https (Secure HTTP) according to http scheme.
  */

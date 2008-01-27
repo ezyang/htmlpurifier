@@ -1,12 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Strategy.php';
-require_once 'HTMLPurifier/HTMLDefinition.php';
-require_once 'HTMLPurifier/Generator.php';
-require_once 'HTMLPurifier/TagTransform.php';
-
-require_once 'HTMLPurifier/AttrValidator.php';
-
 HTMLPurifier_ConfigSchema::define(
     'Core', 'RemoveInvalidImg', true, 'bool', '
 <p>

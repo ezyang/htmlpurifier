@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/TagTransform.php';
-
 /**
  * Simple transformation, just change tag name to something else,
  * and possibly add some styling. This will cover most of the deprecated

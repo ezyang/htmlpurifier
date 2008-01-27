@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/DefinitionCache.php';
-
 HTMLPurifier_ConfigSchema::define(
     'Cache', 'DefinitionImpl', 'Serializer', 'string/null', '
 This directive defines which method to use when caching definitions,

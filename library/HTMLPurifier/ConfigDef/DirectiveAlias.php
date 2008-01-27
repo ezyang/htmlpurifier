@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ConfigDef.php';
-
 /**
  * Structure object describing a directive alias
  */

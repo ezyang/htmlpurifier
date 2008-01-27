@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/URI/IPv4.php';
-
 /**
  * Validates an IPv6 address.
  * @author Feyd @ forums.devnetwork.net (public domain)

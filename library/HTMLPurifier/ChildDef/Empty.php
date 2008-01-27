@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ChildDef.php';
-
 /**
  * Definition that disallows all elements.
  * @warning validateChildren() in this class is actually never called, because

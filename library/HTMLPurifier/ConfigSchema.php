@@ -1,12 +1,12 @@
 <?php
 
-require_once 'HTMLPurifier/Error.php';
+if (!defined('HTMLPURIFIER_SCHEMA_STRICT')) define('HTMLPURIFIER_SCHEMA_STRICT', false);
+
+// REMOVE THESE LATER:
 require_once 'HTMLPurifier/ConfigDef.php';
-require_once 'HTMLPurifier/ConfigDef/Namespace.php';
 require_once 'HTMLPurifier/ConfigDef/Directive.php';
 require_once 'HTMLPurifier/ConfigDef/DirectiveAlias.php';
-
-if (!defined('HTMLPURIFIER_SCHEMA_STRICT')) define('HTMLPURIFIER_SCHEMA_STRICT', false);
+require_once 'HTMLPurifier/ConfigDef/Namespace.php';
 
 /**
  * Configuration definition, defines directives and their defaults.

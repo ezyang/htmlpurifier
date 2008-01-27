@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/AttrDef/HTML/Length.php';
-
 /**
  * Validates a MultiLength as defined by the HTML spec.
  * 

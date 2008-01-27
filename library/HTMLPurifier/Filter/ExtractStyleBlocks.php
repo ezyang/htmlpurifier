@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Filter.php';
-
 HTMLPurifier_ConfigSchema::define(
     'Filter', 'ExtractStyleBlocksEscaping', true, 'bool', '
 <p>

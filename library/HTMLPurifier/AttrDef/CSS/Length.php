@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Number.php';
-
 /**
  * Represents a Length as defined by CSS.
  */

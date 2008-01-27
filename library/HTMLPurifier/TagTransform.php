@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Token.php';
-
 /**
  * Defines a mutation of an obsolete tag into a valid tag.
  */

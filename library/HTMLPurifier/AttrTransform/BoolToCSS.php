@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform.php';
-
 /**
  * Pre-transform that changes converts a boolean attribute to fixed CSS
  */

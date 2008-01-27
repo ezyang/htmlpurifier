@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-require_once 'HTMLPurifier/AttrDef/HTML/LinkTypes.php';
-
 /**
  * XHTML 1.1 Hypertext Module, defines hypertext links. Core Module.
  */

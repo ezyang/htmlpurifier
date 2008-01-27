@@ -1,13 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/URIParser.php';
-require_once 'HTMLPurifier/URIScheme.php';
-require_once 'HTMLPurifier/URISchemeRegistry.php';
-require_once 'HTMLPurifier/AttrDef/URI/Host.php';
-require_once 'HTMLPurifier/PercentEncoder.php';
-require_once 'HTMLPurifier/AttrDef/URI/Email.php';
-
 // special case filtering directives 
 
 HTMLPurifier_ConfigSchema::define(

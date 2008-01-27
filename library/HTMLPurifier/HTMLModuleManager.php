@@ -1,42 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-require_once 'HTMLPurifier/ElementDef.php';
-require_once 'HTMLPurifier/Doctype.php';
-require_once 'HTMLPurifier/DoctypeRegistry.php';
-
-require_once 'HTMLPurifier/ContentSets.php';
-require_once 'HTMLPurifier/AttrTypes.php';
-require_once 'HTMLPurifier/AttrCollections.php';
-
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/AttrDef/Enum.php';
-
-// W3C modules
-require_once 'HTMLPurifier/HTMLModule/CommonAttributes.php';
-require_once 'HTMLPurifier/HTMLModule/Text.php';
-require_once 'HTMLPurifier/HTMLModule/Hypertext.php';
-require_once 'HTMLPurifier/HTMLModule/List.php';
-require_once 'HTMLPurifier/HTMLModule/Presentation.php';
-require_once 'HTMLPurifier/HTMLModule/Edit.php';
-require_once 'HTMLPurifier/HTMLModule/Bdo.php';
-require_once 'HTMLPurifier/HTMLModule/Tables.php';
-require_once 'HTMLPurifier/HTMLModule/Image.php';
-require_once 'HTMLPurifier/HTMLModule/StyleAttribute.php';
-require_once 'HTMLPurifier/HTMLModule/Legacy.php';
-require_once 'HTMLPurifier/HTMLModule/Target.php';
-require_once 'HTMLPurifier/HTMLModule/Scripting.php';
-require_once 'HTMLPurifier/HTMLModule/XMLCommonAttributes.php';
-require_once 'HTMLPurifier/HTMLModule/NonXMLCommonAttributes.php';
-require_once 'HTMLPurifier/HTMLModule/Ruby.php';
-require_once 'HTMLPurifier/HTMLModule/Object.php';
-
-// tidy modules
-require_once 'HTMLPurifier/HTMLModule/Tidy.php';
-require_once 'HTMLPurifier/HTMLModule/Tidy/XHTMLAndHTML4.php';
-require_once 'HTMLPurifier/HTMLModule/Tidy/XHTML.php';
-require_once 'HTMLPurifier/HTMLModule/Tidy/Proprietary.php';
-
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'Doctype', '', 'string',
     'Doctype to use during filtering. '.

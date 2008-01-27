@@ -1,18 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/Lang.php';
-require_once 'HTMLPurifier/AttrDef/Enum.php';
-require_once 'HTMLPurifier/AttrDef/HTML/Bool.php';
-require_once 'HTMLPurifier/AttrDef/HTML/ID.php';
-require_once 'HTMLPurifier/AttrDef/HTML/Length.php';
-require_once 'HTMLPurifier/AttrDef/HTML/MultiLength.php';
-require_once 'HTMLPurifier/AttrDef/HTML/Nmtokens.php';
-require_once 'HTMLPurifier/AttrDef/HTML/Pixels.php';
-require_once 'HTMLPurifier/AttrDef/HTML/Color.php';
-require_once 'HTMLPurifier/AttrDef/Integer.php';
-require_once 'HTMLPurifier/AttrDef/Text.php';
-require_once 'HTMLPurifier/AttrDef/URI.php';
-
 /**
  * Provides lookup array of attribute types to HTMLPurifier_AttrDef objects
  */

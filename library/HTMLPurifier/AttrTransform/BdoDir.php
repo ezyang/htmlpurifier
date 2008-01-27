@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform.php';
-
 // this MUST be placed in post, as it assumes that any value in dir is valid
 
 HTMLPurifier_ConfigSchema::define(

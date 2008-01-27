@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/IDAccumulator.php';
-
 HTMLPurifier_ConfigSchema::define(
     'Attr', 'EnableID', false, 'bool',
     'Allows the ID attribute in HTML.  This is disabled by default '.

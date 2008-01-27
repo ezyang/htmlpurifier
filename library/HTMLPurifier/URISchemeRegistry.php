@@ -1,12 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIScheme/http.php';
-require_once 'HTMLPurifier/URIScheme/https.php';
-require_once 'HTMLPurifier/URIScheme/mailto.php';
-require_once 'HTMLPurifier/URIScheme/ftp.php';
-require_once 'HTMLPurifier/URIScheme/nntp.php';
-require_once 'HTMLPurifier/URIScheme/news.php';
-
 HTMLPurifier_ConfigSchema::define(
     'URI', 'AllowedSchemes', array(
         'http'  => true, // "Hypertext Transfer Protocol", nuf' said

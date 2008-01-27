@@ -135,6 +135,17 @@ class FSTools
         return rmdir($dirname);
     }
     
+    /**
+     * Recursively globs a directory.
+     */
+    function globr($dir, $pattern, $flags = NULL) {
+        $files = glob("$dir/$pattern", $flags);
+        foreach (glob("$dir/*", GLOB_ONLYDIR) as $sub_dir) {
+            $sub_files = $this->globr($sub_dir, $pattern, $flags);
+            $files = array_merge($files, $sub_files);
+        }
+        return $files; 
+    }
     
 }
 

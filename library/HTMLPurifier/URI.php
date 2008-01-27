@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIParser.php';
-require_once 'HTMLPurifier/URIFilter.php';
-
 /**
  * HTML Purifier's internal representation of a URI
  */

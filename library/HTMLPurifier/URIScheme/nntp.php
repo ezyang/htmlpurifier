@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIScheme.php';
-
 /**
  * Validates nntp (Network News Transfer Protocol) as defined by generic RFC 1738
  */

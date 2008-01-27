@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Lexer.php';
-
 HTMLPurifier_ConfigSchema::define(
     'Core', 'DirectLexLineNumberSyncInterval', 0, 'int', '
 <p>

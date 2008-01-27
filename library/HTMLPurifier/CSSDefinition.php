@@ -1,24 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Definition.php';
-
-require_once 'HTMLPurifier/AttrDef/CSS/AlphaValue.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Background.php';
-require_once 'HTMLPurifier/AttrDef/CSS/BackgroundPosition.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Border.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Color.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Composite.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Filter.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Font.php';
-require_once 'HTMLPurifier/AttrDef/CSS/FontFamily.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Length.php';
-require_once 'HTMLPurifier/AttrDef/CSS/ListStyle.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Multiple.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Percentage.php';
-require_once 'HTMLPurifier/AttrDef/CSS/TextDecoration.php';
-require_once 'HTMLPurifier/AttrDef/CSS/URI.php';
-require_once 'HTMLPurifier/AttrDef/Enum.php';
-
 HTMLPurifier_ConfigSchema::define(
     'CSS', 'DefinitionRev', 1, 'int', '
 <p>

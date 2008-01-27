@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/URI.php';
-
 /**
  * Validates a URI in CSS syntax, which uses url('http://example.com')
  * @note While theoretically speaking a URI in a CSS document could

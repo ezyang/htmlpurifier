@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Printer.php';
-
 class HTMLPurifier_Printer_CSSDefinition extends HTMLPurifier_Printer
 {
     

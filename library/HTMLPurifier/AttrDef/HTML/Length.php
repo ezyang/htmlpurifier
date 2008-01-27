@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-require_once 'HTMLPurifier/AttrDef/HTML/Pixels.php';
-
 /**
  * Validates the HTML type length (not to be confused with CSS's length).
  * 

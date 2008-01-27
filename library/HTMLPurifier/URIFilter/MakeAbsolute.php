@@ -2,8 +2,6 @@
 
 // does not support network paths
 
-require_once 'HTMLPurifier/URIFilter.php';
-
 HTMLPurifier_ConfigSchema::define(
     'URI', 'MakeAbsolute', false, 'bool', '
 <p>

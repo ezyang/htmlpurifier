@@ -1,12 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/DefinitionCache/Serializer.php';
-require_once 'HTMLPurifier/DefinitionCache/Null.php';
-
-require_once 'HTMLPurifier/DefinitionCache/Decorator.php';
-require_once 'HTMLPurifier/DefinitionCache/Decorator/Memory.php';
-require_once 'HTMLPurifier/DefinitionCache/Decorator/Cleanup.php';
-
 /**
  * Abstract class representing Definition cache managers that implements
  * useful common methods and is a factory.

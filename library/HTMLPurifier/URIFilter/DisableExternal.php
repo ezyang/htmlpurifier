@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIFilter.php';
-
 HTMLPurifier_ConfigSchema::define(
     'URI', 'DisableExternal', false, 'bool',
     'Disables links to external websites.  This is a highly effective '.

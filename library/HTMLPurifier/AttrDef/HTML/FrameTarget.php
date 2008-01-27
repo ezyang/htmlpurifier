@@ -11,8 +11,6 @@ HTMLPurifier_ConfigSchema::define(
     'will have to manually enable it (see the module documentation for more details.)'
 );
 
-require_once 'HTMLPurifier/AttrDef/Enum.php';
-
 /**
  * Special-case enum attribute definition that lazy loads allowed frame targets
  */

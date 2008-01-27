@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Doctype.php';
-
 // Legacy directives for doctype specification
 HTMLPurifier_ConfigSchema::define(
     'HTML', 'Strict', false, 'bool',

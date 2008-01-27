@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URI.php';
-
 /**
  * Parses a URI into the components and fragment identifier as specified
  * by RFC 2396.

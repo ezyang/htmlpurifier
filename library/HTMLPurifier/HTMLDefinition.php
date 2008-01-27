@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Definition.php';
-require_once 'HTMLPurifier/HTMLModuleManager.php';
-
 // this definition and its modules MUST NOT define configuration directives
 // outside of the HTML or Attr namespaces
 

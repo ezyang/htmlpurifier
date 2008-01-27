@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIFilter/DisableExternal.php';
-
 HTMLPurifier_ConfigSchema::define(
     'URI', 'DisableExternalResources', false, 'bool',
     'Disables the embedding of external resources, preventing users from '.
