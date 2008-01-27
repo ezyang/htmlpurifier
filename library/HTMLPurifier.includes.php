@@ -18,6 +18,9 @@
  *      library directory; this is not auto-set.
  */
 
+// Treat this file specially, as it is detached from the rest of the library
+require_once 'HTMLPurifier/Bootstrap.php';
+
 require 'HTMLPurifier/ConfigSchema.php';
 require 'HTMLPurifier.php';
 require 'HTMLPurifier/AttrCollections.php';
@@ -25,7 +28,6 @@ require 'HTMLPurifier/AttrDef.php';
 require 'HTMLPurifier/AttrTransform.php';
 require 'HTMLPurifier/AttrTypes.php';
 require 'HTMLPurifier/AttrValidator.php';
-require 'HTMLPurifier/Bootstrap.php';
 require 'HTMLPurifier/Definition.php';
 require 'HTMLPurifier/CSSDefinition.php';
 require 'HTMLPurifier/ChildDef.php';
