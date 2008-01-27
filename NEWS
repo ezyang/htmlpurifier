@@ -17,6 +17,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   HTMLPurifier.php is insufficient--in such cases include HTMLPurifier.autoload.php
   as well to register our autoload handler (or modify your autoload function
   to check HTMLPurifier_Bootstrap::getPath($class)).
+! Extra utility classes for testing and non-library operations can
+  be found in extras/. Specifically, these are FSTools and ConfigSchema.
+  You may find a use for these in your own project, but right now they
+  are highly experimental.
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
 . Plugins now get their own changelogs according to project conventions.

@@ -32,6 +32,19 @@ htmlpurifier_parse_args($AC, $aliases);
 // clean out cache if necessary
 if ($AC['flush']) shell_exec('php ../maintenance/flush-definition-cache.php');
 
+// setup our own autoload for earlier PHP versions
+if (!function_exists('spl_autoload_register')) {
+    function __autoload($class) {
+        return // we're using the fact that once one OR is true, the rest is skipped
+            HTMLPurifier_Bootstrap::autoload($class) ||
+            HTMLPurifierExtras::autoload($class);
+    }
+}
+
+// initialize and load alternative classes
+require_once '../extras/HTMLPurifierExtras.auto.php';
+
+
 // initialize and load HTML Purifier
 // use ?standalone to load the alterative standalone stub
 if ($AC['standalone']) {

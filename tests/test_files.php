@@ -130,3 +130,10 @@ if ($csstidy_location) {
 
 // ... none yet
 
+// FSTools auxiliary library
+
+$test_files[] = 'FSTools/FileTest.php';
+
+// ConfigSchema auxiliary library
+
+$test_files[] = 'ConfigSchema/DirectiveParserTest.php';
