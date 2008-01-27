@@ -1,0 +1,5 @@
+Namespace.Directive
+TYPE: string
+--DESCRIPTION--
+Multiline
+stuff

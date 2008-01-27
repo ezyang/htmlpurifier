@@ -136,4 +136,4 @@ $test_files[] = 'FSTools/FileTest.php';
 
 // ConfigSchema auxiliary library
 
-$test_files[] = 'ConfigSchema/DirectiveParserTest.php';
+$test_files[] = 'ConfigSchema/StringHashParserTest.php';
