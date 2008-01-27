@@ -68,7 +68,7 @@ function create_blank($file) {
     $dir = dirname($file);
     $base = realpath('../tests/blanks/') . DIRECTORY_SEPARATOR ;
     if ($dir != '.') {
-        $FS->mkdir($base . $dir);
+        $FS->mkdirr($base . $dir);
     }
     file_put_contents($base . $file, '');
 }
@@ -88,7 +88,7 @@ function make_dir_standalone($dir) {
  */
 function make_file_standalone($file) {
     global $FS;
-    $FS->mkdir('standalone/' . dirname($file));
+    $FS->mkdirr('standalone/' . dirname($file));
     copy_and_remove_includes($file, 'standalone/' . $file);
     return true;
 }
@@ -143,7 +143,7 @@ echo 'Creating standalone directory...';
 $FS->rmdirr('standalone'); // ensure a clean copy
 
 // data files
-$FS->mkdir('standalone/HTMLPurifier/DefinitionCache/Serializer');
+$FS->mkdirr('standalone/HTMLPurifier/DefinitionCache/Serializer');
 make_dir_standalone('HTMLPurifier/EntityLookup');
 
 // non-standard inclusion setup
