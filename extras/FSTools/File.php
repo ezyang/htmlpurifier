@@ -2,6 +2,10 @@
 
 /**
  * Represents a file in the filesystem
+ *
+ * @warning Be sure to distinguish between get() and write() versus
+ *      read() and put(), the former operates on the entire file, while
+ *      the latter operates on a handle.
  */
 class FSTools_File
 {
@@ -77,9 +81,44 @@ class FSTools_File
     /** Closes file's handle */
     public function close() {
         if (!$this->handle) return false;
-        $this->fs->fclose($this->handle);
+        $status = $this->fs->fclose($this->handle);
         $this->handle = false;
-        return true;
+        return $status;
+    }
+    
+    /** Retrieves a line from an open file, with optional max length $length */
+    public function getLine($length = null) {
+        if (!$this->handle) $this->open('r');
+        if ($length === null) return $this->fs->fgets($this->handle);
+        else return $this->fs->fgets($this->handle, $length);
+    }
+    
+    /** Retrieves a character from an open file */
+    public function getChar() {
+        if (!$this->handle) $this->open('r');
+        return $this->fs->fgetc($this->handle);
+    }
+    
+    /** Retrieves an $length bytes of data from an open data */
+    public function read($length) {
+        if (!$this->handle) $this->open('r');
+        return $this->fs->fread($this->handle, $length);
+    }
+    
+    /** Writes to an open file */
+    public function put($string) {
+        if (!$this->handle) $this->open('a');
+        return $this->fs->fwrite($this->handle, $string);
+    }
+    
+    /** Returns TRUE if the end of the file has been reached */
+    public function eof() {
+        if (!$this->handle) return true;
+        return $this->fs->feof($this->handle);
+    }
+    
+    public function __destruct() {
+        if ($this->handle) $this->close();
     }
     
 }

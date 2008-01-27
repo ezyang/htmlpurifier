@@ -2,6 +2,9 @@
 
 require_once 'FSTools/FileSystemHarness.php';
 
+/**
+ * These are not really unit tests, just sanity checks of basic functionality.
+ */
 class FSTools_FileTest extends FSTools_FileSystemHarness
 {
     
@@ -28,7 +31,14 @@ class FSTools_FileTest extends FSTools_FileSystemHarness
         $this->assertFalse($file->exists());
         $file->open('w');
         $this->assertTrue($file->exists());
+        $file->put('Foobar');
         $file->close();
+        $file->open('r');
+        $this->assertIdentical('F', $file->getChar());
+        $this->assertFalse($file->eof());
+        $this->assertIdentical('oo', $file->read(2));
+        $this->assertIdentical('bar', $file->getLine());
+        $this->assertTrue($file->eof());
     }
     
 }
