@@ -21,6 +21,10 @@
  *
  * We use this as an easy to use file-format for configuration schema
  * files.
+ *
+ * @todo
+ *      Put this in its own class hierarchy or something; this class
+ *      is usage agnostic.
  */
 class ConfigSchema_StringHashParser
 {

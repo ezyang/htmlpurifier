@@ -46,6 +46,11 @@ class HTMLPurifier_ConfigSchema {
     public $info_namespace = array();
     
     /**
+     * Application-wide singleton
+     */
+    static protected $singleton;
+    
+    /**
      * Lookup table of allowed types.
      */
     public $types = array(
@@ -83,14 +88,19 @@ class HTMLPurifier_ConfigSchema {
      * Retrieves an instance of the application-wide configuration definition.
      */
     public static function &instance($prototype = null) {
-        static $instance;
         if ($prototype !== null) {
-            $instance = $prototype;
-        } elseif ($instance === null || $prototype === true) {
-            $instance = new HTMLPurifier_ConfigSchema();
-            $instance->initialize();
+            HTMLPurifier_ConfigSchema::$singleton = $prototype;
+        } elseif (HTMLPurifier_ConfigSchema::$singleton === null || $prototype === true) {
+            HTMLPurifier_ConfigSchema::$singleton = new HTMLPurifier_ConfigSchema();
+            HTMLPurifier_ConfigSchema::$singleton->initialize();
         }
-        return $instance;
+        return HTMLPurifier_ConfigSchema::$singleton;
+    }
+    
+    /** @see HTMLPurifier_ConfigSchema->set() */
+    public static function define($namespace, $name, $default, $type, $description) {
+        $def =& HTMLPurifier_ConfigSchema::instance();
+        $def->add($namespace, $name, $default, $type, $description);
     }
     
     /**
@@ -103,12 +113,10 @@ class HTMLPurifier_ConfigSchema {
      *      HTMLPurifier_DirectiveDef::$type for allowed values
      * @param $description Description of directive for documentation
      */
-    public static function define($namespace, $name, $default, $type, $description) {
-        $def =& HTMLPurifier_ConfigSchema::instance();
-        
+    public function add($namespace, $name, $default, $type, $description) {
         // basic sanity checks
         if (HTMLPURIFIER_SCHEMA_STRICT) {
-            if (!isset($def->info[$namespace])) {
+            if (!isset($this->info[$namespace])) {
                 trigger_error('Cannot define directive for undefined namespace',
                     E_USER_ERROR);
                 return;
@@ -125,11 +133,11 @@ class HTMLPurifier_ConfigSchema {
             }
         }
         
-        if (isset($def->info[$namespace][$name])) {
+        if (isset($this->info[$namespace][$name])) {
             // already defined
             if (
-                $def->info[$namespace][$name]->type !== $type ||
-                $def->defaults[$namespace][$name]   !== $default
+                $this->info[$namespace][$name]->type !== $type ||
+                $this->defaults[$namespace][$name]   !== $default
             ) {
                 trigger_error('Inconsistent default or type, cannot redefine');
                 return;
@@ -144,30 +152,37 @@ class HTMLPurifier_ConfigSchema {
             $allow_null = ($modifier === 'null');
             
             if (HTMLPURIFIER_SCHEMA_STRICT) {
-                if (!isset($def->types[$type])) {
+                if (!isset($this->types[$type])) {
                     trigger_error('Invalid type for configuration directive',
                         E_USER_ERROR);
                     return;
                 }
-                $default = $def->validate($default, $type, $allow_null);
-                if ($def->isError($default)) {
+                $default = $this->validate($default, $type, $allow_null);
+                if ($this->isError($default)) {
                     trigger_error('Default value does not match directive type',
                         E_USER_ERROR);
                     return;
                 }
             }
             
-            $def->info[$namespace][$name] =
+            $this->info[$namespace][$name] =
                 new HTMLPurifier_ConfigDef_Directive();
-            $def->info[$namespace][$name]->type = $type;
-            $def->info[$namespace][$name]->allow_null = $allow_null;
-            $def->defaults[$namespace][$name]   = $default;
+            $this->info[$namespace][$name]->type = $type;
+            $this->info[$namespace][$name]->allow_null = $allow_null;
+            $this->defaults[$namespace][$name]   = $default;
         }
         if (!HTMLPURIFIER_SCHEMA_STRICT) return;
+        // This will be removed soon:
         $backtrace = debug_backtrace();
-        $file = $def->mungeFilename($backtrace[0]['file']);
-        $line = $backtrace[0]['line'];
-        $def->info[$namespace][$name]->addDescription($file,$line,$description);
+        $file = $this->mungeFilename($backtrace[1]['file']);
+        $line = $backtrace[1]['line'];
+        $this->info[$namespace][$name]->addDescription($file,$line,$description);
+    }
+    
+    /** @see HTMLPurifier_ConfigSchema->addNamespace() */
+    public static function defineNamespace($namespace, $description) {
+        $def =& HTMLPurifier_ConfigSchema::instance();
+        $def->addNamespace($namespace, $description);
     }
     
     /**
@@ -175,10 +190,9 @@ class HTMLPurifier_ConfigSchema {
      * @param $namespace Namespace's name
      * @param $description Description of the namespace
      */
-    public static function defineNamespace($namespace, $description) {
-        $def =& HTMLPurifier_ConfigSchema::instance();
+    public function addNamespace($namespace, $description) {
         if (HTMLPURIFIER_SCHEMA_STRICT) {
-            if (isset($def->info[$namespace])) {
+            if (isset($this->info[$namespace])) {
                 trigger_error('Cannot redefine namespace', E_USER_ERROR);
                 return;
             }
@@ -193,10 +207,16 @@ class HTMLPurifier_ConfigSchema {
                 return;
             }
         }
-        $def->info[$namespace] = array();
-        $def->info_namespace[$namespace] = new HTMLPurifier_ConfigDef_Namespace();
-        $def->info_namespace[$namespace]->description = $description;
-        $def->defaults[$namespace] = array();
+        $this->info[$namespace] = array();
+        $this->info_namespace[$namespace] = new HTMLPurifier_ConfigDef_Namespace();
+        $this->info_namespace[$namespace]->description = $description;
+        $this->defaults[$namespace] = array();
+    }
+    
+    /** @see HTMLPurifier_ConfigSchema->addValueAliases() */
+    public static function defineValueAliases($namespace, $name, $aliases) {
+        $def =& HTMLPurifier_ConfigSchema::instance();
+        $def->addValueAliases($namespace, $name, $aliases);
     }
     
     /**
@@ -209,30 +229,35 @@ class HTMLPurifier_ConfigSchema {
      * @param $alias Name of aliased value
      * @param $real Value aliased value will be converted into
      */
-    public static function defineValueAliases($namespace, $name, $aliases) {
-        $def =& HTMLPurifier_ConfigSchema::instance();
-        if (HTMLPURIFIER_SCHEMA_STRICT && !isset($def->info[$namespace][$name])) {
+    public function addValueAliases($namespace, $name, $aliases) {
+        if (HTMLPURIFIER_SCHEMA_STRICT && !isset($this->info[$namespace][$name])) {
             trigger_error('Cannot set value alias for non-existant directive',
                 E_USER_ERROR);
             return;
         }
         foreach ($aliases as $alias => $real) {
             if (HTMLPURIFIER_SCHEMA_STRICT) {
-                if (!$def->info[$namespace][$name] !== true &&
-                    !isset($def->info[$namespace][$name]->allowed[$real])
+                if (!$this->info[$namespace][$name] !== true &&
+                    !isset($this->info[$namespace][$name]->allowed[$real])
                 ) {
                     trigger_error('Cannot define alias to value that is not allowed',
                         E_USER_ERROR);
                     return;
                 }
-                if (isset($def->info[$namespace][$name]->allowed[$alias])) {
+                if (isset($this->info[$namespace][$name]->allowed[$alias])) {
                     trigger_error('Cannot define alias over allowed value',
                         E_USER_ERROR);
                     return;
                 }
             }
-            $def->info[$namespace][$name]->aliases[$alias] = $real;
+            $this->info[$namespace][$name]->aliases[$alias] = $real;
         }
+    }
+    
+    /** @see HTMLPurifier_ConfigSchema->addAllowedValues() */
+    public static function defineAllowedValues($namespace, $name, $allowed_values) {
+        $def =& HTMLPurifier_ConfigSchema::instance();
+        $def->addAllowedValues($namespace, $name, $allowed_values);
     }
     
     /**
@@ -241,14 +266,13 @@ class HTMLPurifier_ConfigSchema {
      * @param $name Name of directive
      * @param $allowed_values Arraylist of allowed values
      */
-    public static function defineAllowedValues($namespace, $name, $allowed_values) {
-        $def =& HTMLPurifier_ConfigSchema::instance();
-        if (HTMLPURIFIER_SCHEMA_STRICT && !isset($def->info[$namespace][$name])) {
+    public function addAllowedValues($namespace, $name, $allowed_values) {
+        if (HTMLPURIFIER_SCHEMA_STRICT && !isset($this->info[$namespace][$name])) {
             trigger_error('Cannot define allowed values for undefined directive',
                 E_USER_ERROR);
             return;
         }
-        $directive =& $def->info[$namespace][$name];
+        $directive =& $this->info[$namespace][$name];
         $type = $directive->type;
         if (HTMLPURIFIER_SCHEMA_STRICT && $type != 'string' && $type != 'istring') {
             trigger_error('Cannot define allowed values for directive whose type is not string',
@@ -263,14 +287,20 @@ class HTMLPurifier_ConfigSchema {
         }
         if (
             HTMLPURIFIER_SCHEMA_STRICT &&
-            $def->defaults[$namespace][$name] !== null &&
-            !isset($directive->allowed[$def->defaults[$namespace][$name]])
+            $this->defaults[$namespace][$name] !== null &&
+            !isset($directive->allowed[$this->defaults[$namespace][$name]])
         ) {
             trigger_error('Default value must be in allowed range of variables',
                 E_USER_ERROR);
             $directive->allowed = true; // undo undo!
             return;
         }
+    }
+    
+    /** @see HTMLPurifier_ConfigSchema->addAlias() */
+    public static function defineAlias($namespace, $name, $new_namespace, $new_name) {
+        $def =& HTMLPurifier_ConfigSchema::instance();
+        $def->addAlias($namespace, $name, $new_namespace, $new_name);
     }
     
     /**
@@ -280,10 +310,9 @@ class HTMLPurifier_ConfigSchema {
      * @param $new_namespace
      * @param $new_name Directive that the alias will be to
      */
-    public static function defineAlias($namespace, $name, $new_namespace, $new_name) {
-        $def =& HTMLPurifier_ConfigSchema::instance();
+    public function addAlias($namespace, $name, $new_namespace, $new_name) {
         if (HTMLPURIFIER_SCHEMA_STRICT) {
-            if (!isset($def->info[$namespace])) {
+            if (!isset($this->info[$namespace])) {
                 trigger_error('Cannot define directive alias in undefined namespace',
                     E_USER_ERROR);
                 return;
@@ -293,26 +322,26 @@ class HTMLPurifier_ConfigSchema {
                     E_USER_ERROR);
                 return;
             }
-            if (isset($def->info[$namespace][$name])) {
+            if (isset($this->info[$namespace][$name])) {
                 trigger_error('Cannot define alias over directive',
                     E_USER_ERROR);
                 return;
             }
-            if (!isset($def->info[$new_namespace][$new_name])) {
+            if (!isset($this->info[$new_namespace][$new_name])) {
                 trigger_error('Cannot define alias to undefined directive',
                     E_USER_ERROR);
                 return;
             }
-            if ($def->info[$new_namespace][$new_name]->class == 'alias') {
+            if ($this->info[$new_namespace][$new_name]->class == 'alias') {
                 trigger_error('Cannot define alias to alias',
                     E_USER_ERROR);
                 return;
             }
         }
-        $def->info[$namespace][$name] =
+        $this->info[$namespace][$name] =
             new HTMLPurifier_ConfigDef_DirectiveAlias(
                 $new_namespace, $new_name);
-        $def->info[$new_namespace][$new_name]->directiveAliases[] = "$namespace.$name";
+        $this->info[$new_namespace][$new_name]->directiveAliases[] = "$namespace.$name";
     }
     
     /**
