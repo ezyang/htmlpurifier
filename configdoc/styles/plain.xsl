@@ -85,18 +85,6 @@
     <xsl:template match="directive/constraints">
         <table class="constraints">
             <xsl:apply-templates />
-            <!-- Calculated other values -->
-            <xsl:if test="../descriptions/description[@file]">
-                <tr>
-                    <th>Used by:</th>
-                    <td>
-                        <xsl:for-each select="../descriptions/description">
-                            <xsl:if test="position()&gt;1">, </xsl:if>
-                            <xsl:value-of select="@file" />
-                        </xsl:for-each>
-                    </td>
-                </tr>
-            </xsl:if>
             <xsl:if test="../aliases/alias">
                 <xsl:apply-templates select="../aliases" mode="constraints" />
             </xsl:if>
@@ -111,7 +99,7 @@
             </xsl:for-each>
         </td>
     </xsl:template>
-    <xsl:template match="directive//description">
+    <xsl:template match="directive/description">
         <div class="description">
             <xsl:copy-of select="div/node()" />
         </div>

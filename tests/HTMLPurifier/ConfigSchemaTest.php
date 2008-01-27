@@ -9,132 +9,83 @@ if (!class_exists('CS')) {
 class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
 {
     
-    /**
-     * Munged name of current file.
-     */
-    protected $file;
+    protected $schema;
     
-    /**
-     * Copy of the real ConfigSchema to revert to.
-     */
-    protected $old_copy;
-    
-    /**
-     * Copy of dummy ConfigSchema for testing purposes.
-     */
-    protected $our_copy;
-    
-    function setUp() {
-        // yes, I know this is slightly convoluted, but that's the price
-        // you pay for using Singletons. Good thing we can overload it.
-        
-        // first, let's get a clean copy to do tests
-        $our_copy = new HTMLPurifier_ConfigSchema();
-        // get the old copy
-        $this->old_copy = HTMLPurifier_ConfigSchema::instance();
-        // put in our copy, and reassign to the REAL reference
-        $this->our_copy =& HTMLPurifier_ConfigSchema::instance($our_copy);
-        
-        $this->file = $this->our_copy->mungeFilename(__FILE__);
+    function setup() {
+        $this->schema = new HTMLPurifier_ConfigSchema();
     }
     
     function tearDown() {
-        // testing is done, restore the old copy
-        HTMLPurifier_ConfigSchema::instance($this->old_copy);
         tally_errors($this);
     }
     
     function test_defineNamespace() {
-        CS::defineNamespace('http', $d = 'This is an internet protocol.');
+        $this->schema->addNamespace('http', $d = 'This is an internet protocol.');
         
-        $this->assertIdentical($this->our_copy->info_namespace, array(
+        $this->assertIdentical($this->schema->info_namespace, array(
             'http' => new HTMLPurifier_ConfigDef_Namespace($d)
         ));
         
         $this->expectError('Cannot redefine namespace');
-        CS::defineNamespace('http', 'It is used to serve webpages.');
+        $this->schema->addNamespace('http', 'It is used to serve webpages.');
         
         $this->expectError('Namespace name must be alphanumeric');
-        CS::defineNamespace('ssh+http', 'This http is tunneled through SSH.');
+        $this->schema->addNamespace('ssh+http', 'This http is tunneled through SSH.');
         
         $this->expectError('Description must be non-empty');
-        CS::defineNamespace('ftp', null);
+        $this->schema->addNamespace('ftp', null);
     }
     
     function test_define() {
-        CS::defineNamespace('Car', 'Automobiles, those gas-guzzlers!');
+        $this->schema->addNamespace('Car', 'Automobiles, those gas-guzzlers!');
         
-        CS::define('Car', 'Seats', 5, 'int', $d = 'Standard issue.'); $l = __LINE__;
+        $this->schema->add('Car', 'Seats', 5, 'int', $d = 'Standard issue.');
         
-        $this->assertIdentical($this->our_copy->defaults['Car']['Seats'], 5);
-        $this->assertIdentical($this->our_copy->info['Car']['Seats'],
-            new HTMLPurifier_ConfigDef_Directive('int',
-                array($this->file => array($l => $d))
-            )
+        $this->assertIdentical($this->schema->defaults['Car']['Seats'], 5);
+        $this->assertIdentical($this->schema->info['Car']['Seats'],
+            new HTMLPurifier_ConfigDef_Directive('int', $d)
         );
         
-        CS::define('Car', 'Age', null, 'int/null', $d = 'Not always known.'); $l = __LINE__;
+        $this->schema->add('Car', 'Age', null, 'int/null', $d = 'Not always known.');
         
-        $this->assertIdentical($this->our_copy->defaults['Car']['Age'], null);
-        $this->assertIdentical($this->our_copy->info['Car']['Age'], 
-            new HTMLPurifier_ConfigDef_Directive('int',
-                array($this->file => array($l => $d)), true
-            )
+        $this->assertIdentical($this->schema->defaults['Car']['Age'], null);
+        $this->assertIdentical($this->schema->info['Car']['Age'], 
+            new HTMLPurifier_ConfigDef_Directive('int', $d, true)
         );
         
         $this->expectError('Cannot define directive for undefined namespace');
-        CS::define('Train', 'Cars', 10, 'int', 'Including the caboose.');
+        $this->schema->add('Train', 'Cars', 10, 'int', 'Including the caboose.');
         
         $this->expectError('Directive name must be alphanumeric');
-        CS::define('Car', 'Is it shiny?', true, 'bool', 'Indicates regular waxing.');
+        $this->schema->add('Car', 'Is it shiny?', true, 'bool', 'Indicates regular waxing.');
         
         $this->expectError('Invalid type for configuration directive');
-        CS::define('Car', 'Efficiency', 50, 'mpg', 'The higher the better.');
+        $this->schema->add('Car', 'Efficiency', 50, 'mpg', 'The higher the better.');
         
         $this->expectError('Default value does not match directive type');
-        CS::define('Car', 'Producer', 'Ford', 'int', 'ID of the company that made the car.');
+        $this->schema->add('Car', 'Producer', 'Ford', 'int', 'ID of the company that made the car.');
         
         $this->expectError('Description must be non-empty');
-        CS::define('Car', 'ComplexAttribute', 'lawyers', 'istring', null);
-    }
-    
-    function testRedefinition_define() {
-        CS::defineNamespace('Cat', 'Belongs to Schrodinger.');
-        
-        CS::define('Cat', 'Dead', false, 'bool', $d1 = 'Well, is it?'); $l1 = __LINE__;
-        CS::define('Cat', 'Dead', false, 'bool', $d2 = 'It is difficult to say.'); $l2 = __LINE__;
-        
-        $this->assertIdentical($this->our_copy->defaults['Cat']['Dead'], false);
-        $this->assertIdentical($this->our_copy->info['Cat']['Dead'], 
-            new HTMLPurifier_ConfigDef_Directive('bool',
-                array($this->file => array($l1 => $d1, $l2 => $d2))
-            )
-        );
-        
-        $this->expectError('Inconsistent default or type, cannot redefine');
-        CS::define('Cat', 'Dead', true, 'bool', 'Quantum mechanics does not know.');
-        
-        $this->expectError('Inconsistent default or type, cannot redefine');
-        CS::define('Cat', 'Dead', 'maybe', 'string', 'Perhaps if we look we will know.');
+        $this->schema->add('Car', 'ComplexAttribute', 'lawyers', 'istring', null);
     }
     
     function test_defineAllowedValues() {
-        CS::defineNamespace('QuantumNumber', 'D');
-        CS::define('QuantumNumber', 'Spin', 0.5, 'float',
+        $this->schema->addNamespace('QuantumNumber', 'D');
+        $this->schema->add('QuantumNumber', 'Spin', 0.5, 'float',
             'Spin of particle. Fourth quantum number, represented by s.');
-        CS::define('QuantumNumber', 'Current', 's', 'string',
+        $this->schema->add('QuantumNumber', 'Current', 's', 'string',
             'Currently selected quantum number.');
-        CS::define('QuantumNumber', 'Difficulty', null, 'string/null', $d = 'How hard are the problems?'); $l = __LINE__;
+        $this->schema->add('QuantumNumber', 'Difficulty', null, 'string/null', $d = 'How hard are the problems?');
         
-        CS::defineAllowedValues( // okay, since default is null
+        $this->schema->addAllowedValues( // okay, since default is null
             'QuantumNumber', 'Difficulty', array('easy', 'medium', 'hard')
         );
         
-        $this->assertIdentical($this->our_copy->defaults['QuantumNumber']['Difficulty'], null);
-        $this->assertIdentical($this->our_copy->info['QuantumNumber']['Difficulty'], 
+        $this->assertIdentical($this->schema->defaults['QuantumNumber']['Difficulty'], null);
+        $this->assertIdentical($this->schema->info['QuantumNumber']['Difficulty'], 
             new HTMLPurifier_ConfigDef_Directive(
                 'string',
-                array($this->file => array($l => $d)),
+                $d,
                 true,
                 array(
                     'easy' => true,
@@ -145,48 +96,48 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
         );
         
         $this->expectError('Cannot define allowed values for undefined directive');
-        CS::defineAllowedValues(
+        $this->schema->addAllowedValues(
             'SpaceTime', 'Symmetry', array('time', 'spatial', 'projective')
         );
         
         $this->expectError('Cannot define allowed values for directive whose type is not string');
-        CS::defineAllowedValues(
+        $this->schema->addAllowedValues(
             'QuantumNumber', 'Spin', array(0.5, -0.5)
         );
         
         $this->expectError('Default value must be in allowed range of variables');
-        CS::defineAllowedValues(
+        $this->schema->addAllowedValues(
             'QuantumNumber', 'Current', array('n', 'l', 'm') // forgot s!
         );
     }
     
     function test_defineValueAliases() {
-        CS::defineNamespace('Abbrev', 'Stuff on abbreviations.');
-        CS::define('Abbrev', 'HTH', 'Happy to Help', 'string', $d = 'Three-letters'); $l = __LINE__;
-        CS::defineAllowedValues(
+        $this->schema->addNamespace('Abbrev', 'Stuff on abbreviations.');
+        $this->schema->add('Abbrev', 'HTH', 'Happy to Help', 'string', $d = 'Three-letters');
+        $this->schema->addAllowedValues(
             'Abbrev', 'HTH', array(
                 'Happy to Help',
                 'Hope that Helps',
                 'HAIL THE HAND!'
             )
         );
-        CS::defineValueAliases(
+        $this->schema->addValueAliases(
             'Abbrev', 'HTH', array(
                 'happy' => 'Happy to Help',
                 'hope' => 'Hope that Helps'
             )
         );
-        CS::defineValueAliases( // delayed addition
+        $this->schema->addValueAliases( // delayed addition
             'Abbrev', 'HTH', array(
                 'hail' => 'HAIL THE HAND!'
             )
         );
         
-        $this->assertIdentical($this->our_copy->defaults['Abbrev']['HTH'], 'Happy to Help');
-        $this->assertIdentical($this->our_copy->info['Abbrev']['HTH'], 
+        $this->assertIdentical($this->schema->defaults['Abbrev']['HTH'], 'Happy to Help');
+        $this->assertIdentical($this->schema->info['Abbrev']['HTH'], 
             new HTMLPurifier_ConfigDef_Directive(
                 'string',
-                array($this->file => array($l => $d)),
+                $d,
                 false,
                 array(
                     'Happy to Help' => true,
@@ -202,14 +153,14 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
         );
         
         $this->expectError('Cannot define alias to value that is not allowed');
-        CS::defineValueAliases(
+        $this->schema->addValueAliases(
             'Abbrev', 'HTH', array(
                 'head' => 'Head to Head'
             )
         );
         
         $this->expectError('Cannot define alias over allowed value');
-        CS::defineValueAliases(
+        $this->schema->addValueAliases(
             'Abbrev', 'HTH', array(
                 'Hope that Helps' => 'Happy to Help'
             )
@@ -218,41 +169,41 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
     }
    
     function testAlias() {
-        CS::defineNamespace('Home', 'Sweet home.');
-        CS::define('Home', 'Rug', 3, 'int', 'ID.');
-        CS::defineAlias('Home', 'Carpet', 'Home', 'Rug');
+        $this->schema->addNamespace('Home', 'Sweet home.');
+        $this->schema->add('Home', 'Rug', 3, 'int', 'ID.');
+        $this->schema->addAlias('Home', 'Carpet', 'Home', 'Rug');
         
-        $this->assertTrue(!isset($this->our_copy->defaults['Home']['Carpet']));
-        $this->assertIdentical($this->our_copy->info['Home']['Carpet'], 
+        $this->assertTrue(!isset($this->schema->defaults['Home']['Carpet']));
+        $this->assertIdentical($this->schema->info['Home']['Carpet'], 
             new HTMLPurifier_ConfigDef_DirectiveAlias('Home', 'Rug')
         );
         
         $this->expectError('Cannot define directive alias in undefined namespace');
-        CS::defineAlias('Store', 'Rug', 'Home', 'Rug');
+        $this->schema->addAlias('Store', 'Rug', 'Home', 'Rug');
         
         $this->expectError('Directive name must be alphanumeric');
-        CS::defineAlias('Home', 'R.g', 'Home', 'Rug');
+        $this->schema->addAlias('Home', 'R.g', 'Home', 'Rug');
         
-        CS::define('Home', 'Rugger', 'Bob Max', 'string', 'Name of.');
+        $this->schema->add('Home', 'Rugger', 'Bob Max', 'string', 'Name of.');
         $this->expectError('Cannot define alias over directive');
-        CS::defineAlias('Home', 'Rugger', 'Home', 'Rug');
+        $this->schema->addAlias('Home', 'Rugger', 'Home', 'Rug');
         
         $this->expectError('Cannot define alias to undefined directive');
-        CS::defineAlias('Home', 'Rug2', 'Home', 'Rugavan');
+        $this->schema->addAlias('Home', 'Rug2', 'Home', 'Rugavan');
         
         $this->expectError('Cannot define alias to alias');
-        CS::defineAlias('Home', 'Rug2', 'Home', 'Carpet');
+        $this->schema->addAlias('Home', 'Rug2', 'Home', 'Carpet');
     }
     
     function assertValid($var, $type, $ret = null) {
         $ret = ($ret === null) ? $var : $ret;
-        $this->assertIdentical($this->our_copy->validate($var, $type), $ret);
+        $this->assertIdentical($this->schema->validate($var, $type), $ret);
     }
     
     function assertInvalid($var, $type) {
         $this->assertTrue(
-            $this->our_copy->isError(
-                $this->our_copy->validate($var, $type)
+            $this->schema->isError(
+                $this->schema->validate($var, $type)
             )
         );
     }
@@ -307,36 +258,15 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
     function testValidate_null() {
         
         $this->assertTrue(
-            $this->our_copy->isError(
-                $this->our_copy->validate(null, 'string', false)
+            $this->schema->isError(
+                $this->schema->validate(null, 'string', false)
             )
         );
         
         $this->assertFalse(
-            $this->our_copy->isError(
-                $this->our_copy->validate(null, 'string', true)
+            $this->schema->isError(
+                $this->schema->validate(null, 'string', true)
             )
-        );
-        
-    }
-    
-    function assertMungeFilename($oldname, $newname) {
-        $this->assertIdentical(
-            $this->our_copy->mungeFilename($oldname),
-            $newname
-        );
-    }
-    
-    function testMungeFilename() {
-        
-        $this->assertMungeFilename(
-            'C:\\php\\My Libraries\\htmlpurifier\\library\\HTMLPurifier\\AttrDef.php',
-            'HTMLPurifier/AttrDef.php'
-        );
-        
-        $this->assertMungeFilename(
-            'C:\\php\\My Libraries\\htmlpurifier\\library\\HTMLPurifier.php',
-            'HTMLPurifier.php'
         );
         
     }

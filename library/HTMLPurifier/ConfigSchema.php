@@ -135,13 +135,8 @@ class HTMLPurifier_ConfigSchema {
         
         if (isset($this->info[$namespace][$name])) {
             // already defined
-            if (
-                $this->info[$namespace][$name]->type !== $type ||
-                $this->defaults[$namespace][$name]   !== $default
-            ) {
-                trigger_error('Inconsistent default or type, cannot redefine');
-                return;
-            }
+            trigger_error('Cannot redefine directive');
+            return;
         } else {
             // needs defining
             
@@ -172,11 +167,7 @@ class HTMLPurifier_ConfigSchema {
             $this->defaults[$namespace][$name]   = $default;
         }
         if (!HTMLPURIFIER_SCHEMA_STRICT) return;
-        // This will be removed soon:
-        $backtrace = debug_backtrace();
-        $file = $this->mungeFilename($backtrace[1]['file']);
-        $line = $backtrace[1]['line'];
-        $this->info[$namespace][$name]->addDescription($file,$line,$description);
+        $this->info[$namespace][$name]->description = $description;
     }
     
     /** @see HTMLPurifier_ConfigSchema->addNamespace() */

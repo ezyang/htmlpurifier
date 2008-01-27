@@ -21,7 +21,8 @@ error_reporting(E_ALL); // probably not possible to use E_STRICT
 define('HTMLPURIFIER_SCHEMA_STRICT', true); // description data needs to be collected
 
 // load dual-libraries
-require_once '../library/HTMLPurifier.auto.php';
+set_include_path(realpath('../library') . PATH_SEPARATOR . get_include_path() );
+require_once '../library/HTMLPurifier.includes.php';
 require_once 'library/ConfigDoc.auto.php';
 
 $purifier = HTMLPurifier::getInstance(array(

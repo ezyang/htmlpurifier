@@ -11,16 +11,16 @@ class HTMLPurifier_ConfigDef_Directive extends HTMLPurifier_ConfigDef
     
     public function __construct(
         $type = null,
-        $descriptions = null,
+        $description = null,
         $allow_null = null,
         $allowed = null,
         $aliases = null
     ) {
-        if (        $type !== null)         $this->type = $type;
-        if ($descriptions !== null) $this->descriptions = $descriptions;
-        if (  $allow_null !== null)   $this->allow_null = $allow_null;
-        if (     $allowed !== null)      $this->allowed = $allowed;
-        if (     $aliases !== null)      $this->aliases = $aliases;
+        if (       $type !== null)        $this->type = $type;
+        if ($description !== null) $this->description = $description;
+        if ( $allow_null !== null)  $this->allow_null = $allow_null;
+        if (    $allowed !== null)     $this->allowed = $allowed;
+        if (    $aliases !== null)     $this->aliases = $aliases;
     }
     
     /**
@@ -38,10 +38,9 @@ class HTMLPurifier_ConfigDef_Directive extends HTMLPurifier_ConfigDef
     public $type = 'mixed';
     
     /**
-     * Plaintext descriptions of the configuration entity is. Organized by
-     * file and line number, so multiple descriptions are allowed.
+     * Plaintext description of the configuration entity is.
      */
-    public $descriptions = array();
+    public $description = null;
     
     /**
      * Is null allowed? Has no effect for mixed type.
@@ -64,14 +63,6 @@ class HTMLPurifier_ConfigDef_Directive extends HTMLPurifier_ConfigDef
      * redirect here
      */
     public $directiveAliases = array();
-    
-    /**
-     * Adds a description to the array
-     */
-    public function addDescription($file, $line, $description) {
-        if (!isset($this->descriptions[$file])) $this->descriptions[$file] = array();
-        $this->descriptions[$file][$line] = $description;
-    }
     
 }
 

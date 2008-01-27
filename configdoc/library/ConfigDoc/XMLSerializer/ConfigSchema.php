@@ -96,21 +96,9 @@ class ConfigDoc_XMLSerializer_ConfigSchema extends ConfigDoc_XMLSerializer
                 
                 $dom_constraints->appendChild($dom_default);
                 
-                $dom_descriptions = $dom_document->createElement('descriptions');
-                $dom_directive->appendChild($dom_descriptions);
-                
-                foreach ($info->descriptions as $file => $file_descriptions) {
-                    foreach ($file_descriptions as $line => $description) {
-                        $dom_description = $dom_document->createElement('description');
-                        // refuse to write $file if it's a full path
-                        if (str_replace('\\', '/', realpath($file)) != $file) {
-                            $dom_description->setAttribute('file', $file);
-                            $dom_description->setAttribute('line', $line);
-                        }
-                        $this->appendHTMLDiv($dom_document, $dom_description, $description);
-                        $dom_descriptions->appendChild($dom_description);
-                    }
-                }
+                $dom_description = $dom_document->createElement('description');
+                $this->appendHTMLDiv($dom_document, $dom_description, $info->description);
+                $dom_directive->appendChild($dom_description);
                 
             }
             
