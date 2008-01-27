@@ -71,21 +71,53 @@ document's character encoding incorrectly.
 ---------------------------------------------------------------------------
 3.  Including the library
 
+WARNING: Currently, the HTMLPurifier.auto.php file is broken due to our
+configuration setup. Once ConfigSchema is migrated outside of PHP files,
+this information will be correct.
+
 The procedure is quite simple:
 
     require_once '/path/to/library/HTMLPurifier.auto.php';
 
-I recommend only including HTML Purifier when you need it, because that
-call represents the inclusion of a lot of PHP files which constitute
-the bulk of HTML Purifier's memory usage.
-
-If you don't like your include_path to be fiddled around with, simply set
-HTML Purifier's library/ directory to the include path yourself and then:
-
-    require_once 'HTMLPurifier.php';
+This will setup an autoloader, so the library's files are only included
+when you use them.
 
 Only the contents in the library/ folder are necessary, so you can remove
-everything else when using HTML Purifier in a production environment. 
+everything else when using HTML Purifier in a production environment.
+
+For better performance
+----------------------
+
+    Opcode caches, which greatly speed up PHP initialization for scripts
+    with large amounts of code (HTML Purifier included), don't like
+    autoloaders. We offer an include file that includes all of HTML Purifier's
+    files in one go in an opcode cache friendly manner:
+    
+        // If /path/to/library isn't already in your include path, uncomment
+        // the below line:
+        // set_include_path( '/path/to/library' . PATH_SEPARATOR . get_include_path() );
+        
+        require 'HTMLPurifier.includes.php';
+    
+    Optional components still need to be included--you'll know if you try to
+    use a feature and you get a class doesn't exists error! The autoloader
+    can be used in conjunction with this approach to catch
+
+For advanced users
+------------------
+
+    HTMLPurifier.auto.php performs a number of operations that can be done
+    individually. These are:
+    
+        * Puts /path/to/library in the include path,
+        * Registers an autoload handler with HTMLPurifier.autoload.php
+          (depending on your version of PHP, this means using
+          spl_autoload_register or defining an __autoload function)
+    
+    You can do these operations by yourself--in fact, you must modify your own
+    autoload handler if you are using a version of PHP earlier than PHP 5.1.2.
+    HTML Purifier's autoload handler is HTMLPurifier_Bootstrap::autoload($class)
+    (so be sure to include HTMLPurifier/Bootstrap.php first.)
 
 
 ---------------------------------------------------------------------------
