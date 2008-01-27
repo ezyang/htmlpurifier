@@ -5,8 +5,7 @@ require_once 'HTMLPurifier/AttrTransform.php';
 /**
  * Pre-transform that changes converts a boolean attribute to fixed CSS
  */
-class HTMLPurifier_AttrTransform_BoolToCSS
-extends HTMLPurifier_AttrTransform {
+class HTMLPurifier_AttrTransform_BoolToCSS extends HTMLPurifier_AttrTransform {
     
     /**
      * Name of boolean attribute that is trigger

@@ -5,8 +5,7 @@ require_once 'HTMLPurifier/ChildDef/Required.php';
 /**
  * Takes the contents of blockquote when in strict and reformats for validation.
  */
-class   HTMLPurifier_ChildDef_StrictBlockquote
-extends HTMLPurifier_ChildDef_Required
+class HTMLPurifier_ChildDef_StrictBlockquote extends HTMLPurifier_ChildDef_Required
 {
     protected $real_elements;
     protected $fake_elements;
