@@ -13,6 +13,10 @@ class ConfigSchema_StringHashAdapter
      */
     public function adapt($hash, $schema) {
         
+        if (! $hash instanceof ConfigSchema_StringHash) {
+            $hash = new ConfigSchema_StringHash($hash);
+        }
+        
         if (!isset($hash['ID'])) {
             trigger_error('Missing key ID in string hash');
             return;
@@ -23,6 +27,7 @@ class ConfigSchema_StringHashAdapter
             // This will cause problems if we decide to support nested
             // namespaces, but for now it's ok.
             $schema->addNamespace($hash['ID'], $hash['DESCRIPTION']);
+            $this->_findUnused($hash);
             return;
         }
         
@@ -36,8 +41,43 @@ class ConfigSchema_StringHashAdapter
             $schema->add($ns, $directive, $default, $type, $description);
         }
         
+        if (isset($hash['VALUE-ALIASES'])) {
+            $raw_value_aliases = $hash['VALUE-ALIASES'];
+            $value_aliases     = eval("return array($raw_value_aliases);");
+            $schema->addValueAliases($ns, $directive, $value_aliases);
+        }
         
+        if (isset($hash['ALLOWED'])) {
+            $raw_allowed = $hash['ALLOWED'];
+            $allowed     = eval("return array($raw_allowed);");
+            $schema->addAllowedValues($ns, $directive, $allowed);
+        }
         
+        if (isset($hash['ALIASES'])) {
+            $raw_aliases = $hash['ALIASES'];
+            $aliases = preg_split('/\s*,\s*/', $raw_aliases);
+            foreach ($aliases as $alias) {
+                list($new_ns, $new_directive) = explode('.', $alias, 2);
+                $schema->addAlias($ns, $directive, $new_ns, $new_directive);
+            }
+        }
+        
+        $this->_findUnused($hash);
+        
+    }
+    
+    /**
+     * Triggers errors for any unused keys passed in the hash; such keys
+     * may indicate typos, missing values, etc.
+     * @param $hash Instance of ConfigSchema_StringHash to check.
+     */
+    protected function _findUnused($hash) {
+        $accessed = $hash->getAccessed();
+        foreach ($hash as $k => $v) {
+            if (!isset($accessed[$k])) {
+                trigger_error("String hash key '$k' not used by adapter", E_USER_NOTICE);
+            }
+        }
     }
     
 }

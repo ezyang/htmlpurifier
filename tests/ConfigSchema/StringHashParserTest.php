@@ -27,7 +27,9 @@ class ConfigSchema_StringHashParserTest extends UnitTestCase
         $this->assertParse('Simple.txt', array(
             'ID' => 'Namespace.Directive',
             'TYPE' => 'string',
-            'DESCRIPTION' => "Multiline\nstuff\n"
+            'CHAIN-ME' => '2',
+            'DESCRIPTION' => "Multiline\nstuff\n",
+            'FOR-WHO' => "Single multiline\n",
         ));
     }
     

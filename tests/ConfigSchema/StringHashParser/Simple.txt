@@ -1,5 +1,8 @@
 Namespace.Directive
 TYPE: string
+CHAIN-ME: 2
 --DESCRIPTION--
 Multiline
 stuff
+--FOR-WHO--
+Single multiline
