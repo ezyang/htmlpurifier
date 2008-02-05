@@ -7,7 +7,7 @@ class ConfigSchema_StringHashAdapterTest extends UnitTestCase
         parent::UnitTestCase();
     }
     
-    function assertAdapt($input, $calls) {
+    function assertAdapt($input, $calls = array()) {
         $schema = new HTMLPurifier_ConfigSchemaMock();
         foreach ($calls as $func => $params) {
             $schema->expectOnce($func, $params);
@@ -32,4 +32,24 @@ class ConfigSchema_StringHashAdapterTest extends UnitTestCase
             )
         );
     }
+    
+    function testNamespace() {
+        $this->assertAdapt(
+            array(
+                'ID' => 'Namespace',
+                'DESCRIPTION' => 'Description of namespace'
+            ),
+            array(
+                'addNamespace' => array('Namespace', 'Description of namespace'),
+            )
+        );
+    }
+    
+    function testMissingId() {
+        $this->expectError('Missing key ID in string hash');
+        $this->assertAdapt(array());
+    }
+    
+    
+    
 }

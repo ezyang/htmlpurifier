@@ -138,3 +138,4 @@ $test_files[] = 'FSTools/FileTest.php';
 
 $test_files[] = 'ConfigSchema/StringHashAdapterTest.php';
 $test_files[] = 'ConfigSchema/StringHashParserTest.php';
+$test_files[] = 'ConfigSchema/StringHashTest.php';

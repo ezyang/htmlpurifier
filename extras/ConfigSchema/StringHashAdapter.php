@@ -12,11 +12,32 @@ class ConfigSchema_StringHashAdapter
      * based on its values.
      */
     public function adapt($hash, $schema) {
+        
+        if (!isset($hash['ID'])) {
+            trigger_error('Missing key ID in string hash');
+            return;
+        }
+        
+        // Check namespace:
+        if (strpos($hash['ID'], '.') === false) {
+            // This will cause problems if we decide to support nested
+            // namespaces, but for now it's ok.
+            $schema->addNamespace($hash['ID'], $hash['DESCRIPTION']);
+            return;
+        }
+        
         list($ns, $directive) = explode('.', $hash['ID'], 2);
-        $default      = eval("return {$hash['DEFAULT']};");
-        $type         = $hash['TYPE'];
-        $description  = $hash['DESCRIPTION'];
-        $schema->add($ns, $directive, $default, $type, $description);
+        
+        if (isset($hash['DEFAULT'], $hash['DESCRIPTION'], $hash['TYPE'])) {
+            $raw_default  = $hash['DEFAULT'];
+            $default      = eval("return $raw_default;");
+            $description  = $hash['DESCRIPTION'];
+            $type         = $hash['TYPE'];
+            $schema->add($ns, $directive, $default, $type, $description);
+        }
+        
+        
+        
     }
     
 }
