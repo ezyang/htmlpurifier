@@ -39,12 +39,22 @@ class ConfigSchema_StringHashReverseAdapter
             trigger_error("Directive '$ns.$directive' doesn't exist in schema");
             return;
         }
+        
         $def = $this->schema->info[$ns][$directive];
+        
+        if ($def instanceof HTMLPurifier_ConfigDef_DirectiveAlias) {
+            return false;
+        }
+        
         $ret['ID'] = "$ns.$directive";
         $ret['TYPE'] = $def->type;
         $ret['DEFAULT'] = $this->export($this->schema->defaults[$ns][$directive]);
-        $ret['DESCRIPTION'] = $def->description;
-        if ($def->allowed !== null) {
+        
+        // Attempt to extract version information from description.
+        
+        $ret['DESCRIPTION'] = wordwrap($this->normalize($def->description), 75, "\n");
+        
+        if ($def->allowed !== true) {
             $ret['ALLOWED'] = $this->exportLookup($def->allowed);
         }
         if (!empty($def->aliases)) {
@@ -59,14 +69,17 @@ class ConfigSchema_StringHashReverseAdapter
     /**
      * Exports a variable into a PHP-readable format
      */
-    protected function export($var) {
+    public function export($var) {
+        if ($var === array()) return 'array()'; // single-line format
         return var_export($var, true);
     }
     
     /**
      * Exports a lookup array into the form 'key1', 'key2', ...
      */
-    protected function exportLookup($lookup) {
+    public function exportLookup($lookup) {
+        if (!is_array($lookup)) return $this->export($lookup);
+        if (empty($lookup)) return '';
         $keys = array_map(array($this, 'export'), array_keys($lookup));
         return implode(', ', $keys);
     }
@@ -74,7 +87,9 @@ class ConfigSchema_StringHashReverseAdapter
     /**
      * Exports a hash into the form 'key' => 'val',\n ...
      */
-    protected function exportHash($hash) {
+    public function exportHash($hash) {
+        if (!is_array($hash)) return $this->export($hash);
+        if (empty($hash)) return '';
         $code = $this->export($hash);
         $lines = explode("\n", $code);
         $ret = '';
@@ -84,6 +99,13 @@ class ConfigSchema_StringHashReverseAdapter
             $ret .= substr($line, 2) . "\n";
         }
         return $ret;
+    }
+    
+    /**
+     * Normalizes a string to Unix style newlines
+     */
+    protected function normalize($string) {
+        return str_replace(array("\r\n", "\r"), "\n", $string);
     }
     
 }

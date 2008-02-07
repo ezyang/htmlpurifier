@@ -57,4 +57,30 @@ class ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
         $adapter->get('BadNs', 'BadDir');
     }
     
+    function assertMethod($func, $input, $expect) {
+        $adapter = new ConfigSchema_StringHashReverseAdapter($this->makeSchema());
+        $result = $adapter->$func($input);
+        $this->assertIdentical($result, $expect);
+    }
+    
+    function testExportEmptyHash() {
+        $this->assertMethod('exportHash', array(), '');
+    }
+    
+    function testExportHash() {
+        $this->assertMethod('exportHash', array('foo' => 'bar'), "'foo' => 'bar',\n");
+    }
+    
+    function testExportEmptyLookup() {
+        $this->assertMethod('exportLookup', array(), '');
+    }
+    
+    function testExportSingleLookup() {
+        $this->assertMethod('exportLookup', array('key' => true), "'key'");
+    }
+    
+    function testExportLookup() {
+        $this->assertMethod('exportLookup', array('key' => true, 'key2' => true, 3 => true), "'key', 'key2', 3");
+    }
+    
 }

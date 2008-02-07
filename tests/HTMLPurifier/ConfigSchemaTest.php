@@ -240,6 +240,7 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
         $this->assertValid("foo\nbar", 'lookup', array('foo' => true, 'bar' => true));
         $this->assertValid("foo\nbar,baz", 'lookup', array('foo' => true, 'bar' => true, 'baz' => true));
         $this->assertValid('', 'lookup', array());
+        $this->assertValid(array(), 'lookup');
         
         $this->assertValid(array('foo' => 'bar'), 'hash');
         $this->assertValid(array(1 => 'moo'), 'hash');
