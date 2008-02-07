@@ -82,8 +82,8 @@ class ConfigSchema_StringHashAdapterTest extends UnitTestCase
                 'ALIASES' => "Ns.Dir2, Ns2.Dir",
             ),
             array(
-                array('addAlias', array('Ns', 'Dir', 'Ns',  'Dir2')),
-                array('addAlias', array('Ns', 'Dir', 'Ns2', 'Dir')),
+                array('addAlias', array('Ns',  'Dir2', 'Ns', 'Dir')),
+                array('addAlias', array('Ns2', 'Dir',  'Ns', 'Dir')),
             )
         );
     }
@@ -92,25 +92,25 @@ class ConfigSchema_StringHashAdapterTest extends UnitTestCase
         $this->assertAdapt(
             array(
                 'ID' => 'Ns.Dir',
-                'DEFAULT' => "'default' . 'bar'",
+                'DEFAULT' => "'val' . '1'",
                 'TYPE' => 'string',
                 'DESCRIPTION' => "Description of default.\n",
                 'VALUE-ALIASES' => "
-                    'milk' => 'dairy',
-                    'cheese' => 'dairy',
+                    'milk' => 'val1',
+                    'cheese' => 'val1',
                 ",
                 'ALLOWED' => "'val1', 'val2'",
                 'ALIASES' => "Ns.Dir2, Ns2.Dir",
             ),
             array(
                 array('add', array(
-                    'Ns', 'Dir', 'defaultbar', 'string',
+                    'Ns', 'Dir', 'val1', 'string',
                     "Description of default.\n"
                 )),
-                array('addValueAliases', array('Ns', 'Dir', array('milk' => 'dairy', 'cheese' => 'dairy'))),
                 array('addAllowedValues', array('Ns', 'Dir', array('val1', 'val2'))),
-                array('addAlias', array('Ns', 'Dir', 'Ns',  'Dir2')),
-                array('addAlias', array('Ns', 'Dir', 'Ns2', 'Dir')),
+                array('addValueAliases', array('Ns', 'Dir', array('milk' => 'val1', 'cheese' => 'val1'))),
+                array('addAlias', array('Ns', 'Dir2', 'Ns', 'Dir')),
+                array('addAlias', array('Ns2', 'Dir', 'Ns', 'Dir')),
             )
         );
     }

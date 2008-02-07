@@ -33,18 +33,12 @@ class ConfigSchema_StringHashAdapter
         
         list($ns, $directive) = explode('.', $hash['ID'], 2);
         
-        if (isset($hash['DEFAULT'], $hash['DESCRIPTION'], $hash['TYPE'])) {
+        if (isset($hash['TYPE'], $hash['DEFAULT'], $hash['DESCRIPTION'])) {
+            $type         = $hash['TYPE'];
             $raw_default  = $hash['DEFAULT'];
             $default      = eval("return $raw_default;");
             $description  = $hash['DESCRIPTION'];
-            $type         = $hash['TYPE'];
             $schema->add($ns, $directive, $default, $type, $description);
-        }
-        
-        if (isset($hash['VALUE-ALIASES'])) {
-            $raw_value_aliases = $hash['VALUE-ALIASES'];
-            $value_aliases     = eval("return array($raw_value_aliases);");
-            $schema->addValueAliases($ns, $directive, $value_aliases);
         }
         
         if (isset($hash['ALLOWED'])) {
@@ -53,12 +47,19 @@ class ConfigSchema_StringHashAdapter
             $schema->addAllowedValues($ns, $directive, $allowed);
         }
         
+        // This must be after ALLOWED
+        if (isset($hash['VALUE-ALIASES'])) {
+            $raw_value_aliases = $hash['VALUE-ALIASES'];
+            $value_aliases     = eval("return array($raw_value_aliases);");
+            $schema->addValueAliases($ns, $directive, $value_aliases);
+        }
+        
         if (isset($hash['ALIASES'])) {
             $raw_aliases = $hash['ALIASES'];
             $aliases = preg_split('/\s*,\s*/', $raw_aliases);
             foreach ($aliases as $alias) {
-                list($new_ns, $new_directive) = explode('.', $alias, 2);
-                $schema->addAlias($ns, $directive, $new_ns, $new_directive);
+                list($alias_ns, $alias_directive) = explode('.', $alias, 2);
+                $schema->addAlias($alias_ns, $alias_directive, $ns, $directive);
             }
         }
         

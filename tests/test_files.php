@@ -137,5 +137,6 @@ $test_files[] = 'FSTools/FileTest.php';
 // ConfigSchema auxiliary library
 
 $test_files[] = 'ConfigSchema/StringHashAdapterTest.php';
+$test_files[] = 'ConfigSchema/StringHashReverseAdapterTest.php';
 $test_files[] = 'ConfigSchema/StringHashParserTest.php';
 $test_files[] = 'ConfigSchema/StringHashTest.php';
