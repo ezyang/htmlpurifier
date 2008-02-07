@@ -3,6 +3,10 @@
 /**
  * This is in almost every respect equivalent to an array except
  * that it keeps track of which keys were accessed.
+ *
+ * @warning For the sake of backwards compatibility with early versions
+ *     of PHP 5, you must not use the $hash[$key] syntax; if you do
+ *     our version of offsetGet is never called.
  */
 class ConfigSchema_StringHash extends ArrayObject
 {

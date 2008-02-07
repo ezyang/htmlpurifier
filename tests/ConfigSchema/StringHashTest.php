@@ -9,7 +9,7 @@ class ConfigSchema_StringHashTest extends UnitTestCase
             'key2' => 'value2'
         ));
         $this->assertIdentical($hash->getAccessed(), array());
-        $t = $hash['key'];
+        $t = $hash->offsetGet('key');
         $this->assertIdentical($hash->getAccessed(), array('key' => true));
         $hash->resetAccessed();
         $this->assertIdentical($hash->getAccessed(), array());

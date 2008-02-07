@@ -26,36 +26,36 @@ class ConfigSchema_StringHashAdapter
         if (strpos($hash['ID'], '.') === false) {
             // This will cause problems if we decide to support nested
             // namespaces, but for now it's ok.
-            $schema->addNamespace($hash['ID'], $hash['DESCRIPTION']);
+            $schema->addNamespace($hash->offsetGet('ID'), $hash->offsetGet('DESCRIPTION'));
             $this->_findUnused($hash);
             return;
         }
         
-        list($ns, $directive) = explode('.', $hash['ID'], 2);
+        list($ns, $directive) = explode('.', $hash->offsetGet('ID'), 2);
         
         if (isset($hash['TYPE'], $hash['DEFAULT'], $hash['DESCRIPTION'])) {
-            $type         = $hash['TYPE'];
-            $raw_default  = $hash['DEFAULT'];
+            $type         = $hash->offsetGet('TYPE');
+            $raw_default  = $hash->offsetGet('DEFAULT');
             $default      = eval("return $raw_default;");
-            $description  = $hash['DESCRIPTION'];
+            $description  = $hash->offsetGet('DESCRIPTION');
             $schema->add($ns, $directive, $default, $type, $description);
         }
         
         if (isset($hash['ALLOWED'])) {
-            $raw_allowed = $hash['ALLOWED'];
+            $raw_allowed = $hash->offsetGet('ALLOWED');
             $allowed     = eval("return array($raw_allowed);");
             $schema->addAllowedValues($ns, $directive, $allowed);
         }
         
         // This must be after ALLOWED
         if (isset($hash['VALUE-ALIASES'])) {
-            $raw_value_aliases = $hash['VALUE-ALIASES'];
+            $raw_value_aliases = $hash->offsetGet('VALUE-ALIASES');
             $value_aliases     = eval("return array($raw_value_aliases);");
             $schema->addValueAliases($ns, $directive, $value_aliases);
         }
         
         if (isset($hash['ALIASES'])) {
-            $raw_aliases = $hash['ALIASES'];
+            $raw_aliases = $hash->offsetGet('ALIASES');
             $aliases = preg_split('/\s*,\s*/', $raw_aliases);
             foreach ($aliases as $alias) {
                 list($alias_ns, $alias_directive) = explode('.', $alias, 2);
