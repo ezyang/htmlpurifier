@@ -14,9 +14,19 @@ afraid to cast your vote for the next feature to be implemented!
 IMPORTANT
  - Get everything into configuration objects (filters, I'm looking at you)
  - Factor demo.php into a set of Printer classes, and then create a stub
-   file for users here
+   file for users here (inside the actual HTML Purifier library)
  - Test HTMLPurifier.auto.php, HTMLPurifier.includes.php, and combinations
    of the two.
+ - Document new ConfigSchema setup and format; dev-includes.txt is a base
+   but we need it in HTML
+ - Document new methods of including the library
+ - We should do a release candidate, because of the major changes
+ - Move utility classes for ConfigSchema into HTML Purifier itself: they're
+   that important
+ - Factor generate-schema-cache.php into a class, so that the maintenance script
+   is as small as possible
+ - Document which scripts need to be called when a change is made
+ - Semi-automated smoketests using PHPT style files
 
 3.1 release [Error'ed]
  # Error logging for filtering/cleanup procedures

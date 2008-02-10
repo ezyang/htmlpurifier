@@ -43,7 +43,11 @@ $aliases = array(
 );
 htmlpurifier_parse_args($AC, $aliases);
 
+// Calls generate-includes.php automatically
 shell_exec("php ../maintenance/merge-library.php");
+
+// Not strictly necessary, but its a good idea
+shell_exec("php ../maintenance/generate-schema-cache.php");
 shell_exec('php ../maintenance/flush-definition-cache.php');
 
 $test = new TestSuite('HTML Purifier Multiple Versions Test');

@@ -131,7 +131,8 @@ create_blank('HTMLPurifier.php');
 echo 'Creating full file...';
 $contents = replace_includes(file_get_contents('HTMLPurifier.includes.php'));
 $contents = str_replace(
-    "define('HTMLPURIFIER_PREFIX', dirname(__FILE__));",
+    // Note that bootstrap is now inside the standalone file
+    "define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/..'));",
     "define('HTMLPURIFIER_PREFIX', dirname(__FILE__) . '/standalone');
 set_include_path(HTMLPURIFIER_PREFIX . PATH_SEPARATOR . get_include_path());",
     $contents
