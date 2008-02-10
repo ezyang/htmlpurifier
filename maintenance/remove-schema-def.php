@@ -10,10 +10,7 @@ exit;
 
 /**
  * @file
- * Removes leading includes from files.
- * 
- * @note
- *      This does not remove inline includes; those must be handled manually.
+ * Removes ConfigSchema function calls from source files.
  */
 
 chdir(dirname(__FILE__) . '/../library/');
@@ -23,8 +20,11 @@ $files = $FS->globr('.', '*.php');
 foreach ($files as $file) {
     if (substr_count(basename($file), '.') > 1) continue;
     $old_code = file_get_contents($file);
-    $new_code = preg_replace("#^require_once .+[\n\r]*#m", '', $old_code);
+    $new_code = preg_replace("#^HTMLPurifier_ConfigSchema::.+?\);[\n\r]*#ms", '', $old_code);
     if ($old_code !== $new_code) {
         file_put_contents($file, $new_code);
+    }
+    if (preg_match('#^\s+HTMLPurifier_ConfigSchema::#m', $new_code)) {
+        echo "Indented ConfigSchema call in $file\n";
     }
 }

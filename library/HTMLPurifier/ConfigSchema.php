@@ -68,20 +68,10 @@ class HTMLPurifier_ConfigSchema {
     );
     
     /**
-     * Initializes the default namespaces.
+     * Unserializes the default ConfigSchema.
      */
-    public function initialize() {
-        $this->defineNamespace('Core', 'Core features that are always available.');
-        $this->defineNamespace('Attr', 'Features regarding attribute validation.');
-        $this->defineNamespace('URI', 'Features regarding Uniform Resource Identifiers.');
-        $this->defineNamespace('HTML', 'Configuration regarding allowed HTML.');
-        $this->defineNamespace('CSS', 'Configuration regarding allowed CSS.');
-        $this->defineNamespace('AutoFormat', 'Configuration for activating auto-formatting functionality (also known as <code>Injector</code>s)');
-        $this->defineNamespace('AutoFormatParam', 'Configuration for customizing auto-formatting functionality');
-        $this->defineNamespace('Filter', 'Configuration for filters');
-        $this->defineNamespace('Output', 'Configuration relating to the generation of (X)HTML.');
-        $this->defineNamespace('Cache', 'Configuration for DefinitionCache and related subclasses.');
-        $this->defineNamespace('Test', 'Developer testing configuration for our unit tests.');
+    public static function makeFromSerial() {
+        return unserialize(file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/ConfigSchema/schema.ser'));
     }
     
     /**
@@ -91,8 +81,7 @@ class HTMLPurifier_ConfigSchema {
         if ($prototype !== null) {
             HTMLPurifier_ConfigSchema::$singleton = $prototype;
         } elseif (HTMLPurifier_ConfigSchema::$singleton === null || $prototype === true) {
-            HTMLPurifier_ConfigSchema::$singleton = new HTMLPurifier_ConfigSchema();
-            HTMLPurifier_ConfigSchema::$singleton->initialize();
+            HTMLPurifier_ConfigSchema::$singleton = HTMLPurifier_ConfigSchema::makeFromSerial();
         }
         return HTMLPurifier_ConfigSchema::$singleton;
     }

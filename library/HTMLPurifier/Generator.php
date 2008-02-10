@@ -1,49 +1,6 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'Output', 'CommentScriptContents', true, 'bool',
-    'Determines whether or not HTML Purifier should attempt to fix up '.
-    'the contents of script tags for legacy browsers with comments. This '.
-    'directive was available since 2.0.0.'
-);
-HTMLPurifier_ConfigSchema::defineAlias('Core', 'CommentScriptContents', 'Output', 'CommentScriptContents');
-
 // extension constraints could be factored into ConfigSchema
-HTMLPurifier_ConfigSchema::define(
-    'Output', 'TidyFormat', false, 'bool', <<<HTML
-<p>
-    Determines whether or not to run Tidy on the final output for pretty 
-    formatting reasons, such as indentation and wrap.
-</p>
-<p>
-    This can greatly improve readability for editors who are hand-editing
-    the HTML, but is by no means necessary as HTML Purifier has already
-    fixed all major errors the HTML may have had. Tidy is a non-default
-    extension, and this directive will silently fail if Tidy is not
-    available.
-</p>
-<p>
-    If you are looking to make the overall look of your page's source
-    better, I recommend running Tidy on the entire page rather than just
-    user-content (after all, the indentation relative to the containing
-    blocks will be incorrect).
-</p>
-<p>
-    This directive was available since 1.1.1.
-</p>
-HTML
-);
-HTMLPurifier_ConfigSchema::defineAlias('Core', 'TidyFormat', 'Output', 'TidyFormat');
-
-HTMLPurifier_ConfigSchema::define('Output', 'Newline', null, 'string/null', '
-<p>
-    Newline string to format final output with. If left null, HTML Purifier
-    will auto-detect the default newline type of the system and use that;
-    you can manually override it here. Remember, \r\n is Windows, \r
-    is Mac, and \n is Unix. This directive was available since 2.0.1.
-</p>
-');
-
 /**
  * Generates HTML from tokens.
  * @todo Refactor interface so that configuration/context is determined

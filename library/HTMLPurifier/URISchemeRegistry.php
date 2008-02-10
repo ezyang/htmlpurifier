@@ -1,28 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'URI', 'AllowedSchemes', array(
-        'http'  => true, // "Hypertext Transfer Protocol", nuf' said
-        'https' => true, // HTTP over SSL (Secure Socket Layer)
-        // quite useful, but not necessary
-        'mailto' => true,// Email
-        'ftp'   => true, // "File Transfer Protocol"
-        // for Usenet, these two are similar, but distinct
-        'nntp'  => true, // individual Netnews articles
-        'news'  => true  // newsgroup or individual Netnews articles
-    ), 'lookup',
-    'Whitelist that defines the schemes that a URI is allowed to have.  This '.
-    'prevents XSS attacks from using pseudo-schemes like javascript or mocha.'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'URI', 'OverrideAllowedSchemes', true, 'bool',
-    'If this is set to true (which it is by default), you can override '.
-    '%URI.AllowedSchemes by simply registering a HTMLPurifier_URIScheme '.
-    'to the registry.  If false, you will also have to update that directive '.
-    'in order to add more schemes.'
-);
-
 /**
  * Registry for retrieving specific URI scheme validator objects.
  */

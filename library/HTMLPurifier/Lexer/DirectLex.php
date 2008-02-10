@@ -1,19 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'DirectLexLineNumberSyncInterval', 0, 'int', '
-<p>
-  Specifies the number of tokens the DirectLex line number tracking
-  implementations should process before attempting to resyncronize the
-  current line count by manually counting all previous new-lines. When
-  at 0, this functionality is disabled. Lower values will decrease
-  performance, and this is only strictly necessary if the counting
-  algorithm is buggy (in which case you should report it as a bug).
-  This has no effect when %Core.MaintainLineNumbers is disabled or DirectLex is
-  not being used. This directive has been available since 2.0.0.
-</p>
-');
-
 /**
  * Our in-house implementation of a parser.
  * 

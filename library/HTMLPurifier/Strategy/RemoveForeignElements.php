@@ -1,42 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'RemoveInvalidImg', true, 'bool', '
-<p>
-  This directive enables pre-emptive URI checking in <code>img</code> 
-  tags, as the attribute validation strategy is not authorized to 
-  remove elements from the document.  This directive has been available 
-  since 1.3.0, revert to pre-1.3.0 behavior by setting to false.
-</p>
-'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'RemoveScriptContents', null, 'bool/null', '
-<p>
-  This directive enables HTML Purifier to remove not only script tags
-  but all of their contents. This directive has been deprecated since 2.1.0,
-  and when not set the value of %Core.HiddenElements will take
-  precedence. This directive has been available since 2.0.0, and can be used to 
-  revert to pre-2.0.0 behavior by setting it to false.
-</p>
-'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'HiddenElements', array('script' => true, 'style' => true), 'lookup', '
-<p>
-  This directive is a lookup array of elements which should have their
-  contents removed when they are not allowed by the HTML definition.
-  For example, the contents of a <code>script</code> tag are not 
-  normally shown in a document, so if script tags are to be removed,
-  their contents should be removed to. This is opposed to a <code>b</code>
-  tag, which defines some presentational changes but does not hide its
-  contents.
-</p>
-'
-);
-
 /**
  * Removes all unrecognized tags from the list of tokens.
  * 

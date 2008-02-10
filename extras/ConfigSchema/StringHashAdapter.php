@@ -55,13 +55,18 @@ class ConfigSchema_StringHashAdapter
         }
         
         if (isset($hash['ALIASES'])) {
-            $raw_aliases = $hash->offsetGet('ALIASES');
+            $raw_aliases = trim($hash->offsetGet('ALIASES'));
             $aliases = preg_split('/\s*,\s*/', $raw_aliases);
             foreach ($aliases as $alias) {
                 list($alias_ns, $alias_directive) = explode('.', $alias, 2);
                 $schema->addAlias($alias_ns, $alias_directive, $ns, $directive);
             }
         }
+        
+        // We don't use these yet, but there being used
+        if (isset($hash['VERSION'])) $hash->offsetGet('VERSION');
+        if (isset($hash['DEPRECATED-USE'])) $hash->offsetGet('DEPRECATED-USE');
+        if (isset($hash['DEPRECATED-VERSION'])) $hash->offsetGet('DEPRECATED-VERSION');
         
         $this->_findUnused($hash);
         

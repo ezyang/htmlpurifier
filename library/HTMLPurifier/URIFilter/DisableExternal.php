@@ -1,15 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'URI', 'DisableExternal', false, 'bool',
-    'Disables links to external websites.  This is a highly effective '.
-    'anti-spam and anti-pagerank-leech measure, but comes at a hefty price: no'.
-    'links or images outside of your domain will be allowed.  Non-linkified '.
-    'URIs will still be preserved.  If you want to be able to link to '.
-    'subdomains or use absolute URIs, specify %URI.Host for your website. '.
-    'This directive has been available since 1.2.0.'
-);
-
 class HTMLPurifier_URIFilter_DisableExternal extends HTMLPurifier_URIFilter
 {
     public $name = 'DisableExternal';

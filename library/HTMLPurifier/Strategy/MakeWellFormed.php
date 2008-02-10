@@ -1,16 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'AutoFormat', 'Custom', array(), 'list', '
-<p>
-  This directive can be used to add custom auto-format injectors.
-  Specify an array of injector names (class name minus the prefix)
-  or concrete implementations. Injector class must exist. This directive
-  has been available since 2.0.1.
-</p>
-'
-);
-
 /**
  * Takes tokens makes them well-formed (balance end tags, etc.)
  */

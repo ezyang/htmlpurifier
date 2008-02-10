@@ -5,15 +5,6 @@
 // false = delete parent node and all children
 // array(...) = replace children nodes with these
 
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'EscapeInvalidChildren', false, 'bool',
-    'When true, a child is found that is not allowed in the context of the '.
-    'parent element will be transformed into text as if it were ASCII. When '.
-    'false, that element and all internal tags will be dropped, though text '.
-    'will be preserved.  There is no option for dropping the element but '.
-    'preserving child nodes.'
-);
-
 /**
  * Defines allowed child nodes and validates tokens against it.
  */

@@ -1,19 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'Cache', 'DefinitionImpl', 'Serializer', 'string/null', '
-This directive defines which method to use when caching definitions,
-the complex data-type that makes HTML Purifier tick. Set to null
-to disable caching (not recommended, as you will see a definite
-performance degradation). This directive has been available since 2.0.0.
-');
-
-HTMLPurifier_ConfigSchema::defineAlias(
-    'Core', 'DefinitionCache',
-    'Cache', 'DefinitionImpl'
-);
-
-
 /**
  * Responsible for creating definition caches.
  */

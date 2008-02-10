@@ -1,13 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'Language', 'en', 'string', '
-ISO 639 language code for localizable things in HTML Purifier to use,
-which is mainly error reporting. There is currently only an English (en)
-translation, so this directive is currently useless.
-This directive has been available since 2.0.0.
-');
-
 /**
  * Class responsible for generating HTMLPurifier_Language objects, managing
  * caching and fallbacks.

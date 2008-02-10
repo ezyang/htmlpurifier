@@ -1,10 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'Attr', 'IDBlacklist', array(), 'list',
-    'Array of IDs not allowed in the document.'
-);
-
 /**
  * Component of HTMLPurifier_AttrContext that accumulates IDs to prevent dupes
  * @note In Slashdot-speak, dupe means duplicate.

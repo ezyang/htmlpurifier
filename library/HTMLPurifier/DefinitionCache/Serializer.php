@@ -1,16 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'Cache', 'SerializerPath', null, 'string/null', '
-<p>
-    Absolute path with no trailing slash to store serialized definitions in.
-    Default is within the
-    HTML Purifier library inside DefinitionCache/Serializer. This
-    path must be writable by the webserver. This directive has been
-    available since 2.0.0.
-</p>
-');
-
 class HTMLPurifier_DefinitionCache_Serializer extends
       HTMLPurifier_DefinitionCache
 {

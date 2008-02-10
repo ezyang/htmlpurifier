@@ -1,22 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'CSS', 'DefinitionRev', 1, 'int', '
-<p>
-    Revision identifier for your custom definition. See
-    %HTML.DefinitionRev for details. This directive has been available
-    since 2.0.0.
-</p>
-');
-
-HTMLPurifier_ConfigSchema::define(
-    'CSS', 'Proprietary', false, 'bool', '
-<p>
-    Whether or not to allow safe, proprietary CSS values. This directive
-    has been available since 3.0.0.
-</p>
-');
-
 /**
  * Defines allowed CSS attributes and what their values are.
  * @see HTMLPurifier_HTMLDefinition

@@ -1,53 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'Encoding', 'utf-8', 'istring', 
-    'If for some reason you are unable to convert all webpages to UTF-8, '. 
-    'you can use this directive as a stop-gap compatibility change to '. 
-    'let HTML Purifier deal with non UTF-8 input.  This technique has '. 
-    'notable deficiencies: absolutely no characters outside of the selected '. 
-    'character encoding will be preserved, not even the ones that have '. 
-    'been ampersand escaped (this is due to a UTF-8 specific <em>feature</em> '.
-    'that automatically resolves all entities), making it pretty useless '.
-    'for anything except the most I18N-blind applications, although '.
-    '%Core.EscapeNonASCIICharacters offers fixes this trouble with '.
-    'another tradeoff. This directive '.
-    'only accepts ISO-8859-1 if iconv is not enabled.'
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'EscapeNonASCIICharacters', false, 'bool',
-    'This directive overcomes a deficiency in %Core.Encoding by blindly '.
-    'converting all non-ASCII characters into decimal numeric entities before '.
-    'converting it to its native encoding. This means that even '.
-    'characters that can be expressed in the non-UTF-8 encoding will '.
-    'be entity-ized, which can be a real downer for encodings like Big5. '.
-    'It also assumes that the ASCII repetoire is available, although '.
-    'this is the case for almost all encodings. Anyway, use UTF-8! This '.
-    'directive has been available since 1.4.0.'
-);
-
-if ( !function_exists('iconv') ) {
-    // only encodings with native PHP support
-    HTMLPurifier_ConfigSchema::defineAllowedValues(
-        'Core', 'Encoding', array(
-            'utf-8',
-            'iso-8859-1'
-        )
-    );
-    HTMLPurifier_ConfigSchema::defineValueAliases(
-        'Core', 'Encoding', array(
-            'iso8859-1' => 'iso-8859-1'
-        )
-    );
-}
-
-HTMLPurifier_ConfigSchema::define(
-    'Test', 'ForceNoIconv', false, 'bool', 
-    'When set to true, HTMLPurifier_Encoder will act as if iconv does not '.
-    'exist and use only pure PHP implementations.'
-);
-
 /**
  * A UTF-8 specific character encoder that handles cleaning and transforming.
  * @note All functions in this class should be static.

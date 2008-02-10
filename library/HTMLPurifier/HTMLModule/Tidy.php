@@ -1,39 +1,5 @@
 <?php
 
-HTMLPurifier_ConfigSchema::define(
-    'HTML', 'TidyLevel', 'medium', 'string', '
-<p>General level of cleanliness the Tidy module should enforce.
-There are four allowed values:</p>
-<dl>
-    <dt>none</dt>
-    <dd>No extra tidying should be done</dd>
-    <dt>light</dt>
-    <dd>Only fix elements that would be discarded otherwise due to
-    lack of support in doctype</dd>
-    <dt>medium</dt>
-    <dd>Enforce best practices</dd>
-    <dt>heavy</dt>
-    <dd>Transform all deprecated elements and attributes to standards
-    compliant equivalents</dd>
-</dl>
-<p>This directive has been available since 2.0.0</p>
-' );
-HTMLPurifier_ConfigSchema::defineAllowedValues(
-    'HTML', 'TidyLevel', array('none', 'light', 'medium', 'heavy')
-);
-
-HTMLPurifier_ConfigSchema::define(
-    'HTML', 'TidyAdd', array(), 'lookup', '
-Fixes to add to the default set of Tidy fixes as per your level. This
-directive has been available since 2.0.0.
-' );
-
-HTMLPurifier_ConfigSchema::define(
-    'HTML', 'TidyRemove', array(), 'lookup', '
-Fixes to remove from the default set of Tidy fixes as per your level. This
-directive has been available since 2.0.0.
-' );
-
 /**
  * Abstract class for a set of proprietary modules that clean up (tidy)
  * poorly written HTML.

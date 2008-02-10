@@ -43,16 +43,6 @@
 define('HTMLPURIFIER_PREFIX', dirname(__FILE__));
 
 // every class has an undocumented dependency to these, must be included!
-HTMLPurifier_ConfigSchema::define(
-    'Core', 'CollectErrors', false, 'bool', '
-Whether or not to collect errors found while filtering the document. This
-is a useful way to give feedback to your users. <strong>Warning:</strong>
-Currently this feature is very patchy and experimental, with lots of
-possible error messages not yet implemented. It will not cause any problems,
-but it may not help your users either. This directive has been available
-since 2.0.0.
-');
-
 /**
  * Facade that coordinates HTML Purifier's subsystems in order to purify HTML.
  * 
