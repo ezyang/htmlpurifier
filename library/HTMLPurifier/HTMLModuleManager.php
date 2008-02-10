@@ -146,14 +146,14 @@ class HTMLPurifier_HTMLModuleManager
             $ok = false;
             foreach ($this->prefixes as $prefix) {
                 $module = $prefix . $original_module;
-                if ($this->_classExists($module)) {
+                if (class_exists($module)) {
                     $ok = true;
                     break;
                 }
             }
             if (!$ok) {
                 $module = $original_module;
-                if (!$this->_classExists($module)) {
+                if (!class_exists($module)) {
                     trigger_error($original_module . ' module does not exist',
                         E_USER_ERROR);
                     return;
@@ -166,15 +166,6 @@ class HTMLPurifier_HTMLModuleManager
             return;
         }
         $this->registeredModules[$module->name] = $module;
-    }
-    
-    /**
-     * Safely tests for class existence without invoking __autoload in PHP5
-     * or greater.
-     * @param $name String class name to test
-     */
-    private function _classExists($name) {
-        return class_exists($name, false);
     }
     
     /**

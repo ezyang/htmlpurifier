@@ -42,7 +42,6 @@
 // constants are slow, but we'll make one exception
 define('HTMLPURIFIER_PREFIX', dirname(__FILE__));
 
-// every class has an undocumented dependency to these, must be included!
 /**
  * Facade that coordinates HTML Purifier's subsystems in order to purify HTML.
  * 

@@ -145,6 +145,7 @@ $FS->rmdirr('standalone'); // ensure a clean copy
 // data files
 $FS->mkdirr('standalone/HTMLPurifier/DefinitionCache/Serializer');
 make_dir_standalone('HTMLPurifier/EntityLookup');
+make_file_standalone('HTMLPurifier/ConfigSchema/schema.ser');
 
 // non-standard inclusion setup
 make_dir_standalone('HTMLPurifier/Language');

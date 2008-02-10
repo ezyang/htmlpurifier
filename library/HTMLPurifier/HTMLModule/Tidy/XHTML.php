@@ -1,7 +1,6 @@
 <?php
 
-class HTMLPurifier_HTMLModule_Tidy_XHTML extends
-      HTMLPurifier_HTMLModule_Tidy
+class HTMLPurifier_HTMLModule_Tidy_XHTML extends HTMLPurifier_HTMLModule_Tidy
 {
     
     public $name = 'Tidy_XHTML';

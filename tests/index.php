@@ -15,6 +15,7 @@
 
 define('HTMLPurifierTest', 1);
 define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
+chdir(dirname(__FILE__));
 
 require_once 'common.php';
 
@@ -52,7 +53,7 @@ if ($AC['standalone']) {
     require_once '../library/HTMLPurifier.standalone.php';
 } else {
     set_include_path(realpath('../library') . PATH_SEPARATOR . get_include_path() );
-    require_once 'HTMLPurifier.includes.php';
+    require_once 'HTMLPurifier.auto.php';
 }
 require_once 'HTMLPurifier/Harness.php';
 

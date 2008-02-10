@@ -21,7 +21,6 @@
 // Treat this file specially, as it is detached from the rest of the library
 require_once 'HTMLPurifier/Bootstrap.php';
 
-require 'HTMLPurifier/ConfigSchema.php';
 require 'HTMLPurifier.php';
 require 'HTMLPurifier/AttrCollections.php';
 require 'HTMLPurifier/AttrDef.php';
@@ -32,6 +31,8 @@ require 'HTMLPurifier/Definition.php';
 require 'HTMLPurifier/CSSDefinition.php';
 require 'HTMLPurifier/ChildDef.php';
 require 'HTMLPurifier/Config.php';
+require 'HTMLPurifier/ConfigDef.php';
+require 'HTMLPurifier/ConfigSchema.php';
 require 'HTMLPurifier/ContentSets.php';
 require 'HTMLPurifier/Context.php';
 require 'HTMLPurifier/DefinitionCache.php';
@@ -119,6 +120,9 @@ require 'HTMLPurifier/ChildDef/Required.php';
 require 'HTMLPurifier/ChildDef/Optional.php';
 require 'HTMLPurifier/ChildDef/StrictBlockquote.php';
 require 'HTMLPurifier/ChildDef/Table.php';
+require 'HTMLPurifier/ConfigDef/Directive.php';
+require 'HTMLPurifier/ConfigDef/DirectiveAlias.php';
+require 'HTMLPurifier/ConfigDef/Namespace.php';
 require 'HTMLPurifier/DefinitionCache/Decorator.php';
 require 'HTMLPurifier/DefinitionCache/Null.php';
 require 'HTMLPurifier/DefinitionCache/Serializer.php';
@@ -143,8 +147,10 @@ require 'HTMLPurifier/HTMLModule/Text.php';
 require 'HTMLPurifier/HTMLModule/Tidy.php';
 require 'HTMLPurifier/HTMLModule/XMLCommonAttributes.php';
 require 'HTMLPurifier/HTMLModule/Tidy/Proprietary.php';
-require 'HTMLPurifier/HTMLModule/Tidy/XHTML.php';
 require 'HTMLPurifier/HTMLModule/Tidy/XHTMLAndHTML4.php';
+require 'HTMLPurifier/HTMLModule/Tidy/Strict.php';
+require 'HTMLPurifier/HTMLModule/Tidy/Transitional.php';
+require 'HTMLPurifier/HTMLModule/Tidy/XHTML.php';
 require 'HTMLPurifier/Injector/AutoParagraph.php';
 require 'HTMLPurifier/Injector/Linkify.php';
 require 'HTMLPurifier/Injector/PurifierLinkify.php';

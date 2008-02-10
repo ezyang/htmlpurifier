@@ -17,10 +17,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   HTMLPurifier.php is insufficient--in such cases include HTMLPurifier.autoload.php
   as well to register our autoload handler (or modify your autoload function
   to check HTMLPurifier_Bootstrap::getPath($class)).
+# HTMLPurifier_ConfigSchema static functions are officially deprecated. Schema
+  information is stored in the ConfigSchema directory, and the
+  maintenance/generate-schema-cache.php generates the schema.ser file, which
+  is now instantiated. Support for userland schema changes coming soon!
 ! Extra utility classes for testing and non-library operations can
   be found in extras/. Specifically, these are FSTools and ConfigSchema.
   You may find a use for these in your own project, but right now they
-  are highly experimental.
+  are highly experimental and volatile.
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
 . Plugins now get their own changelogs according to project conventions.
@@ -31,6 +35,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Implemented recursive glob at FSTools->globr
 . ConfigSchema now has instance methods for all corresponding define* 
   static methods.
+. A couple of new historical maintenance scripts were added.
+. HTMLPurifier/HTMLModule/Tidy/XHTMLAndHTML4.php split into two files
+. tests/index.php can now be run from any directory.
 
 3.0.0, released 2008-01-06
 # HTML Purifier is PHP 5 only! The 2.1.x branch will be maintained

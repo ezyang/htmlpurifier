@@ -18,13 +18,11 @@ $FS = new FSTools();
 $exclude_dirs = array(
     'HTMLPurifier/Language/',
     'HTMLPurifier/Filter/',
-    'HTMLPurifier/ConfigDef/', // specially handled, remove this once fixed!
 );
 $exclude_files = array(
     'HTMLPurifier/Lexer/PEARSax3.php',
     'HTMLPurifier/Lexer/PH5P.php',
     'HTMLPurifier/Bootstrap.php',
-    'HTMLPurifier/ConfigDef.php', // specially handled, remove this once fixed!
 );
 
 // Determine what files need to be included:
@@ -65,9 +63,6 @@ function get_dependency_lookup($file) {
     $deps = array();
     while (!feof($fh)) {
         $line = fgets($fh);
-        if (strncmp('HTMLPurifier_ConfigSchema', $line, 25) === 0) {
-            $deps['HTMLPurifier/ConfigSchema.php'] = true;
-        }
         if (strncmp('class', $line, 5) === 0) {
             // The implementation here is fragile and will break if we attempt
             // to use interfaces. Beware!
