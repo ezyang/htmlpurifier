@@ -1,5 +1,5 @@
 Attr.IDBlacklistRegexp
-TYPE: string
+TYPE: string/null
 VERSION: 1.6.0
 DEFAULT: NULL
 --DESCRIPTION--

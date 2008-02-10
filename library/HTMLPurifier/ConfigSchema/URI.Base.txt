@@ -1,5 +1,5 @@
 URI.Base
-TYPE: string
+TYPE: string/null
 VERSION: 2.1.0
 DEFAULT: NULL
 --DESCRIPTION--

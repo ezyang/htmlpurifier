@@ -1,5 +1,5 @@
 HTML.AllowedModules
-TYPE: lookup
+TYPE: lookup/null
 VERSION: 2.0.0
 DEFAULT: NULL
 --DESCRIPTION--

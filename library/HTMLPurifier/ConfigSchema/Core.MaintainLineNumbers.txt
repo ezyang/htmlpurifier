@@ -1,5 +1,5 @@
 Core.MaintainLineNumbers
-TYPE: bool
+TYPE: bool/null
 VERSION: 2.0.0
 DEFAULT: NULL
 --DESCRIPTION--

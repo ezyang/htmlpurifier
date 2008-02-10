@@ -1,5 +1,5 @@
 HTML.DefinitionID
-TYPE: string
+TYPE: string/null
 DEFAULT: NULL
 VERSION: 2.0.0
 --DESCRIPTION--

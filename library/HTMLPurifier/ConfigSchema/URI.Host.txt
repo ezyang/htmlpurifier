@@ -1,5 +1,5 @@
 URI.Host
-TYPE: string
+TYPE: string/null
 VERSION: 1.2.0
 DEFAULT: NULL
 --DESCRIPTION--

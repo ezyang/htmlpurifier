@@ -1,5 +1,5 @@
 URI.Munge
-TYPE: string
+TYPE: string/null
 VERSION: 1.3.0
 DEFAULT: NULL
 --DESCRIPTION--

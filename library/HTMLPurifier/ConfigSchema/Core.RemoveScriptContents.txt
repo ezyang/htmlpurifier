@@ -1,5 +1,5 @@
 Core.RemoveScriptContents
-TYPE: bool
+TYPE: bool/null
 DEFAULT: NULL
 VERSION: 2.0.0
 DEPRECATED-VERSION: 2.1.0

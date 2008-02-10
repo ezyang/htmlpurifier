@@ -1,5 +1,5 @@
 HTML.Allowed
-TYPE: itext
+TYPE: itext/null
 VERSION: 2.0.0
 DEFAULT: NULL
 --DESCRIPTION--

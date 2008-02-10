@@ -1,5 +1,5 @@
 Cache.DefinitionImpl
-TYPE: string
+TYPE: string/null
 VERSION: 2.0.0
 DEFAULT: 'Serializer'
 --DESCRIPTION--

@@ -1,5 +1,5 @@
 Output.Newline
-TYPE: string
+TYPE: string/null
 VERSION: 2.0.1
 DEFAULT: NULL
 --DESCRIPTION--
