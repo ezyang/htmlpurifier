@@ -59,6 +59,10 @@ foreach ($raw_files as $file) {
 function get_dependency_lookup($file) {
     static $cache = array();
     if (isset($cache[$file])) return $cache[$file];
+    if (!file_exists($file)) {
+        echo "File doesn't exist: $file\n";
+        return array();
+    }
     $fh = fopen($file, 'r');
     $deps = array();
     while (!feof($fh)) {

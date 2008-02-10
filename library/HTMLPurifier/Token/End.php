@@ -7,4 +7,7 @@
  * is for optimization reasons, as under normal circumstances, the Lexers
  * do not pass attributes.
  */
-class HTMLPurifier_Token_End extends HTMLPurifier_Token_Tag {}
+class HTMLPurifier_Token_End extends HTMLPurifier_Token_Tag
+{
+    
+}
