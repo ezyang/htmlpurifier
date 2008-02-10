@@ -12,13 +12,11 @@ amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
 IMPORTANT
- - Put our new configuration thing into effect
- - Get rid of the manual includes in ConfigSchema (this means changing
-   generate-includes.php too)
  - Get everything into configuration objects (filters, I'm looking at you)
  - Factor demo.php into a set of Printer classes, and then create a stub
    file for users here
- - Test HTMLPurifier.auto.php
+ - Test HTMLPurifier.auto.php, HTMLPurifier.includes.php, and combinations
+   of the two.
 
 3.1 release [Error'ed]
  # Error logging for filtering/cleanup procedures

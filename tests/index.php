@@ -54,6 +54,7 @@ if ($AC['standalone']) {
 } else {
     set_include_path(realpath('../library') . PATH_SEPARATOR . get_include_path() );
     require_once 'HTMLPurifier.auto.php';
+    require_once 'HTMLPurifier.includes.php';
 }
 require_once 'HTMLPurifier/Harness.php';
 
