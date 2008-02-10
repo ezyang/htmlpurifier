@@ -48,11 +48,14 @@ class ConfigSchema_StringHashReverseAdapter
         
         $ret['ID'] = "$ns.$directive";
         $ret['TYPE'] = $def->type;
-        $ret['DEFAULT'] = $this->export($this->schema->defaults[$ns][$directive]);
         
         // Attempt to extract version information from description.
+        $description = $this->normalize($def->description);
+        list($description, $version) = $this->extractVersion($description);
         
-        $ret['DESCRIPTION'] = wordwrap($this->normalize($def->description), 75, "\n");
+        if ($version) $ret['VERSION'] = $version;
+        $ret['DEFAULT'] = $this->export($this->schema->defaults[$ns][$directive]);
+        $ret['DESCRIPTION'] = wordwrap($description, 75, "\n");
         
         if ($def->allowed !== true) {
             $ret['ALLOWED'] = $this->exportLookup($def->allowed);
@@ -106,6 +109,10 @@ class ConfigSchema_StringHashReverseAdapter
      */
     protected function normalize($string) {
         return str_replace(array("\r\n", "\r"), "\n", $string);
+    }
+    
+    public function extractVersion($description) {
+        return array($description, false);
     }
     
 }

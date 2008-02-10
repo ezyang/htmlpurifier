@@ -83,4 +83,8 @@ class ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
         $this->assertMethod('exportLookup', array('key' => true, 'key2' => true, 3 => true), "'key', 'key2', 3");
     }
     
+    function assertExtraction($desc, $expect_desc, $expect_version) {
+        
+    }
+    
 }
