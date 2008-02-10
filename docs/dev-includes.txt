@@ -268,3 +268,10 @@ Backwards-compatibility
 I expect that the ConfigSchema methods should stick around for a little bit,
 but display E_USER_NOTICE warnings that they are deprecated. This will
 require documentation!
+
+New stuff
+---------
+
+VERSION: Version number directive was introduced
+DEPRECATED-VERSION: If the directive was deprecated, when was it deprecated?
+DEPRECATED-USE: If the directive was deprecated, what should the user use now?

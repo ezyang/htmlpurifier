@@ -1,0 +1,9 @@
+HTML.XHTML
+TYPE: bool
+DEFAULT: true
+VERSION: 1.1.0
+--DESCRIPTION--
+Determines whether or not output is XHTML 1.0 or HTML 4.01 flavor. This
+directive is deprecated in favor of %HTML.Doctype.
+--ALIASES--
+Core.XHTML

@@ -1,0 +1,2 @@
+Filter
+DESCRIPTION: Configuration for filters

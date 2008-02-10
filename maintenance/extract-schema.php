@@ -28,12 +28,12 @@ require_once 'HTMLPurifier/Filter/ExtractStyleBlocks.php';
  */
 function saveHash($hash) {
     if ($hash === false) return;
-    $dir = realpath(dirname(__FILE__) . '/../library/HTMLPurifier/ConfigSchema/');
+    $dir = realpath(dirname(__FILE__) . '/../library/HTMLPurifier/ConfigSchema');
     $name = $hash['ID'] . '.txt';
-    $file = $dir . $name;
+    $file = $dir . '/' . $name;
     if (file_exists($file)) {
-        //trigger_error("File already exists; skipped $name");
-        //return;
+        trigger_error("File already exists; skipped $name");
+        return;
     }
     $file = new FSTools_File($file);
     $file->open('w');
