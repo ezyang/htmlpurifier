@@ -112,7 +112,16 @@ class ConfigSchema_StringHashReverseAdapter
     }
     
     public function extractVersion($description) {
-        return array($description, false);
+        $regex = '/This directive (?:has been|was) available since (\d+\.\d+\.\d+)\./';
+        $regex = str_replace(' ', '\s+', $regex); // allow any number of spaces between statements
+        $ok = preg_match($regex, $description, $matches);
+        if ($ok) {
+            $version = $matches[1];
+        } else {
+            $version = false;
+        }
+        $description = preg_replace($regex, '', $description, 1);
+        return array($description, $version);
     }
     
 }

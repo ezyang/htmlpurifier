@@ -8,7 +8,7 @@ class ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
         $schema->addNamespace('Ns', 'Description of ns.');
         $schema->addNamespace('Ns2', 'Description of ns2.');
         $schema->add('Ns', 'Dir', 'dairy', 'string',
-                     "Description of default.\n");
+                     "Description of default.\nThis directive has been available since 1.2.0.");
         $schema->addAllowedValues('Ns', 'Dir', array('dairy', 'meat'));
         $schema->addValueAliases('Ns', 'Dir', array('milk' => 'dairy', 'cheese' => 'dairy'));
         $schema->addAlias('Ns', 'Dir2', 'Ns',  'Dir');
@@ -40,6 +40,7 @@ class ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
         $expect = array(
             'ID' => 'Ns.Dir',
             'TYPE' => 'string',
+            'VERSION' => '1.2.0',
             'DEFAULT' => "'dairy'",
             'DESCRIPTION' => "Description of default.\n",
             'ALLOWED' => "'dairy', 'meat'",
@@ -84,7 +85,18 @@ class ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
     }
     
     function assertExtraction($desc, $expect_desc, $expect_version) {
-        
+        $adapter = new ConfigSchema_StringHashReverseAdapter($this->makeSchema());
+        list($result_desc, $result_version) = $adapter->extractVersion($desc);
+        $this->assertIdentical($result_desc, $expect_desc);
+        $this->assertIdentical($result_version, $expect_version);
+    }
+    
+    function testExtractSimple() {
+        $this->assertExtraction("Desc.\nThis directive has been available since 2.0.0.", "Desc.\n", '2.0.0');
+    }
+    
+    function testExtractMultiline() {
+        $this->assertExtraction("Desc.\nThis directive was available\n    since 23.4.333.", "Desc.\n", '23.4.333');
     }
     
 }
