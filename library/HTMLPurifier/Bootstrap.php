@@ -1,7 +1,7 @@
 <?php
 
 // constants are slow, but we'll make one exception
-define('HTMLPURIFIER_PREFIX', dirname(__FILE__));
+define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/..'));
 
 /**
  * Bootstrap class that contains meta-functionality for HTML Purifier such as
