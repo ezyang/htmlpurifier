@@ -1,5 +1,8 @@
 <?php
 
+// constants are slow, but we'll make one exception
+define('HTMLPURIFIER_PREFIX', dirname(__FILE__));
+
 /**
  * Bootstrap class that contains meta-functionality for HTML Purifier such as
  * the autoload function.

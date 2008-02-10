@@ -39,9 +39,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-// constants are slow, but we'll make one exception
-define('HTMLPURIFIER_PREFIX', dirname(__FILE__));
-
 /**
  * Facade that coordinates HTML Purifier's subsystems in order to purify HTML.
  * 
