@@ -1,7 +1,5 @@
 <?php
 
-// informative URI directives
-
 class HTMLPurifier_URIDefinition extends HTMLPurifier_Definition
 {
     

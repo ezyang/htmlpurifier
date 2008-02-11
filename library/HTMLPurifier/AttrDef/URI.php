@@ -1,9 +1,5 @@
 <?php
 
-// special case filtering directives 
-
-// disabling directives
-
 /**
  * Validates a URI as defined by RFC 3986.
  * @note Scheme-specific mechanics deferred to HTMLPurifier_URIScheme

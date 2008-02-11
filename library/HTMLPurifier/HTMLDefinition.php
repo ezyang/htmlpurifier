@@ -1,8 +1,5 @@
 <?php
 
-// this definition and its modules MUST NOT define configuration directives
-// outside of the HTML or Attr namespaces
-
 /**
  * Definition of the purified HTML that describes allowed children,
  * attributes, and many other things.
@@ -22,6 +19,9 @@
  * 
  * @note This class is inspected by Printer_HTMLDefinition; please
  *       update that class if things here change.
+ *
+ * @warning Directives that change this object's structure must be in
+ *          the HTML or Attr namespace!
  */
 class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
 {

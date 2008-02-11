@@ -1,6 +1,5 @@
 <?php
 
-// Legacy directives for doctype specification
 class HTMLPurifier_DoctypeRegistry
 {
     

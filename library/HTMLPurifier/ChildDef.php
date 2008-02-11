@@ -1,10 +1,5 @@
 <?php
 
-// HTMLPurifier_ChildDef and inheritance have three types of output:
-// true = leave nodes as is
-// false = delete parent node and all children
-// array(...) = replace children nodes with these
-
 /**
  * Defines allowed child nodes and validates tokens against it.
  */
