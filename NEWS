@@ -40,6 +40,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . tests/index.php can now be run from any directory.
 . HTMLPurifier_Token subclasses split into seperate files
 . HTMLPURIFIER_PREFIX now is defined in Bootstrap.php, NOT HTMLPurifier.php
+. HTMLPURIFIER_PREFIX can now be defined outside of HTML Purifier
 
 3.0.0, released 2008-01-06
 # HTML Purifier is PHP 5 only! The 2.1.x branch will be maintained
