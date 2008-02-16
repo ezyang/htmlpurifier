@@ -78,14 +78,19 @@ class HTMLPurifier_Config
      *                      object. Can be: a HTMLPurifier_Config() object,
      *                      an array of directives based on loadArray(),
      *                      or a string filename of an ini file.
+     * @param HTMLPurifier_ConfigSchema Schema object
      * @return Configured HTMLPurifier_Config object
      */
-    public static function create($config) {
+    public static function create($config, $schema = null) {
         if ($config instanceof HTMLPurifier_Config) {
             // pass-through
             return $config;
         }
-        $ret = HTMLPurifier_Config::createDefault();
+        if (!$schema) {
+            $ret = HTMLPurifier_Config::createDefault();
+        } else {
+            $ret = new HTMLPurifier_Config($schema);
+        }
         if (is_string($config)) $ret->loadIni($config);
         elseif (is_array($config)) $ret->loadArray($config);
         return $ret;
@@ -346,8 +351,10 @@ class HTMLPurifier_Config
      * namespaces/directives list.
      * @param $allowed List of allowed namespaces/directives
      */
-    public static function getAllowedDirectivesForForm($allowed) {
-        $schema = HTMLPurifier_ConfigSchema::instance();
+    public static function getAllowedDirectivesForForm($allowed, $schema = null) {
+        if (!$schema) {
+            $schema = HTMLPurifier_ConfigSchema::instance();
+        }
         if ($allowed !== true) {
              if (is_string($allowed)) $allowed = array($allowed);
              $allowed_ns = array();
@@ -389,10 +396,11 @@ class HTMLPurifier_Config
      * @param $index Index/name that the config variables are in
      * @param $allowed List of allowed namespaces/directives 
      * @param $mq_fix Boolean whether or not to enable magic quotes fix
+     * @param $schema Instance of HTMLPurifier_ConfigSchema to use, if not global copy
      */
-    public static function loadArrayFromForm($array, $index, $allowed = true, $mq_fix = true) {
-        $ret = HTMLPurifier_Config::prepareArrayFromForm($array, $index, $allowed, $mq_fix);
-        $config = HTMLPurifier_Config::create($ret);
+    public static function loadArrayFromForm($array, $index, $allowed = true, $mq_fix = true, $schema = null) {
+        $ret = HTMLPurifier_Config::prepareArrayFromForm($array, $index, $allowed, $mq_fix, $schema);
+        $config = HTMLPurifier_Config::create($ret, $schema);
         return $config;
     }
     
@@ -401,7 +409,7 @@ class HTMLPurifier_Config
      * @note Same parameters as loadArrayFromForm
      */
     public function mergeArrayFromForm($array, $index, $allowed = true, $mq_fix = true) {
-         $ret = HTMLPurifier_Config::prepareArrayFromForm($array, $index, $allowed, $mq_fix);
+         $ret = HTMLPurifier_Config::prepareArrayFromForm($array, $index, $allowed, $mq_fix, $this->def);
          $this->loadArray($ret);
     }
     
@@ -409,11 +417,11 @@ class HTMLPurifier_Config
      * Prepares an array from a form into something usable for the more
      * strict parts of HTMLPurifier_Config
      */
-    public static function prepareArrayFromForm($array, $index, $allowed = true, $mq_fix = true) {
+    public static function prepareArrayFromForm($array, $index, $allowed = true, $mq_fix = true, $schema = null) {
         $array = (isset($array[$index]) && is_array($array[$index])) ? $array[$index] : array();
         $mq = get_magic_quotes_gpc() && $mq_fix;
         
-        $allowed = HTMLPurifier_Config::getAllowedDirectivesForForm($allowed);
+        $allowed = HTMLPurifier_Config::getAllowedDirectivesForForm($allowed, $schema);
         $ret = array();
         foreach ($allowed as $key) {
             list($ns, $directive) = $key;

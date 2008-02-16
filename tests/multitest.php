@@ -37,6 +37,7 @@ $AC['exclude-standalone'] = false;
 $AC['file']  = '';
 $AC['xml']   = false;
 $AC['quiet'] = false;
+$AC['php'] = 'php';
 $aliases = array(
     'f' => 'file',
     'q' => 'quiet',
@@ -44,11 +45,11 @@ $aliases = array(
 htmlpurifier_parse_args($AC, $aliases);
 
 // Calls generate-includes.php automatically
-shell_exec("php ../maintenance/merge-library.php");
+shell_exec($AC['php'] . ' ../maintenance/merge-library.php');
 
 // Not strictly necessary, but its a good idea
-shell_exec("php ../maintenance/generate-schema-cache.php");
-shell_exec('php ../maintenance/flush-definition-cache.php');
+shell_exec($AC['php'] . ' ../maintenance/generate-schema-cache.php');
+shell_exec($AC['php'] . ' ../maintenance/flush-definition-cache.php');
 
 $test = new TestSuite('HTML Purifier Multiple Versions Test');
 $file = '';
@@ -73,8 +74,8 @@ foreach ($versions_to_test as $version) {
         $version = $version[0];
         $flush = '--flush';
     }
-    if (!$AC['exclude-normal'])     $test->addTestCase(new CliTestCase("$phpv $version index.php --xml $flush $file", $AC['quiet'], $size));
-    if (!$AC['exclude-standalone']) $test->addTestCase(new CliTestCase("$phpv $version index.php --xml --standalone $file", $AC['quiet'], $size));
+    if (!$AC['exclude-normal'])     $test->addTestCase(new CliTestCase("$phpv $version index.php --xml $flush --php=\"$phpv $version\" $file", $AC['quiet'], $size));
+    if (!$AC['exclude-standalone']) $test->addTestCase(new CliTestCase("$phpv $version index.php --xml --standalone --php=\"$phpv $version\" $file", $AC['quiet'], $size));
 }
 
 // This is the HTML Purifier website's test XML file. We could
@@ -88,4 +89,4 @@ if ($AC['xml']) {
 }
 $test->run($reporter);
 
-shell_exec('php ../maintenance/flush-definition-cache.php');
+shell_exec($AC['php'] . ' ../maintenance/flush-definition-cache.php');

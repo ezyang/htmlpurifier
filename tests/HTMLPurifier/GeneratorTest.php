@@ -63,7 +63,6 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
         foreach ($inputs as $i => $input) {
             $result = $this->obj->generateFromToken($input);
             $this->assertIdentical($result, $expect[$i]);
-            paintIf($result, $result != $expect[$i]);
         }
         
     }
@@ -92,7 +91,6 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
         foreach ($inputs as $i => $input) {
             $result = $this->obj->generateAttributes($input, 'irrelevant');
             $this->assertIdentical($result, $expect[$i]);
-            paintIf($result, $result != $expect[$i]);
         }
         
     }

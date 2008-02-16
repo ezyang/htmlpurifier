@@ -71,7 +71,6 @@ class HTMLPurifier_Lexer_DirectLexTest extends HTMLPurifier_Harness
         for($i = 0; $i < $size; $i++) {
             $result = $this->DirectLex->parseAttributeString($input[$i], $config, $context);
             $this->assertIdentical($expect[$i], $result, 'Test ' . $i . ': %s');
-            paintIf($result, $expect[$i] != $result);
         }
         
     }

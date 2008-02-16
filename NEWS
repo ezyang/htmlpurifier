@@ -25,8 +25,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   be found in extras/. Specifically, these are FSTools and ConfigSchema.
   You may find a use for these in your own project, but right now they
   are highly experimental and volatile.
+! Integration with PHPT allows for automated smoketests
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
+- Various HTMLPurifier_Config convenience functions now accept another parameter
+  $schema which defines what HTMLPurifier_ConfigSchema to use besides the
+  global default.
 . Plugins now get their own changelogs according to project conventions.
 . Convert tokens to use instanceof, reducing memory footprint and
   improving comparison speed.
@@ -41,6 +45,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . HTMLPurifier_Token subclasses split into seperate files
 . HTMLPURIFIER_PREFIX now is defined in Bootstrap.php, NOT HTMLPurifier.php
 . HTMLPURIFIER_PREFIX can now be defined outside of HTML Purifier
+. New --php=php flag added, allows PHP executable to be specified (command
+  line only!)
+. htmlpurifier_add_test() preferred method to translate test files in to
+  classes, because it handles PHPT files too.
+. Debugger class is deprecated and will be removed soon.
 
 3.0.0, released 2008-01-06
 # HTML Purifier is PHP 5 only! The 2.1.x branch will be maintained

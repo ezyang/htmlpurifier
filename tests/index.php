@@ -25,22 +25,22 @@ $AC['standalone'] = false;
 $AC['file'] = '';
 $AC['xml'] = false;
 $AC['dry'] = false;
+$AC['php'] = 'php';
 $aliases = array(
     'f' => 'file',
 );
 htmlpurifier_parse_args($AC, $aliases);
 
-// clean out cache if necessary
-if ($AC['flush']) shell_exec('php ../maintenance/flush-definition-cache.php');
-
-// setup our own autoload for earlier PHP versions
-if (!function_exists('spl_autoload_register')) {
-    function __autoload($class) {
-        return // we're using the fact that once one OR is true, the rest is skipped
-            HTMLPurifier_Bootstrap::autoload($class) ||
-            HTMLPurifierExtras::autoload($class);
-    }
+if (!SimpleReporter::inCli()) {
+    // Undo any dangerous parameters
+    $AC['php'] = 'php';
 }
+
+$phpt = PHPT_Registry::getInstance();
+$phpt->php = $AC['php'];
+
+// clean out cache if necessary
+if ($AC['flush']) shell_exec($AC['php'] . ' ../maintenance/flush-definition-cache.php');
 
 // initialize and load alternative classes
 require_once '../extras/HTMLPurifierExtras.auto.php';
@@ -81,8 +81,7 @@ if ($AC['file']) {
 if ($AC['file']) {
     
     $test = new TestSuite($AC['file']);
-    require_once $AC['file'];
-    $test->addTestClass(path2class($AC['file']));
+    htmlpurifier_add_test($test, $AC['file']);
     
 } else {
     
@@ -90,8 +89,7 @@ if ($AC['file']) {
     if ($AC['standalone']) $standalone = ' (standalone)';
     $test = new TestSuite('All HTML Purifier tests on PHP ' . PHP_VERSION . $standalone);
     foreach ($test_files as $test_file) {
-        require_once $test_file;
-        $test->addTestClass(path2class($test_file));
+        htmlpurifier_add_test($test, $test_file);
     }
     
 }

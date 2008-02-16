@@ -5,6 +5,20 @@ if (!defined('HTMLPurifierTest')) {
     exit;
 }
 
+// setup our own autoload, checking for HTMLPurifier library if spl_autoload_register
+// is not allowed
+function __autoload($class) {
+    if (!function_exists('spl_autoload_register')) {
+        if (HTMLPurifier_Bootstrap::autoload($class)) return true;
+        if (HTMLPurifierExtras::autoload($class)) return true;
+    }
+    require_once str_replace('_', '/', $class) . '.php';
+    return true;
+}
+if (function_exists('spl_autoload_register')) {
+    spl_autoload_register('__autoload');
+}
+
 // default settings (protect against register_globals)
 $GLOBALS['HTMLPurifierTest'] = array();
 $GLOBALS['HTMLPurifierTest']['PEAR'] = false; // do PEAR tests
@@ -43,10 +57,7 @@ if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {
 // after external libraries are loaded, turn on compile time errors
 error_reporting(E_ALL | E_STRICT);
 
-// load SimpleTest addons
-require_once 'HTMLPurifier/SimpleTest/Reporter.php';
-require_once 'CliTestCase.php';
-require_once 'Debugger.php';
+// load SimpleTest addon functions
 require_once 'generate_mock_once.func.php';
 require_once 'path2class.func.php';
 require_once 'tally_errors.func.php'; // compat
@@ -103,4 +114,18 @@ function htmlpurifier_args(&$AC, $aliases, $o, $v) {
     if (!isset($AC[$o])) return;
     if (is_string($AC[$o])) $AC[$o] = $v;
     if (is_bool($AC[$o])) $AC[$o] = true;
+}
+
+/**
+ * Adds a test-class; depending on the file's extension this may involve
+ * a regular UnitTestCase or a special PHPT test
+ */
+function htmlpurifier_add_test($test, $test_file) {
+    $info = pathinfo($test_file);
+    if (!isset($info['extension']) || $info['extension'] == 'phpt') {
+        $test->addTestCase(new PHPT_Controller_SimpleTest($test_file));
+    } else {
+        require_once $test_file;
+        $test->addTestClass(path2class($test_file));
+    }
 }

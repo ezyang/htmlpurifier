@@ -2,46 +2,39 @@
 
 require_once 'HTMLPurifier/Config.php';
 
-if (!class_exists('CS')) {
-    class CS extends HTMLPurifier_ConfigSchema {}
-}
-
 class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 {
     
-    protected $our_copy, $old_copy;
+    protected $schema;
     
     function setUp() {
         // set up a dummy schema object for testing
-        $our_copy = new HTMLPurifier_ConfigSchema();
-        $this->old_copy = HTMLPurifier_ConfigSchema::instance();
-        $this->our_copy =& HTMLPurifier_ConfigSchema::instance($our_copy);
+        $this->schema = new HTMLPurifier_ConfigSchema();
     }
     
     function tearDown() {
-        HTMLPurifier_ConfigSchema::instance($this->old_copy);
         tally_errors($this);
     }
     
     // test functionality based on ConfigSchema
     
     function testNormal() {
-        CS::defineNamespace('Element', 'Chemical substances that cannot be further decomposed');
+        $this->schema->addNamespace('Element', 'Chemical substances that cannot be further decomposed');
         
-        CS::define('Element', 'Abbr', 'H', 'string', 'Abbreviation of element name.');
-        CS::define('Element', 'Name', 'hydrogen', 'istring', 'Full name of atoms.');
-        CS::define('Element', 'Number', 1, 'int', 'Atomic number, is identity.');
-        CS::define('Element', 'Mass', 1.00794, 'float', 'Atomic mass.');
-        CS::define('Element', 'Radioactive', false, 'bool', 'Does it have rapid decay?');
-        CS::define('Element', 'Isotopes', array(1 => true, 2 => true, 3 => true), 'lookup',
+        $this->schema->add('Element', 'Abbr', 'H', 'string', 'Abbreviation of element name.');
+        $this->schema->add('Element', 'Name', 'hydrogen', 'istring', 'Full name of atoms.');
+        $this->schema->add('Element', 'Number', 1, 'int', 'Atomic number, is identity.');
+        $this->schema->add('Element', 'Mass', 1.00794, 'float', 'Atomic mass.');
+        $this->schema->add('Element', 'Radioactive', false, 'bool', 'Does it have rapid decay?');
+        $this->schema->add('Element', 'Isotopes', array(1 => true, 2 => true, 3 => true), 'lookup',
             'What numbers of neutrons for this element have been observed?');
-        CS::define('Element', 'Traits', array('nonmetallic', 'odorless', 'flammable'), 'list',
+        $this->schema->add('Element', 'Traits', array('nonmetallic', 'odorless', 'flammable'), 'list',
             'What are general properties of the element?');
-        CS::define('Element', 'IsotopeNames', array(1 => 'protium', 2 => 'deuterium', 3 => 'tritium'), 'hash',
+        $this->schema->add('Element', 'IsotopeNames', array(1 => 'protium', 2 => 'deuterium', 3 => 'tritium'), 'hash',
             'Lookup hash of neutron counts to formal names.');
-        CS::define('Element', 'Object', new stdClass(), 'mixed', 'Model representation.');
+        $this->schema->add('Element', 'Object', new stdClass(), 'mixed', 'Model representation.');
         
-        $config = HTMLPurifier_Config::createDefault();
+        $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
         
         // test default value retrieval
@@ -90,23 +83,23 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     
     function testEnumerated() {
         
-        CS::defineNamespace('Instrument', 'Of the musical type.');
+        $this->schema->addNamespace('Instrument', 'Of the musical type.');
         
         // case sensitive
-        CS::define('Instrument', 'Manufacturer', 'Yamaha', 'string', 'Who made it?');
-        CS::defineAllowedValues('Instrument', 'Manufacturer', array(
+        $this->schema->add('Instrument', 'Manufacturer', 'Yamaha', 'string', 'Who made it?');
+        $this->schema->addAllowedValues('Instrument', 'Manufacturer', array(
             'Yamaha', 'Conn-Selmer', 'Vandoren', 'Laubin', 'Buffet', 'other'));
-        CS::defineValueAliases('Instrument', 'Manufacturer', array(
+        $this->schema->addValueAliases('Instrument', 'Manufacturer', array(
             'Selmer' => 'Conn-Selmer'));
         
         // case insensitive
-        CS::define('Instrument', 'Family', 'woodwind', 'istring', 'What family is it?');
-        CS::defineAllowedValues('Instrument', 'Family', array(
+        $this->schema->add('Instrument', 'Family', 'woodwind', 'istring', 'What family is it?');
+        $this->schema->addAllowedValues('Instrument', 'Family', array(
             'brass', 'woodwind', 'percussion', 'string', 'keyboard', 'electronic'));
-        CS::defineValueAliases('Instrument', 'Family', array(
+        $this->schema->addValueAliases('Instrument', 'Family', array(
             'synth' => 'electronic'));
         
-        $config = HTMLPurifier_Config::createDefault();
+        $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
         
         // case sensitive
@@ -138,11 +131,11 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     
     function testNull() {
         
-        CS::defineNamespace('ReportCard', 'It is for grades.');
-        CS::define('ReportCard', 'English', null, 'string/null', 'Grade from English class.');
-        CS::define('ReportCard', 'Absences', 0, 'int', 'How many times missing from school?');
+        $this->schema->addNamespace('ReportCard', 'It is for grades.');
+        $this->schema->add('ReportCard', 'English', null, 'string/null', 'Grade from English class.');
+        $this->schema->add('ReportCard', 'Absences', 0, 'int', 'How many times missing from school?');
         
-        $config = HTMLPurifier_Config::createDefault();
+        $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
         
         $config->set('ReportCard', 'English', 'B-');
@@ -159,11 +152,11 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     
     function testAliases() {
         
-        CS::defineNamespace('Home', 'Sweet home.');
-        CS::define('Home', 'Rug', 3, 'int', 'ID.');
-        CS::defineAlias('Home', 'Carpet', 'Home', 'Rug');
+        $this->schema->addNamespace('Home', 'Sweet home.');
+        $this->schema->add('Home', 'Rug', 3, 'int', 'ID.');
+        $this->schema->addAlias('Home', 'Carpet', 'Home', 'Rug');
         
-        $config = HTMLPurifier_Config::createDefault();
+        $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
         
         $this->assertIdentical($config->get('Home', 'Rug'), 3);
@@ -180,11 +173,11 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     
     function test_getBatch() {
         
-        CS::defineNamespace('Variables', 'Changing quantities in equation.');
-        CS::define('Variables', 'TangentialAcceleration', 'a_tan', 'string', 'In m/s^2');
-        CS::define('Variables', 'AngularAcceleration', 'alpha', 'string', 'In rad/s^2');
+        $this->schema->addNamespace('Variables', 'Changing quantities in equation.');
+        $this->schema->add('Variables', 'TangentialAcceleration', 'a_tan', 'string', 'In m/s^2');
+        $this->schema->add('Variables', 'AngularAcceleration', 'alpha', 'string', 'In rad/s^2');
         
-        $config = HTMLPurifier_Config::createDefault();
+        $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
         
         // grab a namespace
@@ -204,12 +197,12 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     
     function test_loadIni() {
         
-        CS::defineNamespace('Shortcut', 'Keyboard shortcuts for commands');
-        CS::define('Shortcut', 'Copy', 'c', 'istring', 'Copy text');
-        CS::define('Shortcut', 'Paste', 'v', 'istring', 'Paste clipboard');
-        CS::define('Shortcut', 'Cut', 'x', 'istring', 'Cut text');
+        $this->schema->addNamespace('Shortcut', 'Keyboard shortcuts for commands');
+        $this->schema->add('Shortcut', 'Copy', 'c', 'istring', 'Copy text');
+        $this->schema->add('Shortcut', 'Paste', 'v', 'istring', 'Paste clipboard');
+        $this->schema->add('Shortcut', 'Cut', 'x', 'istring', 'Cut text');
         
-        $config = HTMLPurifier_Config::createDefault();
+        $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
         
         $config->loadIni(dirname(__FILE__) . '/ConfigTest-loadIni.ini');
@@ -224,8 +217,6 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         
         // we actually want to use the old copy, because the definition
         // generation routines have dependencies on configuration values
-        
-        $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
         
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
@@ -264,41 +255,39 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     }
     
     function test_getHTMLDefinition_rawError() {
-        $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
         $config = HTMLPurifier_Config::createDefault();
         $this->expectError('Cannot retrieve raw version without specifying %HTML.DefinitionID');
         $def =& $config->getHTMLDefinition(true);
     }
     
     function test_getCSSDefinition() {
-        $this->old_copy = HTMLPurifier_ConfigSchema::instance($this->old_copy);
         $config = HTMLPurifier_Config::createDefault();
         $def = $config->getCSSDefinition();
         $this->assertIsA($def, 'HTMLPurifier_CSSDefinition');
     }
     
     function test_getDefinition() {
-        CS::defineNamespace('Cache', 'Cache stuff');
-        CS::define('Cache', 'DefinitionImpl', null, 'string/null', 'Cache?');
-        CS::defineNamespace('Crust', 'Krusty Krabs');
-        $config = HTMLPurifier_Config::createDefault();
+        $this->schema->addNamespace('Cache', 'Cache stuff');
+        $this->schema->add('Cache', 'DefinitionImpl', null, 'string/null', 'Cache?');
+        $this->schema->addNamespace('Crust', 'Krusty Krabs');
+        $config = new HTMLPurifier_Config($this->schema);
         $this->expectError("Definition of Crust type not supported");
         $config->getDefinition('Crust');
     }
     
     function test_loadArray() {
         // setup a few dummy namespaces/directives for our testing
-        CS::defineNamespace('Zoo', 'Animals we have.');
-        CS::define('Zoo', 'Aadvark', 0, 'int', 'Have?');
-        CS::define('Zoo', 'Boar',    0, 'int', 'Have?');
-        CS::define('Zoo', 'Camel',   0, 'int', 'Have?');
-        CS::define(
+        $this->schema->addNamespace('Zoo', 'Animals we have.');
+        $this->schema->add('Zoo', 'Aadvark', 0, 'int', 'Have?');
+        $this->schema->add('Zoo', 'Boar',    0, 'int', 'Have?');
+        $this->schema->add('Zoo', 'Camel',   0, 'int', 'Have?');
+        $this->schema->add(
             'Zoo', 'Others', array(), 'list', 'Other animals we have one of.'
         );
         
-        $config_manual   = HTMLPurifier_Config::createDefault();
-        $config_loadabbr = HTMLPurifier_Config::createDefault();
-        $config_loadfull = HTMLPurifier_Config::createDefault();
+        $config_manual   = new HTMLPurifier_Config($this->schema);
+        $config_loadabbr = new HTMLPurifier_Config($this->schema);
+        $config_loadfull = new HTMLPurifier_Config($this->schema);
         
         $config_manual->set('Zoo', 'Aadvark', 3);
         $config_manual->set('Zoo', 'Boar', 5);
@@ -330,23 +319,23 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     
     function test_create() {
         
-        CS::defineNamespace('Cake', 'Properties of it.');
-        CS::define('Cake', 'Sprinkles', 666, 'int', 'Number of.');
-        CS::define('Cake', 'Flavor', 'vanilla', 'string', 'Flavor of the batter.');
+        $this->schema->addNamespace('Cake', 'Properties of it.');
+        $this->schema->add('Cake', 'Sprinkles', 666, 'int', 'Number of.');
+        $this->schema->add('Cake', 'Flavor', 'vanilla', 'string', 'Flavor of the batter.');
         
-        $config = HTMLPurifier_Config::createDefault();
+        $config = new HTMLPurifier_Config($this->schema);
         $config->set('Cake', 'Sprinkles', 42);
         
         // test flat pass-through
-        $created_config = HTMLPurifier_Config::create($config);
+        $created_config = HTMLPurifier_Config::create($config, $this->schema);
         $this->assertIdentical($config, $created_config);
         
         // test loadArray
-        $created_config = HTMLPurifier_Config::create(array('Cake.Sprinkles' => 42));
+        $created_config = HTMLPurifier_Config::create(array('Cake.Sprinkles' => 42), $this->schema);
         $this->assertIdentical($config, $created_config);
         
         // test loadIni
-        $created_config = HTMLPurifier_Config::create(dirname(__FILE__) . '/ConfigTest-create.ini');
+        $created_config = HTMLPurifier_Config::create(dirname(__FILE__) . '/ConfigTest-create.ini', $this->schema);
         $this->assertIdentical($config, $created_config);
         
     }
@@ -355,10 +344,10 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         
         // test finalization
         
-        CS::defineNamespace('Poem', 'Violets are red, roses are blue...');
-        CS::define('Poem', 'Meter', 'iambic', 'string', 'Rhythm of poem.');
+        $this->schema->addNamespace('Poem', 'Violets are red, roses are blue...');
+        $this->schema->add('Poem', 'Meter', 'iambic', 'string', 'Rhythm of poem.');
         
-        $config = HTMLPurifier_Config::createDefault();
+        $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
         
         $config->set('Poem', 'Meter', 'irregular');
@@ -376,19 +365,19 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         
     }
     
-    function test_loadArrayFromForm() {
+    function __onlytest_loadArrayFromForm() {
         
-        CS::defineNamespace('Pancake', 'This should not be user customizable');
-        CS::define('Pancake', 'Mix', 'buttermilk', 'string', 'Type of pancake mix to use.');
-        CS::define('Pancake', 'Served', true, 'bool', 'But this is customizable by user.');
-        CS::defineNamespace('Toppings', 'This is user customizable');
-        CS::define('Toppings', 'Syrup', true, 'bool', 'Absolutely standard!');
-        CS::define('Toppings', 'Flavor', 'maple', 'string', 'What flavor is the syrup?');
-        CS::define('Toppings', 'Strawberries', 3, 'int', 'Quite delightful fruit.');
-        CS::define('Toppings', 'Calories', 2000, 'int/null', 'Some things are best left unknown.');
-        CS::define('Toppings', 'DefinitionID', null, 'string/null', 'Do not let this be set');
-        CS::define('Toppings', 'DefinitionRev', 1, 'int', 'Do not let this be set');
-        CS::define('Toppings', 'Protected', 1, 'int', 'Do not let this be set');
+        $this->schema->addNamespace('Pancake', 'This should not be user customizable');
+        $this->schema->add('Pancake', 'Mix', 'buttermilk', 'string', 'Type of pancake mix to use.');
+        $this->schema->add('Pancake', 'Served', true, 'bool', 'But this is customizable by user.');
+        $this->schema->addNamespace('Toppings', 'This is user customizable');
+        $this->schema->add('Toppings', 'Syrup', true, 'bool', 'Absolutely standard!');
+        $this->schema->add('Toppings', 'Flavor', 'maple', 'string', 'What flavor is the syrup?');
+        $this->schema->add('Toppings', 'Strawberries', 3, 'int', 'Quite delightful fruit.');
+        $this->schema->add('Toppings', 'Calories', 2000, 'int/null', 'Some things are best left unknown.');
+        $this->schema->add('Toppings', 'DefinitionID', null, 'string/null', 'Do not let this be set');
+        $this->schema->add('Toppings', 'DefinitionRev', 1, 'int', 'Do not let this be set');
+        $this->schema->add('Toppings', 'Protected', 1, 'int', 'Do not let this be set');
         
         $get = array(
             'breakfast' => array(
@@ -411,9 +400,14 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
             'Toppings.Flavor' => "juice",
             'Toppings.Strawberries' => 999,
             'Toppings.Calories' => null
-        ));
+        ), $this->schema);
         
-        $config_result = HTMLPurifier_Config::loadArrayFromForm($get, 'breakfast', array('Pancake.Served', 'Toppings', '-Toppings.Protected'));
+        $config_result = HTMLPurifier_Config::loadArrayFromForm(
+            $get, 'breakfast',
+            array('Pancake.Served', 'Toppings', '-Toppings.Protected'),
+            true, // mq fix
+            $this->schema
+        );
         
         $this->assertEqual($config_expect, $config_result);
         
@@ -434,19 +428,19 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     }
     
     function test_getAllowedDirectivesForForm() {
-        CS::defineNamespace('Unused', 'Not mentioned, so deny');
-        CS::define('Unused', 'Unused', 'Foobar', 'string', 'Not mentioned, do not allow');
-        CS::defineNamespace('Partial', 'Some are mentioned, allow only those');
-        CS::define('Partial', 'Allowed', true, 'bool', 'Mentioned, allowed');
-        CS::define('Partial', 'Unused', 'Foobar', 'string', 'Not mentioned, do not allow');
-        CS::defineNamespace('All', 'Entire namespace allowed, allow all unless...');
-        CS::define('All', 'Allowed', true, 'bool', 'Not mentioned, allowed');
-        CS::define('All', 'Blacklisted', 'Foobar', 'string', 'Specifically blacklisted');
-        CS::define('All', 'DefinitionID', 'Foobar', 'string/null', 'Special case, auto-blacklisted');
-        CS::define('All', 'DefinitionRev', 2, 'int', 'Special case, auto-blacklisted');
+        $this->schema->addNamespace('Unused', 'Not mentioned, so deny');
+        $this->schema->add('Unused', 'Unused', 'Foobar', 'string', 'Not mentioned, do not allow');
+        $this->schema->addNamespace('Partial', 'Some are mentioned, allow only those');
+        $this->schema->add('Partial', 'Allowed', true, 'bool', 'Mentioned, allowed');
+        $this->schema->add('Partial', 'Unused', 'Foobar', 'string', 'Not mentioned, do not allow');
+        $this->schema->addNamespace('All', 'Entire namespace allowed, allow all unless...');
+        $this->schema->add('All', 'Allowed', true, 'bool', 'Not mentioned, allowed');
+        $this->schema->add('All', 'Blacklisted', 'Foobar', 'string', 'Specifically blacklisted');
+        $this->schema->add('All', 'DefinitionID', 'Foobar', 'string/null', 'Special case, auto-blacklisted');
+        $this->schema->add('All', 'DefinitionRev', 2, 'int', 'Special case, auto-blacklisted');
         
         $input = array('Partial.Allowed', 'All', '-All.Blacklisted');
-        $output = HTMLPurifier_Config::getAllowedDirectivesForForm($input);
+        $output = HTMLPurifier_Config::getAllowedDirectivesForForm($input, $this->schema);
         $expect = array(
             array('Partial', 'Allowed'),
             array('All', 'Allowed')
