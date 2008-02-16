@@ -31,6 +31,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Various HTMLPurifier_Config convenience functions now accept another parameter
   $schema which defines what HTMLPurifier_ConfigSchema to use besides the
   global default.
+- Fix bug with trusted script handling in libxml versions later than 2.6.28.
 . Plugins now get their own changelogs according to project conventions.
 . Convert tokens to use instanceof, reducing memory footprint and
   improving comparison speed.
