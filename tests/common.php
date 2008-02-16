@@ -28,6 +28,7 @@ $GLOBALS['HTMLPurifierTest']['PH5P'] = class_exists('DOMDocument');
 $simpletest_location = 'simpletest/'; // reasonable guess
 $csstidy_location = false;
 $versions_to_test = array();
+$php  = 'php';
 $phpv = 'phpv';
 
 // load configuration
@@ -72,12 +73,8 @@ require_once 'tally_errors.func.php'; // compat
  * Arguments parser, is cli and web agnostic.
  * @warning
  *   There are some quirks about the argument format:
- *     - Short flags cannot be chained together
- *     - Any number of hyphens are allowed to lead flags
- *     - Flag values cannot have spaces in them
- *     - You must specify an equal sign, --foo=value; --foo value doesn't work
- *     - Only strings and booleans are accepted
- *     - This --flag=off will be interpreted as true, use --flag=0 instead
+ *     - Short boolean flags cannot be chained together
+ *     - Only strings, integers and booleans are accepted
  * @param $AC
  *   Arguments array to populate. This takes a simple format of 'argument'
  *   => default value. Depending on the type of the default value, 
@@ -90,15 +87,43 @@ require_once 'tally_errors.func.php'; // compat
 function htmlpurifier_parse_args(&$AC, $aliases) {
     if (empty($_GET)) {
         array_shift($_SERVER['argv']);
+        $o = false;
+        $bool = false;
+        $val_is_bool = false;
         foreach ($_SERVER['argv'] as $opt) {
-            if (strpos($opt, "=") !== false) {
-                list($o, $v) = explode("=", $opt, 2);
+            if ($o !== false) {
+                $v = $opt;
             } else {
-                $o = $opt;
-                $v = true;
+                if ($opt === '') continue;
+                if (strlen($opt) > 2 && strncmp($opt, '--', 2) === 0) {
+                    $o = substr($opt, 2);
+                } elseif ($opt[0] == '-') {
+                    $o = substr($opt, 1);
+                } else {
+                    $lopt = strtolower($opt);
+                    if ($bool !== false && ($opt === '0' || $lopt === 'off' || $lopt === 'no')) {
+                        $o = $bool;
+                        $v = false;
+                        $val_is_bool = true;
+                    } elseif (isset($aliases[''])) {
+                        $o = $aliases[''];
+                    }
+                }
+                $bool = false;
+                if (!isset($AC[$o]) || !is_bool($AC[$o])) {
+                    if (strpos($o, '=') === false) {
+                        continue;
+                    }
+                    list($o, $v) = explode('=', $o);
+                } elseif (!$val_is_bool) {
+                    $v = true;
+                    $bool = $o;
+                }
+                $val_is_bool = false;
             }
-            $o = ltrim($o, '-');
+            if ($o === false) continue;
             htmlpurifier_args($AC, $aliases, $o, $v);
+            $o = false;
         }
     } else {
         foreach ($_GET as $o => $v) {
@@ -119,7 +144,8 @@ function htmlpurifier_args(&$AC, $aliases, $o, $v) {
     if (isset($aliases[$o])) $o = $aliases[$o];
     if (!isset($AC[$o])) return;
     if (is_string($AC[$o])) $AC[$o] = $v;
-    if (is_bool($AC[$o])) $AC[$o] = true;
+    if (is_bool($AC[$o]))   $AC[$o] = (bool) $v;
+    if (is_int($AC[$o]))    $AC[$o] = (int) $v;
 }
 
 /**

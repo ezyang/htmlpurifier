@@ -98,7 +98,7 @@ foreach ($versions_to_test as $version) {
     //if (!$AC['disable-phpt']) {
         $test->addTestCase(
             new CliTestCase(
-                $AC['php'] . " index.php --xml --php=\"$phpv $version\" --only-phpt",
+                $AC['php'] . " index.php --xml --php \"$phpv $version\" --only-phpt",
                 $AC['quiet'], $size
             )
         );

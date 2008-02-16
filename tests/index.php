@@ -39,7 +39,7 @@ htmlpurifier_parse_args($AC, $aliases);
 
 if (!SimpleReporter::inCli()) {
     // Undo any dangerous parameters
-    $AC['php'] = 'php';
+    $AC['php'] = $php;
 }
 
 if ($AC['disable-phpt'] && $AC['only-phpt']) {
