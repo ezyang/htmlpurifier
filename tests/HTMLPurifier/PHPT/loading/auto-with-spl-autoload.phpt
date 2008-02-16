@@ -3,7 +3,7 @@ HTMLPurifier.auto.php using spl_autoload_register with userland spl_autoload reg
 --SKIPIF--
 <?php
 if (!function_exists('spl_autoload_register')) {
-    echo "skip spl_autoload_register() not available";
+    echo "skip - spl_autoload_register() not available";
 }
 --FILE--
 <?php

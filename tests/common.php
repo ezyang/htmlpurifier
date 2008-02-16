@@ -57,6 +57,12 @@ if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {
 // after external libraries are loaded, turn on compile time errors
 error_reporting(E_ALL | E_STRICT);
 
+// initialize HTML Purifier
+require_once '../library/HTMLPurifier.auto.php';
+
+// initialize alternative classes
+require_once '../extras/HTMLPurifierExtras.auto.php';
+
 // load SimpleTest addon functions
 require_once 'generate_mock_once.func.php';
 require_once 'path2class.func.php';
