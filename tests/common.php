@@ -120,12 +120,14 @@ function htmlpurifier_args(&$AC, $aliases, $o, $v) {
  * Adds a test-class; depending on the file's extension this may involve
  * a regular UnitTestCase or a special PHPT test
  */
-function htmlpurifier_add_test($test, $test_file) {
-    $info = pathinfo($test_file);
-    if (!isset($info['extension']) || $info['extension'] == 'phpt') {
-        $test->addTestCase(new PHPT_Controller_SimpleTest($test_file));
-    } else {
-        require_once $test_file;
-        $test->addTestClass(path2class($test_file));
+function htmlpurifier_add_test($test, $test_file, $only_phpt = false) {
+    switch (strrchr($test_file, ".")) {
+        case '.phpt':
+            return $test->addTestCase(new PHPT_Controller_SimpleTest($test_file));
+        case '.php':
+            require_once $test_file;
+            return $test->addTestClass(path2class($test_file));
+        default:
+            trigger_error("$test_file is an invalid file for testing", E_USER_ERROR);
     }
 }

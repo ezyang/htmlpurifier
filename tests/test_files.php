@@ -4,6 +4,8 @@ if (!defined('HTMLPurifierTest')) exit;
 
 // define callable test files (sorted alphabetically)
 
+if (!$AC['only-phpt']) {
+
 // HTML Purifier main library
 
 $test_files[] = 'HTMLPurifier/AttrCollectionsTest.php';
@@ -141,6 +143,19 @@ $test_files[] = 'ConfigSchema/StringHashReverseAdapterTest.php';
 $test_files[] = 'ConfigSchema/StringHashParserTest.php';
 $test_files[] = 'ConfigSchema/StringHashTest.php';
 
+} // end if ($AC['only-phpt'])
+
 // PHPT tests
 
-$test_files[] = 'HTMLPurifier/PHPT';
+if (!$AC['disable-phpt']) {
+    $phpt_dirs = array();
+    $phpt_dirs[] = 'HTMLPurifier/PHPT';
+
+    foreach ($phpt_dirs as $dir) {
+        $FS = new FSTools();
+        $phpt_files = $FS->globr($dir, '*.phpt');
+        foreach ($phpt_files as $file) {
+            $test_files[] = str_replace('\\', '/', $file);
+        }
+    }
+}

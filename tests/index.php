@@ -26,6 +26,12 @@ $AC['file'] = '';
 $AC['xml'] = false;
 $AC['dry'] = false;
 $AC['php'] = 'php';
+
+// Convenience parameters for running quicker tests; ideally all tests
+// should be performed.
+$AC['disable-phpt'] = false;
+$AC['only-phpt'] = false;
+
 $aliases = array(
     'f' => 'file',
 );
@@ -36,8 +42,15 @@ if (!SimpleReporter::inCli()) {
     $AC['php'] = 'php';
 }
 
-$phpt = PHPT_Registry::getInstance();
-$phpt->php = $AC['php'];
+if ($AC['disable-phpt'] && $AC['only-phpt']) {
+    echo "Cannot disable and allow only PHPT tests!\n";
+    exit(1);
+}
+
+if (!$AC['disable-phpt']) {
+    $phpt = PHPT_Registry::getInstance();
+    $phpt->php = $AC['php'];
+}
 
 // clean out cache if necessary
 if ($AC['flush']) shell_exec($AC['php'] . ' ../maintenance/flush-definition-cache.php');

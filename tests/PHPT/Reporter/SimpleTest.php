@@ -14,33 +14,36 @@ class PHPT_Reporter_SimpleTest implements PHPT_Reporter
         $this->reporter = $reporter;
     }
     
+    // TODO: Figure out what the proper calls should be, since we've given
+    // each Suite its own UnitTestCase controller
+    
     /**
      * Called when the Reporter is started from a PHPT_Suite
      * @todo Figure out if Suites can be named
      */
     public function onSuiteStart(PHPT_Suite $suite) {
-        $this->reporter->paintGroupStart('PHPT Suite', $suite->count());
+        //$this->reporter->paintGroupStart('PHPT Suite', $suite->count());
     }
     
     /**
      * Called when the Reporter is finished in a PHPT_Suite
      */
     public function onSuiteEnd(PHPT_Suite $suite) {
-        $this->reporter->paintGroupEnd('PHPT Suite');
+        //$this->reporter->paintGroupEnd('PHPT Suite');
     }
     
     /**
      * Called when a Case is started
      */
     public function onCaseStart(PHPT_Case $case) {
-        $this->reporter->paintCaseStart($case->name);
+        //$this->reporter->paintCaseStart($case->name);
     }
     
     /**
      * Called when a Case ends
      */
     public function onCaseEnd(PHPT_Case $case) {
-        $this->reporter->paintCaseEnd($case->name);
+        //$this->reporter->paintCaseEnd($case->name);
     }
     
     /**
@@ -54,7 +57,7 @@ class PHPT_Reporter_SimpleTest implements PHPT_Reporter
      * Called when a PHPT_Case_VetoException is thrown during a Case's run()
      */
     public function onCaseSkip(PHPT_Case $case, PHPT_Case_VetoException $veto) {
-        $this->reporter->paintSkip("{$case->name} in {$case->filename}");
+        $this->reporter->paintSkip($veto->getMessage() . ' [' . $case->filename .']');
     }
     
     /**
