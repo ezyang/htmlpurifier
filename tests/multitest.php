@@ -38,15 +38,13 @@ $AC['file']  = '';
 $AC['xml']   = false;
 $AC['quiet'] = false;
 $AC['php'] = 'php';
+$AC['disable-phpt'] = false;
+$AC['only-phpt'] = false;
 $aliases = array(
     'f' => 'file',
     'q' => 'quiet',
 );
 htmlpurifier_parse_args($AC, $aliases);
-
-// Currently not configurable
-$AC['disable-phpt'] = false;
-$AC['only-phpt'] = false;
 
 // Calls generate-includes.php automatically
 shell_exec($AC['php'] . ' ../maintenance/merge-library.php');
@@ -78,31 +76,32 @@ foreach ($versions_to_test as $version) {
         $version = $version[0];
         $flush = '--flush';
     }
-    if (!$AC['exclude-normal']) {
-        $test->addTestCase(
-            new CliTestCase(
-                "$phpv $version index.php --xml $flush --disable-phpt $file",
-                $AC['quiet'], $size
-            )
-        );
+    if (!$AC['only-phpt']) {
+        if (!$AC['exclude-normal']) {
+            $test->addTestCase(
+                new CliTestCase(
+                    "$phpv $version index.php --xml $flush --disable-phpt $file",
+                    $AC['quiet'], $size
+                )
+            );
+        }
+        if (!$AC['exclude-standalone']) {
+            $test->addTestCase(
+                new CliTestCase(
+                    "$phpv $version index.php --xml $flush --standalone --disable-phpt $file",
+                    $AC['quiet'], $size
+                )
+            );
+        }
     }
-    if (!$AC['exclude-standalone']) {
-        $test->addTestCase(
-            new CliTestCase(
-                "$phpv $version index.php --xml $flush --standalone --disable-phpt $file",
-                $AC['quiet'], $size
-            )
-        );
-    }
-    // naming is inconsistent:
-    //if (!$AC['disable-phpt']) {
+    if (!$AC['disable-phpt']) { // naming is not consistent
         $test->addTestCase(
             new CliTestCase(
                 $AC['php'] . " index.php --xml --php \"$phpv $version\" --only-phpt",
                 $AC['quiet'], $size
             )
         );
-    //}
+    }
 }
 
 // This is the HTML Purifier website's test XML file. We could
