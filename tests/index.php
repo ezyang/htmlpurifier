@@ -52,8 +52,11 @@ if (!$AC['disable-phpt']) {
     $phpt->php = $AC['php'];
 }
 
-// clean out cache if necessary
-if ($AC['flush']) shell_exec($AC['php'] . ' ../maintenance/flush-definition-cache.php');
+if ($AC['flush']) {
+    shell_exec($AC['php'] . ' ../maintenance/generate-schema-cache.php');
+    shell_exec($AC['php'] . ' ../maintenance/flush-definition-cache.php');
+    shell_exec($AC['php'] . ' ../maintenance/merge-library.php');
+}
 
 // initialize and load HTML Purifier
 // use ?standalone to load the alterative standalone stub
