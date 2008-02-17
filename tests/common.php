@@ -144,7 +144,7 @@ function htmlpurifier_args(&$AC, $aliases, $o, $v) {
     if (isset($aliases[$o])) $o = $aliases[$o];
     if (!isset($AC[$o])) return;
     if (is_string($AC[$o])) $AC[$o] = $v;
-    if (is_bool($AC[$o]))   $AC[$o] = (bool) $v;
+    if (is_bool($AC[$o]))   $AC[$o] = ($v === '') ? true :(bool) $v;
     if (is_int($AC[$o]))    $AC[$o] = (int) $v;
 }
 

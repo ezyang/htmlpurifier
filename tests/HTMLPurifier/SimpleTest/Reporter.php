@@ -22,7 +22,7 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
             ?>><?php echo $file ?></option>
         <?php } ?>
     </select>
-    <input type="checkbox" name="standalone" title="Standalone version?" <?php if($this->ac['standalone']) {echo 'checked="checked" ';} ?>/>
+    <input type="checkbox" name="standalone" value="1" title="Standalone version?" <?php if($this->ac['standalone']) {echo 'checked="checked" ';} ?>/>
     <input type="submit" value="Go">
 </form>
 <?php
