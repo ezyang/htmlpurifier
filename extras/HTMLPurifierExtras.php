@@ -11,6 +11,7 @@ class HTMLPurifierExtras
         $path = HTMLPurifierExtras::getPath($class);
         if (!$path) return false;
         require $path;
+        return true;
     }
     
     public static function getPath($class) {

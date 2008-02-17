@@ -150,12 +150,4 @@ $test_files[] = 'ConfigSchema/StringHashTest.php';
 if (!$AC['disable-phpt']) {
     $phpt_dirs = array();
     $phpt_dirs[] = 'HTMLPurifier/PHPT';
-
-    foreach ($phpt_dirs as $dir) {
-        $FS = new FSTools();
-        $phpt_files = $FS->globr($dir, '*.phpt');
-        foreach ($phpt_files as $file) {
-            $test_files[] = str_replace('\\', '/', $file);
-        }
-    }
 }

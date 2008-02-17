@@ -9,8 +9,8 @@ if (!defined('HTMLPurifierTest')) {
 // is not allowed
 function __autoload($class) {
     if (!function_exists('spl_autoload_register')) {
-        if (class_exists('HTMLPurifier_Bootstrap', false) && HTMLPurifier_Bootstrap::autoload($class)) return true;
-        if (class_exists('HTMLPurifierExtras', false)     && HTMLPurifierExtras::autoload($class)) return true;
+        if (HTMLPurifier_Bootstrap::autoload($class)) return true;
+        if (HTMLPurifierExtras::autoload($class)) return true;
     }
     require str_replace('_', '/', $class) . '.php';
     return true;
