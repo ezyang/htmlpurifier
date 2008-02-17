@@ -51,6 +51,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . htmlpurifier_add_test() preferred method to translate test files in to
   classes, because it handles PHPT files too.
 . Debugger class is deprecated and will be removed soon.
+. Command line argument parsing for testing scripts revamped, now --opt value
+  format is supported.
 
 3.0.0, released 2008-01-06
 # HTML Purifier is PHP 5 only! The 2.1.x branch will be maintained
