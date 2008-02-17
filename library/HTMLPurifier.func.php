@@ -1,18 +1,20 @@
 <?php
 
 /**
- * Function wrapper for HTML Purifier for quick use.
- * @note This function only includes the library when it is called. While
- *       this is efficient for instances when you only use HTML Purifier
- *       on a few of your pages, it murders bytecode caching. You still
- *       need to add HTML Purifier to your path.
+ * @file
+ * Defines a function wrapper for HTML Purifier for quick use.
  * @note ''HTMLPurifier()'' is NOT the same as ''new HTMLPurifier()''
  */
 
+/**
+ * Purify HTML.
+ * @param $html String HTML to purify
+ * @param $config Configuration to use, can be any value accepted by
+ *        HTMLPurifier_Config::create()
+ */
 function HTMLPurifier($html, $config = null) {
     static $purifier = false;
     if (!$purifier) {
-        require_once 'HTMLPurifier.php';
         $purifier = new HTMLPurifier();
     }
     return $purifier->purify($html, $config);

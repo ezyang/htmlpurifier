@@ -17,7 +17,7 @@ define('HTMLPurifierTest', 1);
 define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
 chdir(dirname(__FILE__));
 
-require_once 'common.php';
+require 'common.php';
 
 $AC = array(); // parameters
 $AC['flush'] = false;
@@ -60,11 +60,13 @@ if ($AC['flush']) shell_exec($AC['php'] . ' ../maintenance/flush-definition-cach
 if ($AC['standalone']) {
     // :TODO: This line is pretty important; please document!
     set_include_path(realpath('../library/standalone') . PATH_SEPARATOR . realpath('blanks') . PATH_SEPARATOR . get_include_path());
-    require_once '../library/HTMLPurifier.standalone.php';
+    require '../library/HTMLPurifier.standalone.php';
 } else {
-    require_once 'HTMLPurifier.includes.php';
+    require '../library/HTMLPurifier.path.php';
+    require 'HTMLPurifier.includes.php';
+    require '../library/HTMLPurifier.autoload.php';
 }
-require_once 'HTMLPurifier/Harness.php';
+require 'HTMLPurifier/Harness.php';
 
 // setup special DefinitionCacheFactory decorator
 $factory =& HTMLPurifier_DefinitionCacheFactory::instance();

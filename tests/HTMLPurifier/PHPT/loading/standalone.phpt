@@ -1,9 +1,8 @@
 --TEST--
-HTMLPurifier.auto.php and HTMLPurifier.includes.php loading test
+HTMLPurifier.standalone.php loading test
 --FILE--
 <?php
-require_once '../library/HTMLPurifier.path.php';
-require_once 'HTMLPurifier.includes.php';
+require_once '../library/HTMLPurifier.standalone.php';
 $config = HTMLPurifier_Config::createDefault();
 $purifier = new HTMLPurifier($config);
 echo $purifier->purify('<b>Salsa!');

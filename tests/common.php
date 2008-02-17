@@ -9,10 +9,10 @@ if (!defined('HTMLPurifierTest')) {
 // is not allowed
 function __autoload($class) {
     if (!function_exists('spl_autoload_register')) {
-        if (HTMLPurifier_Bootstrap::autoload($class)) return true;
-        if (HTMLPurifierExtras::autoload($class)) return true;
+        if (class_exists('HTMLPurifier_Bootstrap', false) && HTMLPurifier_Bootstrap::autoload($class)) return true;
+        if (class_exists('HTMLPurifierExtras', false)     && HTMLPurifierExtras::autoload($class)) return true;
     }
-    require_once str_replace('_', '/', $class) . '.php';
+    require str_replace('_', '/', $class) . '.php';
     return true;
 }
 if (function_exists('spl_autoload_register')) {
@@ -36,16 +36,15 @@ if (file_exists('../conf/test-settings.php')) include '../conf/test-settings.php
 if (file_exists('../test-settings.php')) include '../test-settings.php';
 
 // load SimpleTest
-require_once $simpletest_location . 'unit_tester.php';
-require_once $simpletest_location . 'reporter.php';
-require_once $simpletest_location . 'mock_objects.php';
-require_once $simpletest_location . 'xml.php';
-require_once $simpletest_location . 'remote.php';
+require $simpletest_location . 'unit_tester.php';
+require $simpletest_location . 'reporter.php';
+require $simpletest_location . 'mock_objects.php';
+require $simpletest_location . 'xml.php';
+require $simpletest_location . 'remote.php';
 
 // load CSS Tidy
 if ($csstidy_location !== false) {
-    require_once $csstidy_location . 'class.csstidy.php';
-    require_once $csstidy_location . 'class.csstidy_print.php';
+    require $csstidy_location . 'class.csstidy.php';
 }
 
 // load PEAR to include path
@@ -58,16 +57,13 @@ if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {
 // after external libraries are loaded, turn on compile time errors
 error_reporting(E_ALL | E_STRICT);
 
-// initialize HTML Purifier
-require_once '../library/HTMLPurifier.auto.php';
-
-// initialize alternative classes
-require_once '../extras/HTMLPurifierExtras.auto.php';
+// initialize extra HTML Purifier libraries
+require '../extras/HTMLPurifierExtras.auto.php';
 
 // load SimpleTest addon functions
-require_once 'generate_mock_once.func.php';
-require_once 'path2class.func.php';
-require_once 'tally_errors.func.php'; // compat
+require 'generate_mock_once.func.php';
+require 'path2class.func.php';
+require 'tally_errors.func.php'; // compat
 
 /**
  * Arguments parser, is cli and web agnostic.

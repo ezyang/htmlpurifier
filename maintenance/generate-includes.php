@@ -22,7 +22,6 @@ $exclude_dirs = array(
 $exclude_files = array(
     'HTMLPurifier/Lexer/PEARSax3.php',
     'HTMLPurifier/Lexer/PH5P.php',
-    'HTMLPurifier/Bootstrap.php',
 );
 
 // Determine what files need to be included:
@@ -139,9 +138,6 @@ $php = "<?php
  *      This file requires that the include path contains the HTML Purifier
  *      library directory; this is not auto-set.
  */
-
-// Treat this file specially, as it is detached from the rest of the library
-require_once 'HTMLPurifier/Bootstrap.php';
 
 ";
 

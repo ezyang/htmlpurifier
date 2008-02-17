@@ -48,25 +48,31 @@
  *          -# Instance: new HTMLPurifier($config)
  *          -# Invocation: purify($html, $config)
  *       These configurations are entirely independent of each other and
- *       are *not* merged.
+ *       are *not* merged (this behavior may change in the future).
  * 
- * @todo We need an easier way to inject strategies, it'll probably end
- *       up getting done through config though.
+ * @todo We need an easier way to inject strategies using the configuration
+ *       object.
  */
 class HTMLPurifier
 {
     
+    /** Version of HTML Purifier */
     public $version = '3.0.0';
     
+    /** Global configuration object */
     public $config;
+    
+    /** Array of HTMLPurifier_Filter objects to run on HTML */
     public $filters = array();
+    
+    /** Single instance of HTML Purifier */
+    private static $instance;
     
     protected $strategy, $generator;
     
     /**
      * Resultant HTMLPurifier_Context of last run purification. Is an array
      * of contexts if the last called method was purifyArray().
-     * @public
      */
     public $context;
     
@@ -107,7 +113,7 @@ class HTMLPurifier
      */
     public function purify($html, $config = null) {
         
-        // todo: make the config merge in, instead of replace
+        // :TODO: make the config merge in, instead of replace
         $config = $config ? HTMLPurifier_Config::create($config) : $this->config;
         
         // implementation is partially environment dependant, partially
@@ -187,18 +193,17 @@ class HTMLPurifier
      * @param $prototype Optional prototype HTMLPurifier instance to
      *                   overload singleton with.
      */
-    public static function &getInstance($prototype = null) {
-        static $htmlpurifier;
-        if (!$htmlpurifier || $prototype) {
+    public static function getInstance($prototype = null) {
+        if (!self::$instance || $prototype) {
             if ($prototype instanceof HTMLPurifier) {
-                $htmlpurifier = $prototype;
+                self::$instance = $prototype;
             } elseif ($prototype) {
-                $htmlpurifier = new HTMLPurifier($prototype);
+                self::$instance = new HTMLPurifier($prototype);
             } else {
-                $htmlpurifier = new HTMLPurifier();
+                self::$instance = new HTMLPurifier();
             }
         }
-        return $htmlpurifier;
+        return self::$instance;
     }
     
 }

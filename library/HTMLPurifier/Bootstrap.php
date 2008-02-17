@@ -20,9 +20,6 @@ if (!defined('PHP_EOL')) {
     }
 }
 
-// :TODO: Might be slow
-if (!class_exists('HTMLPurifier_Bootstrap', false)) {
-
 /**
  * Bootstrap class that contains meta-functionality for HTML Purifier such as
  * the autoload function.
@@ -59,6 +56,3 @@ class HTMLPurifier_Bootstrap
     }
     
 }
-
-}
-

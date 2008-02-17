@@ -20,25 +20,22 @@ IMPORTANT
    of the two. This is related to standalone in tests/index.php. This should use
    semi-automated smoketests using PHPT style files (probably should be part
    of SimpleTest framework). These tests can be further extended to work for
-   many of our other smoketests.
+   many of our other smoketests. Follow the documentation!
  - Release candidate, because of the major changes
  - Move utility classes for ConfigSchema into HTML Purifier itself: they're
    that important
 
 DOCUMENTATION
- - Document new methods of including the library (probably can go in INSTALL)
  - Document new ConfigSchema setup and format; dev-includes.txt is a base
    but we need it in HTML
  - Update French translation of README
  - Document which scripts need to be called when a change is made
- - Document that standalone doesn't load autoload by default, so you need
-   to include HTMLPurifier.autoload.php after it
 
 IMPORTANT FEATURES
  - Get everything into configuration objects (filters, I'm looking at you)
  - Factor generate-schema-cache.php into a class, so that the maintenance script
    is as small as possible
- - Factor out command line parser into its own class
+ - Factor out command line parser into its own class, and unit test it
  - Optimize ConfigSchema by only caching things necessary for runtime
 
 CONFIGDOC
@@ -57,7 +54,6 @@ IF IT AIN'T BROKE...
  - Create "super" script which performs all regeneration actions
  - Remove all includes from unit tests, and remove blanks/ folder and generation
  - Simplify merge library script by removing recursion? (or other things)
- - Update unit tests for ConfigSchema
  - Perhaps replace types with integer identifiers in ConfigSchema? (would be
    smaller, but not by much).
 

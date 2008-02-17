@@ -9,7 +9,11 @@
 set_time_limit(0);
 
 // Turning off output buffering will prevent mysterious errors from core dumps
-@ob_end_flush();
+$data = @ob_get_clean();
+if ($data !== false && $data !== '') {
+    echo "Output buffer contains data [".urlencode($data)."]\n";
+    exit;
+}
 
 // Where is SimpleTest located?
 $simpletest_location = '/path/to/simpletest/';
@@ -19,6 +23,9 @@ $csstidy_location    = '/path/to/csstidy/';
 
 // For tests/multitest.php, which versions to test?
 $versions_to_test    = array();
+
+// Stable PHP binary to use when invoking maintenance scripts.
+$php = 'php';
 
 // For tests/multitest.php, what is the multi-version executable? It must
 // accept an extra parameter (version number) before all other arguments

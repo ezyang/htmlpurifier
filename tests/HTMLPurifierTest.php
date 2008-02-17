@@ -134,8 +134,8 @@ alert("<This is compatible with XHTML>");
     }
     
     function testGetInstance() {
-        $purifier  =& HTMLPurifier::getInstance();
-        $purifier2 =& HTMLPurifier::getInstance();
+        $purifier  = HTMLPurifier::getInstance();
+        $purifier2 = HTMLPurifier::getInstance();
         $this->assertReference($purifier, $purifier2);
     }
     
