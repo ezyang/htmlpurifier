@@ -106,7 +106,6 @@ foreach ($versions_to_test as $version) {
 
 // This is the HTML Purifier website's test XML file. We could
 // add more websites, i.e. more configurations to test.
-$test->addTestCase(new RemoteTestCase('http://localhost/htmlpurifier/tests/?xml=1', 'http://localhost/htmlpurifier/tests/?xml=1&dry=1'));
 $test->addTestCase(new RemoteTestCase('http://htmlpurifier.org/dev/tests/?xml=1', 'http://htmlpurifier.org/dev/tests/?xml=1&dry=1'));
 
 if ($AC['xml']) {

@@ -12,6 +12,16 @@ function my_autoload($class) {
     eval("class $class {}");
     return true;
 }
+class MyClass {
+    public static function myAutoload($class) {
+        if ($class == 'Foo') {
+            echo "Special autoloading Foo..." . PHP_EOL;
+            eval("class $class {}");
+        }
+    }
+}
+
+spl_autoload_register(array('MyClass', 'myAutoload'));
 spl_autoload_register('my_autoload');
 
 require '../library/HTMLPurifier.auto.php';
@@ -20,9 +30,11 @@ $config = HTMLPurifier_Config::createDefault();
 $purifier = new HTMLPurifier($config);
 echo $purifier->purify('<b>Salsa!') . PHP_EOL;
 
-// purposely invoke older autoload
+// purposely invoke older autoloads
+$foo = new Foo();
 $bar = new Bar();
 
 --EXPECT--
 <b>Salsa!</b>
+Special autoloading Foo...
 Autoloading Bar...
