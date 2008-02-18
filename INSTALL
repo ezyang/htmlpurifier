@@ -159,7 +159,7 @@ Standalone version
 
     HTML Purifier has a standalone distribution; you can also generate
     a standalone file from the full version by running the script
-    maintenance/merge-library.php . The standalone version has the
+    maintenance/generate-standalone.php . The standalone version has the
     benefit of having most of its code in one file, so parsing is much
     faster and the library is easier to manage.
     
