@@ -31,7 +31,7 @@ class CliTestCase
        $xml = shell_exec($command);
         if (! $xml) {
             if (!$this->_quiet) {
-                trigger_error('Command did not have any output [' . $command . ']');
+                $reporter->paintFail('Command did not have any output [' . $command . ']');
             }
             return false;
         }
@@ -45,14 +45,14 @@ class CliTestCase
             if (!$this->_quiet) {
                 foreach ($this->_errors as $error) {
                     list($no, $str, $file, $line) = $error;
-                    $reporter->paintFormattedMessage("Error $no: $str on line $line of $file");
+                    $reporter->paintFail("Error $no: $str on line $line of $file");
                 }
-                $msg = "Command produced malformed XML: \n";
                 if (strlen($xml) > 120) {
-                    $msg .= substr($xml, 0, 50) . "...\n\n[snip]\n\n..." . substr($xml, -50);
+                    $msg = substr($xml, 0, 50) . "...\n\n[snip]\n\n..." . substr($xml, -50);
                 } else {
-                    $msg .= $xml;
+                    $msg = $xml;
                 }
+                $reporter->paintFail("Command produced malformed XML");
                 $reporter->paintFormattedMessage($msg);
             }
             return false;
