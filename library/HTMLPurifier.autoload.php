@@ -6,7 +6,7 @@
  */
 
 if (function_exists('spl_autoload_register')) {
-    spl_autoload_register(array('HTMLPurifier_Bootstrap', 'autoload'));
+    HTMLPurifier_Bootstrap::registerAutoload();
     if (function_exists('__autoload')) {
         // Be polite and ensure that userland autoload gets retained
         spl_autoload_register('__autoload');

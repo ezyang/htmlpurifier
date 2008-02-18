@@ -1,5 +1,5 @@
 --TEST--
-HTMLPurifier.auto.php using spl_autoload_register with userland __autoload loading test
+HTMLPurifier.auto.php using spl_autoload_register with user registration loading test
 --SKIPIF--
 <?php
 if (!function_exists('spl_autoload_register')) {
@@ -7,10 +7,12 @@ if (!function_exists('spl_autoload_register')) {
 }
 --FILE--
 <?php
-function __autoload($class) {
+function my_autoload($class) {
     echo "Autoloading $class..." . PHP_EOL;
     eval("class $class {}");
+    return true;
 }
+spl_autoload_register('my_autoload');
 
 require '../library/HTMLPurifier.auto.php';
 require 'HTMLPurifier/PHPT/loading/_autoload.inc';

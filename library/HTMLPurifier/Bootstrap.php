@@ -55,4 +55,18 @@ class HTMLPurifier_Bootstrap
         return str_replace('_', '/', $class) . '.php';
     }
     
+    /**
+     * "Pre-registers" our autoloader on the SPL stack.
+     */
+    public static function registerAutoload() {
+        $autoload = array('HTMLPurifier_Bootstrap', 'autoload');
+        if ( ($funcs = spl_autoload_functions()) === false ) {
+            spl_autoload_register($autoload);
+        } else {
+            foreach ($funcs as $func) spl_autoload_unregister($func);
+            spl_autoload_register($autoload);
+            foreach ($funcs as $func) spl_autoload_register($func);
+        }
+    }
+    
 }

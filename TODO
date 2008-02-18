@@ -16,11 +16,6 @@ UPCOMING RELEASE
 ----------------
 
 IMPORTANT
- - Test HTMLPurifier.auto.php, HTMLPurifier.includes.php, and combinations
-   of the two. This is related to standalone in tests/index.php. This should use
-   semi-automated smoketests using PHPT style files (probably should be part
-   of SimpleTest framework). These tests can be further extended to work for
-   many of our other smoketests. Follow the documentation!
  - Release candidate, because of the major changes
  - Move utility classes for ConfigSchema into HTML Purifier itself: they're
    that important
@@ -144,6 +139,7 @@ Unknown release (on a scratch-an-itch basis)
  - Allow scoped="scoped" attribute in <style> tags; may be troublesome
    because regular CSS has no way of uniquely identifying nodes, so we'd
    have to generate IDs
+ - Time PHPT tests
 
 Requested
 
