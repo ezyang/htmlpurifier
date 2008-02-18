@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrCollections.php';
-
 Mock::generatePartial(
     'HTMLPurifier_AttrCollections',
     'HTMLPurifier_AttrCollections_TestForConstruct',

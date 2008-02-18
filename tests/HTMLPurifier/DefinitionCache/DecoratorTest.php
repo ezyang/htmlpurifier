@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/DefinitionCacheHarness.php';
-require_once 'HTMLPurifier/DefinitionCache/Decorator.php';
-
 class HTMLPurifier_DefinitionCache_DecoratorTest extends HTMLPurifier_DefinitionCacheHarness
 {
     

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Language.php';
-
 /** 
  * @todo Fix usage of HTMLPurifier_Language->_loaded using something else
  */

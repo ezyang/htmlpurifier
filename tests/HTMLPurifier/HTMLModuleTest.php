@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule.php';
-require_once 'HTMLPurifier/AttrDef.php';
-
 class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
 {
     

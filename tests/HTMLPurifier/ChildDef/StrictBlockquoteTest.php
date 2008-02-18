@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ChildDefHarness.php';
-require_once 'HTMLPurifier/ChildDef/StrictBlockquote.php';
-
 class   HTMLPurifier_ChildDef_StrictBlockquoteTest
 extends HTMLPurifier_ChildDefHarness
 {

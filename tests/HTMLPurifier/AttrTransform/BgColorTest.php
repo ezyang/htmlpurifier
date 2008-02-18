@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform/BgColor.php';
-require_once 'HTMLPurifier/AttrTransformHarness.php';
-
 // we currently rely on the CSS validator to fix any problems.
 // This means that this transform, strictly speaking, supports
 // a superset of the functionality.

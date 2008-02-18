@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/InjectorHarness.php';
-require_once 'HTMLPurifier/Injector/Linkify.php';
-
 class HTMLPurifier_Injector_LinkifyTest extends HTMLPurifier_InjectorHarness
 {
     

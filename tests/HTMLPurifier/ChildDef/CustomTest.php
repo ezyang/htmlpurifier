@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ChildDefHarness.php';
-require_once 'HTMLPurifier/ChildDef/Custom.php';
-
 class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
 {
     

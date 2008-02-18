@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/StrategyHarness.php';
-require_once 'HTMLPurifier/Strategy/Core.php';
-
 class HTMLPurifier_Strategy_CoreTest extends HTMLPurifier_StrategyHarness
 {
     

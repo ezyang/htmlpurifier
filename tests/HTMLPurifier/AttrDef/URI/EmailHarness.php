@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/URI/Email.php';
-require_once 'HTMLPurifier/AttrDefHarness.php';
-
 class HTMLPurifier_AttrDef_URI_EmailHarness extends HTMLPurifier_AttrDefHarness
 {
     

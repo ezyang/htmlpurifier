@@ -1,8 +1,5 @@
 <?php
 
-require_once('HTMLPurifier/StrategyHarness.php');
-require_once('HTMLPurifier/Strategy/ValidateAttributes.php');
-
 class HTMLPurifier_Strategy_ValidateAttributes_TidyTest extends HTMLPurifier_StrategyHarness
 {
     

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/DefinitionTestable.php';
-
 class HTMLPurifier_DefinitionCacheHarness extends HTMLPurifier_Harness
 {
     

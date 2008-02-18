@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDefHarness.php';
-require_once 'HTMLPurifier/AttrDef/CSS/Background.php';
-
 class HTMLPurifier_AttrDef_CSS_BackgroundTest extends HTMLPurifier_AttrDefHarness
 {
     

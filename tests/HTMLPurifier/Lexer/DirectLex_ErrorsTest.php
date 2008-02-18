@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ErrorsHarness.php';
-require_once 'HTMLPurifier/Lexer/DirectLex.php';
-
 class HTMLPurifier_Lexer_DirectLex_ErrorsTest extends HTMLPurifier_ErrorsHarness
 {
     

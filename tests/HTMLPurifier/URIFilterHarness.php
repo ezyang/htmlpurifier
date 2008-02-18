@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIHarness.php';
-
 class HTMLPurifier_URIFilterHarness extends HTMLPurifier_URIHarness
 {
     

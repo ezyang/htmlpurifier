@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDefHarness.php';
-require_once 'HTMLPurifier/AttrDef/CSS/FontFamily.php';
-
 class HTMLPurifier_AttrDef_CSS_FontFamilyTest extends HTMLPurifier_AttrDefHarness
 {
     

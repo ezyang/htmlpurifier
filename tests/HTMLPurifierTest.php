@@ -1,9 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier.php';
-
-// integration test
-
 class HTMLPurifierTest extends HTMLPurifier_Harness
 {
     protected $purifier;

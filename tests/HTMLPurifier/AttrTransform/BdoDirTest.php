@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform/BdoDir.php';
-require_once 'HTMLPurifier/AttrTransformHarness.php';
-
 class HTMLPurifier_AttrTransform_BdoDirTest extends HTMLPurifier_AttrTransformHarness
 {
     

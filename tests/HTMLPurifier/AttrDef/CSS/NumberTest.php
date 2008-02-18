@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/CSS/Number.php';
-require_once 'HTMLPurifier/AttrDefHarness.php';
-
 class HTMLPurifier_AttrDef_CSS_NumberTest extends HTMLPurifier_AttrDefHarness
 {
     

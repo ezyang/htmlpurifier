@@ -1,9 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Strategy.php';
-require_once 'HTMLPurifier/Strategy/Composite.php';
-require_once 'HTMLPurifier/Config.php';
-
 class HTMLPurifier_Strategy_Composite_Test
     extends HTMLPurifier_Strategy_Composite
 {

@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDefHarness.php';
-require_once 'HTMLPurifier/AttrDef/URI/IPv6.php';
-
 // test case is from Feyd's IPv6 implementation
 // we ought to disallow non-routable addresses
 

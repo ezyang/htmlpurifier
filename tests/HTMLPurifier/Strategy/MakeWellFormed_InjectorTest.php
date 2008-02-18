@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/StrategyHarness.php';
-require_once 'HTMLPurifier/Strategy/MakeWellFormed.php';
-
 class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_StrategyHarness
 {
     

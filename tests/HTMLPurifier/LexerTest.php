@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Lexer/DirectLex.php';
-
 class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 {
     

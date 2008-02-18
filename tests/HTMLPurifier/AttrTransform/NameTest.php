@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform/Name.php';
-require_once 'HTMLPurifier/AttrTransformHarness.php';
-
 class HTMLPurifier_AttrTransform_NameTest extends HTMLPurifier_AttrTransformHarness
 {
     

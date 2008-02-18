@@ -1,10 +1,6 @@
 <?php
 
-require_once 'HTMLPurifier/Context.php';
-
 // mocks
-require_once 'HTMLPurifier/IDAccumulator.php';
-
 class HTMLPurifier_ContextTest extends HTMLPurifier_Harness
 {
     

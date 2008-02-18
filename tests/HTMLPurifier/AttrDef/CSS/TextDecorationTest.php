@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDefHarness.php';
-require_once 'HTMLPurifier/AttrDef/CSS/TextDecoration.php';
-
 class HTMLPurifier_AttrDef_CSS_TextDecorationTest extends HTMLPurifier_AttrDefHarness
 {
     

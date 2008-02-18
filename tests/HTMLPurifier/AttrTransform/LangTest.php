@@ -1,9 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Token.php';
-require_once 'HTMLPurifier/AttrTransformHarness.php';
-require_once 'HTMLPurifier/AttrTransform/Lang.php';
-
 class HTMLPurifier_AttrTransform_LangTest
     extends HTMLPurifier_AttrTransformHarness
 {

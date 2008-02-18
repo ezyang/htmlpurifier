@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/DefinitionCache/DecoratorHarness.php';
-require_once 'HTMLPurifier/DefinitionCache/Decorator/Memory.php';
-
 generate_mock_once('HTMLPurifier_DefinitionCache');
 
 class HTMLPurifier_DefinitionCache_Decorator_MemoryTest extends HTMLPurifier_DefinitionCache_DecoratorHarness

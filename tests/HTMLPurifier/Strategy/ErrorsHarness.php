@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ErrorsHarness.php';
-
 class HTMLPurifier_Strategy_ErrorsHarness extends HTMLPurifier_ErrorsHarness
 {
     

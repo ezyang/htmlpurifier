@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/CSS/AlphaValue.php';
-require_once 'HTMLPurifier/AttrDefHarness.php';
-
 class HTMLPurifier_AttrDef_CSS_AlphaValueTest extends HTMLPurifier_AttrDefHarness
 {
     

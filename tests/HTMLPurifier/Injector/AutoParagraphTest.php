@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/InjectorHarness.php';
-require_once 'HTMLPurifier/Injector/AutoParagraph.php';
-
 class HTMLPurifier_Injector_AutoParagraphTest extends HTMLPurifier_InjectorHarness
 {
     

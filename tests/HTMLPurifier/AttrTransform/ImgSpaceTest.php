@@ -1,9 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform/ImgSpace.php';
-require_once 'HTMLPurifier/AttrTransformHarness.php';
-
-
 class HTMLPurifier_AttrTransform_ImgSpaceTest extends HTMLPurifier_AttrTransformHarness
 {
     

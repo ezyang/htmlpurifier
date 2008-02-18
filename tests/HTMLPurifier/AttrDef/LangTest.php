@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDefHarness.php';
-require_once 'HTMLPurifier/AttrDef/Lang.php';
-
 class HTMLPurifier_AttrDef_LangTest extends HTMLPurifier_AttrDefHarness
 {
     

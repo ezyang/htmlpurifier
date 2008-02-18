@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/HTML/PixelsTest.php';
-require_once 'HTMLPurifier/AttrDef/HTML/Length.php';
-
 class HTMLPurifier_AttrDef_HTML_LengthTest extends HTMLPurifier_AttrDef_HTML_PixelsTest
 {
     

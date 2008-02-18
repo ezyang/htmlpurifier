@@ -1,10 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Generator.php';
-require_once 'HTMLPurifier/EntityLookup.php';
-
-require_once 'HTMLPurifier/ComplexHarness.php';
-
 class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
 {
     

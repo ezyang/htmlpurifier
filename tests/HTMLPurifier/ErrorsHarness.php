@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ErrorCollectorEMock.php';
-require_once 'HTMLPurifier/Lexer/DirectLex.php';
-
 /**
  * @todo Make the callCount variable actually work, so we can precisely
  *       specify what errors we want: no more, no less

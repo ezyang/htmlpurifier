@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIFilter/MakeAbsolute.php';
-require_once 'HTMLPurifier/URIFilterHarness.php';
-
 class HTMLPurifier_URIFilter_MakeAbsoluteTest extends HTMLPurifier_URIFilterHarness
 {
     

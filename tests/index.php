@@ -11,6 +11,10 @@
  *   - file (f), a single file to test
  *   - xml, whether or not to output XML
  *   - dry, whether or not to do a dry run
+ *
+ * @warning File setup does not exactly match with autoloader; make sure that
+ *          non-test classes (i.e. classes that are not retrieved using
+ *          $test_files) do not have underscores in their names.
  */
 
 define('HTMLPurifierTest', 1);
@@ -56,8 +60,6 @@ if ($AC['disable-phpt'] && $AC['only-phpt']) {
 // initialize and load HTML Purifier
 // use ?standalone to load the alterative standalone stub
 if ($AC['standalone']) {
-    // :TODO: This line is pretty important; please document!
-    set_include_path(realpath('../library/standalone') . PATH_SEPARATOR . realpath('blanks') . PATH_SEPARATOR . get_include_path());
     require '../library/HTMLPurifier.standalone.php';
 } else {
     require '../library/HTMLPurifier.path.php';

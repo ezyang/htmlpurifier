@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Encoder.php';
-
 class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
 {
     

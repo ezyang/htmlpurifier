@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIFilter/DisableExternal.php';
-require_once 'HTMLPurifier/URIFilterHarness.php';
-
 class HTMLPurifier_URIFilter_DisableExternalTest extends HTMLPurifier_URIFilterHarness
 {
     

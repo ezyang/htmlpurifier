@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ChildDefHarness.php';
-require_once 'HTMLPurifier/ChildDef/Chameleon.php';
-
 class HTMLPurifier_ChildDef_ChameleonTest extends HTMLPurifier_ChildDefHarness
 {
     

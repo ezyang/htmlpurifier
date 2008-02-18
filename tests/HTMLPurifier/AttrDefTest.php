@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef.php';
-
 Mock::generatePartial(
         'HTMLPurifier_AttrDef',
         'HTMLPurifier_AttrDefTestable',

@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIFilter/HostBlacklist.php';
-require_once 'HTMLPurifier/URIFilterHarness.php';
-
 class HTMLPurifier_URIFilter_HostBlacklistTest extends HTMLPurifier_URIFilterHarness
 {
     

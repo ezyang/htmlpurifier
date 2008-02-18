@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDefHarness.php';
-require_once 'HTMLPurifier/AttrDef/URI/Host.php';
-
 // takes a URI formatted host and validates it
 
 

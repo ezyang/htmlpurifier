@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform/EnumToCSS.php';
-require_once 'HTMLPurifier/AttrTransformHarness.php';
-
 class HTMLPurifier_AttrTransform_EnumToCSSTest extends HTMLPurifier_AttrTransformHarness
 {
     

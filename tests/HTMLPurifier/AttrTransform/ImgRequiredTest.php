@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform/ImgRequired.php';
-require_once 'HTMLPurifier/AttrTransformHarness.php';
-
 class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransformHarness
 {
     

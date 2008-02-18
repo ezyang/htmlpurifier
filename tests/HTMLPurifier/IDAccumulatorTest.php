@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/IDAccumulator.php';
-
 class HTMLPurifier_IDAccumulatorTest extends HTMLPurifier_Harness
 {
     

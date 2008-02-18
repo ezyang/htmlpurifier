@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ErrorsHarness.php';
-require_once 'HTMLPurifier/AttrValidator.php';
-
 class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
 {
     

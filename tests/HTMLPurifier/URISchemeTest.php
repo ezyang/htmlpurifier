@@ -1,18 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URI.php';
-require_once 'HTMLPurifier/URIHarness.php';
-
-require_once 'HTMLPurifier/URIScheme.php';
-require_once 'HTMLPurifier/URISchemeRegistry.php';
-
-require_once 'HTMLPurifier/URIScheme/http.php';
-require_once 'HTMLPurifier/URIScheme/ftp.php';
-require_once 'HTMLPurifier/URIScheme/https.php';
-require_once 'HTMLPurifier/URIScheme/mailto.php';
-require_once 'HTMLPurifier/URIScheme/news.php';
-require_once 'HTMLPurifier/URIScheme/nntp.php';
-
 // WARNING: All the URI schemes are far to relaxed, we need to tighten
 // the checks.
 

@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/HTML/LengthTest.php';
-require_once 'HTMLPurifier/AttrDef/HTML/MultiLength.php';
-
 class HTMLPurifier_AttrDef_HTML_MultiLengthTest extends HTMLPurifier_AttrDef_HTML_LengthTest
 {
     

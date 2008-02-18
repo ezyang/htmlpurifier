@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ChildDefHarness.php';
-require_once 'HTMLPurifier/ChildDef/Table.php';
-
 // we're using empty tags to compact the tests: under real circumstances
 // there would be contents in them
 

@@ -59,21 +59,6 @@ function remove_php_tags($text) {
 }
 
 /**
- * Creates an appropriate blank file, recursively generating directories
- * if necessary
- * @param string $file Filename to create blank for
- */
-function create_blank($file) {
-    global $FS;
-    $dir = dirname($file);
-    $base = realpath('../tests/blanks/') . DIRECTORY_SEPARATOR ;
-    if ($dir != '.') {
-        $FS->mkdirr($base . $dir);
-    }
-    file_put_contents($base . $file, '');
-}
-
-/**
  * Copies the contents of a directory to the standalone directory
  * @param string $dir Directory to copy
  */
@@ -120,7 +105,6 @@ function replace_includes_callback($matches) {
     }
     if (isset($GLOBALS['loaded'][$file])) return '';
     $GLOBALS['loaded'][$file] = true;
-    create_blank($file);
     return replace_includes(remove_php_tags(file_get_contents($file)));
 }
 

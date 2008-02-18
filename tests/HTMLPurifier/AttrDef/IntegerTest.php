@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/Integer.php';
-require_once 'HTMLPurifier/AttrDefHarness.php';
-
 class HTMLPurifier_AttrDef_IntegerTest extends HTMLPurifier_AttrDefHarness
 {
     

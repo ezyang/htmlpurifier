@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Strategy/ErrorsHarness.php';
-require_once 'HTMLPurifier/Strategy/FixNesting.php';
-
 class HTMLPurifier_Strategy_FixNesting_ErrorsTest extends HTMLPurifier_Strategy_ErrorsHarness
 {
     

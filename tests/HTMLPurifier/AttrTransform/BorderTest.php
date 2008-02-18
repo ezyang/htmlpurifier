@@ -1,9 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform/Border.php';
-require_once 'HTMLPurifier/AttrTransformHarness.php';
-
-
 class HTMLPurifier_AttrTransform_BorderTest extends HTMLPurifier_AttrTransformHarness
 {
     

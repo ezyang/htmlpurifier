@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/TokenFactory.php';
-
 class HTMLPurifier_TokenFactoryTest extends HTMLPurifier_Harness
 {
     public function test() {

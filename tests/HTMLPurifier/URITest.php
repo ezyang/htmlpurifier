@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URI.php';
-require_once 'HTMLPurifier/URIParser.php';
-
 class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
 {
     

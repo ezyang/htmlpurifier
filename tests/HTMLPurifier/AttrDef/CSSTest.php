@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/CSS.php';
-require_once 'HTMLPurifier/AttrDefHarness.php';
-
 class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
 {
     

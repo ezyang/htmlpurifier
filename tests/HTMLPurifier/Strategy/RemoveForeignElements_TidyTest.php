@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/StrategyHarness.php';
-require_once 'HTMLPurifier/Strategy/RemoveForeignElements.php';
-
 class HTMLPurifier_Strategy_RemoveForeignElements_TidyTest
   extends HTMLPurifier_StrategyHarness
 {

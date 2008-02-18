@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Config.php';
-
 class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 {
     

@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/DefinitionCacheHarness.php';
-require_once 'HTMLPurifier/DefinitionCache/Serializer.php';
-
 class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_DefinitionCacheHarness
 {
     

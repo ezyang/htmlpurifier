@@ -1,8 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform/BoolToCSS.php';
-require_once 'HTMLPurifier/AttrTransformHarness.php';
-
 class HTMLPurifier_AttrTransform_BoolToCSSTest extends HTMLPurifier_AttrTransformHarness
 {
     

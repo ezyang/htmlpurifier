@@ -5,8 +5,8 @@ chdir(dirname(__FILE__));
 require_once 'common.php';
 assertCli();
 
-echo "Please do not run this script. It is here for historical purposes only.";
-exit;
+//echo "Please do not run this script. It is here for historical purposes only.";
+//exit;
 
 /**
  * @file
@@ -16,7 +16,7 @@ exit;
  *      This does not remove inline includes; those must be handled manually.
  */
 
-chdir(dirname(__FILE__) . '/../library/');
+chdir(dirname(__FILE__) . '/../tests/HTMLPurifier');
 $FS = new FSTools();
 
 $files = $FS->globr('.', '*.php');

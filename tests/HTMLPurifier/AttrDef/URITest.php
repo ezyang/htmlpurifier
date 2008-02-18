@@ -1,9 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDefHarness.php';
-require_once 'HTMLPurifier/AttrDef/URI.php';
-require_once 'HTMLPurifier/URIParser.php';
-
 /**
  * @todo Aim for complete code coverage with mocks
  */

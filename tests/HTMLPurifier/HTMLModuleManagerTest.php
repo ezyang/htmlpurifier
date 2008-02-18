@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModuleManager.php';
-
 class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
 {
     

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/URIParser.php';
-
 /**
  * All-use harness, use this rather than SimpleTest's
  */

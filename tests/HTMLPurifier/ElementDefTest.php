@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ElementDef.php';
-
 class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
 {
     

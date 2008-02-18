@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/Filter/ExtractStyleBlocks.php';
-
 /**
  * @todo Assimilate CSSTidy into our library
  */

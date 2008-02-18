@@ -1,11 +1,6 @@
 <?php
 
-require_once 'HTMLPurifier/AttrDef/CSS/Multiple.php';
-require_once 'HTMLPurifier/AttrDefHarness.php';
-
 // borrowed for the sakes of this test
-require_once 'HTMLPurifier/AttrDef/Integer.php';
-
 class HTMLPurifier_AttrDef_CSS_MultipleTest extends HTMLPurifier_AttrDefHarness
 {
     

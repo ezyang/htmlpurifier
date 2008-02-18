@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLModule/Tidy.php';
-
 Mock::generatePartial(
     'HTMLPurifier_HTMLModule_Tidy',
     'HTMLPurifier_HTMLModule_Tidy_TestForConstruct',

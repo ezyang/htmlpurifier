@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/ComplexHarness.php';
-
 class HTMLPurifier_StrategyHarness extends HTMLPurifier_ComplexHarness
 {
     

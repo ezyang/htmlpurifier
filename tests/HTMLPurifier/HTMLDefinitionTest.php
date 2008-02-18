@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/HTMLDefinition.php';
-
 class HTMLPurifier_HTMLDefinitionTest extends HTMLPurifier_Harness
 {
     

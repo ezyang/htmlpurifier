@@ -1,7 +1,5 @@
 <?php
 
-require_once 'HTMLPurifier/AttrTransform.php';
-
 Mock::generatePartial(
         'HTMLPurifier_AttrTransform',
         'HTMLPurifier_AttrTransformTestable',
