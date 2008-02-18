@@ -1,5 +1,5 @@
 --TEST--
-HTMLPurifier.auto.php and HTMLPurifier.includes.php loading test
+HTMLPurifier.path.php and HTMLPurifier.includes.php loading test
 --FILE--
 <?php
 require '../library/HTMLPurifier.path.php';

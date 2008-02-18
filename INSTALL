@@ -168,20 +168,11 @@ Standalone version
     
         require '/path/to/HTMLPurifier.standalone.php';
     
-    This is equivalent to including HTMLPurifier.includes.php, but no
-    include path changes are necessary unless you want to use optional
-    classes. If you *do* want the optional classes, you need to add
-    HTML Purifier's source directory to your path. This will vary:
-    
-        * If you downloaded the htmlpurifier-x.y.z-standalone
-          distribution, you'll notice that the rest of the library is
-          missing; add standalone/ to your include path.
-        
-        * If you generated the standalone file yourself, the
-          standalone/ directory will also exist with the relevant
-          optional classes, but you can also set library/ to your path
-          and things will still work properly (in theory, a file in both
-          places should be equivalent).
+    This is equivalent to including HTMLPurifier.includes.php, except that
+    the contents of standalone/ will be added to your path. To override this
+    behavior, specify a new HTMLPURIFIER_PREFIX where standalone files can
+    be found (usually, this will be one directory up, the "true" library
+    directory in full distributions). Don't forget to set your path too!
     
     The autoloader can be added to the end to ensure the classes are
     loaded when necessary; otherwise you can manually include them.
