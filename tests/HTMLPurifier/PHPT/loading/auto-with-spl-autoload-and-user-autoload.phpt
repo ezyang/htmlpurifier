@@ -1,5 +1,5 @@
 --TEST--
-HTMLPurifier.auto.php using spl_autoload_register with userland spl_autoload registration loading test
+HTMLPurifier.auto.php using spl_autoload_register with userland __autoload loading test
 --SKIPIF--
 <?php
 if (!function_exists('spl_autoload_register')) {
