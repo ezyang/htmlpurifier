@@ -40,6 +40,9 @@ $aliases = array(
 // with a function, but could be if we put this in a class.
 htmlpurifier_parse_args($AC, $aliases);
 
+// Disable PHPT tests if they're not enabled
+if (!$GLOBALS['HTMLPurifierTest']['PHPT']) $AC['disable-phpt'] = true;
+
 if (!SimpleReporter::inCli()) {
     // Undo any dangerous parameters
     $AC['php'] = $php;

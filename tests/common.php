@@ -22,6 +22,7 @@ if (function_exists('spl_autoload_register')) {
 // default settings (protect against register_globals)
 $GLOBALS['HTMLPurifierTest'] = array();
 $GLOBALS['HTMLPurifierTest']['PEAR'] = false; // do PEAR tests
+$GLOBALS['HTMLPurifierTest']['PHPT'] = true; // do PHPT tests
 $GLOBALS['HTMLPurifierTest']['PH5P'] = class_exists('DOMDocument');
 
 // default library settings

@@ -4,19 +4,31 @@
 // This file is necessary to run the unit tests and profiling scripts.
 // Please copy it to 'test-settings.php' and make the necessary edits.
 
-// Some of these scripts run a long time, so it is recommended that you
-// turn off the time limit
+// Note: The minimum set of external libraries you need are PHP SimpleTest
+
+// We've got a lot of tests, so we recommend turning the limit off.
 set_time_limit(0);
 
-// Turning off output buffering will prevent mysterious errors from core dumps
+// Turning off output buffering will prevent mysterious errors from core dumps.
 $data = @ob_get_clean();
 if ($data !== false && $data !== '') {
     echo "Output buffer contains data [".urlencode($data)."]\n";
     exit;
 }
 
+// -----------------------------------------------------------------------------
+// RECOMMENDED SETTINGS
+
 // Where is SimpleTest located?
 $simpletest_location = '/path/to/simpletest/';
+
+// Should PHPT tests be enabled? (This should already be in your path; if it
+// isn't, set it here)
+// set_include_path('/path/to/phpt/Core/src' . PATH_SEPARATOR . get_include_path());
+$GLOBALS['HTMLPurifierTest']['PHPT'] = true;
+
+// -----------------------------------------------------------------------------
+// OPTIONAL SETTINGS
 
 // Where is CSSTidy located?
 $csstidy_location    = '/path/to/csstidy/';
@@ -31,7 +43,7 @@ $php = 'php';
 // accept an extra parameter (version number) before all other arguments
 $phpv = 'phpv';
 
-// How many times should profiling scripts iterate over the function? More runs 
-// means more accurate results, but they'll take longer to perform.
-$GLOBALS['HTMLPurifierTest']['Runs'] = 2;
+// Should PEAR tests be run? If you've got a valid PEAR installation, set this
+// to true (or, if it's not in the include path, to its install directory).
+$GLOBALS['HTMLPurifierTest']['PEAR'] = false;
 
