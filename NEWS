@@ -26,6 +26,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   You may find a use for these in your own project, but right now they
   are highly experimental and volatile.
 ! Integration with PHPT allows for automated smoketests
+! Limited support for proprietary HTML elements, namely <marquee>, sponsored
+  by Chris. You can enable them with %HTML.Proprietary if your client
+  demands them.
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
 - Various HTMLPurifier_Config convenience functions now accept another parameter

@@ -213,6 +213,12 @@ class HTMLPurifier_HTMLModuleManager
         // merge in custom modules
         $modules = array_merge($modules, $this->userModules);
         
+        // add proprietary module (this gets special treatment because
+        // it is completely removed from doctypes, etc.)
+        if ($config->get('HTML', 'Proprietary')) {
+            $modules[] = 'Proprietary';
+        }
+        
         foreach ($modules as $module) {
             $this->processModule($module);
         }
