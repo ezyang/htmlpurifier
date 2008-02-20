@@ -91,7 +91,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             $last = end($tokens);
             $data = $node->data;
             // (note $node->tagname is already normalized)
-            if ($last instanceof HTMLPurifier_Token_Start && $last->name == 'script') {
+            if ($last instanceof HTMLPurifier_Token_Start && ($last->name == 'script' || $last->name == 'style')) {
                 $new_data = trim($data);
                 if (substr($new_data, 0, 4) === '<!--') {
                     $data = substr($new_data, 4);

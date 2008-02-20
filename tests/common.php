@@ -160,3 +160,19 @@ function htmlpurifier_add_test($test, $test_file, $only_phpt = false) {
             trigger_error("$test_file is an invalid file for testing", E_USER_ERROR);
     }
 }
+
+/**
+ * Debugging function that prints tokens in a user-friendly manner.
+ */
+function printTokens($tokens, $index = null) {
+    $string = '<pre>';
+    $generator = new HTMLPurifier_Generator();
+    foreach ($tokens as $i => $token) {
+        if ($index === $i) $string .= '[<strong>';
+        $string .= "<sup>$i</sup>";
+        $string .= $generator->escape($generator->generateFromToken($token));
+        if ($index === $i) $string .= '</strong>]';
+    }
+    $string .= '</pre>';
+    echo $string;
+}

@@ -72,6 +72,15 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
         } else {
             $scopes = array();
         }
+        // remove comments from CSS
+        $css = trim($css);
+        if (strncmp('<!--', $css, 4) === 0) {
+            $css = substr($css, 4);
+        }
+        if (strlen($css) > 3 && substr($css, -3) == '-->') {
+            $css = substr($css, 0, -3);
+        }
+        $css = trim($css);
         $this->_tidy->parse($css);
         $css_definition = $config->getDefinition('CSS');
         foreach ($this->_tidy->css as $k => $decls) {

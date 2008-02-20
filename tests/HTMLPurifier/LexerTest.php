@@ -509,6 +509,29 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
         );
     }
     
+    function test_tokenizeHTML_() {
+        $this->assertTokenization(
+'<style type="text/css"><!--
+div {}
+--></style>',
+            array(
+                new HTMLPurifier_Token_Start('style', array('type' => 'text/css')),
+                new HTMLPurifier_Token_Text("\ndiv {}\n"),
+                new HTMLPurifier_Token_End('style'),
+            ),
+            array(
+                // PH5P doesn't seem to like style tags
+                'PH5P' => false,
+                // DirectLex defers to RemoveForeignElements for textification
+                'DirectLex' => array(
+                    new HTMLPurifier_Token_Start('style', array('type' => 'text/css')),
+                    new HTMLPurifier_Token_Comment("\ndiv {}\n"),
+                    new HTMLPurifier_Token_End('style'),
+                ),
+            )
+        );
+    }
+    
     /*
     
     function test_tokenizeHTML_() {

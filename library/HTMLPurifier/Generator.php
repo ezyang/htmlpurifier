@@ -112,6 +112,8 @@ class HTMLPurifier_Generator
         } elseif ($token instanceof HTMLPurifier_Token_Text) {
             return $this->escape($token->data);
             
+        } elseif ($token instanceof HTMLPurifier_Token_Comment) {
+            return '<!--' . $token->data . '-->';
         } else {
             return '';
             

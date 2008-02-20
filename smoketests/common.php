@@ -15,3 +15,21 @@ function escapeHTML($string) {
     return $string;
 }
 
+if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+    function fix_magic_quotes(&$array) {
+        foreach ($array as $k => $val) {
+            if (!is_array($val)) {
+                $array[$k] = stripslashes($val);
+            } else {
+                fix_magic_quotes($array[$k]);
+            }
+        }
+    }
+    
+    fix_magic_quotes($_GET);
+    fix_magic_quotes($_POST);
+    fix_magic_quotes($_COOKIE);
+    fix_magic_quotes($_REQUEST);
+    fix_magic_quotes($_ENV);
+    fix_magic_quotes($_SERVER);
+}

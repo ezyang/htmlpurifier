@@ -172,4 +172,17 @@ text-align:left;
         );
     }
     
+    function test_removeComments() {
+        $this->assertCleanCSS(
+"<!--
+div {
+text-align:right;
+}
+-->",
+"div {
+text-align:right;
+}"
+        );
+    }
+    
 }

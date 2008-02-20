@@ -32,6 +32,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   $schema which defines what HTMLPurifier_ConfigSchema to use besides the
   global default.
 - Fix bug with trusted script handling in libxml versions later than 2.6.28.
+- Fix bug in ExtractStyleBlocks with comments in style tags
+- Fix bug in comment parsing for DirectLex
 . Plugins now get their own changelogs according to project conventions.
 . Convert tokens to use instanceof, reducing memory footprint and
   improving comparison speed.
@@ -53,6 +55,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Debugger class is deprecated and will be removed soon.
 . Command line argument parsing for testing scripts revamped, now --opt value
   format is supported.
+. Smoketests now cleanup after magic quotes
+. Generator now can output comments (however, comments are still stripped
+  from HTML Purifier output)
+. substr_count PHP4 compatibility cludge removed
 
 3.0.0, released 2008-01-06
 # HTML Purifier is PHP 5 only! The 2.1.x branch will be maintained
