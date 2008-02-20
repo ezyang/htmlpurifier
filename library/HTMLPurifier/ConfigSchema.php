@@ -80,8 +80,16 @@ class HTMLPurifier_ConfigSchema {
         return HTMLPurifier_ConfigSchema::$singleton;
     }
     
+    /**
+     * Throws an E_USER_NOTICE stating that a method is deprecated.
+     */
+    private static function deprecated($method) {
+        trigger_error("Static HTMLPurifier_ConfigSchema::$method deprecated, use add*() method instead", E_USER_NOTICE);
+    }
+    
     /** @see HTMLPurifier_ConfigSchema->set() */
     public static function define($namespace, $name, $default, $type, $description) {
+        HTMLPurifier_ConfigSchema::deprecated(__METHOD__);
         $def =& HTMLPurifier_ConfigSchema::instance();
         $def->add($namespace, $name, $default, $type, $description);
     }
@@ -155,6 +163,7 @@ class HTMLPurifier_ConfigSchema {
     
     /** @see HTMLPurifier_ConfigSchema->addNamespace() */
     public static function defineNamespace($namespace, $description) {
+        HTMLPurifier_ConfigSchema::deprecated(__METHOD__);
         $def =& HTMLPurifier_ConfigSchema::instance();
         $def->addNamespace($namespace, $description);
     }
@@ -189,6 +198,7 @@ class HTMLPurifier_ConfigSchema {
     
     /** @see HTMLPurifier_ConfigSchema->addValueAliases() */
     public static function defineValueAliases($namespace, $name, $aliases) {
+        HTMLPurifier_ConfigSchema::deprecated(__METHOD__);
         $def =& HTMLPurifier_ConfigSchema::instance();
         $def->addValueAliases($namespace, $name, $aliases);
     }
@@ -230,6 +240,7 @@ class HTMLPurifier_ConfigSchema {
     
     /** @see HTMLPurifier_ConfigSchema->addAllowedValues() */
     public static function defineAllowedValues($namespace, $name, $allowed_values) {
+        HTMLPurifier_ConfigSchema::deprecated(__METHOD__);
         $def =& HTMLPurifier_ConfigSchema::instance();
         $def->addAllowedValues($namespace, $name, $allowed_values);
     }
@@ -273,6 +284,7 @@ class HTMLPurifier_ConfigSchema {
     
     /** @see HTMLPurifier_ConfigSchema->addAlias() */
     public static function defineAlias($namespace, $name, $new_namespace, $new_name) {
+        HTMLPurifier_ConfigSchema::deprecated(__METHOD__);
         $def =& HTMLPurifier_ConfigSchema::instance();
         $def->addAlias($namespace, $name, $new_namespace, $new_name);
     }
