@@ -110,7 +110,6 @@ function replace_includes_callback($matches) {
 
 shell_exec('php generate-includes.php');
 chdir(dirname(__FILE__) . '/../library/');
-create_blank('HTMLPurifier.php');
 
 echo 'Creating full file...';
 $contents = replace_includes(file_get_contents('HTMLPurifier.includes.php'));
