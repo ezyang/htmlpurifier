@@ -15,7 +15,7 @@ assertCli();
 $target = '../library/HTMLPurifier/ConfigSchema/schema.ser';
 $FS = new FSTools();
 
-$files = $FS->globr('../library/HTMLPurifier/ConfigSchema', '*.txt');
+$files = $FS->globr('../library/HTMLPurifier/ConfigSchema/schema', '*.txt');
 
 $namespaces = array();
 $directives = array();

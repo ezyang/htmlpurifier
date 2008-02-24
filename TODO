@@ -45,7 +45,6 @@ CONFIGDOC
    which files use what configuration
 
 IF IT AIN'T BROKE...
- - Create "super" script which performs all regeneration actions
  - Simplify merge library script by removing recursion? (or other things)
  - Perhaps replace types with integer identifiers in ConfigSchema? (would be
    smaller, but not by much).
