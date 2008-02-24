@@ -71,9 +71,7 @@ require 'HTMLPurifier/Harness.php';
 // Shell-script code is executed
 
 if ($AC['flush']) {
-    shell_exec($AC['php'] . ' ../maintenance/generate-schema-cache.php');
-    shell_exec($AC['php'] . ' ../maintenance/flush-definition-cache.php');
-    shell_exec($AC['php'] . ' ../maintenance/generate-standalone.php');
+    shell_exec($AC['php'] . ' ../maintenance/flush.php');
 }
 
 // Now, userland code begins to be executed

@@ -46,12 +46,8 @@ $aliases = array(
 );
 htmlpurifier_parse_args($AC, $aliases);
 
-// Calls generate-includes.php automatically
-shell_exec($AC['php'] . ' ../maintenance/generate-standalone.php');
-
-// Not strictly necessary, but its a good idea
-shell_exec($AC['php'] . ' ../maintenance/generate-schema-cache.php');
-shell_exec($AC['php'] . ' ../maintenance/flush-definition-cache.php');
+// Regenerate any necessary files
+shell_exec($AC['php'] . ' ../maintenance/flush.php');
 
 $test = new TestSuite('HTML Purifier Multiple Versions Test');
 $file = '';

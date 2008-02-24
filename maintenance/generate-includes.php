@@ -25,6 +25,7 @@ $exclude_files = array(
 );
 
 // Determine what files need to be included:
+echo 'Scanning for files... ';
 $raw_files = $FS->globr('.', '*.php');
 $files = array();
 foreach ($raw_files as $file) {
@@ -42,6 +43,7 @@ foreach ($raw_files as $file) {
     if (in_array($file, $exclude_files)) continue; // rm excluded files
     $files[] = $file;
 }
+echo "done!\n";
 
 // Reorder list so that dependencies are included first:
 
@@ -145,4 +147,6 @@ foreach ($files as $file) {
     $php .= "require '$file';" . PHP_EOL;
 }
 
+echo "Writing file... ";
 file_put_contents('HTMLPurifier.includes.php', $php);
+echo "done!\n";

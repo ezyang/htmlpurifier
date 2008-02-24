@@ -108,7 +108,10 @@ function replace_includes_callback($matches) {
     return replace_includes(remove_php_tags(file_get_contents($file)));
 }
 
+echo 'Generating includes file... ';
 shell_exec('php generate-includes.php');
+echo "done!\n";
+
 chdir(dirname(__FILE__) . '/../library/');
 
 echo 'Creating full file...';
