@@ -21,7 +21,7 @@ $namespaces = array();
 $directives = array();
 
 // Generate string hashes
-$parser = new ConfigSchema_StringHashParser();
+$parser = new HTMLPurifier_ConfigSchema_StringHashParser();
 foreach ($files as $file) {
     $hash = $parser->parseFile($file);
     if (strpos($hash['ID'], '.') === false) {
@@ -31,7 +31,7 @@ foreach ($files as $file) {
     }
 }
 
-$adapter = new ConfigSchema_StringHashAdapter();
+$adapter = new HTMLPurifier_ConfigSchema_StringHashAdapter();
 $schema  = new HTMLPurifier_ConfigSchema();
 
 foreach ($namespaces as $hash) $adapter->adapt($hash, $schema);

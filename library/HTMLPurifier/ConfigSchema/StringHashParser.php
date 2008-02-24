@@ -26,19 +26,18 @@
  *      Put this in its own class hierarchy or something; this class
  *      is usage agnostic.
  */
-class ConfigSchema_StringHashParser
+class HTMLPurifier_ConfigSchema_StringHashParser
 {
     
     public $default = 'ID';
     
     public function parseFile($file) {
-        if (is_string($file)) $file = new FSTools_File($file);
-        if (!$file->exists()) throw new Exception('File does not exist');
-        $file->open('r');
+        if (!file_exists($file)) throw new Exception('File does not exist');
+        $fh = fopen($file, 'r');
         $state   = false;
         $single  = false;
         $ret     = array();
-        while (($line = $file->getLine()) !== false) {
+        while (($line = fgets($fh)) !== false) {
             $line = rtrim($line, "\n\r");
             if (!$state && $line === '') continue;
             if (strncmp('--', $line, 2) === 0) {
@@ -64,7 +63,7 @@ class ConfigSchema_StringHashParser
                 $ret[$state] .= "$line\n";
             }
         }
-        $file->close();
+        fclose($fh);
         return $ret;
     }
     

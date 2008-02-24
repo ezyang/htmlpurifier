@@ -28,12 +28,3 @@ the filesystem. It currently consists of two classes:
   method imaginable one would need.
 
 Check the files themselves for more information.
-
-
-ConfigSchema
-------------
-
-ConfigSchema is the next-generation configuration validation system for
-HTML Purifier, built off of the original HTMLPurifier_ConfigSchema. When
-complete, it will be used to generate schema files which will then be used
-to enforce values set to HTMLPurifier_Config.

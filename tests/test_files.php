@@ -64,6 +64,10 @@ $test_files[] = 'HTMLPurifier/ChildDef/RequiredTest.php';
 $test_files[] = 'HTMLPurifier/ChildDef/StrictBlockquoteTest.php';
 $test_files[] = 'HTMLPurifier/ChildDef/TableTest.php';
 $test_files[] = 'HTMLPurifier/ConfigSchemaTest.php';
+$test_files[] = 'HTMLPurifier/ConfigSchema/StringHashAdapterTest.php';
+$test_files[] = 'HTMLPurifier/ConfigSchema/StringHashReverseAdapterTest.php';
+$test_files[] = 'HTMLPurifier/ConfigSchema/StringHashParserTest.php';
+$test_files[] = 'HTMLPurifier/ConfigSchema/StringHashTest.php';
 $test_files[] = 'HTMLPurifier/ConfigTest.php';
 $test_files[] = 'HTMLPurifier/ContextTest.php';
 $test_files[] = 'HTMLPurifier/DefinitionCacheFactoryTest.php';
@@ -135,13 +139,6 @@ if ($csstidy_location) {
 // FSTools auxiliary library
 
 $test_files[] = 'FSTools/FileTest.php';
-
-// ConfigSchema auxiliary library
-
-$test_files[] = 'ConfigSchema/StringHashAdapterTest.php';
-$test_files[] = 'ConfigSchema/StringHashReverseAdapterTest.php';
-$test_files[] = 'ConfigSchema/StringHashParserTest.php';
-$test_files[] = 'ConfigSchema/StringHashTest.php';
 
 } // end if ($AC['only-phpt'])
 

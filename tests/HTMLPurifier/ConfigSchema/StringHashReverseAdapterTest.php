@@ -1,6 +1,6 @@
 <?php
 
-class ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
+class HTMLPurifier_ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
 {
     
     function makeSchema() {
@@ -17,7 +17,7 @@ class ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
     }
     
     function testNamespace() {
-        $adapter = new ConfigSchema_StringHashReverseAdapter($this->makeSchema());
+        $adapter = new HTMLPurifier_ConfigSchema_StringHashReverseAdapter($this->makeSchema());
         $result = $adapter->get('Ns');
         $expect = array(
             'ID' => 'Ns',
@@ -27,14 +27,14 @@ class ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
     }
     
     function testBadNamespace() {
-        $adapter = new ConfigSchema_StringHashReverseAdapter($this->makeSchema());
+        $adapter = new HTMLPurifier_ConfigSchema_StringHashReverseAdapter($this->makeSchema());
         $this->expectError("Namespace 'BadNs' doesn't exist in schema");
         $adapter->get('BadNs');
     }
     
     function testDirective() {
         
-        $adapter = new ConfigSchema_StringHashReverseAdapter($this->makeSchema());
+        $adapter = new HTMLPurifier_ConfigSchema_StringHashReverseAdapter($this->makeSchema());
         
         $result = $adapter->get('Ns', 'Dir');
         $expect = array(
@@ -53,13 +53,13 @@ class ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
     }
     
     function testBadDirective() {
-        $adapter = new ConfigSchema_StringHashReverseAdapter($this->makeSchema());
+        $adapter = new HTMLPurifier_ConfigSchema_StringHashReverseAdapter($this->makeSchema());
         $this->expectError("Directive 'BadNs.BadDir' doesn't exist in schema");
         $adapter->get('BadNs', 'BadDir');
     }
     
     function assertMethod($func, $input, $expect) {
-        $adapter = new ConfigSchema_StringHashReverseAdapter($this->makeSchema());
+        $adapter = new HTMLPurifier_ConfigSchema_StringHashReverseAdapter($this->makeSchema());
         $result = $adapter->$func($input);
         $this->assertIdentical($result, $expect);
     }
@@ -85,7 +85,7 @@ class ConfigSchema_StringHashReverseAdapterTest extends UnitTestCase
     }
     
     function assertExtraction($desc, $expect_desc, $expect_version) {
-        $adapter = new ConfigSchema_StringHashReverseAdapter($this->makeSchema());
+        $adapter = new HTMLPurifier_ConfigSchema_StringHashReverseAdapter($this->makeSchema());
         list($result_desc, $result_version) = $adapter->extractVersion($desc);
         $this->assertIdentical($result_desc, $expect_desc);
         $this->assertIdentical($result_version, $expect_version);

@@ -16,8 +16,7 @@ class HTMLPurifierExtras
     
     public static function getPath($class) {
         if (
-            strncmp('FSTools', $class, 7) !== 0 &&
-            strncmp('ConfigSchema', $class, 12) !== 0
+            strncmp('FSTools', $class, 7) !== 0
         ) return false;
         // Custom implementations can go here
         // Standard implementation:

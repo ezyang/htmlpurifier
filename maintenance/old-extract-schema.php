@@ -58,7 +58,7 @@ function saveHash($hash) {
 }
 
 $schema  = HTMLPurifier_ConfigSchema::instance();
-$adapter = new ConfigSchema_StringHashReverseAdapter($schema);
+$adapter = new HTMLPurifier_ConfigSchema_StringHashReverseAdapter($schema);
 
 foreach ($schema->info as $ns => $ns_array) {
     saveHash($adapter->get($ns));

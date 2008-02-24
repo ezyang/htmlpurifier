@@ -1,10 +1,10 @@
 <?php
 
-class ConfigSchema_StringHashTest extends UnitTestCase
+class HTMLPurifier_ConfigSchema_StringHashTest extends UnitTestCase
 {
     
     public function testUsed() {
-        $hash = new ConfigSchema_StringHash(array(
+        $hash = new HTMLPurifier_ConfigSchema_StringHash(array(
             'key' => 'value',
             'key2' => 'value2'
         ));

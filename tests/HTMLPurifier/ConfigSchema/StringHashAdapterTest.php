@@ -1,6 +1,6 @@
 <?php
 
-class ConfigSchema_StringHashAdapterTest extends UnitTestCase
+class HTMLPurifier_ConfigSchema_StringHashAdapterTest extends UnitTestCase
 {
     function __construct() {
         generate_mock_once('HTMLPurifier_ConfigSchema');
@@ -15,7 +15,7 @@ class ConfigSchema_StringHashAdapterTest extends UnitTestCase
             if (!isset($called[$func])) $called[$func] = 0;
             $schema->expectAt($called[$func]++, $func, $params);
         }
-        $adapter = new ConfigSchema_StringHashAdapter();
+        $adapter = new HTMLPurifier_ConfigSchema_StringHashAdapter();
         $adapter->adapt($input, $schema);
     }
     

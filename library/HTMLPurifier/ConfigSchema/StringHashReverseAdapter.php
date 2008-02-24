@@ -4,7 +4,7 @@
  * Converts HTMLPurifier_ConfigSchema into a StringHash which can be
  * easily saved to a file.
  */
-class ConfigSchema_StringHashReverseAdapter
+class HTMLPurifier_ConfigSchema_StringHashReverseAdapter
 {
     
     protected $schema;
