@@ -3,9 +3,12 @@
 class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
 {
     
-    function test() {
-        
+    function setup() {
+        parent::setup();
         $this->def = new HTMLPurifier_AttrDef_CSS();
+    }
+    
+    function test() {
         
         // regular cases, singular
         $this->assertDef('text-align:right;');
@@ -107,11 +110,13 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         // case-insensitivity
         $this->assertDef('FLOAT:LEFT;', 'float:left;');
         
+        // !important stripping
+        $this->assertDef('float:left !important;', 'float:left;');
+        
     }
     
     function testProprietary() {
         $this->config->set('CSS', 'Proprietary', true);
-        $this->def = new HTMLPurifier_AttrDef_CSS();
         
         $this->assertDef('scrollbar-arrow-color:#ff0;');
         $this->assertDef('scrollbar-base-color:#ff6347;');
@@ -125,6 +130,11 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('-khtml-opacity:.2;');
         $this->assertDef('filter:alpha(opacity=20);');
         
+    }
+    
+    function testImportant() {
+        $this->config->set('CSS', 'AllowImportant', true);
+        $this->assertDef('float:left !important;');
     }
     
 }

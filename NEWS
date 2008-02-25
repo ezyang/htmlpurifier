@@ -29,6 +29,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Limited support for proprietary HTML elements, namely <marquee>, sponsored
   by Chris. You can enable them with %HTML.Proprietary if your client
   demands them.
+! Support for !important CSS cascade modifier. By default, this will be stripped
+  from CSS, but you can enable it using %CSS.AllowImportant
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
 - Various HTMLPurifier_Config convenience functions now accept another parameter

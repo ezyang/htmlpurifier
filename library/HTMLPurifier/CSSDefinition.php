@@ -202,6 +202,12 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             $this->doSetupProprietary($config);
         }
         
+        $allow_important = $config->get('CSS', 'AllowImportant');
+        // wrap all attr-defs with decorator that handles !important
+        foreach ($this->info as $k => $v) {
+            $this->info[$k] = new HTMLPurifier_AttrDef_CSS_ImportantDecorator($v, $allow_important);
+        }
+        
     }
     
     protected function doSetupProprietary($config) {

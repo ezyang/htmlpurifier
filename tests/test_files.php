@@ -18,6 +18,7 @@ $test_files[] = 'HTMLPurifier/AttrDef/CSS/CompositeTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/FilterTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/FontFamilyTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/FontTest.php';
+$test_files[] = 'HTMLPurifier/AttrDef/CSS/ImportantDecoratorTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/LengthTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/ListStyleTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/CSS/MultipleTest.php';
