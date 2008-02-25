@@ -15,17 +15,18 @@ TODO:
 - add blurbs to ToC
 */
 
-if (version_compare('5', PHP_VERSION, '>')) exit('Requires PHP 5 or higher.');
-error_reporting(E_ALL); // probably not possible to use E_STRICT
+if (version_compare(PHP_VERSION, '5.2.0', '<')) exit('PHP 5.2.0 or greater required.');
+error_reporting(E_ALL | E_STRICT);
 
-define('HTMLPURIFIER_SCHEMA_STRICT', true); // description data needs to be collected
+echo 'Currently broken!';
+exit;
 
 // load dual-libraries
-set_include_path(realpath('../library') . PATH_SEPARATOR . get_include_path() );
-require_once '../library/HTMLPurifier.includes.php';
-require_once 'library/ConfigDoc.auto.php';
+require_once '../extras/HTMLPurifierExtras.auto.php';
+require_once '../library/HTMLPurifier.auto.php';
 
-$purifier = HTMLPurifier::getInstance(array(
+// setup HTML Purifier singleton
+HTMLPurifier::getInstance(array(
     'AutoFormat.PurifierLinkify' => true
 ));
 
@@ -34,11 +35,16 @@ $style = 'plain'; // use $_GET in the future
 $configdoc = new ConfigDoc();
 $output = $configdoc->generate($schema, $style);
 
+if (!$output) {
+    echo "Error in generating files\n";
+    exit(1);
+}
+
 // write out
 file_put_contents("$style.html", $output);
 
 if (php_sapi_name() != 'cli') {
-    // output = instant feedback
+    // output (instant feedback if it's a browser)
     echo $output;
 } else {
     echo 'Files generated successfully.';

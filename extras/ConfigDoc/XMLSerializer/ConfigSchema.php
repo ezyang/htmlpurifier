@@ -1,7 +1,5 @@
 <?php
 
-require_once 'ConfigDoc/XMLSerializer.php';
-
 class ConfigDoc_XMLSerializer_ConfigSchema extends ConfigDoc_XMLSerializer
 {
     

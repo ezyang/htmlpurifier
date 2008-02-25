@@ -134,7 +134,9 @@ if ($csstidy_location) {
 
 // ConfigDoc auxiliary library
 
-// ... none yet
+if (version_compare(PHP_VERSION, '5.2', '>=')) {
+    $test_files[] = 'ConfigDoc/DOM/DocumentTest.php';
+}
 
 // FSTools auxiliary library
 

@@ -3,6 +3,11 @@
 /**
  * @file
  * Convenience file that registers autoload handler for HTML Purifier.
+ * 
+ * @warning
+ *      This autoloader does not contain the compatibility code seen in
+ *      HTMLPurifier_Bootstrap; the user is expected to make any necessary
+ *      changes to use this library.
  */
 
 if (function_exists('spl_autoload_register')) {

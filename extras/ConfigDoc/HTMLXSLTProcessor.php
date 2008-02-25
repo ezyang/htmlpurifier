@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Special XSLT processor specifically for HTML documents. Loosely
- * based off of XSLTProcessor, but does not inherit from that class
+ * Decorator/extender XSLT processor specifically for HTML documents.
  */
 class ConfigDoc_HTMLXSLTProcessor
 {
@@ -12,14 +11,13 @@ class ConfigDoc_HTMLXSLTProcessor
      */
     protected $xsltProcessor;
     
-    public function __construct() {
-        $this->xsltProcessor = new XSLTProcessor();
+    public function __construct($proc = false) {
+        if ($proc === false) $proc = new XSLTProcessor();
+        $this->xsltProcessor = $proc;
     }
     
     /**
-     * Imports stylesheet for processor to use
-     * @param $xsl XSLT DOM tree, or filename of the XSL transformation
-     * @return bool Success?
+     * @note Allows a string $xsl filename to be passed
      */
     public function importStylesheet($xsl) {
         if (is_string($xsl)) {
@@ -69,6 +67,13 @@ class ConfigDoc_HTMLXSLTProcessor
         foreach ($options as $name => $value) {
             $this->xsltProcessor->setParameter('', $name, $value);
         }
+    }
+    
+    /**
+     * Forward any other calls to the XSLT processor
+     */
+    public function __call($name, $arguments) {
+        call_user_func_array(array($this->xsltProcessor, $name), $arguments);
     }
     
 }
