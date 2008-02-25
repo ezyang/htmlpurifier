@@ -31,6 +31,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   demands them.
 ! Support for !important CSS cascade modifier. By default, this will be stripped
   from CSS, but you can enable it using %CSS.AllowImportant
+! Support for display and visibility CSS properties added, set %CSS.AllowTricky
+  to true to use them.
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
 - Various HTMLPurifier_Config convenience functions now accept another parameter

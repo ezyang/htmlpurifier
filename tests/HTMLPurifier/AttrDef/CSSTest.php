@@ -137,5 +137,11 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('float:left !important;');
     }
     
+    function testTricky() {
+        $this->config->set('CSS', 'AllowTricky', true);
+        $this->assertDef('display:none;');
+        $this->assertDef('visibility:visible;');
+    }
+    
 }
 

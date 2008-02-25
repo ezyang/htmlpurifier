@@ -202,6 +202,10 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             $this->doSetupProprietary($config);
         }
         
+        if ($config->get('CSS', 'AllowTricky')) {
+            $this->doSetupTricky($config);
+        }
+        
         $allow_important = $config->get('CSS', 'AllowImportant');
         // wrap all attr-defs with decorator that handles !important
         foreach ($this->info as $k => $v) {
@@ -227,6 +231,18 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         // only opacity, for now
         $this->info['filter'] = new HTMLPurifier_AttrDef_CSS_Filter();
         
+    }
+    
+    protected function doSetupTricky($config) {
+        $this->info['display'] = new HTMLPurifier_AttrDef_Enum(array(
+            'inline', 'block', 'list-item', 'run-in', 'compact',
+            'marker', 'table', 'inline-table', 'table-row-group',
+            'table-header-group', 'table-footer-group', 'table-row',
+            'table-column-group', 'table-column', 'table-cell', 'table-caption', 'none'
+        ));
+        $this->info['visibility'] = new HTMLPurifier_AttrDef_Enum(array(
+            'visible', 'hidden', 'collapse'
+        ));
     }
     
 }
