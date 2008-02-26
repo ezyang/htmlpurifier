@@ -2,12 +2,12 @@
 
 /**
  * Generates XML and HTML documents describing configuration.
- * @note PHP 5 only!
+ * @note PHP 5.2+ only!
  */
 
 /*
 TODO:
-- make XML format richer (see XMLSerializer_ConfigSchema)
+- make XML format richer
 - extend XSLT transformation (see the corresponding XSLT file)
 - allow generation of packaged docs that can be easily moved
 - multipage documentation

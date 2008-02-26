@@ -63,7 +63,7 @@ class HTMLPurifier_ConfigSchema_StringHashAdapter
             }
         }
         
-        // We don't use these yet, but there being used
+        // We don't use these yet, but they're specified
         if (isset($hash['VERSION'])) $hash->offsetGet('VERSION');
         if (isset($hash['DEPRECATED-USE'])) $hash->offsetGet('DEPRECATED-USE');
         if (isset($hash['DEPRECATED-VERSION'])) $hash->offsetGet('DEPRECATED-VERSION');
