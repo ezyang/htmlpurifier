@@ -221,6 +221,11 @@ function phorum_htmlpurifier_common() {
         exit;
     }
     
+    if (!function_exists('phorum_htmlpurifier_migrate')) {
+        // Dummy function
+        function phorum_htmlpurifier_migrate($data) {return $data;}
+    }
+    
 }
 
 /**

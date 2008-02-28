@@ -11,6 +11,7 @@ Changelog                                         HTMLPurifier : Phorum Mod
 
 Version 3.0.0.1 for Phorum 5.2, unknown release date
 - Fixed double encoded quotes
+- Fixed fatal error when migrate.php is blank
 
 Version 3.0.0 for Phorum 5.2, released January 12, 2008
 # WYSIWYG and suppress_message options are now configurable via web
