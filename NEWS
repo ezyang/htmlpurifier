@@ -33,6 +33,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   from CSS, but you can enable it using %CSS.AllowImportant
 ! Support for display and visibility CSS properties added, set %CSS.AllowTricky
   to true to use them.
+! HTML Purifier now has its own Exception hierarchy under HTMLPurifier_Exception.
+  Developer error (not enduser error) can cause these to be triggered.
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
 - Various HTMLPurifier_Config convenience functions now accept another parameter

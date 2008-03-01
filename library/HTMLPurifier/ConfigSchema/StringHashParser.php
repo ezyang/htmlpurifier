@@ -32,7 +32,7 @@ class HTMLPurifier_ConfigSchema_StringHashParser
     public $default = 'ID';
     
     public function parseFile($file) {
-        if (!file_exists($file)) throw new Exception('File does not exist');
+        if (!file_exists($file)) throw new HTMLPurifier_ConfigSchema_Exception('File ' . $file . ' does not exist');
         $fh = fopen($file, 'r');
         $state   = false;
         $single  = false;

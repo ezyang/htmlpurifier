@@ -52,4 +52,12 @@ class HTMLPurifier_ConfigSchema_StringHashParserTest extends UnitTestCase
         ));
     }
     
+    function testError() {
+        try {
+            $this->parser->parseFile('NoExist.txt');
+        } catch (HTMLPurifier_ConfigSchema_Exception $e) {
+            $this->assertIdentical($e->getMessage(), 'File NoExist.txt does not exist');
+        }
+    }
+    
 }

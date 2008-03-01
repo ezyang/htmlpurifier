@@ -65,6 +65,7 @@ $test_files[] = 'HTMLPurifier/ChildDef/RequiredTest.php';
 $test_files[] = 'HTMLPurifier/ChildDef/StrictBlockquoteTest.php';
 $test_files[] = 'HTMLPurifier/ChildDef/TableTest.php';
 $test_files[] = 'HTMLPurifier/ConfigSchemaTest.php';
+$test_files[] = 'HTMLPurifier/ConfigSchema/InterchangeTest.php';
 $test_files[] = 'HTMLPurifier/ConfigSchema/StringHashAdapterTest.php';
 $test_files[] = 'HTMLPurifier/ConfigSchema/StringHashReverseAdapterTest.php';
 $test_files[] = 'HTMLPurifier/ConfigSchema/StringHashParserTest.php';
