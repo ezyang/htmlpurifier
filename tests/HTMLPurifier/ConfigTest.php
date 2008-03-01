@@ -403,7 +403,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $config_result = HTMLPurifier_Config::loadArrayFromForm(
             $get, 'breakfast',
             array('Pancake.Served', 'Toppings', '-Toppings.Protected'),
-            true, // mq fix
+            false, // mq fix
             $this->schema
         );
         
