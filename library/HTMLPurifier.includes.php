@@ -129,6 +129,8 @@ require 'HTMLPurifier/ConfigSchema/StringHash.php';
 require 'HTMLPurifier/ConfigSchema/StringHashAdapter.php';
 require 'HTMLPurifier/ConfigSchema/StringHashParser.php';
 require 'HTMLPurifier/ConfigSchema/StringHashReverseAdapter.php';
+require 'HTMLPurifier/ConfigSchema/Interchange/Validator.php';
+require 'HTMLPurifier/ConfigSchema/Interchange/Validator/IdExists.php';
 require 'HTMLPurifier/DefinitionCache/Decorator.php';
 require 'HTMLPurifier/DefinitionCache/Null.php';
 require 'HTMLPurifier/DefinitionCache/Serializer.php';

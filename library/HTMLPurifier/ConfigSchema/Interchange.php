@@ -11,11 +11,11 @@ class HTMLPurifier_ConfigSchema_Interchange
     /**
      * Hash table of allowed types.
      */
-    public $types = array(
+    protected $types = array(
         'string'    => 'String',
         'istring'   => 'Case-insensitive string',
         'text'      => 'Text',
-        'itext'      => 'Case-insensitive text',
+        'itext'     => 'Case-insensitive text',
         'int'       => 'Integer',
         'float'     => 'Float',
         'bool'      => 'Boolean',
@@ -28,18 +28,34 @@ class HTMLPurifier_ConfigSchema_Interchange
     /**
      * Array of Namespace ID => array(namespace info)
      */
-    public $namespaces;
+    protected $namespaces;
     
     /**
      * Array of Directive ID => array(directive info)
      */
-    public $directives;
+    protected $directives;
+    
+    /** Get all namespaces */
+    public function getNamespaces() {return $this->namespaces;}
+    /** Get a namespace */
+    public function getNamespace($id) {return $this->namespaces[$id];}
+    /** Check if a namespace exists */
+    public function namespaceExists($id) {return isset($this->namespaces[$id]);}
+    
+    /** Get all directives */
+    public function getDirectives() {return $this->directives;}
+    /** Get a directive */
+    public function getDirective($id) {return $this->directives[$id];}
+    /** Check if a directive exists */
+    public function directiveExists($id) {return isset($this->directives[$id]);}
+    
+    /** Get all types */
+    public function getTypes() {return $this->types;}
     
     /**
      * Adds a namespace array to $namespaces
      */
     public function addNamespace($arr) {
-        if (!isset($arr['ID'])) throw new HTMLPurifier_ConfigSchema_Exception('Namespace must have ID');
         $this->namespaces[$arr['ID']] = $arr;
     }
     
@@ -47,8 +63,17 @@ class HTMLPurifier_ConfigSchema_Interchange
      * Adds a directive array to $directives
      */
     public function addDirective($arr) {
-        if (!isset($arr['ID'])) throw new HTMLPurifier_ConfigSchema_Exception('Directive must have ID');
         $this->directives[$arr['ID']] = $arr;
+    }
+    
+    /**
+     * Retrieves a version of this object wrapped in the validator adapter
+     * to be used for data-input.
+     */
+    public function getValidatorAdapter() {
+        return
+            new HTMLPurifier_ConfigSchema_Interchange_Validator_IdExists(
+            $this);
     }
     
 }
