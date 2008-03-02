@@ -55,7 +55,13 @@ class HTMLPurifier_ConfigSchema_Interchange
      */
     public function getValidatorAdapter() {
         $validator = new HTMLPurifier_ConfigSchema_InterchangeValidator($this);
-        $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_IdExists());
+        // Common validators
+        $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Exists('ID'));
+        $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Exists('DESCRIPTION'));
+        // Namespace validators
+        
+        // Directive validators
+        
         return $validator;
     }
     

@@ -27,7 +27,7 @@ class HTMLPurifier_ConfigSchema_InterchangeTest extends UnitTestCase
     
     public function testValidator() {
         $adapter = $this->interchange->getValidatorAdapter();
-        $this->expectException(new HTMLPurifier_ConfigSchema_Exception('ID must exist in directive'));
+        $this->expectException(new HTMLPurifier_ConfigSchema_Exception('ID must exist'));
         $adapter->addDirective(array());
     }
     

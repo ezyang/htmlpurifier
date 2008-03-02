@@ -7,6 +7,9 @@ class HTMLPurifier_ConfigSchema_InterchangeValidator
 {
     protected $interchange;
     protected $validators = array();
+    protected $namespaceValidators = array();
+    protected $directiveVaildators = array();
+    protected $index = 0;
     
     /**
      * @param $interchange Instance of HTMLPurifier_ConfigSchema_Interchange
@@ -20,15 +23,32 @@ class HTMLPurifier_ConfigSchema_InterchangeValidator
      * Registers a HTMLPurifier_ConfigSchema_Validator to run when adding.
      */
     public function addValidator($validator) {
-        $this->validators[] = $validator;
+        $this->validators[$this->index++] = $validator;
+    }
+    
+    /**
+     * Register validators to be used only on directives
+     */
+    public function addDirectiveValidator($validator) {
+        $this->directiveValidators[$this->index++] = $validator;
+    }
+    
+    /**
+     * Register validators to be used only on namespaces
+     */
+    public function addNamespaceValidator($validator) {
+        $this->namespaceValidators[$this->index++] = $validator;
     }
     
     /**
      * Validates and adds a namespace hash
      */
     public function addNamespace($hash) {
-        foreach ($this->validators as $validator) {
-            $validator->validateNamespace($hash, $this->interchange);
+        for ($i = 0; $i < $this->index; $i++) {
+            if (isset($this->validators[$i])) $validator = $this->validators[$i];
+            elseif (isset($this->namespaceValidators[$i])) $validator = $this->namespaceValidators[$i];
+            else continue;
+            $validator->validate($hash, $this->interchange);
         }
         $this->interchange->addNamespace($hash);
     }
@@ -37,8 +57,11 @@ class HTMLPurifier_ConfigSchema_InterchangeValidator
      * Validates and adds a directive hash
      */
     public function addDirective($hash) {
-        foreach ($this->validators as $validator) {
-            $validator->validateDirective($hash, $this->interchange);
+        for ($i = 0; $i < $this->index; $i++) {
+            if (isset($this->validators[$i])) $validator = $this->validators[$i];
+            elseif (isset($this->directiveValidators[$i])) $validator = $this->directiveValidators[$i];
+            else continue;
+            $validator->validate($hash, $this->interchange);
         }
         $this->interchange->addDirective($hash);
     }

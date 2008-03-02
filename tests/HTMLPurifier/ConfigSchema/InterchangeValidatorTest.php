@@ -9,10 +9,11 @@ class HTMLPurifier_ConfigSchema_InterchangeValidatorTest extends UnitTestCase
         $this->validator = new HTMLPurifier_ConfigSchema_InterchangeValidator($this->mock);
     }
     
-    protected function makeValidator($expect_method, $expect_params) {
+    protected function makeValidator($expect_params = null) {
         generate_mock_once('HTMLPurifier_ConfigSchema_Validator');
         $validator = new HTMLPurifier_ConfigSchema_ValidatorMock();
-        $validator->expectOnce($expect_method, $expect_params);
+        if ($expect_params !== null) $validator->expectOnce('validate', $expect_params);
+        else $validator->expectNever('validate');
         return $validator;
     }
     
@@ -24,10 +25,20 @@ class HTMLPurifier_ConfigSchema_InterchangeValidatorTest extends UnitTestCase
     
     public function testAddNamespaceWithValidators() {
         $hash = array('ID' => 'Namespace');
-        $this->validator->addValidator($this->makeValidator('validateNamespace', array($hash, $this->mock)));
-        $this->validator->addValidator($this->makeValidator('validateNamespace', array($hash, $this->mock)));
+        $this->validator->addValidator($this->makeValidator(array($hash, $this->mock)));
+        $this->validator->addNamespaceValidator($this->makeValidator(array($hash, $this->mock)));
+        $this->validator->addDirectiveValidator($this->makeValidator()); // not called
         $this->mock->expectOnce('addNamespace', array($hash));
         $this->validator->addNamespace($hash);
+    }
+    
+    public function testAddDirectiveWithValidators() {
+        $hash = array('ID' => 'Namespace.Directive');
+        $this->validator->addValidator($this->makeValidator(array($hash, $this->mock)));
+        $this->validator->addNamespaceValidator($this->makeValidator()); // not called
+        $this->validator->addDirectiveValidator($this->makeValidator(array($hash, $this->mock)));
+        $this->mock->expectOnce('addDirective', array($hash));
+        $this->validator->addDirective($hash);
     }
     
 }
