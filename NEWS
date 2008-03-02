@@ -43,6 +43,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix bug with trusted script handling in libxml versions later than 2.6.28.
 - Fix bug in ExtractStyleBlocks with comments in style tags
 - Fix bug in comment parsing for DirectLex
+- Flush output now displayed when in command line mode for unit tester
 . Plugins now get their own changelogs according to project conventions.
 . Convert tokens to use instanceof, reducing memory footprint and
   improving comparison speed.

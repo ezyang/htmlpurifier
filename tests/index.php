@@ -71,7 +71,11 @@ require 'HTMLPurifier/Harness.php';
 // Shell-script code is executed
 
 if ($AC['flush']) {
-    shell_exec($AC['php'] . ' ../maintenance/flush.php');
+    if (SimpleReporter::inCli() && !$AC['xml']) {
+        passthru($AC['php'] . ' ../maintenance/flush.php');
+    } else {
+        shell_exec($AC['php'] . ' ../maintenance/flush.php');
+    }
 }
 
 // Now, userland code begins to be executed

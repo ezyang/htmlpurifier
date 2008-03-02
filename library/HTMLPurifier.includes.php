@@ -125,6 +125,7 @@ require 'HTMLPurifier/ConfigDef/DirectiveAlias.php';
 require 'HTMLPurifier/ConfigDef/Namespace.php';
 require 'HTMLPurifier/ConfigSchema/Exception.php';
 require 'HTMLPurifier/ConfigSchema/Interchange.php';
+require 'HTMLPurifier/ConfigSchema/InterchangeValidator.php';
 require 'HTMLPurifier/ConfigSchema/StringHash.php';
 require 'HTMLPurifier/ConfigSchema/StringHashAdapter.php';
 require 'HTMLPurifier/ConfigSchema/StringHashParser.php';

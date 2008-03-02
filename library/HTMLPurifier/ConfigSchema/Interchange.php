@@ -11,7 +11,7 @@ class HTMLPurifier_ConfigSchema_Interchange
     /**
      * Hash table of allowed types.
      */
-    private $types = array(
+    public $types = array(
         'string'    => 'String',
         'istring'   => 'Case-insensitive string',
         'text'      => 'Text',
@@ -28,29 +28,12 @@ class HTMLPurifier_ConfigSchema_Interchange
     /**
      * Array of Namespace ID => array(namespace info)
      */
-    private $namespaces;
+    public $namespaces;
     
     /**
      * Array of Directive ID => array(directive info)
      */
-    private $directives;
-    
-    /** Get all namespaces */
-    public function getNamespaces() {return $this->namespaces;}
-    /** Get a namespace */
-    public function getNamespace($id) {return $this->namespaces[$id];}
-    /** Check if a namespace exists */
-    public function namespaceExists($id) {return isset($this->namespaces[$id]);}
-    
-    /** Get all directives */
-    public function getDirectives() {return $this->directives;}
-    /** Get a directive */
-    public function getDirective($id) {return $this->directives[$id];}
-    /** Check if a directive exists */
-    public function directiveExists($id) {return isset($this->directives[$id]);}
-    
-    /** Get all types */
-    public function getTypes() {return $this->types;}
+    public $directives;
     
     /**
      * Adds a namespace array to $namespaces
@@ -71,7 +54,9 @@ class HTMLPurifier_ConfigSchema_Interchange
      * to be used for data-input.
      */
     public function getValidatorAdapter() {
-        
+        $validator = new HTMLPurifier_ConfigSchema_InterchangeValidator($this);
+        $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_IdExists());
+        return $validator;
     }
     
 }

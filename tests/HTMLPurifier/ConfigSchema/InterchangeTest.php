@@ -14,7 +14,7 @@ class HTMLPurifier_ConfigSchema_InterchangeTest extends UnitTestCase
             'ID' => 'Namespace',
             'DESCRIPTION' => 'Bar',
         ));
-        $this->assertIdentical($v, $this->interchange->getNamespace('Namespace'));
+        $this->assertIdentical($v, $this->interchange->namespaces['Namespace']);
     }
     
     public function testAddDirective() {
@@ -22,7 +22,13 @@ class HTMLPurifier_ConfigSchema_InterchangeTest extends UnitTestCase
             'ID' => 'Namespace.Directive',
             'DESCRIPTION' => 'Bar',
         ));
-        $this->assertIdentical($v, $this->interchange->getDirective('Namespace.Directive'));
+        $this->assertIdentical($v, $this->interchange->directives['Namespace.Directive']);
+    }
+    
+    public function testValidator() {
+        $adapter = $this->interchange->getValidatorAdapter();
+        $this->expectException(new HTMLPurifier_ConfigSchema_Exception('ID must exist in directive'));
+        $adapter->addDirective(array());
     }
     
 }
