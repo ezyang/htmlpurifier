@@ -86,17 +86,35 @@ if (!$AC['disable-phpt']) {
 }
 
 // load tests
+
 $test_files = array();
+$test_dirs = array();
+$test_dirs_exclude = array();
 $phpt_dirs  = array();
+
 require 'test_files.php'; // populates $test_files array
+
+$FS = new FSTools();
+
+// handle test dirs
+foreach ($test_dirs as $dir) {
+    $raw_files = $FS->globr($dir, '*Test.php');
+    foreach ($raw_files as $file) {
+        $file = str_replace('\\', '/', $file);
+        if (isset($test_dirs_exclude[$file])) continue; 
+        $test_files[] = $file;
+    }
+}
+
 // handle phpt files
 foreach ($phpt_dirs as $dir) {
-    $FS = new FSTools();
     $phpt_files = $FS->globr($dir, '*.phpt');
     foreach ($phpt_files as $file) {
         $test_files[] = str_replace('\\', '/', $file);
     }
 }
+
+array_unique($test_files);
 sort($test_files); // for the SELECT
 $GLOBALS['HTMLPurifierTest']['Files'] = $test_files; // for the reporter
 $test_file_lookup = array_flip($test_files);

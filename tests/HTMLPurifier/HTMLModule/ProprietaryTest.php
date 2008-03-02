@@ -18,7 +18,7 @@ class HTMLPurifier_HTMLModule_ProprietaryTest extends HTMLPurifier_HTMLModuleHar
                 scrolldelay="3"
                 scrollamount="5"
                 loop="4"
-                bgcolor="red"
+                bgcolor="#FF0000"
                 hspace="5"
                 vspace="3"
                 ><div>Block</div><span>Inline</span>Text</marquee></span>'
