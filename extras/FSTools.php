@@ -133,7 +133,10 @@ class FSTools
      */
     public function globr($dir, $pattern, $flags = NULL) {
         $files = $this->glob("$dir/$pattern", $flags);
-        foreach ($this->glob("$dir/*", GLOB_ONLYDIR) as $sub_dir) {
+        if ($files === false) $files = array();
+        $sub_dirs = $this->glob("$dir/*", GLOB_ONLYDIR);
+        if ($sub_dirs === false) $sub_dirs = array();
+        foreach ($sub_dirs as $sub_dir) {
             $sub_files = $this->globr($sub_dir, $pattern, $flags);
             $files = array_merge($files, $sub_files);
         }
