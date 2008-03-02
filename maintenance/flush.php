@@ -17,7 +17,7 @@ function e($cmd) {
     echo "\n";
 }
 
-e('php flush-definition-cache.php');
 e('php generate-includes.php');
+e('php flush-definition-cache.php');
 e('php generate-schema-cache.php');
 e('php generate-standalone.php');

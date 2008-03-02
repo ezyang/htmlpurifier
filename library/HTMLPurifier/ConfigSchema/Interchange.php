@@ -11,7 +11,7 @@ class HTMLPurifier_ConfigSchema_Interchange
     /**
      * Hash table of allowed types.
      */
-    protected $types = array(
+    private $types = array(
         'string'    => 'String',
         'istring'   => 'Case-insensitive string',
         'text'      => 'Text',
@@ -28,12 +28,12 @@ class HTMLPurifier_ConfigSchema_Interchange
     /**
      * Array of Namespace ID => array(namespace info)
      */
-    protected $namespaces;
+    private $namespaces;
     
     /**
      * Array of Directive ID => array(directive info)
      */
-    protected $directives;
+    private $directives;
     
     /** Get all namespaces */
     public function getNamespaces() {return $this->namespaces;}
@@ -71,9 +71,7 @@ class HTMLPurifier_ConfigSchema_Interchange
      * to be used for data-input.
      */
     public function getValidatorAdapter() {
-        return
-            new HTMLPurifier_ConfigSchema_Interchange_Validator_IdExists(
-            $this);
+        
     }
     
 }

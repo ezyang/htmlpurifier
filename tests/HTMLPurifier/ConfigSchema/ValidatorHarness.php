@@ -1,14 +1,13 @@
 <?php
 
-class HTMLPurifier_ConfigSchema_Interchange_ValidatorHarness extends UnitTestCase
+class HTMLPurifier_ConfigSchema_ValidatorHarness extends UnitTestCase
 {
     
-    protected $validator;
-    protected $mock;
+    protected $interchange, $validator;
     
     public function setup() {
         generate_mock_once('HTMLPurifier_ConfigSchema_Interchange');
-        $this->mock = new HTMLPurifier_ConfigSchema_InterchangeMock();
+        $this->interchange = new HTMLPurifier_ConfigSchema_InterchangeMock();
     }
     
     protected function expectSchemaException($msg) {
