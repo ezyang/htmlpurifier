@@ -66,6 +66,8 @@ require 'HTMLPurifier/URIFilter.php';
 require 'HTMLPurifier/URIParser.php';
 require 'HTMLPurifier/URIScheme.php';
 require 'HTMLPurifier/URISchemeRegistry.php';
+require 'HTMLPurifier/VarParser.php';
+require 'HTMLPurifier/VarParserException.php';
 require 'HTMLPurifier/AttrDef/CSS.php';
 require 'HTMLPurifier/AttrDef/Enum.php';
 require 'HTMLPurifier/AttrDef/Integer.php';

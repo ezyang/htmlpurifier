@@ -47,6 +47,11 @@ class HTMLPurifier_Config
     protected $conf;
     
     /**
+     * Parser for variables
+     */
+    protected $parser;
+    
+    /**
      * Reference HTMLPurifier_ConfigSchema for value checking
      * @note This is public for introspective purposes. Please don't
      *       abuse!
@@ -70,6 +75,7 @@ class HTMLPurifier_Config
     public function __construct(&$definition) {
         $this->conf = $definition->defaults; // set up, copy in defaults
         $this->def  = $definition; // keep a copy around for checking
+        $this->parser = new HTMLPurifier_VarParser();
     }
     
     /**
@@ -200,11 +206,16 @@ class HTMLPurifier_Config
                        $value, true);
             return;
         }
-        $value = $this->def->validate(
-                    $value,
-                    $type = $this->def->info[$namespace][$key]->type,
-                    $this->def->info[$namespace][$key]->allow_null
-                 );
+        try {
+            $value = $this->parser->parse(
+                        $value,
+                        $type = $this->def->info[$namespace][$key]->type,
+                        $this->def->info[$namespace][$key]->allow_null
+                     );
+        } catch (HTMLPurifier_VarParserException $e) {
+            trigger_error('Value for ' . "$namespace.$key" . ' is of invalid type, should be ' . $type, E_USER_WARNING);
+            return;
+        }
         if (is_string($value)) {
             // resolve value alias if defined
             if (isset($this->def->info[$namespace][$key]->aliases[$value])) {
@@ -218,10 +229,6 @@ class HTMLPurifier_Config
                     return;
                 }
             }
-        }
-        if ($this->def->isError($value)) {
-            trigger_error('Value for ' . "$namespace.$key" . ' is of invalid type, should be ' . $type, E_USER_WARNING);
-            return;
         }
         $this->conf[$namespace][$key] = $value;
         
