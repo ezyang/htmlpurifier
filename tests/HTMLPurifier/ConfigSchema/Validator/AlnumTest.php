@@ -4,8 +4,8 @@ class HTMLPurifier_ConfigSchema_Validator_AlnumTest extends HTMLPurifier_ConfigS
 {
     
     public function setup() {
-        parent::setup();
         $this->validator = new HTMLPurifier_ConfigSchema_Validator_Alnum('ID');
+        parent::setup();
     }
     
     public function testValidate() {

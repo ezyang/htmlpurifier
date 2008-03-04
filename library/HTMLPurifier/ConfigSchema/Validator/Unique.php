@@ -2,6 +2,8 @@
 
 /**
  * Validates that this ID does not exist already in the interchange object.
+ * Expects ID to exist.
+ * 
  * @note
  *      Although this tests both possible values, in practice the ID
  *      will only be in one or the other. We do this to keep things simple.

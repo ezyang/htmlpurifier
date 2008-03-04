@@ -57,17 +57,32 @@ class HTMLPurifier_ConfigSchema_Interchange
         $validator = new HTMLPurifier_ConfigSchema_InterchangeValidator($this);
         
         // Validators should be defined in the order they are to be called.
-        
-        // Common validators
-        $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Exists('ID'));
-        $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Unique());
-        $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Exists('DESCRIPTION'));
-        
-        // Namespace validators
-        
-        // Directive validators
+        $validator->addValidator($this->make('Exists', 'ID'));
+        $validator->addValidator($this->make('Unique'));
+        $validator->addNamespaceValidator($this->make('Alnum', 'ID'));
+        $validator->addValidator($this->make('ParseId'));
+        $validator->addValidator($this->make('Exists', '_NAMESPACE'));
+        $validator->addValidator($this->make('Alnum', '_NAMESPACE'));
+        $validator->addDirectiveValidator($this->make('Exists', '_DIRECTIVE'));
+        $validator->addDirectiveValidator($this->make('Alnum', '_DIRECTIVE'));
+        $validator->addDirectiveValidator($this->make('Exists', 'TYPE'));
+        $validator->addDirectiveValidator($this->make('Exists', 'DEFAULT'));
+        $validator->addDirectiveValidator($this->make('NamespaceExists'));
+        $validator->addValidator($this->make('Exists', 'DESCRIPTION'));
         
         return $validator;
+    }
+    
+    /**
+     * Creates a validator.
+     * @warning
+     *      Only *one* argument is supported; multiple args shouldn't use
+     *      this function.
+     */
+    protected function make($name, $arg = null) {
+        $class = "HTMLPurifier_ConfigSchema_Validator_$name";
+        if ($arg === null) return new $class();
+        else return new $class($arg);
     }
     
 }

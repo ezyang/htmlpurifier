@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Validates that a field is alphanumeric in the array (does not check
- * existence!)
+ * Validates that a field is alphanumeric in the array. Expects $index
+ * to exist.
  */
 class HTMLPurifier_ConfigSchema_Validator_Alnum extends HTMLPurifier_ConfigSchema_Validator
 {
