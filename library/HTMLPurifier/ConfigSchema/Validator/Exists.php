@@ -14,7 +14,7 @@ class HTMLPurifier_ConfigSchema_Validator_Exists extends HTMLPurifier_ConfigSche
     
     public function validate(&$arr, $interchange) {
         if (empty($arr[$this->index])) {
-            throw new HTMLPurifier_ConfigSchema_Exception($this->index . ' must exist');
+            $this->error($this->index . ' must exist');
         }
     }
     

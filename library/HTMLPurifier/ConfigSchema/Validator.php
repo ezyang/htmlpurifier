@@ -16,4 +16,11 @@ class HTMLPurifier_ConfigSchema_Validator
      */
     public function validate(&$arr, $interchange) {}
     
+    /**
+     * Throws a HTMLPurifier_ConfigSchema_Exception
+     */
+    protected function error($msg) {
+        throw new HTMLPurifier_ConfigSchema_Exception($msg);
+    }
+    
 }

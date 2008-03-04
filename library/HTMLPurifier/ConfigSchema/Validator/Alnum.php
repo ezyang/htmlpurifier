@@ -15,7 +15,7 @@ class HTMLPurifier_ConfigSchema_Validator_Alnum extends HTMLPurifier_ConfigSchem
     
     public function validate(&$arr, $interchange) {
         if (!ctype_alnum($arr[$this->index])) {
-            throw new HTMLPurifier_ConfigSchema_Exception($arr[$this->index] . ' in '. $this->index .' must be alphanumeric');
+            $this->error($arr[$this->index] . ' in '. $this->index .' must be alphanumeric');
         }
     }
     

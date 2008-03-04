@@ -55,9 +55,14 @@ class HTMLPurifier_ConfigSchema_Interchange
      */
     public function getValidatorAdapter() {
         $validator = new HTMLPurifier_ConfigSchema_InterchangeValidator($this);
+        
+        // Validators should be defined in the order they are to be called.
+        
         // Common validators
         $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Exists('ID'));
+        $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Duplicate());
         $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Exists('DESCRIPTION'));
+        
         // Namespace validators
         
         // Directive validators

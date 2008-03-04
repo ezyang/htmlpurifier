@@ -6,8 +6,7 @@ class HTMLPurifier_ConfigSchema_ValidatorHarness extends UnitTestCase
     protected $interchange, $validator;
     
     public function setup() {
-        generate_mock_once('HTMLPurifier_ConfigSchema_Interchange');
-        $this->interchange = new HTMLPurifier_ConfigSchema_InterchangeMock();
+        $this->interchange = new HTMLPurifier_ConfigSchema_Interchange();
     }
     
     protected function expectSchemaException($msg) {
