@@ -1,11 +1,11 @@
 <?php
 
-class HTMLPurifier_ConfigSchema_Validator_DuplicateTest extends HTMLPurifier_ConfigSchema_ValidatorHarness
+class HTMLPurifier_ConfigSchema_Validator_UniqueTest extends HTMLPurifier_ConfigSchema_ValidatorHarness
 {
     
     public function setup() {
         parent::setup();
-        $this->validator = new HTMLPurifier_ConfigSchema_Validator_Duplicate();
+        $this->validator = new HTMLPurifier_ConfigSchema_Validator_Unique();
     }
     
     public function testValidateNamespace() {

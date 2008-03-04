@@ -158,22 +158,6 @@ class HTMLPurifier_ConfigSchema {
      * @param $description Description of the namespace
      */
     public function addNamespace($namespace, $description) {
-        if (HTMLPURIFIER_SCHEMA_STRICT) {
-            if (isset($this->info[$namespace])) {
-                trigger_error('Cannot redefine namespace', E_USER_ERROR);
-                return;
-            }
-            if (!ctype_alnum($namespace)) {
-                trigger_error('Namespace name must be alphanumeric',
-                    E_USER_ERROR);
-                return;
-            }
-            if (empty($description)) {
-                trigger_error('Description must be non-empty',
-                    E_USER_ERROR);
-                return;
-            }
-        }
         $this->info[$namespace] = array();
         $this->info_namespace[$namespace] = new HTMLPurifier_ConfigDef_Namespace();
         $this->info_namespace[$namespace]->description = $description;

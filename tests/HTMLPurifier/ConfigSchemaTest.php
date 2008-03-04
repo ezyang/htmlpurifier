@@ -19,15 +19,6 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
         $this->assertIdentical($this->schema->info_namespace, array(
             'http' => new HTMLPurifier_ConfigDef_Namespace($d)
         ));
-        
-        $this->expectError('Cannot redefine namespace');
-        $this->schema->addNamespace('http', 'It is used to serve webpages.');
-        
-        $this->expectError('Namespace name must be alphanumeric');
-        $this->schema->addNamespace('ssh+http', 'This http is tunneled through SSH.');
-        
-        $this->expectError('Description must be non-empty');
-        $this->schema->addNamespace('ftp', null);
     }
     
     function test_define() {

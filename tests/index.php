@@ -57,6 +57,16 @@ if ($AC['disable-phpt'] && $AC['only-phpt']) {
     exit(1);
 }
 
+// Shell-script code is executed
+
+if ($AC['flush']) {
+    if (SimpleReporter::inCli() && !$AC['xml']) {
+        passthru($AC['php'] . ' ../maintenance/flush.php');
+    } else {
+        shell_exec($AC['php'] . ' ../maintenance/flush.php');
+    }
+}
+
 // initialize and load HTML Purifier
 // use ?standalone to load the alterative standalone stub
 if ($AC['standalone']) {
@@ -67,16 +77,6 @@ if ($AC['standalone']) {
     require '../library/HTMLPurifier.autoload.php';
 }
 require 'HTMLPurifier/Harness.php';
-
-// Shell-script code is executed
-
-if ($AC['flush']) {
-    if (SimpleReporter::inCli() && !$AC['xml']) {
-        passthru($AC['php'] . ' ../maintenance/flush.php');
-    } else {
-        shell_exec($AC['php'] . ' ../maintenance/flush.php');
-    }
-}
 
 // Now, userland code begins to be executed
 

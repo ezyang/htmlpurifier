@@ -6,7 +6,7 @@
  *      Although this tests both possible values, in practice the ID
  *      will only be in one or the other. We do this to keep things simple.
  */
-class HTMLPurifier_ConfigSchema_Validator_Duplicate extends HTMLPurifier_ConfigSchema_Validator
+class HTMLPurifier_ConfigSchema_Validator_Unique extends HTMLPurifier_ConfigSchema_Validator
 {
     
     public function validate(&$arr, $interchange) {

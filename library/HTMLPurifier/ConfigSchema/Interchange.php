@@ -60,7 +60,7 @@ class HTMLPurifier_ConfigSchema_Interchange
         
         // Common validators
         $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Exists('ID'));
-        $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Duplicate());
+        $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Unique());
         $validator->addValidator(new HTMLPurifier_ConfigSchema_Validator_Exists('DESCRIPTION'));
         
         // Namespace validators

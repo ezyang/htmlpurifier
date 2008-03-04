@@ -133,6 +133,7 @@ require 'HTMLPurifier/ConfigSchema/StringHashReverseAdapter.php';
 require 'HTMLPurifier/ConfigSchema/Validator.php';
 require 'HTMLPurifier/ConfigSchema/Validator/Alnum.php';
 require 'HTMLPurifier/ConfigSchema/Validator/Exists.php';
+require 'HTMLPurifier/ConfigSchema/Validator/Unique.php';
 require 'HTMLPurifier/DefinitionCache/Decorator.php';
 require 'HTMLPurifier/DefinitionCache/Null.php';
 require 'HTMLPurifier/DefinitionCache/Serializer.php';
