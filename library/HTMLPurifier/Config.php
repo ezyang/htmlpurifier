@@ -75,7 +75,7 @@ class HTMLPurifier_Config
     public function __construct(&$definition) {
         $this->conf = $definition->defaults; // set up, copy in defaults
         $this->def  = $definition; // keep a copy around for checking
-        $this->parser = new HTMLPurifier_VarParser();
+        $this->parser = new HTMLPurifier_VarParser_Flexible();
     }
     
     /**

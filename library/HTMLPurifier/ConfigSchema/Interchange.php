@@ -9,23 +9,6 @@ class HTMLPurifier_ConfigSchema_Interchange
 {
     
     /**
-     * Hash table of allowed types.
-     */
-    public $types = array(
-        'string'    => 'String',
-        'istring'   => 'Case-insensitive string',
-        'text'      => 'Text',
-        'itext'     => 'Case-insensitive text',
-        'int'       => 'Integer',
-        'float'     => 'Float',
-        'bool'      => 'Boolean',
-        'lookup'    => 'Lookup array',
-        'list'      => 'Array list',
-        'hash'      => 'Associative array',
-        'mixed'     => 'Mixed'
-    );
-    
-    /**
      * Array of Namespace ID => array(namespace info)
      */
     public $namespaces;

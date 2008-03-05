@@ -1,31 +1,7 @@
 <?php
 
-class HTMLPurifier_VarParserTest extends UnitTestCase
+class HTMLPurifier_VarParser_FlexibleTest extends HTMLPurifier_VarParserHarness
 {
-    
-    protected $parser;
-    
-    public function setup() {
-        $this->parser = new HTMLPurifier_VarParser();
-    }
-    
-    function assertValid($var, $type, $ret = null) {
-        $ret = ($ret === null) ? $var : $ret;
-        $this->assertIdentical($this->parser->parse($var, $type), $ret);
-    }
-    
-    function assertInvalid($var, $type, $msg = null) {
-        $caught = false;
-        try {
-            $this->parser->parse($var, $type);
-        } catch (HTMLPurifier_VarParserException $e) {
-            $caught = true;
-            if ($msg !== null) $this->assertIdentical($e->getMessage(), $msg);
-        }
-        if (!$caught) {
-            $this->fail('Did not catch expected error');
-        }
-    }
     
     function testValidate() {
         

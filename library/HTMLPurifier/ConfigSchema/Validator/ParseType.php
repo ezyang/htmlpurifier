@@ -8,7 +8,7 @@ class HTMLPurifier_ConfigSchema_Validator_ParseType extends HTMLPurifier_ConfigS
     
     public function validate(&$arr, $interchange) {
         $r = explode('/', $arr['TYPE'], 2);
-        if (!isset($interchange->types[$r[0]])) {
+        if (!isset(HTMLPurifier_VarParser::$types[$r[0]])) {
             $this->error('Invalid type ' . $r[0] . ' for configuration directive ' . $arr['ID']);
         }
         $arr['_TYPE'] = $r[0];

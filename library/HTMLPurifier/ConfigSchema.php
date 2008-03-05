@@ -51,7 +51,7 @@ class HTMLPurifier_ConfigSchema {
     );
     
     public function __construct() {
-        $this->parser = new HTMLPurifier_VarParser();
+        $this->parser = new HTMLPurifier_VarParser_Flexible();
     }
     
     /**

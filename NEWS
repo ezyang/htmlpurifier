@@ -22,7 +22,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   maintenance/generate-schema-cache.php generates the schema.ser file, which
   is now instantiated. Support for userland schema changes coming soon!
 ! Extra utility classes for testing and non-library operations can
-  be found in extras/. Specifically, these are FSTools and ConfigSchema.
+  be found in extras/. Specifically, these are FSTools and ConfigDoc.
   You may find a use for these in your own project, but right now they
   are highly experimental and volatile.
 ! Integration with PHPT allows for automated smoketests

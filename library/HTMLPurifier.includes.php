@@ -200,3 +200,4 @@ require 'HTMLPurifier/URIScheme/https.php';
 require 'HTMLPurifier/URIScheme/mailto.php';
 require 'HTMLPurifier/URIScheme/news.php';
 require 'HTMLPurifier/URIScheme/nntp.php';
+require 'HTMLPurifier/VarParser/Flexible.php';
