@@ -137,6 +137,7 @@ require 'HTMLPurifier/ConfigSchema/Validator/Alnum.php';
 require 'HTMLPurifier/ConfigSchema/Validator/Composite.php';
 require 'HTMLPurifier/ConfigSchema/Validator/Exists.php';
 require 'HTMLPurifier/ConfigSchema/Validator/NamespaceExists.php';
+require 'HTMLPurifier/ConfigSchema/Validator/Or.php';
 require 'HTMLPurifier/ConfigSchema/Validator/ParseId.php';
 require 'HTMLPurifier/ConfigSchema/Validator/ParseType.php';
 require 'HTMLPurifier/ConfigSchema/Validator/Unique.php';
