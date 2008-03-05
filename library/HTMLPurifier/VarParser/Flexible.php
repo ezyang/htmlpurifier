@@ -24,7 +24,7 @@ class HTMLPurifier_VarParser_Flexible extends HTMLPurifier_VarParser
                 if (is_string($var) && ctype_digit($var)) $var = (int) $var;
                 return $var;
             case 'float':
-                if (is_string($var) && is_numeric($var)) $var = (float) $var;
+                if ((is_string($var) && is_numeric($var)) || is_int($var)) $var = (float) $var;
                 return $var;
             case 'bool':
                 if (is_int($var) && ($var === 0 || $var === 1)) {
