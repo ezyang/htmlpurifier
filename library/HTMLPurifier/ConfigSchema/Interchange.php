@@ -66,6 +66,7 @@ class HTMLPurifier_ConfigSchema_Interchange
         $directive->addValidator($this->make('Exists', '_TYPE'));
         $directive->addValidator($this->make('Exists', '_NULL'));
         $directive->addValidator($this->make('Exists', 'DEFAULT'));
+        $directive->addValidator($this->make('ParseDefault'));
         
         // Common tests
         $validator->addValidator($this->make('Exists', 'DESCRIPTION'));
