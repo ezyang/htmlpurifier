@@ -6,9 +6,8 @@
 class HTMLPurifier_ConfigSchema_InterchangeValidator
 {
     protected $interchange;
-    protected $validators = array();
-    protected $namespaceValidators = array();
-    protected $directiveValidators = array();
+    public $namespace;
+    public $directive;
     
     /**
      * @param $interchange Instance of HTMLPurifier_ConfigSchema_Interchange
@@ -16,37 +15,24 @@ class HTMLPurifier_ConfigSchema_InterchangeValidator
      */
     public function __construct($interchange) {
         $this->interchange = $interchange;
+        $this->namespace = new HTMLPurifier_ConfigSchema_Validator_Composite();
+        $this->directive = new HTMLPurifier_ConfigSchema_Validator_Composite();
     }
     
     /**
-     * Registers a HTMLPurifier_ConfigSchema_Validator to run when adding.
+     * Registers a HTMLPurifier_ConfigSchema_Validator for both
+     * directive and namespace
      */
     public function addValidator($validator) {
-        $this->addNamespaceValidator($validator);
-        $this->addDirectiveValidator($validator);
-    }
-    
-    /**
-     * Register validators to be used only on directives
-     */
-    public function addDirectiveValidator($validator) {
-        $this->directiveValidators[] = $validator;
-    }
-    
-    /**
-     * Register validators to be used only on namespaces
-     */
-    public function addNamespaceValidator($validator) {
-        $this->namespaceValidators[] = $validator;
+        $this->directive->addValidator($validator);
+        $this->namespace->addValidator($validator);
     }
     
     /**
      * Validates and adds a namespace hash
      */
     public function addNamespace($hash) {
-        foreach ($this->namespaceValidators as $validator) {
-            $validator->validate($hash, $this->interchange);
-        }
+        $this->namespace->validate($hash, $this->interchange);
         $this->interchange->addNamespace($hash);
     }
     
@@ -54,9 +40,7 @@ class HTMLPurifier_ConfigSchema_InterchangeValidator
      * Validates and adds a directive hash
      */
     public function addDirective($hash) {
-        foreach ($this->directiveValidators as $validator) {
-            $validator->validate($hash, $this->interchange);
-        }
+        $this->directive->validate($hash, $this->interchange);
         $this->interchange->addDirective($hash);
     }
 }

@@ -26,8 +26,8 @@ class HTMLPurifier_ConfigSchema_InterchangeValidatorTest extends UnitTestCase
     public function testAddNamespaceWithValidators() {
         $hash = array('ID' => 'Namespace');
         $this->validator->addValidator($this->makeValidator(array($hash, $this->mock)));
-        $this->validator->addNamespaceValidator($this->makeValidator(array($hash, $this->mock)));
-        $this->validator->addDirectiveValidator($this->makeValidator()); // not called
+        $this->validator->namespace->addValidator($this->makeValidator(array($hash, $this->mock)));
+        $this->validator->directive->addValidator($this->makeValidator()); // not called
         $this->mock->expectOnce('addNamespace', array($hash));
         $this->validator->addNamespace($hash);
     }
@@ -35,8 +35,8 @@ class HTMLPurifier_ConfigSchema_InterchangeValidatorTest extends UnitTestCase
     public function testAddDirectiveWithValidators() {
         $hash = array('ID' => 'Namespace.Directive');
         $this->validator->addValidator($this->makeValidator(array($hash, $this->mock)));
-        $this->validator->addNamespaceValidator($this->makeValidator()); // not called
-        $this->validator->addDirectiveValidator($this->makeValidator(array($hash, $this->mock)));
+        $this->validator->namespace->addValidator($this->makeValidator()); // not called
+        $this->validator->directive->addValidator($this->makeValidator(array($hash, $this->mock)));
         $this->mock->expectOnce('addDirective', array($hash));
         $this->validator->addDirective($hash);
     }

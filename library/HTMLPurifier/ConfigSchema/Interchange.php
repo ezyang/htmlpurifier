@@ -40,26 +40,32 @@ class HTMLPurifier_ConfigSchema_Interchange
         $validator = new HTMLPurifier_ConfigSchema_InterchangeValidator($this);
         
         // Validators should be defined in the order they are to be called.
+        $namespace = $validator->namespace;
+        $directive = $validator->directive;
         
         // ID tests
         $validator->addValidator($this->make('Exists', 'ID'));
         $validator->addValidator($this->make('Unique'));
-        $validator->addNamespaceValidator($this->make('Alnum', 'ID'));
+        
+        // ID: Namespace test
+        $namespace->addValidator($this->make('Alnum', 'ID'));
+        
+        // ID: Common tests
         $validator->addValidator($this->make('ParseId'));
         $validator->addValidator($this->make('Exists', '_NAMESPACE'));
         $validator->addValidator($this->make('Alnum', '_NAMESPACE'));
         
-        // Directive tests
-        $validator->addDirectiveValidator($this->make('Exists', '_DIRECTIVE'));
-        $validator->addDirectiveValidator($this->make('Alnum', '_DIRECTIVE'));
-        $validator->addDirectiveValidator($this->make('NamespaceExists'));
+        // ID: Directive tests
+        $directive->addValidator($this->make('Exists', '_DIRECTIVE'));
+        $directive->addValidator($this->make('Alnum', '_DIRECTIVE'));
+        $directive->addValidator($this->make('NamespaceExists'));
         
         // Directive: Type tests
-        $validator->addDirectiveValidator($this->make('Exists', 'TYPE'));
-        $validator->addDirectiveValidator($this->make('ParseType'));
-        $validator->addDirectiveValidator($this->make('Exists', '_TYPE'));
-        $validator->addDirectiveValidator($this->make('Exists', '_NULL'));
-        $validator->addDirectiveValidator($this->make('Exists', 'DEFAULT'));
+        $directive->addValidator($this->make('Exists', 'TYPE'));
+        $directive->addValidator($this->make('ParseType'));
+        $directive->addValidator($this->make('Exists', '_TYPE'));
+        $directive->addValidator($this->make('Exists', '_NULL'));
+        $directive->addValidator($this->make('Exists', 'DEFAULT'));
         
         // Common tests
         $validator->addValidator($this->make('Exists', 'DESCRIPTION'));

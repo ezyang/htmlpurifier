@@ -134,6 +134,7 @@ require 'HTMLPurifier/ConfigSchema/StringHashParser.php';
 require 'HTMLPurifier/ConfigSchema/StringHashReverseAdapter.php';
 require 'HTMLPurifier/ConfigSchema/Validator.php';
 require 'HTMLPurifier/ConfigSchema/Validator/Alnum.php';
+require 'HTMLPurifier/ConfigSchema/Validator/Composite.php';
 require 'HTMLPurifier/ConfigSchema/Validator/Exists.php';
 require 'HTMLPurifier/ConfigSchema/Validator/NamespaceExists.php';
 require 'HTMLPurifier/ConfigSchema/Validator/ParseId.php';
