@@ -60,7 +60,7 @@ class HTMLPurifier_ConfigSchema_Interchange
         $directive->addValidator($this->make('Alnum', '_DIRECTIVE'));
         $directive->addValidator($this->make('NamespaceExists'));
         
-        // Directive: Type tests
+        // Directive: Type and Default tests
         $directive->addValidator($this->make('Exists', 'TYPE'));
         $directive->addValidator($this->make('ParseType'));
         $directive->addValidator($this->make('Exists', '_TYPE'));
