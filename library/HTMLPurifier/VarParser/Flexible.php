@@ -8,31 +8,23 @@
 class HTMLPurifier_VarParser_Flexible extends HTMLPurifier_VarParser
 {
     
-    public function parse($var, $type, $allow_null = false) {
-        if (!isset(HTMLPurifier_VarParser::$types[$type])) {
-            throw new HTMLPurifier_VarParserException("Invalid type $type");
-        }
+    protected function parseImplementation($var, $type, $allow_null) {
         if ($allow_null && $var === null) return null;
         switch ($type) {
             // Note: if code "breaks" from the switch, it triggers a generic
             // exception to be thrown. Specific errors can be specifically
             // done here.
             case 'mixed':
-                return $var;
             case 'istring':
             case 'string':
-            case 'text': // no difference, just is longer/multiple line string
+            case 'text':
             case 'itext':
-                if (!is_string($var)) break;
-                if ($type === 'istring' || $type === 'itext') $var = strtolower($var);
                 return $var;
             case 'int':
                 if (is_string($var) && ctype_digit($var)) $var = (int) $var;
-                elseif (!is_int($var)) break;
                 return $var;
             case 'float':
                 if (is_string($var) && is_numeric($var)) $var = (float) $var;
-                elseif (!is_float($var)) break;
                 return $var;
             case 'bool':
                 if (is_int($var) && ($var === 0 || $var === 1)) {
@@ -45,7 +37,7 @@ class HTMLPurifier_VarParser_Flexible extends HTMLPurifier_VarParser
                     } else {
                         throw new HTMLPurifier_VarParserException("Unrecognized value '$var' for $type");
                     }
-                } elseif (!is_bool($var)) break;
+                }
                 return $var;
             case 'list':
             case 'hash':
@@ -94,10 +86,9 @@ class HTMLPurifier_VarParser_Flexible extends HTMLPurifier_VarParser
                 }
                 return $var;
             default:
-                // This should not happen!
-                throw new HTMLPurifier_Exception("Inconsistency in HTMLPurifier_VarParser_Flexible: $type is not implemented");
+                $this->errorInconsistent(__CLASS__, $type);
         }
-        throw new HTMLPurifier_VarParserException("Invalid input for type $type");
+        $this->errorGeneric($var, $type);
     }
     
 }
