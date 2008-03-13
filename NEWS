@@ -35,6 +35,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   to true to use them.
 ! HTML Purifier now has its own Exception hierarchy under HTMLPurifier_Exception.
   Developer error (not enduser error) can cause these to be triggered.
+! Experimental kses() wrapper introduced with HTMLPurifier.kses.php
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
 - Various HTMLPurifier_Config convenience functions now accept another parameter
