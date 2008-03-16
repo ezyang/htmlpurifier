@@ -12,6 +12,7 @@ class HTMLPurifier_AttrDef_CSS_BorderTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('thick solid');
         $this->assertDef('solid red', 'solid #FF0000');
         $this->assertDef('1px solid #000');
+        $this->assertDef('1px solid rgb(0, 0, 0)', '1px solid rgb(0,0,0)');
         
     }
     

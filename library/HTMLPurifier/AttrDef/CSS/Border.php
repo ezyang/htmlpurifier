@@ -20,7 +20,7 @@ class HTMLPurifier_AttrDef_CSS_Border extends HTMLPurifier_AttrDef
     
     public function validate($string, $config, $context) {
         $string = $this->parseCDATA($string);
-        // we specifically will not support rgb() syntax with spaces
+        $string = $this->mungeRgb($string);
         $bits = explode(' ', $string);
         $done = array(); // segments we've finished
         $ret = ''; // return value

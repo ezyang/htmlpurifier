@@ -11,6 +11,10 @@ class HTMLPurifier_AttrDef_CSS_BackgroundTest extends HTMLPurifier_AttrDefHarnes
         $valid = '#333 url(chess.png) repeat fixed 50% top';
         $this->assertDef($valid);
         $this->assertDef('url("chess.png") #333 50% top repeat fixed', $valid);
+        $this->assertDef(
+            'rgb(34, 56, 33) url(chess.png) repeat fixed top',
+            'rgb(34,56,33) url(chess.png) repeat fixed top'
+        );
         
     }
     

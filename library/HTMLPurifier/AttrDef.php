@@ -76,5 +76,13 @@ abstract class HTMLPurifier_AttrDef
         return $this;
     }
     
+    /**
+     * Removes spaces from rgb(0, 0, 0) so that shorthand CSS properties work
+     * properly. THIS IS A HACK!
+     */
+    protected function mungeRgb($string) {
+        return preg_replace('/rgb\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\)/', 'rgb(\1,\2,\3)', $string);
+    }
+    
 }
 
