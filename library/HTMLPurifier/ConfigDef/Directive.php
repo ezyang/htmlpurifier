@@ -11,13 +11,11 @@ class HTMLPurifier_ConfigDef_Directive extends HTMLPurifier_ConfigDef
     
     public function __construct(
         $type = null,
-        $description = null,
         $allow_null = null,
         $allowed = null,
         $aliases = null
     ) {
         if (       $type !== null)        $this->type = $type;
-        if ($description !== null) $this->description = $description;
         if ( $allow_null !== null)  $this->allow_null = $allow_null;
         if (    $allowed !== null)     $this->allowed = $allowed;
         if (    $aliases !== null)     $this->aliases = $aliases;
@@ -36,11 +34,6 @@ class HTMLPurifier_ConfigDef_Directive extends HTMLPurifier_ConfigDef
      *      - mixed (anything goes)
      */
     public $type = 'mixed';
-    
-    /**
-     * Plaintext description of the configuration entity is.
-     */
-    public $description = null;
     
     /**
      * Is null allowed? Has no effect for mixed type.

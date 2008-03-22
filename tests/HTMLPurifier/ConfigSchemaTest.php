@@ -14,63 +14,44 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
     }
     
     function test_defineNamespace() {
-        $this->schema->addNamespace('http', $d = 'This is an internet protocol.');
-        
-        $this->assertIdentical($this->schema->info_namespace, array(
-            'http' => new HTMLPurifier_ConfigDef_Namespace($d)
-        ));
+        $this->schema->addNamespace('http');
+        $this->assertIdentical($this->schema->info['http'], array());
+        $this->assertIdentical($this->schema->defaults['http'], array());
     }
     
     function test_define() {
-        $this->schema->addNamespace('Car', 'Automobiles, those gas-guzzlers!');
+        $this->schema->addNamespace('Car');
         
-        $this->schema->add('Car', 'Seats', 5, 'int', $d = 'Standard issue.');
+        $this->schema->add('Car', 'Seats', 5, 'int', false);
         
         $this->assertIdentical($this->schema->defaults['Car']['Seats'], 5);
         $this->assertIdentical($this->schema->info['Car']['Seats'],
-            new HTMLPurifier_ConfigDef_Directive('int', $d)
+            new HTMLPurifier_ConfigDef_Directive('int')
         );
         
-        $this->schema->add('Car', 'Age', null, 'int/null', $d = 'Not always known.');
+        $this->schema->add('Car', 'Age', null, 'int', true);
         
         $this->assertIdentical($this->schema->defaults['Car']['Age'], null);
         $this->assertIdentical($this->schema->info['Car']['Age'], 
-            new HTMLPurifier_ConfigDef_Directive('int', $d, true)
+            new HTMLPurifier_ConfigDef_Directive('int', true)
         );
         
-        $this->expectError('Cannot define directive for undefined namespace');
-        $this->schema->add('Train', 'Cars', 10, 'int', 'Including the caboose.');
-        
-        $this->expectError('Directive name must be alphanumeric');
-        $this->schema->add('Car', 'Is it shiny?', true, 'bool', 'Indicates regular waxing.');
-        
-        $this->expectError('Invalid type for configuration directive');
-        $this->schema->add('Car', 'Efficiency', 50, 'mpg', 'The higher the better.');
-        
-        $this->expectError('Default value does not match directive type');
-        $this->schema->add('Car', 'Producer', 'Ford', 'int', 'ID of the company that made the car.');
-        
-        $this->expectError('Description must be non-empty');
-        $this->schema->add('Car', 'ComplexAttribute', 'lawyers', 'istring', null);
     }
     
     function test_defineAllowedValues() {
         $this->schema->addNamespace('QuantumNumber', 'D');
-        $this->schema->add('QuantumNumber', 'Spin', 0.5, 'float',
-            'Spin of particle. Fourth quantum number, represented by s.');
-        $this->schema->add('QuantumNumber', 'Current', 's', 'string',
-            'Currently selected quantum number.');
-        $this->schema->add('QuantumNumber', 'Difficulty', null, 'string/null', $d = 'How hard are the problems?');
+        $this->schema->add('QuantumNumber', 'Spin', 0.5, 'float', false);
+        $this->schema->add('QuantumNumber', 'Current', 's', 'string', false);
+        $this->schema->add('QuantumNumber', 'Difficulty', null, 'string', true);
         
         $this->schema->addAllowedValues( // okay, since default is null
-            'QuantumNumber', 'Difficulty', array('easy', 'medium', 'hard')
+            'QuantumNumber', 'Difficulty', array('easy' => true, 'medium' => true, 'hard' => true)
         );
         
         $this->assertIdentical($this->schema->defaults['QuantumNumber']['Difficulty'], null);
         $this->assertIdentical($this->schema->info['QuantumNumber']['Difficulty'], 
             new HTMLPurifier_ConfigDef_Directive(
                 'string',
-                $d,
                 true,
                 array(
                     'easy' => true,
@@ -80,30 +61,16 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
             )
         );
         
-        $this->expectError('Cannot define allowed values for undefined directive');
-        $this->schema->addAllowedValues(
-            'SpaceTime', 'Symmetry', array('time', 'spatial', 'projective')
-        );
-        
-        $this->expectError('Cannot define allowed values for directive whose type is not string');
-        $this->schema->addAllowedValues(
-            'QuantumNumber', 'Spin', array(0.5, -0.5)
-        );
-        
-        $this->expectError('Default value must be in allowed range of variables');
-        $this->schema->addAllowedValues(
-            'QuantumNumber', 'Current', array('n', 'l', 'm') // forgot s!
-        );
     }
     
     function test_defineValueAliases() {
         $this->schema->addNamespace('Abbrev', 'Stuff on abbreviations.');
-        $this->schema->add('Abbrev', 'HTH', 'Happy to Help', 'string', $d = 'Three-letters');
+        $this->schema->add('Abbrev', 'HTH', 'Happy to Help', 'string', false);
         $this->schema->addAllowedValues(
             'Abbrev', 'HTH', array(
-                'Happy to Help',
-                'Hope that Helps',
-                'HAIL THE HAND!'
+                'Happy to Help' => true,
+                'Hope that Helps' => true,
+                'HAIL THE HAND!' => true,
             )
         );
         $this->schema->addValueAliases(
@@ -122,7 +89,6 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
         $this->assertIdentical($this->schema->info['Abbrev']['HTH'], 
             new HTMLPurifier_ConfigDef_Directive(
                 'string',
-                $d,
                 false,
                 array(
                     'Happy to Help' => true,
@@ -137,25 +103,11 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
             )
         );
         
-        $this->expectError('Cannot define alias to value that is not allowed');
-        $this->schema->addValueAliases(
-            'Abbrev', 'HTH', array(
-                'head' => 'Head to Head'
-            )
-        );
-        
-        $this->expectError('Cannot define alias over allowed value');
-        $this->schema->addValueAliases(
-            'Abbrev', 'HTH', array(
-                'Hope that Helps' => 'Happy to Help'
-            )
-        );
-        
     }
    
     function testAlias() {
-        $this->schema->addNamespace('Home', 'Sweet home.');
-        $this->schema->add('Home', 'Rug', 3, 'int', 'ID.');
+        $this->schema->addNamespace('Home');
+        $this->schema->add('Home', 'Rug', 3, 'int', false);
         $this->schema->addAlias('Home', 'Carpet', 'Home', 'Rug');
         
         $this->assertTrue(!isset($this->schema->defaults['Home']['Carpet']));
@@ -163,21 +115,6 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
             new HTMLPurifier_ConfigDef_DirectiveAlias('Home', 'Rug')
         );
         
-        $this->expectError('Cannot define directive alias in undefined namespace');
-        $this->schema->addAlias('Store', 'Rug', 'Home', 'Rug');
-        
-        $this->expectError('Directive name must be alphanumeric');
-        $this->schema->addAlias('Home', 'R.g', 'Home', 'Rug');
-        
-        $this->schema->add('Home', 'Rugger', 'Bob Max', 'string', 'Name of.');
-        $this->expectError('Cannot define alias over directive');
-        $this->schema->addAlias('Home', 'Rugger', 'Home', 'Rug');
-        
-        $this->expectError('Cannot define alias to undefined directive');
-        $this->schema->addAlias('Home', 'Rug2', 'Home', 'Rugavan');
-        
-        $this->expectError('Cannot define alias to alias');
-        $this->schema->addAlias('Home', 'Rug2', 'Home', 'Carpet');
     }
     
 }
