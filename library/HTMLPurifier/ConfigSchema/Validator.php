@@ -30,7 +30,6 @@ class HTMLPurifier_ConfigSchema_Validator
     public function validateNamespace($n) {
         $this->context = "namespace '{$n->namespace}'";
         $this->with($n, 'namespace')
-            ->assertIsString()
             ->assertNotEmpty()
             ->assertAlnum();
         $this->with($n, 'description')
@@ -40,12 +39,27 @@ class HTMLPurifier_ConfigSchema_Validator
     
     public function validateDirective($d) {
         $this->context = "directive '{$d->id}'";
+        $this->validateId($d->id);
+    }
+    
+    public function validateId($id) {
+        $this->context = "id '$id'";
+        $this->with($id, 'namespace')
+            ->assertNotEmpty()
+            ->assertAlnum();
+        $this->with($id, 'directive')
+            ->assertNotEmpty()
+            ->assertAlnum();
     }
     
     // protected helper functions
     
     protected function with($obj, $member) {
-        return new HTMLPurifier_ConfigSchema_ValidatorAtom($this->interchange, $this->context, $obj, $member);
+        return new HTMLPurifier_ConfigSchema_ValidatorAtom($this->context, $obj, $member);
+    }
+    
+    protected function error($msg) {
+        throw new HTMLPurifier_ConfigSchema_Exception($msg . ' in ' . $this->context);
     }
     
 }

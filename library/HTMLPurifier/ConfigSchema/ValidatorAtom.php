@@ -3,15 +3,15 @@
 /**
  * Fluent interface for validating the contents of member variables.
  * This should be immutable. See HTMLPurifier_ConfigSchema_Validator for
- * use-cases.
+ * use-cases. We name this an 'atom' because it's ONLY for validations that
+ * are independent and usually scalar.
  */
 class HTMLPurifier_ConfigSchema_ValidatorAtom
 {
     
-    protected $interchange, $context, $obj, $member, $contents;
+    protected $context, $obj, $member, $contents;
     
-    public function __construct($interchange, $context, $obj, $member) {
-        $this->interchange = $interchange;
+    public function __construct($context, $obj, $member) {
         $this->context     = $context;
         $this->obj         = $obj;
         $this->member      = $member;
@@ -24,11 +24,12 @@ class HTMLPurifier_ConfigSchema_ValidatorAtom
     }
     
     public function assertNotNull() {
-        if (is_null($this->contents)) $this->error('must not be null');
+        if ($this->contents === null) $this->error('must not be null');
         return $this;
     }
     
     public function assertAlnum() {
+        $this->assertIsString();
         if (!ctype_alnum($this->contents)) $this->error('must be alphanumeric');
         return $this;
     }

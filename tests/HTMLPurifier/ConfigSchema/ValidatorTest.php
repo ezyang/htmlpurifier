@@ -18,6 +18,20 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $obj->namespace   = $namespace;
         $obj->description = $description;
         $this->interchange->addNamespace($obj);
+        return $obj;
+    }
+    
+    protected function addDirective($namespace, $directive, $type = 'string', $description = 'Description') {
+        $obj = new HTMLPurifier_ConfigSchema_Interchange_Directive();
+        $obj->id = $this->makeId($namespace, $directive);
+        $obj->type = $type;
+        $obj->description = $description;
+        $this->interchange->addDirective($obj);
+        return $obj; // for future editing
+    }
+    
+    protected function makeId($namespace, $directive) {
+        return new HTMLPurifier_ConfigSchema_Interchange_Id($namespace, $directive);
     }
     
     /**
@@ -36,12 +50,6 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validate();
     }
     
-    public function testNamespaceNamespaceString() {
-        $this->addNamespace(3, 'Description');
-        $this->expectValidationException("Member variable 'namespace' in namespace '3' must be a string");
-        $this->validate();
-    }
-    
     public function testNamespaceNamespaceNotEmpty() {
         $this->addNamespace('0', 'Description');
         $this->expectValidationException("Member variable 'namespace' in namespace '0' must not be empty");
@@ -54,16 +62,14 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validate();
     }
     
-    public function testNamespaceDescriptionString() {
-        $this->addNamespace('Ns', 3);
-        $this->expectValidationException("Member variable 'description' in namespace 'Ns' must be a string");
-        $this->validate();
-    }
-    
     public function testNamespaceDescriptionNotEmpty() {
         $this->addNamespace('Ns', '');
         $this->expectValidationException("Member variable 'description' in namespace 'Ns' must not be empty");
         $this->validate();
+    }
+    
+    public function testDirectiveIdNamespaceNotEmpty() {
+        $this->addDirective('', 'Dir');
     }
     
 }
