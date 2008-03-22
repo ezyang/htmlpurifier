@@ -24,6 +24,9 @@ foreach ($files as $file) {
     $builder->build($interchange, new HTMLPurifier_StringHash($parser->parseFile($file)));
 }
 
+$validator = new HTMLPurifier_ConfigSchema_Validator();
+$validator->validate($interchange);
+
 $schema_builder = new HTMLPurifier_ConfigSchema_Builder_ConfigSchema();
 $schema = $schema_builder->build($interchange);
 

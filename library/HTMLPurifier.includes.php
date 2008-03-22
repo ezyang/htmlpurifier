@@ -130,6 +130,8 @@ require 'HTMLPurifier/ConfigDef/Namespace.php';
 require 'HTMLPurifier/ConfigSchema/Exception.php';
 require 'HTMLPurifier/ConfigSchema/Interchange.php';
 require 'HTMLPurifier/ConfigSchema/InterchangeBuilder.php';
+require 'HTMLPurifier/ConfigSchema/Validator.php';
+require 'HTMLPurifier/ConfigSchema/ValidatorAtom.php';
 require 'HTMLPurifier/ConfigSchema/Builder/ConfigSchema.php';
 require 'HTMLPurifier/ConfigSchema/Interchange/Directive.php';
 require 'HTMLPurifier/ConfigSchema/Interchange/Id.php';

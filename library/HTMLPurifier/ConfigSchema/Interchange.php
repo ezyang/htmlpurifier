@@ -11,12 +11,12 @@ class HTMLPurifier_ConfigSchema_Interchange
     /**
      * Array of Namespace ID => array(namespace info)
      */
-    public $namespaces;
+    public $namespaces = array();
     
     /**
      * Array of Directive ID => array(directive info)
      */
-    public $directives;
+    public $directives = array();
     
     /**
      * Adds a namespace array to $namespaces
@@ -29,7 +29,7 @@ class HTMLPurifier_ConfigSchema_Interchange
      * Adds a directive array to $directives
      */
     public function addDirective($directive) {
-        $this->directives[(string) $directive->id] = $directive;
+        $this->directives[$directive->id->__toString()] = $directive;
     }
     
 }
