@@ -20,19 +20,15 @@
  *      )
  *
  * We use this as an easy to use file-format for configuration schema
- * files.
- *
- * @todo
- *      Put this in its own class hierarchy or something; this class
- *      is usage agnostic.
+ * files, but the class itself is usage agnostic.
  */
-class HTMLPurifier_ConfigSchema_StringHashParser
+class HTMLPurifier_StringHashParser
 {
     
     public $default = 'ID';
     
     public function parseFile($file) {
-        if (!file_exists($file)) throw new HTMLPurifier_ConfigSchema_Exception('File ' . $file . ' does not exist');
+        if (!file_exists($file)) return false;
         $fh = fopen($file, 'r');
         $state   = false;
         $single  = false;

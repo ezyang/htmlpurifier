@@ -3,7 +3,7 @@
 /**
  * @note Sample input files are located in the StringHashParser/ directory.
  */
-class HTMLPurifier_ConfigSchema_StringHashParserTest extends UnitTestCase
+class HTMLPurifier_StringHashParserTest extends UnitTestCase
 {
     
     /**
@@ -12,7 +12,7 @@ class HTMLPurifier_ConfigSchema_StringHashParserTest extends UnitTestCase
     protected $parser;
     
     function setup() {
-        $this->parser = new HTMLPurifier_ConfigSchema_StringHashParser();
+        $this->parser = new HTMLPurifier_StringHashParser();
     }
     
     /**

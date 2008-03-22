@@ -17,11 +17,11 @@ $FS = new FSTools();
 
 $files = $FS->globr('../library/HTMLPurifier/ConfigSchema/schema', '*.txt');
 
-$parser      = new HTMLPurifier_ConfigSchema_StringHashParser();
+$parser      = new HTMLPurifier_StringHashParser();
 $builder     = new HTMLPurifier_ConfigSchema_InterchangeBuilder();
 $interchange = new HTMLPurifier_ConfigSchema_Interchange();
 foreach ($files as $file) {
-    $builder->build($interchange, $parser->parseFile($file));
+    $builder->build($interchange, new HTMLPurifier_StringHash($parser->parseFile($file)));
 }
 
 $schema_builder = new HTMLPurifier_ConfigSchema_Builder_ConfigSchema();

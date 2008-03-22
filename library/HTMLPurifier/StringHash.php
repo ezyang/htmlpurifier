@@ -8,7 +8,7 @@
  *     of PHP 5, you must not use the $hash[$key] syntax; if you do
  *     our version of offsetGet is never called.
  */
-class HTMLPurifier_ConfigSchema_StringHash extends ArrayObject
+class HTMLPurifier_StringHash extends ArrayObject
 {
     protected $accessed = array();
     
