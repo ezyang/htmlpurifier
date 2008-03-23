@@ -94,6 +94,7 @@ if (!$AC['disable-phpt']) {
 $test_files = array();
 $test_dirs = array();
 $test_dirs_exclude = array();
+$vtest_dirs = array();
 $phpt_dirs  = array();
 
 require 'test_files.php'; // populates $test_files array

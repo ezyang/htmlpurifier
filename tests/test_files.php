@@ -16,7 +16,6 @@ if (!$AC['only-phpt']) {
     }
     
     // ConfigSchema Validator tests
-    $vtest_dirs = array();
     $vtest_dirs[] = 'HTMLPurifier/ConfigSchema/Validator';
     
     // ConfigDoc auxiliary library
@@ -31,6 +30,5 @@ if (!$AC['only-phpt']) {
 
 // PHPT tests
 if (!$AC['disable-phpt']) {
-    $phpt_dirs = array();
     $phpt_dirs[] = 'HTMLPurifier/PHPT';
 }
