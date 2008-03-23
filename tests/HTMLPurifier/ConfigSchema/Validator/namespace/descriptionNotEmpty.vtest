@@ -1,0 +1,3 @@
+ERROR: Description in namespace 'Ns' must not be empty
+----
+ID: Ns

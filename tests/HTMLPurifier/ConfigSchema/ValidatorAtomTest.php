@@ -19,7 +19,7 @@ class HTMLPurifier_ConfigSchema_ValidatorAtomTest extends UnitTestCase
     }
     
     public function testAssertIsStringFail() {
-        $this->expectValidationException("Member variable 'property' in context must be a string");
+        $this->expectValidationException("Property in context must be a string");
         $this->makeAtom(3)->assertIsString();
     }
     
@@ -28,7 +28,7 @@ class HTMLPurifier_ConfigSchema_ValidatorAtomTest extends UnitTestCase
     }
     
     public function testAssertNotNullFail() {
-        $this->expectValidationException("Member variable 'property' in context must not be null");
+        $this->expectValidationException("Property in context must not be null");
         $this->makeAtom(null)->assertNotNull();
     }
     
@@ -37,12 +37,12 @@ class HTMLPurifier_ConfigSchema_ValidatorAtomTest extends UnitTestCase
     }
     
     public function testAssertAlnumFail() {
-        $this->expectValidationException("Member variable 'property' in context must be alphanumeric");
+        $this->expectValidationException("Property in context must be alphanumeric");
         $this->makeAtom('%a')->assertAlnum();
     }
     
     public function testAssertAlnumFailIsString() {
-        $this->expectValidationException("Member variable 'property' in context must be a string");
+        $this->expectValidationException("Property in context must be a string");
         $this->makeAtom(3)->assertAlnum();
     }
     
@@ -51,7 +51,7 @@ class HTMLPurifier_ConfigSchema_ValidatorAtomTest extends UnitTestCase
     }
     
     public function testAssertNotEmptyFail() {
-        $this->expectValidationException("Member variable 'property' in context must not be empty");
+        $this->expectValidationException("Property in context must not be empty");
         $this->makeAtom('')->assertNotEmpty();
     }
     

@@ -15,6 +15,12 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
      * @param $hash HTMLPurifier_ConfigSchema_StringHash source data
      */
     public function build($interchange, $hash) {
+        if (!$hash instanceof HTMLPurifier_StringHash) {
+            $hash = new HTMLPurifier_StringHash($hash);
+        }
+        if (!isset($hash['ID'])) {
+            throw new HTMLPurifier_ConfigSchema_Exception('Hash does not have any ID');
+        }
         if (strpos($hash['ID'], '.') === false) {
             $this->buildNamespace($interchange, $hash);
         } else {
@@ -26,7 +32,9 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
     public function buildNamespace($interchange, $hash) {
         $namespace = new HTMLPurifier_ConfigSchema_Interchange_Namespace();
         $namespace->namespace   = $hash->offsetGet('ID');
-        $namespace->description = $hash->offsetGet('DESCRIPTION');
+        if (isset($hash['DESCRIPTION'])) {
+            $namespace->description = $hash->offsetGet('DESCRIPTION');
+        }
         $interchange->addNamespace($namespace);
     }
     
@@ -35,33 +43,43 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         
         // These are required elements:
         $directive->id = $this->id($hash->offsetGet('ID'));
-        $type = explode('/', $hash->offsetGet('TYPE'));
-        if (isset($type[1])) $directive->typeAllowsNull = true;
-        $directive->type = $type[0];
-        $directive->description = $directive->offsetGet('DESCRIPTION');
         
-        // These are extras:
-        if (isset($directive['ALLOWED'])) {
-            $directive->allowed = $this->lookup($this->evalArray($directive->offsetGet('ALLOWED')));
+        if (isset($hash['TYPE'])) {
+            $type = explode('/', $hash->offsetGet('TYPE'));
+            if (isset($type[1])) $directive->typeAllowsNull = true;
+            $directive->type = $type[0];
         }
-        if (isset($directive['VALUE-ALIASES'])) {
-            $directive->valueAliases = $this->evalArray($directive->offsetGet('VALUE-ALIASES'));
+        
+        if (isset($hash['DESCRIPTION'])) {
+            $directive->description = $hash->offsetGet('DESCRIPTION');
         }
-        if (isset($directive['ALIASES'])) {
+        
+        if (isset($hash['ALLOWED'])) {
+            $directive->allowed = $this->lookup($this->evalArray($hash->offsetGet('ALLOWED')));
+        }
+        
+        if (isset($hash['VALUE-ALIASES'])) {
+            $directive->valueAliases = $this->evalArray($hash->offsetGet('VALUE-ALIASES'));
+        }
+        
+        if (isset($hash['ALIASES'])) {
             $raw_aliases = trim($hash->offsetGet('ALIASES'));
             $aliases = preg_split('/\s*,\s*/', $raw_aliases);
             foreach ($aliases as $alias) {
-                $this->aliases[] = $this->id($alias);
+                $directive->aliases[] = $this->id($alias);
             }
         }
-        if (isset($directive['VERSION'])) {
-            $directive->version = $directive->offsetGet('VERSION');
+        
+        if (isset($hash['VERSION'])) {
+            $directive->version = $hash->offsetGet('VERSION');
         }
-        if (isset($directive['DEPRECATED-USE'])) {
-            $directive->deprecatedUse = $this->id($directive->offsetGet('DEPRECATED-USE'));
+        
+        if (isset($hash['DEPRECATED-USE'])) {
+            $directive->deprecatedUse = $this->id($hash->offsetGet('DEPRECATED-USE'));
         }
-        if (isset($directive['DEPRECATED-VERSION'])) {
-            $directive->deprecatedVersion = $directive->offsetGet('DEPRECATED-VERSION');
+        
+        if (isset($hash['DEPRECATED-VERSION'])) {
+            $directive->deprecatedVersion = $hash->offsetGet('DEPRECATED-VERSION');
         }
         
         $interchange->addDirective($directive);

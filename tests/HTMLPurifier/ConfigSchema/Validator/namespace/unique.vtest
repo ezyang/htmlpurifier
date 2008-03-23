@@ -1,0 +1,7 @@
+ERROR: Cannot redefine namespace 'Ns'
+----
+ID: Ns
+DESCRIPTION: Version 1
+----
+ID: Ns
+DESCRIPTION: Version 2

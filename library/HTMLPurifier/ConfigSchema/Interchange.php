@@ -22,14 +22,20 @@ class HTMLPurifier_ConfigSchema_Interchange
      * Adds a namespace array to $namespaces
      */
     public function addNamespace($namespace) {
-        $this->namespaces[$namespace->namespace] = $namespace;
+        if (isset($this->namespaces[$i = $namespace->namespace])) {
+            throw new HTMLPurifier_ConfigSchema_Exception("Cannot redefine namespace '$i'");
+        }
+        $this->namespaces[$i] = $namespace;
     }
     
     /**
      * Adds a directive array to $directives
      */
     public function addDirective($directive) {
-        $this->directives[$directive->id->__toString()] = $directive;
+        if (isset($this->directives[$i = $directive->id->__toString()])) {
+            throw new HTMLPurifier_ConfigSchema_Exception("Cannot redefine directive '$i'");
+        }
+        $this->directives[$i] = $directive;
     }
     
 }

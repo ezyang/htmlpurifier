@@ -1,0 +1,4 @@
+ERROR: Namespace in namespace '0' must not be empty
+----
+ID: 0
+DESCRIPTION: empty($ID) === true

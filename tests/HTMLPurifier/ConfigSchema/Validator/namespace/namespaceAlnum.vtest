@@ -1,0 +1,4 @@
+ERROR: Namespace in namespace 'R&D' must be alphanumeric
+----
+ID: R&D
+DESCRIPTION: ctype_alnum($ID) === false

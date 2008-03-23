@@ -110,6 +110,14 @@ foreach ($test_dirs as $dir) {
     }
 }
 
+// handle vtest dirs
+foreach ($vtest_dirs as $dir) {
+    $raw_files = $FS->globr($dir, '*.vtest');
+    foreach ($raw_files as $file) {
+        $test_files[] = str_replace('\\', '/', $file);
+    }
+}
+
 // handle phpt files
 foreach ($phpt_dirs as $dir) {
     $phpt_files = $FS->globr($dir, '*.phpt');

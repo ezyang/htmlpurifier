@@ -156,6 +156,8 @@ function htmlpurifier_add_test($test, $test_file, $only_phpt = false) {
         case '.php':
             require_once $test_file;
             return $test->addTestClass(path2class($test_file));
+        case '.vtest':
+            return $test->addTestCase(new HTMLPurifier_ConfigSchema_ValidatorTestCase($test_file));
         default:
             trigger_error("$test_file is an invalid file for testing", E_USER_ERROR);
     }

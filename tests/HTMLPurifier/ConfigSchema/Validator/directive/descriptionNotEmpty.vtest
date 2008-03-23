@@ -1,0 +1,7 @@
+ERROR: Description in directive 'Ns.Dir' must not be empty
+----
+Ns
+DESCRIPTION: Our namespace.
+----
+Ns.Dir
+TYPE: int

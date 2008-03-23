@@ -1,0 +1,8 @@
+ERROR: Directive in id 'Ns.' in directive 'Ns.' must not be empty
+----
+Ns
+DESCRIPTION: Our namespace
+----
+ID: Ns.
+TYPE: int
+DESCRIPTION: Description.

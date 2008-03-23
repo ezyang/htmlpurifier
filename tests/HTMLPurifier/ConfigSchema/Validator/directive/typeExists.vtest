@@ -1,0 +1,8 @@
+ERROR: Type in directive 'Ns.Dir' is invalid
+----
+Ns
+DESCRIPTION: Namespace
+----
+Ns.Dir
+DESCRIPTION: Directive
+TYPE: foobar

@@ -15,6 +15,10 @@ if (!$AC['only-phpt']) {
       $test_files[] = 'HTMLPurifier/Filter/ExtractStyleBlocksTest.php';
     }
     
+    // ConfigSchema Validator tests
+    $vtest_dirs = array();
+    $vtest_dirs[] = 'HTMLPurifier/ConfigSchema/Validator';
+    
     // ConfigDoc auxiliary library
     if (version_compare(PHP_VERSION, '5.2', '>=')) {
         $test_dirs[] = 'ConfigDoc';
