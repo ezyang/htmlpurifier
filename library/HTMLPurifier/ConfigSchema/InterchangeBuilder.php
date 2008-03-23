@@ -56,7 +56,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
             try {
                 $directive->default = $this->varParser->parse($hash->offsetGet('DEFAULT'), $directive->type, $directive->typeAllowsNull);
             } catch (HTMLPurifier_VarParserException $e) {
-                throw new HTMLPurifier_ConfigSchema_Exception($e->getMessage() . " in DEFAULT in directive hash '{$directive->id}'");
+                throw new HTMLPurifier_ConfigSchema_Exception($e->getMessage() . " in TYPE/DEFAULT in directive hash '{$directive->id}'");
             }
         }
         
@@ -70,8 +70,11 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         
         if (isset($hash['VALUE-ALIASES'])) {
             $value_aliases = $this->evalArray($hash->offsetGet('VALUE-ALIASES'));
+            // :TODO: Build corresponding test in Validator.php
             try {
                 foreach ($value_aliases as $alias => $real) {
+                    // might want to allow users to use a different var parser
+                    // in this case
                     $directive->valueAliases[$this->varParser->parse($alias, $directive->type, $directive->typeAllowsNull)] =
                         $this->varParser->parse($real, $directive->type, $directive->typeAllowsNull);
                 }

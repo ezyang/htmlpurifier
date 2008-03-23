@@ -32,7 +32,7 @@ class HTMLPurifier_ConfigSchema_Interchange
      * Adds a directive array to $directives
      */
     public function addDirective($directive) {
-        if (isset($this->directives[$i = $directive->id->__toString()])) {
+        if (isset($this->directives[$i = "{$directive->id}"])) {
             throw new HTMLPurifier_ConfigSchema_Exception("Cannot redefine directive '$i'");
         }
         $this->directives[$i] = $directive;

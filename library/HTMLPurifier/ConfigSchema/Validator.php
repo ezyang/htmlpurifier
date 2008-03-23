@@ -2,6 +2,11 @@
 
 /**
  * Performs validations on HTMLPurifier_ConfigSchema_Interchange
+ *
+ * @note If you see '// handled by InterchangeBuilder', that means a
+ *       design decision in that class would prevent this validation from
+ *       ever being necessary. We have them anyway, however, for
+ *       redundancy.
  */
 class HTMLPurifier_ConfigSchema_Validator
 {
@@ -28,10 +33,14 @@ class HTMLPurifier_ConfigSchema_Validator
      */
     public function validate($interchange) {
         $this->interchange = $interchange;
-        foreach ($interchange->namespaces as $namespace) {
+        // PHP is a bit lax with integer <=> string conversions in
+        // arrays, so we don't use the identical !== comparison
+        foreach ($interchange->namespaces as $i => $namespace) {
+            if ($i != $namespace->namespace) $this->error(false, "Integrity violation: key '$i' does not match internal id '{$namespace->namespace}'");
             $this->validateNamespace($namespace);
         }
-        foreach ($interchange->directives as $directive) {
+        foreach ($interchange->directives as $i => $directive) {
+            if ($i != "{$directive->id}") $this->error(false, "Integrity violation: key '$i' does not match internal id '{$directive->id}'");
             $this->validateDirective($directive);
         }
     }
@@ -40,24 +49,25 @@ class HTMLPurifier_ConfigSchema_Validator
         $this->context[] = "namespace '{$n->namespace}'";
         $this->with($n, 'namespace')
             ->assertNotEmpty()
-            ->assertAlnum();
+            ->assertAlnum(); // implicit assertIsString handled by InterchangeBuilder
         $this->with($n, 'description')
             ->assertNotEmpty()
-            ->assertIsString(); // technically redundant
+            ->assertIsString(); // handled by InterchangeBuilder
         array_pop($this->context);
     }
     
     public function validateId($id) {
         $this->context[] = "id '$id'";
-        if (!isset($this->interchange->namespaces[$id->namespace])) {
-            $this->error('namespace', 'does not exist');
+        if (!$id instanceof HTMLPurifier_ConfigSchema_Interchange_Id) {
+            // handled by InterchangeBuilder
+            $this->error(false, 'is not an instance of HTMLPurifier_ConfigSchema_Interchange_Id');
         }
-        $this->with($id, 'namespace')
-            ->assertNotEmpty()
-            ->assertAlnum();
+        if (!isset($this->interchange->namespaces[$id->namespace])) {
+            $this->error('namespace', 'does not exist'); // assumes that the namespace was validated already
+        }
         $this->with($id, 'directive')
             ->assertNotEmpty()
-            ->assertAlnum();
+            ->assertAlnum(); // implicit assertIsString handled by InterchangeBuilder
         array_pop($this->context);
     }
     
@@ -67,11 +77,14 @@ class HTMLPurifier_ConfigSchema_Validator
         $this->with($d, 'description')
             ->assertNotEmpty();
         $this->with($d, 'type')
-            ->assertNotEmpty();
-        if (!isset(HTMLPurifier_VarParser::$types[$d->type])) {
-            $this->error('type', 'is invalid');
+            ->assertNotEmpty(); // handled by InterchangeBuilder
+        // Much stricter default check, since we're using the base implementation.
+        // handled by InterchangeBuilder
+        try {
+            $this->parser->parse($d->default, $d->type, $d->typeAllowsNull);
+        } catch (HTMLPurifier_VarParserException $e) {
+            $this->error('default', 'had error: ' . $e->getMessage());
         }
-        $this->parser->parse($d->default, $d->type, $d->typeAllowsNull);
         
         array_pop($this->context);
     }
@@ -83,7 +96,9 @@ class HTMLPurifier_ConfigSchema_Validator
     }
     
     protected function error($target, $msg) {
-        throw new HTMLPurifier_ConfigSchema_Exception(ucfirst($target) . ' in ' . $this->getFormattedContext() . ' ' . $msg);
+        if ($target !== false) $prefix = ucfirst($target) . ' in ' .  $this->getFormattedContext();
+        else $prefix = ucfirst($this->getFormattedContext());
+        throw new HTMLPurifier_ConfigSchema_Exception(trim($prefix . ' ' . $msg));
     }
     
     protected function getFormattedContext() {
