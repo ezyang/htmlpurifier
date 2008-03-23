@@ -40,7 +40,8 @@ class HTMLPurifier_ConfigSchema_Validator
             $this->validateNamespace($namespace);
         }
         foreach ($interchange->directives as $i => $directive) {
-            if ($i != "{$directive->id}") $this->error(false, "Integrity violation: key '$i' does not match internal id '{$directive->id}'");
+            $id = $directive->id->toString();
+            if ($i != $id) $this->error(false, "Integrity violation: key '$i' does not match internal id '$id'");
             $this->validateDirective($directive);
         }
     }
@@ -57,7 +58,8 @@ class HTMLPurifier_ConfigSchema_Validator
     }
     
     public function validateId($id) {
-        $this->context[] = "id '$id'";
+        $id_string = $id->toString();
+        $this->context[] = "id '$id_string'";
         if (!$id instanceof HTMLPurifier_ConfigSchema_Interchange_Id) {
             // handled by InterchangeBuilder
             $this->error(false, 'is not an instance of HTMLPurifier_ConfigSchema_Interchange_Id');
@@ -72,7 +74,8 @@ class HTMLPurifier_ConfigSchema_Validator
     }
     
     public function validateDirective($d) {
-        $this->context[] = "directive '{$d->id}'";
+        $id = $d->id->toString();
+        $this->context[] = "directive '$id'";
         $this->validateId($d->id);
         $this->with($d, 'description')
             ->assertNotEmpty();

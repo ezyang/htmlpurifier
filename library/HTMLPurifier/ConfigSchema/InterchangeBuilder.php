@@ -43,20 +43,21 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         
         // These are required elements:
         $directive->id = $this->id($hash->offsetGet('ID'));
+        $id = $directive->id->toString(); // convenience
         
         if (isset($hash['TYPE'])) {
             $type = explode('/', $hash->offsetGet('TYPE'));
             if (isset($type[1])) $directive->typeAllowsNull = true;
             $directive->type = $type[0];
         } else {
-            throw new HTMLPurifier_ConfigSchema_Exception("TYPE in directive hash '{$directive->id}' not defined");
+            throw new HTMLPurifier_ConfigSchema_Exception("TYPE in directive hash '$id' not defined");
         }
         
         if (isset($hash['DEFAULT'])) {
             try {
                 $directive->default = $this->varParser->parse($hash->offsetGet('DEFAULT'), $directive->type, $directive->typeAllowsNull);
             } catch (HTMLPurifier_VarParserException $e) {
-                throw new HTMLPurifier_ConfigSchema_Exception($e->getMessage() . " in TYPE/DEFAULT in directive hash '{$directive->id}'");
+                throw new HTMLPurifier_ConfigSchema_Exception($e->getMessage() . " in TYPE/DEFAULT in directive hash '$id'");
             }
         }
         
@@ -79,7 +80,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
                         $this->varParser->parse($real, $directive->type, $directive->typeAllowsNull);
                 }
             } catch (HTMLPurifier_VarParserException $e) {
-                throw new HTMLPurifier_ConfigSchema_Exception($e->getMessage() . " in $alias => $real in VALUE-ALIASES in directive hash '{$directive->id}'");
+                throw new HTMLPurifier_ConfigSchema_Exception($e->getMessage() . " in $alias => $real in VALUE-ALIASES in directive hash '$id'");
             }
         }
         

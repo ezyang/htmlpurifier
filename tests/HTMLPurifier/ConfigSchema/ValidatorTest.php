@@ -40,20 +40,6 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
     
-    public function testDirectiveIdInstanceof() {
-        // This example is somewhat contrived
-        $this->makeNamespace('Ns');
-        $d = new HTMLPurifier_ConfigSchema_Interchange_Directive();
-        $d->id = 3;
-        $d->default = 0;
-        $d->type = 'int';
-        $d->description = 'Description';
-        $this->interchange->addDirective($d);
-        
-        $this->expectValidationException("Id '3' in directive '3' is not an instance of HTMLPurifier_ConfigSchema_Interchange_Id");
-        $this->validator->validate($this->interchange);
-    }
-    
     public function testDirectiveTypeNotEmpty() {
         $this->makeNamespace('Ns');
         $d = $this->makeDirective('Ns', 'Dir');
