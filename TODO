@@ -26,26 +26,17 @@ DOCUMENTATION
 
 IMPORTANT FEATURES
  - Get everything into configuration objects (filters, I'm looking at you)
- - Factor generate-schema-cache.php into a class, so that the maintenance script
-   is as small as possible
  - Factor out command line parser into its own class, and unit test it
- - Optimize ConfigSchema by making our runtime class only contain entries for
-   things necessary for operation (NOT descriptions).
 
 CONFIGDOC
  - Properly integrate new ConfigSchema system into configdoc. DESCRIPTIONS
    ARE CURRENTLY BROKEN AND NEED TO BE FIXED!!! (Configdoc
    should directly read the configuration files, or at the very least should
    not use static functions)
- - Deprecate Serializer in favor of ReverseAdapter
  - Have configdoc use version and deprecated information (hide deprecated
    info, for example)
  - Implement source code sniffing for configdoc, so we can easily figure out
    which files use what configuration (we'll rely on the $config convention)
-
-IF IT AIN'T BROKE...
- - Perhaps replace types with integer identifiers in ConfigSchema? (would be
-   smaller, but not by much).
 
 NICE FEATURES
  - Factor demo.php into a set of Printer classes, and then create a stub
