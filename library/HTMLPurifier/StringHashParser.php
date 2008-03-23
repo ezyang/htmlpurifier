@@ -21,21 +21,60 @@
  *
  * We use this as an easy to use file-format for configuration schema
  * files, but the class itself is usage agnostic.
+ *
+ * You can use ---- to forcibly terminate parsing of a single string-hash;
+ * this marker is used in multi string-hashes to delimit boundaries.
  */
 class HTMLPurifier_StringHashParser
 {
     
     public $default = 'ID';
     
+    /**
+     * Parses a file that contains a single string-hash.
+     */
     public function parseFile($file) {
         if (!file_exists($file)) return false;
         $fh = fopen($file, 'r');
+        if (!$fh) return false;
+        $ret = $this->parseHandle($fh);
+        fclose($fh);
+        return $ret;
+    }
+    
+    /**
+     * Parses a file that contains multiple string-hashes delimited by '----'
+     */
+    public function parseMultiFile($file) {
+        if (!file_exists($file)) return false;
+        $ret = array();
+        $fh = fopen($file, 'r');
+        if (!$fh) return false;
+        while (!feof($fh)) {
+            $ret[] = $this->parseHandle($fh);
+        }
+        fclose($fh);
+        return $ret;
+    }
+    
+    /**
+     * Internal parser that acepts a file handle.
+     * @note While it's possible to simulate in-memory parsing by using
+     *       custom stream wrappers, if such a use-case arises we should
+     *       factor out the file handle into its own class.
+     * @param $fh File handle with pointer at start of valid string-hash
+     *            block.
+     */
+    protected function parseHandle($fh) {
         $state   = false;
         $single  = false;
         $ret     = array();
-        while (($line = fgets($fh)) !== false) {
+        do {
+            $line = fgets($fh);
+            if ($line === false) break;
             $line = rtrim($line, "\n\r");
             if (!$state && $line === '') continue;
+            if ($line === '----') break;
             if (strncmp('--', $line, 2) === 0) {
                 // Multiline declaration
                 $state = trim($line, '- ');
@@ -58,8 +97,7 @@ class HTMLPurifier_StringHashParser
                 if (!isset($ret[$state])) $ret[$state] = '';
                 $ret[$state] .= "$line\n";
             }
-        }
-        fclose($fh);
+        } while (!feof($fh));
         return $ret;
     }
     

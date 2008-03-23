@@ -1,0 +1,18 @@
+Namespace.Directive
+TYPE: string
+CHAIN-ME: 2
+--DESCRIPTION--
+Multiline
+stuff
+--FOR-WHO--
+Single multiline
+----
+
+Namespace.Directive2
+TYPE: integer
+CHAIN-ME: 3
+--DESCRIPTION--
+M
+stuff
+--FOR-WHO--
+Single multiline2
