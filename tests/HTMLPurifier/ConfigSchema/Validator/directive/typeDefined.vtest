@@ -1,0 +1,8 @@
+ERROR: TYPE in directive hash 'Ns.Dir' not defined
+----
+Ns
+DESCRIPTION: Namespace
+----
+Ns.Dir
+DESCRIPTION: Notice that TYPE is missing
+DEFAULT: 0

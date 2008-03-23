@@ -36,7 +36,7 @@ class HTMLPurifier_VarParser
      */
     final public function parse($var, $type, $allow_null = false) {
         if (!isset(HTMLPurifier_VarParser::$types[$type])) {
-            throw new HTMLPurifier_VarParserException("Invalid type $type");
+            throw new HTMLPurifier_VarParserException("Invalid type '$type'");
         }
         $var = $this->parseImplementation($var, $type, $allow_null);
         if ($allow_null && $var === null) return null;
@@ -73,7 +73,7 @@ class HTMLPurifier_VarParser
             case 'mixed':
                 return $var;
             default:
-                $this->errorInconsistent(__CLASS__, $type);
+                $this->errorInconsistent(get_class($this), $type);
         }
         $this->errorGeneric($var, $type);
     }

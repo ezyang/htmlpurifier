@@ -9,9 +9,18 @@ class HTMLPurifier_ConfigSchema_Validator
     protected $interchange;
     
     /**
-     * Volatile context variables to provide a fluent interface.
+     * Context-stack to provide easy to read error messages.
      */
-    protected $context = array(), $obj, $member;
+    protected $context = array();
+    
+    /**
+     * HTMLPurifier_VarParser to test variable types.
+     */
+    protected $parser;
+    
+    public function __construct() {
+        $this->parser = new HTMLPurifier_VarParser();
+    }
     
     /**
      * Validates a fully-formed interchange object. Throws an
@@ -38,17 +47,6 @@ class HTMLPurifier_ConfigSchema_Validator
         array_pop($this->context);
     }
     
-    public function validateDirective($d) {
-        $this->context[] = "directive '{$d->id}'";
-        $this->validateId($d->id);
-        $this->with($d, 'description')
-            ->assertNotEmpty();
-        if (!isset(HTMLPurifier_VarParser::$types[$d->type])) {
-            $this->error('type', 'is invalid');
-        }
-        array_pop($this->context);
-    }
-    
     public function validateId($id) {
         $this->context[] = "id '$id'";
         if (!isset($this->interchange->namespaces[$id->namespace])) {
@@ -60,6 +58,21 @@ class HTMLPurifier_ConfigSchema_Validator
         $this->with($id, 'directive')
             ->assertNotEmpty()
             ->assertAlnum();
+        array_pop($this->context);
+    }
+    
+    public function validateDirective($d) {
+        $this->context[] = "directive '{$d->id}'";
+        $this->validateId($d->id);
+        $this->with($d, 'description')
+            ->assertNotEmpty();
+        $this->with($d, 'type')
+            ->assertNotEmpty();
+        if (!isset(HTMLPurifier_VarParser::$types[$d->type])) {
+            $this->error('type', 'is invalid');
+        }
+        $this->parser->parse($d->default, $d->type, $d->typeAllowsNull);
+        
         array_pop($this->context);
     }
     

@@ -5,3 +5,4 @@ DESCRIPTION: Our namespace.
 ----
 Ns.Dir
 TYPE: int
+DEFAULT: 0
