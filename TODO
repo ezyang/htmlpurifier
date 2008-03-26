@@ -46,7 +46,6 @@ NICE FEATURES
 
 BUGS
  - Style attribute height/width limiting for images
- - addAttribute multiple calls with HTMLDefinition
  - Support for hard-coded paths/dirname(__FILE__) in include stub and autoload
  - Easy way to blacklist elements and attributes
  - Investigate iconv error emitting

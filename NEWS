@@ -46,6 +46,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix bug in comment parsing for DirectLex
 - Flush output now displayed when in command line mode for unit tester
 - Fix bug with rgb(0, 1, 2) color syntax with spaces inside shorthand syntax
+- HTMLPurifier_HTMLDefinition->addAttribute can now be called multiple times
+  on the same element without emitting errors.
 . Plugins now get their own changelogs according to project conventions.
 . Convert tokens to use instanceof, reducing memory footprint and
   improving comparison speed.

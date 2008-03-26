@@ -85,6 +85,22 @@ a[href|title]
         
     }
     
+    function test_addAttribute_multiple() {
+        
+        $config = HTMLPurifier_Config::create(array(
+            'HTML.DefinitionID' => 'HTMLPurifier_HTMLDefinitionTest->test_addAttribute_multiple'
+        ));
+        $def =& $config->getHTMLDefinition(true);
+        $def->addAttribute('span', 'custom', 'Enum#attribute');
+        $def->addAttribute('span', 'foo', 'Text');
+        
+        $purifier = new HTMLPurifier($config);
+        $input = '<span custom="attribute" foo="asdf">Custom!</span>';
+        $output = $purifier->purify($input);
+        $this->assertIdentical($input, $output);
+        
+    }
+    
     function test_addElement() {
         
         $config = HTMLPurifier_Config::create(array(
