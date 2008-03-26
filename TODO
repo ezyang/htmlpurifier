@@ -44,6 +44,15 @@ NICE FEATURES
  - Support exporting configuration, so users can easily tweak settings
    in the demo, and then copy-paste into their own setup
 
+BUGS
+ - Style attribute height/width limiting for images
+ - addAttribute multiple calls with HTMLDefinition
+ - Support for hard-coded paths/dirname(__FILE__) in include stub and autoload
+ - Easy way to blacklist elements and attributes
+ - Investigate iconv error emitting
+ - Investigate UTF-8 optimization <http://htmlpurifier.org/phorum/read.php?3,1496>
+ - Figure out what to do about target="" and name="", since they show up so often
+ - Update htmLawed comparison
 
 FUTURE VERSIONS
 ---------------
@@ -70,6 +79,7 @@ FUTURE VERSIONS
 
 3.4 release [It's All About Trust] (floating)
  # Implement untrusted, dangerous elements/attributes
+    - Objects and Forms are especially wanted
  # Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
  # Frameset XHTML 1.0 and HTML 4.01 doctypes
