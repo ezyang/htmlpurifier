@@ -53,6 +53,23 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
         
     }
     
+    function testDifferentAllowedCSSProperties() {
+        
+        $this->purifier = new HTMLPurifier(array(
+            'CSS.AllowedProperties' => array('color', 'background-color')
+        ));
+        
+        $this->assertPurification(
+            '<div style="color:#f00;background-color:#ded;">red</div>'
+        );
+        
+        $this->assertPurification(
+            '<div style="color:#f00;border:1px solid #000">red</div>',
+            '<div style="color:#f00;">red</div>'
+        );
+        
+    }
+    
     function testDisableURI() {
         
         $this->purifier = new HTMLPurifier( array('Attr.DisableURI' => true) );

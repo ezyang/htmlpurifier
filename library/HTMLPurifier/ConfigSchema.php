@@ -118,7 +118,6 @@ class HTMLPurifier_ConfigSchema {
      */
     public function addAlias($namespace, $name, $new_namespace, $new_name) {
         $this->info[$namespace][$name] = new HTMLPurifier_ConfigDef_DirectiveAlias($new_namespace, $new_name);
-        $this->info[$new_namespace][$new_name]->directiveAliases[] = "$namespace.$name";
     }
     
     // DEPRECATED METHODS

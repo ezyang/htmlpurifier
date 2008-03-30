@@ -45,21 +45,21 @@ class HTMLPurifier_DefinitionCacheFactoryTest extends HTMLPurifier_Harness
     }
     
     function test_create_invalid() {
-        $this->config->set('Core', 'DefinitionCache', 'Invalid');
+        $this->config->set('Cache', 'DefinitionImpl', 'Invalid');
         $this->expectError('Unrecognized DefinitionCache Invalid, using Serializer instead');
         $cache = $this->factory->create('Test', $this->config);
         $this->assertIsA($cache, 'HTMLPurifier_DefinitionCache_Serializer');
     }
     
     function test_null() {
-        $this->config->set('Core', 'DefinitionCache', null);
+        $this->config->set('Cache', 'DefinitionImpl', null);
         $cache = $this->factory->create('Test', $this->config);
         $this->assertEqual($cache, new HTMLPurifier_DefinitionCache_Null('Test'));
     }
     
     function test_register() {
         generate_mock_once('HTMLPurifier_DefinitionCache');
-        $this->config->set('Core', 'DefinitionCache', 'TestCache');
+        $this->config->set('Cache', 'DefinitionImpl', 'TestCache');
         $this->factory->register('TestCache', $class = 'HTMLPurifier_DefinitionCacheMock');
         $cache = $this->factory->create('Test', $this->config);
         $this->assertIsA($cache, $class);

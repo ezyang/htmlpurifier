@@ -252,6 +252,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             }
             // emit errors
             foreach ($allowed_elements as $element => $d) {
+                // :TODO: Is this htmlspecialchars() call really necessary?
                 $element = htmlspecialchars($element);
                 trigger_error("Element '$element' is not supported $support", E_USER_WARNING);
             }
@@ -283,6 +284,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             // emit errors
             foreach ($allowed_attributes_mutable as $elattr => $d) {
                 list($element, $attribute) = explode('.', $elattr);
+                // :TODO: Is this htmlspecialchars() call really necessary?
                 $element = htmlspecialchars($element);
                 $attribute = htmlspecialchars($attribute);
                 if ($element == '*') {

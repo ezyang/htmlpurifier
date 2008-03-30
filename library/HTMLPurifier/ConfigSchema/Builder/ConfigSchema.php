@@ -9,10 +9,10 @@ class HTMLPurifier_ConfigSchema_Builder_ConfigSchema
     
     public function build($interchange) {
         $schema = new HTMLPurifier_ConfigSchema();
-        foreach ($this->namespaces as $n) {
+        foreach ($interchange->namespaces as $n) {
             $schema->addNamespace($n->namespace);
         }
-        foreach ($this->directives as $d) {
+        foreach ($interchange->directives as $d) {
             $schema->add(
                 $d->id->namespace,
                 $d->id->directive,
@@ -29,8 +29,8 @@ class HTMLPurifier_ConfigSchema_Builder_ConfigSchema
             }
             foreach ($d->aliases as $alias) {
                 $schema->addAlias(
-                    $alias->id->namespace,
-                    $alias->id->directive,
+                    $alias->namespace,
+                    $alias->directive,
                     $d->id->namespace,
                     $d->id->directive
                 );
@@ -43,6 +43,7 @@ class HTMLPurifier_ConfigSchema_Builder_ConfigSchema
                 );
             }
         }
+        return $schema;
     }
     
 }

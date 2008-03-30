@@ -36,6 +36,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! HTML Purifier now has its own Exception hierarchy under HTMLPurifier_Exception.
   Developer error (not enduser error) can cause these to be triggered.
 ! Experimental kses() wrapper introduced with HTMLPurifier.kses.php
+! Finally %CSS.AllowedProperties for tweaking allowed CSS properties without
+  mucking around with HTMLPurifier_CSSDefinition
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
 - Various HTMLPurifier_Config convenience functions now accept another parameter
@@ -75,7 +77,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . HTMLPurifier_ConfigSchema->validate() deprecated in favor of
   HTMLPurifier_VarParser->parse()
 . Integers auto-cast into float type by VarParser.
-. HTMLPURIFIER_STRICT
+. HTMLPURIFIER_STRICT removed; no validation is performed on runtime, only 
+  during cache generation
+. Reordered script calls in maintenance/flush.php
 
 3.0.0, released 2008-01-06
 # HTML Purifier is PHP 5 only! The 2.1.x branch will be maintained

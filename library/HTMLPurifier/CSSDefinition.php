@@ -212,6 +212,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             $this->info[$k] = new HTMLPurifier_AttrDef_CSS_ImportantDecorator($v, $allow_important);
         }
         
+        $this->setupConfigStuff($config);
     }
     
     protected function doSetupProprietary($config) {
@@ -245,5 +246,32 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         ));
     }
     
+    
+    /**
+     * Performs extra config-based processing. Based off of
+     * HTMLPurifier_HTMLDefinition.
+     * @todo Refactor duplicate elements into common class (probably using
+     *       composition, not inheritance).
+     */
+    protected function setupConfigStuff($config) {
+        
+        // setup allowed elements
+        $support = "(for information on implementing this, see the ".
+                   "support forums) ";
+        $allowed_attributes = $config->get('CSS', 'AllowedProperties');
+        if ($allowed_attributes !== null) {
+            foreach ($this->info as $name => $d) {
+                if(!isset($allowed_attributes[$name])) unset($this->info[$name]);
+                unset($allowed_attributes[$name]);
+            }
+            // emit errors
+            foreach ($allowed_attributes as $name => $d) {
+                // :TODO: Is this htmlspecialchars() call really necessary?
+                $name = htmlspecialchars($name);
+                trigger_error("Style attribute '$name' is not supported $support", E_USER_WARNING);
+            }
+        }
+        
+    }
 }
 

@@ -51,11 +51,5 @@ class HTMLPurifier_ConfigDef_Directive extends HTMLPurifier_ConfigDef
      */
     public $aliases = array();
     
-    /**
-     * Advisory list of directive aliases, i.e. other directives that
-     * redirect here
-     */
-    public $directiveAliases = array();
-    
 }
 
