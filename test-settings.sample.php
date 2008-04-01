@@ -4,7 +4,8 @@
 // This file is necessary to run the unit tests and profiling scripts.
 // Please copy it to 'test-settings.php' and make the necessary edits.
 
-// Note: The minimum set of external libraries you need are PHP SimpleTest
+// Note: The only external library you *need* is SimpleTest; everything else
+//       is optional.
 
 // We've got a lot of tests, so we recommend turning the limit off.
 set_time_limit(0);
@@ -17,21 +18,22 @@ if ($data !== false && $data !== '') {
 }
 
 // -----------------------------------------------------------------------------
-// RECOMMENDED SETTINGS
+// REQUIRED SETTINGS
 
-// Where is SimpleTest located?
+// Where is SimpleTest located? Remember to include a trailing slash!
 $simpletest_location = '/path/to/simpletest/';
-
-// Should PHPT tests be enabled? (This should already be in your path; if it
-// isn't, set it here)
-// set_include_path('/path/to/phpt/Core/src' . PATH_SEPARATOR . get_include_path());
-$GLOBALS['HTMLPurifierTest']['PHPT'] = true;
 
 // -----------------------------------------------------------------------------
 // OPTIONAL SETTINGS
 
-// Where is CSSTidy located?
-$csstidy_location    = '/path/to/csstidy/';
+// Should PHPT tests be enabled?
+$GLOBALS['HTMLPurifierTest']['PHPT'] = false;
+
+// If PHPT isn't in your Path via PEAR, set that here:
+// set_include_path('/path/to/phpt/Core/src' . PATH_SEPARATOR . get_include_path());
+
+// Where is CSSTidy located? (Include trailing slash. Leave false to disable.)
+$csstidy_location    = false;
 
 // For tests/multitest.php, which versions to test?
 $versions_to_test    = array();
@@ -41,7 +43,7 @@ $php = 'php';
 
 // For tests/multitest.php, what is the multi-version executable? It must
 // accept an extra parameter (version number) before all other arguments
-$phpv = 'phpv';
+$phpv = false;
 
 // Should PEAR tests be run? If you've got a valid PEAR installation, set this
 // to true (or, if it's not in the include path, to its install directory).
