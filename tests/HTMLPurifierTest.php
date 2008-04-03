@@ -72,7 +72,7 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
     
     function testDisableURI() {
         
-        $this->purifier = new HTMLPurifier( array('Attr.DisableURI' => true) );
+        $this->purifier = new HTMLPurifier( array('URI.Disable' => true) );
         
         $this->assertPurification(
             '<img src="foobar"/>',
@@ -105,7 +105,7 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
             '<span>foobar</span>'
         );
         
-        $this->purifier = new HTMLPurifier(array('HTML.EnableAttrID' => true));
+        $this->purifier = new HTMLPurifier(array('Attr.EnableID' => true));
         $this->assertPurification('<span id="moon">foobar</span>');
         $this->assertPurification('<img id="folly" src="folly.png" alt="Omigosh!" />');
         

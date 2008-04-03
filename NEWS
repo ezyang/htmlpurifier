@@ -21,6 +21,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   information is stored in the ConfigSchema directory, and the
   maintenance/generate-schema-cache.php generates the schema.ser file, which
   is now instantiated. Support for userland schema changes coming soon!
+# HTMLPurifier_Config will now throw E_USER_NOTICE when you use a directive
+  alias; to get rid of these errors just modify your configuration to use
+  the new directive name.
 ! Extra utility classes for testing and non-library operations can
   be found in extras/. Specifically, these are FSTools and ConfigDoc.
   You may find a use for these in your own project, but right now they

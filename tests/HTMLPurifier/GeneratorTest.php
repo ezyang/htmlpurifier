@@ -160,7 +160,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
         
         
         $this->config = HTMLPurifier_Config::createDefault();
-        $this->config->set('Core', 'CommentScriptContents', false);
+        $this->config->set('Output', 'CommentScriptContents', false);
         
         $this->assertGeneration(
             array(
@@ -174,7 +174,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
     
     function test_generateFromTokens_XHTMLoff() {
         $this->config = HTMLPurifier_Config::createDefault();
-        $this->config->set('Core', 'XHTML', false);
+        $this->config->set('HTML', 'XHTML', false);
         
         // omit trailing slash
         $this->assertGeneration(

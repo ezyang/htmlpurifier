@@ -199,11 +199,13 @@ class HTMLPurifier_Config
         if ($this->def->info[$namespace][$key]->class == 'alias') {
             if ($from_alias) {
                 trigger_error('Double-aliases not allowed, please fix '.
-                    'ConfigSchema bug with' . "$namespace.$key");
+                    'ConfigSchema bug with' . "$namespace.$key", E_USER_ERROR);
+                return;
             }
-            $this->set($this->def->info[$namespace][$key]->namespace,
-                       $this->def->info[$namespace][$key]->name,
+            $this->set($new_ns = $this->def->info[$namespace][$key]->namespace,
+                       $new_dir = $this->def->info[$namespace][$key]->name,
                        $value, true);
+            trigger_error("$namespace.$key is an alias, preferred directive name is $new_ns.$new_dir", E_USER_NOTICE);
             return;
         }
         try {

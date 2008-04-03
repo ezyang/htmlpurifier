@@ -27,7 +27,6 @@ DOCUMENTATION
 IMPORTANT FEATURES
  - Get everything into configuration objects (filters, I'm looking at you)
  - Factor out command line parser into its own class, and unit test it
- - Emit notices when aliases are used (allow muting these errors)
 
 CONFIGDOC
  - Properly integrate new ConfigSchema system into configdoc. DESCRIPTIONS

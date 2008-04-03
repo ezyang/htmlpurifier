@@ -6,7 +6,7 @@ class HTMLPurifier_Strategy_ValidateAttributes_IDTest extends HTMLPurifier_Strat
     function setUp() {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_ValidateAttributes();
-        $this->config->set('HTML', 'EnableAttrID', true);
+        $this->config->set('Attr', 'EnableID', true);
     }
     
     

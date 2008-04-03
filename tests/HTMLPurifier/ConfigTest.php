@@ -161,6 +161,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->expectError('Cannot get value from aliased directive, use real name Home.Rug');
         $config->get('Home', 'Carpet');
         
+        $this->expectError('Home.Carpet is an alias, preferred directive name is Home.Rug');
         $config->set('Home', 'Carpet', 999);
         $this->assertIdentical($config->get('Home', 'Rug'), 999);
         
