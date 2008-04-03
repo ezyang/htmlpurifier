@@ -27,9 +27,6 @@ DOCUMENTATION
 IMPORTANT FEATURES
  - Get everything into configuration objects (filters, I'm looking at you)
  - Factor out command line parser into its own class, and unit test it
- - Verbose mode for webtester that includes transcript from command line
- - Command line maintenance scripts must complain with exit(1) if there are
-   fatal errors
  - Emit notices when aliases are used (allow muting these errors)
 
 CONFIGDOC

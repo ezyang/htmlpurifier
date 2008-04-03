@@ -178,3 +178,33 @@ function printTokens($tokens, $index = null) {
     $string .= '</pre>';
     echo $string;
 }
+
+/**
+ * Convenient "insta-fail" test-case to add if any outside things fail
+ */
+class FailedTest extends UnitTestCase {
+    protected $msg, $details;
+    public function __construct($msg, $details = null) {
+        $this->msg = $msg;
+        $this->details = $details;
+    }
+    public function test() {
+        $this->fail($this->msg);
+        if ($this->details) $this->_reporter->paintFormattedMessage($this->details);
+    }
+}
+
+/**
+ * Flushes all caches, and fatally errors out if there's a problem.
+ */
+function htmlpurifier_flush($php, $reporter) {
+    exec($php . ' ../maintenance/flush.php', $out, $status);
+    if ($status) {
+        $test = new FailedTest(
+            'maintenance/flush.php returned non-zero exit status',
+            wordwrap(implode("\n", $out), 80)
+        );
+        $test->run($reporter);
+        exit(1);
+    }
+}

@@ -59,12 +59,17 @@ if ($AC['disable-phpt'] && $AC['only-phpt']) {
 
 // Shell-script code is executed
 
+if ($AC['xml']) {
+    if (!SimpleReporter::inCli()) header('Content-Type: text/xml;charset=UTF-8');
+    $reporter = new XmlReporter();
+} elseif (SimpleReporter::inCli()) {
+    $reporter = new TextReporter();
+} else {
+    $reporter = new HTMLPurifier_SimpleTest_Reporter('UTF-8', $AC);
+}
+
 if ($AC['flush']) {
-    if (SimpleReporter::inCli() && !$AC['xml']) {
-        passthru($AC['php'] . ' ../maintenance/flush.php');
-    } else {
-        shell_exec($AC['php'] . ' ../maintenance/flush.php');
-    }
+    htmlpurifier_flush($AC['php'], $reporter);
 }
 
 // initialize and load HTML Purifier
@@ -155,15 +160,6 @@ if ($AC['file']) {
         htmlpurifier_add_test($test, $test_file);
     }
     
-}
-
-if ($AC['xml']) {
-    if (!SimpleReporter::inCli()) header('Content-Type: text/xml;charset=UTF-8');
-    $reporter = new XmlReporter();
-} elseif (SimpleReporter::inCli()) {
-    $reporter = new TextReporter();
-} else {
-    $reporter = new HTMLPurifier_SimpleTest_Reporter('UTF-8', $AC);
 }
 
 if ($AC['dry']) $reporter->makeDry();

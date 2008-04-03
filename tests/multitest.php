@@ -46,10 +46,15 @@ $aliases = array(
 );
 htmlpurifier_parse_args($AC, $aliases);
 
-// Regenerate any necessary files
-shell_exec($AC['php'] . ' ../maintenance/flush.php');
+if ($AC['xml']) {
+    $reporter = new XmlReporter();
+} else {
+    $reporter = new TextReporter();
+}
 
-$test = new TestSuite('HTML Purifier Multiple Versions Test');
+// Regenerate any necessary files
+htmlpurifier_flush($AC['php'], $reporter);
+
 $file = '';
 
 $test_files = array();
@@ -59,13 +64,14 @@ if ($AC['file']) {
     if (isset($test_files_lookup[$AC['file']])) {
         $file = '--file=' . $AC['file'];
     } else {
-        echo "Invalid file passed\n";
-        exit;
+        throw new Exception("Invalid file passed");
     }
 }
 // This allows us to get out of having to do dry runs.
 $size = count($test_files);
 
+// Setup the test
+$test = new TestSuite('HTML Purifier Multiple Versions Test');
 foreach ($versions_to_test as $version) {
     $flush = '';
     if (is_array($version)) {
@@ -104,11 +110,6 @@ foreach ($versions_to_test as $version) {
 // add more websites, i.e. more configurations to test.
 $test->addTestCase(new RemoteTestCase('http://htmlpurifier.org/dev/tests/?xml=1', 'http://htmlpurifier.org/dev/tests/?xml=1&dry=1&flush=1'));
 
-if ($AC['xml']) {
-    $reporter = new XmlReporter();
-} else {
-    $reporter = new TextReporter();
-}
 $test->run($reporter);
 
 shell_exec($AC['php'] . ' ../maintenance/flush-definition-cache.php');
