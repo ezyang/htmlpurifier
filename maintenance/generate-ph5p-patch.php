@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @file
+ * This file compares our version of PH5P with Jero's original version, and
+ * generates a patch of the differences. This script should be run whenever
+ * library/HTMLPurifier/Lexer/PH5P.php is modified.
+ */
+
 $orig = realpath(dirname(__FILE__) . '/PH5P.php');
 $new  = realpath(dirname(__FILE__) . '/../library/HTMLPurifier/Lexer/PH5P.php');
 $newt = dirname(__FILE__) . '/PH5P.new.php'; // temporary file

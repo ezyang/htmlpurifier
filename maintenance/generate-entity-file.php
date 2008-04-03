@@ -8,7 +8,9 @@ assertCli();
 /**
  * @file
  * Parses *.ent files into an entity lookup table, and then serializes and
- * writes the whole kaboodle to a file. The resulting file should be versioned.
+ * writes the whole kaboodle to a file. The resulting file is cached so
+ * that this script does not need to be run. This script should rarely,
+ * if ever, be run, since HTML's entities are fairly immutable.
  */
 
 // here's where the entity files are located, assuming working directory

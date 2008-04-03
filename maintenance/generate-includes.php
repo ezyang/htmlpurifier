@@ -10,6 +10,8 @@ assertCli();
 /**
  * @file
  * Generates an include stub for users who do not want to use the autoloader.
+ * When new files are added to HTML Purifier's main codebase, this file should
+ * be called.
  */
 
 chdir(dirname(__FILE__) . '/../library/');

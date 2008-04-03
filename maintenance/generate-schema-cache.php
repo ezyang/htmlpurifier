@@ -9,7 +9,11 @@ assertCli();
 /**
  * @file
  * Generates a schema cache file from the contents of
- * library/HTMLPurifier/ConfigSchema/schema.ser
+ * library/HTMLPurifier/ConfigSchema/schema.ser.
+ * 
+ * This should be run when new configuration options are added to
+ * HTML Purifier. A cached version is available via SVN so this does not
+ * normally have to be regenerated.
  */
 
 $target = '../library/HTMLPurifier/ConfigSchema/schema.ser';

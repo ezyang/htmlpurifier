@@ -6,8 +6,10 @@ require_once 'common.php';
 assertCli();
 
 /**
+ * @file
  * Compiles all of HTML Purifier's library files into one big file
- * named HTMLPurifier.standalone.php.
+ * named HTMLPurifier.standalone.php. This is usually called during the
+ * release process.
  */
 
 /**

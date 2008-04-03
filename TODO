@@ -22,7 +22,6 @@ DOCUMENTATION
  - Document new ConfigSchema setup and format; dev-includes.txt is a base
    but we need it in HTML
  - Update French translation of README
- - Document which scripts need to be called when a change is made
 
 IMPORTANT FEATURES
  - Get everything into configuration objects (filters, I'm looking at you)
