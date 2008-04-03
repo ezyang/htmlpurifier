@@ -16,6 +16,7 @@ $target = '../library/HTMLPurifier/ConfigSchema/schema.ser';
 $FS = new FSTools();
 
 $files = $FS->globr('../library/HTMLPurifier/ConfigSchema/schema', '*.txt');
+if (!$files) throw new Exception('Did not find any schema files');
 
 $parser      = new HTMLPurifier_StringHashParser();
 $builder     = new HTMLPurifier_ConfigSchema_InterchangeBuilder();

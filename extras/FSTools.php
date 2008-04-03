@@ -68,7 +68,7 @@ class FSTools
         }
         // Loop through the folder
         $dir = $this->dir($source);
-        while (false !== $entry = $dir->read()) {
+        while ( false !== ($entry = $dir->read()) ) {
             // Skip pointers
             if ($entry == '.' || $entry == '..') {
                 continue;

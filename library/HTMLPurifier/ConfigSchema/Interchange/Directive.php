@@ -38,7 +38,8 @@ class HTMLPurifier_ConfigSchema_Interchange_Directive
     public $allowed;
     
     /**
-     * List of aliases for the directive, e.g. array('Alt.Directive').
+     * List of aliases for the directive,
+     * e.g. array(new HTMLPurifier_ConfigSchema_Interchange_Id('Ns', 'Dir'))).
      */
     public $aliases = array();
     

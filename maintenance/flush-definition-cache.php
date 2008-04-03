@@ -22,8 +22,7 @@ if (isset($argv[1])) {
     if (in_array($argv[1], $names)) {
         $names = array($argv[1]);
     } else {
-        echo "Did not recognized cache parameter {$argv[1]} as valid cache, aborting.\n";
-        exit;
+        throw new Exception("Cache parameter {$argv[1]} is not a valid cache");
     }
 }
 

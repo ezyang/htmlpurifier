@@ -13,8 +13,9 @@ assertCli();
 
 function e($cmd) {
     echo "\$ $cmd\n";
-    passthru($cmd);
+    passthru($cmd, $status);
     echo "\n";
+    if ($status) exit($status);
 }
 
 e('php generate-includes.php');
