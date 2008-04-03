@@ -124,7 +124,9 @@ function htmlpurifier_parse_args(&$AC, $aliases) {
         }
     } else {
         foreach ($_GET as $o => $v) {
-            if (get_magic_quotes_gpc()) $v = stripslashes($v);
+            if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+                $v = stripslashes($v);
+            }
             htmlpurifier_args($AC, $aliases, $o, $v);
         }
     }
@@ -146,8 +148,7 @@ function htmlpurifier_args(&$AC, $aliases, $o, $v) {
 }
 
 /**
- * Adds a test-class; depending on the file's extension this may involve
- * a regular UnitTestCase or a special PHPT test
+ * Adds a test-class; we use file extension to determine which class to use.
  */
 function htmlpurifier_add_test($test, $test_file, $only_phpt = false) {
     switch (strrchr($test_file, ".")) {
