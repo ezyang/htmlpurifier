@@ -1,0 +1,10 @@
+ERROR: Default in directive 'Ns.Dir' must be an allowed value
+----
+Ns
+DESCRIPTION: Namespace
+----
+Ns.Dir
+DESCRIPTION: Directive
+TYPE: string
+DEFAULT: 'a'
+ALLOWED: 'b'
