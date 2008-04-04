@@ -168,12 +168,12 @@ $php = "<?php
  * Changes to include_path are not necessary.
  */
 
-$__dir = dirname(__FILE__);
+\$__dir = dirname(__FILE__);
 
 ";
 
 foreach ($files as $file) {
-    $php .= "require_once \$__dir . '$file';" . PHP_EOL;
+    $php .= "require_once \$__dir . '/$file';" . PHP_EOL;
 }
 
 echo "Writing HTMLPurifier.safe-includes.php... ";
