@@ -25,6 +25,17 @@ class HTMLPurifier_VarParser
     );
     
     /**
+     * Lookup table of types that are string, and can have aliases or
+     * allowed value lists.
+     */
+    static public $stringTypes = array(
+        'string'    => true,
+        'istring'   => true,
+        'text'      => true,
+        'itext'     => true,
+    );
+    
+    /**
      * Validate a variable according to type. Throws
      * HTMLPurifier_VarParserException if invalid.
      * It may return NULL as a valid type if $allow_null is true.

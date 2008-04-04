@@ -23,6 +23,16 @@ class HTMLPurifier_ConfigSchema_ValidatorAtom
         return $this;
     }
     
+    public function assertIsBool() {
+        if (!is_bool($this->contents)) $this->error('must be a boolean');
+        return $this;
+    }
+    
+    public function assertIsArray() {
+        if (!is_array($this->contents)) $this->error('must be an array');
+        return $this;
+    }
+    
     public function assertNotNull() {
         if ($this->contents === null) $this->error('must not be null');
         return $this;
@@ -36,6 +46,14 @@ class HTMLPurifier_ConfigSchema_ValidatorAtom
     
     public function assertNotEmpty() {
         if (empty($this->contents)) $this->error('must not be empty');
+        return $this;
+    }
+    
+    public function assertIsLookup() {
+        $this->assertIsArray();
+        foreach ($this->contents as $v) {
+            if ($v !== true) $this->error('must be a lookup array');
+        }
         return $this;
     }
     

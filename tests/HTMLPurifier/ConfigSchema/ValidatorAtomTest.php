@@ -55,4 +55,36 @@ class HTMLPurifier_ConfigSchema_ValidatorAtomTest extends UnitTestCase
         $this->makeAtom('')->assertNotEmpty();
     }
     
+    public function testAssertIsBool() {
+        $this->makeAtom(false)->assertIsBool();
+    }
+    
+    public function testAssertIsBoolFail() {
+        $this->expectValidationException("Property in context must be a boolean");
+        $this->makeAtom('0')->assertIsBool();
+    }
+    
+    public function testAssertIsArray() {
+        $this->makeAtom(array())->assertIsArray();
+    }
+    
+    public function testAssertIsArrayFail() {
+        $this->expectValidationException("Property in context must be an array");
+        $this->makeAtom('asdf')->assertIsArray();
+    }
+    
+    
+    public function testAssertIsLookup() {
+        $this->makeAtom(array('foo' => true))->assertIsLookup();
+    }
+    
+    public function testAssertIsLookupFail() {
+        $this->expectValidationException("Property in context must be a lookup array");
+        $this->makeAtom(array('foo' => 4))->assertIsLookup();
+    }
+    
+    public function testAssertIsLookupFailIsArray() {
+        $this->expectValidationException("Property in context must be an array");
+        $this->makeAtom('asdf')->assertIsLookup();
+    }
 }

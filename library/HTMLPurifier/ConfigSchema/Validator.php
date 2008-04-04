@@ -79,16 +79,67 @@ class HTMLPurifier_ConfigSchema_Validator
         $this->validateId($d->id);
         $this->with($d, 'description')
             ->assertNotEmpty();
+        
+        // BEGIN - handled by InterchangeBuilder
         $this->with($d, 'type')
-            ->assertNotEmpty(); // handled by InterchangeBuilder
-        // Much stricter default check, since we're using the base implementation.
-        // handled by InterchangeBuilder
+            ->assertNotEmpty();
+        $this->with($d, 'typeAllowsNull')
+            ->assertIsBool();
         try {
+            // This also tests validity of $d->type
             $this->parser->parse($d->default, $d->type, $d->typeAllowsNull);
         } catch (HTMLPurifier_VarParserException $e) {
             $this->error('default', 'had error: ' . $e->getMessage());
         }
+        // END - handled by InterchangeBuilder
         
+        if (!is_null($d->allowed) || !empty($d->valueAliases)) {
+            // allowed and valueAliases require that we be dealing with
+            // strings, so check for that early.
+            if (!isset(HTMLPurifier_VarParser::$stringTypes[$d->type])) {
+                $this->error('type', 'must be a string type when used with allowed or value aliases');
+            }
+        }
+        
+        $this->validateDirectiveAllowed($d);
+        $this->validateDirectiveValueAliases($d);
+        
+        array_pop($this->context);
+    }
+    
+    public function validateDirectiveAllowed($d) {
+        if (is_null($d->allowed)) return;
+        $this->with($d, 'allowed')
+            ->assertNotEmpty()
+            ->assertIsLookup(); // handled by InterchangeBuilder
+        $this->context[] = 'allowed';
+        foreach ($d->allowed as $val => $x) {
+            if (!is_string($val)) $this->error("value $val", 'must be a string');
+        }
+        array_pop($this->context);
+    }
+    
+    public function validateDirectiveValueAliases($d) {
+        if (is_null($d->valueAliases)) return;
+        $this->with($d, 'valueAliases')
+            ->assertIsArray(); // handled by InterchangeBuilder
+        $this->context[] = 'valueAliases';
+        foreach ($d->valueAliases as $alias => $real) {
+            if (!is_string($alias)) $this->error("alias $alias", 'must be a string');
+            if (!is_string($real))  $this->error("alias target $real from alias '$alias'",  'must be a string');
+            if ($alias === $real) {
+                $this->error("alias '$alias'", "must not be an alias to itself");
+            }
+        }
+        if (!is_null($d->allowed)) {
+            foreach ($d->valueAliases as $alias => $real) {
+                if (isset($d->allowed[$alias])) {
+                    $this->error("alias '$alias'", 'must not be an allowed value');
+                } elseif (!isset($d->allowed[$real])) {
+                    $this->error("alias '$alias'", 'must be an alias to an allowed value');
+                }
+            }
+        }
         array_pop($this->context);
     }
     

@@ -72,6 +72,42 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
     
+    public function testDirectiveTypeAllowsNullIsBool() {
+        $this->makeNamespace('Ns');
+        $d = $this->makeDirective('Ns', 'Dir');
+        $d->default = 0;
+        $d->type = 'int';
+        $d->description = 'Description';
+        $d->typeAllowsNull = 'yes';
+        
+        $this->expectValidationException("TypeAllowsNull in directive 'Ns.Dir' must be a boolean");
+        $this->validator->validate($this->interchange);
+    }
+    
+    public function testDirectiveValueAliasesIsArray() {
+        $this->makeNamespace('Ns');
+        $d = $this->makeDirective('Ns', 'Dir');
+        $d->default = 'a';
+        $d->type = 'string';
+        $d->description = 'Description';
+        $d->valueAliases = 2;
+        
+        $this->expectValidationException("ValueAliases in directive 'Ns.Dir' must be an array");
+        $this->validator->validate($this->interchange);
+    }
+    
+    public function testDirectiveAllowedIsLookup() {
+        $this->makeNamespace('Ns');
+        $d = $this->makeDirective('Ns', 'Dir');
+        $d->default = 'foo';
+        $d->type = 'string';
+        $d->description = 'Description';
+        $d->allowed = array('foo' => 1);
+        
+        $this->expectValidationException("Allowed in directive 'Ns.Dir' must be a lookup array");
+        $this->validator->validate($this->interchange);
+    }
+    
     // helper functions
     
     protected function makeNamespace($n) {
