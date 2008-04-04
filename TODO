@@ -45,7 +45,6 @@ NICE FEATURES
 
 BUGS
  - Style attribute height/width limiting for images
- - Support for hard-coded paths/dirname(__FILE__) in include stub and autoload
  - Easy way to blacklist elements and attributes
  - Investigate iconv error emitting
  - Investigate UTF-8 optimization <http://htmlpurifier.org/phorum/read.php?3,1496>

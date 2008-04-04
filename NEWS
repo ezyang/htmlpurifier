@@ -16,7 +16,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   or HTMLPurifier.includes.php; setting the include path and including
   HTMLPurifier.php is insufficient--in such cases include HTMLPurifier.autoload.php
   as well to register our autoload handler (or modify your autoload function
-  to check HTMLPurifier_Bootstrap::getPath($class)).
+  to check HTMLPurifier_Bootstrap::getPath($class)). You can also use
+  HTMLPurifier.safe-includes.php for a less performance friendly but more
+  user-friendly library load.
 # HTMLPurifier_ConfigSchema static functions are officially deprecated. Schema
   information is stored in the ConfigSchema directory, and the
   maintenance/generate-schema-cache.php generates the schema.ser file, which
