@@ -34,6 +34,11 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
 <div id="index">Return to the <a href="index.html">index</a>.</div>
 <div id="home"><a href="http://htmlpurifier.org/">HTML Purifier</a> End-User Documentation</div>
 
+<p>
+  <strong>Warning:</strong> This table is kept for historical purposes and
+  is not being actively updated.
+</p>
+
 <h2>Key</h2>
 
 <table cellspacing="0"><tbody>
@@ -148,7 +153,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     Depends on background-image</td></tr>
 <tr class="css1 impl-yes"><td>background-position</td><td>Depends on background-image</td></tr>
 <tr class="danger impl-no"><td>cursor</td><td>Dangerous but fluffy</td></tr>
-<tr class="danger css1"><td>display</td><td>ENUM(...), Dangerous but interesting;
+<tr class="danger impl-yes"><td>display</td><td>ENUM(...), Dangerous but interesting;
     will not implement list-item, run-in (Opera only) or table (no IE);
     inline-block has incomplete IE6 support and requires -moz-inline-box
     for Mozilla. Unknown target milestone.</td></tr>
@@ -167,7 +172,7 @@ thead th {text-align:left;padding:0.1em;background-color:#EEE;}
     Mostly supported. Unknown target milestone.</td></tr>
 <tr><td>page-break-inside</td><td>ENUM(avoid, auto), Opera only. Unknown target milestone.</td></tr>
 <tr class="impl-no"><td>quotes</td><td>May be dropped from CSS2, fairly useless for inline context</td></tr>
-<tr class="impl-no"><td>visibility</td><td>ENUM(visible, hidden, collapse),
+<tr class="danger impl-yes"><td>visibility</td><td>ENUM(visible, hidden, collapse),
     Dangerous</td></tr>
 <tr class="css1 feature impl-partial"><td>white-space</td><td>ENUM(normal, pre, nowrap, pre-wrap,
     pre-line), Spotty implementation:

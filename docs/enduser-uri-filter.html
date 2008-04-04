@@ -33,9 +33,9 @@
 
 <pre>class HTMLPurifier_URIFilter_<strong>NameOfFilter</strong> extends HTMLPurifier_URIFilter
 {
-    var $name = '<strong>NameOfFilter</strong>';
-    function prepare($config) {}
-    function filter(&$uri, $config, &$context) {}
+    public $name = '<strong>NameOfFilter</strong>';
+    public function prepare($config) {}
+    public function filter(&$uri, $config, &$context) {}
 }</pre>
 
 <p>
@@ -56,12 +56,12 @@
 
 <pre>class HTMLPurifier_URI
 {
-    var $scheme, $userinfo, $host, $port, $path, $query, $fragment;
-    function HTMLPurifier_URI($scheme, $userinfo, $host, $port, $path, $query, $fragment);
-    function toString();
-    function copy();
-    function getSchemeObj($config, &$context);
-    function validate($config, &$context);
+    public $scheme, $userinfo, $host, $port, $path, $query, $fragment;
+    public function HTMLPurifier_URI($scheme, $userinfo, $host, $port, $path, $query, $fragment);
+    public function toString();
+    public function copy();
+    public function getSchemeObj($config, &$context);
+    public function validate($config, &$context);
 }</pre>
 
 <p>
@@ -138,8 +138,8 @@
 
 <pre>class HTMLPurifier_URIFilter_ConvertIDNToPunycode extends HTMLPurifier_URIFilter
 {
-    var $name = 'ConvertIDNToPunycode';
-    function filter(&$uri, $config, &$context) {
+    public $name = 'ConvertIDNToPunycode';
+    public function filter(&$uri, $config, &$context) {
         if (is_null($uri->host)) return true;
         if ($uri->host == utf8_decode($uri->host)) {
             // is ASCII, abort

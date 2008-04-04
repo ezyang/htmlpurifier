@@ -17,7 +17,6 @@ a lot of strtolower() calls, no legit casing
     URI - multiple regular expressions; missing validation for parts (?)
     CSS - parser doesn't accept advanced CSS (fringe)
     Number - constructor interface inconsistent with Integer
-ConfigSchema - redefinition is a mess
 Strategy
     FixNesting - cannot bubble nodes out of structures, duplicated checks
         for special-case parent node
