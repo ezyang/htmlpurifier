@@ -1,4 +1,4 @@
-ERROR: Expected type string, got integer in TYPE/DEFAULT in directive hash 'Ns.Dir'
+ERROR: Expected type string, got integer in DEFAULT in directive hash 'Ns.Dir'
 ----
 Ns
 DESCRIPTION: Namespace

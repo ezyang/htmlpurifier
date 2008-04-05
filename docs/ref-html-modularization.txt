@@ -1,6 +1,9 @@
 
 The Modularization of HTMLDefinition in HTML Purifier
 
+WARNING: This document was drafted before the implementation of this
+    system, and some implementation details may have evolved over time.
+
 HTML Purifier uses the modularization of XHTML
 <http://www.w3.org/TR/xhtml-modularization/> to organize the internals
 of HTMLDefinition into a more manageable and extensible fashion. Rather

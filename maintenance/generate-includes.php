@@ -19,11 +19,17 @@ $FS = new FSTools();
 
 $exclude_dirs = array(
     'HTMLPurifier/Language/',
+    'HTMLPurifier/ConfigSchema/',
     'HTMLPurifier/Filter/',
+    'HTMLPurifier/Printer/',
+    /* These should be excluded, but need to have ConfigSchema support first
+    
+    */
 );
 $exclude_files = array(
     'HTMLPurifier/Lexer/PEARSax3.php',
     'HTMLPurifier/Lexer/PH5P.php',
+    'HTMLPurifier/Printer.php',
 );
 
 // Determine what files need to be included:

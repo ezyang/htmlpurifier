@@ -60,7 +60,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
             try {
                 $directive->default = $this->varParser->parse($hash->offsetGet('DEFAULT'), $directive->type, $directive->typeAllowsNull);
             } catch (HTMLPurifier_VarParserException $e) {
-                throw new HTMLPurifier_ConfigSchema_Exception($e->getMessage() . " in TYPE/DEFAULT in directive hash '$id'");
+                throw new HTMLPurifier_ConfigSchema_Exception($e->getMessage() . " in DEFAULT in directive hash '$id'");
             }
         }
         

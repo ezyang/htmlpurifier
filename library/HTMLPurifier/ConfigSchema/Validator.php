@@ -131,7 +131,7 @@ class HTMLPurifier_ConfigSchema_Validator
         $this->with($d, 'allowed')
             ->assertNotEmpty()
             ->assertIsLookup(); // handled by InterchangeBuilder
-        if (!isset($d->allowed[$d->default])) {
+        if (is_string($d->default) && !isset($d->allowed[$d->default])) {
             $this->error('default', 'must be an allowed value');
         }
         $this->context[] = 'allowed';

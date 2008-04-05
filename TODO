@@ -19,8 +19,6 @@ IMPORTANT
  - Release candidate, because of the major changes
 
 DOCUMENTATION
- - Document new ConfigSchema setup and format; dev-includes.txt is a base
-   but we need it in HTML
  - Update French translation of README
 
 IMPORTANT FEATURES
