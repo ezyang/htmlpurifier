@@ -209,3 +209,16 @@ function htmlpurifier_flush($php, $reporter) {
         exit(1);
     }
 }
+
+/**
+ * Dumps error queue, useful if there has been a fatal error.
+ */
+function htmlpurifier_dump_error_queue() {
+    $context = &SimpleTest::getContext();
+    $queue = &$context->get('SimpleErrorQueue');
+    if ($queue && !empty($queue->_queue)) {
+        // replace this with something prettier
+        var_dump($queue->_queue);
+    }
+}
+register_shutdown_function('htmlpurifier_dump_error_queue');

@@ -509,7 +509,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
         );
     }
     
-    function test_tokenizeHTML_() {
+    function test_tokenizeHTML_style() {
         $extra = array(
                 // PH5P doesn't seem to like style tags
                 'PH5P' => false,
@@ -540,6 +540,26 @@ div {}
                 new HTMLPurifier_Token_End('style'),
             ),
             $extra
+        );
+    }
+    
+    function test_tokenizeHTML_() {
+        $this->assertTokenization(
+            '<a@>>',
+            array(
+                new HTMLPurifier_Token_Start('a'),
+                new HTMLPurifier_Token_Text('>'),
+                new HTMLPurifier_Token_End('a'),
+            ),
+            array(
+                'DirectLex' => array(
+                    // Technically this is invalid, but it won't be a
+                    // problem with invalid element removal; also, this
+                    // mimics Mozilla's parsing of the tag.
+                    new HTMLPurifier_Token_Start('a@'),
+                    new HTMLPurifier_Token_Text('>'),
+                ),
+            )
         );
     }
     

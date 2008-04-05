@@ -63,16 +63,10 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             $e =& $context->get('ErrorCollector');
         }
         
-        // infinite loop protection
-        // has to be pretty big, since html docs can be big
-        // we're allow two hundred thousand tags... more than enough?
-        // NOTE: this is also used for synchronization, so watch out
+        // for testing synchronization
         $loops = 0;
         
-        while(true) {
-            
-            // infinite loop protection
-            if (++$loops > 200000) return array();
+        while(++$loops) {
             
             // recalculate lines
             if (
@@ -381,15 +375,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         // space, so let's guarantee that there's always a terminating space.
         $string .= ' ';
         
-        // infinite loop protection
-        $loops = 0;
         while(true) {
-            
-            // infinite loop protection
-            if (++$loops > 1000) {
-                trigger_error('Infinite loop detected in attribute parsing', E_USER_WARNING);
-                return array();
-            }
             
             if ($cursor >= $size) {
                 break;

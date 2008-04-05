@@ -115,7 +115,7 @@ class HTML5 {
 
     public function __construct($data) {
         $data = str_replace("\r\n", "\n", $data);
-        $date = str_replace("\r", null, $data);
+        $data = str_replace("\r", null, $data);
 
         $this->data = $data;
         $this->char = -1;
@@ -2143,7 +2143,7 @@ class HTML5TreeConstructer {
                     /* Reconstruct the active formatting elements, if any. */
                     $this->reconstructActiveFormattingElements();
 
-                    $this->insertElement($token);
+                    $this->insertElement($token, true, true);
                 break;
             }
             break;
@@ -3524,7 +3524,18 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function insertElement($token, $append = true) {
+    private function insertElement($token, $append = true, $check = false) {
+        // Proprietary workaround for libxml2's limitations with tag names
+        if ($check) {
+            // Slightly modified HTML5 tag-name modification,
+            // removing anything that's not an ASCII letter, digit, or hyphen
+            $token['name'] = preg_replace('/[^a-z0-9-]/i', '', $token['name']);
+            // Remove leading hyphens and numbers
+            $token['name'] = ltrim($token['name'], '-0..9');
+            // In theory, this should ever be needed, but just in case
+            if ($token['name'] === '') $token['name'] = 'span'; // arbitrary generic choice
+        }
+        
         $el = $this->dom->createElement($token['name']);
 
         foreach($token['attr'] as $attr) {

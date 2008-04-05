@@ -55,6 +55,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix bug with rgb(0, 1, 2) color syntax with spaces inside shorthand syntax
 - HTMLPurifier_HTMLDefinition->addAttribute can now be called multiple times
   on the same element without emitting errors.
+- Fixed fatal error in PH5P lexer with invalid tag names
 . Plugins now get their own changelogs according to project conventions.
 . Convert tokens to use instanceof, reducing memory footprint and
   improving comparison speed.
