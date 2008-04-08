@@ -29,6 +29,6 @@ if (!$AC['only-phpt']) {
 }
 
 // PHPT tests
-if (!$AC['disable-phpt']) {
+if (!$AC['disable-phpt'] && version_compare(PHP_VERSION, '5.2', '>=')) {
     $phpt_dirs[] = 'HTMLPurifier/PHPT';
 }
