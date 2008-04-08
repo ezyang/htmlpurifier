@@ -1,4 +1,4 @@
-ERROR: Invalid type 'foobar' in TYPE/DEFAULT in directive hash 'Ns.Dir'
+ERROR: Invalid type 'foobar' in DEFAULT in directive hash 'Ns.Dir'
 ----
 Ns
 DESCRIPTION: Namespace
