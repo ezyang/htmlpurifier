@@ -145,7 +145,6 @@ if ($AC['file']) {
     }
 }
 
-// we can't use addTestFile because SimpleTest chokes on E_STRICT warnings
 if ($AC['file']) {
     
     $test = new TestSuite($AC['file']);

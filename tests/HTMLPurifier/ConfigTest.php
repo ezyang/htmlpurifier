@@ -10,10 +10,6 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->schema = new HTMLPurifier_ConfigSchema();
     }
     
-    function tearDown() {
-        tally_errors($this);
-    }
-    
     // test functionality based on ConfigSchema
     
     function testNormal() {
@@ -129,7 +125,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     function testNull() {
         
         $this->schema->addNamespace('ReportCard');
-        $this->schema->add('ReportCard', 'English', null, 'string', false);
+        $this->schema->add('ReportCard', 'English', null, 'string', true);
         $this->schema->add('ReportCard', 'Absences', 0, 'int', false);
         
         $config = new HTMLPurifier_Config($this->schema);
@@ -266,7 +262,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     
     function test_getDefinition() {
         $this->schema->addNamespace('Cache', 'Cache stuff');
-        $this->schema->add('Cache', 'DefinitionImpl', null, 'string/null', 'Cache?');
+        $this->schema->add('Cache', 'DefinitionImpl', null, 'string', true);
         $this->schema->addNamespace('Crust', 'Krusty Krabs');
         $config = new HTMLPurifier_Config($this->schema);
         $this->expectError("Definition of Crust type not supported");
@@ -361,7 +357,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         
     }
     
-    function __onlytest_loadArrayFromForm() {
+    function test_loadArrayFromForm() {
         
         $this->schema->addNamespace('Pancake');
         $this->schema->add('Pancake', 'Mix', 'buttermilk', 'string', false);

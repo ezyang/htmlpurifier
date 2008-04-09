@@ -64,7 +64,6 @@ require '../extras/HTMLPurifierExtras.auto.php';
 // load SimpleTest addon functions
 require 'generate_mock_once.func.php';
 require 'path2class.func.php';
-require 'tally_errors.func.php'; // compat
 
 /**
  * Arguments parser, is cli and web agnostic.

@@ -9,10 +9,6 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
         $this->schema = new HTMLPurifier_ConfigSchema();
     }
     
-    function tearDown() {
-        tally_errors($this);
-    }
-    
     function test_defineNamespace() {
         $this->schema->addNamespace('http');
         $this->assertIdentical($this->schema->info['http'], array());
