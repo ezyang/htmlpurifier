@@ -22,9 +22,9 @@ if ($data !== false && $data !== '') {
 
 // Note on running SimpleTest:
 //      Because HTML Purifier is PHP5-only and E_STRICT compliant, SimpleTest
-//      1.0.1 will not work; you need to run SimpleTest off its trunk using
+//      1.0.1 will not work; you need to run SimpleTest off its trunk using:
 //
-//        $ svn co https://simpletest.svn.sourceforge.net/svnroot/simpletest/simpletest/trunk
+//        $ svn co https://simpletest.svn.sourceforge.net/svnroot/simpletest/simpletest/trunk simpletest
 //
 //      If SimpleTest is borked with HTML Purifier, please contact me or
 //      the SimpleTest devs; I am a developer for SimpleTest so I should be
@@ -40,7 +40,10 @@ $simpletest_location = '/path/to/simpletest/';
 //      Vanilla PHPT from http://phpt.info will not work, because there are 
 //      a number of bugs that prevent HTML Purifier from doing what they need
 //      to do. If you really want to run PHPT, you'll will need to apply the
-//      patches in maintenance/phpt-modifications.patch on the PHPT Core.
+//      patches in maintenance/phpt-modifications.patch on the PHPT Core trunk,
+//      which can be checked out using:
+//
+//        $ svn co https://svn.phpt.info/Core/trunk phpt-core
 
 // Should PHPT tests be enabled?
 $GLOBALS['HTMLPurifierTest']['PHPT'] = false;

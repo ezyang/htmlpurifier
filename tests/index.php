@@ -12,6 +12,10 @@
  *   - xml, whether or not to output XML
  *   - dry, whether or not to do a dry run
  *
+ * If you're interested in running the test-cases, mosey over to
+ * ../test-settings.sample.php, copy the file to test-settings.php and follow
+ * the enclosed instructions.
+ *
  * @warning File setup does not exactly match with autoloader; make sure that
  *          non-test classes (i.e. classes that are not retrieved using
  *          $test_files) do not have underscores in their names.
