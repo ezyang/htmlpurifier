@@ -29,8 +29,8 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
         flush();
     }
     
-    public function _getCss() {
-        $css = parent::_getCss();
+    protected function getCss() {
+        $css = parent::getCss();
         $css .= '
         #select {position:absolute;top:0.2em;right:0.2em;}
         ';
