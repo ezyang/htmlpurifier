@@ -108,7 +108,6 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
         $this->config->set('HTML', 'Parent', 'obviously-impossible');
         // $this->expectError('Cannot use unrecognized element as parent');
         $this->assertResult('<div>Accept</div>');
-        $this->swallowErrors();
     }
     
     function testCascadingRemovalOfNodesMissingRequiredChildren() {

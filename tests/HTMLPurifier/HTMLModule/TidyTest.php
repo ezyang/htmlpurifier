@@ -111,10 +111,6 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
         )));
         $module->construct($config);
         
-        // done
-        
-        $module->tally();
-        
     }
     
     function test_makeFixesForLevel() {

@@ -152,12 +152,12 @@ function htmlpurifier_args(&$AC, $aliases, $o, $v) {
 function htmlpurifier_add_test($test, $test_file, $only_phpt = false) {
     switch (strrchr($test_file, ".")) {
         case '.phpt':
-            return $test->addTestCase(new PHPT_Controller_SimpleTest($test_file));
+            return $test->add(new PHPT_Controller_SimpleTest($test_file));
         case '.php':
             require_once $test_file;
-            return $test->addTestClass(path2class($test_file));
+            return $test->add(path2class($test_file));
         case '.vtest':
-            return $test->addTestCase(new HTMLPurifier_ConfigSchema_ValidatorTestCase($test_file));
+            return $test->add(new HTMLPurifier_ConfigSchema_ValidatorTestCase($test_file));
         default:
             trigger_error("$test_file is an invalid file for testing", E_USER_ERROR);
     }
@@ -213,8 +213,8 @@ function htmlpurifier_flush($php, $reporter) {
  * Dumps error queue, useful if there has been a fatal error.
  */
 function htmlpurifier_dump_error_queue() {
-    $context = &SimpleTest::getContext();
-    $queue = &$context->get('SimpleErrorQueue');
+    $context = SimpleTest::getContext();
+    $queue = $context->get('SimpleErrorQueue');
     if ($queue && !empty($queue->_queue)) {
         // replace this with something prettier
         var_dump($queue->_queue);

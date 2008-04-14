@@ -40,9 +40,6 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
         $result = $def->validate($input, $config, $context);
         $this->assertIdentical($output, $result);
         
-        $def1->tally();
-        $def2->tally();
-        
         // second test, first def fails, second def works
         
         $def1 = new HTMLPurifier_AttrDefMock();
@@ -60,9 +57,6 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
         $result = $def->validate($input, $config, $context);
         $this->assertIdentical($output, $result);
         
-        $def1->tally();
-        $def2->tally();
-        
         // third test, all fail, so composite faiils
         
         $def1 = new HTMLPurifier_AttrDefMock();
@@ -79,9 +73,6 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
         
         $result = $def->validate($input, $config, $context);
         $this->assertIdentical($output, $result);
-        
-        $def1->tally();
-        $def2->tally();
         
     }
     

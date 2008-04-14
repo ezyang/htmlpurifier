@@ -25,14 +25,14 @@ class HTMLPurifier_ErrorCollectorEMock extends HTMLPurifier_ErrorCollectorMock
     
     public function send($v1, $v2) {
         // test for context
-        $context =& SimpleTest::getContext();
-        $test =& $context->getTest();
+        $context = SimpleTest::getContext();
+        $test = $context->getTest();
         
         // compat
         if (empty($this->_mock)) {
-            $mock =& $this;
+            $mock = $this;
         } else {
-            $mock =& $this->_mock;
+            $mock = $this->_mock;
         }
         
         foreach ($this->_expected_context as $key => $value) {

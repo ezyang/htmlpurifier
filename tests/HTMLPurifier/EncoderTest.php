@@ -36,7 +36,6 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
             "\xF6", // this is invalid
             'Expected identical [Binary: F6]'
         );
-        $this->assertNoErrors();
         
         $config = HTMLPurifier_Config::create(array(
             'Core.Encoding' => 'ISO-8859-1'

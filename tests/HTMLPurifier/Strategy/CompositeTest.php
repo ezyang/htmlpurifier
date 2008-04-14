@@ -59,12 +59,6 @@ class HTMLPurifier_Strategy_CompositeTest extends HTMLPurifier_Harness
         $output = $composite->execute($input_1, $config, $context);
         $this->assertIdentical($input_4, $output);
         
-        // tally the calls
-        
-        $mock_1->tally();
-        $mock_2->tally();
-        $mock_3->tally();
-        
     }
     
 }
