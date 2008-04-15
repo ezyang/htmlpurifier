@@ -34,7 +34,10 @@ $phpv = 'phpv';
 
 // load configuration
 if (file_exists('../conf/test-settings.php')) include '../conf/test-settings.php';
-if (file_exists('../test-settings.php')) include '../test-settings.php';
+elseif (file_exists('../test-settings.php')) include '../test-settings.php';
+else {
+    throw new Exception('Please create a test-settings.php file by copying test-settings.sample.php and configuring accordingly');
+}
 
 // load SimpleTest
 require_once $simpletest_location . 'unit_tester.php';
