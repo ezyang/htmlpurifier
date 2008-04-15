@@ -24,6 +24,8 @@
  */
 
 define('HTMLPurifierTest', 1);
+$php = 'php'; // for safety
+
 require_once 'common.php';
 
 if (!SimpleReporter::inCli()) {
@@ -37,7 +39,7 @@ $AC['exclude-standalone'] = false;
 $AC['file']  = '';
 $AC['xml']   = false;
 $AC['quiet'] = false;
-$AC['php'] = 'php';
+$AC['php'] = $php;
 $AC['disable-phpt'] = false;
 $AC['only-phpt'] = false;
 $aliases = array(
@@ -80,7 +82,7 @@ foreach ($versions_to_test as $version) {
     }
     if (!$AC['only-phpt']) {
         if (!$AC['exclude-normal']) {
-            $test->addTestCase(
+            $test->add(
                 new CliTestCase(
                     "$phpv $version index.php --xml $flush --disable-phpt $file",
                     $AC['quiet'], $size
@@ -88,7 +90,7 @@ foreach ($versions_to_test as $version) {
             );
         }
         if (!$AC['exclude-standalone']) {
-            $test->addTestCase(
+            $test->add(
                 new CliTestCase(
                     "$phpv $version index.php --xml $flush --standalone --disable-phpt $file",
                     $AC['quiet'], $size
@@ -97,7 +99,7 @@ foreach ($versions_to_test as $version) {
         }
     }
     if (!$AC['disable-phpt']) { // naming is not consistent
-        $test->addTestCase(
+        $test->add(
             new CliTestCase(
                 $AC['php'] . " index.php --xml --php \"$phpv $version\" --only-phpt",
                 $AC['quiet'], $size
@@ -108,8 +110,6 @@ foreach ($versions_to_test as $version) {
 
 // This is the HTML Purifier website's test XML file. We could
 // add more websites, i.e. more configurations to test.
-$test->addTestCase(new RemoteTestCase('http://htmlpurifier.org/dev/tests/?xml=1', 'http://htmlpurifier.org/dev/tests/?xml=1&dry=1&flush=1'));
+// $test->add(new RemoteTestCase('http://htmlpurifier.org/dev/tests/?xml=1', 'http://htmlpurifier.org/dev/tests/?xml=1&dry=1&flush=1'));
 
 $test->run($reporter);
-
-shell_exec($AC['php'] . ' ../maintenance/flush-definition-cache.php');

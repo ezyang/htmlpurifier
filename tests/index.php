@@ -25,6 +25,8 @@ define('HTMLPurifierTest', 1);
 define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
 chdir(dirname(__FILE__));
 
+$php = 'php'; // for safety
+
 require 'common.php';
 
 $AC = array(); // parameters
@@ -33,7 +35,7 @@ $AC['standalone'] = false;
 $AC['file'] = '';
 $AC['xml'] = false;
 $AC['dry'] = false;
-$AC['php'] = 'php';
+$AC['php'] = $php;
 
 // Convenience parameters for running quicker tests; ideally all tests
 // should be performed.

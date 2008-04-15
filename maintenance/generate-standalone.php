@@ -133,12 +133,15 @@ $FS->rmdirr('standalone'); // ensure a clean copy
 
 // data files
 $FS->mkdirr('standalone/HTMLPurifier/DefinitionCache/Serializer');
-make_dir_standalone('HTMLPurifier/EntityLookup');
+make_file_standalone('HTMLPurifier/EntityLookup/entities.ser');
 make_file_standalone('HTMLPurifier/ConfigSchema/schema.ser');
 
 // non-standard inclusion setup
+make_dir_standalone('HTMLPurifier/ConfigSchema');
 make_dir_standalone('HTMLPurifier/Language');
 make_dir_standalone('HTMLPurifier/Filter');
+make_dir_standalone('HTMLPurifier/Printer');
+make_file_standalone('HTMLPurifier/Printer.php');
 make_file_standalone('HTMLPurifier/Lexer/PH5P.php');
 make_file_standalone('HTMLPurifier/Lexer/PEARSax3.php');
 

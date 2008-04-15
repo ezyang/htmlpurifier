@@ -106,7 +106,8 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
    function testInvalidParentError() {
         // test fallback to div
         $this->config->set('HTML', 'Parent', 'obviously-impossible');
-        // $this->expectError('Cannot use unrecognized element as parent');
+        $this->config->set('Cache', 'DefinitionImpl', null);
+        $this->expectError('Cannot use unrecognized element as parent');
         $this->assertResult('<div>Accept</div>');
     }
     

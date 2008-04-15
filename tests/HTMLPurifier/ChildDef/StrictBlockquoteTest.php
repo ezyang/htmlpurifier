@@ -71,9 +71,10 @@ extends HTMLPurifier_ChildDefHarness
     }
     
     function testError() {
-        // $this->expectError('Cannot use non-block element as block wrapper');
+        $this->expectError('Cannot use non-block element as block wrapper');
         $this->obj = new HTMLPurifier_ChildDef_StrictBlockquote('div | p');
         $this->config->set('HTML', 'BlockWrapper', 'dav');
+        $this->config->set('Cache', 'DefinitionImpl', null);
         $this->assertResult('Needs wrap', '<p>Needs wrap</p>');
     }
     

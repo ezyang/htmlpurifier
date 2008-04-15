@@ -215,9 +215,8 @@ function htmlpurifier_flush($php, $reporter) {
 function htmlpurifier_dump_error_queue() {
     $context = SimpleTest::getContext();
     $queue = $context->get('SimpleErrorQueue');
-    if ($queue && !empty($queue->_queue)) {
-        // replace this with something prettier
-        var_dump($queue->_queue);
+    while (($error = $queue->extract()) !== false) {
+        var_dump($error);
     }
 }
 register_shutdown_function('htmlpurifier_dump_error_queue');
