@@ -18,7 +18,7 @@ function e($cmd) {
     if ($status) exit($status);
 }
 
-e('php generate-includes.php');
-e('php generate-schema-cache.php');
-e('php flush-definition-cache.php');
-e('php generate-standalone.php');
+e($argv[0] . ' generate-includes.php');
+e($argv[0] . ' generate-schema-cache.php');
+e($argv[0] . ' flush-definition-cache.php');
+e($argv[0] . ' generate-standalone.php');
