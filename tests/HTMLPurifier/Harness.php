@@ -6,8 +6,8 @@
 class HTMLPurifier_Harness extends UnitTestCase
 {
     
-    function HTMLPurifier_Harness() {
-        parent::UnitTestCase();
+    public function __construct() {
+        parent::__construct();
     }
     
     protected $config, $context;
@@ -15,7 +15,7 @@ class HTMLPurifier_Harness extends UnitTestCase
     /**
      * Generates easily accessible default config/context
      */
-    function setUp() {
+    public function setUp() {
         list($this->config, $this->context) = $this->createCommon();
     }
     
@@ -24,7 +24,7 @@ class HTMLPurifier_Harness extends UnitTestCase
      * @param &$config Reference to config variable
      * @param &$context Reference to context variable
      */
-    function prepareCommon(&$config, &$context) {
+    protected function prepareCommon(&$config, &$context) {
         $config = HTMLPurifier_Config::create($config);
         if (!$context) $context = new HTMLPurifier_Context();
     }
@@ -33,14 +33,14 @@ class HTMLPurifier_Harness extends UnitTestCase
      * Generates default configuration and context objects
      * @return Defaults in form of array($config, $context)
      */
-    function createCommon() {
+    protected function createCommon() {
         return array(HTMLPurifier_Config::createDefault(), new HTMLPurifier_Context);
     }
     
     /**
      * Normalizes a string to Unix (\n) endings
      */
-    function normalize(&$string) {
+    protected function normalize(&$string) {
         $string = str_replace(array("\r\n", "\r"), "\n", $string);
     }
     
@@ -51,7 +51,7 @@ class HTMLPurifier_Harness extends UnitTestCase
      * @param $result Mixed result from processing
      * @param $expect Mixed expectation for result
      */
-    function assertEitherFailOrIdentical($status, $result, $expect) {
+    protected function assertEitherFailOrIdentical($status, $result, $expect) {
         if ($expect === false) {
             $this->assertFalse($status, 'Expected false result, got true');
         } else {
@@ -60,7 +60,7 @@ class HTMLPurifier_Harness extends UnitTestCase
         }
     }
     
-    function getTests() {
+    public function getTests() {
         // __onlytest makes only one test get triggered
         foreach (get_class_methods(get_class($this)) as $method) {
             if (strtolower(substr($method, 0, 10)) == '__onlytest') {

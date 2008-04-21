@@ -3,7 +3,7 @@
 class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
 {
     
-    function invoke($input) {
+    protected function invoke($input) {
         $validator = new HTMLPurifier_AttrValidator();
         $validator->validateToken($input, $this->config, $this->context);
     }

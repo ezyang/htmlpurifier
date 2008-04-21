@@ -3,7 +3,7 @@
 class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
 {
     
-    function setup() {
+    public function setup() {
         generate_mock_once('HTMLPurifier_Language');
         generate_mock_once('HTMLPurifier_Generator');
     }

@@ -6,7 +6,7 @@ class HTMLPurifier_ContextTest extends HTMLPurifier_Harness
     
     protected $context;
     
-    function setUp() {
+    public function setUp() {
         $this->context = new HTMLPurifier_Context();
     }
     

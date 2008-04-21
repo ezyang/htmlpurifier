@@ -50,10 +50,10 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
      */
     protected $context;
     
-    function HTMLPurifier_ComplexHarness() {
+    public function __construct() {
         $this->lexer     = new HTMLPurifier_Lexer_DirectLex();
         $this->generator = new HTMLPurifier_Generator();
-        parent::HTMLPurifier_Harness();
+        parent::__construct();
     }
     
     /**
@@ -65,7 +65,7 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
      * @param $context_array Context array in form of Key => Value or an actual
      *                       context object.
      */
-    function assertResult($input, $expect = true) {
+    protected function assertResult($input, $expect = true) {
         
         if ($this->to_tokens && is_string($input)) {
             // $func may cause $input to change, so "clone" another copy
@@ -102,14 +102,14 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
     /**
      * Tokenize HTML into tokens, uses member variables for common variables
      */
-    function tokenize($html) {
+    protected function tokenize($html) {
         return $this->lexer->tokenizeHTML($html, $this->config, $this->context);
     }
     
     /**
      * Generate textual HTML from tokens
      */
-    function generate($tokens) {
+    protected function generate($tokens) {
         return $this->generator->generateFromTokens($tokens, $this->config, $this->context);
     }
     

@@ -3,7 +3,7 @@
 class HTMLPurifier_StringHashTest extends UnitTestCase
 {
     
-    public function testUsed() {
+    function testUsed() {
         $hash = new HTMLPurifier_StringHash(array(
             'key' => 'value',
             'key2' => 'value2'

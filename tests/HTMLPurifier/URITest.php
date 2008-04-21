@@ -3,7 +3,7 @@
 class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
 {
     
-    function createURI($uri) {
+    protected function createURI($uri) {
         $parser = new HTMLPurifier_URIParser();
         return $parser->parse($uri);
     }
@@ -16,7 +16,7 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
     
     protected $oldRegistry;
     
-    function &setUpSchemeRegistryMock() {
+    protected function &setUpSchemeRegistryMock() {
         $this->oldRegistry = HTMLPurifier_URISchemeRegistry::instance();
         generate_mock_once('HTMLPurifier_URIScheme');
         generate_mock_once('HTMLPurifier_URISchemeRegistry');
@@ -26,19 +26,19 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
         return $registry;
     }
     
-    function setUpSchemeMock($name) {
+    protected function setUpSchemeMock($name) {
         $registry = $this->setUpSchemeRegistryMock();
         $scheme_mock = new HTMLPurifier_URISchemeMock();
         $registry->setReturnValue('getScheme', $scheme_mock, array($name, '*', '*'));
         return $scheme_mock;
     }
     
-    function setUpNoValidSchemes() {
+    protected function setUpNoValidSchemes() {
         $registry = $this->setUpSchemeRegistryMock();
         $registry->setReturnValue('getScheme', false, array('*', '*', '*'));
     }
     
-    function tearDownSchemeRegistryMock() {
+    protected function tearDownSchemeRegistryMock() {
         HTMLPurifier_URISchemeRegistry::instance($this->oldRegistry);
     }
     
@@ -88,7 +88,7 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
         $this->tearDownSchemeRegistryMock();
     }
     
-    function assertToString($expect_uri, $scheme, $userinfo, $host, $port, $path, $query, $fragment) {
+    protected function assertToString($expect_uri, $scheme, $userinfo, $host, $port, $path, $query, $fragment) {
         $uri = new HTMLPurifier_URI($scheme, $userinfo, $host, $port, $path, $query, $fragment);
         $string = $uri->toString();
         $this->assertIdentical($string, $expect_uri);
@@ -136,7 +136,7 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
         ); 
     }
     
-    function assertValidation($uri, $expect_uri = true) {
+    protected function assertValidation($uri, $expect_uri = true) {
         if ($expect_uri === true) $expect_uri = $uri;
         $uri = $this->createURI($uri);
         $result = $uri->validate($this->config, $this->context);

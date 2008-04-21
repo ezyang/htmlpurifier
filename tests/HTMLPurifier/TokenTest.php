@@ -3,7 +3,7 @@
 class HTMLPurifier_TokenTest extends HTMLPurifier_Harness
 {
     
-    function assertTokenConstruction($name, $attr,
+    protected function assertTokenConstruction($name, $attr,
         $expect_name = null, $expect_attr = null
     ) {
         if ($expect_name === null) $expect_name = $name;

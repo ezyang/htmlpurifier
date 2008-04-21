@@ -3,12 +3,12 @@
 class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifier_Strategy_ErrorsHarness
 {
     
-    function setup() {
+    public function setup() {
         parent::setup();
         $this->config->set('HTML', 'TidyLevel', 'heavy');
     }
     
-    function getStrategy() {
+    protected function getStrategy() {
         return new HTMLPurifier_Strategy_RemoveForeignElements();
     }
     

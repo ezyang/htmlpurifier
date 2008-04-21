@@ -6,7 +6,7 @@
 class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
 {
     
-    function assertValidation($uri, $expect_uri = true) {
+    protected function assertValidation($uri, $expect_uri = true) {
         $this->prepareURI($uri, $expect_uri);
         // convenience hack: the scheme should be explicitly specified
         $scheme = $uri->getSchemeObj($this->config, $this->context);

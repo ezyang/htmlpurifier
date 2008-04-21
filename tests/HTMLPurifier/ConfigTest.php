@@ -5,7 +5,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     
     protected $schema;
     
-    function setUp() {
+    public function setUp() {
         // set up a dummy schema object for testing
         $this->schema = new HTMLPurifier_ConfigSchema();
     }

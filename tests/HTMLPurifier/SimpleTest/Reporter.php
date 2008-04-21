@@ -7,7 +7,7 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
     
     public function __construct($encoding, $ac) {
         $this->ac = $ac;
-        parent::HTMLReporter($encoding);
+        parent::__construct($encoding);
     }
     
     public function paintHeader($test_name) {

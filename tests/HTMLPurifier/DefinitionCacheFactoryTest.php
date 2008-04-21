@@ -6,14 +6,14 @@ class HTMLPurifier_DefinitionCacheFactoryTest extends HTMLPurifier_Harness
     protected $factory;
     protected $oldFactory;
     
-    function setup() {
+    public function setUp() {
         parent::setup();
         $this->factory = new HTMLPurifier_DefinitionCacheFactory();
         $this->oldFactory = HTMLPurifier_DefinitionCacheFactory::instance();
         HTMLPurifier_DefinitionCacheFactory::instance($this->factory);
     }
     
-    function teardown() {
+    public function tearDown() {
         HTMLPurifier_DefinitionCacheFactory::instance($this->oldFactory);
     }
     

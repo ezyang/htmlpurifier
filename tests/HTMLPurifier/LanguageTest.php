@@ -8,7 +8,7 @@ class HTMLPurifier_LanguageTest extends HTMLPurifier_Harness
     
     protected $lang;
     
-    function generateEnLanguage() {
+    protected function generateEnLanguage() {
         $factory = HTMLPurifier_LanguageFactory::instance();
         $config = HTMLPurifier_Config::create(array('Core.Language' => 'en'));
         $context = new HTMLPurifier_Context();

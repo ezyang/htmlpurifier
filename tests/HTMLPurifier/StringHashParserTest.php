@@ -18,12 +18,12 @@ class HTMLPurifier_StringHashParserTest extends UnitTestCase
     /**
      * Assert that $file gets parsed into the form of $expect
      */
-    public function assertParse($file, $expect) {
+    protected function assertParse($file, $expect) {
         $result = $this->parser->parseFile(dirname(__FILE__) . '/StringHashParser/' . $file);
         $this->assertIdentical($result, $expect);
     }
     
-    public function testSimple() {
+    function testSimple() {
         $this->assertParse('Simple.txt', array(
             'ID' => 'Namespace.Directive',
             'TYPE' => 'string',
@@ -33,26 +33,26 @@ class HTMLPurifier_StringHashParserTest extends UnitTestCase
         ));
     }
     
-    public function testOverrideSingle() {
+    function testOverrideSingle() {
         $this->assertParse('OverrideSingle.txt', array(
             'KEY' => 'New',
         ));
     }
     
-    public function testAppendMultiline() {
+    function testAppendMultiline() {
         $this->assertParse('AppendMultiline.txt', array(
             'KEY' => "Line1\nLine2\n",
         ));
     }
     
-    public function testDefault() {
+    function testDefault() {
         $this->parser->default = 'NEW-ID';
         $this->assertParse('Default.txt', array(
             'NEW-ID' => 'DefaultValue',
         ));
     }
     
-    public function testError() {
+    function testError() {
         try {
             $this->parser->parseFile('NoExist.txt');
         } catch (HTMLPurifier_ConfigSchema_Exception $e) {
@@ -60,7 +60,7 @@ class HTMLPurifier_StringHashParserTest extends UnitTestCase
         }
     }
     
-    public function testParseMultiple() {
+    function testParseMultiple() {
         $result = $this->parser->parseMultiFile(dirname(__FILE__) . '/StringHashParser/Multi.txt');
         $this->assertIdentical(
             $result,

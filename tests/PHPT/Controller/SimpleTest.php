@@ -10,7 +10,7 @@ class PHPT_Controller_SimpleTest extends SimpleTestCase
     
     public function __construct($path) {
         $this->_path = $path;
-        parent::SimpleTestCase($path);
+        parent::__construct($path);
     }
     
     public function testPhpt() {

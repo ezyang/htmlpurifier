@@ -9,7 +9,7 @@ class HTMLPurifier_URIHarness extends HTMLPurifier_Harness
      * @param &$expect_uri Reference to string expectation URI
      * @note If $expect_uri is false, it will stay false
      */
-    function prepareURI(&$uri, &$expect_uri) {
+    protected function prepareURI(&$uri, &$expect_uri) {
         $parser = new HTMLPurifier_URIParser();
         if ($expect_uri === true) $expect_uri = $uri;
         $uri = $parser->parse($uri);
@@ -21,7 +21,7 @@ class HTMLPurifier_URIHarness extends HTMLPurifier_Harness
     /**
      * Generates a URI object from the corresponding string
      */
-    function createURI($uri) {
+    protected function createURI($uri) {
         $parser = new HTMLPurifier_URIParser();
         return $parser->parse($uri);
     }

@@ -7,13 +7,13 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
     protected $_entity_lookup;
     protected $config;
     
-    function HTMLPurifier_GeneratorTest() {
-        $this->HTMLPurifier_Harness();
+    public function __construct() {
+        parent::__construct();
         $this->gen = new HTMLPurifier_Generator();
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
     }
     
-    function setUp() {
+    public function setUp() {
         $this->obj       = new HTMLPurifier_Generator();
         $this->func      = null;
         $this->to_tokens = false;
@@ -115,7 +115,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
         
     }
     
-    function assertGeneration($tokens, $expect) {
+    protected function assertGeneration($tokens, $expect) {
         $context = new HTMLPurifier_Context();
         $result = $this->gen->generateFromTokens(
           $tokens, $this->config, $context);

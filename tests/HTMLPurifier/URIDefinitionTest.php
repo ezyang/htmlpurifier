@@ -3,7 +3,7 @@
 class HTMLPurifier_URIDefinitionTest extends HTMLPurifier_URIHarness
 {
     
-    function createFilterMock($expect = true, $result = true) {
+    protected function createFilterMock($expect = true, $result = true) {
         static $i = 0;
         generate_mock_once('HTMLPurifier_URIFilter');
         $mock = new HTMLPurifier_URIFilterMock();

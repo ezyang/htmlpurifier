@@ -3,7 +3,7 @@
 class HTMLPurifier_URIParserTest extends HTMLPurifier_Harness
 {
     
-    function assertParsing(
+    protected function assertParsing(
         $uri, $scheme, $userinfo, $host, $port, $path, $query, $fragment, $config = null, $context = null
     ) {
         $this->prepareCommon($config, $context);

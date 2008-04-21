@@ -5,8 +5,8 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
     
     protected $_has_pear = false;
     
-    function HTMLPurifier_LexerTest() {
-        parent::HTMLPurifier_Harness();
+    public function __construct() {
+        parent::__construct();
         // E_STRICT = 2048, int used for PHP4 compat: this check disables
         // PEAR if PHP 5 strict mode is on, since the class is not strict safe
         if (

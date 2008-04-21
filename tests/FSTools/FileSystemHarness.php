@@ -12,7 +12,7 @@ class FSTools_FileSystemHarness extends UnitTestCase
     protected $dir, $oldDir;
     
     function __construct() {
-        parent::UnitTestCase();
+        parent::__construct();
         $this->dir = 'tmp/' . md5(uniqid(rand(), true)) . '/';
         mkdir($this->dir);
         $this->oldDir = getcwd();

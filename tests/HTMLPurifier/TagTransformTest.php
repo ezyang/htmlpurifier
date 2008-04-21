@@ -30,7 +30,7 @@ class HTMLPurifier_TagTransformTest extends HTMLPurifier_Harness
      * @param $config_array     Configuration array for HTMLPurifier_Config
      * @param $context_array    Context array for HTMLPurifier_Context
      */
-    function assertTransformation($transformer,
+    protected function assertTransformation($transformer,
                                          $name,        $attributes,
                                   $expect_name, $expect_attributes,
                                   $expect_added_attributes = array(),
@@ -119,7 +119,7 @@ class HTMLPurifier_TagTransformTest extends HTMLPurifier_Harness
         
     }
     
-    function assertSizeToStyle($transformer, $size, $style) {
+    protected function assertSizeToStyle($transformer, $size, $style) {
         $this->assertTransformation(
             $transformer,
             'font', array('size' => $size),

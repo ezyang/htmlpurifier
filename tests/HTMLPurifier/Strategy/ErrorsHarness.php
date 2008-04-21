@@ -4,9 +4,9 @@ class HTMLPurifier_Strategy_ErrorsHarness extends HTMLPurifier_ErrorsHarness
 {
     
     // needs to be defined
-    function getStrategy() {}
+    protected function getStrategy() {}
     
-    function invoke($input) {
+    protected function invoke($input) {
         $strategy = $this->getStrategy();
         $lexer = new HTMLPurifier_Lexer_DirectLex();
         $tokens = $lexer->tokenizeHTML($input, $this->config, $this->context);

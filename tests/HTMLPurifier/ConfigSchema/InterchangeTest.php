@@ -9,14 +9,14 @@ class HTMLPurifier_ConfigSchema_InterchangeTest extends UnitTestCase
         $this->interchange = new HTMLPurifier_ConfigSchema_Interchange();
     }
     
-    public function testAddNamespace() {
+    function testAddNamespace() {
         $v = new HTMLPurifier_ConfigSchema_Interchange_Namespace();
         $v->namespace = 'Namespace';
         $this->interchange->addNamespace($v);
         $this->assertIdentical($v, $this->interchange->namespaces['Namespace']);
     }
     
-    public function testAddDirective() {
+    function testAddDirective() {
         $v = new HTMLPurifier_ConfigSchema_Interchange_Directive();
         $v->id = new HTMLPurifier_ConfigSchema_Interchange_Id('Namespace', 'Directive');
         $this->interchange->addDirective($v);

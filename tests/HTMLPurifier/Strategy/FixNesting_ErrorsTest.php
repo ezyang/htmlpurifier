@@ -3,7 +3,7 @@
 class HTMLPurifier_Strategy_FixNesting_ErrorsTest extends HTMLPurifier_Strategy_ErrorsHarness
 {
     
-    function getStrategy() {
+    protected function getStrategy() {
         return new HTMLPurifier_Strategy_FixNesting();
     }
     

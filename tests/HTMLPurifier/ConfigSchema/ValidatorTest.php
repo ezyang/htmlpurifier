@@ -13,34 +13,34 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->interchange = new HTMLPurifier_ConfigSchema_Interchange();
     }
     
-    public function testNamespaceIntegrityViolation() {
+    function testNamespaceIntegrityViolation() {
         $ns = $this->makeNamespace('Ns');
         $ns->namespace = 'AltNs';
         $this->expectValidationException("Integrity violation: key 'Ns' does not match internal id 'AltNs'");
         $this->validator->validate($this->interchange);
     }
     
-    public function testNamespaceNamespaceIsString() {
+    function testNamespaceNamespaceIsString() {
         $this->makeNamespace(3);
         $this->expectValidationException("Namespace in namespace '3' must be a string");
         $this->validator->validate($this->interchange);
     }
     
-    public function testNamespaceDescriptionIsString() {
+    function testNamespaceDescriptionIsString() {
         $ns = $this->makeNamespace('Ns');
         $ns->description = 3;
         $this->expectValidationException("Description in namespace 'Ns' must be a string");
         $this->validator->validate($this->interchange);
     }
     
-    public function testDirectiveIntegrityViolation() {
+    function testDirectiveIntegrityViolation() {
         $d = $this->makeDirective('Ns', 'Dir');
         $d->id = new HTMLPurifier_ConfigSchema_Interchange_Id('Ns', 'Dir2');
         $this->expectValidationException("Integrity violation: key 'Ns.Dir' does not match internal id 'Ns.Dir2'");
         $this->validator->validate($this->interchange);
     }
     
-    public function testDirectiveTypeNotEmpty() {
+    function testDirectiveTypeNotEmpty() {
         $this->makeNamespace('Ns');
         $d = $this->makeDirective('Ns', 'Dir');
         $d->default = 0;
@@ -50,7 +50,7 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
     
-    public function testDirectiveDefaultInvalid() {
+    function testDirectiveDefaultInvalid() {
         $this->makeNamespace('Ns');
         $d = $this->makeDirective('Ns', 'Dir');
         $d->default = 'asdf';
@@ -61,7 +61,7 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
     
-    public function testDirectiveIdDirectiveIsString() {
+    function testDirectiveIdDirectiveIsString() {
         $this->makeNamespace('Ns');
         $d = $this->makeDirective('Ns', 3);
         $d->default = 0;
@@ -72,7 +72,7 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
     
-    public function testDirectiveTypeAllowsNullIsBool() {
+    function testDirectiveTypeAllowsNullIsBool() {
         $this->makeNamespace('Ns');
         $d = $this->makeDirective('Ns', 'Dir');
         $d->default = 0;
@@ -84,7 +84,7 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
     
-    public function testDirectiveValueAliasesIsArray() {
+    function testDirectiveValueAliasesIsArray() {
         $this->makeNamespace('Ns');
         $d = $this->makeDirective('Ns', 'Dir');
         $d->default = 'a';
@@ -96,7 +96,7 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
     
-    public function testDirectiveAllowedIsLookup() {
+    function testDirectiveAllowedIsLookup() {
         $this->makeNamespace('Ns');
         $d = $this->makeDirective('Ns', 'Dir');
         $d->default = 'foo';
