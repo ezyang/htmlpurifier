@@ -12,7 +12,7 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         generate_mock_once('HTMLPurifier_AttrDef');
         $attrdef = new HTMLPurifier_AttrDefMock();
         $attrdef->setReturnValue('make', $attrdef_nmtokens);
-        $manager->attrTypes->info['NMTOKENS'] =& $attrdef;
+        $manager->attrTypes->set('NMTOKENS', $attrdef);
         
         // ...but we add user modules
         
@@ -24,14 +24,19 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         
         $structural_module = new HTMLPurifier_HTMLModule();
         $structural_module->name = 'Structural';
-        $structural_module->addElement('p', true, 'Block', 'Inline', 'Common');
-        $structural_module->addElement('div', false, 'Block', 'Flow');
+        $structural_module->addElement('p', 'Block', 'Inline', 'Common');
         $manager->addModule($structural_module);
         
         $formatting_module = new HTMLPurifier_HTMLModule();
         $formatting_module->name = 'Formatting';
-        $formatting_module->addElement('em', true, 'Inline', 'Inline', 'Common');
+        $formatting_module->addElement('em', 'Inline', 'Inline', 'Common');
         $manager->addModule($formatting_module);
+        
+        $unsafe_module = new HTMLPurifier_HTMLModule();
+        $unsafe_module->name = 'Unsafe';
+        $unsafe_module->safe = false;
+        $unsafe_module->addElement('div', 'Block', 'Flow');
+        $manager->addModule($unsafe_module);
         
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML', 'Trusted', false);
@@ -45,7 +50,6 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         $p->content_model = 'em | #PCDATA';
         $p->content_model_type = 'optional';
         $p->descendants_are_inline = true;
-        $p->safe = true;
         
         $em = new HTMLPurifier_ElementDef();
         $em->attr['class'] = $attrdef_nmtokens;
@@ -53,7 +57,6 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         $em->content_model = 'em | #PCDATA';
         $em->content_model_type = 'optional';
         $em->descendants_are_inline = true;
-        $em->safe = true;
         
         $this->assertEqual(
             array('p' => $p, 'em' => $em),
@@ -67,7 +70,6 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         $div->content_model = 'p | div | em | #PCDATA';
         $div->content_model_type = 'optional';
         $div->descendants_are_inline = false;
-        $div->safe = false;
         
         $this->assertEqual($div, $manager->getElement('div', true));
         

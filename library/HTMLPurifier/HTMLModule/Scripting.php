@@ -31,6 +31,7 @@ class HTMLPurifier_HTMLModule_Scripting extends HTMLPurifier_HTMLModule
     public $name = 'Scripting';
     public $elements = array('script', 'noscript');
     public $content_sets = array('Block' => 'script | noscript', 'Inline' => 'script | noscript');
+    public $safe = false;
     
     public function __construct() {
         // TODO: create custom child-definition for noscript that
@@ -41,13 +42,15 @@ class HTMLPurifier_HTMLModule_Scripting extends HTMLPurifier_HTMLModule
         
         // TODO: convert this to new syntax, main problem is getting
         // both content sets working
-        foreach ($this->elements as $element) {
-            $this->info[$element] = new HTMLPurifier_ElementDef();
-            $this->info[$element]->safe = false;
-        }
+        
+        // In theory, this could be safe, but I don't see any reason to
+        // allow it.
+        $this->info['noscript'] = new HTMLPurifier_ElementDef();
         $this->info['noscript']->attr = array( 0 => array('Common') );
         $this->info['noscript']->content_model = 'Heading | List | Block';
         $this->info['noscript']->content_model_type = 'required';
+        
+        $this->info['script'] = new HTMLPurifier_ElementDef();
         $this->info['script']->attr = array(
             'defer' => new HTMLPurifier_AttrDef_Enum(array('defer')),
             'src'   => new HTMLPurifier_AttrDef_URI(true),

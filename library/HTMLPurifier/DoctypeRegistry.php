@@ -72,9 +72,7 @@ class HTMLPurifier_DoctypeRegistry
      *       based or not).
      */
     public function make($config) {
-        $original_doctype = $this->get($this->getDoctypeFromConfig($config));
-        $doctype = $original_doctype->copy();
-        return $doctype;
+        return clone $this->get($this->getDoctypeFromConfig($config));
     }
     
     /**

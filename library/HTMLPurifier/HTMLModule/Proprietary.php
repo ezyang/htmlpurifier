@@ -11,7 +11,7 @@ class HTMLPurifier_HTMLModule_Proprietary extends HTMLPurifier_HTMLModule
     
     public function __construct() {
         
-        $this->addElement('marquee', true, 'Inline', 'Flow', 'Common', 
+        $this->addElement('marquee', 'Inline', 'Flow', 'Common', 
             array(
                 'direction' => 'Enum#left,right,up,down',
                 'behavior' => 'Enum#alternate',

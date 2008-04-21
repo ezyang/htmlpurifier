@@ -26,6 +26,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 # HTMLPurifier_Config will now throw E_USER_NOTICE when you use a directive
   alias; to get rid of these errors just modify your configuration to use
   the new directive name.
+# Directive-level safety properties superceded in favor of module-level
+  safety. Internal method HTMLModule->addElement() has changed, although 
+  the externally visible HTMLDefinition->addElement has *not* changed.
 ! Extra utility classes for testing and non-library operations can
   be found in extras/. Specifically, these are FSTools and ConfigDoc.
   You may find a use for these in your own project, but right now they
@@ -89,6 +92,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Command line scripts now honor exit codes
 . When --flush fails in unit testers, abort tests and print message
 . Improved documentation in docs/dev-flush.html about the maintenance scripts
+. copy() methods removed in favor of clone keyword
 
 3.0.0, released 2008-01-06
 # HTML Purifier is PHP 5 only! The 2.1.x branch will be maintained

@@ -27,7 +27,7 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
             is_null($uri->host) && is_null($uri->query) && is_null($uri->fragment)
         ) {
             // reference to current document
-            $uri = $this->base->copy();
+            $uri = clone $this->base;
             return true;
         }
         if (!is_null($uri->scheme)) {

@@ -91,16 +91,10 @@ class HTMLPurifier_ElementDef
     public $excludes = array();
     
     /**
-     * Is this element safe for untrusted users to use?
-     */
-    public $safe;
-    
-    /**
      * Low-level factory constructor for creating new standalone element defs
      */
-    public static function create($safe, $content_model, $content_model_type, $attr) {
+    public static function create($content_model, $content_model_type, $attr) {
         $def = new HTMLPurifier_ElementDef();
-        $def->safe = (bool) $safe;
         $def->content_model = $content_model;
         $def->content_model_type = $content_model_type;
         $def->attr = $attr;
@@ -144,7 +138,6 @@ class HTMLPurifier_ElementDef
         }
         if(!is_null($def->child)) $this->child = $def->child;
         if($def->descendants_are_inline) $this->descendants_are_inline = $def->descendants_are_inline;
-        if(!is_null($def->safe)) $this->safe = $def->safe;
         
     }
     
@@ -161,13 +154,6 @@ class HTMLPurifier_ElementDef
             }
             $a1[$k] = $v;
         }
-    }
-    
-    /**
-     * Retrieves a copy of the element definition
-     */
-    public function copy() {
-        return unserialize(serialize($this));
     }
     
 }

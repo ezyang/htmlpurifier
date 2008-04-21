@@ -113,7 +113,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         $module =& $this->getAnonymousModule();
         // assume that if the user is calling this, the element
         // is safe. This may not be a good idea
-        $element =& $module->addElement($element_name, true, $type, $contents, $attr_collections, $attributes);
+        $element =& $module->addElement($element_name, $type, $contents, $attr_collections, $attributes);
         return $element;
     }
     

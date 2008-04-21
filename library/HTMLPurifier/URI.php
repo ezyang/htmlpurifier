@@ -105,12 +105,5 @@ class HTMLPurifier_URI
         return $result;
     }
     
-    /**
-     * Returns a copy of the URI object
-     */
-    public function copy() {
-        return unserialize(serialize($this));
-    }
-    
 }
 

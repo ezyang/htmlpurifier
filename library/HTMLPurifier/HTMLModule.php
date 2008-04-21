@@ -80,6 +80,20 @@ class HTMLPurifier_HTMLModule
     public $defines_child_def = false;
     
     /**
+     * Boolean flag whether or not this module is safe. If it is not safe, all
+     * of its members are unsafe. Modules are safe by default (this might be
+     * slightly dangerous, but it doesn't make much sense to force HTML Purifier,
+     * which is based off of safe HTML, to explicitly say, "This is safe," even
+     * though there are modules which are "unsafe")
+     * 
+     * @note Previously, safety could be applied at an element level granularity.
+     *       We've removed this ability, so in order to add "unsafe" elements
+     *       or attributes, a dedicated module with this property set to false
+     *       must be used.
+     */
+    public $safe = true;
+    
+    /**
      * Retrieves a proper HTMLPurifier_ChildDef subclass based on 
      * content_model and content_model_type member variables of
      * the HTMLPurifier_ElementDef class. There is a similar function
@@ -94,7 +108,6 @@ class HTMLPurifier_HTMLModule
     /**
      * Convenience function that sets up a new element
      * @param $element Name of element to add
-     * @param $safe Is element safe for untrusted users to use?
      * @param $type What content set should element be registered to?
      *              Set as false to skip this step.
      * @param $contents Allowed children in form of:
@@ -106,7 +119,7 @@ class HTMLPurifier_HTMLModule
      * @return Reference to created element definition object, so you 
      *         can set advanced parameters
      */
-    public function &addElement($element, $safe, $type, $contents, $attr_includes = array(), $attr = array()) {
+    public function &addElement($element, $type, $contents, $attr_includes = array(), $attr = array()) {
         $this->elements[] = $element;
         // parse content_model
         list($content_model_type, $content_model) = $this->parseContents($contents);
@@ -116,7 +129,7 @@ class HTMLPurifier_HTMLModule
         if ($type) $this->addElementToContentSet($element, $type);
         // create element
         $this->info[$element] = HTMLPurifier_ElementDef::create(
-            $safe, $content_model, $content_model_type, $attr
+            $content_model, $content_model_type, $attr
         );
         // literal object $contents means direct child manipulation
         if (!is_string($contents)) $this->info[$element]->child = $contents;

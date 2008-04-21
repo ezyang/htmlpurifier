@@ -19,7 +19,7 @@ class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
         
         $module = new HTMLPurifier_HTMLModule();
         $def =& $module->addElement(
-            'a', true, 'Inline', 'Optional: #PCDATA', array('Common'),
+            'a', 'Inline', 'Optional: #PCDATA', array('Common'),
             array(
                 'href' => 'URI'
             )
@@ -27,7 +27,6 @@ class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
         
         $module2 = new HTMLPurifier_HTMLModule();
         $def2 = new HTMLPurifier_ElementDef();
-        $def2->safe = true;
         $def2->content_model = '#PCDATA';
         $def2->content_model_type = 'optional';
         $def2->attr = array(

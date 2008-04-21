@@ -8,7 +8,7 @@ class HTMLPurifier_AttrTypes
     /**
      * Lookup array of attribute string identifiers to concrete implementations
      */
-    public $info = array();
+    protected $info = array();
     
     /**
      * Constructs the info array, supplying default implementations for attribute

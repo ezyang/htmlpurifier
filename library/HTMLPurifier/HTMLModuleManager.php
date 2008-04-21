@@ -59,9 +59,7 @@ class HTMLPurifier_HTMLModuleManager
         $this->attrTypes = new HTMLPurifier_AttrTypes();
         $this->doctypes  = new HTMLPurifier_DoctypeRegistry();
         
-        // setup default HTML doctypes
-        
-        // module reuse
+        // setup basic modules
         $common = array(
             'CommonAttributes', 'Text', 'Hypertext', 'List',
             'Presentation', 'Edit', 'Bdo', 'Tables', 'Image',
@@ -71,6 +69,7 @@ class HTMLPurifier_HTMLModuleManager
         $xml = array('XMLCommonAttributes');
         $non_xml = array('NonXMLCommonAttributes');
         
+        // setup basic doctypes
         $this->doctypes->register(
             'HTML 4.01 Transitional', false,
             array_merge($common, $transitional, $non_xml),
@@ -124,6 +123,9 @@ class HTMLPurifier_HTMLModuleManager
      * @param $module Mixed: string module name, with or without
      *                HTMLPurifier_HTMLModule prefix, or instance of
      *                subclass of HTMLPurifier_HTMLModule.
+     * @param $overload Boolean whether or not to overload previous modules.
+     *                  If this is not set, and you do overload a module,
+     *                  HTML Purifier will complain with a warning.
      * @note This function will not call autoload, you must instantiate
      *       (and thus invoke) autoload outside the method.
      * @note If a string is passed as a module name, different variants
@@ -135,11 +137,8 @@ class HTMLPurifier_HTMLModuleManager
      *       If your object name collides with an internal class, specify
      *       your module manually. All modules must have been included
      *       externally: registerModule will not perform inclusions for you!
-     * @warning If your module has the same name as an already loaded
-     *          module, your module will overload the old one WITHOUT
-     *          warning.
      */
-    public function registerModule($module) {
+    public function registerModule($module, $overload = false) {
         if (is_string($module)) {
             // attempt to load the module
             $original_module = $module;
@@ -164,6 +163,9 @@ class HTMLPurifier_HTMLModuleManager
         if (empty($module->name)) {
             trigger_error('Module instance of ' . get_class($module) . ' must have name');
             return;
+        }
+        if (!$overload && isset($this->registeredModules[$module->name])) {
+            trigger_error('Overloading ' . $module->name . ' without explicit overload parameter', E_USER_WARNING);
         }
         $this->registeredModules[$module->name] = $module;
     }
@@ -274,10 +276,9 @@ class HTMLPurifier_HTMLModuleManager
         
         $elements = array();
         foreach ($this->modules as $module) {
+            if (!$this->trusted && !$module->safe) continue;
             foreach ($module->info as $name => $v) {
                 if (isset($elements[$name])) continue;
-                // if element is not safe, don't use it
-                if (!$this->trusted && ($v->safe === false)) continue;
                 $elements[$name] = $this->getElement($name);
             }
         }
@@ -298,43 +299,45 @@ class HTMLPurifier_HTMLModuleManager
      * @param $trusted Boolean trusted overriding parameter: set to true
      *                 if you want the full version of an element
      * @return Merged HTMLPurifier_ElementDef
+     * @note You may notice that modules are getting iterated over twice (once
+     *       in getElements() and once here). This
+     *       is because 
      */
     public function getElement($name, $trusted = null) {
-        
-        $def = false;
-        if ($trusted === null) $trusted = $this->trusted;
-        
-        $modules = $this->modules;
         
         if (!isset($this->elementLookup[$name])) {
             return false;
         }
         
+        // setup global state variables
+        $def = false;
+        if ($trusted === null) $trusted = $this->trusted;
+        
+        // iterate through each module that has registered itself to this
+        // element
         foreach($this->elementLookup[$name] as $module_name) {
             
-            $module = $modules[$module_name];
+            $module = $this->modules[$module_name];
             
-            // copy is used because, ideally speaking, the original
-            // definition should not be modified. Usually, this will
-            // make no difference, but for consistency's sake
-            $new_def = $module->info[$name]->copy();
-            
-            // refuse to create/merge in a definition that is deemed unsafe
-            if (!$trusted && ($new_def->safe === false)) {
-                $def = false;
+            // refuse to create/merge from a module that is deemed unsafe--
+            // pretend the module doesn't exist--when trusted mode is not on.
+            if (!$trusted && !$module->safe) {
                 continue;
             }
             
+            // clone is used because, ideally speaking, the original
+            // definition should not be modified. Usually, this will
+            // make no difference, but for consistency's sake
+            $new_def = clone $module->info[$name];
+            
             if (!$def && $new_def->standalone) {
-                // element with unknown safety is not to be trusted.
-                // however, a merge-in definition with undefined safety
-                // is fine
-                if (!$trusted && !$new_def->safe) continue;
                 $def = $new_def;
             } elseif ($def) {
+                // This will occur even if $new_def is standalone. In practice,
+                // this will usually result in a full replacement.
                 $def->mergeIn($new_def);
             } else {
-                // could "save it for another day":
+                // :TODO:
                 // non-standalone definitions that don't have a standalone
                 // to merge into could be deferred to the end
                 continue;

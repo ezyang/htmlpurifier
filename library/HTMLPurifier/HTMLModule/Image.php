@@ -12,7 +12,7 @@ class HTMLPurifier_HTMLModule_Image extends HTMLPurifier_HTMLModule
     
     public function __construct() {
         $img =& $this->addElement(
-            'img', true, 'Inline', 'Empty', 'Common',
+            'img', 'Inline', 'Empty', 'Common',
             array(
                 'alt*' => 'Text',
                 'height' => 'Length',

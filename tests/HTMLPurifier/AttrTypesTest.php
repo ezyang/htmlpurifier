@@ -8,7 +8,7 @@ class HTMLPurifier_AttrTypesTest extends HTMLPurifier_Harness
         
         $this->assertIdentical(
             $types->get('CDATA'),
-            $types->info['CDATA']
+            new HTMLPurifier_AttrDef_Text()
         );
         
         $this->expectError('Cannot retrieve undefined attribute type foobar');

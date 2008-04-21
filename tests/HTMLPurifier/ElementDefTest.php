@@ -36,7 +36,6 @@ class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
             'old' => true,
             'removed-old' => true
         );
-        $def1->safe = false;
         
         $def2->standalone = false;
         $def2->attr = array(
@@ -59,7 +58,6 @@ class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
             'new' => true,
             'removed-old' => false
         );
-        $def2->safe = true;
         
         $def1->mergeIn($def2);
         $def1->mergeIn($def3); // empty, has no effect
@@ -85,7 +83,6 @@ class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
             'old' => true,
             'new' => true
         ));
-        $this->assertIdentical($def1->safe, true);
         
     }
     

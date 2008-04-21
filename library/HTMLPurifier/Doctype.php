@@ -55,12 +55,5 @@ class HTMLPurifier_Doctype
         $this->dtdPublic    = $dtd_public;
         $this->dtdSystem    = $dtd_system;
     }
-    
-    /**
-     * Clones the doctype, use before resolving modes and the like
-     */
-    public function copy() {
-        return unserialize(serialize($this));
-    }
 }
 

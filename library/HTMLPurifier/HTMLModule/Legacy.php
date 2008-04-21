@@ -23,27 +23,27 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
     
     public function __construct() {
         
-        $this->addElement('basefont', true, 'Inline', 'Empty', false, array(
+        $this->addElement('basefont', 'Inline', 'Empty', false, array(
             'color' => 'Color',
             'face' => 'Text', // extremely broad, we should
             'size' => 'Text', // tighten it
             'id' => 'ID'
         ));
-        $this->addElement('center', true, 'Block', 'Flow', 'Common');
-        $this->addElement('dir', true, 'Block', 'Required: li', 'Common', array(
+        $this->addElement('center', 'Block', 'Flow', 'Common');
+        $this->addElement('dir', 'Block', 'Required: li', 'Common', array(
             'compact' => 'Bool#compact'
         ));
-        $this->addElement('font', true, 'Inline', 'Inline', array('Core', 'I18N'), array(
+        $this->addElement('font', 'Inline', 'Inline', array('Core', 'I18N'), array(
             'color' => 'Color',
             'face' => 'Text', // extremely broad, we should
             'size' => 'Text', // tighten it
         ));
-        $this->addElement('menu', true, 'Block', 'Required: li', 'Common', array(
+        $this->addElement('menu', 'Block', 'Required: li', 'Common', array(
             'compact' => 'Bool#compact'
         ));
-        $this->addElement('s', true, 'Inline', 'Inline', 'Common');
-        $this->addElement('strike', true, 'Inline', 'Inline', 'Common');
-        $this->addElement('u', true, 'Inline', 'Inline', 'Common');
+        $this->addElement('s', 'Inline', 'Inline', 'Common');
+        $this->addElement('strike', 'Inline', 'Inline', 'Common');
+        $this->addElement('u', 'Inline', 'Inline', 'Common');
         
         // setup modifications to old elements
         
