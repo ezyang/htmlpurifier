@@ -7,10 +7,9 @@ TODO List
     ? Maybe I'll Do It
 ==========================
 
-If no interest is expressed for a feature that may required a considerable
+If no interest is expressed for a feature that may require a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
-
 
 UPCOMING RELEASE
 ----------------
@@ -27,15 +26,23 @@ EXTERNAL
 FUTURE VERSIONS
 ---------------
 
-3.2 release [Error'ed]
- # Error logging for filtering/cleanup procedures
- - XSS-attempt detection
+3.2 release [It's All About Trust] (floating)
+ # Implement untrusted, dangerous elements/attributes
+    - Objects and Forms are especially wanted
+ # Implement IDREF support (harder than it seems, since you cannot have
+   IDREFs to non-existent IDs)
+ # Frameset XHTML 1.0 and HTML 4.01 doctypes
+ - Research and implement a "safe" version of the Object module
 
-3.3 release [Do What I Mean, Not What I Say]
+3.3 release [Error'ed]
+ # Error logging for filtering/cleanup procedures
+ - XSS-attempt detection--certain errors are flagged XSS-like
+
+3.4 release [Do What I Mean, Not What I Say]
  # Additional support for poorly written HTML
     - Microsoft Word HTML cleaning (i.e. MsoNormal, but research essential!)
     - Friendly strict handling of <address> (block -> <br>)
- - Remove redundant tags, ex. <u><u>Underlined</u></u>. Implementation notes:
+ ? Remove redundant tags, ex. <u><u>Underlined</u></u>. Implementation notes:
     1. Analyzing which tags to remove duplicants
     2. Ensure attributes are merged into the parent tag
     3. Extend the tag exclusion system to specify whether or not the
@@ -45,25 +52,16 @@ FUTURE VERSIONS
  - Remove empty inline tags<i></i>
  - Append something to duplicate IDs so they're still usable (impl. note: the
    dupe detector would also need to detect the suffix as well)
- - Externalize inline CSS to promote clean HTML
-
-3.4 release [It's All About Trust] (floating)
- # Implement untrusted, dangerous elements/attributes
-    - Objects and Forms are especially wanted
- # Implement IDREF support (harder than it seems, since you cannot have
-   IDREFs to non-existent IDs)
- # Frameset XHTML 1.0 and HTML 4.01 doctypes
+ - Externalize inline CSS to promote clean HTML, proposed by Sander Tekelenburg
 
 4.0 release [Beyond HTML]
  # Legit token based CSS parsing (will require revamping almost every
-   AttrDef class). Probably will use CSSTidy class
- # More control over allowed CSS properties (maybe modularize it in the
-   same fashion!)
+   AttrDef class). Probably will use CSSTidy class?
+ # More control over allowed CSS properties using a modularization
  # HTML 5 support
  - Standardize token armor for all areas of processing
  - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
    Also, enable disabling of directionality
- - Table of Contents generation (XHTML Compiler might be reusable)
 
 5.0 release [To XML and Beyond]
  - Extended HTML capabilities based on namespacing and tag transforms (COMPLEX)
@@ -73,50 +71,52 @@ FUTURE VERSIONS
 
 Ongoing
  - More refactoring to take advantage of PHP5's facilities 
- - Lots of profiling, make it faster!
+ - Refactor unit tests into lots of test methods
  - Plugins for major CMSes (COMPLEX)
     - phpBB
+    - Drupal needs loving!
+    - Phorum need loving!
     - more! (look for ones that use WYSIWYGs)
- - Complete basic smoketests
+    - Also, maybe a FAQ for extension writers with HTML Purifier
 
 AutoFormat
  - Smileys
  - Syntax highlighting with <pre> and possibly <?php
  - Look at http://drupal.org/project/Modules/category/63 for ideas
 
-Unknown release (on a scratch-an-itch basis)
- # CHMOD install script for PEAR installs
- ? Have 'lang' attribute be checked against official lists, achieved by
-   encoding all characters that have string entity equivalents
- - Abstract ChildDef_BlockQuote to work with all elements that only
-   allow blocks in them, required or optional
- - Reorganize Unit Tests
+Neat feature related
+ ! Factor demo.php into a set of Printer classes, and then create a stub
+   file for users here (inside the actual HTML Purifier library)
+ ! Support exporting configuration, so users can easily tweak settings
+   in the demo, and then copy-paste into their own setup
  - Advanced URI filtering schemes (see docs/proposal-new-directives.txt)
- - Implement lenient <ruby> child validation
+ - Allow scoped="scoped" attribute in <style> tags; may be troublesome
+   because regular CSS has no way of uniquely identifying nodes, so we'd
+   have to generate IDs
  - Explain how to use HTML Purifier in non-PHP languages / create
    a simple command line stub (or complicated?)
  - Fixes for Firefox's inability to handle COL alignment props (Bug 915)
  - Automatically add non-breaking spaces to empty table cells when
    empty-cells:show is applied to have compatibility with Internet Explorer
+ - Table of Contents generation (XHTML Compiler might be reusable). May also
+   be out-of-band information.
+
+Maintenance related (slightly boring)
+ # CHMOD install script for PEAR installs
+ ! Factor out command line parser into its own class, and unit test it
+ ! Nested configuration namespaces
  - Distinguish between default settings and explicitly set settings, so
    configurations can be merged
- - Nested configuration namespaces
- - Allow scoped="scoped" attribute in <style> tags; may be troublesome
-   because regular CSS has no way of uniquely identifying nodes, so we'd
-   have to generate IDs
  - Time PHPT tests
- - Factor out command line parser into its own class, and unit test it
- - Factor demo.php into a set of Printer classes, and then create a stub
-   file for users here (inside the actual HTML Purifier library)
- - Support exporting configuration, so users can easily tweak settings
-   in the demo, and then copy-paste into their own setup
 
-Requested
+ChildDef related (very boring)
+ - Abstract ChildDef_BlockQuote to work with all elements that only
+   allow blocks in them, required or optional
+ - Implement lenient <ruby> child validation
 
 Wontfix
  - Non-lossy smart alternate character encoding transformations (unless
    patch provided)
  - Pretty-printing HTML: users can use Tidy on the output on entire page
- - Native content compression, whitespace stripping (don't rely on Tidy, make
-   sure we don't remove from <pre> or related tags): use gzip if this is
+ - Native content compression, whitespace stripping: use gzip if this is
    really important
