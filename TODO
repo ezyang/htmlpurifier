@@ -29,10 +29,13 @@ NICE FEATURES
 
 BUGS
  - Style attribute height/width limiting for images
- - Easy way to blacklist elements and attributes
- - Investigate iconv error emitting
- - Investigate UTF-8 optimization <http://htmlpurifier.org/phorum/read.php?3,1496>
  - Figure out what to do about target="" and name="", since they show up so often
+
+EXTERNAL
+ - Improve Phorum install documentation
+ - Mia
+ - Aliro
+ - Comparison: http://code.iamcal.com/php/lib_filter/
 
 FUTURE VERSIONS
 ---------------

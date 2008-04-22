@@ -12,7 +12,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 3.1.0, unknown release date
 - InterchangeBuilder now alphabetizes its lists
 - Validation error in configdoc output fixed
+- Iconv errors muted even with custom error handlers
 . Out-of-date documentation revised
+. UTF-8 encoding check optimization as suggested by Diego
 
 3.1.0rc1, released 2008-04-22
 # Autoload support added. Internal require_once's removed in favor of an
