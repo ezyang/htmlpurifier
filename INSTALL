@@ -81,6 +81,13 @@ when you use them.
 Only the contents in the library/ folder are necessary, so you can remove
 everything else when using HTML Purifier in a production environment.
 
+If you installed HTML Purifier via PEAR, all you need to do is:
+
+    require_once 'HTMLPurifier.auto.php';
+
+Please note that the usual PEAR practice of including just the classes you
+want will not work with HTML Purifier's autoloading scheme.
+
 Advanced users, read on; other users can skip to section 4.
 
 Autoload compatibility

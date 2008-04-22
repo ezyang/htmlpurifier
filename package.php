@@ -14,7 +14,11 @@ $pkg->setOptions(
         'filelistgenerator' => 'file',
         'include' => array('*'),
         'dir_roles' => array('/' => 'php'), // hack to put *.ser files in the right place
-        'ignore' => array('HTMLPurifier.auto.php', 'HTMLPurifier.standalone.php',  'HTMLPurifier.path.php', 'standalone/'),
+        'ignore' => array(
+            'HTMLPurifier.standalone.php',
+            'HTMLPurifier.path.php',
+            'standalone/'
+        ),
     )
 );
 

@@ -23,7 +23,6 @@ DOCUMENTATION
 
 IMPORTANT FEATURES
  - Factor out command line parser into its own class, and unit test it
- - Figure out autoload and PEAR
 
 NICE FEATURES
  - Factor demo.php into a set of Printer classes, and then create a stub
@@ -37,7 +36,6 @@ BUGS
  - Investigate iconv error emitting
  - Investigate UTF-8 optimization <http://htmlpurifier.org/phorum/read.php?3,1496>
  - Figure out what to do about target="" and name="", since they show up so often
- - Update htmLawed comparison
 
 FUTURE VERSIONS
 ---------------
