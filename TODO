@@ -27,8 +27,6 @@ IMPORTANT FEATURES
  - Figure out autoload and PEAR
 
 CONFIGDOC
- - Have configdoc use version and deprecated information (hide deprecated
-   info, for example)
  - Implement source code sniffing for configdoc, so we can easily figure out
    which files use what configuration (we'll rely on the $config convention)
 

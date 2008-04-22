@@ -48,7 +48,9 @@
         </xsl:if>
     </xsl:template>
     <xsl:template match="directive" mode="toc">
-        <li><a href="#{@id}"><xsl:value-of select="name" /></a></li>
+        <xsl:if test="not(deprecated)">
+            <li><a href="#{@id}"><xsl:value-of select="name" /></a></li>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template match="title" />
@@ -69,7 +71,15 @@
     </xsl:template>
     
     <xsl:template match="directive">
-        <xsl:apply-templates />
+        <div>
+            <xsl:attribute name="class">
+                directive
+                <xsl:if test="deprecated">
+                    deprecated
+                </xsl:if>
+            </xsl:attribute>
+            <xsl:apply-templates />
+        </div>
     </xsl:template>
     <xsl:template match="directive/name">
         <xsl:apply-templates select="../aliases/alias" mode="anchor" />
@@ -106,7 +116,19 @@
             <xsl:copy-of xmlns:xhtml="http://www.w3.org/1999/xhtml" select="xhtml:div/node()" />
         </div>
     </xsl:template>
+    <xsl:template match="directive/deprecated">
+        <div class="deprecated-notice">
+            This directive was deprecated in version <xsl:value-of select="version" />.
+            <a href="#{use}">%<xsl:value-of select="use" /></a> should be used instead.
+        </div>
+    </xsl:template>
     
+    <xsl:template match="constraints/version">
+        <tr>
+            <th>Version:</th>
+            <td><xsl:value-of select="." /></td>
+        </tr>
+    </xsl:template>
     <xsl:template match="constraints/type">
         <tr>
             <th>Type:</th>

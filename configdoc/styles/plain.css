@@ -22,3 +22,6 @@ h2 {border-bottom:1px solid #CCC; font-family:sans-serif; font-weight:normal;
     font-size:1.3em;}
 h3 {font-family:sans-serif; font-size:1.1em; font-weight:bold; }
 h4 {font-family:sans-serif; font-size:0.9em; font-weight:bold; }
+
+.deprecated {color: #CCC;}
+.deprecated-notice {color: #000; text-align:center; margin-bottom: 1em;}

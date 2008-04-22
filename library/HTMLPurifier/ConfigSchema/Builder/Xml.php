@@ -70,6 +70,7 @@ class HTMLPurifier_ConfigSchema_Builder_Xml extends XMLWriter
         $this->endElement(); // aliases
         
         $this->startElement('constraints');
+            if ($directive->version) $this->writeElement('version', $directive->version);
             $this->writeElement('type', $directive->type);
             if ($directive->typeAllowsNull) $this->writeAttribute('allow-null', 'yes');
             if ($directive->allowed) {
@@ -80,6 +81,13 @@ class HTMLPurifier_ConfigSchema_Builder_Xml extends XMLWriter
             $this->writeElement('default', $this->export($directive->default));
             $this->writeAttribute('xml:space', 'preserve');
         $this->endElement(); // constraints
+        
+        if ($directive->deprecatedVersion) {
+            $this->startElement('deprecated');
+                $this->writeElement('version', $directive->deprecatedVersion);
+                $this->writeElement('use', $directive->deprecatedUse->toString());
+            $this->endElement(); // deprecated
+        }
         
         $this->startElement('description');
             $this->writeHTMLDiv($directive->description);

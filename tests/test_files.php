@@ -20,7 +20,7 @@ if (!$AC['only-phpt']) {
     
     // ConfigDoc auxiliary library
     if (version_compare(PHP_VERSION, '5.2', '>=')) {
-        $test_dirs[] = 'ConfigDoc';
+        // $test_dirs[] = 'ConfigDoc'; // no test files currently!
     }
     
     // FSTools auxiliary library
