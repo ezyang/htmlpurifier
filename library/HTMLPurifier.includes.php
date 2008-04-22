@@ -82,6 +82,7 @@ require 'HTMLPurifier/AttrDef/CSS/BackgroundPosition.php';
 require 'HTMLPurifier/AttrDef/CSS/Border.php';
 require 'HTMLPurifier/AttrDef/CSS/Color.php';
 require 'HTMLPurifier/AttrDef/CSS/Composite.php';
+require 'HTMLPurifier/AttrDef/CSS/DenyElementDecorator.php';
 require 'HTMLPurifier/AttrDef/CSS/Filter.php';
 require 'HTMLPurifier/AttrDef/CSS/Font.php';
 require 'HTMLPurifier/AttrDef/CSS/FontFamily.php';

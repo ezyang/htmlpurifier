@@ -2,7 +2,7 @@
 <usage>
  <directive id="Core.CollectErrors">
   <file name="HTMLPurifier.php">
-   <line>131</line>
+   <line>129</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>93</line>
@@ -18,22 +18,22 @@
  </directive>
  <directive id="CSS.Proprietary">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>201</line>
+   <line>202</line>
   </file>
  </directive>
  <directive id="CSS.AllowTricky">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>205</line>
+   <line>206</line>
   </file>
  </directive>
  <directive id="CSS.AllowImportant">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>209</line>
+   <line>210</line>
   </file>
  </directive>
  <directive id="CSS.AllowedProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>261</line>
+   <line>262</line>
   </file>
  </directive>
  <directive id="Cache.DefinitionImpl">
@@ -63,19 +63,19 @@
  </directive>
  <directive id="Core.Encoding">
   <file name="HTMLPurifier/Encoder.php">
-   <line>267</line>
-   <line>285</line>
+   <line>281</line>
+   <line>299</line>
   </file>
  </directive>
  <directive id="Test.ForceNoIconv">
   <file name="HTMLPurifier/Encoder.php">
-   <line>269</line>
-   <line>290</line>
+   <line>283</line>
+   <line>304</line>
   </file>
  </directive>
  <directive id="Core.EscapeNonASCIICharacters">
   <file name="HTMLPurifier/Encoder.php">
-   <line>287</line>
+   <line>301</line>
   </file>
  </directive>
  <directive id="Core.MaintainLineNumbers">

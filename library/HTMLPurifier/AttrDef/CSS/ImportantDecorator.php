@@ -3,7 +3,7 @@
 /**
  * Decorator which enables !important to be used in CSS values.
  */
-class HTMLPurifier_AttrDef_CSS_ImportantDecorator
+class HTMLPurifier_AttrDef_CSS_ImportantDecorator extends HTMLPurifier_AttrDef
 {
     protected $def, $allow;
     

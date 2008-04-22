@@ -15,7 +15,6 @@ UPCOMING RELEASE
 ----------------
 
 BUGS
- - Style attribute height/width limiting for images
  - Figure out what to do about target="" and name="", since they show up so often
 
 EXTERNAL

@@ -21,3 +21,17 @@ $styles = $purifier->context->get('StyleBlocks');
 foreach ($styles as $style) {
     echo '<style type="text/css">' . $style . "</style>\n";
 }]]></pre>
+<p>
+  <strong>Warning:</strong> It is possible for a user to mount an
+  imagecrash attack using this CSS. Counter-measures are difficult;
+  it is not simply enough to limit the range of CSS lengths (using
+  relative lengths with many nesting levels allows for large values
+  to be attained without actually specifying them in the stylesheet),
+  and the flexible nature of selectors makes it difficult to selectively
+  disable lengths on image tags (HTML Purifier, however, does disable
+  CSS width and height in inline styling). There are probably two effective
+  counter measures: an explicit width and height set to auto in all
+  images in your document (unlikely) or the disabling of width and
+  height (somewhat reasonable). Whether or not these measures should be
+  used is left to the reader.
+</p>

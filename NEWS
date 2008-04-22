@@ -13,6 +13,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - InterchangeBuilder now alphabetizes its lists
 - Validation error in configdoc output fixed
 - Iconv errors muted even with custom error handlers
+- Add protection against imagecrash attack with CSS height/width
 . Out-of-date documentation revised
 . UTF-8 encoding check optimization as suggested by Diego
 

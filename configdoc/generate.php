@@ -15,7 +15,7 @@ TODO:
 - add blurbs to ToC
 */
 
-if (version_compare(PHP_VERSION, '5.2.0', '<')) exit('PHP 5.2.0 or greater required.');
+if (version_compare(PHP_VERSION, '5.2', '<')) exit('PHP 5.2+ required.');
 error_reporting(E_ALL | E_STRICT);
 
 chdir(dirname(__FILE__));

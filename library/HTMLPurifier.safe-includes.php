@@ -76,6 +76,7 @@ require_once $__dir . '/HTMLPurifier/AttrDef/CSS/BackgroundPosition.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Border.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Color.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Composite.php';
+require_once $__dir . '/HTMLPurifier/AttrDef/CSS/DenyElementDecorator.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Filter.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Font.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/FontFamily.php';
