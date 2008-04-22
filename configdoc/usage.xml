@@ -129,6 +129,16 @@
    <line>242</line>
   </file>
  </directive>
+ <directive id="HTML.ForbiddenElements">
+  <file name="HTMLPurifier/HTMLDefinition.php">
+   <line>303</line>
+  </file>
+ </directive>
+ <directive id="HTML.ForbiddenAttributes">
+  <file name="HTMLPurifier/HTMLDefinition.php">
+   <line>304</line>
+  </file>
+ </directive>
  <directive id="HTML.Trusted">
   <file name="HTMLPurifier/HTMLModuleManager.php">
    <line>198</line>

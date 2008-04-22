@@ -296,6 +296,24 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                         E_USER_WARNING);
                 }
             }
+            
+        }
+        
+        // setup forbidden elements
+        $forbidden_elements = $config->get('HTML', 'ForbiddenElements');
+        $forbidden_attributes = $config->get('HTML', 'ForbiddenAttributes');
+        
+        foreach ($this->info as $tag => $info) {
+            if (isset($forbidden_elements[$tag])) {
+                unset($this->info[$tag]);
+                continue;
+            }
+            foreach ($info->attr as $name => $def) {
+                if (isset($forbidden_attributes["$tag.$name"])) {
+                    unset($this->info[$tag]->attr[$name]);
+                    continue;
+                }
+            }
         }
         
     }

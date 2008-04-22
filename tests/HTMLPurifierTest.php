@@ -53,6 +53,21 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
         
     }
     
+    function testBlacklistElements() {
+        $this->purifier = new HTMLPurifier(array(
+            'HTML.ForbiddenElements' => array('b'),
+            'HTML.ForbiddenAttributes' => array('a.href')
+        ));
+        $this->assertPurification(
+            '<p>Par.</p>'
+        );
+        $this->assertPurification(
+            '<b>Pa<a href="foo">r</a>.</b>',
+            'Pa<a>r</a>.'
+        );
+        
+    }
+    
     function testDifferentAllowedCSSProperties() {
         
         $this->purifier = new HTMLPurifier(array(

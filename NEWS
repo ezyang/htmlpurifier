@@ -50,6 +50,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Finally %CSS.AllowedProperties for tweaking allowed CSS properties without
   mucking around with HTMLPurifier_CSSDefinition
 ! ConfigDoc output has been enhanced with version and deprecation info.
+! %HTML.ForbiddenAttributes and %HTML.ForbiddenElements implemented.
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
 - Various HTMLPurifier_Config convenience functions now accept another parameter

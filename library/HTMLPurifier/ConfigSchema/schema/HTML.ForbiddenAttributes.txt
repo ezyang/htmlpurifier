@@ -1,0 +1,10 @@
+HTML.ForbiddenAttributes
+TYPE: lookup
+VERSION: 3.1.0
+DEFAULT: array()
+--DESCRIPTION--
+<p>
+    This directive complements %HTML.ForbiddenElements and is the inverse of
+    %HTML.AllowedAttributes. Please see the former for a discussion of why you
+    should think twice before using this directive.
+</p>
