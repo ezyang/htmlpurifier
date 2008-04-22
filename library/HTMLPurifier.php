@@ -15,9 +15,7 @@
  *  -# Generating HTML from the purified tokens.
  * 
  * However, most users will only need to interface with the HTMLPurifier
- * class, so this massive amount of infrastructure is usually concealed.
- * If you plan on working with the internals, be sure to include
- * HTMLPurifier_ConfigSchema and HTMLPurifier_Config.
+ * and HTMLPurifier_Config.
  */
 
 /*
