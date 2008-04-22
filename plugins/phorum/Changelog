@@ -10,6 +10,7 @@ Changelog                                         HTMLPurifier : Phorum Mod
 ==========================
 
 Version 3.0.0.1 for Phorum 5.2, unknown release date
+! Better installation documentation
 - Fixed double encoded quotes
 - Fixed fatal error when migrate.php is blank
 
