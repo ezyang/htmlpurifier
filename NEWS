@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+3.1.0, unknown release date
+- InterchangeBuilder now alphabetizes its lists
+. Out-of-date documentation revised
+
 3.1.0rc1, released 2008-04-22
 # Autoload support added. Internal require_once's removed in favor of an
   explicit require list or autoloading. To use HTML Purifier,

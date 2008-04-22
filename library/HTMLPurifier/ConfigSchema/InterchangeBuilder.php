@@ -17,21 +17,27 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         $builder     = new HTMLPurifier_ConfigSchema_InterchangeBuilder();
         $interchange = new HTMLPurifier_ConfigSchema_Interchange();
         
-        if (!$dir) $dir = realpath(dirname(__FILE__) . '/schema/');
+        if (!$dir) $dir = dirname(__FILE__) . '/schema/';
         $info = parse_ini_file($dir . 'info.ini');
         $interchange->name = $info['name'];
         
+        $files = array();
         $dh = opendir($dir);
         while (false !== ($file = readdir($dh))) {
             if (!$file || $file[0] == '.' || strrchr($file, '.') !== '.txt') {
                 continue;
             }
+            $files[] = $file;
+        }
+        closedir($dh);
+        
+        sort($files);
+        foreach ($files as $file) {
             $builder->build(
                 $interchange,
                 new HTMLPurifier_StringHash( $parser->parseFile($dir . $file) )
             );
         }
-        closedir($dh);
         
         return $interchange;
     }
