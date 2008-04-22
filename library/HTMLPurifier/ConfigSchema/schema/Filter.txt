@@ -1,2 +1,2 @@
 Filter
-DESCRIPTION: Configuration for filters
+DESCRIPTION: Directives for turning filters on and off, or specifying custom filters.

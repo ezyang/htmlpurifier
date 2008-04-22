@@ -1,0 +1,23 @@
+Filter.ExtractStyleBlocks
+TYPE: bool
+VERSION: 3.1.0
+DEFAULT: false
+EXTERNAL: CSSTidy
+--DESCRIPTION--
+<p>
+  This directive turns on the style block extraction filter, which removes
+  <code>style</code> blocks from input HTML, cleans them up with CSSTidy,
+  and places them in the <code>StyleBlocks</code> context variable, for further
+  use by you, usually to be placed in an external stylesheet, or a
+  <code>style</code> block in the <code>head</code> of your document.
+</p>
+<p>
+  Sample usage:
+</p>
+<pre><![CDATA[$config = HTMLPurifier_Config::createDefault();
+$config->set('Filter', 'ExtractStyleBlocks', true);
+$purifier = new HTMLPurifier($config);
+$styles = $purifier->context->get('StyleBlocks');
+foreach ($styles as $style) {
+    echo '<style type="text/css">' . $style . "</style>\n";
+}]]></pre>

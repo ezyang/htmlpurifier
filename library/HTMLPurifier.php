@@ -62,8 +62,8 @@ class HTMLPurifier
     /** Global configuration object */
     public $config;
     
-    /** Array of HTMLPurifier_Filter objects to run on HTML */
-    public $filters = array();
+    /** Array of extra HTMLPurifier_Filter objects to run on HTML, for backwards compatibility */
+    private $filters = array();
     
     /** Single instance of HTML Purifier */
     private static $instance;
@@ -98,6 +98,7 @@ class HTMLPurifier
      * @param $filter HTMLPurifier_Filter object
      */
     public function addFilter($filter) {
+        trigger_error('HTMLPurifier->addFilter() is deprecated, use configuration directives in the Filter namespace or Filter.Custom', E_USER_WARNING);
         $this->filters[] = $filter;
     }
     
@@ -144,8 +145,25 @@ class HTMLPurifier
         
         $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);
         
-        for ($i = 0, $size = count($this->filters); $i < $size; $i++) {
-            $html = $this->filters[$i]->preFilter($html, $config, $context);
+        // setup filters
+        $filter_flags = $config->getBatch('Filter');
+        $custom_filters = $filter_flags['Custom'];
+        unset($filter_flags['Custom']);
+        $filters = array();
+        foreach ($filter_flags as $filter => $flag) {
+            if (!$flag) continue;
+            $class = "HTMLPurifier_Filter_$filter";
+            $filters[] = new $class;
+        }
+        foreach ($custom_filters as $filter) {
+            // maybe "HTMLPurifier_Filter_$filter", but be consistent with AutoFormat
+            $filters[] = $filter;
+        }
+        $filters = array_merge($filters, $this->filters);
+        // maybe prepare(), but later
+        
+        for ($i = 0, $filter_size = count($filters); $i < $filter_size; $i++) {
+            $html = $filters[$i]->preFilter($html, $config, $context);
         }
         
         // purified HTML
@@ -163,8 +181,8 @@ class HTMLPurifier
                 $config, $context
             );
         
-        for ($i = $size - 1; $i >= 0; $i--) {
-            $html = $this->filters[$i]->postFilter($html, $config, $context);
+        for ($i = $filter_size - 1; $i >= 0; $i--) {
+            $html = $filters[$i]->postFilter($html, $config, $context);
         }
         
         $html = HTMLPurifier_Encoder::convertFromUTF8($html, $config, $context);

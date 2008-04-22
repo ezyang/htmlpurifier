@@ -20,8 +20,9 @@ accordingly.
 require_once $csstidy_location . 'class.csstidy.php';
 require_once $csstidy_location . 'class.csstidy_print.php';
 
-$purifier = new HTMLPurifier();
-$purifier->addFilter(new HTMLPurifier_Filter_ExtractStyleBlocks());
+$purifier = new HTMLPurifier(array(
+    'Filter.ExtractStyleBlocks' => true,
+));
 
 $html = isset($_POST['html']) ? $_POST['html'] : '';
 $purified_html = $purifier->purify($html);

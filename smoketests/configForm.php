@@ -15,11 +15,6 @@ if (isset($_GET['doc'])) {
     
     if (version_compare('5', PHP_VERSION, '>')) exit('Requires PHP 5 or higher.');
     
-    // setup schema for parsing
-    require_once 'testSchema.php';
-    $new_schema = $custom_schema; // dereference the reference
-    HTMLPurifier_ConfigSchema::instance($old); // restore old version
-    
     // setup ConfigDoc environment
     require_once '../configdoc/library/ConfigDoc.auto.php';
     
@@ -60,6 +55,7 @@ require_once 'HTMLPurifier/Printer/ConfigForm.php';
 // fictional set, attempts to cover every possible data-type
 // see source at ConfigTest.php
 require_once 'testSchema.php';
+HTMLPurifier_ConfigSchema::instance($custom_schema);
 
 // cleanup ( this should be rolled into Config )
 $config = HTMLPurifier_Config::loadArrayFromForm($_GET, 'config');

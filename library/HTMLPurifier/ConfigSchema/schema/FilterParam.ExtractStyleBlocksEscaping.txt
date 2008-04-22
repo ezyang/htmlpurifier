@@ -1,7 +1,8 @@
-Filter.ExtractStyleBlocksEscaping
+FilterParam.ExtractStyleBlocksEscaping
 TYPE: bool
 VERSION: 3.0.0
 DEFAULT: true
+ALIASES: Filter.ExtractStyleBlocksEscaping
 --DESCRIPTION--
 
 <p>

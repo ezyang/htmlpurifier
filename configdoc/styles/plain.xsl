@@ -216,5 +216,18 @@
             <td><pre><xsl:value-of select="." xml:space="preserve" /></pre></td>
         </tr>
     </xsl:template>
+    <xsl:template match="constraints/external">
+        <tr>
+            <th>External deps</th>
+            <td>
+                <ul>
+                    <xsl:apply-templates />
+                </ul>
+            </td>
+        </tr>
+    </xsl:template>
+    <xsl:template match="constraints/external/project">
+        <xsl:value-of select="." />
+    </xsl:template>
     
 </xsl:stylesheet>

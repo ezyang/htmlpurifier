@@ -2,7 +2,7 @@
 <usage>
  <directive id="Core.CollectErrors">
   <file name="HTMLPurifier.php">
-   <line>130</line>
+   <line>131</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>93</line>
@@ -280,14 +280,19 @@
    <line>91</line>
   </file>
  </directive>
- <directive id="Filter.ExtractStyleBlocksScope">
+ <directive id="FilterParam.ExtractStyleBlocksTidyImpl">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>69</line>
+   <line>41</line>
   </file>
  </directive>
- <directive id="Filter.ExtractStyleBlocksEscaping">
+ <directive id="FilterParam.ExtractStyleBlocksScope">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>127</line>
+   <line>65</line>
+  </file>
+ </directive>
+ <directive id="FilterParam.ExtractStyleBlocksEscaping">
+  <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
+   <line>123</line>
   </file>
  </directive>
  <directive id="HTML.TidyLevel">

@@ -19,9 +19,9 @@ $string = '<object width="425" height="350"><param name="movie" value="http://ww
 
 $regular_purifier = new HTMLPurifier();
 
-$youtube_purifier = new HTMLPurifier();
-require_once 'HTMLPurifier/Filter/YouTube.php';
-$youtube_purifier->addFilter(new HTMLPurifier_Filter_YouTube());
+$youtube_purifier = new HTMLPurifier(array(
+    'Filter.YouTube' => true,
+));
 
 ?>
 <h2>Unpurified</h2>

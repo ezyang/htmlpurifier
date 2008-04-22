@@ -21,14 +21,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
     private $_styleMatches = array();
     private $_tidy;
     
-    /**
-     * @param $tidy
-     *      Instance of csstidy to use, false to turn off cleaning,
-     *      and null to automatically instantiate
-     */
-    public function __construct($tidy = null) {
-        if ($tidy === null) $tidy = new csstidy();
-        $this->_tidy = $tidy;
+    public function __construct() {
+        $this->_tidy = new csstidy();
     }
     
     /**
@@ -44,6 +38,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
      * @todo Extend to indicate non-text/css style blocks
      */
     public function preFilter($html, $config, $context) {
+        $tidy = $config->get('FilterParam', 'ExtractStyleBlocksTidyImpl');
+        if ($tidy !== null) $this->_tidy = $tidy;
         $html = preg_replace_callback('#<style(?:\s.*)?>(.+)</style>#isU', array($this, 'styleCallback'), $html);
         $style_blocks = $this->_styleMatches;
         $this->_styleMatches = array(); // reset
@@ -66,7 +62,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
      */
     public function cleanCSS($css, $config, $context) {
         // prepare scope
-        $scope = $config->get('Filter', 'ExtractStyleBlocksScope');
+        $scope = $config->get('FilterParam', 'ExtractStyleBlocksScope');
         if ($scope !== null) {
             $scopes = array_map('trim', explode(',', $scope));
         } else {
@@ -124,7 +120,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
         $css = $this->_tidy->print->plain();
         // we are going to escape any special characters <>& to ensure
         // that no funny business occurs (i.e. </style> in a font-family prop).
-        if ($config->get('Filter', 'ExtractStyleBlocksEscaping')) {
+        if ($config->get('FilterParam', 'ExtractStyleBlocksEscaping')) {
             $css = str_replace(
                 array('<',    '>',    '&'),
                 array('\3C ', '\3E ', '\26 '),

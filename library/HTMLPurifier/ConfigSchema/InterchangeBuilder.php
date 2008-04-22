@@ -120,6 +120,10 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
             $directive->deprecatedVersion = $hash->offsetGet('DEPRECATED-VERSION');
         }
         
+        if (isset($hash['EXTERNAL'])) {
+            $directive->external = preg_split('/\s*,\s*/', trim($hash->offsetGet('EXTERNAL')));
+        }
+        
         $interchange->addDirective($directive);
     }
     

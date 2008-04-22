@@ -67,5 +67,9 @@ class HTMLPurifier_ConfigSchema_Interchange_Directive
      */
     public $deprecatedVersion;
     
+    /**
+     * List of external projects this directive depends on, e.g. array('CSSTidy').
+     */
+    public $external = array();
     
 }

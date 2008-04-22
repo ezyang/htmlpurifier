@@ -22,7 +22,6 @@ DOCUMENTATION
  - Update French translation of README
 
 IMPORTANT FEATURES
- - Get everything into configuration objects (filters, I'm looking at you)
  - Factor out command line parser into its own class, and unit test it
  - Figure out autoload and PEAR
 

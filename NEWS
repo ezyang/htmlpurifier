@@ -26,6 +26,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 # HTMLPurifier_Config will now throw E_USER_NOTICE when you use a directive
   alias; to get rid of these errors just modify your configuration to use
   the new directive name.
+# HTMLPurifier->addFilter is deprecated; built-in filters can now be
+  enabled using %Filter.$filter_name or by setting your own filters using
+  %Filter.Custom
 # Directive-level safety properties superceded in favor of module-level
   safety. Internal method HTMLModule->addElement() has changed, although 
   the externally visible HTMLDefinition->addElement has *not* changed.

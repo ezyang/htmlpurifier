@@ -163,5 +163,15 @@ alert("<This is compatible with XHTML>");
         );
     }
     
+    function test_addFilter_deprecated() {
+        $purifier = new HTMLPurifier();
+        $this->expectError('HTMLPurifier->addFilter() is deprecated, use configuration directives in the Filter namespace or Filter.Custom');
+        generate_mock_once('HTMLPurifier_Filter');
+        $purifier->addFilter($mock = new HTMLPurifier_FilterMock());
+        $mock->expectOnce('preFilter');
+        $mock->expectOnce('postFilter');
+        $purifier->purify('foo');
+    }
+    
 }
 

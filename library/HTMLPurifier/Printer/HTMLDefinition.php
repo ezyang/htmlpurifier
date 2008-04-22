@@ -118,7 +118,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
         $ret .= $this->end('tr');
         foreach ($this->def->info as $name => $def) {
             $ret .= $this->start('tr');
-                $ret .= $this->element('th', "<$name>" . ($def->safe ? '' : ' (unsafe)'), array('class'=>'heavy' . ($def->safe ? '' : ' unsafe'), 'colspan' => 2));
+                $ret .= $this->element('th', "<$name>", array('class'=>'heavy', 'colspan' => 2));
             $ret .= $this->end('tr');
             $ret .= $this->start('tr');
                 $ret .= $this->element('th', 'Inline content');

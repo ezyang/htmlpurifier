@@ -80,6 +80,11 @@ class HTMLPurifier_ConfigSchema_Builder_Xml extends XMLWriter
             }
             $this->writeElement('default', $this->export($directive->default));
             $this->writeAttribute('xml:space', 'preserve');
+            if ($directive->external) {
+                $this->startElement('external');
+                    foreach ($directive->external as $project) $this->writeElement('project', $project);
+                $this->endElement();
+            }
         $this->endElement(); // constraints
         
         if ($directive->deprecatedVersion) {
