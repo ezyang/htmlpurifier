@@ -227,7 +227,7 @@
         </tr>
     </xsl:template>
     <xsl:template match="constraints/external/project">
-        <xsl:value-of select="." />
+        <li><xsl:value-of select="." /></li>
     </xsl:template>
     
 </xsl:stylesheet>

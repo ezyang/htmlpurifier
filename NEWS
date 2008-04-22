@@ -11,6 +11,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 3.1.0, unknown release date
 - InterchangeBuilder now alphabetizes its lists
+- Validation error in configdoc output fixed
 . Out-of-date documentation revised
 
 3.1.0rc1, released 2008-04-22
