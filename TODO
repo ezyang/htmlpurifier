@@ -26,10 +26,6 @@ IMPORTANT FEATURES
  - Factor out command line parser into its own class, and unit test it
  - Figure out autoload and PEAR
 
-CONFIGDOC
- - Implement source code sniffing for configdoc, so we can easily figure out
-   which files use what configuration (we'll rely on the $config convention)
-
 NICE FEATURES
  - Factor demo.php into a set of Printer classes, and then create a stub
    file for users here (inside the actual HTML Purifier library)
