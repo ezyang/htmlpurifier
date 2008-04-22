@@ -9,6 +9,11 @@ class HTMLPurifier_ConfigSchema_Interchange
 {
     
     /**
+     * Name of the application this schema is describing.
+     */
+    public $name;
+    
+    /**
      * Array of Namespace ID => array(namespace info)
      */
     public $namespaces = array();
@@ -36,6 +41,15 @@ class HTMLPurifier_ConfigSchema_Interchange
             throw new HTMLPurifier_ConfigSchema_Exception("Cannot redefine directive '$i'");
         }
         $this->directives[$i] = $directive;
+    }
+    
+    /**
+     * Convenience function to perform standard validation. Throws exception
+     * on failed validation.
+     */
+    public function validate() {
+        $validator = new HTMLPurifier_ConfigSchema_Validator();
+        return $validator->validate($this);
     }
     
 }

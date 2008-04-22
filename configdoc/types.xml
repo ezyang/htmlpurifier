@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<types>
+  <type id="string">String</type>
+  <type id="istring">Case-insensitive string</type>
+  <type id="text">Text</type>
+  <type id="itext">Case-insensitive text</type>
+  <type id="int">Integer</type>
+  <type id="float">Float</type>
+  <type id="bool">Boolean</type>
+  <type id="lookup">Lookup array</type>
+  <type id="list">Array list</type>
+  <type id="hash">Associative array</type>
+  <type id="mixed">Mixed</type>
+</types>

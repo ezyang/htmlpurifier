@@ -30,18 +30,23 @@ class ConfigDoc_HTMLXSLTProcessor
     
     /**
      * Transforms an XML file into compatible XHTML based on the stylesheet
-     * @param $xml XML DOM tree
+     * @param $xml XML DOM tree, or string filename
      * @return string HTML output
      * @todo Rename to transformToXHTML, as transformToHTML is misleading
      */
     public function transformToHTML($xml) {
-        $out = $this->xsltProcessor->transformToXML($xml);
+        if (is_string($xml)) {
+            $dom = new DOMDocument();
+            $dom->load($xml);
+        } else {
+            $dom = $xml;
+        }
+        $out = $this->xsltProcessor->transformToXML($dom);
         
         // fudges for HTML backwards compatibility
         // assumes that document is XHTML
         $out = str_replace('/>', ' />', $out); // <br /> not <br/>
         $out = str_replace(' xmlns=""', '', $out); // rm unnecessary xmlns
-        $out = str_replace(' xmlns="http://www.w3.org/1999/xhtml"', '', $out); // rm unnecessary xmlns
         
         if (class_exists('Tidy')) {
             // cleanup output

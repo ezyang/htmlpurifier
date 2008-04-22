@@ -48,6 +48,7 @@ class HTMLPurifier_ConfigSchema_Validator
             if ($i != $id) $this->error(false, "Integrity violation: key '$i' does not match internal id '$id'");
             $this->validateDirective($directive);
         }
+        return true;
     }
     
     /**

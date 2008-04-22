@@ -27,10 +27,6 @@ IMPORTANT FEATURES
  - Figure out autoload and PEAR
 
 CONFIGDOC
- - Properly integrate new ConfigSchema system into configdoc. DESCRIPTIONS
-   ARE CURRENTLY BROKEN AND NEED TO BE FIXED!!! (Configdoc
-   should directly read the configuration files, or at the very least should
-   not use static functions)
  - Have configdoc use version and deprecated information (hide deprecated
    info, for example)
  - Implement source code sniffing for configdoc, so we can easily figure out

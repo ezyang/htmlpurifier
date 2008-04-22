@@ -12,6 +12,30 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         $this->varParser = $varParser ? $varParser : new HTMLPurifier_VarParser_Native();
     }
     
+    public static function buildFromDirectory($dir = null) {
+        $parser      = new HTMLPurifier_StringHashParser();
+        $builder     = new HTMLPurifier_ConfigSchema_InterchangeBuilder();
+        $interchange = new HTMLPurifier_ConfigSchema_Interchange();
+        
+        if (!$dir) $dir = realpath(dirname(__FILE__) . '/schema/');
+        $info = parse_ini_file($dir . 'info.ini');
+        $interchange->name = $info['name'];
+        
+        $dh = opendir($dir);
+        while (false !== ($file = readdir($dh))) {
+            if (!$file || $file[0] == '.' || strrchr($file, '.') !== '.txt') {
+                continue;
+            }
+            $builder->build(
+                $interchange,
+                new HTMLPurifier_StringHash( $parser->parseFile($dir . $file) )
+            );
+        }
+        closedir($dh);
+        
+        return $interchange;
+    }
+    
     /**
      * Builds an interchange object based on a hash.
      * @param $interchange HTMLPurifier_ConfigSchema_Interchange object to build

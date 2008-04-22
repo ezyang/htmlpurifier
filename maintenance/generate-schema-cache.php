@@ -8,7 +8,7 @@ assertCli();
 
 /**
  * @file
- * Generates a schema cache file from the contents of
+ * Generates a schema cache file, saving it to
  * library/HTMLPurifier/ConfigSchema/schema.ser.
  * 
  * This should be run when new configuration options are added to
@@ -17,20 +17,9 @@ assertCli();
  */
 
 $target = '../library/HTMLPurifier/ConfigSchema/schema.ser';
-$FS = new FSTools();
 
-$files = $FS->globr('../library/HTMLPurifier/ConfigSchema/schema', '*.txt');
-if (!$files) throw new Exception('Did not find any schema files');
-
-$parser      = new HTMLPurifier_StringHashParser();
-$builder     = new HTMLPurifier_ConfigSchema_InterchangeBuilder();
-$interchange = new HTMLPurifier_ConfigSchema_Interchange();
-foreach ($files as $file) {
-    $builder->build($interchange, new HTMLPurifier_StringHash($parser->parseFile($file)));
-}
-
-$validator = new HTMLPurifier_ConfigSchema_Validator();
-$validator->validate($interchange);
+$interchange = HTMLPurifier_ConfigSchema_InterchangeBuilder::buildFromDirectory();
+$interchange->validate();
 
 $schema_builder = new HTMLPurifier_ConfigSchema_Builder_ConfigSchema();
 $schema = $schema_builder->build($interchange);

@@ -64,7 +64,7 @@
     </xsl:template>
     <xsl:template match="namespace/description">
         <div class="description">
-            <xsl:copy-of select="div/node()" />
+            <xsl:copy-of xmlns:xhtml="http://www.w3.org/1999/xhtml" select="xhtml:div/node()" />
         </div>
     </xsl:template>
     
@@ -91,17 +91,19 @@
         </table>
     </xsl:template>
     <xsl:template match="directive/aliases" mode="constraints">
-        <th>Aliases:</th>
-        <td>
-            <xsl:for-each select="alias">
-                <xsl:if test="position()&gt;1">, </xsl:if>
-                <xsl:value-of select="." />
-            </xsl:for-each>
-        </td>
+        <tr>
+            <th>Aliases:</th>
+            <td>
+                <xsl:for-each select="alias">
+                    <xsl:if test="position()&gt;1">, </xsl:if>
+                    <xsl:value-of select="." />
+                </xsl:for-each>
+            </td>
+        </tr>
     </xsl:template>
     <xsl:template match="directive/description">
         <div class="description">
-            <xsl:copy-of select="div/node()" />
+            <xsl:copy-of xmlns:xhtml="http://www.w3.org/1999/xhtml" select="xhtml:div/node()" />
         </div>
     </xsl:template>
     
