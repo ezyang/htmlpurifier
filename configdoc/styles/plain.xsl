@@ -56,10 +56,12 @@
     <xsl:template match="title" />
     
     <xsl:template match="namespace">
-        <xsl:apply-templates />
-        <xsl:if test="count(directive)=0">
-            <p>No configuration directives defined for this namespace.</p>
-        </xsl:if>
+        <div class="namespace">
+            <xsl:apply-templates />
+            <xsl:if test="count(directive)=0">
+                <p>No configuration directives defined for this namespace.</p>
+            </xsl:if>
+        </div>
     </xsl:template>
     <xsl:template match="namespace/name">
         <h2 id="{../@id}"><xsl:value-of select="." /></h2>
@@ -72,11 +74,7 @@
     
     <xsl:template match="directive">
         <div>
-            <xsl:attribute name="class">
-                directive
-                <xsl:if test="deprecated">
-                    deprecated
-                </xsl:if>
+            <xsl:attribute name="class">directive<xsl:if test="deprecated"> deprecated</xsl:if>
             </xsl:attribute>
             <xsl:apply-templates />
         </div>
