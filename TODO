@@ -15,18 +15,6 @@ afraid to cast your vote for the next feature to be implemented!
 UPCOMING RELEASE
 ----------------
 
-DOCUMENTATION
- - Update French translation of README
-
-IMPORTANT FEATURES
- - Factor out command line parser into its own class, and unit test it
-
-NICE FEATURES
- - Factor demo.php into a set of Printer classes, and then create a stub
-   file for users here (inside the actual HTML Purifier library)
- - Support exporting configuration, so users can easily tweak settings
-   in the demo, and then copy-paste into their own setup
-
 BUGS
  - Style attribute height/width limiting for images
  - Figure out what to do about target="" and name="", since they show up so often
@@ -117,6 +105,11 @@ Unknown release (on a scratch-an-itch basis)
    because regular CSS has no way of uniquely identifying nodes, so we'd
    have to generate IDs
  - Time PHPT tests
+ - Factor out command line parser into its own class, and unit test it
+ - Factor demo.php into a set of Printer classes, and then create a stub
+   file for users here (inside the actual HTML Purifier library)
+ - Support exporting configuration, so users can easily tweak settings
+   in the demo, and then copy-paste into their own setup
 
 Requested
 

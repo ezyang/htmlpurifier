@@ -17,7 +17,7 @@ ce document pour quelques choses.
 
 1.  Compatibilité
 
-HTML Purifier fonctionne dans PHP 5. PHP 5.0.0 est le dernier
+HTML Purifier fonctionne dans PHP 5. PHP 5.0.5 est le dernier
 version que je le testais.  Il ne dépend de les autre librairies.
 
 Les extensions optionnel est iconv (en général déjà installer) et 
@@ -34,19 +34,15 @@ Utilisez:
 ...quand vous devez utiliser HTML Purifier (ne inclure pas quand vous
 ne devez pas, parce que HTML Purifier est trés grand.)
 
-Si vous n'aime pas que HTML Purifier change vos include_path, on peut
-change vos include_path, et:
+HTML Purifier utilise 'autoload'. Si vous avez définu la fonction
+__autoload, vous doivez ajoute cet programme:
 
-    require_once 'HTMLPurifier.php';
+    spl_autoload_register('__autoload')
 
-Seuleument les contents dans library/ est essentiel; vous peut enlever
-les autre fichiers quand vous est dans une atmosphère professionnel.
-
-
-[En cours de construction]
+Plus d'information est dans le document 'INSTALL'.
 
 
-6.   Installation vite
+3.   Installation vite
 
 Si votre site web est en UTF-8 et XHTML Transitional, utilisez:
 
