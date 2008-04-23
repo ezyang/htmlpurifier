@@ -11,17 +11,6 @@ If no interest is expressed for a feature that may require a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
-UPCOMING RELEASE
-----------------
-
-BUGS
- - Figure out what to do about target="" and name="", since they show up so often
-
-EXTERNAL
- - Mia
- - Aliro
- - Comparison: http://code.iamcal.com/php/lib_filter/
-
 FUTURE VERSIONS
 ---------------
 
