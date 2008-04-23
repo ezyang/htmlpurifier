@@ -42,7 +42,7 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
         // Block Phrasal --------------------------------------------------
         $this->addElement('address',     'Block', 'Inline', 'Common');
         $this->addElement('blockquote',  'Block', 'Optional: Heading | Block | List', 'Common', array('cite' => 'URI') );
-        $pre =& $this->addElement('pre', 'Block', 'Inline', 'Common');
+        $pre = $this->addElement('pre', 'Block', 'Inline', 'Common');
         $pre->excludes = $this->makeLookup(
             'img', 'big', 'small', 'object', 'applet', 'font', 'basefont' );
         $this->addElement('h1', 'Heading', 'Inline', 'Common');

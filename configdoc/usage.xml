@@ -5,7 +5,7 @@
    <line>129</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>93</line>
+   <line>85</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>50</line>
@@ -64,18 +64,18 @@
  <directive id="Core.Encoding">
   <file name="HTMLPurifier/Encoder.php">
    <line>281</line>
-   <line>299</line>
+   <line>305</line>
   </file>
  </directive>
  <directive id="Test.ForceNoIconv">
   <file name="HTMLPurifier/Encoder.php">
    <line>283</line>
-   <line>304</line>
+   <line>310</line>
   </file>
  </directive>
  <directive id="Core.EscapeNonASCIICharacters">
   <file name="HTMLPurifier/Encoder.php">
-   <line>301</line>
+   <line>307</line>
   </file>
  </directive>
  <directive id="Core.MaintainLineNumbers">
@@ -83,7 +83,7 @@
    <line>81</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>90</line>
+   <line>82</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>45</line>
@@ -91,17 +91,17 @@
  </directive>
  <directive id="Output.CommentScriptContents">
   <file name="HTMLPurifier/Generator.php">
-   <line>40</line>
+   <line>37</line>
   </file>
  </directive>
  <directive id="Output.TidyFormat">
   <file name="HTMLPurifier/Generator.php">
-   <line>61</line>
+   <line>58</line>
   </file>
  </directive>
  <directive id="Output.Newline">
   <file name="HTMLPurifier/Generator.php">
-   <line>86</line>
+   <line>83</line>
   </file>
  </directive>
  <directive id="HTML.BlockWrapper">
@@ -144,7 +144,7 @@
    <line>198</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>245</line>
+   <line>238</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>34</line>
@@ -177,12 +177,12 @@
  </directive>
  <directive id="Core.LexerImpl">
   <file name="HTMLPurifier/Lexer.php">
-   <line>78</line>
+   <line>70</line>
   </file>
  </directive>
  <directive id="Core.ConvertDocumentToFragment">
   <file name="HTMLPurifier/Lexer.php">
-   <line>237</line>
+   <line>230</line>
   </file>
  </directive>
  <directive id="URI.Host">

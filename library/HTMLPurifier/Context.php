@@ -4,6 +4,8 @@
  * Registry object that contains information about the current context.
  * @warning Is a bit buggy when variables are set to null: it thinks
  *          they don't exist! So use false instead, please.
+ * @note Since the variables Context deals with may not be objects,
+ *       references are very important here! Do not remove!
  */
 class HTMLPurifier_Context
 {
@@ -16,7 +18,7 @@ class HTMLPurifier_Context
     /**
      * Registers a variable into the context.
      * @param $name String name
-     * @param $ref Variable to be registered
+     * @param $ref Reference to variable to be registered
      */
     public function register($name, &$ref) {
         if (isset($this->_storage[$name])) {

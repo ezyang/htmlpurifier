@@ -158,7 +158,7 @@
 <pre>$config = HTMLPurifier_Config::createDefault();
 $config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
 $config->set('HTML', 'DefinitionRev', 1);
-$def =& $config->getHTMLDefinition(true);</pre>
+$def = $config->getHTMLDefinition(true);</pre>
 
 <p>
   Assuming that HTML Purifier has already been properly loaded (hint:
@@ -214,7 +214,7 @@ $def =& $config->getHTMLDefinition(true);</pre>
 $config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
 $config->set('HTML', 'DefinitionRev', 1);
 <strong>$config->set('Core', 'DefinitionCache', null); // remove this later!</strong>
-$def =& $config->getHTMLDefinition(true);</pre>
+$def = $config->getHTMLDefinition(true);</pre>
 
 <p>
   A few things should be mentioned about the caching mechanism before
@@ -270,7 +270,7 @@ $def =& $config->getHTMLDefinition(true);</pre>
 $config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
 $config->set('HTML', 'DefinitionRev', 1);
 $config->set('Core', 'DefinitionCache', null); // remove this later!
-$def =& $config->getHTMLDefinition(true);
+$def = $config->getHTMLDefinition(true);
 <strong>$def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');</strong></pre>
 
 <p>
@@ -388,7 +388,7 @@ $def =& $config->getHTMLDefinition(true);
 $config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
 $config->set('HTML', 'DefinitionRev', 1);
 $config->set('Core', 'DefinitionCache', null); // remove this later!
-$def =& $config->getHTMLDefinition(true);
+$def = $config->getHTMLDefinition(true);
 <strong>$def->addAttribute('a', 'target', new HTMLPurifier_AttrDef_Enum(
   array('_blank','_self','_target','_top')
 ));</strong></pre>
@@ -735,11 +735,11 @@ $def =& $config->getHTMLDefinition(true);
 $config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
 $config->set('HTML', 'DefinitionRev', 1);
 $config->set('Core', 'DefinitionCache', null); // remove this later!
-$def =& $config->getHTMLDefinition(true);
+$def = $config->getHTMLDefinition(true);
 $def->addAttribute('a', 'target', new HTMLPurifier_AttrDef_Enum(
   array('_blank','_self','_target','_top')
 ));
-<strong>$form =& $def->addElement(
+<strong>$form = $def->addElement(
   'form',   // name
   'Block',  // content set
   'Flow', // allowed children

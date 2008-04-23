@@ -42,7 +42,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             if (!$result) break;
             
             // chained filtering
-            $uri_def =& $config->getDefinition('URI');
+            $uri_def = $config->getDefinition('URI');
             $result = $uri_def->filter($uri, $config, $context);
             if (!$result) break;
             

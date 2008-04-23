@@ -18,7 +18,7 @@ class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
     function test_addElement() {
         
         $module = new HTMLPurifier_HTMLModule();
-        $def =& $module->addElement(
+        $def = $module->addElement(
             'a', 'Inline', 'Optional: #PCDATA', array('Common'),
             array(
                 'href' => 'URI'
@@ -107,7 +107,7 @@ class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
     function test_addBlankElement() {
         
         $module = new HTMLPurifier_HTMLModule();
-        $def =& $module->addBlankElement('a');
+        $def = $module->addBlankElement('a');
         
         $def2 = new HTMLPurifier_ElementDef();
         $def2->standalone = false;

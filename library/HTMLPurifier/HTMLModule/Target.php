@@ -11,7 +11,7 @@ class HTMLPurifier_HTMLModule_Target extends HTMLPurifier_HTMLModule
     public function __construct() {
         $elements = array('a');
         foreach ($elements as $name) {
-            $e =& $this->addBlankElement($name);
+            $e = $this->addBlankElement($name);
             $e->attr = array(
                 'target' => new HTMLPurifier_AttrDef_HTML_FrameTarget()
             );

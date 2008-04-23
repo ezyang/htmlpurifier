@@ -14,14 +14,6 @@ class HTMLPurifier_Token {
      */
     public $armor = array();
     
-    /**
-     * Copies the tag into a new one (clone substitute).
-     * @return Copied token
-     */
-    public function copy() {
-        return unserialize(serialize($this));
-    }
-    
     public function __get($n) {
       if ($n === 'type') {
         trigger_error('Deprecated type property called; use instanceof', E_USER_NOTICE);

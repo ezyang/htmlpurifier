@@ -53,7 +53,7 @@ class HTMLPurifier_LanguageFactory
      * @param $prototype Optional prototype to overload sole instance with,
      *                   or bool true to reset to default factory.
      */
-    public static function &instance($prototype = null) {
+    public static function instance($prototype = null) {
         static $instance = null;
         if ($prototype !== null) {
             $instance = $prototype;

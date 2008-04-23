@@ -116,10 +116,10 @@ class HTMLPurifier_HTMLModule
      *              element?
      * @param $attr What unique attributes does the element define?
      * @note See ElementDef for in-depth descriptions of these parameters.
-     * @return Reference to created element definition object, so you 
+     * @return Created element definition object, so you 
      *         can set advanced parameters
      */
-    public function &addElement($element, $type, $contents, $attr_includes = array(), $attr = array()) {
+    public function addElement($element, $type, $contents, $attr_includes = array(), $attr = array()) {
         $this->elements[] = $element;
         // parse content_model
         list($content_model_type, $content_model) = $this->parseContents($contents);
@@ -140,9 +140,9 @@ class HTMLPurifier_HTMLModule
      * Convenience function that creates a totally blank, non-standalone
      * element.
      * @param $element Name of element to create
-     * @return Reference to created element
+     * @return Created element
      */
-    public function &addBlankElement($element) {
+    public function addBlankElement($element) {
         if (!isset($this->info[$element])) {
             $this->elements[] = $element;
             $this->info[$element] = new HTMLPurifier_ElementDef();

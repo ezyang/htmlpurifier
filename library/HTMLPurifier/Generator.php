@@ -12,19 +12,16 @@ class HTMLPurifier_Generator
     
     /**
      * Bool cache of %HTML.XHTML
-     * @private
      */
     private $_xhtml = true;
     
     /**
      * Bool cache of %Output.CommentScriptContents
-     * @private
      */
     private $_scriptFix = false;
     
     /**
      * Cache of HTMLDefinition
-     * @private
      */
     private $_def;
     

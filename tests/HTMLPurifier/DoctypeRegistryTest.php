@@ -7,7 +7,7 @@ class HTMLPurifier_DoctypeRegistryTest extends HTMLPurifier_Harness
         
         $registry = new HTMLPurifier_DoctypeRegistry();
         
-        $d =& $registry->register(
+        $d = $registry->register(
             $name = 'XHTML 1.0 Transitional',
             $xml = true,
             $modules = array('module-one', 'module-two'),
@@ -18,10 +18,10 @@ class HTMLPurifier_DoctypeRegistryTest extends HTMLPurifier_Harness
         $d2 = new HTMLPurifier_Doctype($name, $xml, $modules, $tidyModules, $aliases);
         
         $this->assertIdentical($d, $d2);
-        $this->assertReference($d, $registry->get('XHTML 1.0 Transitional'));
+        $this->assertSame($d, $registry->get('XHTML 1.0 Transitional'));
         
         // test shorthand
-        $d =& $registry->register(
+        $d = $registry->register(
             $name = 'XHTML 1.0 Strict', true, 'module', 'Tidy', 'X10S'
         );
         $d2 = new HTMLPurifier_Doctype($name, true, array('module'), array('Tidy'), array('X10S'));
@@ -49,26 +49,26 @@ class HTMLPurifier_DoctypeRegistryTest extends HTMLPurifier_Harness
         
         $registry = new HTMLPurifier_DoctypeRegistry();
         
-        $d1 =& $registry->register('Doc1', true, array(), array(), array('1'));
+        $d1 = $registry->register('Doc1', true, array(), array(), array('1'));
         
-        $this->assertReference($d1, $registry->get('Doc1'));
-        $this->assertReference($d1, $registry->get('1'));
+        $this->assertSame($d1, $registry->get('Doc1'));
+        $this->assertSame($d1, $registry->get('1'));
         
-        $d2 =& $registry->register('Doc2', true, array(), array(), array('2'));
+        $d2 = $registry->register('Doc2', true, array(), array(), array('2'));
         
-        $this->assertReference($d2, $registry->get('Doc2'));
-        $this->assertReference($d2, $registry->get('2'));
+        $this->assertSame($d2, $registry->get('Doc2'));
+        $this->assertSame($d2, $registry->get('2'));
         
-        $d3 =& $registry->register('1', true, array(), array(), array());
+        $d3 = $registry->register('1', true, array(), array(), array());
         
         // literal name overrides alias
-        $this->assertReference($d3, $registry->get('1'));
+        $this->assertSame($d3, $registry->get('1'));
         
-        $d4 =& $registry->register('One', true, array(), array(), array('1'));
+        $d4 = $registry->register('One', true, array(), array(), array('1'));
         
-        $this->assertReference($d4, $registry->get('One'));
+        $this->assertSame($d4, $registry->get('One'));
         // still it overrides
-        $this->assertReference($d3, $registry->get('1'));
+        $this->assertSame($d3, $registry->get('1'));
         
     }
     

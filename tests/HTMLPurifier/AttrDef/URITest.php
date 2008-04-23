@@ -65,14 +65,31 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $parser = new HTMLPurifier_URIParser();
         $uri = $parser->parse('http://example.com');
         $this->config->set('URI', 'DefinitionID', 'HTMLPurifier_AttrDef_URITest->testURIDefinitionValidation');
-        $uri_def =& $this->config->getDefinition('URI');
-        // overload with mock
+        
         generate_mock_once('HTMLPurifier_URIDefinition');
         $uri_def = new HTMLPurifier_URIDefinitionMock();
         $uri_def->expectOnce('filter', array($uri, '*', '*'));
         $uri_def->setReturnValue('filter', true, array($uri, '*', '*'));
         $uri_def->setup = true;
+        
+        // Since definitions are no longer passed by reference, we need
+        // to muck around with the cache to insert our mock. This is
+        // technically a little bad, since the cache shouldn't change
+        // behavior, but I don't feel too good about letting users
+        // overload entire definitions.
+        generate_mock_once('HTMLPurifier_DefinitionCache');
+        $cache_mock = new HTMLPurifier_DefinitionCacheMock();
+        $cache_mock->setReturnValue('get', $uri_def);
+        
+        generate_mock_once('HTMLPurifier_DefinitionCacheFactory');
+        $factory_mock = new HTMLPurifier_DefinitionCacheFactoryMock();
+        $old = HTMLPurifier_DefinitionCacheFactory::instance();
+        HTMLPurifier_DefinitionCacheFactory::instance($factory_mock);
+        $factory_mock->setReturnValue('create', $cache_mock);
+        
         $this->assertDef('http://example.com');
+        
+        HTMLPurifier_DefinitionCacheFactory::instance($old);
     }
     
     /*

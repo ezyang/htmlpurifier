@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Represents a language and defines localizable string formatting and
+ * other functions, as well as the localized messages for HTML Purifier.
+ */
 class HTMLPurifier_Language
 {
     
@@ -36,7 +40,7 @@ class HTMLPurifier_Language
     
     public function __construct($config, $context) {
         $this->config  = $config;
-        $this->context =& $context;
+        $this->context = $context;
     }
     
     /**
@@ -122,7 +126,7 @@ class HTMLPurifier_Language
                     // could be introduced for all types of tokens. This
                     // may need to be factored out into a dedicated class
                     if (!empty($value->attr)) {
-                        $stripped_token = $value->copy();
+                        $stripped_token = clone $value;
                         $stripped_token->attr = array();
                         $subst['$'.$i.'.Compact'] = $generator->generateFromToken($stripped_token);
                     }

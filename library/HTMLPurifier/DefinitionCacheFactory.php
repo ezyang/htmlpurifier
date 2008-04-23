@@ -20,7 +20,7 @@ class HTMLPurifier_DefinitionCacheFactory
     /**
      * Retrieves an instance of global definition cache factory.
      */
-    public static function &instance($prototype = null) {
+    public static function instance($prototype = null) {
         static $instance;
         if ($prototype !== null) {
             $instance = $prototype;
@@ -45,7 +45,7 @@ class HTMLPurifier_DefinitionCacheFactory
      * @param $name Name of definitions handled by cache
      * @param $config Instance of HTMLPurifier_Config
      */
-    public function &create($type, $config) {
+    public function create($type, $config) {
         $method = $config->get('Cache', 'DefinitionImpl');
         if ($method === null) {
             $null = new HTMLPurifier_DefinitionCache_Null($type);

@@ -3,7 +3,7 @@
 /**
  * Base class for configuration entity
  */
-class HTMLPurifier_ConfigDef {
+abstract class HTMLPurifier_ConfigDef {
     public $class = false;
 }
 

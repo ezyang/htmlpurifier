@@ -35,7 +35,7 @@
 {
     public $name = '<strong>NameOfFilter</strong>';
     public function prepare($config) {}
-    public function filter(&$uri, $config, &$context) {}
+    public function filter(&$uri, $config, $context) {}
 }</pre>
 
 <p>
@@ -60,8 +60,8 @@
     public function HTMLPurifier_URI($scheme, $userinfo, $host, $port, $path, $query, $fragment);
     public function toString();
     public function copy();
-    public function getSchemeObj($config, &$context);
-    public function validate($config, &$context);
+    public function getSchemeObj($config, $context);
+    public function validate($config, $context);
 }</pre>
 
 <p>
@@ -139,7 +139,7 @@
 <pre>class HTMLPurifier_URIFilter_ConvertIDNToPunycode extends HTMLPurifier_URIFilter
 {
     public $name = 'ConvertIDNToPunycode';
-    public function filter(&$uri, $config, &$context) {
+    public function filter(&$uri, $config, $context) {
         if (is_null($uri->host)) return true;
         if ($uri->host == utf8_decode($uri->host)) {
             // is ASCII, abort
@@ -163,7 +163,7 @@
   to use it. Fortunately, this part's simple:
 </p>
 
-<pre>$uri =& $config->getDefinition('URI');
+<pre>$uri = $config->getDefinition('URI');
 $uri->addFilter(new HTMLPurifier_URIFilter_<strong>NameOfFilter</strong>());</pre>
 
 <p>
@@ -177,7 +177,7 @@ $uri->addFilter(new HTMLPurifier_URIFilter_<strong>NameOfFilter</strong>());</pr
     'URI', '<strong>NameOfFilter</strong>', false, 'bool',
     '<strong>What your filter does.</strong>'
 );
-$uri =& $config->getDefinition('URI', true);
+$uri = $config->getDefinition('URI', true);
 $uri->registerFilter(new HTMLPurifier_URIFilter_<strong>NameOfFilter</strong>());
 </pre>
 

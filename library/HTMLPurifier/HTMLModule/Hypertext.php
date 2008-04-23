@@ -9,7 +9,7 @@ class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
     public $name = 'Hypertext';
     
     public function __construct() {
-        $a =& $this->addElement(
+        $a = $this->addElement(
             'a', 'Inline', 'Inline', 'Common',
             array(
                 // 'accesskey' => 'Character',

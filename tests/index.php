@@ -92,7 +92,7 @@ require 'HTMLPurifier/Harness.php';
 // Now, userland code begins to be executed
 
 // setup special DefinitionCacheFactory decorator
-$factory =& HTMLPurifier_DefinitionCacheFactory::instance();
+$factory = HTMLPurifier_DefinitionCacheFactory::instance();
 $factory->addDecorator('Memory'); // since we deal with a lot of config objects
 
 if (!$AC['disable-phpt']) {

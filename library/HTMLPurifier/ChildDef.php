@@ -3,7 +3,7 @@
 /**
  * Defines allowed child nodes and validates tokens against it.
  */
-class HTMLPurifier_ChildDef
+abstract class HTMLPurifier_ChildDef
 {
     /**
      * Type of child definition, usually right-most part of class name lowercase.
@@ -34,9 +34,7 @@ class HTMLPurifier_ChildDef
      * @return bool false to remove parent node
      * @return array of replacement child tokens
      */
-    public function validateChildren($tokens_of_children, $config, $context) {
-        trigger_error('Call to abstract function', E_USER_ERROR);
-    }
+    abstract public function validateChildren($tokens_of_children, $config, $context);
 }
 
 

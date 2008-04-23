@@ -49,40 +49,40 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
         
         $align = 'Enum#left,right,center,justify';
         
-        $address =& $this->addBlankElement('address');
+        $address = $this->addBlankElement('address');
         $address->content_model = 'Inline | #PCDATA | p';
         $address->content_model_type = 'optional';
         $address->child = false;
         
-        $blockquote =& $this->addBlankElement('blockquote');
+        $blockquote = $this->addBlankElement('blockquote');
         $blockquote->content_model = 'Flow | #PCDATA';
         $blockquote->content_model_type = 'optional';
         $blockquote->child = false;
         
-        $br =& $this->addBlankElement('br');
+        $br = $this->addBlankElement('br');
         $br->attr['clear'] = 'Enum#left,all,right,none';
         
-        $caption =& $this->addBlankElement('caption');
+        $caption = $this->addBlankElement('caption');
         $caption->attr['align'] = 'Enum#top,bottom,left,right';
         
-        $div =& $this->addBlankElement('div');
+        $div = $this->addBlankElement('div');
         $div->attr['align'] = $align;
         
-        $dl =& $this->addBlankElement('dl');
+        $dl = $this->addBlankElement('dl');
         $dl->attr['compact'] = 'Bool#compact';
         
         for ($i = 1; $i <= 6; $i++) {
-            $h =& $this->addBlankElement("h$i");
+            $h = $this->addBlankElement("h$i");
             $h->attr['align'] = $align;
         }
         
-        $hr =& $this->addBlankElement('hr');
+        $hr = $this->addBlankElement('hr');
         $hr->attr['align'] = $align;
         $hr->attr['noshade'] = 'Bool#noshade';
         $hr->attr['size'] = 'Pixels';
         $hr->attr['width'] = 'Length';
         
-        $img =& $this->addBlankElement('img');
+        $img = $this->addBlankElement('img');
         $img->attr['align'] = 'Enum#top,middle,bottom,left,right';
         $img->attr['border'] = 'Pixels';
         $img->attr['hspace'] = 'Pixels';
@@ -90,43 +90,43 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
         
         // figure out this integer business
         
-        $li =& $this->addBlankElement('li');
+        $li = $this->addBlankElement('li');
         $li->attr['value'] = new HTMLPurifier_AttrDef_Integer();
         $li->attr['type']  = 'Enum#s:1,i,I,a,A,disc,square,circle';
         
-        $ol =& $this->addBlankElement('ol');
+        $ol = $this->addBlankElement('ol');
         $ol->attr['compact'] = 'Bool#compact';
         $ol->attr['start'] = new HTMLPurifier_AttrDef_Integer();
         $ol->attr['type'] = 'Enum#s:1,i,I,a,A';
         
-        $p =& $this->addBlankElement('p');
+        $p = $this->addBlankElement('p');
         $p->attr['align'] = $align;
         
-        $pre =& $this->addBlankElement('pre');
+        $pre = $this->addBlankElement('pre');
         $pre->attr['width'] = 'Number';
         
         // script omitted
         
-        $table =& $this->addBlankElement('table');
+        $table = $this->addBlankElement('table');
         $table->attr['align'] = 'Enum#left,center,right';
         $table->attr['bgcolor'] = 'Color';
         
-        $tr =& $this->addBlankElement('tr');
+        $tr = $this->addBlankElement('tr');
         $tr->attr['bgcolor'] = 'Color';
         
-        $th =& $this->addBlankElement('th');
+        $th = $this->addBlankElement('th');
         $th->attr['bgcolor'] = 'Color';
         $th->attr['height'] = 'Length';
         $th->attr['nowrap'] = 'Bool#nowrap';
         $th->attr['width'] = 'Length';
         
-        $td =& $this->addBlankElement('td');
+        $td = $this->addBlankElement('td');
         $td->attr['bgcolor'] = 'Color';
         $td->attr['height'] = 'Length';
         $td->attr['nowrap'] = 'Bool#nowrap';
         $td->attr['width'] = 'Length';
         
-        $ul =& $this->addBlankElement('ul');
+        $ul = $this->addBlankElement('ul');
         $ul->attr['compact'] = 'Bool#compact';
         $ul->attr['type'] = 'Enum#square,disc,circle';
         

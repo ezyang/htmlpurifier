@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Factory for token generation (PHP 5 only).
+ * Factory for token generation.
  * 
  * @note Doing some benchmarking indicates that the new operator is much
  *       slower than the clone operator (even discounting the cost of the
- *       constructor).  This class is for that optimization.  We may want to
- *       consider porting this to PHP 4 by virtue of the fact it makes the code
- *       easier to read.  Other then that, there's not much point as we don't
+ *       constructor).  This class is for that optimization.
+ *       Other then that, there's not much point as we don't
  *       maintain parallel HTMLPurifier_Token hierarchies (the main reason why
  *       you'd want to use an abstract factory).
+ * @todo Port DirectLex to use this
  */
 class HTMLPurifier_TokenFactory
 {

@@ -17,7 +17,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         $builder     = new HTMLPurifier_ConfigSchema_InterchangeBuilder();
         $interchange = new HTMLPurifier_ConfigSchema_Interchange();
         
-        if (!$dir) $dir = dirname(__FILE__) . '/schema/';
+        if (!$dir) $dir = HTMLPURIFIER_PREFIX . '/HTMLPurifier/ConfigSchema/schema/';
         $info = parse_ini_file($dir . 'info.ini');
         $interchange->name = $info['name'];
         

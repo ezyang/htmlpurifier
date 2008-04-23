@@ -206,7 +206,7 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
         ));
         
         $module2 = new HTMLPurifier_HTMLModule_Tidy();
-        $e =& $module2->addBlankElement('element');
+        $e = $module2->addBlankElement('element');
         $e->attr_transform_pre['attr'] = $attr;
         $e->attr_transform_post['attr'] = $attr_post;
         $e->child = $child;

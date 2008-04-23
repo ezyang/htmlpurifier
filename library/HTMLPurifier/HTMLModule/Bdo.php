@@ -13,7 +13,7 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
     );
     
     public function __construct() {
-        $bdo =& $this->addElement(
+        $bdo = $this->addElement(
             'bdo', 'Inline', 'Inline', array('Core', 'Lang'),
             array(
                 'dir' => 'Enum#ltr,rtl', // required

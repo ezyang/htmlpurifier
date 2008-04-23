@@ -128,14 +128,16 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
                     if (isset($params['element'])) {
                         $element = $params['element'];
                         if (empty($this->info[$element])) {
-                            $e =& $this->addBlankElement($element);
+                            $e = $this->addBlankElement($element);
                         } else {
-                            $e =& $this->info[$element];
+                            $e = $this->info[$element];
                         }
                     } else {
                         $type = "info_$type";
-                        $e =& $this;
+                        $e = $this;
                     }
+                    // PHP does some weird parsing when I do
+                    // $e->$type[$attr], so I have to assign a ref.
                     $f =& $e->$type;
                     $f[$attr] = $fix;
                     break;
@@ -146,9 +148,9 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
                 case 'content_model_type':
                     $element = $params['element'];
                     if (empty($this->info[$element])) {
-                        $e =& $this->addBlankElement($element);
+                        $e = $this->addBlankElement($element);
                     } else {
-                        $e =& $this->info[$element];
+                        $e = $this->info[$element];
                     }
                     $e->$type = $fix;
                     break;

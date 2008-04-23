@@ -21,9 +21,9 @@ class HTMLPurifier_DoctypeRegistry
      * @param $modules Modules doctype will load
      * @param $modules_for_modes Modules doctype will load for certain modes
      * @param $aliases Alias names for doctype
-     * @return Reference to registered doctype (usable for further editing)
+     * @return Editable registered doctype
      */
-    public function &register($doctype, $xml = true, $modules = array(),
+    public function register($doctype, $xml = true, $modules = array(),
         $tidy_modules = array(), $aliases = array(), $dtd_public = null, $dtd_system = null
     ) {
         if (!is_array($modules)) $modules = array($modules);
@@ -34,7 +34,7 @@ class HTMLPurifier_DoctypeRegistry
                 $doctype, $xml, $modules, $tidy_modules, $aliases, $dtd_public, $dtd_system
             );
         }
-        $this->doctypes[$doctype->name] =& $doctype;
+        $this->doctypes[$doctype->name] = $doctype;
         $name = $doctype->name;
         // hookup aliases
         foreach ($doctype->aliases as $alias) {
@@ -51,9 +51,9 @@ class HTMLPurifier_DoctypeRegistry
      * @note This function resolves aliases
      * @note When possible, use the more fully-featured make()
      * @param $doctype Name of doctype
-     * @return Reference to doctype object
+     * @return Editable doctype object
      */
-    public function &get($doctype) {
+    public function get($doctype) {
         if (isset($this->aliases[$doctype])) $doctype = $this->aliases[$doctype];
         if (!isset($this->doctypes[$doctype])) {
             trigger_error('Doctype ' . htmlspecialchars($doctype) . ' does not exist', E_USER_ERROR);

@@ -11,7 +11,7 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
     function testAttributesTransformedGlobalPre() {
         $this->config->set('HTML', 'DefinitionID',
           'HTMLPurifier_AttrValidator_ErrorsTest::testAttributesTransformedGlobalPre');
-        $def =& $this->config->getHTMLDefinition(true);
+        $def = $this->config->getHTMLDefinition(true);
         generate_mock_once('HTMLPurifier_AttrTransform');
         $transform = new HTMLPurifier_AttrTransformMock();
         $input = array('original' => 'value');

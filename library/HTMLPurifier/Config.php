@@ -107,7 +107,7 @@ class HTMLPurifier_Config
      * @return Default HTMLPurifier_Config object.
      */
     public static function createDefault() {
-        $definition =& HTMLPurifier_ConfigSchema::instance();
+        $definition = HTMLPurifier_ConfigSchema::instance();
         $config = new HTMLPurifier_Config($definition);
         return $config;
     }
@@ -254,21 +254,21 @@ class HTMLPurifier_Config
     }
     
     /**
-     * Retrieves reference to the HTML definition.
+     * Retrieves object reference to the HTML definition.
      * @param $raw Return a copy that has not been setup yet. Must be
      *             called before it's been setup, otherwise won't work.
      */
-    public function &getHTMLDefinition($raw = false) {
-        $def =& $this->getDefinition('HTML', $raw);
-        return $def; // prevent PHP 4.4.0 from complaining
+    public function getHTMLDefinition($raw = false) {
+        return $this->getDefinition('HTML', $raw);
     }
     
     /**
-     * Retrieves reference to the CSS definition
+     * Retrieves object reference to the CSS definition
+     * @param $raw Return a copy that has not been setup yet. Must be
+     *             called before it's been setup, otherwise won't work.
      */
-    public function &getCSSDefinition($raw = false) {
-        $def =& $this->getDefinition('CSS', $raw);
-        return $def;
+    public function getCSSDefinition($raw = false) {
+        return $this->getDefinition('CSS', $raw);
     }
     
     /**
@@ -276,7 +276,7 @@ class HTMLPurifier_Config
      * @param $type Type of definition: HTML, CSS, etc
      * @param $raw  Whether or not definition should be returned raw
      */
-    public function &getDefinition($type, $raw = false) {
+    public function getDefinition($type, $raw = false) {
         if (!$this->finalized && $this->autoFinalize) $this->finalize();
         $factory = HTMLPurifier_DefinitionCacheFactory::instance();
         $cache = $factory->create($type, $this);
@@ -310,17 +310,13 @@ class HTMLPurifier_Config
         } elseif ($type == 'URI') {
             $this->definitions[$type] = new HTMLPurifier_URIDefinition();
         } else {
-            trigger_error("Definition of $type type not supported");
-            $false = false;
-            return $false;
+            throw new HTMLPurifier_Exception("Definition of $type type not supported");
         }
         // quick abort if raw
         if ($raw) {
             if (is_null($this->get($type, 'DefinitionID'))) {
                 // fatally error out if definition ID not set
-                trigger_error("Cannot retrieve raw version without specifying %$type.DefinitionID", E_USER_ERROR);
-                $false = new HTMLPurifier_Error();
-                return $false;
+                throw new HTMLPurifier_Exception("Cannot retrieve raw version without specifying %$type.DefinitionID");
             }
             return $this->definitions[$type];
         }

@@ -281,9 +281,15 @@ class HTMLPurifier_Encoder
         $encoding = $config->get('Core', 'Encoding');
         if ($encoding === 'utf-8') return $str;
         if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
-            return @iconv($encoding, 'utf-8//IGNORE', $str);
+            set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
+            $str = iconv($encoding, 'utf-8//IGNORE', $str);
+            restore_error_handler();
+            return $str;
         } elseif ($encoding === 'iso-8859-1') {
-            return @utf8_encode($str);
+            set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
+            $str = utf8_encode($str);
+            restore_error_handler();
+            return $str;
         }
         trigger_error('Encoding not supported', E_USER_ERROR);
     }
@@ -302,9 +308,15 @@ class HTMLPurifier_Encoder
             $str = HTMLPurifier_Encoder::convertToASCIIDumbLossless($str);
         }
         if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
-            return @iconv('utf-8', $encoding . '//IGNORE', $str);
+            set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
+            $str = iconv('utf-8', $encoding . '//IGNORE', $str);
+            restore_error_handler();
+            return $str;
         } elseif ($encoding === 'iso-8859-1') {
-            return @utf8_decode($str);
+            set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
+            $str = utf8_decode($str);
+            restore_error_handler();
+            return $str;
         }
         trigger_error('Encoding not supported', E_USER_ERROR);
     }

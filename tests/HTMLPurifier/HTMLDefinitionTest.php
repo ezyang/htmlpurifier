@@ -75,7 +75,7 @@ a[href|title]
         $config = HTMLPurifier_Config::create(array(
             'HTML.DefinitionID' => 'HTMLPurifier_HTMLDefinitionTest->test_addAttribute'
         ));
-        $def =& $config->getHTMLDefinition(true);
+        $def = $config->getHTMLDefinition(true);
         $def->addAttribute('span', 'custom', 'Enum#attribute');
         
         $purifier = new HTMLPurifier($config);
@@ -90,7 +90,7 @@ a[href|title]
         $config = HTMLPurifier_Config::create(array(
             'HTML.DefinitionID' => 'HTMLPurifier_HTMLDefinitionTest->test_addAttribute_multiple'
         ));
-        $def =& $config->getHTMLDefinition(true);
+        $def = $config->getHTMLDefinition(true);
         $def->addAttribute('span', 'custom', 'Enum#attribute');
         $def->addAttribute('span', 'foo', 'Text');
         
@@ -106,7 +106,7 @@ a[href|title]
         $config = HTMLPurifier_Config::create(array(
             'HTML.DefinitionID' => 'HTMLPurifier_HTMLDefinitionTest->test_addElement'
         ));
-        $def =& $config->getHTMLDefinition(true);
+        $def = $config->getHTMLDefinition(true);
         $def->addElement('marquee', 'Inline', 'Inline', 'Common', array('width' => 'Length'));
         
         $purifier = new HTMLPurifier($config);

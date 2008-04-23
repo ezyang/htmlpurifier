@@ -11,7 +11,8 @@
  * 
  * A lexer is HTML-oriented: it might work with XML, but it's not
  * recommended, as we adhere to a subset of the specification for optimization
- * reasons.
+ * reasons. This might change in the future. Also, most tokenizers are not
+ * expected to handle DTDs or PIs.
  * 
  * This class should not be directly instantiated, but you may use create() to
  * retrieve a default copy of the lexer.  Being a supertype, this class
@@ -20,7 +21,8 @@
  * 
  * @note The unit tests will instantiate this class for testing purposes, as
  *       many of the utility functions require a class to be instantiated.
- *       Be careful when porting this class to PHP 5.
+ *       This means that, even though this class is not runnable, it will
+ *       not be declared abstract.
  * 
  * @par
  * 
@@ -28,18 +30,14 @@
  * We use tokens rather than create a DOM representation because DOM would:
  * 
  * @par
- *  -# Require more processing power to create,
- *  -# Require recursion to iterate,
- *  -# Must be compatible with PHP 5's DOM (otherwise duplication),
- *  -# Has the entire document structure (html and body not needed), and
- *  -# Has unknown readability improvement.
+ *  -# Require more processing and memory to create,
+ *  -# Is not streamable, and
+ *  -# Has the entire document structure (html and body not needed).
  * 
  * @par
- * What the last item means is that the functions for manipulating tokens are
- * already fairly compact, and when well-commented, more abstraction may not
- * be needed.
- * 
- * @see HTMLPurifier_Token
+ * However, DOM is helpful in that it makes it easy to move around nodes
+ * without a lot of lookaheads to see when a tag is closed. This is a
+ * limitation of the token system and some workarounds would be nice.
  */
 class HTMLPurifier_Lexer
 {
@@ -49,22 +47,16 @@ class HTMLPurifier_Lexer
     /**
      * Retrieves or sets the default Lexer as a Prototype Factory.
      * 
-     * Depending on what PHP version you are running, the abstract base
-     * Lexer class will determine which concrete Lexer is best for you:
-     * HTMLPurifier_Lexer_DirectLex for PHP 4, and HTMLPurifier_Lexer_DOMLex
-     * for PHP 5 and beyond.  This general rule has a few exceptions to it
-     * involving special features that only DirectLex implements.
+     * By default HTMLPurifier_Lexer_DOMLex will be returned. There are
+     * a few exceptions involving special features that only DirectLex
+     * implements.
      * 
      * @note The behavior of this class has changed, rather than accepting
      *       a prototype object, it now accepts a configuration object.
      *       To specify your own prototype, set %Core.LexerImpl to it.
      *       This change in behavior de-singletonizes the lexer object.
      * 
-     * @note In PHP4, it is possible to call this factory method from 
-     *       subclasses, such usage is not recommended and not
-     *       forwards-compatible.
-     * 
-     * @param $prototype Optional prototype lexer or configuration object
+     * @param $config Instance of HTMLPurifier_Config
      * @return Concrete lexer.
      */
     public static function create($config) {
@@ -96,8 +88,9 @@ class HTMLPurifier_Lexer
                 break;
             }
             
-            if (version_compare(PHP_VERSION, "5", ">=") && // check for PHP5
-                class_exists('DOMDocument')) { // check for DOM support
+            if (class_exists('DOMDocument')) {
+                // check for DOM support, because, surprisingly enough,
+                // it's *not* part of the core!
                 $lexer = 'DOMLex';
             } else {
                 $lexer = 'DirectLex';

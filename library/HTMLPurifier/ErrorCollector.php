@@ -15,7 +15,7 @@ class HTMLPurifier_ErrorCollector
     public function __construct($context) {
         $this->locale    =& $context->get('Locale');
         $this->generator =& $context->get('Generator');
-        $this->context   =& $context;
+        $this->context   = $context;
     }
     
     /**

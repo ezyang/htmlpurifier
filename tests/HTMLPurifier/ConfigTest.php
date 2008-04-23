@@ -219,27 +219,25 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $def = $config->getCSSDefinition();
         $this->assertIsA($def, 'HTMLPurifier_CSSDefinition');
         
-        $def  =& $config->getHTMLDefinition();
-        $def2 =& $config->getHTMLDefinition();
+        $def  = $config->getHTMLDefinition();
+        $def2 = $config->getHTMLDefinition();
         $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
-        $this->assertReference($def, $def2);
+        $this->assertSame($def, $def2);
         $this->assertTrue($def->setup);
         
-        // test re-calculation if HTML changes
-        unset($def, $def2);
-        $def2 = $config->getHTMLDefinition(); // forcibly de-reference
+        $old_def = clone $def2;
         
         $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
         $def = $config->getHTMLDefinition();
         $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
-        $this->assertNotEqual($def, $def2);
+        $this->assertNotEqual($def, $old_def);
         $this->assertTrue($def->setup);
         
         // test retrieval of raw definition
         $config->set('HTML', 'DefinitionID', 'HTMLPurifier_ConfigTest->test_getHTMLDefinition()');
         $config->set('HTML', 'DefinitionRev', 3);
-        $def =& $config->getHTMLDefinition(true);
-        $this->assertNotEqual($def, $def2);
+        $def = $config->getHTMLDefinition(true);
+        $this->assertNotEqual($def, $old_def);
         $this->assertEqual(false, $def->setup);
         
         // auto initialization
@@ -250,8 +248,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     
     function test_getHTMLDefinition_rawError() {
         $config = HTMLPurifier_Config::createDefault();
-        $this->expectError('Cannot retrieve raw version without specifying %HTML.DefinitionID');
-        $def =& $config->getHTMLDefinition(true);
+        $this->expectException(new HTMLPurifier_Exception('Cannot retrieve raw version without specifying %HTML.DefinitionID'));
+        $def = $config->getHTMLDefinition(true);
     }
     
     function test_getCSSDefinition() {
@@ -265,7 +263,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->schema->add('Cache', 'DefinitionImpl', null, 'string', true);
         $this->schema->addNamespace('Crust', 'Krusty Krabs');
         $config = new HTMLPurifier_Config($this->schema);
-        $this->expectError("Definition of Crust type not supported");
+        $this->expectException(new HTMLPurifier_Exception("Definition of Crust type not supported"));
         $config->getDefinition('Crust');
     }
     

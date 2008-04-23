@@ -35,7 +35,6 @@ require_once $__dir . '/HTMLPurifier/ElementDef.php';
 require_once $__dir . '/HTMLPurifier/Encoder.php';
 require_once $__dir . '/HTMLPurifier/EntityLookup.php';
 require_once $__dir . '/HTMLPurifier/EntityParser.php';
-require_once $__dir . '/HTMLPurifier/Error.php';
 require_once $__dir . '/HTMLPurifier/ErrorCollector.php';
 require_once $__dir . '/HTMLPurifier/Exception.php';
 require_once $__dir . '/HTMLPurifier/Filter.php';

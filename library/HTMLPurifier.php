@@ -207,9 +207,10 @@ class HTMLPurifier
     /**
      * Singleton for enforcing just one HTML Purifier in your system
      * @param $prototype Optional prototype HTMLPurifier instance to
-     *                   overload singleton with.
+     *                   overload singleton with, or HTMLPurifier_Config
+     *                   instance to configure the generated version with.
      */
-    public static function getInstance($prototype = null) {
+    public static function instance($prototype = null) {
         if (!self::$instance || $prototype) {
             if ($prototype instanceof HTMLPurifier) {
                 self::$instance = $prototype;
@@ -220,6 +221,13 @@ class HTMLPurifier
             }
         }
         return self::$instance;
+    }
+    
+    /**
+     * @note Backwards compatibility, see instance()
+     */
+    public static function getInstance($prototype = null) {
+        return HTMLPurifier::instance($prototype);
     }
     
 }

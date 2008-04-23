@@ -95,11 +95,11 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      *             HTMLPurifier_AttrTypes for details
      */
     public function addAttribute($element_name, $attr_name, $def) {
-        $module =& $this->getAnonymousModule();
+        $module = $this->getAnonymousModule();
         if (!isset($module->info[$element_name])) {
-            $element =& $module->addBlankElement($element_name);
+            $element = $module->addBlankElement($element_name);
         } else {
-            $element =& $module->info[$element_name];
+            $element = $module->info[$element_name];
         }
         $element->attr[$attr_name] = $def;
     }
@@ -109,11 +109,11 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      * @note See HTMLPurifier_HTMLModule::addElement for detailed 
      *       parameter and return value descriptions.
      */
-    public function &addElement($element_name, $type, $contents, $attr_collections, $attributes) {
-        $module =& $this->getAnonymousModule();
+    public function addElement($element_name, $type, $contents, $attr_collections, $attributes) {
+        $module = $this->getAnonymousModule();
         // assume that if the user is calling this, the element
         // is safe. This may not be a good idea
-        $element =& $module->addElement($element_name, $type, $contents, $attr_collections, $attributes);
+        $element = $module->addElement($element_name, $type, $contents, $attr_collections, $attributes);
         return $element;
     }
     
@@ -123,9 +123,9 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      * @note See HTMLPurifier_HTMLModule::addBlankElement for detailed
      *       parameter and return value descriptions.
      */
-    public function &addBlankElement($element_name) {
-        $module  =& $this->getAnonymousModule();
-        $element =& $module->addBlankElement($element_name);
+    public function addBlankElement($element_name) {
+        $module  = $this->getAnonymousModule();
+        $element = $module->addBlankElement($element_name);
         return $element;
     }
     
@@ -134,7 +134,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      * bust out advanced features without having to make your own
      * module.
      */
-    public function &getAnonymousModule() {
+    public function getAnonymousModule() {
         if (!$this->_anonModule) {
             $this->_anonModule = new HTMLPurifier_HTMLModule();
             $this->_anonModule->name = 'Anonymous';

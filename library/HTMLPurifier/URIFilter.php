@@ -26,7 +26,7 @@ abstract class HTMLPurifier_URIFilter
     
     /**
      * Filter a URI object
-     * @param &$uri Reference to URI object
+     * @param $uri Reference to URI object variable
      * @param $config Instance of HTMLPurifier_Config
      * @param $context Instance of HTMLPurifier_Context
      * @return bool Whether or not to continue processing: false indicates

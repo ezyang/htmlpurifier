@@ -10,12 +10,28 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 3.1.0, unknown release date
+# Unnecessary references to objects (vestiges of PHP4) removed from method
+  signatures.  The following methods do not need references when assigning from
+  them and will result in E_STRICT errors if you try:
+    + HTMLPurifier_Config->get*Definition() [* = HTML, CSS]
+    + HTMLPurifier_ConfigSchema::instance()
+    + HTMLPurifier_DefinitionCacheFactory::instance()
+    + HTMLPurifier_DefinitionCacheFactory->create()
+    + HTMLPurifier_DoctypeRegistry->register()
+    + HTMLPurifier_DoctypeRegistry->get()
+    + HTMLPurifier_HTMLModule->addElement()
+    + HTMLPurifier_HTMLModule->addBlankElement()
+    + HTMLPurifier_LanguageFactory::instance()
 - InterchangeBuilder now alphabetizes its lists
 - Validation error in configdoc output fixed
-- Iconv errors muted even with custom error handlers
+- Iconv and other encoding errors muted even with custom error handlers that
+  do not honor error_reporting
 - Add protection against imagecrash attack with CSS height/width
+- HTMLPurifier::instance() created for consistency, is equivalent to getInstance()
 . Out-of-date documentation revised
 . UTF-8 encoding check optimization as suggested by Diego
+. HTMLPurifier_Error removed in favor of exceptions
+. More copy() function removed; should use clone instead
 
 3.1.0rc1, released 2008-04-22
 # Autoload support added. Internal require_once's removed in favor of an

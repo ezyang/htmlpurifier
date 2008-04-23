@@ -83,7 +83,7 @@ alert(&lt;b&gt;bold&lt;/b&gt;);
         $this->config->set('HTML', 'DefinitionID',
             'HTMLPurifier_Strategy_RemoveForeignElementsTest'.
             '->testRequiredAttributesTestNotPerformedOnEndTag');
-        $def =& $this->config->getHTMLDefinition(true);
+        $def = $this->config->getHTMLDefinition(true);
         $def->addElement('f', 'Block', 'Optional: #PCDATA', false, array('req*' => 'Text'));
         $this->assertResult('<f req="text">Foo</f> Bar');
     }

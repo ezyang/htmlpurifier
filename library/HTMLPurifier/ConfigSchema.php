@@ -40,7 +40,7 @@ class HTMLPurifier_ConfigSchema {
     /**
      * Retrieves an instance of the application-wide configuration definition.
      */
-    public static function &instance($prototype = null) {
+    public static function instance($prototype = null) {
         if ($prototype !== null) {
             HTMLPurifier_ConfigSchema::$singleton = $prototype;
         } elseif (HTMLPurifier_ConfigSchema::$singleton === null || $prototype === true) {
@@ -104,9 +104,8 @@ class HTMLPurifier_ConfigSchema {
      * @param $allowed Lookup array of allowed values
      */
     public function addAllowedValues($namespace, $name, $allowed) {
-        $directive =& $this->info[$namespace][$name];
-        $type = $directive->type;
-        $directive->allowed = $allowed;
+        $type = $this->info[$namespace][$name]->type;
+        $this->info[$namespace][$name]->allowed = $allowed;
     }
     
     /**
@@ -130,21 +129,21 @@ class HTMLPurifier_ConfigSchema {
         $type = $type_values[0];
         $modifier = isset($type_values[1]) ? $type_values[1] : false;
         $allow_null = ($modifier === 'null');
-        $def =& HTMLPurifier_ConfigSchema::instance();
+        $def = HTMLPurifier_ConfigSchema::instance();
         $def->add($namespace, $name, $default, $type, $allow_null);
     }
     
     /** @see HTMLPurifier_ConfigSchema->addNamespace() */
     public static function defineNamespace($namespace, $description) {
         HTMLPurifier_ConfigSchema::deprecated(__METHOD__);
-        $def =& HTMLPurifier_ConfigSchema::instance();
+        $def = HTMLPurifier_ConfigSchema::instance();
         $def->addNamespace($namespace);
     }
     
     /** @see HTMLPurifier_ConfigSchema->addValueAliases() */
     public static function defineValueAliases($namespace, $name, $aliases) {
         HTMLPurifier_ConfigSchema::deprecated(__METHOD__);
-        $def =& HTMLPurifier_ConfigSchema::instance();
+        $def = HTMLPurifier_ConfigSchema::instance();
         $def->addValueAliases($namespace, $name, $aliases);
     }
     
@@ -155,14 +154,14 @@ class HTMLPurifier_ConfigSchema {
         foreach ($allowed_values as $value) {
             $allowed[$value] = true;
         }
-        $def =& HTMLPurifier_ConfigSchema::instance();
+        $def = HTMLPurifier_ConfigSchema::instance();
         $def->addAllowedValues($namespace, $name, $allowed);
     }
     
     /** @see HTMLPurifier_ConfigSchema->addAlias() */
     public static function defineAlias($namespace, $name, $new_namespace, $new_name) {
         HTMLPurifier_ConfigSchema::deprecated(__METHOD__);
-        $def =& HTMLPurifier_ConfigSchema::instance();
+        $def = HTMLPurifier_ConfigSchema::instance();
         $def->addAlias($namespace, $name, $new_namespace, $new_name);
     }
     
