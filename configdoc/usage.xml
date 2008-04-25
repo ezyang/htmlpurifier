@@ -2,7 +2,7 @@
 <usage>
  <directive id="Core.CollectErrors">
   <file name="HTMLPurifier.php">
-   <line>129</line>
+   <line>132</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>85</line>
