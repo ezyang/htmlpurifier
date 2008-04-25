@@ -24,6 +24,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     + HTMLPurifier_LanguageFactory::instance()
 # Printer_ConfigForm's get*() functions were static-ified
 ! Allow index to be false for config from form creation
+! Added HTMLPurifier::VERSION constant
 - InterchangeBuilder now alphabetizes its lists
 - Validation error in configdoc output fixed
 - Iconv and other encoding errors muted even with custom error handlers that

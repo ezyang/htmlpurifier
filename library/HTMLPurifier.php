@@ -58,7 +58,7 @@ class HTMLPurifier
     public $version = '3.1.0-dev';
     
     /** Constant with version of HTML Purifier */
-    const version = '3.1.0-dev';
+    const VERSION = '3.1.0-dev';
     
     /** Global configuration object */
     public $config;

@@ -78,8 +78,8 @@ if (!$c) {
     exit;
 }
 $htmlpurifier_c = preg_replace(
-    '/const version = \'.+?\';/',
-    "const version = '$version';",
+    '/const VERSION = \'.+?\';/',
+    "const VERSION = '$version';",
     $htmlpurifier_c,
     1, $c
 );
