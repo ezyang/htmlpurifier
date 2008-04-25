@@ -20,7 +20,7 @@ class HTMLPurifier_Config
     /**
      * HTML Purifier's version
      */
-    public $version = '3.1.0rc1';
+    public $version = '3.1.0';
     
     /**
      * Bool indicator whether or not to automatically finalize 
