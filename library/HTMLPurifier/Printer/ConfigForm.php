@@ -55,14 +55,14 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
     /**
      * Retrieves styling, in case it is not accessible by webserver
      */
-    public function getCSS() {
+    public static function getCSS() {
         return file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/Printer/ConfigForm.css');
     }
     
     /**
      * Retrieves JavaScript, in case it is not accessible by webserver
      */
-    public function getJavaScript() {
+    public static function getJavaScript() {
         return file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/Printer/ConfigForm.js');
     }
     
@@ -86,8 +86,8 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
         $ret .= $this->start('table', array('class' => 'hp-config'));
         $ret .= $this->start('thead');
         $ret .= $this->start('tr');
-            $ret .= $this->element('th', 'Directive');
-            $ret .= $this->element('th', 'Value');
+            $ret .= $this->element('th', 'Directive', array('class' => 'hp-directive'));
+            $ret .= $this->element('th', 'Value', array('class' => 'hp-value'));
         $ret .= $this->end('tr');
         $ret .= $this->end('thead');
         foreach ($all as $ns => $directives) {

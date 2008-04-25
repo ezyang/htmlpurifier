@@ -403,7 +403,7 @@ class HTMLPurifier_Config
      * @param $mq_fix Boolean whether or not to enable magic quotes fix
      * @param $schema Instance of HTMLPurifier_ConfigSchema to use, if not global copy
      */
-    public static function loadArrayFromForm($array, $index, $allowed = true, $mq_fix = true, $schema = null) {
+    public static function loadArrayFromForm($array, $index = false, $allowed = true, $mq_fix = true, $schema = null) {
         $ret = HTMLPurifier_Config::prepareArrayFromForm($array, $index, $allowed, $mq_fix, $schema);
         $config = HTMLPurifier_Config::create($ret, $schema);
         return $config;
@@ -413,7 +413,7 @@ class HTMLPurifier_Config
      * Merges in configuration values from $_GET/$_POST to object. NOT STATIC.
      * @note Same parameters as loadArrayFromForm
      */
-    public function mergeArrayFromForm($array, $index, $allowed = true, $mq_fix = true) {
+    public function mergeArrayFromForm($array, $index = false, $allowed = true, $mq_fix = true) {
          $ret = HTMLPurifier_Config::prepareArrayFromForm($array, $index, $allowed, $mq_fix, $this->def);
          $this->loadArray($ret);
     }
@@ -422,8 +422,8 @@ class HTMLPurifier_Config
      * Prepares an array from a form into something usable for the more
      * strict parts of HTMLPurifier_Config
      */
-    public static function prepareArrayFromForm($array, $index, $allowed = true, $mq_fix = true, $schema = null) {
-        $array = (isset($array[$index]) && is_array($array[$index])) ? $array[$index] : array();
+    public static function prepareArrayFromForm($array, $index = false, $allowed = true, $mq_fix = true, $schema = null) {
+        if ($index !== false) $array = (isset($array[$index]) && is_array($array[$index])) ? $array[$index] : array();
         $mq = $mq_fix && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc();
         
         $allowed = HTMLPurifier_Config::getAllowedDirectivesForForm($allowed, $schema);
