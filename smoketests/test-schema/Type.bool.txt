@@ -1,0 +1,4 @@
+Type.bool
+TYPE: bool
+DEFAULT: false
+DESCRIPTION: The boolean type is true or false.

@@ -2,31 +2,37 @@
 
 require_once 'common.php';
 
+// Setup environment
+require_once '../extras/HTMLPurifierExtras.auto.php';
+$interchange = HTMLPurifier_ConfigSchema_InterchangeBuilder::buildFromDirectory('test-schema/');
+$interchange->validate();
+
 if (isset($_GET['doc'])) {
     
-    if (
-        file_exists('testSchema.html') &&
-        filemtime('testSchema.php') < filemtime('testSchema.html') &&
-        !isset($_GET['purge'])
-    ) {
-        echo file_get_contents('testSchema.html');
+    // Hijack page generation to supply documentation
+    
+    if (file_exists('test-schema.html') && !isset($_GET['purge'])) {
+        echo file_get_contents('test-schema.html');
         exit;
     }
     
-    if (version_compare('5', PHP_VERSION, '>')) exit('Requires PHP 5 or higher.');
-    
-    // setup ConfigDoc environment
-    require_once '../configdoc/library/ConfigDoc.auto.php';
-    
-    // perform the ConfigDoc generation
-    $configdoc = new ConfigDoc();
-    $html = $configdoc->generate($new_schema, 'plain', array(
-        'css' => '../configdoc/styles/plain.css',
-        'title' => 'Sample Configuration Documentation'
+    $style = 'plain';
+    $configdoc_xml = 'test-schema.xml';
+
+    $xml_builder = new HTMLPurifier_ConfigSchema_Builder_Xml();
+    $xml_builder->openURI($configdoc_xml);
+    $xml_builder->build($interchange);
+    unset($xml_builder); // free handle
+
+    $xslt = new ConfigDoc_HTMLXSLTProcessor();
+    $xslt->importStylesheet("../configdoc/styles/$style.xsl");
+    $xslt->setParameters(array(
+      'css' => '../configdoc/styles/plain.css',
     ));
-    $configdoc->cleanup();
+    $html = $xslt->transformToHTML($configdoc_xml);
     
-    file_put_contents('testSchema.html', $html);
+    unlink('test-schema.xml');
+    file_put_contents('test-schema.html', $html);
     echo $html;
     
     exit;
@@ -50,15 +56,11 @@ of directive possible.</p>
 style="float:right;">
 <?php
 
-require_once 'HTMLPurifier/Printer/ConfigForm.php';
+$schema_builder = new HTMLPurifier_ConfigSchema_Builder_ConfigSchema();
+$schema = $schema_builder->build($interchange);
+HTMLPurifier_ConfigSchema::instance($schema);
 
-// fictional set, attempts to cover every possible data-type
-// see source at ConfigTest.php
-require_once 'testSchema.php';
-HTMLPurifier_ConfigSchema::instance($custom_schema);
-
-// cleanup ( this should be rolled into Config )
-$config = HTMLPurifier_Config::loadArrayFromForm($_GET, 'config');
+$config  = HTMLPurifier_Config::loadArrayFromForm($_GET, 'config');
 $printer = new HTMLPurifier_Printer_ConfigForm('config', '?doc#%s');
 echo $printer->render($config);
 
@@ -66,7 +68,7 @@ echo $printer->render($config);
 </form>
 <pre>
 <?php
-echo htmlspecialchars(print_r($config->getAll(), true));
+echo htmlspecialchars(var_export($config->getAll(), true));
 ?>
 </pre>
 </body>

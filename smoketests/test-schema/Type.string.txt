@@ -1,0 +1,4 @@
+Type.string
+TYPE: string
+DEFAULT: 'Case sensitive'
+DESCRIPTION: The string type is short (no newlines) and case-sensitive.

@@ -38,6 +38,7 @@ $configdoc_xml = 'configdoc.xml';
 $xml_builder = new HTMLPurifier_ConfigSchema_Builder_Xml();
 $xml_builder->openURI($configdoc_xml);
 $xml_builder->build($interchange);
+unset($xml_builder); // free handle
 
 $xslt = new ConfigDoc_HTMLXSLTProcessor();
 $xslt->importStylesheet(dirname(__FILE__) . "/styles/$style.xsl");

@@ -31,6 +31,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   do not honor error_reporting
 - Add protection against imagecrash attack with CSS height/width
 - HTMLPurifier::instance() created for consistency, is equivalent to getInstance()
+- Fixed and revamped broken ConfigForm smoketest
+- Bug with bool/null fields in Printer_ConfigForm fixed
 . Out-of-date documentation revised
 . UTF-8 encoding check optimization as suggested by Diego
 . HTMLPurifier_Error removed in favor of exceptions

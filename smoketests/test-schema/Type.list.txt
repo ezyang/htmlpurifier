@@ -1,0 +1,4 @@
+Type.list
+TYPE: list
+DEFAULT: array('item1', 'item2')
+DESCRIPTION: The list type is a numerically indexed array of strings.

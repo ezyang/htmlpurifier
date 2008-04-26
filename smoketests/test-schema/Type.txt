@@ -1,0 +1,2 @@
+Type
+DESCRIPTION: Directives demonstration the variable types ConfigSchema supports.

@@ -194,6 +194,10 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
             'id' => "$name:Null_$ns.$directive",
             'onclick' => "toggleWriteability('$name:$ns.$directive',checked)" // INLINE JAVASCRIPT!!!!
         );
+        if ($this->obj instanceof HTMLPurifier_Printer_ConfigForm_bool) {
+            // modify inline javascript slightly
+            $attr['onclick'] = "toggleWriteability('$name:Yes_$ns.$directive',checked);toggleWriteability('$name:No_$ns.$directive',checked)";
+        }
         if ($value === null) $attr['checked'] = 'checked';
         $ret .= $this->elementEmpty('input', $attr);
         $ret .= $this->text(' or ');
@@ -291,7 +295,8 @@ class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer {
             'id' => "$name:Yes_$ns.$directive",
             'value' => '1'
         );
-        if ($value) $attr['checked'] = 'checked';
+        if ($value === true) $attr['checked'] = 'checked';
+        if ($value === null) $attr['disabled'] = 'disabled';
         $ret .= $this->elementEmpty('input', $attr);
         
         $ret .= $this->start('label', array('for' => "$name:No_$ns.$directive"));
@@ -305,7 +310,8 @@ class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer {
             'id' => "$name:No_$ns.$directive",
             'value' => '0'
         );
-        if (!$value) $attr['checked'] = 'checked';
+        if ($value === false) $attr['checked'] = 'checked';
+        if ($value === null) $attr['disabled'] = 'disabled';
         $ret .= $this->elementEmpty('input', $attr);
                 
         $ret .= $this->end('div');
