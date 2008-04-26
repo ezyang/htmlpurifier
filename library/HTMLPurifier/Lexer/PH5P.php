@@ -2,17 +2,28 @@
 
 /**
  * Experimental HTML5-based parser using Jeroen van der Meer's PH5P library.
- * Requires PHP5, and occupies space in the HTML5 pseudo-namespace (may
- * cause conflicts, sorry).
+ * Occupies space in the HTML5 pseudo-namespace, which may cause conflicts.
+ * 
+ * @note
+ *    Recent changes to PHP's DOM extension have resulted in some fatal
+ *    error conditions with the original version of PH5P. Pending changes,
+ *    this lexer will punt to DirectLex if DOM throughs an exception.
  */
 
 class HTMLPurifier_Lexer_PH5P extends HTMLPurifier_Lexer_DOMLex {
     
     public function tokenizeHTML($html, $config, $context) {
-        $html = $this->normalize($html, $config, $context);
-        $html = $this->wrapHTML( $html, $config, $context);
-        $parser = new HTML5($html);
-        $doc = $parser->save();
+        $new_html = $this->normalize($html, $config, $context);
+        $new_html = $this->wrapHTML($new_html, $config, $context);
+        try {
+            $parser = new HTML5($new_html);
+            $doc = $parser->save();
+        } catch (DOMException $e) {
+            // Uh oh, it failed. Punt to DirectLex.
+            $lexer = new HTMLPurifier_Lexer_DirectLex();
+            $context->register('PH5PError', $e); // save the error, so we can detect it
+            return $lexer->tokenizeHTML($html, $config, $context); // use original HTML
+        }
         $tokens = array();
         $this->tokenizeDOM(
             $doc->getElementsByTagName('html')->item(0)-> // <html>

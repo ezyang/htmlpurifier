@@ -138,7 +138,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
         $lexers = array();
         $lexers['DirectLex']  = new HTMLPurifier_Lexer_DirectLex();
         if ($this->_has_pear) $lexers['PEARSax3']   = new HTMLPurifier_Lexer_PEARSax3();
-        if (version_compare(PHP_VERSION, "5", ">=") && class_exists('DOMDocument')) {
+        if (class_exists('DOMDocument')) {
             $lexers['DOMLex'] = new HTMLPurifier_Lexer_DOMLex();
             $lexers['PH5P']   = new HTMLPurifier_Lexer_PH5P();
         }
@@ -310,11 +310,24 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
                     new HTMLPurifier_Token_Start('a', array('"' => ''))
                 ),
                 'PEARSax3' => $tokens,
-                'PH5P' => array(
-                    new HTMLPurifier_Token_Empty('a', array('"' => ''))
-                ),
+                'PH5P' => false, // behavior varies; handle this personally
             )
         );
+    }
+    
+    function test_tokenizeHTML_earlyQuote_PH5P() {
+        if (!class_exists('DOMDocument')) return;
+        $lexer = new HTMLPurifier_Lexer_PH5P();
+        $result = $lexer->tokenizeHTML('<a "=>', $this->config, $this->context);
+        if ($this->context->get('PH5PError', true)) {
+            $this->assertIdentical(array(
+                new HTMLPurifier_Token_Start('a', array('"' => ''))
+            ), $result);
+        } else {
+            $this->assertIdentical(array(
+                new HTMLPurifier_Token_Empty('a', array('"' => ''))
+            ), $result);
+        }
     }
     
     function test_tokenizeHTML_unescapedQuote() {
