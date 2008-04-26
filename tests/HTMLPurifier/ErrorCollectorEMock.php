@@ -46,7 +46,7 @@ class HTMLPurifier_ErrorCollectorEMock extends HTMLPurifier_ErrorCollectorMock
         }
         // boilerplate mock code, does not have return value or references
         $args = func_get_args();
-        $mock->_invoke('send', $args);
+        $mock->invoke('send', $args);
     }
     
 }
