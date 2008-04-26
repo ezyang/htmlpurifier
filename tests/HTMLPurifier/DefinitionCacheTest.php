@@ -13,16 +13,17 @@ class HTMLPurifier_DefinitionCacheTest extends HTMLPurifier_Harness
         $config->setReturnValue('get', 10, array('Test', 'DefinitionRev'));
         $config->setReturnValue('getBatchSerial', 'hash', array('Test'));
         
-        $this->assertIdentical($cache->isOld('1.0.0-hash-10', $config), false);
-        $this->assertIdentical($cache->isOld('1.5.0-hash-1', $config), true);
+        $this->assertIdentical($cache->isOld('1.0.0,hash,10', $config), false);
+        $this->assertIdentical($cache->isOld('1.5.0,hash,1', $config), true);
         
-        $this->assertIdentical($cache->isOld('0.9.0-hash-1', $config), true);
-        $this->assertIdentical($cache->isOld('1.0.0-hash-1', $config), true);
-        $this->assertIdentical($cache->isOld('1.0.0beta-hash-11', $config), true);
+        $this->assertIdentical($cache->isOld('0.9.0,hash,1', $config), true);
+        $this->assertIdentical($cache->isOld('1.0.0,hash,1', $config), true);
+        $this->assertIdentical($cache->isOld('1.0.0beta,hash,11', $config), true);
         
-        $this->assertIdentical($cache->isOld('0.9.0-hash2-1', $config), true);
-        $this->assertIdentical($cache->isOld('1.0.0-hash2-1', $config), false); // if hash is different, don't touch!
-        $this->assertIdentical($cache->isOld('1.0.0beta-hash2-11', $config), true);
+        $this->assertIdentical($cache->isOld('0.9.0,hash2,1', $config), true);
+        $this->assertIdentical($cache->isOld('1.0.0,hash2,1', $config), false); // if hash is different, don't touch!
+        $this->assertIdentical($cache->isOld('1.0.0beta,hash2,11', $config), true);
+        $this->assertIdentical($cache->isOld('1.0.0-dev,hash2,11', $config), true);
         
     }
     

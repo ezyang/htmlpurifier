@@ -72,7 +72,7 @@ class HTMLPurifier_Config
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
      */
-    public function __construct(&$definition) {
+    public function __construct($definition) {
         $this->conf = $definition->defaults; // set up, copy in defaults
         $this->def  = $definition; // keep a copy around for checking
         $this->parser = new HTMLPurifier_VarParser_Flexible();

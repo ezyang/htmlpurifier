@@ -48,8 +48,7 @@ class HTMLPurifier_DefinitionCacheFactory
     public function create($type, $config) {
         $method = $config->get('Cache', 'DefinitionImpl');
         if ($method === null) {
-            $null = new HTMLPurifier_DefinitionCache_Null($type);
-            return $null;
+            return new HTMLPurifier_DefinitionCache_Null($type);
         }
         if (!empty($this->caches[$method][$type])) {
             return $this->caches[$method][$type];

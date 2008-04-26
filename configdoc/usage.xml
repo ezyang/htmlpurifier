@@ -131,12 +131,12 @@
  </directive>
  <directive id="HTML.ForbiddenElements">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>326</line>
+   <line>328</line>
   </file>
  </directive>
  <directive id="HTML.ForbiddenAttributes">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>327</line>
+   <line>329</line>
   </file>
  </directive>
  <directive id="HTML.Trusted">

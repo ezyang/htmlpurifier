@@ -11,6 +11,9 @@ If no interest is expressed for a feature that may require a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
+ - Get PH5P working with the latest versions of DOM, which have much more
+   stringent error checking procedures. Maybe convert straight to tokens.
+
 FUTURE VERSIONS
 ---------------
 

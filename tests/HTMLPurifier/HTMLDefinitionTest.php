@@ -3,6 +3,13 @@
 class HTMLPurifier_HTMLDefinitionTest extends HTMLPurifier_Harness
 {
     
+    function expectError($error = false, $message = '%s') {
+        // Because we're testing a definition, it's vital that the cache
+        // is turned off for tests that expect errors.
+        $this->config->set('Cache', 'DefinitionImpl', null);
+        parent::expectError($error);
+    }
+    
     function test_parseTinyMCEAllowedList() {
         
         $def = new HTMLPurifier_HTMLDefinition();
@@ -85,21 +92,18 @@ a[href|title]
     }
     
     function test_AllowedElements_invalidElement() {
-        $this->config->set('Cache', 'DefinitionImpl', null); // Necessary to ensure error is thrown
         $this->config->set('HTML', 'AllowedElements', 'obviously_invalid,p');
         $this->expectError(new PatternExpectation("/Element 'obviously_invalid' is not supported/"));
         $this->assertPurification_AllowedElements_p();
     }
     
     function test_AllowedElements_invalidElement_xssAttempt() {
-        $this->config->set('Cache', 'DefinitionImpl', null);
         $this->config->set('HTML', 'AllowedElements', '<script>,p');
         $this->expectError(new PatternExpectation("/Element '&lt;script&gt;' is not supported/"));
         $this->assertPurification_AllowedElements_p();
     }
     
     function test_AllowedElements_multipleInvalidElements() {
-        $this->config->set('Cache', 'DefinitionImpl', null);
         $this->config->set('HTML', 'AllowedElements', 'dr-wiggles,dr-pepper,p');
         $this->expectError(new PatternExpectation("/Element 'dr-wiggles' is not supported/"));
         $this->expectError(new PatternExpectation("/Element 'dr-pepper' is not supported/"));
@@ -153,21 +157,18 @@ a[href|title]
     }
     
     function test_AllowedAttributes_local_invalidAttribute() {
-        $this->config->set('Cache', 'DefinitionImpl', null);
         $this->config->set('HTML', 'AllowedAttributes', array('p@style', 'p@<foo>'));
         $this->expectError(new PatternExpectation("/Attribute '&lt;foo&gt;' in element 'p' not supported/"));
         $this->assertPurification_AllowedAttributes_local_p_style();
     }
     
     function test_AllowedAttributes_global_invalidAttribute() {
-        $this->config->set('Cache', 'DefinitionImpl', null);
         $this->config->set('HTML', 'AllowedAttributes', array('style', '<foo>'));
         $this->expectError(new PatternExpectation("/Global attribute '&lt;foo&gt;' is not supported in any elements/"));
         $this->assertPurification_AllowedAttributes_global_style();
     }
     
     function test_AllowedAttributes_local_invalidAttributeDueToMissingElement() {
-        $this->config->set('Cache', 'DefinitionImpl', null);
         $this->config->set('HTML', 'AllowedAttributes', 'p.style,foo.style');
         $this->expectError(new PatternExpectation("/Cannot allow attribute 'style' if element 'foo' is not allowed\/supported/"));
         $this->assertPurification_AllowedAttributes_local_p_style();
@@ -208,7 +209,6 @@ a[href|title]
     }
     
     function test_ForbiddenAttributes_incorrectSyntax() {
-        $this->config->set('Cache', 'DefinitionImpl', null);
         $this->config->set('HTML', 'ForbiddenAttributes', 'b.style');
         $this->expectError("Error with b.style: tag.attr syntax not supported for HTML.ForbiddenAttributes; use tag@attr instead");
         $this->assertPurification('<b style="float:left;">Test</b>');
