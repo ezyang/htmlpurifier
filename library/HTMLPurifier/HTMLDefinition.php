@@ -233,10 +233,10 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         $support = "(for information on implementing this, see the ".
                    "support forums) ";
         
-        // setup allowed elements
+        // setup allowed elements -----------------------------------------
         
         $allowed_elements = $config->get('HTML', 'AllowedElements');
-        $allowed_attributes = $config->get('HTML', 'AllowedAttributes');
+        $allowed_attributes = $config->get('HTML', 'AllowedAttributes'); // retrieve early
         
         if (!is_array($allowed_elements) && !is_array($allowed_attributes)) {
             $allowed = $config->get('HTML', 'Allowed');
@@ -252,55 +252,80 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             }
             // emit errors
             foreach ($allowed_elements as $element => $d) {
-                // :TODO: Is this htmlspecialchars() call really necessary?
-                $element = htmlspecialchars($element);
+                $element = htmlspecialchars($element); // PHP doesn't escape errors, be careful!
                 trigger_error("Element '$element' is not supported $support", E_USER_WARNING);
             }
         }
         
+        // setup allowed attributes ---------------------------------------
+        
         $allowed_attributes_mutable = $allowed_attributes; // by copy!
         if (is_array($allowed_attributes)) {
-            foreach ($this->info_global_attr as $attr_key => $info) {
-                if (!isset($allowed_attributes["*.$attr_key"])) {
-                    unset($this->info_global_attr[$attr_key]);
-                } elseif (isset($allowed_attributes_mutable["*.$attr_key"])) {
-                    unset($allowed_attributes_mutable["*.$attr_key"]);
+            
+            // This actually doesn't do anything, since we went away from
+            // global attributes. It's possible that userland code uses
+            // it, but HTMLModuleManager doesn't!
+            foreach ($this->info_global_attr as $attr => $x) {
+                $keys = array($attr, "*@$attr", "*.$attr");
+                $delete = true;
+                foreach ($keys as $key) {
+                    if ($delete && isset($allowed_attributes[$key])) {
+                        $delete = false;
+                    }
+                    if (isset($allowed_attributes_mutable[$key])) {
+                        unset($allowed_attributes_mutable[$key]);
+                    }
                 }
+                if ($delete) unset($this->info_global_attr[$attr]);
             }
+            
             foreach ($this->info as $tag => $info) {
-                foreach ($info->attr as $attr => $attr_info) {
-                    if (!isset($allowed_attributes["$tag.$attr"]) &&
-                        !isset($allowed_attributes["*.$attr"])) {
-                        unset($this->info[$tag]->attr[$attr]);
-                    } else {
-                        if (isset($allowed_attributes_mutable["$tag.$attr"])) {
-                            unset($allowed_attributes_mutable["$tag.$attr"]);
-                        } elseif (isset($allowed_attributes_mutable["*.$attr"])) {
-                            unset($allowed_attributes_mutable["*.$attr"]);
+                foreach ($info->attr as $attr => $x) {
+                    $keys = array("$tag@$attr", $attr, "*@$attr", "$tag.$attr", "*.$attr");
+                    $delete = true;
+                    foreach ($keys as $key) {
+                        if ($delete && isset($allowed_attributes[$key])) {
+                            $delete = false;
+                        }
+                        if (isset($allowed_attributes_mutable[$key])) {
+                            unset($allowed_attributes_mutable[$key]);
                         }
                     }
+                    if ($delete) unset($this->info[$tag]->attr[$attr]);
                 }
             }
             // emit errors
             foreach ($allowed_attributes_mutable as $elattr => $d) {
-                list($element, $attribute) = explode('.', $elattr);
-                // :TODO: Is this htmlspecialchars() call really necessary?
-                $element = htmlspecialchars($element);
-                $attribute = htmlspecialchars($attribute);
-                if ($element == '*') {
-                    trigger_error("Global attribute '$attribute' is not ".
-                        "supported in any elements $support",
-                        E_USER_WARNING);
-                } else {
-                    trigger_error("Attribute '$attribute' in element '$element' not supported $support",
-                        E_USER_WARNING);
+                $bits = preg_split('/[.@]/', $elattr, 2);
+                $c = count($bits);
+                switch ($c) {
+                    case 2:
+                        if ($bits[0] !== '*') {
+                            $element = htmlspecialchars($bits[0]);
+                            $attribute = htmlspecialchars($bits[1]);
+                            if (!isset($this->info[$element])) {
+                                trigger_error("Cannot allow attribute '$attribute' if element '$element' is not allowed/supported $support");
+                            } else {
+                                trigger_error("Attribute '$attribute' in element '$element' not supported $support",
+                                    E_USER_WARNING);
+                            }
+                            break;
+                        }
+                        // otherwise fall through
+                    case 1:
+                        $attribute = htmlspecialchars($bits[0]);
+                        trigger_error("Global attribute '$attribute' is not ".
+                            "supported in any elements $support",
+                            E_USER_WARNING);
+                        break;
                 }
             }
             
         }
         
-        // setup forbidden elements
-        $forbidden_elements = $config->get('HTML', 'ForbiddenElements');
+        // setup forbidden elements ---------------------------------------
+        
+        $forbidden_elements   = $config->get('HTML', 'ForbiddenElements');
         $forbidden_attributes = $config->get('HTML', 'ForbiddenAttributes');
         
         foreach ($this->info as $tag => $info) {
@@ -308,10 +333,18 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 unset($this->info[$tag]);
                 continue;
             }
-            foreach ($info->attr as $name => $def) {
-                if (isset($forbidden_attributes["$tag.$name"])) {
-                    unset($this->info[$tag]->attr[$name]);
+            foreach ($info->attr as $attr => $x) {
+                if (
+                    isset($forbidden_attributes["$tag@$attr"]) ||
+                    isset($forbidden_attributes["*@$attr"]) ||
+                    isset($forbidden_attributes[$attr])
+                ) {
+                    unset($this->info[$tag]->attr[$attr]);
                     continue;
+                } // this segment might get removed eventually
+                elseif (isset($forbidden_attributes["$tag.$attr"])) {
+                    // $tag.$attr are not user supplied, so no worries!
+                    trigger_error("Error with $tag.$attr: tag.attr syntax not supported for HTML.ForbiddenAttributes; use tag@attr instead", E_USER_WARNING);
                 }
             }
         }

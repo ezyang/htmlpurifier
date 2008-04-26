@@ -23,6 +23,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     + HTMLPurifier_HTMLModule->addBlankElement()
     + HTMLPurifier_LanguageFactory::instance()
 # Printer_ConfigForm's get*() functions were static-ified
+# %HTML.ForbiddenAttributes requires attribute declarations to be in the
+  form of tag@attr, NOT tag.attr (which will throw an error and won't do
+  anything). This is for forwards compatibility with XML; you'd do best
+  to migrate an %HTML.AllowedAttributes directives to this syntax too.
 ! Allow index to be false for config from form creation
 ! Added HTMLPurifier::VERSION constant
 - InterchangeBuilder now alphabetizes its lists
@@ -33,10 +37,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - HTMLPurifier::instance() created for consistency, is equivalent to getInstance()
 - Fixed and revamped broken ConfigForm smoketest
 - Bug with bool/null fields in Printer_ConfigForm fixed
+- Improved error messages for allowed and forbidden HTML elements and attributes
+- Missing (or null) in configdoc documentation restored
 . Out-of-date documentation revised
 . UTF-8 encoding check optimization as suggested by Diego
 . HTMLPurifier_Error removed in favor of exceptions
 . More copy() function removed; should use clone instead
+. More extensive unit tests for HTMLDefinition
+. assertPurification moved to central harness
 
 3.1.0rc1, released 2008-04-22
 # Autoload support added. Internal require_once's removed in favor of an

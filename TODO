@@ -52,6 +52,8 @@ FUTURE VERSIONS
    Also, enable disabling of directionality
 
 5.0 release [To XML and Beyond]
+ - AllowedAttributes and ForbiddenAttributes step on the toes of XML by
+   using periods; this needs to be changed.
  - Extended HTML capabilities based on namespacing and tag transforms (COMPLEX)
     - Hooks for adding custom processors to custom namespaced tags and
       attributes, offer default implementation

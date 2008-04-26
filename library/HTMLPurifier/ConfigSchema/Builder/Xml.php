@@ -71,8 +71,10 @@ class HTMLPurifier_ConfigSchema_Builder_Xml extends XMLWriter
         
         $this->startElement('constraints');
             if ($directive->version) $this->writeElement('version', $directive->version);
-            $this->writeElement('type', $directive->type);
-            if ($directive->typeAllowsNull) $this->writeAttribute('allow-null', 'yes');
+            $this->startElement('type');
+                if ($directive->typeAllowsNull) $this->writeAttribute('allow-null', 'yes');
+                $this->text($directive->type);
+            $this->endElement(); // type
             if ($directive->allowed) {
                 $this->startElement('allowed');
                     foreach ($directive->allowed as $value => $x) $this->writeElement('value', $value);
