@@ -41,6 +41,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Bug with bool/null fields in Printer_ConfigForm fixed
 - Improved error messages for allowed and forbidden HTML elements and attributes
 - Missing (or null) in configdoc documentation restored
+- If DOM throws and exception during parsing with PH5P (occurs in newer versions
+  of DOM), HTML Purifier punts to DirectLex
 . Out-of-date documentation revised
 . UTF-8 encoding check optimization as suggested by Diego
 . HTMLPurifier_Error removed in favor of exceptions

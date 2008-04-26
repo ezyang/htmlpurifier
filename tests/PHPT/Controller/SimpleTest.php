@@ -15,7 +15,7 @@ class PHPT_Controller_SimpleTest extends SimpleTestCase
     
     public function testPhpt() {
         $suite = new PHPT_Suite(array($this->_path));
-        $phpt_reporter = new PHPT_Reporter_SimpleTest($this->_reporter);
+        $phpt_reporter = new PHPT_Reporter_SimpleTest($this->reporter);
         $suite->run($phpt_reporter);
     }
     
