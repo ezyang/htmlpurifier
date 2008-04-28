@@ -12,8 +12,8 @@ class HTMLPurifier_ErrorCollectorEMock extends HTMLPurifier_ErrorCollectorMock
     private $_expected_context = array();
     private $_expected_context_at = array();
     
-    public function prepare(&$context) {
-        $this->_context =& $context;
+    public function prepare($context) {
+        $this->_context = $context;
     }
     
     public function expectContext($key, $value) {
@@ -27,13 +27,7 @@ class HTMLPurifier_ErrorCollectorEMock extends HTMLPurifier_ErrorCollectorMock
         // test for context
         $context = SimpleTest::getContext();
         $test = $context->getTest();
-        
-        // compat
-        if (empty($this->_mock)) {
-            $mock = $this;
-        } else {
-            $mock = $this->_mock;
-        }
+        $mock = $this->mock;
         
         foreach ($this->_expected_context as $key => $value) {
             $test->assertEqual($value, $this->_context->get($key));
