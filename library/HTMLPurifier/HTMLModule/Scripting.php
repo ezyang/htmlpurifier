@@ -8,19 +8,6 @@ INSIDE HTML PURIFIER DOCUMENTS. USE ONLY WITH TRUSTED USER INPUT!!!
 */
 
 /**
- * Implements required attribute stipulation for <script>
- */
-class HTMLPurifier_AttrTransform_ScriptRequired extends HTMLPurifier_AttrTransform
-{
-    public function transform($attr, $config, $context) {
-        if (!isset($attr['type'])) {
-            $attr['type'] = 'text/javascript';
-        }
-        return $attr;
-    }
-}
-
-/**
  * XHTML 1.1 Scripting module, defines elements that are used to contain
  * information pertaining to executable scripts or the lack of support
  * for executable scripts.

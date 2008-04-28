@@ -116,6 +116,7 @@ require 'HTMLPurifier/AttrTransform/ImgSpace.php';
 require 'HTMLPurifier/AttrTransform/Lang.php';
 require 'HTMLPurifier/AttrTransform/Length.php';
 require 'HTMLPurifier/AttrTransform/Name.php';
+require 'HTMLPurifier/AttrTransform/ScriptRequired.php';
 require 'HTMLPurifier/ChildDef/Chameleon.php';
 require 'HTMLPurifier/ChildDef/Custom.php';
 require 'HTMLPurifier/ChildDef/Empty.php';

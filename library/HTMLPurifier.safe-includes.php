@@ -110,6 +110,7 @@ require_once $__dir . '/HTMLPurifier/AttrTransform/ImgSpace.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/Lang.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/Length.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/Name.php';
+require_once $__dir . '/HTMLPurifier/AttrTransform/ScriptRequired.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/Chameleon.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/Custom.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/Empty.php';

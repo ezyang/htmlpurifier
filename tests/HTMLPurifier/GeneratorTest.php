@@ -1,108 +1,152 @@
 <?php
 
-class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
+class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
 {
     
-    protected $gen;
-    protected $_entity_lookup;
-    protected $config;
+    /**
+     * Entity lookup table to help for a few tests.
+     */
+    private $_entity_lookup;
     
     public function __construct() {
         parent::__construct();
-        $this->gen = new HTMLPurifier_Generator();
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
     }
     
     public function setUp() {
-        $this->obj       = new HTMLPurifier_Generator();
-        $this->func      = null;
-        $this->to_tokens = false;
-        $this->to_html   = false;
+        parent::setUp();
+        $this->config->set('Output', 'Newline', "\n");
     }
     
-    function test_generateFromToken() {
-        
-        $inputs = $expect = array();
-        
-        $inputs[0] = new HTMLPurifier_Token_Text('Foobar.<>');
-        $expect[0] = 'Foobar.&lt;&gt;';
-        
-        $inputs[1] = new HTMLPurifier_Token_Start('a',
-                            array('href' => 'dyn?a=foo&b=bar')
-                         );
-        $expect[1] = '<a href="dyn?a=foo&amp;b=bar">';
-        
-        $inputs[2] = new HTMLPurifier_Token_End('b');
-        $expect[2] = '</b>';
-        
-        $inputs[3] = new HTMLPurifier_Token_Empty('br',
-                            array('style' => 'font-family:"Courier New";')
-                         );
-        $expect[3] = '<br style="font-family:&quot;Courier New&quot;;" />';
-        
-        $inputs[4] = new HTMLPurifier_Token_Start('asdf');
-        $expect[4] = '<asdf>';
-        
-        $inputs[5] = new HTMLPurifier_Token_Empty('br');
-        $expect[5] = '<br />';
-        
-        // test fault tolerance
-        $inputs[6] = null;
-        $expect[6] = '';
-        
-        // don't convert non-special characters
-        $theta_char = $this->_entity_lookup->table['theta'];
-        $inputs[7] = new HTMLPurifier_Token_Text($theta_char);
-        $expect[7] = $theta_char;
-        
-        foreach ($inputs as $i => $input) {
-            $result = $this->obj->generateFromToken($input);
-            $this->assertIdentical($result, $expect[$i]);
-        }
-        
+    /**
+     * Creates a generator based on config and context member variables.
+     */
+    protected function createGenerator() {
+        return new HTMLPurifier_Generator($this->config, $this->context);
     }
     
-    function test_generateAttributes() {
-        
-        $inputs = $expect = array();
-        
-        $inputs[0] = array();
-        $expect[0] = '';
-        
-        $inputs[1] = array('href' => 'dyn?a=foo&b=bar');
-        $expect[1] = 'href="dyn?a=foo&amp;b=bar"';
-        
-        $inputs[2] = array('style' => 'font-family:"Courier New";');
-        $expect[2] = 'style="font-family:&quot;Courier New&quot;;"';
-        
-        $inputs[3] = array('src' => 'picture.jpg', 'alt' => 'Short & interesting');
-        $expect[3] = 'src="picture.jpg" alt="Short &amp; interesting"';
-        
-        // don't escape nonspecial characters
-        $theta_char = $this->_entity_lookup->table['theta'];
-        $inputs[4] = array('title' => 'Theta is ' . $theta_char);
-        $expect[4] = 'title="Theta is ' . $theta_char . '"';
-        
-        foreach ($inputs as $i => $input) {
-            $result = $this->obj->generateAttributes($input, 'irrelevant');
-            $this->assertIdentical($result, $expect[$i]);
-        }
-        
+    protected function assertGenerateFromToken($token, $html) {
+        $generator = $this->createGenerator();
+        $result = $generator->generateFromToken($token);
+        $this->assertIdentical($result, $html);
     }
+    
+    function test_generateFromToken_text() {
+        $this->assertGenerateFromToken(
+            new HTMLPurifier_Token_Text('Foobar.<>'),
+            'Foobar.&lt;&gt;'
+        );
+    }
+    
+    function test_generateFromToken_startWithAttr() {
+        $this->assertGenerateFromToken(
+            new HTMLPurifier_Token_Start('a',
+                array('href' => 'dyn?a=foo&b=bar')
+            ),
+            '<a href="dyn?a=foo&amp;b=bar">'
+        );
+    }
+    
+    function test_generateFromToken_end() {
+        $this->assertGenerateFromToken(
+            new HTMLPurifier_Token_End('b'),
+            '</b>'
+        );
+    }
+    
+    function test_generateFromToken_emptyWithAttr() {
+        $this->assertGenerateFromToken(
+            new HTMLPurifier_Token_Empty('br',
+                array('style' => 'font-family:"Courier New";')
+            ),
+            '<br style="font-family:&quot;Courier New&quot;;" />'
+        );
+    }
+    
+    function test_generateFromToken_startNoAttr() {
+        $this->assertGenerateFromToken(
+            new HTMLPurifier_Token_Start('asdf'),
+            '<asdf>'
+        );
+    }
+    
+    function test_generateFromToken_emptyNoAttr() {
+        $this->assertGenerateFromToken(
+            new HTMLPurifier_Token_Empty('br'),
+            '<br />'
+        );
+    }
+    
+    function test_generateFromToken_error() {
+        $this->expectError('Cannot generate HTML from non-HTMLPurifier_Token object');
+        $this->assertGenerateFromToken( null, '' );
+    }
+    
+    function test_generateFromToken_() {
+        $theta_char = $this->_entity_lookup->table['theta'];
+        $this->assertGenerateFromToken(
+            new HTMLPurifier_Token_Text($theta_char),
+            $theta_char
+        );
+    }
+    
+    function assertGenerateAttributes($attr, $expect, $element = false) {
+        $generator = $this->createGenerator();
+        $result = $generator->generateAttributes($attr, $element);
+        $this->assertIdentical($result, $expect);
+    }
+    
+    function test_generateAttributes_blank() {
+        $this->assertGenerateAttributes(array(), '');
+    }
+    
+    function test_generateAttributes_basic() {
+        $this->assertGenerateAttributes(
+            array('href' => 'dyn?a=foo&b=bar'),
+            'href="dyn?a=foo&amp;b=bar"'
+        );
+    }
+    
+    function test_generateAttributes_doubleQuote() {
+        $this->assertGenerateAttributes(
+            array('style' => 'font-family:"Courier New";'),
+            'style="font-family:&quot;Courier New&quot;;"'
+        );
+    }
+    
+    function test_generateAttributes_singleQuote() {
+        $this->assertGenerateAttributes(
+            array('style' => 'font-family:\'Courier New\';'),
+            'style="font-family:\'Courier New\';"'
+        );
+    }
+    
+    function test_generateAttributes_multiple() {
+        $this->assertGenerateAttributes(
+            array('src' => 'picture.jpg', 'alt' => 'Short & interesting'),
+            'src="picture.jpg" alt="Short &amp; interesting"'
+        );
+    }
+    
+    function test_generateAttributes_specialChar() {
+        $theta_char = $this->_entity_lookup->table['theta'];
+        $this->assertGenerateAttributes(
+            array('title' => 'Theta is ' . $theta_char),
+            'title="Theta is ' . $theta_char . '"'
+        );
+    }
+    
     
     function test_generateAttributes_minimized() {
-        $gen = new HTMLPurifier_Generator();
-        $context = new HTMLPurifier_Context();
-        $gen->generateFromTokens(array(), HTMLPurifier_Config::create(array('HTML.Doctype' => 'HTML 4.01 Transitional')), $context);
-        $result = $gen->generateAttributes(array('compact' => 'compact'), 'menu');
-        $this->assertIdentical($result, 'compact');
+        $this->config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
+        $this->assertGenerateAttributes(
+            array('compact' => 'compact'), 'compact', 'menu'
+        );
     }
     
     function test_generateFromTokens() {
         
-        $this->func = 'generateFromTokens';
-        
-        $this->assertResult(
+        $this->assertGeneration(
             array(
                 new HTMLPurifier_Token_Start('b'),
                 new HTMLPurifier_Token_Text('Foobar!'),
@@ -111,23 +155,15 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
             '<b>Foobar!</b>'
         );
         
-        $this->assertResult(array(), '');
-        
     }
     
     protected function assertGeneration($tokens, $expect) {
-        $context = new HTMLPurifier_Context();
-        $result = $this->gen->generateFromTokens(
-          $tokens, $this->config, $context);
-        // normalized newlines, this probably should be put somewhere else
-        $result = str_replace("\r\n", "\n", $result);
-        $result = str_replace("\r", "\n", $result);
+        $generator = new HTMLPurifier_Generator($this->config, $this->context);
+        $result = $generator->generateFromTokens($tokens);
         $this->assertIdentical($expect, $result);
     }
     
     function test_generateFromTokens_Scripting() {
-        $this->config = HTMLPurifier_Config::createDefault();
-        
         $this->assertGeneration(
             array(
                 new HTMLPurifier_Token_Start('script'),
@@ -136,8 +172,9 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
             ),
             "<script><!--//--><![CDATA[//><!--\nalert(3 < 5);\n//--><!]]></script>"
         );
-        
-        // if missing close tag, don't do anything
+    }
+    
+    function test_generateFromTokens_Scripting_missingCloseTag() {
         $this->assertGeneration(
             array(
                 new HTMLPurifier_Token_Start('script'),
@@ -145,8 +182,9 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
             ),
             "<script>alert(3 &lt; 5);"
         );
-        
-        // if two script blocks, don't do anything
+    }
+    
+    function test_generateFromTokens_Scripting_doubleBlock() {
         $this->assertGeneration(
             array(
                 new HTMLPurifier_Token_Start('script'),
@@ -156,12 +194,10 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_ComplexHarness
             ),
             "<script>alert(3 &lt; 5);foo();</script>"
         );
-        
-        
-        
-        $this->config = HTMLPurifier_Config::createDefault();
+    }
+    
+    function test_generateFromTokens_Scripting_disableWrapper() {
         $this->config->set('Output', 'CommentScriptContents', false);
-        
         $this->assertGeneration(
             array(
                 new HTMLPurifier_Token_Start('script'),

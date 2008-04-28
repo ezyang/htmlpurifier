@@ -36,11 +36,6 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
     protected $lexer;
     
     /**
-     * Instance of HTMLPurifier_Generator
-     */
-    protected $generator;
-    
-    /**
      * Default config to fall back on if no config is available
      */
     protected $config;
@@ -52,7 +47,6 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
     
     public function __construct() {
         $this->lexer     = new HTMLPurifier_Lexer_DirectLex();
-        $this->generator = new HTMLPurifier_Generator();
         parent::__construct();
     }
     
@@ -110,7 +104,8 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
      * Generate textual HTML from tokens
      */
     protected function generate($tokens) {
-        return $this->generator->generateFromTokens($tokens, $this->config, $this->context);
+        $generator = new HTMLPurifier_Generator($this->config, $this->context);
+        return $generator->generateFromTokens($tokens);
     }
     
 }

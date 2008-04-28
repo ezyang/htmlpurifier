@@ -43,12 +43,16 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Missing (or null) in configdoc documentation restored
 - If DOM throws and exception during parsing with PH5P (occurs in newer versions
   of DOM), HTML Purifier punts to DirectLex
+- Fatal error with unserialization of ScriptRequired
 . Out-of-date documentation revised
 . UTF-8 encoding check optimization as suggested by Diego
 . HTMLPurifier_Error removed in favor of exceptions
 . More copy() function removed; should use clone instead
 . More extensive unit tests for HTMLDefinition
 . assertPurification moved to central harness
+. HTMLPurifier_Generator accepts $config and $context parameters during
+  instantiation, not runtime
+. Double-quotes outside of attribute values are now unescaped
 
 3.1.0rc1, released 2008-04-22
 # Autoload support added. Internal require_once's removed in favor of an

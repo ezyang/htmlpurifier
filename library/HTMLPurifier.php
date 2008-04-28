@@ -90,7 +90,6 @@ class HTMLPurifier
         $this->config = HTMLPurifier_Config::create($config);
         
         $this->strategy     = new HTMLPurifier_Strategy_Core();
-        $this->generator    = new HTMLPurifier_Generator();
         
     }
     
@@ -124,8 +123,8 @@ class HTMLPurifier
         
         $context = new HTMLPurifier_Context();
         
-        // our friendly neighborhood generator, all primed with configuration too!
-        $this->generator->generateFromTokens(array(), $config, $context);
+        // setup HTML generator
+        $this->generator = new HTMLPurifier_Generator($config, $context);
         $context->register('Generator', $this->generator);
         
         // set up global context variables
@@ -178,8 +177,7 @@ class HTMLPurifier
                         $html, $config, $context
                     ),
                     $config, $context
-                ),
-                $config, $context
+                )
             );
         
         for ($i = $filter_size - 1; $i >= 0; $i--) {

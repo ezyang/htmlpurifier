@@ -13,6 +13,8 @@ afraid to cast your vote for the next feature to be implemented!
 
  - Get PH5P working with the latest versions of DOM, which have much more
    stringent error checking procedures. Maybe convert straight to tokens.
+ - Figure out what to do with $this->config configuration object calls
+   in the scanner
 
 FUTURE VERSIONS
 ---------------

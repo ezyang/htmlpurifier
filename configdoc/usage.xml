@@ -2,7 +2,7 @@
 <usage>
  <directive id="Core.CollectErrors">
   <file name="HTMLPurifier.php">
-   <line>132</line>
+   <line>131</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>85</line>
@@ -91,17 +91,7 @@
  </directive>
  <directive id="Output.CommentScriptContents">
   <file name="HTMLPurifier/Generator.php">
-   <line>37</line>
-  </file>
- </directive>
- <directive id="Output.TidyFormat">
-  <file name="HTMLPurifier/Generator.php">
-   <line>58</line>
-  </file>
- </directive>
- <directive id="Output.Newline">
-  <file name="HTMLPurifier/Generator.php">
-   <line>83</line>
+   <line>41</line>
   </file>
  </directive>
  <directive id="HTML.BlockWrapper">
