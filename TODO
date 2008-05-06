@@ -11,10 +11,15 @@ If no interest is expressed for a feature that may require a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
+ - FINISH THE DRUPAL MODULE!!!
  - Get PH5P working with the latest versions of DOM, which have much more
    stringent error checking procedures. Maybe convert straight to tokens.
  - Figure out what to do with $this->config configuration object calls
    in the scanner
+ - Quick optimizations for empty strings and strings without HTML (make sure
+   %HTML.Parent is accounted for) - Denis
+ - Write a var_export and memcached DefinitionCache - Denis
+ - Make %HTML.Allowed accept arbitrary whitespace - Denis
 
 FUTURE VERSIONS
 ---------------
@@ -76,8 +81,12 @@ Ongoing
 
 AutoFormat
  - Smileys
- - Syntax highlighting with <pre> and possibly <?php
+ - Syntax highlighting (with GeSHi) with <pre> and possibly <?php
  - Look at http://drupal.org/project/Modules/category/63 for ideas
+
+Optimizations
+ - Reduce size of internal data-structures (esp. HTMLDefinition)
+ - Combine multiple strategies into a single, single-pass strategy
 
 Neat feature related
  ! Factor demo.php into a set of Printer classes, and then create a stub
