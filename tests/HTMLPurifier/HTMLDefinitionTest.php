@@ -214,6 +214,28 @@ a[href|title]
         $this->assertPurification('<b style="float:left;">Test</b>');
     }
     
+    function test_ForbiddenAttributes_incorrectGlobalSyntax() {
+        $this->config->set('HTML', 'ForbiddenAttributes', '*.style');
+        $this->expectError("Error with *.style: *.attr syntax not supported for HTML.ForbiddenAttributes; use attr instead");
+        $this->assertPurification('<b style="float:left;">Test</b>');
+    }
+    
+    function assertPurification_ForbiddenAttributes_style() {
+        $this->assertPurification(
+            '<b class="foo" style="float:left;">b</b><i style="float:left;">i</i>',
+            '<b class="foo">b</b><i>i</i>');
+    }
+    
+    function test_ForbiddenAttributes_global() {
+        $this->config->set('HTML', 'ForbiddenAttributes', 'style');
+        $this->assertPurification_ForbiddenAttributes_style();
+    }
+    
+    function test_ForbiddenAttributes_globalVerboseFormat() {
+        $this->config->set('HTML', 'ForbiddenAttributes', '*@style');
+        $this->assertPurification_ForbiddenAttributes_style();
+    }
+    
     function test_addAttribute() {
         
         $config = HTMLPurifier_Config::create(array(

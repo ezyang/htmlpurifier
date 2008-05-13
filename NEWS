@@ -39,6 +39,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - HTMLPurifier::instance() created for consistency, is equivalent to getInstance()
 - Fixed and revamped broken ConfigForm smoketest
 - Bug with bool/null fields in Printer_ConfigForm fixed
+- Bug with global forbidden attributes fixed
 - Improved error messages for allowed and forbidden HTML elements and attributes
 - Missing (or null) in configdoc documentation restored
 - If DOM throws and exception during parsing with PH5P (occurs in newer versions

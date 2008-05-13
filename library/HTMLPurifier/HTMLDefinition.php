@@ -348,6 +348,13 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 }
             }
         }
+        foreach ($forbidden_attributes as $key => $v) {
+            if (strlen($key) < 2) continue;
+            if ($key[0] != '*') continue;
+            if ($key[1] == '.') {
+                trigger_error("Error with $key: *.attr syntax not supported for HTML.ForbiddenAttributes; use attr instead", E_USER_WARNING);
+            }
+        }
         
     }
     
