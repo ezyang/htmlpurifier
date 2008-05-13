@@ -31,6 +31,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added HTMLPurifier::VERSION constant
 ! Commas, not dashes, used for serializer IDs. This change is forwards-compatible
   and allows for version numbers like "3.1.0-dev".
+! %HTML.Allowed deals gracefully with whitespace anywhere, anytime!
 - InterchangeBuilder now alphabetizes its lists
 - Validation error in configdoc output fixed
 - Iconv and other encoding errors muted even with custom error handlers that

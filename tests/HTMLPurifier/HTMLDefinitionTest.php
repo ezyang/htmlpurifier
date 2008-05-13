@@ -56,8 +56,13 @@ class HTMLPurifier_HTMLDefinitionTest extends HTMLPurifier_Harness
 strong
 a[href|title]
 '),
-            array(array('span' => true, 'strong' => true, 'a' => true),
+            $val = array(array('span' => true, 'strong' => true, 'a' => true),
             array('span.style' => true, 'a.href' => true, 'a.title' => true))
+        );
+        
+        $this->assertEqual(
+            $def->parseTinyMCEAllowedList(' span [ style ], strong'."\n\t".'a[href | title]'),
+            $val
         );
         
     }

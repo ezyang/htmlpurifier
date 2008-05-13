@@ -369,6 +369,8 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      */
     public function parseTinyMCEAllowedList($list) {
         
+        $list = str_replace(array(' ', "\t"), '', $list);
+        
         $elements = array();
         $attributes = array();
         

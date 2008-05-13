@@ -15,8 +15,7 @@ afraid to cast your vote for the next feature to be implemented!
    in the scanner
  - Quick optimizations for empty strings and strings without HTML (make sure
    %HTML.Parent is accounted for) - Denis
- - Write a var_export and memcached DefinitionCache - Denis
- - Make %HTML.Allowed accept arbitrary whitespace - Denis
+ - Ensure cache files by Serializer are chmod'ed properly - Denis
 
 FUTURE VERSIONS
 ---------------
@@ -83,9 +82,11 @@ AutoFormat
 
 Optimizations
  - Reduce size of internal data-structures (esp. HTMLDefinition)
+ - Research memory usage of objects versus arrays
  - Combine multiple strategies into a single, single-pass strategy
  - Get PH5P working with the latest versions of DOM, which have much more
    stringent error checking procedures. Maybe convert straight to tokens.
+ - Get rid of set_include_path(). Save this for another major release.
 
 Neat feature related
  ! Factor demo.php into a set of Printer classes, and then create a stub
@@ -103,6 +104,9 @@ Neat feature related
    empty-cells:show is applied to have compatibility with Internet Explorer
  - Table of Contents generation (XHTML Compiler might be reusable). May also
    be out-of-band information.
+ - Full set of color keywords. Also, a way to add onto them without
+   finalizing the configuration object.
+ - Write a var_export and memcached DefinitionCache - Denis
 
 Maintenance related (slightly boring)
  # CHMOD install script for PEAR installs
