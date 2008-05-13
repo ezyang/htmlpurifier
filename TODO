@@ -11,12 +11,6 @@ If no interest is expressed for a feature that may require a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
- - Figure out what to do with $this->config configuration object calls
-   in the scanner
- - Quick optimizations for empty strings and strings without HTML (make sure
-   %HTML.Parent is accounted for) - Denis
- - Ensure cache files by Serializer are chmod'ed properly - Denis
-
 FUTURE VERSIONS
 ---------------
 

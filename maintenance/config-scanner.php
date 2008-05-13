@@ -62,7 +62,19 @@ foreach ($files as $file) {
     $tokens = token_get_all(file_get_contents($file));
     $file = str_replace('\\', '/', $file);
     for ($i = 0, $c = count($tokens); $i < $c; $i++) {
-        if (!testToken($tokens[$i], T_VARIABLE, '$config')) continue;
+        $ok = false;
+        // Match $config
+        if (!$ok && testToken($tokens[$i], T_VARIABLE, '$config')) $ok = true;
+        // Match $this->config
+        while (!$ok && testToken($tokens[$i], T_VARIABLE, '$this')) {
+            consumeWhitespace($tokens, $i);
+            if (!testToken($tokens[$i], T_OBJECT_OPERATOR)) break;
+            consumeWhitespace($tokens, $i);
+            if (testToken($tokens[$i], T_STRING, 'config')) $ok = true;
+            break;
+        }
+        if (!$ok) continue;
+        
         $ok = false;
         for($i++; $i < $c; $i++) {
             if ($tokens[$i] === ',' || $tokens[$i] === ')' || $tokens[$i] === ';') {
@@ -86,31 +98,40 @@ foreach ($files as $file) {
         
         $full_counter++;
         
-        // The T_CONSTANT_ENCAPSED_STRING may hide some more obscure use-cases;
-        // it may be useful to log these.
-        consumeWhitespace($tokens, $i);
-        if (!testToken($tokens[$i], T_CONSTANT_ENCAPSED_STRING)) continue;
-        $namespace = substr($tokens[$i][1], 1, -1);
+        $matched = false;
+        do {
+            
+            // What we currently don't match are batch retrievals, and
+            // wildcard retrievals. This data might be useful in the future,
+            // which is why we have a do {} while loop that doesn't actually
+            // do anything.
+            
+            consumeWhitespace($tokens, $i);
+            if (!testToken($tokens[$i], T_CONSTANT_ENCAPSED_STRING)) continue;
+            $namespace = substr($tokens[$i][1], 1, -1);
+            
+            consumeWhitespace($tokens, $i);
+            if (!testToken($tokens[$i], ',')) continue;
+            
+            consumeWhitespace($tokens, $i);
+            if (!testToken($tokens[$i], T_CONSTANT_ENCAPSED_STRING)) continue;
+            $directive = substr($tokens[$i][1], 1, -1);
+            
+            $counter++;
+            $matched = true;
+            
+            $id = "$namespace.$directive";
+            if (!isset($tracker[$id])) $tracker[$id] = array();
+            if (!isset($tracker[$id][$file])) $tracker[$id][$file] = array();
+            $tracker[$id][$file][] = $line;
+            
+        } while (0);
         
-        consumeWhitespace($tokens, $i);
-        if (!testToken($tokens[$i], ',')) continue;
-        
-        consumeWhitespace($tokens, $i);
-        if (!testToken($tokens[$i], T_CONSTANT_ENCAPSED_STRING)) continue;
-        $directive = substr($tokens[$i][1], 1, -1);
-        
-        $counter++;
-        
-        $id = "$namespace.$directive";
-        if (!isset($tracker[$id])) $tracker[$id] = array();
-        if (!isset($tracker[$id][$file])) $tracker[$id][$file] = array();
-        $tracker[$id][$file][] = $line;
-        
-        // echo "$file:$line uses $namespace.$directive\n";
+        //echo "$file:$line uses $namespace.$directive\n";
     }
 }
 
-echo "\n$counter/$full_counter instances of \$config found in source code.\n";
+echo "\n$counter/$full_counter instances of \$config or \$this->config found in source code.\n";
 
 echo "Generating XML... ";
 

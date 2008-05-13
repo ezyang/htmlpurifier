@@ -29,7 +29,7 @@ class HTMLPurifier_Generator
     /**
      * Configuration for the generator
      */
-    private $_config;
+    protected $config;
     
     /**
      * @param $config Instance of HTMLPurifier_Config
@@ -37,7 +37,7 @@ class HTMLPurifier_Generator
      */
     public function __construct($config = null, $context = null) {
         if (!$config) $config = HTMLPurifier_Config::createDefault();
-        $this->_config = $config;
+        $this->config = $config;
         $this->_scriptFix = $config->get('Output', 'CommentScriptContents');
         $this->_def = $config->getHTMLDefinition();
         $this->_xhtml = $this->_def->doctype->xml;
@@ -67,7 +67,7 @@ class HTMLPurifier_Generator
         }
         
         // Tidy cleanup
-        if (extension_loaded('tidy') && $this->_config->get('Output', 'TidyFormat')) {
+        if (extension_loaded('tidy') && $this->config->get('Output', 'TidyFormat')) {
             $tidy = new Tidy;
             $tidy->parseString($html, array(
                'indent'=> true,
@@ -81,7 +81,7 @@ class HTMLPurifier_Generator
         }
         
         // Normalize newlines to system defined value
-        $nl = $this->_config->get('Output', 'Newline');
+        $nl = $this->config->get('Output', 'Newline');
         if ($nl === null) $nl = PHP_EOL;
         if ($nl !== "\n") $html = str_replace("\n", $nl, $html);
         return $html;

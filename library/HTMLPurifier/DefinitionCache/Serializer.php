@@ -100,18 +100,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
      * @return Number of bytes written if success, or false if failure.
      */
     private function _write($file, $data) {
-        static $file_put_contents;
-        if ($file_put_contents === null) {
-            $file_put_contents = function_exists('file_put_contents');
-        }
-        if ($file_put_contents) {
-            return file_put_contents($file, $data);
-        }
-        $fh = fopen($file, 'w');
-        if (!$fh) return false;
-        $status = fwrite($fh, $data);
-        fclose($fh);
-        return $status;
+        return file_put_contents($file, $data);
     }
     
     /**
@@ -130,7 +119,9 @@ class HTMLPurifier_DefinitionCache_Serializer extends
             } elseif (!$this->_testPermissions($base)) {
                 return false;
             }
+            $old = umask(0022); // disable group and world writes
             mkdir($directory);
+            umask($old);
         } elseif (!$this->_testPermissions($directory)) {
             return false;
         }

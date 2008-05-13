@@ -94,6 +94,16 @@
    <line>41</line>
   </file>
  </directive>
+ <directive id="Output.TidyFormat">
+  <file name="HTMLPurifier/Generator.php">
+   <line>70</line>
+  </file>
+ </directive>
+ <directive id="Output.Newline">
+  <file name="HTMLPurifier/Generator.php">
+   <line>84</line>
+  </file>
+ </directive>
  <directive id="HTML.BlockWrapper">
   <file name="HTMLPurifier/HTMLDefinition.php">
    <line>213</line>

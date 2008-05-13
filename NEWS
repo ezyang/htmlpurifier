@@ -46,6 +46,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - If DOM throws and exception during parsing with PH5P (occurs in newer versions
   of DOM), HTML Purifier punts to DirectLex
 - Fatal error with unserialization of ScriptRequired
+- Created directories are now chmod'ed properly
 . Out-of-date documentation revised
 . UTF-8 encoding check optimization as suggested by Diego
 . HTMLPurifier_Error removed in favor of exceptions
