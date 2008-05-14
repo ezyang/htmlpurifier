@@ -160,4 +160,32 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
         $this->assertValidation('http://[2001:0db8:85z3:08d3:1319:8a2e:0370:7334]', 'http:');
     }
     
+    function test_validate_removeRedundantScheme() {
+        $this->assertValidation('http:foo:/:', 'foo%3A/:');
+    }
+    
+    function test_validate_username() {
+        $this->assertValidation("http://user\xE3\x91\x94:@foo.com", 'http://user%E3%91%94:@foo.com');
+    }
+    
+    function test_validate_path_abempty() {
+        $this->assertValidation("http://host/\xE3\x91\x94:", 'http://host/%E3%91%94:');
+    }
+    
+    function test_validate_path_absolute() {
+        $this->assertValidation("/\xE3\x91\x94:", '/%E3%91%94:');
+    }
+    
+    function test_validate_path_rootless() {
+        $this->assertValidation("mailto:\xE3\x91\x94:", 'mailto:%E3%91%94:');
+    }
+    
+    function test_validate_path_noscheme() {
+        $this->assertValidation("\xE3\x91\x94", '%E3%91%94');
+    }
+    
+    function test_validate_path_empty() {
+        $this->assertValidation('http://google.com');
+    }
+    
 }

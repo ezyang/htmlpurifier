@@ -11,6 +11,8 @@ If no interest is expressed for a feature that may require a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
+- Implement validation for query and for fragment
+
 FUTURE VERSIONS
 ---------------
 
@@ -47,6 +49,7 @@ FUTURE VERSIONS
    AttrDef class). Probably will use CSSTidy class?
  # More control over allowed CSS properties using a modularization
  # HTML 5 support
+ # IRI support
  - Standardize token armor for all areas of processing
  - Convert RTL/LTR override characters to <bdo> tags, or vice versa on demand.
    Also, enable disabling of directionality

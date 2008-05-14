@@ -215,12 +215,12 @@
  </directive>
  <directive id="URI.Disable">
   <file name="HTMLPurifier/AttrDef/URI.php">
-   <line>24</line>
+   <line>23</line>
   </file>
  </directive>
  <directive id="URI.Munge">
   <file name="HTMLPurifier/AttrDef/URI.php">
-   <line>78</line>
+   <line>68</line>
   </file>
  </directive>
  <directive id="Core.ColorKeywords">

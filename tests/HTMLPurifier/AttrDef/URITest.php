@@ -29,6 +29,19 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         );
     }
     
+    function testPercentEncoding() {
+        $this->assertDef(
+            'http:colon:mercenary',
+            'colon%3Amercenary'
+        );
+    }
+    
+    function testPercentEncodingPreserve() {
+        $this->assertDef(
+            'http://www.example.com/abcABC123-_.!~*()\''
+        );
+    }
+    
     function testEmbeds() {
         $this->def = new HTMLPurifier_AttrDef_URI(true);
         $this->assertDef('http://sub.example.com/alas?foo=asd');
