@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+2.1.4, unknown release date
+- Colors missing # but in hex form will be corrected
+- CSS Number algorithm improved
+
 2.1.3, released 2007-11-05
 ! tests/multitest.php allows you to test multiple versions by running
   tests/index.php through multiple interpreters using `phpv` shell
