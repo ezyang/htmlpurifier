@@ -213,7 +213,7 @@ class HTMLPurifier
      * @param $prototype Optional prototype HTMLPurifier instance to
      *                   overload singleton with.
      */
-    function &getInstance($prototype = null) {
+    function &instance($prototype = null) {
         static $htmlpurifier;
         if (!$htmlpurifier || $prototype) {
             if (is_a($prototype, 'HTMLPurifier')) {
@@ -227,6 +227,9 @@ class HTMLPurifier
         return $htmlpurifier;
     }
     
+    function &getInstance($prototype = null) {
+        return HTMLPurifier::instance($prototype);
+    }
     
 }
 
