@@ -9,6 +9,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+ERRATA
+- PH5P is seriously broken here; it can result in fatal errors and exceptions. 
+  If you desire to use it, please use it with the latest, PHP5-only version of 
+  HTML Purifier.
+
 2.1.4, unknown release date
 ! DefinitionCacheFactory now can register new implementations
 ! CSS properties are now case-insensitive
@@ -19,6 +24,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix bug with trusted script handling in libxml versions later than 2.6.28.
 - Fix bug in comment parsing with DirectLex
 - Fix bug with rgb(0, 1, 2) color syntax with spaces inside shorthand syntax
+- HTMLPurifier_HTMLDefinition->addAttribute can now be called multiple times
+  on the same element without emitting errors.
 
 2.1.3, released 2007-11-05
 ! tests/multitest.php allows you to test multiple versions by running
