@@ -18,6 +18,8 @@ ERRATA
 ! DefinitionCacheFactory now can register new implementations
 ! CSS properties are now case-insensitive
 ! Encoder optimized with valid UTF-8 input
+! HTML Purifier's URI handling is a lot more robust, with much stricter
+  validation checks and better percent encoding handling.
 - Colors missing # but in hex form will be corrected
 - CSS Number algorithm improved
 - Autoclose now operates iteratively, i.e. <span><span><div> now has

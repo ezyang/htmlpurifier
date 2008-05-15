@@ -16,6 +16,13 @@ class HTMLPurifier_URIParserTest extends HTMLPurifier_Harness
         $this->assertEqual($result, $expect);
     }
     
+    function testPercentNormalization() {
+        $this->assertParsing(
+            '%G',
+            null, null, null, null, '%25G', null, null
+        );
+    }
+    
     function testRegular() {
         $this->assertParsing(
             'http://www.example.com/webhp?q=foo#result2',
@@ -124,7 +131,7 @@ class HTMLPurifier_URIParserTest extends HTMLPurifier_Harness
     
     function testMalformedTag() {
         $this->assertParsing(
-            'http://www.example.com/\'>"',
+            'http://www.example.com/>',
             'http', null, 'www.example.com', null, '/', null, null
         );
     }

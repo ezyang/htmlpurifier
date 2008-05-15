@@ -17,6 +17,27 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('124.15.6.89'); // IPv4
         $this->assertDef('www.google.com'); // reg-name
         
+        // more domain name tests
+        $this->assertDef('test.');
+        $this->assertDef('sub.test.');
+        $this->assertDef('.test', false);
+        $this->assertDef('ff');
+        $this->assertDef('1f', false);
+        $this->assertDef('-f', false);
+        $this->assertDef('f1');
+        $this->assertDef('f-', false);
+        $this->assertDef('sub.ff');
+        $this->assertDef('sub.1f', false);
+        $this->assertDef('sub.-f', false);
+        $this->assertDef('sub.f1');
+        $this->assertDef('sub.f-', false);
+        $this->assertDef('ff.top');
+        $this->assertDef('1f.top');
+        $this->assertDef('-f.top', false);
+        $this->assertDef('ff.top');
+        $this->assertDef('f1.top');
+        $this->assertDef('f-.top', false);
+        
     }
     
 }

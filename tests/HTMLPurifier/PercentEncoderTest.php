@@ -37,5 +37,28 @@ class HTMLPurifier_PercentEncoderTest extends HTMLPurifier_Harness
         
     }
     
+    function assertEncode($string, $expect = true, $preserve = false) {
+        if ($expect === true) $expect = $string;
+        $encoder = new HTMLPurifier_PercentEncoder($preserve);
+        $result = $encoder->encode($string);
+        $this->assertIdentical($result, $expect);
+    }
+    
+    function test_encode_noChange() {
+        $this->assertEncode('abc012-_~.');
+    }
+    
+    function test_encode_encode() {
+        $this->assertEncode('>', '%3E');
+    }
+    
+    function test_encode_preserve() {
+        $this->assertEncode('<>', '<%3E', '<');
+    }
+    
+    function test_encode_low() {
+        $this->assertEncode("\1", '%01');
+    }
+    
 }
 
