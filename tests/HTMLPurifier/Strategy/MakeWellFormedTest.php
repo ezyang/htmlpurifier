@@ -82,5 +82,12 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
         );
     }
     
+    function testAutoCloseMultiple() {
+        $this->assertResult(
+            '<span><span><div></div>',
+            '<span><span></span></span><div></div>'
+        );
+    }
+    
 }
 
