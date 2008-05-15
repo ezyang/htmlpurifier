@@ -5,6 +5,7 @@
  * caching and fallbacks.
  * @note Thanks to MediaWiki for the general logic, although this version
  *       has been entirely rewritten
+ * @todo Serialized cache for languages
  */
 class HTMLPurifier_LanguageFactory
 {
@@ -77,41 +78,44 @@ class HTMLPurifier_LanguageFactory
      * Creates a language object, handles class fallbacks
      * @param $config Instance of HTMLPurifier_Config
      * @param $context Instance of HTMLPurifier_Context
+     * @param $code Code to override configuration with. Private parameter.
      */
-    public function create($config, $context) {
+    public function create($config, $context, $code = false) {
         
         // validate language code
-        $code = $this->validator->validate(
-          $config->get('Core', 'Language'), $config, $context
-        );
+        if ($code === false) {
+            $code = $this->validator->validate(
+              $config->get('Core', 'Language'), $config, $context
+            );
+        } else {
+            $code = $this->validator->validate($code, $config, $context);
+        }
         if ($code === false) $code = 'en'; // malformed code becomes English
         
         $pcode = str_replace('-', '_', $code); // make valid PHP classname
         static $depth = 0; // recursion protection
         
         if ($code == 'en') {
-            $class = 'HTMLPurifier_Language';
-            $file  = $this->dir . '/Language.php';
+            $lang = new HTMLPurifier_Language($config, $context);
         } else {
             $class = 'HTMLPurifier_Language_' . $pcode;
             $file  = $this->dir . '/Language/classes/' . $code . '.php';
-            // PHP5/APC deps bug workaround can go here
-            // you can bypass the conditional include by loading the
-            // file yourself
-            if (file_exists($file) && !class_exists($class, false)) {
-                include_once $file;
+            if (file_exists($file) && class_exists($class)) {
+                $lang = new $class($config, $context);
+            } else {
+                // Go fallback
+                $fallback = $this->getFallbackFor($code);
+                // If a language doesn't exist, English's language settings
+                // file will automatically be used, which DOESN'T have any
+                // fallback defined. This is fine for settings merging, but
+                // not so good for figuring out a class to use.
+                if ($fallback === false) $fallback = 'en';
+                $depth++;
+                $lang = $this->create($config, $context, $fallback);
+                $depth--;
             }
         }
         
-        if (!class_exists($class, false)) {
-            // go fallback
-            $fallback = HTMLPurifier_LanguageFactory::getFallbackFor($code);
-            $depth++;
-            $lang = HTMLPurifier_LanguageFactory::factory( $fallback );
-            $depth--;
-        } else {
-            $lang = new $class($config, $context);
-        }
         $lang->code = $code;
         
         return $lang;

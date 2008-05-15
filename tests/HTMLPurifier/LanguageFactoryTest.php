@@ -45,5 +45,11 @@ class HTMLPurifier_LanguageFactoryTest extends HTMLPurifier_Harness
         
     }
     
+    function testFullFallback() {
+        $factory = HTMLPurifier_LanguageFactory::instance();
+        $this->config->set('Core', 'Language', 'en-x-none');
+        $language = $factory->create($this->config, $this->context);
+    }
+    
 }
 

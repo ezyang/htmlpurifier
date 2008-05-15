@@ -77,7 +77,7 @@ class HTMLPurifier_Generator
                'wrap' => 68,
             ), 'utf8');
             $tidy->cleanRepair();
-            $html = (string) $tidy; // explicit cast necessary
+            $html = ((string) $tidy); // explicit cast necessary
         }
         
         // Normalize newlines to system defined value
