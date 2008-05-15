@@ -16,6 +16,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - CSS Number algorithm improved
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
   both span tags closed.
+- Fix bug with trusted script handling in libxml versions later than 2.6.28.
 
 2.1.3, released 2007-11-05
 ! tests/multitest.php allows you to test multiple versions by running
