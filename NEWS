@@ -17,6 +17,7 @@ ERRATA
 2.1.4, unknown release date
 ! DefinitionCacheFactory now can register new implementations
 ! CSS properties are now case-insensitive
+! Encoder optimized with valid UTF-8 input
 - Colors missing # but in hex form will be corrected
 - CSS Number algorithm improved
 - Autoclose now operates iteratively, i.e. <span><span><div> now has
@@ -26,6 +27,7 @@ ERRATA
 - Fix bug with rgb(0, 1, 2) color syntax with spaces inside shorthand syntax
 - HTMLPurifier_HTMLDefinition->addAttribute can now be called multiple times
   on the same element without emitting errors.
+- Iconv uses set_error_handler instead of shut-up operator
 
 2.1.3, released 2007-11-05
 ! tests/multitest.php allows you to test multiple versions by running
