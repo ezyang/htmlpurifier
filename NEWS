@@ -11,6 +11,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 2.1.4, unknown release date
 ! DefinitionCacheFactory now can register new implementations
+! CSS properties are now case-insensitive
 - Colors missing # but in hex form will be corrected
 - CSS Number algorithm improved
 

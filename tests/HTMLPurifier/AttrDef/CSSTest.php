@@ -107,6 +107,9 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef(' font-weight : bold; color : #ff0000',
                          'font-weight:bold;color:#ff0000;');
         
+        // case-insensitivity
+        $this->assertDef('FLOAT:LEFT;', 'float:left;');
+        
     }
     
 }
