@@ -49,6 +49,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   of DOM), HTML Purifier punts to DirectLex
 - Fatal error with unserialization of ScriptRequired
 - Created directories are now chmod'ed properly
+- Fixed bug with fallback languages in LanguageFactory
 . Out-of-date documentation revised
 . UTF-8 encoding check optimization as suggested by Diego
 . HTMLPurifier_Error removed in favor of exceptions

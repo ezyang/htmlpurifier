@@ -104,14 +104,13 @@ class HTMLPurifier_LanguageFactory
                 $lang = new $class($config, $context);
             } else {
                 // Go fallback
-                $fallback = $this->getFallbackFor($code);
-                // If a language doesn't exist, English's language settings
-                // file will automatically be used, which DOESN'T have any
-                // fallback defined. This is fine for settings merging, but
-                // not so good for figuring out a class to use.
-                if ($fallback === false) $fallback = 'en';
+                $raw_fallback = $this->getFallbackFor($code);
+                $fallback = $raw_fallback ? $raw_fallback : 'en';
                 $depth++;
                 $lang = $this->create($config, $context, $fallback);
+                if (!$raw_fallback) {
+                    $lang->error = true;
+                }
                 $depth--;
             }
         }

@@ -234,7 +234,8 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         // abort test if tidy isn't loaded
         if (!extension_loaded('tidy')) return;
         
-        $this->config->set('Output', 'TidyFormat', true);
+        $this->config = HTMLPurifier_Config::createDefault();
+        $this->config->set('Core', 'TidyFormat', true);
         $this->config->set('Output', 'Newline', "\n");
         
         // nice wrapping please
@@ -242,9 +243,9 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
             array(
                 new HTMLPurifier_Token_Start('div'),
                 new HTMLPurifier_Token_Text('Text'),
-                new HTMLPurifier_Token_End('div'),
+                new HTMLPurifier_Token_End('div')
             ),
-            "<div>\n  Text\n</div>\n "
+            "<div>\n  Text\n</div>\n"
         );
         
     }
