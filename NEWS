@@ -28,6 +28,7 @@ ERRATA
 - HTMLPurifier_HTMLDefinition->addAttribute can now be called multiple times
   on the same element without emitting errors.
 - Iconv uses set_error_handler instead of shut-up operator
+- Add protection against imagecrash attack with CSS height/width
 
 2.1.3, released 2007-11-05
 ! tests/multitest.php allows you to test multiple versions by running

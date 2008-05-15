@@ -180,6 +180,13 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         );
     }
     
+    function testRemoveCSSWidthAndHeightOnImg() {
+        $this->assertResult(
+            '<img src="" alt="" style="width:10px;height:10px;border:1px solid #000;" />',
+            '<img src="" alt="" style="border:1px solid #000;" />'
+        );
+    }
+    
 }
 
 
