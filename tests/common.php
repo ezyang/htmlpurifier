@@ -193,7 +193,7 @@ class FailedTest extends UnitTestCase {
     }
     public function test() {
         $this->fail($this->msg);
-        if ($this->details) $this->_reporter->paintFormattedMessage($this->details);
+        if ($this->details) $this->reporter->paintFormattedMessage($this->details);
     }
 }
 

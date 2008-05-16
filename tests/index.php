@@ -85,8 +85,8 @@ if ($AC['standalone']) {
 } else {
     require '../library/HTMLPurifier.path.php';
     require 'HTMLPurifier.includes.php';
-    require '../library/HTMLPurifier.autoload.php';
 }
+require '../library/HTMLPurifier.autoload.php';
 require 'HTMLPurifier/Harness.php';
 
 // Now, userland code begins to be executed

@@ -37,7 +37,7 @@ class HTMLPurifier_Bootstrap
     public static function autoload($class) {
         $file = HTMLPurifier_Bootstrap::getPath($class);
         if (!$file) return false;
-        require $file;
+        require HTMLPURIFIER_PREFIX . '/' . $file;
         return true;
     }
     
@@ -48,11 +48,13 @@ class HTMLPurifier_Bootstrap
         if (strncmp('HTMLPurifier', $class, 12) !== 0) return false;
         // Custom implementations
         if (strncmp('HTMLPurifier_Language_', $class, 22) === 0) {
-          $code = str_replace('_', '-', substr($class, 22));
-          return 'HTMLPurifier/Language/classes/' . $code . '.php';
+            $code = str_replace('_', '-', substr($class, 22));
+            $file = 'HTMLPurifier/Language/classes/' . $code . '.php';
+        } else {
+            $file = str_replace('_', '/', $class) . '.php';
         }
-        // Standard implementation
-        return str_replace('_', '/', $class) . '.php';
+        if (!file_exists(HTMLPURIFIER_PREFIX . '/' . $file)) return false;
+        return $file;
     }
     
     /**

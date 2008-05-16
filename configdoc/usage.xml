@@ -172,7 +172,7 @@
  </directive>
  <directive id="Core.Language">
   <file name="HTMLPurifier/LanguageFactory.php">
-   <line>85</line>
+   <line>88</line>
   </file>
  </directive>
  <directive id="Core.LexerImpl">

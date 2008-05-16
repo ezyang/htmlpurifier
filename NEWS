@@ -34,6 +34,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! %HTML.Allowed deals gracefully with whitespace anywhere, anytime!
 ! HTML Purifier's URI handling is a lot more robust, with much stricter
   validation checks and better percent encoding handling.
+! Bootstrap autoloader deals more robustly with classes that don't exist,
+  preventing class_exists($class, true) from barfing.
 - InterchangeBuilder now alphabetizes its lists
 - Validation error in configdoc output fixed
 - Iconv and other encoding errors muted even with custom error handlers that
@@ -50,6 +52,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fatal error with unserialization of ScriptRequired
 - Created directories are now chmod'ed properly
 - Fixed bug with fallback languages in LanguageFactory
+- Standalone testing setup properly with autoload
 . Out-of-date documentation revised
 . UTF-8 encoding check optimization as suggested by Diego
 . HTMLPurifier_Error removed in favor of exceptions
