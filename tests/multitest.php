@@ -12,16 +12,7 @@ $versions_to_test = array(
     '4.4.7',
     '5.0.4',
     '5.0.5',
-    '5.1.4',
-    '5.1.6',
-    '5.2.0',
-    '5.2.1',
-    '5.2.2',
-    '5.2.3',
-    '5.2.4',
-    '5.2.5RC2-dev',
-    '5.3.0-dev',
-    // '6.0.0-dev',
+    // We don't care about later versions: use HTML Purifier 3+!!!
 );
 
 echo str_repeat('-', 70) . "\n";
