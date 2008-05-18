@@ -9,6 +9,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+3.2.0, unknown release date
+
 3.1.0, released 2008-05-18
 # Unnecessary references to objects (vestiges of PHP4) removed from method
   signatures.  The following methods do not need references when assigning from
