@@ -1,8 +1,10 @@
-Release 3.1.0rc1 is a release candidate aimed primarily at ironing out bugs
-in HTML Purifier's shiny new __autoload system.  There are lots of new features,
-however; some notable ones include support for the !important CSS modifier,
-display and visibility CSS properties with %CSS.AllowTricky, marquee
-with %HTML.Proprietary (had you scared for a moment, hmm?), a kses() wrapper,
-%CSS.AllowedProperties, %HTML.ForbiddenAttributes and %HTML.ForbiddenElements
-and a totally revamped ConfigDoc system. And of course, the usual slew of
-bugfixes.
+HTML Purifier 3.1.0 is the second release series for HTML Purifier on PHP 5
+as well as a security update related to URIs. It shifts over to using
+autoload, and also includes support for the !important CSS modifier,
+display and visibility CSS properties with %CSS.AllowTricky, marquee with
+%HTML.Proprietary (had you scared for a moment, hmm?), a kses() wrapper,
+%CSS.AllowedProperties, %HTML.ForbiddenAttributes and
+%HTML.ForbiddenElements and a totally revamped ConfigDoc system. Since the
+release candidate, there have also been a number of stability fixes such as
+improved URI escaping, a change in serializer ID format, and a relaxed
+format for %HTML.Allowed. And as always, numerous bugfixes.

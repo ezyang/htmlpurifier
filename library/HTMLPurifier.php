@@ -19,7 +19,7 @@
  */
 
 /*
-    HTML Purifier 3.1.0-dev - Standards Compliant HTML Filtering
+    HTML Purifier 3.1.0 - Standards Compliant HTML Filtering
     Copyright (C) 2006-2008 Edward Z. Yang
 
     This library is free software; you can redistribute it and/or
@@ -55,10 +55,10 @@ class HTMLPurifier
 {
     
     /** Version of HTML Purifier */
-    public $version = '3.1.0-dev';
+    public $version = '3.1.0';
     
     /** Constant with version of HTML Purifier */
-    const VERSION = '3.1.0-dev';
+    const VERSION = '3.1.0';
     
     /** Global configuration object */
     public $config;
