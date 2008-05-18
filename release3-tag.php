@@ -9,17 +9,12 @@ if (php_sapi_name() != 'cli') {
 
 require 'svn.php';
 
-$svn_info = svn_info('.');
+$svn_info = my_svn_info('.');
 
 $version = trim(file_get_contents('VERSION'));
 
-$trunk_url  = $svn_info['Repository Root'] . '/htmlpurifier/trunk';
-$strict_url = $svn_info['Repository Root'] . '/htmlpurifier/branches/strict';
+$trunk_url  = $svn_info['Repository Root'] . '/htmlpurifier/branches/php4';
 $trunk_tag_url  = $svn_info['Repository Root'] . '/htmlpurifier/tags/' . $version;
-$strict_tag_url = $svn_info['Repository Root'] . '/htmlpurifier/tags/' . $version . '-strict';
 
-echo "Tagging trunk to tags/$version...";
+echo "Tagging php4 branch to tags/$version...";
 passthru("svn copy --message \"Tag $version release.\" $trunk_url $trunk_tag_url");
-echo "Tagging strict to tags/$version-strict...";
-passthru("svn copy --message \"Tag $version-strict release.\" $strict_url $strict_tag_url");
-
