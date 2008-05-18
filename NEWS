@@ -14,7 +14,7 @@ ERRATA
   If you desire to use it, please use it with the latest, PHP5-only version of 
   HTML Purifier.
 
-2.1.4, unknown release date
+2.1.4, released 2008-05-18
 ! DefinitionCacheFactory now can register new implementations
 ! CSS properties are now case-insensitive
 ! Encoder optimized with valid UTF-8 input

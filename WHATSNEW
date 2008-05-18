@@ -1,6 +1,6 @@
-Stability release 2.1.3 fixes a slew of minor bugs found in HTML Purifier,
-and also includes some internal code enhancements and refactorings.
-Notably, tests/multitest.php automates testing in multiple versions, 
-fatal AttrDef_URI_Email error fixed, blockquote contents are more lenient
-in HTML 4.01 Strict and fatal errors involving ID tags in img tags were
-fixed.
+Security release 2.1.4 is a backport release that fixes a vulnerability
+related to URI handling. In addition, it also includes a number of
+bugfixes that have accumulated in the HTML Purifier 3 series but had
+not been merged back yet. Please remember that HTML Purifier 2.1 will
+be deprecated and will be officially dropped by the end of 2008. Please
+only use it for legacy PHP 4 installs.
