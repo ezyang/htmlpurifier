@@ -12,6 +12,11 @@ amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
 - Implement validation for query and for fragment
+- Allow imagecrash protection in CSS images to be turned off
+- Allow imagecrash protection in CSS to be configurable with a max value
+- Maintain old attribute data in tokens (configurable?)
+- Allow URIFilters to run early?
+- Lazy update of token when validating attributes?
 
 FUTURE VERSIONS
 ---------------
