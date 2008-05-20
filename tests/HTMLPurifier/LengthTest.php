@@ -20,10 +20,10 @@ class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
         $this->assertIdentical($l->toString(), '23in');
     }
     
-    protected function assertValidate($string, $expect = true, $disable_negative = false) {
+    protected function assertValidate($string, $expect = true) {
         if ($expect === true) $expect = $string;
         $l = HTMLPurifier_Length::make($string);
-        $result = $l->isValid($disable_negative);
+        $result = $l->isValid();
         if ($result === false) $this->assertIdentical($expect, false);
         else $this->assertIdentical($l->toString(), $expect);
     }
@@ -45,7 +45,6 @@ class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
         $this->assertValidate('3PX', '3px');
         $this->assertValidate('3', false);
         $this->assertValidate('3miles', false);
-        $this->assertValidate('-3mm', false, true); // no-negatives
     }
     
 }

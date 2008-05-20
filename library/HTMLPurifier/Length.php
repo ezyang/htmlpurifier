@@ -53,17 +53,15 @@ class HTMLPurifier_Length
     
     /**
      * Validates the number and unit.
-     * @param bool $non_negative Whether or not to disable negative values.
-     * @note Maybe should be put in another class.
      */
-    protected function validate($non_negative = false) {
+    protected function validate() {
         // Special case:
         if ($this->n === '+0' || $this->n === '-0') $this->n = '0';
         if ($this->n === '0' && $this->unit === false) return true;
         if (!ctype_lower($this->unit)) $this->unit = strtolower($this->unit);
         if (!isset(HTMLPurifier_Length::$allowedUnits[$this->unit])) return false;
         // Hack:
-        $def = new HTMLPurifier_AttrDef_CSS_Number($non_negative);
+        $def = new HTMLPurifier_AttrDef_CSS_Number();
         $result = $def->validate($this->n, false, false);
         if ($result === false) return false;
         $this->n = $result;
@@ -91,8 +89,8 @@ class HTMLPurifier_Length
     /**
      * Returns true if this length unit is valid.
      */
-    public function isValid($non_negative = false) {
-        if ($this->isValid === null) $this->isValid = $this->validate($non_negative);
+    public function isValid() {
+        if ($this->isValid === null) $this->isValid = $this->validate();
         return $this->isValid;
     }
     
