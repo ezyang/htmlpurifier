@@ -76,7 +76,7 @@ class HTMLPurifier_Harness extends UnitTestCase
         // __onlytest makes only one test get triggered
         foreach (get_class_methods(get_class($this)) as $method) {
             if (strtolower(substr($method, 0, 10)) == '__onlytest') {
-                $this->_reporter->paintSkip('All test methods in ' . $this->_label . ' besides ' . $method);
+                $this->reporter->paintSkip('All test methods besides ' . $method);
                 return array($method);
             }
         }
