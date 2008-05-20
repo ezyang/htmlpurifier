@@ -149,12 +149,18 @@ class HTMLPurifier_UnitConverter
         // Calculations will always be carried to the decimal; this is
         // a limitation with BC (we can't set the scale to be negative)
         $new_log = (int) floor(log($n, 10));
-        
-        $rp = $sigfigs - $new_log - $log - 1;
-        if ($rp < 0) $rp = 0;
-        
-        $n = bcadd($n, '0.' .  str_repeat('0', $rp) . '5', $rp + 1);
-        $n = bcdiv($n, '1', $rp);
+        $rp = $sigfigs - $new_log - 1;
+        //echo "----\n";
+        //echo "$n\nsigfigs = $sigfigs\nnew_log = $new_log\nlog = $log\nrp = $rp\n";
+        if ($rp >= 0) {
+            $n = bcadd($n, '0.' .  str_repeat('0', $rp) . '5', $rp + 1);
+            $n = bcdiv($n, '1', $rp);
+        } else {
+            if ($new_log + 1 >= $sigfigs) {
+                $n = bcadd($n, '5' . str_repeat('0', $new_log - $sigfigs));
+                $n = substr($n, 0, $sigfigs) . str_repeat('0', $new_log + 1 - $sigfigs);
+            }
+        }
         if (strpos($n, '.') !== false) $n = rtrim($n, '0');
         $n = rtrim($n, '.');
         

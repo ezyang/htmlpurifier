@@ -39,4 +39,12 @@ class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
         $this->assertConversion('0.3937in', '1cm');
     }
     
+    function testRounding() {
+        $this->assertConversion('100pt', '1.389in');
+        $this->assertConversion('1000pt', '13.89in');
+        $this->assertConversion('10000pt', '138.9in');
+        $this->assertConversion('100000pt', '1389in');
+        $this->assertConversion('1000000pt', '13890in');
+    }
+    
 }
