@@ -17,6 +17,8 @@ afraid to cast your vote for the next feature to be implemented!
 - Maintain old attribute data in tokens (configurable?)
 - Allow URIFilters to run early?
 - Lazy update of token when validating attributes?
+- Investigate how early internal structures can be accessed; this would
+  prevent structures from being parsed and serialized multiple times.
 
 FUTURE VERSIONS
 ---------------

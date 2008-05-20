@@ -5,14 +5,14 @@ class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
     
     function testConstruct() {
         $l = new HTMLPurifier_Length('23', 'in');
-        $this->assertIdentical($l->n, '23');
-        $this->assertIdentical($l->unit, 'in');
+        $this->assertIdentical($l->getN(), '23');
+        $this->assertIdentical($l->getUnit(), 'in');
     }
     
     function testMake() {
         $l = HTMLPurifier_Length::make('+23.4in');
-        $this->assertIdentical($l->n, '+23.4');
-        $this->assertIdentical($l->unit, 'in');
+        $this->assertIdentical($l->getN(), '+23.4');
+        $this->assertIdentical($l->getUnit(), 'in');
     }
     
     function testToString() {
@@ -23,13 +23,15 @@ class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
     protected function assertValidate($string, $expect = true, $disable_negative = false) {
         if ($expect === true) $expect = $string;
         $l = HTMLPurifier_Length::make($string);
-        $result = $l->validate($disable_negative, $this->config, $this->context);
+        $result = $l->isValid($disable_negative);
         if ($result === false) $this->assertIdentical($expect, false);
         else $this->assertIdentical($l->toString(), $expect);
     }
     
     function testValidate() {
         $this->assertValidate('0');
+        $this->assertValidate('+0', '0');
+        $this->assertValidate('-0', '0');
         $this->assertValidate('0px');
         $this->assertValidate('4.5px');
         $this->assertValidate('-4.5px');

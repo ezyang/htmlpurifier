@@ -50,6 +50,11 @@ class HTMLPurifier_UnitConverter
     
     /**
      * Converts a length object of one unit into another unit.
+     * @param HTMLPurifier_Length $length
+     *      Instance of HTMLPurifier_Length to convert. You must validate()
+     *      it before passing it here!
+     * @param string $to_unit
+     *      Unit to convert to.
      * @note
      *      About precision: This conversion function pays very special
      *      attention to the incoming precision of values and attempts
@@ -60,39 +65,35 @@ class HTMLPurifier_UnitConverter
      *          - If a number contains less than four sigfigs ($outputPrecision)
      *            and this causes some decimals to be excluded, those
      *            decimals will be added on.
-     *          - Significant digits will be ignored for quantities greater
-     *            than one. This is a limitation of BCMath and I don't
-     *            feel like coding around it.
      */
     public function convert($length, $to_unit) {
-        if ($length->n === '0' || $length->unit === false) {
-            return new HTMLPurifier_Length('0', $unit);
+        
+        if (!$length->isValid()) return false;
+        
+        $n    = $length->getN();
+        $unit = $length->getUnit();
+        
+        if ($n === '0' || $unit === false) {
+            return new HTMLPurifier_Length('0', false);
         }
         
-        $state = $dest = false;
+        $state = $dest_state = false;
         foreach (self::$units as $k => $x) {
-            if (isset($x[$length->unit])) $state = $k;
+            if (isset($x[$unit])) $state = $k;
             if (isset($x[$to_unit])) $dest_state = $k;
         }
         if (!$state || !$dest_state) return false;
         
-        $n    = $length->n;
-        $unit = $length->unit;
-        
         // Some calculations about the initial precision of the number;
         // this will be useful when we need to do final rounding.
-        $log = (int) floor(log($n, 10));
-        if (strpos($n, '.') === false) {
-            $sigfigs = strlen(trim($n, '0+-'));
-        } else {
-            $sigfigs = strlen(ltrim($n, '0+-')) - 1; // eliminate extra decimal character
-        }
+        $sigfigs = $this->getSigFigs($n);
         if ($sigfigs < $this->outputPrecision) $sigfigs = $this->outputPrecision;
         
         // BCMath's internal precision deals only with decimals. Use
         // our default if the initial number has no decimals, or increase
         // it by how ever many decimals, thus, the number of guard digits
         // will always be greater than or equal to internalPrecision.
+        $log = (int) floor(log(abs($n), 10));
         $cp = ($log < 0) ? $this->internalPrecision - $log : $this->internalPrecision; // internal precision
         
         for ($i = 0; $i < 2; $i++) {
@@ -113,7 +114,7 @@ class HTMLPurifier_UnitConverter
                 $unit = $dest_unit;
             }
             
-            // Output was zero, so bail out early
+            // Output was zero, so bail out early. Shouldn't ever happen.
             if ($n === '') {
                 $n = '0';
                 $unit = $to_unit;
@@ -148,23 +149,44 @@ class HTMLPurifier_UnitConverter
         // Calculate how many decimals we need ($rp)
         // Calculations will always be carried to the decimal; this is
         // a limitation with BC (we can't set the scale to be negative)
-        $new_log = (int) floor(log($n, 10));
+        $new_log = (int) floor(log(abs($n), 10));
         $rp = $sigfigs - $new_log - 1;
-        //echo "----\n";
-        //echo "$n\nsigfigs = $sigfigs\nnew_log = $new_log\nlog = $log\nrp = $rp\n";
+        $neg = $n < 0 ? '-' : '';
+        
+        // Useful for debugging:
+        //echo "<pre>n";
+        //echo "$n\nsigfigs = $sigfigs\nnew_log = $new_log\nlog = $log\nrp = $rp\n</pre>\n";
+        
         if ($rp >= 0) {
-            $n = bcadd($n, '0.' .  str_repeat('0', $rp) . '5', $rp + 1);
+            $n = bcadd($n, $neg . '0.' .  str_repeat('0', $rp) . '5', $rp + 1);
             $n = bcdiv($n, '1', $rp);
         } else {
             if ($new_log + 1 >= $sigfigs) {
-                $n = bcadd($n, '5' . str_repeat('0', $new_log - $sigfigs));
-                $n = substr($n, 0, $sigfigs) . str_repeat('0', $new_log + 1 - $sigfigs);
+                $n = bcadd($n, $neg . '5' . str_repeat('0', $new_log - $sigfigs));
+                $n = substr($n, 0, $sigfigs + strlen($neg)) . str_repeat('0', $new_log + 1 - $sigfigs);
             }
         }
         if (strpos($n, '.') !== false) $n = rtrim($n, '0');
         $n = rtrim($n, '.');
         
         return new HTMLPurifier_Length($n, $unit);
+    }
+    
+    /**
+     * Returns the number of significant figures in a string number.
+     * @param string $n Decimal number
+     * @return int number of sigfigs
+     */
+    public function getSigFigs($n) {
+        $n = ltrim($n, '0+-');
+        $dp = strpos($n, '.'); // decimal position
+        if ($dp === false) {
+            $sigfigs = strlen(rtrim($n, '0'));
+        } else {
+            $sigfigs = strlen(ltrim($n, '0.')); // eliminate extra decimal character
+            if ($dp !== 0) $sigfigs--;
+        }
+        return $sigfigs;
     }
     
 }
