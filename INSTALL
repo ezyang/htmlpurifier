@@ -23,8 +23,9 @@ August 8, 2008.
 
 These optional extensions can enhance the capabilities of HTML Purifier:
 
-    * iconv : Converts text to and from non-UTF-8 encodings
-    * tidy  : Used for pretty-printing HTML
+    * iconv  : Converts text to and from non-UTF-8 encodings
+    * bcmath : Used for unit conversion and imagecrash protection
+    * tidy   : Used for pretty-printing HTML
 
 
 ---------------------------------------------------------------------------

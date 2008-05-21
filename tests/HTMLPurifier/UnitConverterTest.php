@@ -7,9 +7,18 @@ class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
         $length = HTMLPurifier_Length::make($input);
         if ($expect !== false) $expectl = HTMLPurifier_Length::make($expect);
         else $expectl = false;
-        $converter = new HTMLPurifier_UnitConverter();
-        $result = $converter->convert($length, $unit !== null ? $unit : $expectl->getUnit());
-        $this->assertIdentical($result, $expectl);
+        $to_unit = $unit !== null ? $unit : $expectl->getUnit();
+        
+        $converter = new HTMLPurifier_UnitConverter(4, 10);
+        $result = $converter->convert($length, $to_unit);
+        if (!$result || !$expectl) $this->assertIdentical($result, $expectl);
+        else $this->assertIdentical($result->toString(), $expectl->toString());
+        
+        $converter = new HTMLPurifier_UnitConverter(4, 10, true);
+        $result = $converter->convert($length, $to_unit);
+        if (!$result || !$expectl) $this->assertIdentical($result, $expectl);
+        else $this->assertIdentical($result->toString(), $expectl->toString(), 'BCMath substitute: %s');
+        
         if ($test_negative) {
             $this->assertConversion(
                 "-$input",

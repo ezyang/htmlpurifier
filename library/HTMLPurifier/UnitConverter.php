@@ -43,9 +43,15 @@ class HTMLPurifier_UnitConverter
      */
     protected $internalPrecision;
     
-    public function __construct($output_precision = 4, $internal_precision = 10) {
+    /**
+     * Whether or not BCMath is available
+     */
+    private $bcmath;
+    
+    public function __construct($output_precision = 4, $internal_precision = 10, $force_no_bcmath = false) {
         $this->outputPrecision = $output_precision;
         $this->internalPrecision = $internal_precision;
+        $this->bcmath = !$force_no_bcmath && function_exists('bcmul');
     }
     
     /**
@@ -109,8 +115,8 @@ class HTMLPurifier_UnitConverter
             
             // Do the conversion if necessary
             if ($dest_unit !== $unit) {
-                $factor = bcdiv(self::$units[$state][$unit], self::$units[$state][$dest_unit], $cp);
-                $n = bcmul($n, $factor, $cp);
+                $factor = $this->div(self::$units[$state][$unit], self::$units[$state][$dest_unit], $cp);
+                $n = $this->mul($n, $factor, $cp);
                 $unit = $dest_unit;
             }
             
@@ -135,7 +141,7 @@ class HTMLPurifier_UnitConverter
             // Pre-condition: $i == 0
             
             // Perform conversion to next system of units
-            $n = bcmul($n, self::$units[$state][$dest_state][1], $cp);
+            $n = $this->mul($n, self::$units[$state][$dest_state][1], $cp);
             $unit = self::$units[$state][$dest_state][2];
             $state = $dest_state;
             
@@ -146,26 +152,11 @@ class HTMLPurifier_UnitConverter
         // Post-condition: $unit == $to_unit
         if ($unit !== $to_unit) return false;
         
-        // Calculate how many decimals we need ($rp)
-        // Calculations will always be carried to the decimal; this is
-        // a limitation with BC (we can't set the scale to be negative)
-        $new_log = (int) floor(log(abs($n), 10));
-        $rp = $sigfigs - $new_log - 1;
-        $neg = $n < 0 ? '-' : '';
-        
         // Useful for debugging:
         //echo "<pre>n";
         //echo "$n\nsigfigs = $sigfigs\nnew_log = $new_log\nlog = $log\nrp = $rp\n</pre>\n";
         
-        if ($rp >= 0) {
-            $n = bcadd($n, $neg . '0.' .  str_repeat('0', $rp) . '5', $rp + 1);
-            $n = bcdiv($n, '1', $rp);
-        } else {
-            if ($new_log + 1 >= $sigfigs) {
-                $n = bcadd($n, $neg . '5' . str_repeat('0', $new_log - $sigfigs));
-                $n = substr($n, 0, $sigfigs + strlen($neg)) . str_repeat('0', $new_log + 1 - $sigfigs);
-            }
-        }
+        $n = $this->round($n, $sigfigs);
         if (strpos($n, '.') !== false) $n = rtrim($n, '0');
         $n = rtrim($n, '.');
         
@@ -187,6 +178,61 @@ class HTMLPurifier_UnitConverter
             if ($dp !== 0) $sigfigs--;
         }
         return $sigfigs;
+    }
+    
+    /**
+     * Adds two numbers, using arbitrary precision when available.
+     */
+    private function add($s1, $s2, $scale) {
+        if ($this->bcmath) return bcadd($s1, $s2, $scale);
+        else return $this->scale($s1 + $s2, $scale);
+    }
+    
+    /**
+     * Multiples two numbers, using arbitrary precision when available.
+     */
+    private function mul($s1, $s2, $scale) {
+        if ($this->bcmath) return bcmul($s1, $s2, $scale);
+        else return $this->scale($s1 * $s2, $scale);
+    }
+    
+    /**
+     * Divides two numbers, using arbitrary precision when available.
+     */
+    private function div($s1, $s2, $scale) {
+        if ($this->bcmath) return bcdiv($s1, $s2, $scale);
+        else return $this->scale($s1 / $s2, $scale);
+    }
+    
+    /**
+     * Rounds a number according to the number of sigfigs it should have,
+     * using arbitrary precision when available.
+     */
+    private function round($n, $sigfigs) {
+        $new_log = (int) floor(log(abs($n), 10)); // Number of digits left of decimal - 1
+        $rp = $sigfigs - $new_log - 1; // Number of decimal places needed
+        $neg = $n < 0 ? '-' : ''; // Negative sign
+        if ($this->bcmath) {
+            if ($rp >= 0) {
+                $n = bcadd($n, $neg . '0.' .  str_repeat('0', $rp) . '5', $rp + 1);
+                $n = bcdiv($n, '1', $rp);
+            } else {
+                // This algorithm partially depends on the standardized
+                // form of numbers that comes out of bcmath.
+                $n = bcadd($n, $neg . '5' . str_repeat('0', $new_log - $sigfigs), 0);
+                $n = substr($n, 0, $sigfigs + strlen($neg)) . str_repeat('0', $new_log - $sigfigs + 1);
+            }
+            return $n;
+        } else {
+            return $this->scale(round($n, $sigfigs - $new_log - 1), $rp + 1);
+        }
+    }
+    
+    /**
+     * Scales a float to $scale digits right of decimal point, like BCMath.
+     */
+    private function scale($r, $scale) {
+        return sprintf('%.' . $scale . 'f', (float) $r);
     }
     
 }
