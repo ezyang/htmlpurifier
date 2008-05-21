@@ -12,9 +12,8 @@ amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
 - Implement validation for query and for fragment
-- Prevent percentages from being used in width/height attribute in images
-- Maintain old attribute data in tokens (configurable?)
-- Lazy update of token when validating attributes?
+- Ability to fully turn off imagecrash fixes (attribute and CSS will require
+  two separate directives due to our architecture.)
 - Investigate how early internal structures can be accessed; this would
   prevent structures from being parsed and serialized multiple times.
 
