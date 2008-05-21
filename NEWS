@@ -10,6 +10,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 3.1.1, unknown release date
+! More robust imagecrash protection with height/width CSS with %CSS.MaxImgLength.
 . Added HTMLPurifier_UnitConverter and HTMLPurifier_Length for convenient
   handling of CSS-style lengths. HTMLPurifier_AttrDef_CSS_Length now uses
   this class.
