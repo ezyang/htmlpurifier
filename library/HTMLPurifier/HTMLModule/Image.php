@@ -15,10 +15,13 @@ class HTMLPurifier_HTMLModule_Image extends HTMLPurifier_HTMLModule
             'img', 'Inline', 'Empty', 'Common',
             array(
                 'alt*' => 'Text',
-                'height' => 'Length',
+                // According to the spec, it's Length, but percents can
+                // be abused, so we allow only Pixels. A trusted module
+                // could overload this with the real value.
+                'height' => 'Pixels',
+                'width' => 'Pixels',
                 'longdesc' => 'URI', 
                 'src*' => new HTMLPurifier_AttrDef_URI(true), // embedded
-                'width' => 'Length'
             )
         );
         // kind of strange, but splitting things up would be inefficient
