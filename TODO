@@ -11,7 +11,6 @@ If no interest is expressed for a feature that may require a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
-- Implement validation for query and for fragment
 - Ability to fully turn off imagecrash fixes (attribute and CSS will require
   two separate directives due to our architecture.)
 - Investigate how early internal structures can be accessed; this would
