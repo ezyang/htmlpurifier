@@ -56,6 +56,9 @@ class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
         $this->assertConversion('1pt', '0.01389in');
         $this->assertConversion('1.000pt', '0.01389in');
         $this->assertConversion('100000pt', '1389in');
+        
+        $this->assertConversion('1in', '96px');
+        $this->assertConversion('96px', '1in');
     }
     
     function testMetric() {

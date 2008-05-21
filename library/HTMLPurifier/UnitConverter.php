@@ -9,6 +9,7 @@ class HTMLPurifier_UnitConverter
     
     const ENGLISH = 1;
     const METRIC = 2;
+    const DIGITAL = 3;
     
     /**
      * Units information array. Units are grouped into measuring systems
@@ -21,9 +22,10 @@ class HTMLPurifier_UnitConverter
      */
     protected static $units = array(
         self::ENGLISH => array(
-            'pt' => 1,
-            'pc' => 12,
-            'in' => 72,
+            'px' => 3, // This is as per CSS 2.1 and Firefox. Your mileage may vary
+            'pt' => 4,
+            'pc' => 48,
+            'in' => 288,
             self::METRIC => array('pt', '0.352777778', 'mm'),
         ),
         self::METRIC => array(
