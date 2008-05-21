@@ -44,6 +44,7 @@ class HTMLPurifier_Length
      * @warning Does not perform validation.
      */
     static public function make($s) {
+        if ($s instanceof HTMLPurifier_Length) return $s;
         $n_length = strspn($s, '1234567890.+-');
         $n = substr($s, 0, $n_length);
         $unit = substr($s, $n_length);
@@ -92,6 +93,21 @@ class HTMLPurifier_Length
     public function isValid() {
         if ($this->isValid === null) $this->isValid = $this->validate();
         return $this->isValid;
+    }
+    
+    /**
+     * Compares two lengths, and returns 1 if greater, -1 if less and 0 if equal.
+     * @warning If both values are too large or small, this calculation will
+     *          not work properly
+     */
+    public function compareTo($l) {
+        if ($l === false) return false;
+        if ($l->unit !== $this->unit) {
+            $converter = new HTMLPurifier_UnitConverter();
+            $l = $converter->convert($l, $this->unit);
+            if ($l === false) return false;
+        }
+        return $this->n - $l->n;
     }
     
 }

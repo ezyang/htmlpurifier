@@ -90,7 +90,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         $this->info['border-left-width'] = 
         $this->info['border-right-width'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
             new HTMLPurifier_AttrDef_Enum(array('thin', 'medium', 'thick')),
-            new HTMLPurifier_AttrDef_CSS_Length(true) //disallow negative
+            new HTMLPurifier_AttrDef_CSS_Length('0') //disallow negative
         ));
         
         $this->info['border-width'] = new HTMLPurifier_AttrDef_CSS_Multiple($border_width);
@@ -116,7 +116,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         $this->info['line-height'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
             new HTMLPurifier_AttrDef_Enum(array('normal')),
             new HTMLPurifier_AttrDef_CSS_Number(true), // no negatives
-            new HTMLPurifier_AttrDef_CSS_Length(true),
+            new HTMLPurifier_AttrDef_CSS_Length('0'),
             new HTMLPurifier_AttrDef_CSS_Percentage(true)
         ));
         
@@ -138,7 +138,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         $this->info['padding-bottom'] = 
         $this->info['padding-left'] = 
         $this->info['padding-right'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
-            new HTMLPurifier_AttrDef_CSS_Length(true),
+            new HTMLPurifier_AttrDef_CSS_Length('0'),
             new HTMLPurifier_AttrDef_CSS_Percentage(true)
         ));
         
@@ -151,12 +151,19 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         
         $this->info['width'] =
         $this->info['height'] =
-        new HTMLPurifier_AttrDef_CSS_DenyElementDecorator(
-        new HTMLPurifier_AttrDef_CSS_Composite(array(
-            new HTMLPurifier_AttrDef_CSS_Length(true),
-            new HTMLPurifier_AttrDef_CSS_Percentage(true),
-            new HTMLPurifier_AttrDef_Enum(array('auto'))
-        )), 'img');
+        new HTMLPurifier_AttrDef_Switch('img',
+            // For img tags:
+            new HTMLPurifier_AttrDef_CSS_Composite(array(
+                new HTMLPurifier_AttrDef_CSS_Length('0', $config->get('CSS', 'MaxImgLength')),
+                new HTMLPurifier_AttrDef_Enum(array('auto'))
+            )),
+            // For everyone else:
+            new HTMLPurifier_AttrDef_CSS_Composite(array(
+                new HTMLPurifier_AttrDef_CSS_Length('0'),
+                new HTMLPurifier_AttrDef_CSS_Percentage(true),
+                new HTMLPurifier_AttrDef_Enum(array('auto'))
+            ))
+        );
         
         $this->info['text-decoration'] = new HTMLPurifier_AttrDef_CSS_TextDecoration();
         

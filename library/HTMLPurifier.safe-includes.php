@@ -68,6 +68,7 @@ require_once $__dir . '/HTMLPurifier/AttrDef/CSS.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/Enum.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/Integer.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/Lang.php';
+require_once $__dir . '/HTMLPurifier/AttrDef/Switch.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/Text.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/URI.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Number.php';

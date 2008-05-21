@@ -74,6 +74,7 @@ require 'HTMLPurifier/AttrDef/CSS.php';
 require 'HTMLPurifier/AttrDef/Enum.php';
 require 'HTMLPurifier/AttrDef/Integer.php';
 require 'HTMLPurifier/AttrDef/Lang.php';
+require 'HTMLPurifier/AttrDef/Switch.php';
 require 'HTMLPurifier/AttrDef/Text.php';
 require 'HTMLPurifier/AttrDef/URI.php';
 require 'HTMLPurifier/AttrDef/CSS/Number.php';

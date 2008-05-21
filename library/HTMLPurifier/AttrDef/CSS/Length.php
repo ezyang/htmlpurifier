@@ -6,14 +6,15 @@
 class HTMLPurifier_AttrDef_CSS_Length extends HTMLPurifier_AttrDef
 {
     
-    protected $nonNegative;
+    protected $min, $max;
     
     /**
-     * @param $non_negative Bool indication whether or not negative values are
-     *                      allowed.
+     * @param HTMLPurifier_Length $max Minimum length, or null for no bound. String is also acceptable.
+     * @param HTMLPurifier_Length $max Maximum length, or null for no bound. String is also acceptable.
      */
-    public function __construct($non_negative = false) {
-        $this->nonNegative = $non_negative;
+    public function __construct($min = null, $max = null) {
+        $this->min = $min !== null ? HTMLPurifier_Length::make($min) : null;
+        $this->max = $max !== null ? HTMLPurifier_Length::make($max) : null;
     }
     
     public function validate($string, $config, $context) {
@@ -25,10 +26,18 @@ class HTMLPurifier_AttrDef_CSS_Length extends HTMLPurifier_AttrDef
         if (strlen($string) === 1) return false;
         
         $length = HTMLPurifier_Length::make($string);
-        if (!$length->isValid($this->nonNegative)) return false;
+        if (!$length->isValid()) return false;
         
-        $n = $length->getN();
-        if ($this->nonNegative && $n < 0) return false;
+        if ($this->min) {
+            $c = $length->compareTo($this->min);
+            if ($c === false) return false;
+            if ($c < 0) return false;
+        }
+        if ($this->max) {
+            $c = $length->compareTo($this->max);
+            if ($c === false) return false;
+            if ($c > 0) return false;
+        }
         
         return $length->toString();
     }

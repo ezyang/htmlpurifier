@@ -13,6 +13,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Added HTMLPurifier_UnitConverter and HTMLPurifier_Length for convenient
   handling of CSS-style lengths. HTMLPurifier_AttrDef_CSS_Length now uses
   this class.
+. API of HTMLPurifier_AttrDef_CSS_Length changed from __construct($disable_negative)
+  to __construct($min, $max). __construct(true) is equivalent to
+  __construct('0').
+. Added HTMLPurifier_AttrDef_Switch class
 
 3.1.0, released 2008-05-18
 # Unnecessary references to objects (vestiges of PHP4) removed from method

@@ -16,24 +16,29 @@
    <line>44</line>
   </file>
  </directive>
+ <directive id="CSS.MaxImgLength">
+  <file name="HTMLPurifier/CSSDefinition.php">
+   <line>157</line>
+  </file>
+ </directive>
  <directive id="CSS.Proprietary">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>202</line>
+   <line>209</line>
   </file>
  </directive>
  <directive id="CSS.AllowTricky">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>206</line>
+   <line>213</line>
   </file>
  </directive>
  <directive id="CSS.AllowImportant">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>210</line>
+   <line>217</line>
   </file>
  </directive>
  <directive id="CSS.AllowedProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>262</line>
+   <line>269</line>
   </file>
  </directive>
  <directive id="Cache.DefinitionImpl">
