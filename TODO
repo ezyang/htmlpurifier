@@ -15,6 +15,7 @@ afraid to cast your vote for the next feature to be implemented!
   two separate directives due to our architecture.)
 - Investigate how early internal structures can be accessed; this would
   prevent structures from being parsed and serialized multiple times.
+- Figure out how to simultaneously set %CSS.Trusted and %HTML.Trusted (?)
 
 FUTURE VERSIONS
 ---------------
