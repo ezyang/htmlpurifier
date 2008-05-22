@@ -23,9 +23,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   to __construct($min, $max). __construct(true) is equivalent to
   __construct('0').
 . Added HTMLPurifier_AttrDef_Switch class
-. Rename HTMLPurifier_HTMLModule_Tidy->construct() to setup(), and bubble
+. Rename HTMLPurifier_HTMLModule_Tidy->construct() to setup() and bubble method
   up inheritance hierarchy to HTMLPurifier_HTMLModule. All HTMLModules
-  get this called with the configuration object.
+  get this called with the configuration object.  All modules now
+  use this rather than __construct(), although legacy code using constructors
+  will still work--the new format, however, lets modules access the
+  configuration object for HTML namespace dependant tweaks.
 
 3.1.0, released 2008-05-18
 # Unnecessary references to objects (vestiges of PHP4) removed from method
