@@ -1,5 +1,9 @@
 <?php
 
+chdir(dirname(__FILE__));
+
+//require_once '../library/HTMLPurifier.path.php';
+shell_exec('php ../maintenance/generate-schema-cache.php');
 require_once '../library/HTMLPurifier.path.php';
 require_once 'HTMLPurifier.includes.php';
 

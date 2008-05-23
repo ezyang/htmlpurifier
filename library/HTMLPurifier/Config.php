@@ -125,7 +125,7 @@ class HTMLPurifier_Config
                 E_USER_WARNING);
             return;
         }
-        if ($this->def->info[$namespace][$key]->class == 'alias') {
+        if (isset($this->def->info[$namespace][$key]->isAlias)) {
             $d = $this->def->info[$namespace][$key];
             trigger_error('Cannot get value from aliased directive, use real name ' . $d->namespace . '.' . $d->name,
                 E_USER_ERROR);
@@ -196,7 +196,7 @@ class HTMLPurifier_Config
                 E_USER_WARNING);
             return;
         }
-        if ($this->def->info[$namespace][$key]->class == 'alias') {
+        if (isset($this->def->info[$namespace][$key]->isAlias)) {
             if ($from_alias) {
                 trigger_error('Double-aliases not allowed, please fix '.
                     'ConfigSchema bug with' . "$namespace.$key", E_USER_ERROR);
@@ -212,10 +212,10 @@ class HTMLPurifier_Config
             $value = $this->parser->parse(
                         $value,
                         $type = $this->def->info[$namespace][$key]->type,
-                        $this->def->info[$namespace][$key]->allow_null
+                        isset($this->def->info[$namespace][$key]->allow_null)
                      );
         } catch (HTMLPurifier_VarParserException $e) {
-            trigger_error('Value for ' . "$namespace.$key" . ' is of invalid type, should be ' . $type, E_USER_WARNING);
+            trigger_error('Value for ' . "$namespace.$key" . ' is of invalid type, should be ' . HTMLPurifier_VarParser::getTypeName($type), E_USER_WARNING);
             return;
         }
         if (is_string($value)) {
@@ -223,9 +223,9 @@ class HTMLPurifier_Config
             if (isset($this->def->info[$namespace][$key]->aliases[$value])) {
                 $value = $this->def->info[$namespace][$key]->aliases[$value];
             }
-            if ($this->def->info[$namespace][$key]->allowed !== true) {
+            if (isset($this->def->info[$namespace][$key])) {
                 // check to see if the value is allowed
-                if (!isset($this->def->info[$namespace][$key]->allowed[$value])) {
+                if (isset($this->def->info[$namespace][$key]->allowed) && !isset($this->def->info[$namespace][$key]->allowed[$value])) {
                     trigger_error('Value not supported, valid values are: ' .
                         $this->_listify($this->def->info[$namespace][$key]->allowed), E_USER_WARNING);
                     return;
@@ -386,7 +386,7 @@ class HTMLPurifier_Config
                     if (isset($blacklisted_directives["$ns.$directive"])) continue;
                     if (!isset($allowed_directives["$ns.$directive"]) && !isset($allowed_ns[$ns])) continue;
                 }
-                if ($def->class == 'alias') continue;
+                if (isset($def->isAlias)) continue;
                 if ($directive == 'DefinitionID' || $directive == 'DefinitionRev') continue;
                 $ret[] = array($ns, $directive);
             }

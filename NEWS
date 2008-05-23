@@ -31,6 +31,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   will still work--the new format, however, lets modules access the
   configuration object for HTML namespace dependant tweaks.
 . AttrDef_HTML_Pixels now takes a single construction parameter, pixels.
+. ConfigSchema data-structure heavily optimized; on average it uses half
+  the memory it did previously. The interface has changed accordingly,
+  consult changes to HTMLPurifier_Config for details.
+. Variable parsing types now are magic integers instead of strings
+. Added benchmark for ConfigSchema
+
 
 3.1.0, released 2008-05-18
 # Unnecessary references to objects (vestiges of PHP4) removed from method

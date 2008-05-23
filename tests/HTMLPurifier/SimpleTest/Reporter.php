@@ -29,6 +29,14 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
         flush();
     }
     
+    public function paintFooter($test_name) {
+        if (function_exists('xdebug_peak_memory_usage')) {
+            $max_mem = number_format(xdebug_peak_memory_usage());
+            echo "<div>Max memory usage: $max_mem bytes</div>";
+        }
+        parent::paintFooter($test_name);
+    }
+    
     protected function getCss() {
         $css = parent::getCss();
         $css .= '
