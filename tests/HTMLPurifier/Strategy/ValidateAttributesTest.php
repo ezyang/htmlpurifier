@@ -205,6 +205,13 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         );
     }
     
+    function testKeepPercentCSSWidthAndHeightOnImgWhenToldTo() {
+        $this->config->set('CSS', 'MaxImgLength', null);
+        $this->assertResult(
+            '<img src="" alt="" style="width:100%;height:100%;border:1px solid #000;" />'
+        );
+    }
+    
     function testRemoveRelativeCSSWidthAndHeightOnImg() {
         $this->assertResult(
             '<img src="" alt="" style="width:10em;height:10em;border:1px solid #000;" />',

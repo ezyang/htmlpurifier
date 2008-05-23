@@ -23,22 +23,22 @@
  </directive>
  <directive id="CSS.Proprietary">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>209</line>
+   <line>214</line>
   </file>
  </directive>
  <directive id="CSS.AllowTricky">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>213</line>
+   <line>218</line>
   </file>
  </directive>
  <directive id="CSS.AllowImportant">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>217</line>
+   <line>222</line>
   </file>
  </directive>
  <directive id="CSS.AllowedProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>269</line>
+   <line>274</line>
   </file>
  </directive>
  <directive id="Cache.DefinitionImpl">
@@ -150,6 +150,9 @@
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>238</line>
+  </file>
+  <file name="HTMLPurifier/HTMLModule/Image.php">
+   <line>27</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>34</line>
@@ -308,6 +311,11 @@
  <directive id="FilterParam.ExtractStyleBlocksEscaping">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
    <line>123</line>
+  </file>
+ </directive>
+ <directive id="HTML.MaxImgLength">
+  <file name="HTMLPurifier/HTMLModule/Image.php">
+   <line>14</line>
   </file>
  </directive>
  <directive id="HTML.TidyLevel">

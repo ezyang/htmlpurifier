@@ -149,21 +149,26 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             new HTMLPurifier_AttrDef_CSS_Percentage()
         ));
         
+        $trusted_wh = new HTMLPurifier_AttrDef_CSS_Composite(array(
+            new HTMLPurifier_AttrDef_CSS_Length('0'),
+            new HTMLPurifier_AttrDef_CSS_Percentage(true),
+            new HTMLPurifier_AttrDef_Enum(array('auto'))
+        ));
+        $max = $config->get('CSS', 'MaxImgLength');
+        
         $this->info['width'] =
         $this->info['height'] =
-        new HTMLPurifier_AttrDef_Switch('img',
-            // For img tags:
-            new HTMLPurifier_AttrDef_CSS_Composite(array(
-                new HTMLPurifier_AttrDef_CSS_Length('0', $config->get('CSS', 'MaxImgLength')),
-                new HTMLPurifier_AttrDef_Enum(array('auto'))
-            )),
-            // For everyone else:
-            new HTMLPurifier_AttrDef_CSS_Composite(array(
-                new HTMLPurifier_AttrDef_CSS_Length('0'),
-                new HTMLPurifier_AttrDef_CSS_Percentage(true),
-                new HTMLPurifier_AttrDef_Enum(array('auto'))
-            ))
-        );
+            $max === null ?
+            $trusted_wh : 
+            new HTMLPurifier_AttrDef_Switch('img',
+                // For img tags:
+                new HTMLPurifier_AttrDef_CSS_Composite(array(
+                    new HTMLPurifier_AttrDef_CSS_Length('0', $max),
+                    new HTMLPurifier_AttrDef_Enum(array('auto'))
+                )),
+                // For everyone else:
+                $trusted_wh
+            );
         
         $this->info['text-decoration'] = new HTMLPurifier_AttrDef_CSS_TextDecoration();
         
