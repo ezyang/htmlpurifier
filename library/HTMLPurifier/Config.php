@@ -211,7 +211,10 @@ class HTMLPurifier_Config
         try {
             $value = $this->parser->parse(
                         $value,
-                        $type = $this->def->info[$namespace][$key]->type,
+                        $type =
+                            is_int($this->def->info[$namespace][$key]) ?
+                            $this->def->info[$namespace][$key] :
+                            $this->def->info[$namespace][$key]->type,
                         isset($this->def->info[$namespace][$key]->allow_null)
                      );
         } catch (HTMLPurifier_VarParserException $e) {
