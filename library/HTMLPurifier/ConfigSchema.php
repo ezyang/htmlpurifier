@@ -31,6 +31,11 @@ class HTMLPurifier_ConfigSchema {
      *      - namespace: Namespace this directive aliases to
      *      - name: Directive name this directive aliases to
      * 
+     * In certain degenerate cases, stdclass will actually be an integer. In
+     * that case, the value is equivalent to an stdclass with the type
+     * property set to the integer. If the integer is negative, type is
+     * equal to the absolute value of integer, and allow_null is true.
+     * 
      * This class is friendly with HTMLPurifier_Config. If you need introspection
      * about the schema, you're better of using the ConfigSchema_Interchange,
      * which uses more memory but has much richer information.
@@ -135,6 +140,21 @@ class HTMLPurifier_ConfigSchema {
         $obj->name = $new_name;
         $obj->isAlias = true;
         $this->info[$namespace][$name] = $obj;
+    }
+    
+    /**
+     * Replaces any stdclass that only has the type property with type integer.
+     */
+    public function postProcess() {
+        foreach ($this->info as $namespace => $info) {
+            foreach ($info as $directive => $v) {
+                if (count((array) $v) == 1) {
+                    $this->info[$namespace][$directive] = $v->type;
+                } elseif (count((array) $v) == 2 && isset($v->allow_null)) {
+                    $this->info[$namespace][$directive] = -$v->type;
+                }
+            }
+        }
     }
     
     // DEPRECATED METHODS

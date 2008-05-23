@@ -208,15 +208,23 @@ class HTMLPurifier_Config
             trigger_error("$namespace.$key is an alias, preferred directive name is $new_ns.$new_dir", E_USER_NOTICE);
             return;
         }
+        
+        // Raw type might be negative when using the fully optimized form
+        // of stdclass, which indicates allow_null == true
+        $rtype =
+            is_int($this->def->info[$namespace][$key]) ?
+            $this->def->info[$namespace][$key] :
+            $this->def->info[$namespace][$key]->type;
+        if ($rtype < 0) {
+            $type = -$rtype;
+            $allow_null = true;
+        } else {
+            $type = $rtype;
+            $allow_null = isset($this->def->info[$namespace][$key]->allow_null);
+        }
+        
         try {
-            $value = $this->parser->parse(
-                        $value,
-                        $type =
-                            is_int($this->def->info[$namespace][$key]) ?
-                            $this->def->info[$namespace][$key] :
-                            $this->def->info[$namespace][$key]->type,
-                        isset($this->def->info[$namespace][$key]->allow_null)
-                     );
+            $value = $this->parser->parse($value, $type, $allow_null);
         } catch (HTMLPurifier_VarParserException $e) {
             trigger_error('Value for ' . "$namespace.$key" . ' is of invalid type, should be ' . HTMLPurifier_VarParser::getTypeName($type), E_USER_WARNING);
             return;
