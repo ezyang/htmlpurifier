@@ -26,7 +26,6 @@ class HTMLPurifier_AttrDef_CSS_URITest extends HTMLPurifier_AttrDefHarness
         // escaping
         $this->assertDef("url(http://www.example.com/foo,bar\))", 
             "url(http://www.example.com/foo\,bar\))");
-        
     }
     
 }

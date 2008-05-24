@@ -17,6 +17,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   manifest in token until end of operations. This prevents naughty internal
   code from directly modifying CurrentToken when they're not supposed to.
 - Percent encoding checks enabled for URI query and fragment
+- Fix stray backslashes in font-family
 . Added HTMLPurifier_UnitConverter and HTMLPurifier_Length for convenient
   handling of CSS-style lengths. HTMLPurifier_AttrDef_CSS_Length now uses
   this class.
