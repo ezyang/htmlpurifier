@@ -7,6 +7,8 @@
 class HTMLPurifier_Encoder
 {
     
+    private static $nonSgmlCharacters;
+    
     /**
      * Constructor throws fatal error if you attempt to instantiate class
      */
@@ -18,6 +20,24 @@ class HTMLPurifier_Encoder
      * Error-handler that mutes errors, alternative to shut-up operator.
      */
     private static function muteErrorHandler() {}
+    
+    /**
+     * Returns a lookup of UTF-8 character byte sequences that are non-SGML.
+     */
+    public static function getNonSgmlCharacters() {
+        if (empty(HTMLPurifier_Encoder::$nonSgmlCharacters)) {
+            for ($i = 0; $i <= 31; $i++) {
+                // non-SGML ASCII chars
+                // save \r, \t and \n
+                if ($i == 9 || $i == 13 || $i == 10) continue;
+                HTMLPurifier_Encoder::$nonSgmlCharacters[chr($i)] = '';
+            }
+            for ($i = 127; $i <= 159; $i++) {
+                HTMLPurifier_Encoder::$nonSgmlCharacters[HTMLPurifier_Encoder::unichr($i)] = '';
+            }
+        }
+        return HTMLPurifier_Encoder::$nonSgmlCharacters;
+    }
     
     /**
      * Cleans a UTF-8 string for well-formedness and SGML validity
@@ -46,18 +66,7 @@ class HTMLPurifier_Encoder
      */
     public static function cleanUTF8($str, $force_php = false) {
         
-        static $non_sgml_chars = array();
-        if (empty($non_sgml_chars)) {
-            for ($i = 0; $i <= 31; $i++) {
-                // non-SGML ASCII chars
-                // save \r, \t and \n
-                if ($i == 9 || $i == 13 || $i == 10) continue;
-                $non_sgml_chars[chr($i)] = '';
-            }
-            for ($i = 127; $i <= 159; $i++) {
-                $non_sgml_chars[HTMLPurifier_Encoder::unichr($i)] = '';
-            }
-        }
+        $non_sgml = HTMLPurifier_Encoder::getNonSgmlCharacters();
         
         static $iconv = null;
         if ($iconv === null) $iconv = function_exists('iconv');
@@ -66,7 +75,7 @@ class HTMLPurifier_Encoder
         // This is an optimization: if the string is already valid UTF-8, no
         // need to do iconv/php stuff. 99% of the time, this will be the case.
         if (preg_match('/^.{1}/us', $str)) {
-            return strtr($str, $non_sgml_chars);
+            return strtr($str, $non_sgml);
         }
         
         if ($iconv && !$force_php) {
@@ -74,7 +83,7 @@ class HTMLPurifier_Encoder
             set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
             $str = iconv('UTF-8', 'UTF-8//IGNORE', $str);
             restore_error_handler();
-            return strtr($str, $non_sgml_chars);
+            return strtr($str, $non_sgml);
         }
         
         $mState = 0; // cached expected number of octets after the current octet
@@ -276,17 +285,20 @@ class HTMLPurifier_Encoder
      * Converts a string to UTF-8 based on configuration.
      */
     public static function convertToUTF8($str, $config, $context) {
-        static $iconv = null;
-        if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');
         if ($encoding === 'utf-8') return $str;
+        static $iconv = null;
+        if ($iconv === null) $iconv = function_exists('iconv');
+        set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
         if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
-            set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
             $str = iconv($encoding, 'utf-8//IGNORE', $str);
+            // If the string is bjorked by Shift_JIS or a similar encoding
+            // that doesn't support all of ASCII, convert the naughty
+            // characters to their true byte-wise ASCII/UTF-8 equivalents.
+            $str = strtr($str, HTMLPurifier_Encoder::testEncodingSupportsASCII($encoding));
             restore_error_handler();
             return $str;
         } elseif ($encoding === 'iso-8859-1') {
-            set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
             $str = utf8_encode($str);
             restore_error_handler();
             return $str;
@@ -300,20 +312,28 @@ class HTMLPurifier_Encoder
      *       characters being omitted.
      */
     public static function convertFromUTF8($str, $config, $context) {
-        static $iconv = null;
-        if ($iconv === null) $iconv = function_exists('iconv');
         $encoding = $config->get('Core', 'Encoding');
         if ($encoding === 'utf-8') return $str;
-        if ($config->get('Core', 'EscapeNonASCIICharacters')) {
+        static $iconv = null;
+        if ($iconv === null) $iconv = function_exists('iconv');
+        if ($escape = $config->get('Core', 'EscapeNonASCIICharacters')) {
             $str = HTMLPurifier_Encoder::convertToASCIIDumbLossless($str);
         }
+        set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
         if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
-            set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
+            // Undo our previous fix in convertToUTF8, otherwise iconv will barf
+            $ascii_fix = HTMLPurifier_Encoder::testEncodingSupportsASCII($encoding);
+            if (!$escape && !empty($ascii_fix)) {
+                $clear_fix = array();
+                foreach ($ascii_fix as $utf8 => $native) $clear_fix[$utf8] = '';
+                $str = strtr($str, $clear_fix);
+            }
+            $str = strtr($str, array_flip($ascii_fix));
+            // Normal stuff
             $str = iconv('utf-8', $encoding . '//IGNORE', $str);
             restore_error_handler();
             return $str;
         } elseif ($encoding === 'iso-8859-1') {
-            set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
             $str = utf8_decode($str);
             restore_error_handler();
             return $str;
@@ -366,6 +386,47 @@ class HTMLPurifier_Encoder
             }
         }
         return $result;
+    }
+    
+    /**
+     * This expensive function tests whether or not a given character
+     * encoding supports ASCII. 7/8-bit encodings like Shift_JIS will
+     * fail this test, and require special processing. Variable width
+     * encodings shouldn't ever fail.
+     * 
+     * @param string $encoding Encoding name to test, as per iconv format
+     * @param bool $bypass Whether or not to bypass the precompiled arrays.
+     * @return Array of UTF-8 characters to their corresponding ASCII,
+     *      which can be used to "undo" any overzealous iconv action.
+     */
+    public static function testEncodingSupportsASCII($encoding, $bypass = false) {
+        static $encodings = array();
+        if (!$bypass) {
+            if (isset($encodings[$encoding])) return $encodings[$encoding];
+            $lenc = strtolower($encoding);
+            switch ($lenc) {
+                case 'shift_jis':
+                    return array("\xC2\xA5" => '\\', "\xE2\x80\xBE" => '~');
+                case 'johab':
+                    return array("\xE2\x82\xA9" => '\\');
+            }
+            if (strpos($lenc, 'iso-8859-') === 0) return array();
+        }
+        $ret = array();
+        set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
+        if (iconv('UTF-8', $encoding, 'a') === false) return false;
+        for ($i = 0x20; $i <= 0x7E; $i++) { // all printable ASCII chars
+            $c = chr($i);
+            if (iconv('UTF-8', "$encoding//IGNORE", $c) === '') {
+                // Reverse engineer: what's the UTF-8 equiv of this byte
+                // sequence? This assumes that there's no variable width
+                // encoding that doesn't support ASCII.
+                $ret[iconv($encoding, 'UTF-8//IGNORE', $c)] = $c;
+            }
+        }
+        restore_error_handler();
+        $encodings[$encoding] = $ret;
+        return $ret;
     }
     
     

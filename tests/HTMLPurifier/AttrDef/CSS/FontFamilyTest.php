@@ -18,7 +18,20 @@ class HTMLPurifier_AttrDef_CSS_FontFamilyTest extends HTMLPurifier_AttrDefHarnes
         $this->assertDef($d = "'\xE5\xAE\x8B\xE4\xBD\x93'");
         $this->assertDef("\xE5\xAE\x8B\xE4\xBD\x93", $d);
         $this->assertDef("'\\','f'", "'\\\\', f");
-        
+        $this->assertDef("'\\01'", "''");
+        $this->assertDef("'\\20'", "' '");
+        $this->assertDef("\\0020", "'\\\\0020'");
+        $this->assertDef("'\\000045'", "E");
+        $this->assertDef("','", false);
+        $this->assertDef("',' foobar','", "' foobar'");
+        $this->assertDef("'\\27'", "'\''");
+        $this->assertDef('"\\22"', "'\"'");
+        $this->assertDef('"\\""', "'\"'");
+        $this->assertDef('"\'"', "'\\''");
+        $this->assertDef("'\\000045a'", "Ea");
+        $this->assertDef("'\\00045 a'", "Ea");
+        $this->assertDef("'\\00045  a'", "'E a'");
+        $this->assertDef("'\\\nf'", "f");
     }
     
 }

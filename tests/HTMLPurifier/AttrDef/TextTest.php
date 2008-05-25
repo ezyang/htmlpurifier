@@ -8,7 +8,7 @@ class HTMLPurifier_AttrDef_TextTest extends HTMLPurifier_AttrDefHarness
         $this->def = new HTMLPurifier_AttrDef_Text();
         
         $this->assertDef('This is spiffy text!');
-        $this->assertDef(" Casual\tCDATA parse\ncheck. ", 'Casual CDATA parsecheck.');
+        $this->assertDef(" Casual\tCDATA parse\ncheck. ", 'Casual CDATA parse check.');
         
     }
     

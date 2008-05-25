@@ -167,5 +167,23 @@ alert("<This is compatible with XHTML>");
         $this->purifier->purify('foo');
     }
     
+    function test_shiftJis() {
+        if (!function_exists('iconv')) return;
+        $this->config->set('Core', 'Encoding', 'Shift_JIS');
+        $this->config->set('Core', 'EscapeNonASCIICharacters', true);
+        $this->assertPurification(
+            "<b style=\"font-family:'&#165;';\">111</b>"
+        );
+    }
+    
+    function test_shiftJisWorstCase() {
+        if (!function_exists('iconv')) return;
+        $this->config->set('Core', 'Encoding', 'Shift_JIS');
+        $this->assertPurification( // Notice how Yen disappears
+            "<b style=\"font-family:'&#165;';\">111</b>",
+            "<b style=\"font-family:'';\">111</b>"
+        );
+    }
+    
 }
 

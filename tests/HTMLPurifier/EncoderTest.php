@@ -7,6 +7,7 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
     
     function setUp() {
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
+        parent::setUp();
     }
     
     function assertCleanUTF8($string, $expect = null) {
@@ -26,93 +27,89 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
         $this->assertCleanUTF8("\xDF\xFF", ''); // malformed UTF8
     }
     
-    function test_convertToUTF8() {
-        $config = HTMLPurifier_Config::createDefault();
-        $context = new HTMLPurifier_Context();
-        
+    function test_convertToUTF8_noConvert() {
         // UTF-8 means that we don't touch it
         $this->assertIdentical(
-            HTMLPurifier_Encoder::convertToUTF8("\xF6", $config, $context),
+            HTMLPurifier_Encoder::convertToUTF8("\xF6", $this->config, $this->context),
             "\xF6", // this is invalid
             'Expected identical [Binary: F6]'
         );
-        
-        $config = HTMLPurifier_Config::create(array(
-            'Core.Encoding' => 'ISO-8859-1'
-        ));
-        
-        // Now it gets converted
+    }
+    
+    function test_convertToUTF8_iso8859_1() {
+        $this->config->set('Core', 'Encoding', 'ISO-8859-1');
         $this->assertIdentical(
-            HTMLPurifier_Encoder::convertToUTF8("\xF6", $config, $context),
+            HTMLPurifier_Encoder::convertToUTF8("\xF6", $this->config, $this->context),
             "\xC3\xB6"
         );
-        
-        $config = HTMLPurifier_Config::create(array(
-            'Core.Encoding' => 'ISO-8859-1',
-            'Test.ForceNoIconv' => true
-        ));
+    }
+    
+    function test_convertToUTF8_withoutIconv() {
+        $this->config->set('Core', 'Encoding', 'ISO-8859-1');
+        $this->config->set('Test', 'ForceNoIconv', true);
         $this->assertIdentical(
-            HTMLPurifier_Encoder::convertToUTF8("\xF6", $config, $context),
+            HTMLPurifier_Encoder::convertToUTF8("\xF6", $this->config, $this->context),
             "\xC3\xB6"
         );
         
     }
     
-    function test_convertFromUTF8() {
-        $config = HTMLPurifier_Config::createDefault();
-        $context = new HTMLPurifier_Context();
-        
-        // zhong-wen
-        $chinese = "\xE4\xB8\xAD\xE6\x96\x87 (Chinese)";
-        
+    function getZhongWen() {
+        return "\xE4\xB8\xAD\xE6\x96\x87 (Chinese)";
+    }
+    
+    function test_convertFromUTF8_utf8() {
         // UTF-8 means that we don't touch it
         $this->assertIdentical(
-            HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
+            HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $this->config, $this->context),
             "\xC3\xB6"
         );
-        
-        $config = HTMLPurifier_Config::create(array(
-            'Core.Encoding' => 'ISO-8859-1'
-        ));
-        
-        // Now it gets converted
+    }
+    
+    function test_convertFromUTF8_iso8859_1() {
+        $this->config->set('Core', 'Encoding', 'ISO-8859-1');
         $this->assertIdentical(
-            HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
+            HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $this->config, $this->context),
             "\xF6",
             'Expected identical [Binary: F6]'
         );
-        
-        if (function_exists('iconv')) {
-            // iconv has it's own way
-            $this->assertIdentical(
-                HTMLPurifier_Encoder::convertFromUTF8($chinese, $config, $context),
-                " (Chinese)"
-            );
-        }
-        
+    }
+    
+    function test_convertFromUTF8_iconvNoChars() {
+        if (!function_exists('iconv')) return;
+        $this->config->set('Core', 'Encoding', 'ISO-8859-1');
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::convertFromUTF8($this->getZhongWen(), $this->config, $this->context),
+            " (Chinese)"
+        );
+    }
+    
+    function test_convertFromUTF8_phpNormal() {
         // Plain PHP implementation has slightly different behavior
-        $config = HTMLPurifier_Config::create(array(
-            'Core.Encoding' => 'ISO-8859-1',
-            'Test.ForceNoIconv' => true
-        ));
+        $this->config->set('Core', 'Encoding', 'ISO-8859-1');
+        $this->config->set('Test', 'ForceNoIconv', true);
         $this->assertIdentical(
-            HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $config, $context),
+            HTMLPurifier_Encoder::convertFromUTF8("\xC3\xB6", $this->config, $this->context),
             "\xF6",
             'Expected identical [Binary: F6]'
         );
-        
+    }
+    
+    function test_convertFromUTF8_phpNoChars() {
+        $this->config->set('Core', 'Encoding', 'ISO-8859-1');
+        $this->config->set('Test', 'ForceNoIconv', true);
         $this->assertIdentical(
-            HTMLPurifier_Encoder::convertFromUTF8($chinese, $config, $context),
+            HTMLPurifier_Encoder::convertFromUTF8($this->getZhongWen(), $this->config, $this->context),
             "?? (Chinese)"
         );
-        
+    }
+    
+    function test_convertFromUTF8_withProtection() {
         // Preserve the characters!
-        $config = HTMLPurifier_Config::create(array(
-            'Core.Encoding' => 'ISO-8859-1',
-            'Core.EscapeNonASCIICharacters' => true
-        ));
+        $this->config->set('Core', 'Encoding', 'ISO-8859-1');
+        $this->config->set('Core', 'EscapeNonASCIICharacters', true);
         $this->assertIdentical(
-            HTMLPurifier_Encoder::convertFromUTF8($chinese, $config, $context),
+            HTMLPurifier_Encoder::convertFromUTF8($this->getZhongWen(), $this->config, $this->context),
             "&#20013;&#25991; (Chinese)"
         );
         
@@ -137,6 +134,40 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
             "&#917536;"
         );
         
+    }
+    
+    function assertASCIISupportCheck($enc, $ret) {
+        $test = HTMLPurifier_Encoder::testEncodingSupportsASCII($enc, true);
+        if ($test === false) return;
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::testEncodingSupportsASCII($enc),
+            $ret
+        );
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::testEncodingSupportsASCII($enc, true),
+            $ret
+        );
+    }
+    
+    function test_testEncodingSupportsASCII() {
+        $this->assertASCIISupportCheck('Shift_JIS', array("\xC2\xA5" => '\\', "\xE2\x80\xBE" => '~'));
+        $this->assertASCIISupportCheck('JOHAB', array("\xE2\x82\xA9" => '\\'));
+        $this->assertASCIISupportCheck('ISO-8859-1', array());
+        $this->assertASCIISupportCheck('dontexist', array()); // canary
+    }
+    
+    function testShiftJIS() {
+        if (!function_exists('iconv')) return;
+        $this->config->set('Core', 'Encoding', 'Shift_JIS');
+        // This actually looks like a Yen, but we're going to treat it differently
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::convertFromUTF8('\\~', $this->config, $this->context),
+            '\\~'
+        );
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::convertToUTF8('\\~', $this->config, $this->context),
+            '\\~'
+        );
     }
     
 }

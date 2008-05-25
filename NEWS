@@ -17,7 +17,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   manifest in token until end of operations. This prevents naughty internal
   code from directly modifying CurrentToken when they're not supposed to.
 - Percent encoding checks enabled for URI query and fragment
-- Fix stray backslashes in font-family
+- Fix stray backslashes in font-family; CSS Unicode character escapes are
+  now properly resolved (although *only* in font-family).
+- Improve parseCDATA algorithm to take into account newline normalization
+- Account for browser confusion between Yen character and backslash in
+  Shift_JIS encoding. This fix generalizes to any other encoding which is not
+  a strict superset of printable ASCII.
 . Added HTMLPurifier_UnitConverter and HTMLPurifier_Length for convenient
   handling of CSS-style lengths. HTMLPurifier_AttrDef_CSS_Length now uses
   this class.
@@ -37,7 +42,6 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   consult changes to HTMLPurifier_Config for details.
 . Variable parsing types now are magic integers instead of strings
 . Added benchmark for ConfigSchema
-
 
 3.1.0, released 2008-05-18
 # Unnecessary references to objects (vestiges of PHP4) removed from method
