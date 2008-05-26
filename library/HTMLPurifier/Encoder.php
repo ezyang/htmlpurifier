@@ -7,8 +7,6 @@
 class HTMLPurifier_Encoder
 {
     
-    private static $nonSgmlCharacters;
-    
     /**
      * Constructor throws fatal error if you attempt to instantiate class
      */
@@ -20,24 +18,6 @@ class HTMLPurifier_Encoder
      * Error-handler that mutes errors, alternative to shut-up operator.
      */
     private static function muteErrorHandler() {}
-    
-    /**
-     * Returns a lookup of UTF-8 character byte sequences that are non-SGML.
-     */
-    public static function getNonSgmlCharacters() {
-        if (empty(HTMLPurifier_Encoder::$nonSgmlCharacters)) {
-            for ($i = 0; $i <= 31; $i++) {
-                // non-SGML ASCII chars
-                // save \r, \t and \n
-                if ($i == 9 || $i == 13 || $i == 10) continue;
-                HTMLPurifier_Encoder::$nonSgmlCharacters[chr($i)] = '';
-            }
-            for ($i = 127; $i <= 159; $i++) {
-                HTMLPurifier_Encoder::$nonSgmlCharacters[HTMLPurifier_Encoder::unichr($i)] = '';
-            }
-        }
-        return HTMLPurifier_Encoder::$nonSgmlCharacters;
-    }
     
     /**
      * Cleans a UTF-8 string for well-formedness and SGML validity
@@ -66,24 +46,13 @@ class HTMLPurifier_Encoder
      */
     public static function cleanUTF8($str, $force_php = false) {
         
-        $non_sgml = HTMLPurifier_Encoder::getNonSgmlCharacters();
-        
-        static $iconv = null;
-        if ($iconv === null) $iconv = function_exists('iconv');
-        
         // UTF-8 validity is checked since PHP 4.3.5
         // This is an optimization: if the string is already valid UTF-8, no
-        // need to do iconv/php stuff. 99% of the time, this will be the case.
-        if (preg_match('/^.{1}/us', $str)) {
-            return strtr($str, $non_sgml);
-        }
-        
-        if ($iconv && !$force_php) {
-            // do the shortcut way
-            set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
-            $str = iconv('UTF-8', 'UTF-8//IGNORE', $str);
-            restore_error_handler();
-            return strtr($str, $non_sgml);
+        // need to do PHP stuff. 99% of the time, this will be the case.
+        // The regexp matches the XML char production, as well as well as excluding
+        // non-SGML codepoints U+007F to U+009F
+        if (preg_match('/^[\x{9}\x{A}\x{D}\x{20}-\x{7E}\x{A0}-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]*$/Du', $str)) {
+            return $str;
         }
         
         $mState = 0; // cached expected number of octets after the current octet
@@ -194,7 +163,17 @@ class HTMLPurifier_Encoder
                         ) {
                             
                         } elseif (0xFEFF != $mUcs4 && // omit BOM
-                            !($mUcs4 >= 128 && $mUcs4 <= 159) // omit non-SGML
+                            // check for valid Char unicode codepoints
+                            (
+                                0x9 == $mUcs4 ||
+                                0xA == $mUcs4 ||
+                                0xD == $mUcs4 ||
+                                (0x20 <= $mUcs4 && 0x7E >= $mUcs4) ||
+                                // 7F-9F is not strictly prohibited by XML,
+                                // but it is non-SGML, and thus we don't allow it
+                                (0xA0 <= $mUcs4 && 0xD7FF >= $mUcs4) ||
+                                (0x10000 <= $mUcs4 && 0x10FFFF >= $mUcs4)
+                            )
                         ) {
                             $out .= $char;
                         }

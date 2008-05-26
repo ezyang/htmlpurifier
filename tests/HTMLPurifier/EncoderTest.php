@@ -25,6 +25,8 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
         $this->assertCleanUTF8("\xC2\x80", ''); // two byte invalid SGML
         $this->assertCleanUTF8("\xF3\xBF\xBF\xBF"); // valid four byte
         $this->assertCleanUTF8("\xDF\xFF", ''); // malformed UTF8
+        // invalid codepoints
+        $this->assertCleanUTF8("\xED\xB0\x80", '');
     }
     
     function test_convertToUTF8_noConvert() {
