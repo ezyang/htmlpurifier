@@ -58,11 +58,10 @@ style="float:right;">
 
 $schema_builder = new HTMLPurifier_ConfigSchema_Builder_ConfigSchema();
 $schema = $schema_builder->build($interchange);
-HTMLPurifier_ConfigSchema::instance($schema);
 
-$config  = HTMLPurifier_Config::loadArrayFromForm($_GET, 'config');
+$config  = HTMLPurifier_Config::loadArrayFromForm($_GET, 'config', true, true, $schema);
 $printer = new HTMLPurifier_Printer_ConfigForm('config', '?doc#%s');
-echo $printer->render($config);
+echo $printer->render(array(HTMLPurifier_Config::createDefault(), $config));
 
 ?>
 </form>

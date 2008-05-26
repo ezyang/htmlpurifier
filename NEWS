@@ -23,6 +23,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Account for browser confusion between Yen character and backslash in
   Shift_JIS encoding. This fix generalizes to any other encoding which is not
   a strict superset of printable ASCII.
+- Fix missing configuration parameter in Generator calls. Thanks vs for the
+  partial patch.
 . Added HTMLPurifier_UnitConverter and HTMLPurifier_Length for convenient
   handling of CSS-style lengths. HTMLPurifier_AttrDef_CSS_Length now uses
   this class.
@@ -42,6 +44,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   consult changes to HTMLPurifier_Config for details.
 . Variable parsing types now are magic integers instead of strings
 . Added benchmark for ConfigSchema
+. HTMLPurifier_Generator requires $config and $context parameters. If you 
+  don't know what they should be, use HTMLPurifier_Config::createDefault()
+  and new HTMLPurifier_Context().
+. Printers now properly distinguish between output configuration, and 
+  target configuration. This is not applicable to scripts using
+  the Printers for HTML Purifier related tasks.
+. HTML/CSS Printers must be primed with prepareGenerator($gen_config), otherwise
+  fatal errors will ensue.
 
 3.1.0, released 2008-05-18
 # Unnecessary references to objects (vestiges of PHP4) removed from method

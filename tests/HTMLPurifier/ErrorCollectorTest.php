@@ -6,6 +6,7 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
     public function setup() {
         generate_mock_once('HTMLPurifier_Language');
         generate_mock_once('HTMLPurifier_Generator');
+        parent::setup();
     }
     
     function test() {
@@ -20,14 +21,13 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         
         $line = false;
         
-        $context = new HTMLPurifier_Context();
-        $context->register('Locale', $language);
-        $context->register('CurrentLine', $line);
+        $this->context->register('Locale', $language);
+        $this->context->register('CurrentLine', $line);
         
-        $generator = new HTMLPurifier_Generator();
-        $context->register('Generator', $generator);
+        $generator = new HTMLPurifier_Generator($this->config, $this->context);
+        $this->context->register('Generator', $generator);
         
-        $collector = new HTMLPurifier_ErrorCollector($context);
+        $collector = new HTMLPurifier_ErrorCollector($this->context);
         
         $line = 23;
         $collector->send(E_ERROR, 'message-1');
@@ -48,23 +48,21 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         
         $config = HTMLPurifier_Config::create(array('Core.MaintainLineNumbers' => true));
         
-        $this->assertIdentical($collector->getHTMLFormatted($config), $formatted_result);
+        $this->assertIdentical($collector->getHTMLFormatted($this->config), $formatted_result);
         
     }
     
     function testNoErrors() {
         $language = new HTMLPurifier_LanguageMock();
         $language->setReturnValue('getMessage', 'No errors', array('ErrorCollector: No errors'));
-        $context = new HTMLPurifier_Context();
-        $context->register('Locale', $language);
+        $this->context->register('Locale', $language);
         
-        $generator = new HTMLPurifier_Generator();
-        $context->register('Generator', $generator);
+        $generator = new HTMLPurifier_Generator($this->config, $this->context);
+        $this->context->register('Generator', $generator);
         
-        $collector = new HTMLPurifier_ErrorCollector($context);
+        $collector = new HTMLPurifier_ErrorCollector($this->context);
         $formatted_result = '<p>No errors</p>';
-        $config = HTMLPurifier_Config::createDefault();
-        $this->assertIdentical($collector->getHTMLFormatted($config), $formatted_result);
+        $this->assertIdentical($collector->getHTMLFormatted($this->config), $formatted_result);
     }
     
     function testNoLineNumbers() {
@@ -72,13 +70,12 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         $language->setReturnValue('getMessage', 'Message 1', array('message-1'));
         $language->setReturnValue('getMessage', 'Message 2', array('message-2'));
         $language->setReturnValue('getErrorName', 'Error', array(E_ERROR));
-        $context = new HTMLPurifier_Context();
-        $context->register('Locale', $language);
+        $this->context->register('Locale', $language);
         
-        $generator = new HTMLPurifier_Generator();
-        $context->register('Generator', $generator);
+        $generator = new HTMLPurifier_Generator($this->config, $this->context);
+        $this->context->register('Generator', $generator);
         
-        $collector = new HTMLPurifier_ErrorCollector($context);
+        $collector = new HTMLPurifier_ErrorCollector($this->context);
         $collector->send(E_ERROR, 'message-1');
         $collector->send(E_ERROR, 'message-2');
         
@@ -91,23 +88,21 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         $formatted_result = 
             '<ul><li><strong>Error</strong>: Message 1</li>'.
             '<li><strong>Error</strong>: Message 2</li></ul>';
-        $config = HTMLPurifier_Config::createDefault();
-        $this->assertIdentical($collector->getHTMLFormatted($config), $formatted_result);
+        $this->assertIdentical($collector->getHTMLFormatted($this->config), $formatted_result);
     }
     
     function testContextSubstitutions() {
         
         $language = new HTMLPurifier_LanguageMock();
-        $context  = new HTMLPurifier_Context();
-        $context->register('Locale', $language);
+        $this->context->register('Locale', $language);
         
-        $generator = new HTMLPurifier_Generator();
-        $context->register('Generator', $generator);
+        $generator = new HTMLPurifier_Generator($this->config, $this->context);
+        $this->context->register('Generator', $generator);
         
         $current_token = false;
-        $context->register('CurrentToken', $current_token);
+        $this->context->register('CurrentToken', $current_token);
         
-        $collector = new HTMLPurifier_ErrorCollector($context);
+        $collector = new HTMLPurifier_ErrorCollector($this->context);
         
         // 0
         $current_token = new HTMLPurifier_Token_Start('a', array('href' => 'http://example.com'), 32);
@@ -123,7 +118,7 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         $collector->send(E_NOTICE, 'message-attr'); // test when context isn't available
         
         // 2
-        $context->register('CurrentAttr', $current_attr);
+        $this->context->register('CurrentAttr', $current_attr);
         $collector->send(E_NOTICE, 'message-attr');
         
         $result = array(

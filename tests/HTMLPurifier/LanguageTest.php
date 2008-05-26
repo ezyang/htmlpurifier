@@ -37,7 +37,7 @@ class HTMLPurifier_LanguageTest extends HTMLPurifier_Harness
     function test_formatMessage_tokenParameter() {
         $config = HTMLPurifier_Config::createDefault();
         $context = new HTMLPurifier_Context();
-        $generator = new HTMLPurifier_Generator(); // replace with mock if this gets icky
+        $generator = new HTMLPurifier_Generator($config, $context); // replace with mock if this gets icky
         $context->register('Generator', $generator);
         $lang = new HTMLPurifier_Language($config, $context);
         $lang->_loaded = true;

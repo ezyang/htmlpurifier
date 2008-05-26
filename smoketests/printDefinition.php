@@ -13,8 +13,11 @@ if (file_exists('printDefinition.settings.php')) {
     include 'printDefinition.settings.php';
 }
 
+$gen_config = HTMLPurifier_Config::createDefault();
 $printer_html_definition = new HTMLPurifier_Printer_HTMLDefinition();
+$printer_html_definition->prepareGenerator($gen_config);
 $printer_css_definition  = new HTMLPurifier_Printer_CSSDefinition();
+$printer_css_definition->prepareGenerator($gen_config);
 
 $printer_config_form = new HTMLPurifier_Printer_ConfigForm(
     'config',

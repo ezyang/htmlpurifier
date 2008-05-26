@@ -68,19 +68,19 @@
  </directive>
  <directive id="Core.Encoding">
   <file name="HTMLPurifier/Encoder.php">
-   <line>281</line>
-   <line>305</line>
+   <line>288</line>
+   <line>315</line>
   </file>
  </directive>
  <directive id="Test.ForceNoIconv">
   <file name="HTMLPurifier/Encoder.php">
-   <line>283</line>
-   <line>310</line>
+   <line>293</line>
+   <line>323</line>
   </file>
  </directive>
  <directive id="Core.EscapeNonASCIICharacters">
   <file name="HTMLPurifier/Encoder.php">
-   <line>307</line>
+   <line>319</line>
   </file>
  </directive>
  <directive id="Core.MaintainLineNumbers">
@@ -96,17 +96,17 @@
  </directive>
  <directive id="Output.CommentScriptContents">
   <file name="HTMLPurifier/Generator.php">
-   <line>41</line>
+   <line>40</line>
   </file>
  </directive>
  <directive id="Output.TidyFormat">
   <file name="HTMLPurifier/Generator.php">
-   <line>70</line>
+   <line>69</line>
   </file>
  </directive>
  <directive id="Output.Newline">
   <file name="HTMLPurifier/Generator.php">
-   <line>84</line>
+   <line>83</line>
   </file>
  </directive>
  <directive id="HTML.BlockWrapper">
