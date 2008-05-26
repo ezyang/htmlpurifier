@@ -130,30 +130,26 @@
 </p>
 
 <p>
-  Let's suppose I wanted to write a filter that de-internationalized domain
-  names by converting them to <a href="http://en.wikipedia.org/wiki/Punycode">Punycode</a>.
-  Assuming that <code>punycode_encode($input)</code> converts <code>$input</code> to
-  Punycode and returns <code>false</code> on failure:
+  Let's suppose I wanted to write a filter that converted links with a
+  custom <code>image</code> scheme to its corresponding real path on
+  our website:
 </p>
 
-<pre>class HTMLPurifier_URIFilter_ConvertIDNToPunycode extends HTMLPurifier_URIFilter
+<pre>class HTMLPurifier_URIFilter_TransformImageScheme extends HTMLPurifier_URIFilter
 {
-    public $name = 'ConvertIDNToPunycode';
+    public $name = 'TransformImageScheme';
     public function filter(&$uri, $config, $context) {
-        if (is_null($uri->host)) return true;
-        if ($uri->host == utf8_decode($uri->host)) {
-            // is ASCII, abort
-            return true;
-        }
-        $host = punycode_encode($uri->host);
-        if ($host === false) return false;
-        $uri->host = $host;
+        if ($uri->scheme !== 'image') return true;
+        $img_name = $uri->path;
+        // Overwrite the previous URI object
+        $uri = new HTMLPurifier_URI('http', null, null, null, '/img/' . $img_name . '.png', null, null);
         return true;
     }
 }</pre>
 
 <p>
-  Notice I did not <code>return $uri;</code>.
+  Notice I did not <code>return $uri;</code>. This filter would turn
+  <code>image:Foo</code> into <code>/img/Foo.png</code>.
 </p>
 
 <h2>Activating your filter</h2>
@@ -185,6 +181,25 @@ $uri->registerFilter(new HTMLPurifier_URIFilter_<strong>NameOfFilter</strong>())
   Now, your filter will only be called when %URI.<strong>NameOfFilter</strong>
   is set to true.
 </p>
+
+<h2>Post-filter</h2>
+
+<p>
+    Remember our TransformImageScheme filter? That filter acted before we had
+    performed scheme validation; otherwise, the URI would have been filtered
+    out when it was discovered that there was no image scheme. Well, a post-filter
+    is run after scheme specific validation, so it's ideal for bulk
+    post-processing of URIs, including munging. To specify a URI as a post-filter,
+    set the <code>$post</code> member variable to TRUE.
+</p>
+
+<pre>class HTMLPurifier_URIFilter_MyPostFilter extends HTMLPurifier_URIFilter
+{
+    public $name = 'MyPostFilter';
+    public $post = true;
+    // ... extra code here
+}
+</pre>
 
 <h2>Examples</h2>
 

@@ -12,6 +12,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 3.1.1, unknown release date
 ! More robust imagecrash protection with height/width CSS with %CSS.MaxImgLength,
   and height/width HTML with %HTML.MaxImgLength.
+! %URI.SecureMunge for secure URI munging (as opposed to %URI.Munge). Be sure
+  to set %URI.SecureMungeSecretKey when using this directive. Thanks Chris
+  for sponsoring this feature.
+! Implemented post URI filtering. Set member variable $post to true to set
+  a URIFilter as such.
 - Disable percent height/width attributes for img
 - AttrValidator operations are now atomic; updates to attributes are not
   manifest in token until end of operations. This prevents naughty internal
@@ -52,6 +57,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   the Printers for HTML Purifier related tasks.
 . HTML/CSS Printers must be primed with prepareGenerator($gen_config), otherwise
   fatal errors will ensue.
+. URIFilter->prepare can return false in order to abort loading of the filter
 
 3.1.0, released 2008-05-18
 # Unnecessary references to objects (vestiges of PHP4) removed from method

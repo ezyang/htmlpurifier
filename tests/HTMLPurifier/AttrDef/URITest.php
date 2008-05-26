@@ -83,6 +83,8 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $uri_def = new HTMLPurifier_URIDefinitionMock();
         $uri_def->expectOnce('filter', array($uri, '*', '*'));
         $uri_def->setReturnValue('filter', true, array($uri, '*', '*'));
+        $uri_def->expectOnce('postFilter', array($uri, '*', '*'));
+        $uri_def->setReturnValue('postFilter', true, array($uri, '*', '*'));
         $uri_def->setup = true;
         
         // Since definitions are no longer passed by reference, we need

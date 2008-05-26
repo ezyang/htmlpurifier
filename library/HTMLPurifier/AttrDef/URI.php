@@ -50,6 +50,10 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
             $result = $scheme_obj->validate($uri, $config, $context);
             if (!$result) break;
             
+            // Post chained filtering
+            $result = $uri_def->postFilter($uri, $config, $context);
+            if (!$result) break;
+            
             // survived gauntlet
             $ok = true;
             

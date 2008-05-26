@@ -195,7 +195,7 @@
  </directive>
  <directive id="URI.Host">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>57</line>
+   <line>63</line>
   </file>
   <file name="HTMLPurifier/URIFilter/DisableExternal.php">
    <line>8</line>
@@ -203,12 +203,12 @@
  </directive>
  <directive id="URI.Base">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>58</line>
+   <line>64</line>
   </file>
  </directive>
  <directive id="URI.DefaultScheme">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>65</line>
+   <line>71</line>
   </file>
  </directive>
  <directive id="URI.AllowedSchemes">
@@ -228,7 +228,7 @@
  </directive>
  <directive id="URI.Munge">
   <file name="HTMLPurifier/AttrDef/URI.php">
-   <line>68</line>
+   <line>72</line>
   </file>
  </directive>
  <directive id="Core.ColorKeywords">
@@ -369,6 +369,16 @@
  <directive id="URI.HostBlacklist">
   <file name="HTMLPurifier/URIFilter/HostBlacklist.php">
    <line>8</line>
+  </file>
+ </directive>
+ <directive id="URI.SecureMunge">
+  <file name="HTMLPurifier/URIFilter/SecureMunge.php">
+   <line>9</line>
+  </file>
+ </directive>
+ <directive id="URI.SecureMungeSecretKey">
+  <file name="HTMLPurifier/URIFilter/SecureMunge.php">
+   <line>10</line>
   </file>
  </directive>
 </usage>
