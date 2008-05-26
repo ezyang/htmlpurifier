@@ -196,14 +196,16 @@ class HTMLPurifier_Config
                 E_USER_WARNING);
             return;
         }
-        if (isset($this->def->info[$namespace][$key]->isAlias)) {
+        $def = $this->def->info[$namespace][$key];
+        
+        if (isset($def->isAlias)) {
             if ($from_alias) {
                 trigger_error('Double-aliases not allowed, please fix '.
                     'ConfigSchema bug with' . "$namespace.$key", E_USER_ERROR);
                 return;
             }
-            $this->set($new_ns = $this->def->info[$namespace][$key]->namespace,
-                       $new_dir = $this->def->info[$namespace][$key]->name,
+            $this->set($new_ns  = $def->namespace,
+                       $new_dir = $def->name,
                        $value, true);
             trigger_error("$namespace.$key is an alias, preferred directive name is $new_ns.$new_dir", E_USER_NOTICE);
             return;
@@ -211,16 +213,13 @@ class HTMLPurifier_Config
         
         // Raw type might be negative when using the fully optimized form
         // of stdclass, which indicates allow_null == true
-        $rtype =
-            is_int($this->def->info[$namespace][$key]) ?
-            $this->def->info[$namespace][$key] :
-            $this->def->info[$namespace][$key]->type;
+        $rtype = is_int($def) ? $def : $def->type;
         if ($rtype < 0) {
             $type = -$rtype;
             $allow_null = true;
         } else {
             $type = $rtype;
-            $allow_null = isset($this->def->info[$namespace][$key]->allow_null);
+            $allow_null = isset($def->allow_null);
         }
         
         try {
@@ -229,18 +228,16 @@ class HTMLPurifier_Config
             trigger_error('Value for ' . "$namespace.$key" . ' is of invalid type, should be ' . HTMLPurifier_VarParser::getTypeName($type), E_USER_WARNING);
             return;
         }
-        if (is_string($value)) {
+        if (is_string($value) && is_object($def)) {
             // resolve value alias if defined
-            if (isset($this->def->info[$namespace][$key]->aliases[$value])) {
-                $value = $this->def->info[$namespace][$key]->aliases[$value];
+            if (isset($def->aliases[$value])) {
+                $value = $def->aliases[$value];
             }
-            if (isset($this->def->info[$namespace][$key])) {
-                // check to see if the value is allowed
-                if (isset($this->def->info[$namespace][$key]->allowed) && !isset($this->def->info[$namespace][$key]->allowed[$value])) {
-                    trigger_error('Value not supported, valid values are: ' .
-                        $this->_listify($this->def->info[$namespace][$key]->allowed), E_USER_WARNING);
-                    return;
-                }
+            // check to see if the value is allowed
+            if (isset($def->allowed) && !isset($def->allowed[$value])) {
+                trigger_error('Value not supported, valid values are: ' .
+                    $this->_listify($def->allowed), E_USER_WARNING);
+                return;
             }
         }
         $this->conf[$namespace][$key] = $value;

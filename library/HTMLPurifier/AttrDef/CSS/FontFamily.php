@@ -65,7 +65,7 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
             }
             // $font is a pure representation of the font name
             
-            if (ctype_alnum($font)) {
+            if (ctype_alnum($font) && $font !== '') {
                 // very simple font, allow it in unharmed
                 $final .= $font . ', ';
                 continue;
