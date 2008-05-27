@@ -185,5 +185,14 @@ alert("<This is compatible with XHTML>");
         );
     }
     
+    function test_secureMunge() {
+        $this->config->set('URI', 'SecureMunge', '/redirect.php?url=%s&check=%t');
+        $this->config->set('URI', 'SecureMungeSecretKey', 'foo');
+        $this->assertPurification(
+            '<a href="http://localhost">foo</a>',
+            '<a href="/redirect.php?url=http%3A%2F%2Flocalhost&amp;check=8e8223ae8fac24561104180ea549c21fbd111be7">foo</a>'
+        );
+    }
+    
 }
 
