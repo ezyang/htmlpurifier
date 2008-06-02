@@ -17,6 +17,7 @@ class HTMLPurifier_URIFilter_SecureMunge extends HTMLPurifier_URIFilter
     }
     public function filter(&$uri, $config, $context) {
         if (!$this->target || !$this->secretKey) return true;
+        if ($context->get('EmbeddedURI', true)) return true; // abort for embedded URIs
         $scheme_obj = $uri->getSchemeObj($config, $context);
         if (!$scheme_obj) return true; // ignore unknown schemes, maybe another postfilter did it
         if (is_null($uri->host) || empty($scheme_obj->browsable)) {

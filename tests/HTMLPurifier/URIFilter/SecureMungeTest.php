@@ -22,6 +22,12 @@ class HTMLPurifier_URIFilter_SecureMungeTest extends HTMLPurifier_URIFilterHarne
         $this->assertFiltering('/local');
     }
     
+    function testPreserveEmbedded() {
+        $embedded = true;
+        $this->context->register('EmbeddedURI', $embedded);
+        $this->assertFiltering('http://google.com');
+    }
+    
     function testStandardMunge() {
         $this->assertFiltering('http://google.com', '/redirect.php?url=http%3A%2F%2Fgoogle.com&checksum=0072e2f817fd2844825def74e54443debecf0892');
     }
