@@ -107,6 +107,17 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         HTMLPurifier_DefinitionCacheFactory::instance($old);
     }
     
+    function test_make() {
+        $factory = new HTMLPurifier_AttrDef_URI();
+        $def = $factory->make('');
+        $def2 = new HTMLPurifier_AttrDef_URI();
+        $this->assertIdentical($def, $def2);
+        
+        $def = $factory->make('embedded');
+        $def2 = new HTMLPurifier_AttrDef_URI(true);
+        $this->assertIdentical($def, $def2);
+    }
+    
     /*
     function test_validate_configWhitelist() {
         

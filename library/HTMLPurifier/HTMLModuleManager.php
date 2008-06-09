@@ -231,6 +231,19 @@ class HTMLPurifier_HTMLModuleManager
             $this->modules[$module]->setup($config);
         }
         
+        // prepare any injectors
+        foreach ($this->modules as $module) {
+            $n = array();
+            foreach ($module->info_injector as $i => $injector) {
+                if (!is_object($injector)) {
+                    $class = "HTMLPurifier_Injector_$injector";
+                    $injector = new $class;
+                }
+                $n[$injector->name] = $injector;
+            }
+            $module->info_injector = $n;
+        }
+        
         // setup lookup table based on all valid modules
         foreach ($this->modules as $module) {
             foreach ($module->info as $name => $def) {

@@ -287,7 +287,65 @@ a[href|title]
         
     }
     
+    function test_injector() {
+        $this->config->set('HTML', 'DefinitionID', 'HTMLPurifier_HTMLDefinitionTest->test_injector');
+        
+        generate_mock_once('HTMLPurifier_Injector');
+        $injector = new HTMLPurifier_InjectorMock();
+        $injector->name = 'MyInjector';
+        $injector->setReturnValue('checkNeeded', false);
+        
+        $module = $this->config->getHTMLDefinition(true)->getAnonymousModule();
+        $module->info_injector[] = $injector;
+        
+        $this->assertIdentical($this->config->getHTMLDefinition()->info_injector,
+            array(
+                'MyInjector' => $injector,
+            )
+        );
+    }
     
+    function test_injectorMissingNeeded() {
+        $this->config->set('HTML', 'DefinitionID', 'HTMLPurifier_HTMLDefinitionTest->test_injectorMissingNeeded');
+        
+        generate_mock_once('HTMLPurifier_Injector');
+        $injector = new HTMLPurifier_InjectorMock();
+        $injector->name = 'MyInjector';
+        $injector->setReturnValue('checkNeeded', 'a');
+        
+        $module = $this->config->getHTMLDefinition(true)->getAnonymousModule();
+        $module->info_injector[] = $injector;
+        
+        $this->assertIdentical($this->config->getHTMLDefinition()->info_injector,
+            array()
+        );
+    }
+    
+    function test_injectorIntegration() {
+        $this->config->set('HTML', 'DefinitionID', 'HTMLPurifier_HTMLDefinitionTest->test_injectorIntegration');
+        
+        $module = $this->config->getHTMLDefinition(true)->getAnonymousModule();
+        $module->info_injector[] = 'Linkify';
+        
+        $this->assertIdentical(
+            $this->config->getHTMLDefinition()->info_injector,
+            array('Linkify' => new HTMLPurifier_Injector_Linkify())
+        );
+    }
+    
+    function test_injectorIntegrationFail() {
+        $this->config->set('HTML', 'DefinitionID', 'HTMLPurifier_HTMLDefinitionTest->test_injectorIntegrationFail');
+        
+        $this->config->set('HTML', 'Allowed', 'p');
+        
+        $module = $this->config->getHTMLDefinition(true)->getAnonymousModule();
+        $module->info_injector[] = 'Linkify';
+        
+        $this->assertIdentical(
+            $this->config->getHTMLDefinition()->info_injector,
+            array()
+        );
+    }
     
 }
 

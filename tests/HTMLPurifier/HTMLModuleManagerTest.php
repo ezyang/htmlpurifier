@@ -3,9 +3,11 @@
 class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
 {
     
-    function test_addModule() {
+    protected function createManager() {
         $manager = new HTMLPurifier_HTMLModuleManager();
-        $manager->doctypes->register('Blank'); // doctype normally is blank...
+        
+        $this->config->set('HTML', 'CustomDoctype', 'Blank');
+        $manager->doctypes->register('Blank');
         
         $attrdef_nmtokens = new HTMLPurifier_AttrDef_HTML_Nmtokens();
         
@@ -13,6 +15,12 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         $attrdef = new HTMLPurifier_AttrDefMock();
         $attrdef->setReturnValue('make', $attrdef_nmtokens);
         $manager->attrTypes->set('NMTOKENS', $attrdef);
+        return $manager;
+    }
+    
+    function test_addModule() {
+        
+        $manager = $this->createManager();
         
         // ...but we add user modules
         
@@ -43,6 +51,8 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         $config->set('HTML', 'CustomDoctype', 'Blank');
         
         $manager->setup($config);
+        
+        $attrdef_nmtokens = new HTMLPurifier_AttrDef_HTML_Nmtokens();
         
         $p = new HTMLPurifier_ElementDef();
         $p->attr['class'] = $attrdef_nmtokens;
@@ -102,6 +112,8 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         $this->assertFalse(isset($manager->modules['Magic']));
         
     }
+    
+    
     
 }
 

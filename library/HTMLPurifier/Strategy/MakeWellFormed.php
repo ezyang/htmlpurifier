@@ -38,12 +38,17 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $this->injectors = array();
         
         $injectors = $config->getBatch('AutoFormat');
+        $def_injectors = $definition->info_injector;
         $custom_injectors = $injectors['Custom'];
         unset($injectors['Custom']); // special case
         foreach ($injectors as $injector => $b) {
             $injector = "HTMLPurifier_Injector_$injector";
             if (!$b) continue;
             $this->injectors[] = new $injector;
+        }
+        foreach ($def_injectors as $injector) {
+            // assumed to be objects
+            $this->injectors[] = $injector;
         }
         foreach ($custom_injectors as $injector) {
             if (is_string($injector)) {

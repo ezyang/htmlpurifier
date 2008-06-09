@@ -18,6 +18,11 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         $this->embedsResource = (bool) $embeds_resource;
     }
     
+    public function make($string) {
+        $embeds = (bool) $string;
+        return new HTMLPurifier_AttrDef_URI($embeds);
+    }
+    
     public function validate($uri, $config, $context) {
         
         if ($config->get('URI', 'Disable')) return false;
