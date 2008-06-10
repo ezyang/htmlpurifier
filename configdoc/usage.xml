@@ -173,6 +173,16 @@
    <line>220</line>
   </file>
  </directive>
+ <directive id="HTML.SafeObject">
+  <file name="HTMLPurifier/HTMLModuleManager.php">
+   <line>225</line>
+  </file>
+ </directive>
+ <directive id="HTML.SafeEmbed">
+  <file name="HTMLPurifier/HTMLModuleManager.php">
+   <line>228</line>
+  </file>
+ </directive>
  <directive id="Attr.IDBlacklist">
   <file name="HTMLPurifier/IDAccumulator.php">
    <line>26</line>
@@ -316,6 +326,9 @@
  <directive id="HTML.MaxImgLength">
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>14</line>
+  </file>
+  <file name="HTMLPurifier/HTMLModule/SafeEmbed.php">
+   <line>13</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/SafeObject.php">
    <line>19</line>

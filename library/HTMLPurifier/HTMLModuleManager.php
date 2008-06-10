@@ -221,6 +221,14 @@ class HTMLPurifier_HTMLModuleManager
             $modules[] = 'Proprietary';
         }
         
+        // add SafeObject/Safeembed modules
+        if ($config->get('HTML', 'SafeObject')) {
+            $modules[] = 'SafeObject';
+        }
+        if ($config->get('HTML', 'SafeEmbed')) {
+            $modules[] = 'SafeEmbed';
+        }
+        
         foreach ($modules as $module) {
             $this->processModule($module);
             $this->modules[$module]->setup($config);

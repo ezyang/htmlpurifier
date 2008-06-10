@@ -28,7 +28,7 @@ class HTMLPurifier_HTMLModule_SafeObject extends HTMLPurifier_HTMLModule
                 'type'   => 'Enum#application/x-shockwave-flash',
                 'width'  => 'Pixels#' . $max,
                 'height' => 'Pixels#' . $max,
-                'data'   => 'Text'
+                'data'   => 'URI#embedded'
             )
         );
         $object->attr_transform_post[] = new HTMLPurifier_AttrTransform_SafeObject();
