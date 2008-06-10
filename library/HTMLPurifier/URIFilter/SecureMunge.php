@@ -20,7 +20,7 @@ class HTMLPurifier_URIFilter_SecureMunge extends HTMLPurifier_URIFilter
         if ($context->get('EmbeddedURI', true)) return true; // abort for embedded URIs
         $scheme_obj = $uri->getSchemeObj($config, $context);
         if (!$scheme_obj) return true; // ignore unknown schemes, maybe another postfilter did it
-        if (is_null($uri->host) || empty($scheme_obj->browsable) || $context->get('EmbeddedURI', true)) {
+        if (is_null($uri->host) || empty($scheme_obj->browsable)) {
             return true;
         }
         $string = $uri->toString();
