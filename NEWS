@@ -19,6 +19,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   a URIFilter as such.
 ! Allow modules to define injectors via $info_injector. Injectors are 
   automatically disabled if injector's needed elements are not found.
+! Support for "safe" objects added [info on how to enable needed]
 - Disable percent height/width attributes for img
 - AttrValidator operations are now atomic; updates to attributes are not
   manifest in token until end of operations. This prevents naughty internal

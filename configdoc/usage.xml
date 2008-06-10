@@ -68,19 +68,19 @@
  </directive>
  <directive id="Core.Encoding">
   <file name="HTMLPurifier/Encoder.php">
-   <line>288</line>
-   <line>315</line>
+   <line>267</line>
+   <line>294</line>
   </file>
  </directive>
  <directive id="Test.ForceNoIconv">
   <file name="HTMLPurifier/Encoder.php">
-   <line>293</line>
-   <line>323</line>
+   <line>272</line>
+   <line>302</line>
   </file>
  </directive>
  <directive id="Core.EscapeNonASCIICharacters">
   <file name="HTMLPurifier/Encoder.php">
-   <line>319</line>
+   <line>298</line>
   </file>
  </directive>
  <directive id="Core.MaintainLineNumbers">
@@ -111,37 +111,37 @@
  </directive>
  <directive id="HTML.BlockWrapper">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>213</line>
+   <line>222</line>
   </file>
  </directive>
  <directive id="HTML.Parent">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>221</line>
+   <line>230</line>
   </file>
  </directive>
  <directive id="HTML.AllowedElements">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>238</line>
+   <line>247</line>
   </file>
  </directive>
  <directive id="HTML.AllowedAttributes">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>239</line>
+   <line>248</line>
   </file>
  </directive>
  <directive id="HTML.Allowed">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>242</line>
+   <line>251</line>
   </file>
  </directive>
  <directive id="HTML.ForbiddenElements">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>328</line>
+   <line>337</line>
   </file>
  </directive>
  <directive id="HTML.ForbiddenAttributes">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>329</line>
+   <line>338</line>
   </file>
  </directive>
  <directive id="HTML.Trusted">
@@ -195,7 +195,7 @@
  </directive>
  <directive id="URI.Host">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>63</line>
+   <line>64</line>
   </file>
   <file name="HTMLPurifier/URIFilter/DisableExternal.php">
    <line>8</line>
@@ -203,12 +203,12 @@
  </directive>
  <directive id="URI.Base">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>64</line>
+   <line>65</line>
   </file>
  </directive>
  <directive id="URI.DefaultScheme">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>71</line>
+   <line>72</line>
   </file>
  </directive>
  <directive id="URI.AllowedSchemes">
@@ -223,12 +223,12 @@
  </directive>
  <directive id="URI.Disable">
   <file name="HTMLPurifier/AttrDef/URI.php">
-   <line>23</line>
+   <line>28</line>
   </file>
  </directive>
  <directive id="URI.Munge">
   <file name="HTMLPurifier/AttrDef/URI.php">
-   <line>72</line>
+   <line>77</line>
   </file>
  </directive>
  <directive id="Core.ColorKeywords">
@@ -316,6 +316,9 @@
  <directive id="HTML.MaxImgLength">
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>14</line>
+  </file>
+  <file name="HTMLPurifier/HTMLModule/SafeObject.php">
+   <line>19</line>
   </file>
  </directive>
  <directive id="HTML.TidyLevel">

@@ -26,6 +26,7 @@ define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
 chdir(dirname(__FILE__));
 
 $php = 'php'; // for safety
+ini_set('memory_limit', '64M');
 
 require 'common.php';
 

@@ -24,11 +24,10 @@ FUTURE VERSIONS
 
 3.2 release [It's All About Trust] (floating)
  # Implement untrusted, dangerous elements/attributes
-    - Objects and Forms are especially wanted
+    - Forms are especially wanted
  # Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
  # Frameset XHTML 1.0 and HTML 4.01 doctypes
- - Research and implement a "safe" version of the Object module
 
 3.3 release [Error'ed]
  # Error logging for filtering/cleanup procedures
