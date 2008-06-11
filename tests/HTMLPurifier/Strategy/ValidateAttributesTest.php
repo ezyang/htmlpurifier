@@ -180,9 +180,44 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         );
     }
     
-    function testRemoveCSSWidthAndHeightOnImg() {
+    function testKeepAbsoluteCSSWidthAndHeightOnImg() {
         $this->assertResult(
-            '<img src="" alt="" style="width:10px;height:10px;border:1px solid #000;" />',
+            '<img src="" alt="" style="width:10px;height:10px;border:1px solid #000;" />'
+        );
+    }
+    
+    function testRemoveLargeCSSWidthAndHeightOnImg() {
+        $this->assertResult(
+            '<img src="" alt="" style="width:10000000px;height:10000000px;border:1px solid #000;" />',
+            '<img src="" alt="" style="border:1px solid #000;" />'
+        );
+    }
+    
+    function testRemoveLargeCSSWidthAndHeightOnImgWithUserConf() {
+        $this->config->set('CSS', 'MaxImgLength', '1px');
+        $this->assertResult(
+            '<img src="" alt="" style="width:1mm;height:1mm;border:1px solid #000;" />',
+            '<img src="" alt="" style="border:1px solid #000;" />'
+        );
+    }
+    
+    function testKeepLargeCSSWidthAndHeightOnImgWhenToldTo() {
+        $this->config->set('CSS', 'MaxImgLength', null);
+        $this->assertResult(
+            '<img src="" alt="" style="width:10000000px;height:10000000px;border:1px solid #000;" />'
+        );
+    }
+    
+    function testRemoveRelativeCSSWidthAndHeightOnImg() {
+        $this->assertResult(
+            '<img src="" alt="" style="width:10em;height:10em;border:1px solid #000;" />',
+            '<img src="" alt="" style="border:1px solid #000;" />'
+        );
+    }
+    
+    function testRemovePercentCSSWidthAndHeightOnImg() {
+        $this->assertResult(
+            '<img src="" alt="" style="width:100%;height:100%;border:1px solid #000;" />',
             '<img src="" alt="" style="border:1px solid #000;" />'
         );
     }
