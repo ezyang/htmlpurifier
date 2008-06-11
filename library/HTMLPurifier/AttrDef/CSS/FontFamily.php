@@ -22,7 +22,6 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
         // assume that no font names contain commas in them
         $fonts = explode(',', $string);
         $final = '';
-        $non_sgml = HTMLPurifier_Encoder::getNonSgmlCharacters();
         foreach($fonts as $font) {
             $font = trim($font);
             if ($font === '') continue;
@@ -53,8 +52,11 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
                                 if (!ctype_xdigit($font[$i])) break;
                                 $code .= $font[$i];
                             }
+                            // We have to be extremely careful when adding
+                            // new characters, to make sure we're not breaking
+                            // the encoding.
                             $char = HTMLPurifier_Encoder::unichr(hexdec($code));
-                            if (isset($non_sgml[$char])) continue;
+                            if (HTMLPurifier_Encoder::cleanUTF8($char) === '') continue;
                             $new_font .= $char;
                             if ($i < $c && trim($font[$i]) !== '') $i--;
                             continue;
