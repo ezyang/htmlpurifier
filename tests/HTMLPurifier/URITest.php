@@ -187,6 +187,14 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
         $this->assertValidation("\xE3\x91\x94", '%E3%91%94');
     }
     
+    function test_validate_query() {
+        $this->assertValidation("?/\xE3\x91\x94", '?/%E3%91%94');
+    }
+    
+    function test_validate_fragment() {
+        $this->assertValidation("#/\xE3\x91\x94", '#/%E3%91%94');
+    }
+    
     function test_validate_path_empty() {
         $this->assertValidation('http://google.com');
     }
