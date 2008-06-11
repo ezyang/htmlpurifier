@@ -40,7 +40,7 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
         
     }
     
-    function test_construct() {
+    function test_setup() {
         
         $i = 0; // counter, helps us isolate expectations
         
@@ -65,7 +65,7 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
             'HTML.TidyLevel' => 'none'
         ));
         $module->expectAt($i++, 'populate', array(array()));
-        $module->construct($config);
+        $module->setup($config);
         
         // basic levels
         
@@ -76,7 +76,7 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
             'light-fix-1' => $lf1,
             'light-fix-2' => $lf2
         )));
-        $module->construct($config);
+        $module->setup($config);
         
         $config = HTMLPurifier_Config::create(array(
             'HTML.TidyLevel' => 'heavy'
@@ -89,7 +89,7 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
             'heavy-fix-1'  => $hf1,
             'heavy-fix-2'  => $hf2
         )));
-        $module->construct($config);
+        $module->setup($config);
         
         // fine grained tuning
         
@@ -101,7 +101,7 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
             'light-fix-1' => $lf1,
             'medium-fix-1' => $mf1
         )));
-        $module->construct($config);
+        $module->setup($config);
         
         $config = HTMLPurifier_Config::create(array(
             'HTML.TidyLevel' => 'medium',
@@ -111,7 +111,7 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
             'light-fix-2' => $lf2,
             'medium-fix-2' => $mf2
         )));
-        $module->construct($config);
+        $module->setup($config);
         
         // done
         
