@@ -15,7 +15,9 @@ ERRATA
   HTML Purifier.
 
 2.1.5, unknown release date
-
+. Added HTMLPurifier_UnitConverter and HTMLPurifier_Length for convenient
+  handling of CSS-style lengths. HTMLPurifier_AttrDef_CSS_Length now uses
+  this class.
 
 2.1.4, released 2008-05-18
 ! DefinitionCacheFactory now can register new implementations
