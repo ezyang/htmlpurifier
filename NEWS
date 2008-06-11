@@ -15,9 +15,16 @@ ERRATA
   HTML Purifier.
 
 2.1.5, unknown release date
+! More robust imagecrash protection with height/width CSS with %CSS.MaxImgLength,
+  and height/width HTML with %HTML.MaxImgLength.
 . Added HTMLPurifier_UnitConverter and HTMLPurifier_Length for convenient
   handling of CSS-style lengths. HTMLPurifier_AttrDef_CSS_Length now uses
   this class.
+- Disable percent height/width attributes for img
+. API of HTMLPurifier_AttrDef_CSS_Length changed from __construct($disable_negative)
+  to __construct($min, $max). __construct(true) is equivalent to
+  __construct('0'). (replace __construct with HTMLPurifier_AttrDef_CSS_Length)
+. Added HTMLPurifier_AttrDef_Switch class
 
 2.1.4, released 2008-05-18
 ! DefinitionCacheFactory now can register new implementations

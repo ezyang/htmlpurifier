@@ -34,6 +34,7 @@ $test_files[] = 'HTMLPurifier/AttrDef/HTML/LinkTypesTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/IntegerTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/LangTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/TextTest.php';
+$test_files[] = 'HTMLPurifier/AttrDef/SwitchTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/URI/Email/SimpleCheckTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/URI/HostTest.php';
 $test_files[] = 'HTMLPurifier/AttrDef/URI/IPv4Test.php';
