@@ -2,30 +2,15 @@
 
 require_once 'HTMLPurifier.php';
 
-// integration test
-
 class HTMLPurifierTest extends HTMLPurifier_Harness
 {
-    var $purifier;
-    
-    function setUp() {
-        $this->purifier = new HTMLPurifier();
-    }
-    
-    function assertPurification($input, $expect = null, $config = array()) {
-        if ($expect === null) $expect = $input;
-        $result = $this->purifier->purify($input, $config);
-        $this->assertIdentical($expect, $result);
-    }
     
     function testNull() {
         $this->assertPurification("Null byte\0", "Null byte");
     }
     
     function testStrict() {
-        $config = HTMLPurifier_Config::createDefault();
-        $config->set('HTML', 'Strict', true);
-        $this->purifier = new HTMLPurifier( $config ); // verbose syntax
+        $this->config->set('HTML', 'Strict', true);
         
         $this->assertPurification(
             '<u>Illegal underline</u>',
@@ -41,10 +26,8 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
     
     function testDifferentAllowedElements() {
         
-        $this->purifier = new HTMLPurifier(array(
-            'HTML.AllowedElements' => array('b', 'i', 'p', 'a'),
-            'HTML.AllowedAttributes' => array('a.href', '*.id')
-        ));
+        $this->config->set('HTML', 'AllowedElements', array('b', 'i', 'p', 'a'));
+        $this->config->set('HTML', 'AllowedAttributes', array('a.href', '*.id'));
         
         $this->assertPurification(
             '<p>Par.</p><p>Para<a href="http://google.com/">gr</a>aph</p>Text<b>Bol<i>d</i></b>'
@@ -59,7 +42,7 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
     
     function testDisableURI() {
         
-        $this->purifier = new HTMLPurifier( array('Attr.DisableURI' => true) );
+        $this->config->set('URI', 'Disable', true);
         
         $this->assertPurification(
             '<img src="foobar"/>',
@@ -69,8 +52,6 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
     }
     
     function test_purifyArray() {
-        
-        $this->purifier = new HTMLPurifier();
         
         $this->assertIdentical(
             $this->purifier->purifyArray(
@@ -83,23 +64,24 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
         
     }
     
-    function testEnableAttrID() {
-        
-        $this->purifier = new HTMLPurifier();
+    function testAttrIDDisabledByDefault() {
         
         $this->assertPurification(
             '<span id="moon">foobar</span>',
             '<span>foobar</span>'
         );
         
-        $this->purifier = new HTMLPurifier(array('HTML.EnableAttrID' => true));
+    }
+    
+    function testEnableAttrID() {
+        $this->config->set('Attr', 'EnableID', true);
         $this->assertPurification('<span id="moon">foobar</span>');
         $this->assertPurification('<img id="folly" src="folly.png" alt="Omigosh!" />');
-        
     }
     
     function testScript() {
-        $this->purifier = new HTMLPurifier(array('HTML.Trusted' => true));
+        $this->config->set('HTML', 'Trusted', true);
+        
         $ideal = '<script type="text/javascript"><!--//--><![CDATA[//><!--
 alert("<This is compatible with XHTML>");
 //--><!]]></script>';
@@ -140,13 +122,29 @@ alert("<This is compatible with XHTML>");
     }
     
     function testMakeAbsolute() {
+        $this->config->set('URI', 'Base', 'http://example.com/bar/baz.php');
+        $this->config->set('URI', 'MakeAbsolute', true);
         $this->assertPurification(
             '<a href="foo.txt">Foobar</a>',
-            '<a href="http://example.com/bar/foo.txt">Foobar</a>',
-            array(
-                'URI.Base' => 'http://example.com/bar/baz.php',
-                'URI.MakeAbsolute' => true
-            )
+            '<a href="http://example.com/bar/foo.txt">Foobar</a>'
+        );
+    }
+    
+    function test_shiftJis() {
+        if (!function_exists('iconv')) return;
+        $this->config->set('Core', 'Encoding', 'Shift_JIS');
+        $this->config->set('Core', 'EscapeNonASCIICharacters', true);
+        $this->assertPurification(
+            "<b style=\"font-family:'&#165;';\">111</b>"
+        );
+    }
+    
+    function test_shiftJisWorstCase() {
+        if (!function_exists('iconv')) return;
+        $this->config->set('Core', 'Encoding', 'Shift_JIS');
+        $this->assertPurification( // Notice how Yen disappears
+            "<b style=\"font-family:'&#165;';\">111</b>",
+            "<b style=\"font-family:'';\">111</b>"
         );
     }
     

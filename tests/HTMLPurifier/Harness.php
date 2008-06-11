@@ -12,13 +12,24 @@ class HTMLPurifier_Harness extends UnitTestCase
         parent::UnitTestCase();
     }
     
-    var $config, $context;
+    var $config, $context, $purifier;
     
     /**
-     * Generates easily accessible default config/context
+     * Generates easily accessible default config/context, as well as
+     * a convenience purifier for integration testing.
      */
     function setUp() {
         list($this->config, $this->context) = $this->createCommon();
+        $this->purifier = new HTMLPurifier();
+    }
+    
+    /**
+     * Asserts a purification. Good for integration testing.
+     */
+    function assertPurification($input, $expect = null) {
+        if ($expect === null) $expect = $input;
+        $result = $this->purifier->purify($input, $this->config);
+        $this->assertIdentical($expect, $result);
     }
     
     /**

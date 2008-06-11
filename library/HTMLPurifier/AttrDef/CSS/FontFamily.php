@@ -19,10 +19,10 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
             'cursive' => true
         );
         
-        $string = $this->parseCDATA($string);
         // assume that no font names contain commas in them
         $fonts = explode(',', $string);
         $final = '';
+        $non_sgml = HTMLPurifier_Encoder::getNonSgmlCharacters();
         foreach($fonts as $font) {
             $font = trim($font);
             if ($font === '') continue;
@@ -38,11 +38,33 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
                 $quote = $font[0];
                 if ($font[$length - 1] !== $quote) continue;
                 $font = substr($font, 1, $length - 2);
-                // double-backslash processing is buggy. Namely, it doesn't allow
-                // fonts that contain an adjacent quote, backslash, or comma
-                $font = str_replace("\\$quote", $quote, $font); // de-escape quote
-                $font = str_replace("\\\n", '', $font);       // de-escape newlines
-                $font = str_replace("\\\\", "\\", $font);       // de-escape double backslashes
+                
+                $new_font = '';
+                for ($i = 0, $c = strlen($font); $i < $c; $i++) {
+                    if ($font[$i] === '\\') {
+                        $i++;
+                        if ($i >= $c) {
+                            $new_font .= '\\';
+                            break;
+                        }
+                        if (ctype_xdigit($font[$i])) {
+                            $code = $font[$i];
+                            for ($a = 1, $i++; $i < $c && $a < 6; $i++, $a++) {
+                                if (!ctype_xdigit($font[$i])) break;
+                                $code .= $font[$i];
+                            }
+                            $char = HTMLPurifier_Encoder::unichr(hexdec($code));
+                            if (isset($non_sgml[$char])) continue;
+                            $new_font .= $char;
+                            if ($i < $c && trim($font[$i]) !== '') $i--;
+                            continue;
+                        }
+                        if ($font[$i] === "\n") continue;
+                    }
+                    $new_font .= $font[$i];
+                }
+                
+                $font = $new_font;
             }
             // $font is a pure representation of the font name
             
