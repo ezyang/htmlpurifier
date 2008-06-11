@@ -44,6 +44,12 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
                     return;
                 }
                 $n = $token->attr['name'];
+                // We need this fix because YouTube doesn't supply a data
+                // attribute, which we need if a type is specified. This is
+                // *very* Flash specific.
+                if (!isset($this->objectStack[$i]->attr['data']) && $token->attr['name'] == 'movie') {
+                    $this->objectStack[$i]->attr['data'] = $token->attr['value'];
+                }
                 // Check if the parameter is the correct value but has not
                 // already been added
                 if (
