@@ -27,6 +27,20 @@ HTMLPurifier_ConfigSchema::define(
 </p>
 ');
 
+HTMLPurifier_ConfigSchema::define(
+    'CSS', 'MaxImgLength', '1200px', 'string/null', '
+<p>
+ This parameter sets the maximum allowed length on <code>img</code> tags,
+ effectively the <code>width</code> and <code>height</code> properties.
+ Only absolute units of measurement (in, pt, pc, mm, cm) and pixels (px) are allowed. This is
+ in place to prevent imagecrash attacks, disable with null at your own risk.
+ This directive is similar to %HTML.MaxImgLength, and both should be
+ concurrently edited, although there are
+ subtle differences in the input format (the CSS max is a number with
+ a unit).
+</p>
+');
+
 /**
  * Defines allowed CSS attributes and what their values are.
  * @see HTMLPurifier_HTMLDefinition
@@ -176,21 +190,25 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             new HTMLPurifier_AttrDef_CSS_Percentage()
         ));
         
+        $trusted_wh = new HTMLPurifier_AttrDef_CSS_Composite(array(
+            new HTMLPurifier_AttrDef_CSS_Length('0'),
+            new HTMLPurifier_AttrDef_CSS_Percentage(true),
+            new HTMLPurifier_AttrDef_Enum(array('auto'))
+        ));
+        $max = $config->get('CSS', 'MaxImgLength');
         $this->info['width'] =
         $this->info['height'] =
-        new HTMLPurifier_AttrDef_Switch('img',
-            // For img tags:
-            new HTMLPurifier_AttrDef_CSS_Composite(array(
-                new HTMLPurifier_AttrDef_CSS_Length('0', $config->get('CSS', 'MaxImgLength')),
-                new HTMLPurifier_AttrDef_Enum(array('auto'))
-            )),
-            // For everyone else:
-            new HTMLPurifier_AttrDef_CSS_Composite(array(
-                new HTMLPurifier_AttrDef_CSS_Length('0'),
-                new HTMLPurifier_AttrDef_CSS_Percentage(true),
-                new HTMLPurifier_AttrDef_Enum(array('auto'))
-            ))
-        );
+            $max === null ?
+            $trusted_wh : 
+            new HTMLPurifier_AttrDef_Switch('img',
+                // For img tags:
+                new HTMLPurifier_AttrDef_CSS_Composite(array(
+                    new HTMLPurifier_AttrDef_CSS_Length('0', $max),
+                    new HTMLPurifier_AttrDef_Enum(array('auto'))
+                )),
+                // For everyone else:
+                $trusted_wh
+            );
         
         $this->info['text-decoration'] = new HTMLPurifier_AttrDef_CSS_TextDecoration();
         

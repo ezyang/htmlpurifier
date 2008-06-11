@@ -36,5 +36,12 @@ class HTMLPurifier_AttrDef_HTML_PixelsTest extends HTMLPurifier_AttrDefHarness
         
     }
     
+    function test_make() {
+        $factory = new HTMLPurifier_AttrDef_HTML_Pixels();
+        $this->def = $factory->make('30');
+        $this->assertDef('25');
+        $this->assertDef('35', '30');
+    }
+    
 }
 

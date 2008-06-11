@@ -3,20 +3,6 @@
 require_once 'HTMLPurifier/Length.php';
 require_once 'HTMLPurifier/UnitConverter.php';
 
-HTMLPurifier_ConfigSchema::define(
-    'CSS', 'MaxImgLength', '1200px', 'string/null', '
-<p>
- This parameter sets the maximum allowed length on <code>img</code> tags,
- effectively the <code>width</code> and <code>height</code> properties.
- Only absolute units of measurement (in, pt, pc, mm, cm) and pixels (px) are allowed. This is
- in place to prevent imagecrash attacks, disable with null at your own risk.
- This directive is similar to %HTML.MaxImgLength, and both should be
- concurrently edited, although there are
- subtle differences in the input format (the CSS max is a number with
- a unit).
-</p>
-');
-
 /**
  * Represents a Length as defined by CSS.
  */

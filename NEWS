@@ -35,6 +35,7 @@ ERRATA
   use this rather than __construct(), although legacy code using constructors
   will still work--the new format, however, lets modules access the
   configuration object for HTML namespace dependant tweaks.
+. AttrDef_HTML_Pixels now takes a single construction parameter, pixels.
 
 2.1.4, released 2008-05-18
 ! DefinitionCacheFactory now can register new implementations
