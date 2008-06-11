@@ -20,6 +20,7 @@ class HTMLPurifier_AttrDef_CSS_FontFamilyTest extends HTMLPurifier_AttrDefHarnes
         $this->assertDef("John's Font", $d);
         $this->assertDef($d = "'\xE5\xAE\x8B\xE4\xBD\x93'");
         $this->assertDef("\xE5\xAE\x8B\xE4\xBD\x93", $d);
+        $this->assertDef("'\\','f'", "'\\\\', f");
         
     }
     

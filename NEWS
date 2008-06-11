@@ -22,6 +22,8 @@ ERRATA
   code from directly modifying CurrentToken when they're not supposed to.
 - Percent encoding checks enabled for URI query and fragment
 - Disable percent height/width attributes for img
+- Fix stray backslashes in font-family; CSS Unicode character escapes are
+  now properly resolved (although *only* in font-family).
 . Added HTMLPurifier_UnitConverter and HTMLPurifier_Length for convenient
   handling of CSS-style lengths. HTMLPurifier_AttrDef_CSS_Length now uses
   this class.

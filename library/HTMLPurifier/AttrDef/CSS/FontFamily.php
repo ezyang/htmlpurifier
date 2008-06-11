@@ -38,9 +38,11 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
                 $quote = $font[0];
                 if ($font[$length - 1] !== $quote) continue;
                 $font = substr($font, 1, $length - 2);
-                // double-backslash processing is buggy
+                // double-backslash processing is buggy. Namely, it doesn't allow
+                // fonts that contain an adjacent quote, backslash, or comma
                 $font = str_replace("\\$quote", $quote, $font); // de-escape quote
-                $font = str_replace("\\\n", "\n", $font);       // de-escape newlines
+                $font = str_replace("\\\n", '', $font);       // de-escape newlines
+                $font = str_replace("\\\\", "\\", $font);       // de-escape double backslashes
             }
             // $font is a pure representation of the font name
             
@@ -53,8 +55,8 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
             // complicated font, requires quoting
             
             // armor single quotes and new lines
+            $font = str_replace("\\", "\\\\", $font);
             $font = str_replace("'", "\\'", $font);
-            $font = str_replace("\n", "\\\n", $font);
             $final .= "'$font', ";
         }
         $final = rtrim($final, ', ');
