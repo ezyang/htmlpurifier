@@ -64,7 +64,7 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
     function testKeepValidData() {
         $this->assertResult(
             '<object><param name="movie" value="bar" /></object>',
-            '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="movie" value="bar" /></object>'
+            '<object data="bar"><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="movie" value="bar" /></object>'
         );
     }
     

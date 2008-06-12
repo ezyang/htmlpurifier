@@ -199,7 +199,7 @@ alert("<This is compatible with XHTML>");
         $this->config->set('HTML', 'SafeEmbed', true);
         $this->assertPurification(
             '<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/Oq3FV_zdyy0&hl=en"></param><embed src="http://www.youtube.com/v/Oq3FV_zdyy0&hl=en" type="application/x-shockwave-flash" width="425" height="344"></embed></object>',
-            '<object width="425" height="344" type="application/x-shockwave-flash"><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="movie" value="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" /><embed src="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" type="application/x-shockwave-flash" width="425" height="344" allowscriptaccess="never" allownetworking="internal" /></object>'
+            '<object width="425" height="344" data="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" type="application/x-shockwave-flash"><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="movie" value="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" /><embed src="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" type="application/x-shockwave-flash" width="425" height="344" allowscriptaccess="never" allownetworking="internal" /></object>'
         );
     }
     
@@ -210,7 +210,7 @@ alert("<This is compatible with XHTML>");
         $this->config->set('URI', 'SecureMungeSecretKey', 'foo');
         $this->assertPurification(
             '<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/Oq3FV_zdyy0&hl=en"></param><embed src="http://www.youtube.com/v/Oq3FV_zdyy0&hl=en" type="application/x-shockwave-flash" width="425" height="344"></embed></object>',
-            '<object width="425" height="344" type="application/x-shockwave-flash"><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="movie" value="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" /><embed src="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" type="application/x-shockwave-flash" width="425" height="344" allowscriptaccess="never" allownetworking="internal" /></object>'
+            '<object width="425" height="344" data="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" type="application/x-shockwave-flash"><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="movie" value="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" /><embed src="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" type="application/x-shockwave-flash" width="425" height="344" allowscriptaccess="never" allownetworking="internal" /></object>'
         );
     }
     
