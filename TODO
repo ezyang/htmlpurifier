@@ -19,7 +19,6 @@ afraid to cast your vote for the next feature to be implemented!
 - Built-in support for target="_blank" on all external links
 - Make Phorum hide emails
 - Implement SecureMunge for resources too
-- Fix text-decoration:none bug
 - Gitify the repository
 
 FUTURE VERSIONS

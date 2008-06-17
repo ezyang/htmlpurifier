@@ -7,6 +7,9 @@ class HTMLPurifier_AttrDef_CSS_TextDecorationTest extends HTMLPurifier_AttrDefHa
         
         $this->def = new HTMLPurifier_AttrDef_CSS_TextDecoration();
         
+        $this->assertDef('none');
+        $this->assertDef('none underline', 'underline');
+        
         $this->assertDef('underline');
         $this->assertDef('overline');
         $this->assertDef('line-through overline underline');
