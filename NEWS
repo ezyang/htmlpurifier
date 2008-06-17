@@ -31,6 +31,7 @@ ERRATA
 - Improved adherence to Unicode by checking for non-character codepoints.
   Thanks Geoffrey Sneddon for reporting. This may result in degraded
   performance for extremely large inputs.
+- Allow CSS property-value pair ''text-decoration: none''
 . Added HTMLPurifier_UnitConverter and HTMLPurifier_Length for convenient
   handling of CSS-style lengths. HTMLPurifier_AttrDef_CSS_Length now uses
   this class.
