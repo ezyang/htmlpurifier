@@ -35,9 +35,7 @@ $e = &$modx->Event;
 if ($e->name == 'OnBeforeDocFormSave') {
     global $content;
     
-    set_include_path('../assets/plugins/htmlpurifier/library/'
-       . PATH_SEPARATOR . get_include_path());
-    include_once 'HTMLPurifier.php';
+    include_once '../assets/plugins/htmlpurifier/library/HTMLPurifier.auto.php';
     $purifier = new HTMLPurifier();
     
     static $magic_quotes = null;
@@ -89,3 +87,24 @@ HTML Purifier properly like this:
 $config = HTMLPurifier_Config::createDefault();
 $config->set('Core', 'Encoding', 'ISO-8859-1'); // or whatever encoding
 $purifier = new HTMLPurifier($config);
+
+
+
+5. Known Bugs
+
+'rn' characters sometimes mysteriously appear after purification. We are
+currently investigating this issue. See: <http://htmlpurifier.org/phorum/read.php?3,1866>
+
+
+
+6. See Also
+
+A modified version of Jot 1.1.3 is available, which integrates with HTML
+Purifier. You can check it out here: <http://modxcms.com/forums/index.php/topic,25621.msg161970.html>
+
+
+X. Changelog
+
+2008-06-16
+- Updated code to work with 3.1.0 and later
+- Add Known Bugs and See Also section
