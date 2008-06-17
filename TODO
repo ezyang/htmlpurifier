@@ -15,11 +15,12 @@ afraid to cast your vote for the next feature to be implemented!
   prevent structures from being parsed and serialized multiple times.
 - Figure out how to simultaneously set %CSS.Trusted and %HTML.Trusted (?)
 - Merge bugfixes to PHP4
-- Upgrade Modx module for HTML Purifier 3.1
+- Upgrade Modx module for HTML Purifier 3.1 (HTMLPurifier.php -> HTMLPurifier.auto.php)
 - Built-in support for target="_blank" on all external links
 - Make Phorum hide emails
 - Implement SecureMunge for resources too
 - Fix text-decoration:none bug
+- Gitify the repository
 
 FUTURE VERSIONS
 ---------------
