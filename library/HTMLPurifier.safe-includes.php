@@ -178,7 +178,7 @@ require_once $__dir . '/HTMLPurifier/URIFilter/DisableExternal.php';
 require_once $__dir . '/HTMLPurifier/URIFilter/DisableExternalResources.php';
 require_once $__dir . '/HTMLPurifier/URIFilter/HostBlacklist.php';
 require_once $__dir . '/HTMLPurifier/URIFilter/MakeAbsolute.php';
-require_once $__dir . '/HTMLPurifier/URIFilter/SecureMunge.php';
+require_once $__dir . '/HTMLPurifier/URIFilter/Munge.php';
 require_once $__dir . '/HTMLPurifier/URIScheme/ftp.php';
 require_once $__dir . '/HTMLPurifier/URIScheme/http.php';
 require_once $__dir . '/HTMLPurifier/URIScheme/https.php';

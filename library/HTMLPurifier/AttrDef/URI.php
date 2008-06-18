@@ -68,18 +68,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         if (!$ok) return false;
         
         // back to string
-        $result = $uri->toString();
-        
-        // munge entire URI if necessary
-        if (
-            !is_null($uri->host) && // indicator for authority
-            !empty($scheme_obj->browsable) &&
-            !is_null($munge = $config->get('URI', 'Munge'))
-        ) {
-            $result = str_replace('%s', rawurlencode($result), $munge);
-        }
-        
-        return $result;
+        return $uri->toString();
         
     }
     

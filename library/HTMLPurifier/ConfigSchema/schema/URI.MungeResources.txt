@@ -1,0 +1,12 @@
+URI.MungeResources
+TYPE: bool
+VERSION: 3.1.1
+DEFAULT: false
+--DESCRIPTION--
+<p>
+    If true, any URI munging directives like %URI.Munge or %URI.SecureMunge
+    will also apply to embedded resources, such as <code>&lt;img src=""&gt;</code>.
+    Be careful enabling this directive if you have a redirector script
+    that does not use the <code>Location</code> HTTP header; all of your images
+    and other embedded resources will break.
+</ul>

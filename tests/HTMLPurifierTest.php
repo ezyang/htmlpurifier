@@ -186,8 +186,8 @@ alert("<This is compatible with XHTML>");
     }
     
     function test_secureMunge() {
-        $this->config->set('URI', 'SecureMunge', '/redirect.php?url=%s&check=%t');
-        $this->config->set('URI', 'SecureMungeSecretKey', 'foo');
+        $this->config->set('URI', 'Munge', '/redirect.php?url=%s&check=%t');
+        $this->config->set('URI', 'MungeSecretKey', 'foo');
         $this->assertPurification(
             '<a href="http://localhost">foo</a><img src="http://localhost" alt="local" />',
             '<a href="/redirect.php?url=http%3A%2F%2Flocalhost&amp;check=8e8223ae8fac24561104180ea549c21fbd111be7">foo</a><img src="http://localhost" alt="local" />'
@@ -206,11 +206,23 @@ alert("<This is compatible with XHTML>");
     function test_safeObjectAndEmbedWithSecureMunge() {
         $this->config->set('HTML', 'SafeObject', true);
         $this->config->set('HTML', 'SafeEmbed', true);
-        $this->config->set('URI', 'SecureMunge', '/redirect.php?url=%s&check=%t');
-        $this->config->set('URI', 'SecureMungeSecretKey', 'foo');
+        $this->config->set('URI', 'Munge', '/redirect.php?url=%s&check=%t');
+        $this->config->set('URI', 'MungeSecretKey', 'foo');
         $this->assertPurification(
             '<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/Oq3FV_zdyy0&hl=en"></param><embed src="http://www.youtube.com/v/Oq3FV_zdyy0&hl=en" type="application/x-shockwave-flash" width="425" height="344"></embed></object>',
             '<object width="425" height="344" data="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" type="application/x-shockwave-flash"><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="movie" value="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" /><embed src="http://www.youtube.com/v/Oq3FV_zdyy0&amp;hl=en" type="application/x-shockwave-flash" width="425" height="344" allowscriptaccess="never" allownetworking="internal" /></object>'
+        );
+    }
+    
+    function test_mungeWithExtraParams() {
+        $this->config->set('URI', 'Munge', '/redirect?s=%s&t=%t&r=%r&n=%n&m=%m&p=%p');
+        $this->config->set('URI', 'MungeSecretKey', 'foo');
+        $this->config->set('URI', 'MungeResources', true);
+        $this->assertPurification(
+            '<a href="http://example.com">Link</a><img src="http://example.com" style="background-image:url(http://example.com);" alt="example.com" />',
+            '<a href="/redirect?s=http%3A%2F%2Fexample.com&amp;t=c15354f3953dfec262c55b1403067e0d045a3059&amp;r=&amp;n=a&amp;m=href&amp;p=">Link</a>'.
+            '<img src="/redirect?s=http%3A%2F%2Fexample.com&amp;t=c15354f3953dfec262c55b1403067e0d045a3059&amp;r=1&amp;n=img&amp;m=src&amp;p=" '.
+            'style="background-image:url(/redirect?s=http%3A%2F%2Fexample.com&amp;t=c15354f3953dfec262c55b1403067e0d045a3059&amp;r=1&amp;n=img&amp;m=style&amp;p=background-image);" alt="example.com" />'
         );
     }
     

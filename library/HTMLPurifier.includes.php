@@ -184,7 +184,7 @@ require 'HTMLPurifier/URIFilter/DisableExternal.php';
 require 'HTMLPurifier/URIFilter/DisableExternalResources.php';
 require 'HTMLPurifier/URIFilter/HostBlacklist.php';
 require 'HTMLPurifier/URIFilter/MakeAbsolute.php';
-require 'HTMLPurifier/URIFilter/SecureMunge.php';
+require 'HTMLPurifier/URIFilter/Munge.php';
 require 'HTMLPurifier/URIScheme/ftp.php';
 require 'HTMLPurifier/URIScheme/http.php';
 require 'HTMLPurifier/URIScheme/https.php';

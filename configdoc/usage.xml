@@ -236,11 +236,6 @@
    <line>28</line>
   </file>
  </directive>
- <directive id="URI.Munge">
-  <file name="HTMLPurifier/AttrDef/URI.php">
-   <line>77</line>
-  </file>
- </directive>
  <directive id="Core.ColorKeywords">
   <file name="HTMLPurifier/AttrDef/CSS/Color.php">
    <line>12</line>
@@ -387,14 +382,14 @@
    <line>8</line>
   </file>
  </directive>
- <directive id="URI.SecureMunge">
-  <file name="HTMLPurifier/URIFilter/SecureMunge.php">
-   <line>9</line>
+ <directive id="URI.MungeResources">
+  <file name="HTMLPurifier/URIFilter/Munge.php">
+   <line>14</line>
   </file>
  </directive>
- <directive id="URI.SecureMungeSecretKey">
-  <file name="HTMLPurifier/URIFilter/SecureMunge.php">
-   <line>10</line>
+ <directive id="URI.MungeSecretKey">
+  <file name="HTMLPurifier/URIFilter/Munge.php">
+   <line>15</line>
   </file>
  </directive>
 </usage>
