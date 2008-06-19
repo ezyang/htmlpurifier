@@ -17,6 +17,7 @@ require_once 'HTMLPurifier/AttrDef/CSS/Percentage.php';
 require_once 'HTMLPurifier/AttrDef/CSS/TextDecoration.php';
 require_once 'HTMLPurifier/AttrDef/CSS/URI.php';
 require_once 'HTMLPurifier/AttrDef/Enum.php';
+require_once 'HTMLPurifier/AttrDef/Switch.php';
 
 HTMLPurifier_ConfigSchema::define(
     'CSS', 'DefinitionRev', 1, 'int', '
