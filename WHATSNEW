@@ -1,6 +1,7 @@
-Security release 2.1.4 is a backport release that fixes a vulnerability
-related to URI handling. In addition, it also includes a number of
-bugfixes that have accumulated in the HTML Purifier 3 series but had
-not been merged back yet. Please remember that HTML Purifier 2.1 will
-be deprecated and will be officially dropped by the end of 2008. Please
-only use it for legacy PHP 4 installs.
+Security and bugfix release 2.1.5 is a backport that fixes two vulnerabilities
+related to CSS, one of which only occurs under Shift_JIS. It also improves
+imagecrash protection (percent CSS width and height is now disabled for
+images, and you can control the bounds with %CSS.MaxImgLength and
+%HTML.MaxImgLength). Finally, there are number of bug fixes, most notably 
+support for text-decoration: none, improved adherence to Unicode and increased
+percent encoding checks.
