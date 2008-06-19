@@ -1,10 +1,9 @@
-HTML Purifier 3.1.0 is the second release series for HTML Purifier on PHP 5
-as well as a security update related to URIs. It shifts over to using
-autoload, and also includes support for the !important CSS modifier,
-display and visibility CSS properties with %CSS.AllowTricky, marquee with
-%HTML.Proprietary (had you scared for a moment, hmm?), a kses() wrapper,
-%CSS.AllowedProperties, %HTML.ForbiddenAttributes and
-%HTML.ForbiddenElements and a totally revamped ConfigDoc system. Since the
-release candidate, there have also been a number of stability fixes such as
-improved URI escaping, a change in serializer ID format, and a relaxed
-format for %HTML.Allowed. And as always, numerous bugfixes.
+HTML Purifier 3.1.1 is a security and bugfix release. This release addresses
+two security vulnerabilities, both related to CSS, and one of which only
+applies to users using Shift_JIS as their output encoding. There is also
+a security improvement regarding the imagecrash attack. There is a backwards
+incompatible change with %URI.Munge, in which resources are no longer munged
+by default; please enable using %URI.MungeResources. Besides this, there
+are numerous improvements to URI munging, esp. with the addition of
+%URI.MungeSecretKey, as well as an experimental implementation of 
+%HTML.SafeObject and %HTML.SafeEmbed. There are also some memory optimizations.

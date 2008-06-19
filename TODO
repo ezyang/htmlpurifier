@@ -108,6 +108,7 @@ Neat feature related
  - Full set of color keywords. Also, a way to add onto them without
    finalizing the configuration object.
  - Write a var_export and memcached DefinitionCache - Denis
+ - Allow restriction of allowed class values
 
 Maintenance related (slightly boring)
  # CHMOD install script for PEAR installs

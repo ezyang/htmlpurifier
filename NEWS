@@ -9,12 +9,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-3.1.1, unknown release date
+3.1.1, released 2008-06-19
 # %URI.Munge now, by default, does not munge resources (for example, <img src="">)
   In order to enable this again, please set %URI.MungeResources to true. 
 ! More robust imagecrash protection with height/width CSS with %CSS.MaxImgLength,
   and height/width HTML with %HTML.MaxImgLength.
-! %URI.SecureMunge for secure URI munging (as opposed to %URI.Munge). Thanks Chris
+! %URI.MungeSecretKey for secure URI munging. Thanks Chris
   for sponsoring this feature. Check out the corresponding documentation
   for details. (Att Nightly testers: The API for this feature changed before
   the general release. Namely, rename your directives %URI.SecureMungeSecretKey =>
@@ -24,26 +24,31 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Allow modules to define injectors via $info_injector. Injectors are 
   automatically disabled if injector's needed elements are not found.
 ! Support for "safe" objects added, use %HTML.SafeObject and %HTML.SafeEmbed.
+  Thanks Chris for sponsoring. If you've been using ad hoc code from the
+  forums, PLEASE use this instead.
 ! Added substitutions for %e, %n, %a and %p in %URI.Munge (in order,
   embedded, tag name, attribute name, CSS property name). See %URI.Munge
-  for more details.
-- Disable percent height/width attributes for img
+  for more details. Requested by Jochem Blok.
+- Disable percent height/width attributes for img.
 - AttrValidator operations are now atomic; updates to attributes are not
   manifest in token until end of operations. This prevents naughty internal
   code from directly modifying CurrentToken when they're not supposed to.
+  This semantics change was requested by frank farmer.
 - Percent encoding checks enabled for URI query and fragment
 - Fix stray backslashes in font-family; CSS Unicode character escapes are
-  now properly resolved (although *only* in font-family).
+  now properly resolved (although *only* in font-family). Thanks Takeshi Terada
+  for reporting.
 - Improve parseCDATA algorithm to take into account newline normalization
 - Account for browser confusion between Yen character and backslash in
   Shift_JIS encoding. This fix generalizes to any other encoding which is not
-  a strict superset of printable ASCII.
+  a strict superset of printable ASCII. Thanks Takeshi Terada for reporting.
 - Fix missing configuration parameter in Generator calls. Thanks vs for the
   partial patch.
 - Improved adherence to Unicode by checking for non-character codepoints.
   Thanks Geoffrey Sneddon for reporting. This may result in degraded
   performance for extremely large inputs.
-- Allow CSS property-value pair ''text-decoration: none''
+- Allow CSS property-value pair ''text-decoration: none''. Thanks Jochem Blok
+  for reporting.
 . Added HTMLPurifier_UnitConverter and HTMLPurifier_Length for convenient
   handling of CSS-style lengths. HTMLPurifier_AttrDef_CSS_Length now uses
   this class.
