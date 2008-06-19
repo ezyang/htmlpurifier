@@ -10,6 +10,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 3.1.1, unknown release date
+# %URI.Munge now, by default, does not munge resources (for example, <img src="">)
+  In order to enable this again, please set %URI.MungeResources to true. 
 ! More robust imagecrash protection with height/width CSS with %CSS.MaxImgLength,
   and height/width HTML with %HTML.MaxImgLength.
 ! %URI.SecureMunge for secure URI munging (as opposed to %URI.Munge). Thanks Chris

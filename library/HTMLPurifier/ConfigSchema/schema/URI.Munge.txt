@@ -28,6 +28,12 @@ DEFAULT: NULL
     </li>
 </ul>
 <p>
+    Prior to HTML Purifier 3.1.1, this directive also enabled the munging
+    of browsable external resources, which could break things if your redirection
+    script was a splash page or used <code>meta</code> tags. To revert to
+    previous behavior, please use %URI.MungeResources.
+</p>
+<p>
     You may want to also use %URI.MungeSecretKey along with this directive
     in order to enforce what URIs your redirector script allows. Open
     redirector scripts can be a security risk and negatively affect the

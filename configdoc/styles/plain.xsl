@@ -19,7 +19,7 @@
     <xsl:variable name="usageLookup" select="document('../usage.xml')/usage" />
     
     <!-- Twiddle this variable to get the columns as even as possible -->
-    <xsl:variable name="maxNumberAdjust" select="1" />
+    <xsl:variable name="maxNumberAdjust" select="2" />
     
     <xsl:template match="/">
         <html lang="en" xml:lang="en">

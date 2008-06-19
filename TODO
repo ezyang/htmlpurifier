@@ -13,9 +13,7 @@ afraid to cast your vote for the next feature to be implemented!
 
 - Investigate how early internal structures can be accessed; this would
   prevent structures from being parsed and serialized multiple times.
-- Figure out how to simultaneously set %CSS.Trusted and %HTML.Trusted (?)
 - Built-in support for target="_blank" on all external links
-- Implement SecureMunge for resources too
 - Gitify the repository
 
 FUTURE VERSIONS
@@ -28,6 +26,7 @@ FUTURE VERSIONS
    IDREFs to non-existent IDs)
  # Frameset XHTML 1.0 and HTML 4.01 doctypes
  - Implement <area>
+ - Figure out how to simultaneously set %CSS.Trusted and %HTML.Trusted (?)
 
 3.3 release [Error'ed]
  # Error logging for filtering/cleanup procedures
