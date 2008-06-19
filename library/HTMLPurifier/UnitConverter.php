@@ -93,6 +93,11 @@ class HTMLPurifier_UnitConverter
         $sigfigs = $this->getSigFigs($n);
         if ($sigfigs < $this->outputPrecision) $sigfigs = $this->outputPrecision;
         
+        // Cleanup $n for PHP 4.3.9 and 4.3.10. See http://bugs.php.net/bug.php?id=30726
+        if (strncmp($n, '-.', 2) === 0) {
+            $n = '-0.' . substr($n, 2);
+        }
+        
         // BCMath's internal precision deals only with decimals. Use
         // our default if the initial number has no decimals, or increase
         // it by how ever many decimals, thus, the number of guard digits
