@@ -21,7 +21,7 @@ $version = trim($argv[1]);
 // Bump version numbers:
 
 // ...in VERSION
-file_put_contents('VERSION', $version);
+file_put_contents('VERSION', $version . PHP_EOL);
 
 // ...in NEWS
 $date = date('Y-m-d');
