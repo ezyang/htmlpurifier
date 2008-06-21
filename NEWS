@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+3.2.0, unknown release date
+
+3.1.2, unknown release date
+
 3.1.1, released 2008-06-19
 # %URI.Munge now, by default, does not munge resources (for example, <img src="">)
   In order to enable this again, please set %URI.MungeResources to true. 
