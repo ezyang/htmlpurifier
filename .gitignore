@@ -1,0 +1,9 @@
+conf/
+library/HTMLPurifier/DefinitionCache/Serializer/*/
+library/HTMLPurifier.standalone.php
+library/standalone/
+*.phpt.diff
+*.phpt.exp
+*.phpt.log
+*.phpt.out
+*.phpt.php
