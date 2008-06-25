@@ -209,7 +209,6 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
     }
     
     function test_generateFromTokens_XHTMLoff() {
-        $this->config = HTMLPurifier_Config::createDefault();
         $this->config->set('HTML', 'XHTML', false);
         
         // omit trailing slash
@@ -237,7 +236,6 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         // just don't test; Tidy is exploding on me.
         return;
         
-        $this->config = HTMLPurifier_Config::createDefault();
         $this->config->set('Core', 'TidyFormat', true);
         $this->config->set('Output', 'Newline', "\n");
         
@@ -249,6 +247,16 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
                 new HTMLPurifier_Token_End('div')
             ),
             "<div>\n  Text\n</div>\n"
+        );
+        
+    }
+    
+    function test_generateFromTokens_sortAttr() {
+        $this->config->set('Output', 'SortAttr', true);
+        
+        $this->assertGeneration(
+            array( new HTMLPurifier_Token_Start('p', array('b'=>'c', 'a'=>'d')) ),
+            '<p a="d" b="c">'
         );
         
     }

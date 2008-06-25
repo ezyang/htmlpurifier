@@ -96,17 +96,22 @@
  </directive>
  <directive id="Output.CommentScriptContents">
   <file name="HTMLPurifier/Generator.php">
-   <line>40</line>
+   <line>45</line>
+  </file>
+ </directive>
+ <directive id="Output.SortAttr">
+  <file name="HTMLPurifier/Generator.php">
+   <line>46</line>
   </file>
  </directive>
  <directive id="Output.TidyFormat">
   <file name="HTMLPurifier/Generator.php">
-   <line>69</line>
+   <line>75</line>
   </file>
  </directive>
  <directive id="Output.Newline">
   <file name="HTMLPurifier/Generator.php">
-   <line>83</line>
+   <line>89</line>
   </file>
  </directive>
  <directive id="HTML.BlockWrapper">
