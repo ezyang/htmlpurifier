@@ -8,3 +8,4 @@ library/HTMLPurifier.standalone.php
 *.phpt.log
 *.phpt.out
 *.phpt.php
+*.phpt.skip.php
