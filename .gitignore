@@ -1,4 +1,5 @@
 conf/
+test-settings.php
 library/HTMLPurifier/DefinitionCache/Serializer/*/
 library/standalone/
 library/HTMLPurifier.standalone.php
