@@ -88,5 +88,20 @@ alert(&lt;b&gt;bold&lt;/b&gt;);
         $this->assertResult('<f req="text">Foo</f> Bar');
     }
     
+    function testPreserveCommentsWithHTMLTrusted() {
+        $this->config->set('HTML', 'Trusted', true);
+        $this->assertResult('<!-- foo -->');
+    }
+    
+    function testRemoveTrailingHyphensInComment() {
+        $this->config->set('HTML', 'Trusted', true);
+        $this->assertResult('<!-- foo ----->', '<!-- foo -->');
+    }
+    
+    function testCollapseDoubleHyphensInComment() {
+        $this->config->set('HTML', 'Trusted', true);
+        $this->assertResult('<!-- bo --- asdf--as -->', '<!-- bo - asdf-as -->');
+    }
+    
 }
 

@@ -30,6 +30,8 @@ $messages = array(
 'Strategy_RemoveForeignElements: Comment removed'            => 'Comment containing "$CurrentToken.Data" removed',
 'Strategy_RemoveForeignElements: Foreign meta element removed' => 'Unrecognized $CurrentToken.Serialized meta tag and all descendants removed',
 'Strategy_RemoveForeignElements: Token removed to end'       => 'Tags and text starting from $1 element where removed to end',
+'Strategy_RemoveForeignElements: Trailing hyphen in comment removed' => 'Trailing hyphen(s) in comment removed',
+'Strategy_RemoveForeignElements: Hyphens in comment collapsed' => 'Double hyphens in comments are not allowed, and were collapsed into single hyphens',
 
 'Strategy_MakeWellFormed: Unnecessary end tag removed' => 'Unnecessary $CurrentToken.Serialized tag removed',
 'Strategy_MakeWellFormed: Unnecessary end tag to text' => 'Unnecessary $CurrentToken.Serialized tag converted to text',
