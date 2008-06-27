@@ -55,6 +55,30 @@ abstract class HTMLPurifier_Injector
     public $needed = array();
     
     /**
+     * Index of inputTokens to rewind to.
+     */
+    protected $rewind = false;
+    
+    /**
+     * Rewind to a spot to re-perform processing. This is useful if you
+     * deleted a node, and now need to see if this change affected any
+     * earlier nodes. Rewinding does not affect other injectors, and can
+     * result in infinite loops if not used carefully.
+     */
+    public function rewind($index) {
+        $this->rewind = $index;
+    }
+    
+    /**
+     * Retrieves rewind, and then unsets it.
+     */
+    public function getRewind() {
+        $r = $this->rewind;
+        $this->rewind = false;
+        return $r;
+    }
+    
+    /**
      * Prepares the injector by giving it the config and context objects:
      * this allows references to important variables to be made within
      * the injector. This function also checks if the HTML environment

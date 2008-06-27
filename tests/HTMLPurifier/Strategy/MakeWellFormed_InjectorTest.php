@@ -8,14 +8,19 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         $this->obj = new HTMLPurifier_Strategy_MakeWellFormed();
         $this->config->set('AutoFormat', 'AutoParagraph', true);
         $this->config->set('AutoFormat', 'Linkify', true);
+        $this->config->set('AutoFormat', 'RemoveEmpty', true);
         generate_mock_once('HTMLPurifier_Injector');
     }
     
     function testEndNotification() {
         $mock = new HTMLPurifier_InjectorMock();
         $mock->skip = false;
-        $mock->expectAt(0, 'notifyEnd', array(new HTMLPurifier_Token_End('b')));
-        $mock->expectAt(1, 'notifyEnd', array(new HTMLPurifier_Token_End('i')));
+        $b = new HTMLPurifier_Token_End('b');
+        $b->start = new HTMLPurifier_Token_Start('b');
+        $mock->expectAt(0, 'notifyEnd', array($b));
+        $i = new HTMLPurifier_Token_End('i');
+        $i->start = new HTMLPurifier_Token_Start('i');
+        $mock->expectAt(1, 'notifyEnd', array($i));
         $mock->expectCallCount('notifyEnd', 2);
         $this->config->set('AutoFormat', 'AutoParagraph', false);
         $this->config->set('AutoFormat', 'Linkify',       false);
@@ -89,6 +94,22 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         $this->assertResult(
             "http://google.com\n\n<b>b</b>",
             "<p><a href=\"http://google.com\">http://google.com</a></p><p><b>b</b></p>"
+        );
+    }
+    
+    function testEmptyAndParagraph() {
+        // This is a fairly degenerate case, but it demonstrates that
+        // the two don't error out together, at least.
+        $this->assertResult(
+            "<p>asdf\n\nasdf<b></b></p>\n\n<p></p><i></i>",
+            "<p>asdf</p><p>asdf</p>"
+        );
+    }
+    
+    function testRewindAndParagraph() {
+        $this->assertResult(
+            "bar\n\n<p><i></i>\n\n</p>\n\nfoo",
+            "<p>bar</p><p>foo</p>"
         );
     }
     

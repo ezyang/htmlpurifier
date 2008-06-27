@@ -100,7 +100,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                      // injector handler code; duplicated for performance reasons
                      foreach ($this->injectors as $i => $injector) {
                          if (!$injector->skip) $injector->handleText($token);
-                         if (is_array($token)) {
+                         if (is_array($token) || is_int($token)) {
                              $this->currentInjector = $i;
                              break;
                          }
@@ -144,7 +144,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                         if ($e) $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag auto closed', $parent);
                         // insert parent end tag before this tag; 
                         // end tag isn't processed, but this tag is processed again
-                        $this->insertBefore(new HTMLPurifier_Token_End($parent->name));
+                        $new_token = new HTMLPurifier_Token_End($parent->name);
+                        $new_token->start = $parent;
+                        $this->insertBefore($new_token);
                         continue;
                     }
                     
@@ -157,7 +159,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             if ($ok) {
                 foreach ($this->injectors as $i => $injector) {
                     if (!$injector->skip) $injector->handleElement($token);
-                    if (is_array($token)) {
+                    if (is_array($token) || is_int($token)) {
                         $this->currentInjector = $i;
                         break;
                     }
@@ -189,6 +191,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // first, check for the simplest case: everything closes neatly
             $current_parent = array_pop($this->currentNesting);
             if ($current_parent->name == $token->name) {
+                $token->start = $current_parent;
                 foreach ($this->injectors as $i => $injector) {
                     $injector->notifyEnd($token);
                 }
@@ -236,6 +239,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by element end', $skipped_tags[$i]);
                 }
                 $new_token = new HTMLPurifier_Token_End($skipped_tags[$i]->name);
+                $new_token->start = $skipped_tags[$i];
                 $this->insertAfter($new_token);
                 //printTokens($tokens, $this->inputIndex);
                 //var_dump($this->currentNesting);
@@ -261,6 +265,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 }
                 // instead of splice, since we know this is the end
                 $tokens[] = $new_token = new HTMLPurifier_Token_End($this->currentNesting[$i]->name);
+                $new_token->start = $this->currentNesting[$i];
                 foreach ($this->injectors as $injector) {
                     $injector->notifyEnd($new_token);
                 }
@@ -313,34 +318,59 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
      * If $token is false, the current token is deleted.
      */
     protected function processToken($token, $config, $context) {
-        if (is_array($token)) {
+        if (is_array($token) || is_int($token)) {
             // the original token was overloaded by an injector, time
             // to some fancy acrobatics
-            
-            // $this->inputIndex is decremented so that the entire set gets
-            // re-processed
-            array_splice($this->inputTokens, $this->inputIndex--, 1, $token);
-            
-            // adjust the injector skips based on the array substitution
+            if (is_array($token)) {
+                array_splice($this->inputTokens, $this->inputIndex, 1, $token);
+            } else {
+                array_splice($this->inputTokens, $this->inputIndex, $token, array());
+            }
             if ($this->injectors) {
-                $offset = count($token);
-                for ($i = 0; $i <= $this->currentInjector; $i++) {
-                    // because of the skip back, we need to add one more
-                    // for uninitialized injectors. I'm not exactly
-                    // sure why this is the case, but I think it has to
-                    // do with the fact that we're decrementing skips
-                    // before re-checking text
-                    if (!$this->injectors[$i]->skip) $this->injectors[$i]->skip++;
-                    $this->injectors[$i]->skip += $offset;
+                $rewind = $this->injectors[$this->currentInjector]->getRewind();
+                if ($rewind < 0) $rewind = 0;
+                if ($rewind !== false) {
+                    $offset = $this->inputIndex - $rewind;
+                    if ($this->injectors) {
+                        foreach ($this->injectors as $i => $injector) {
+                            if ($i == $this->currentInjector) {
+                                $injector->skip = 0;
+                            } else {
+                                $injector->skip += $offset;
+                            }
+                        }
+                    }
+                    for ($this->inputIndex--; $this->inputIndex >= $rewind; $this->inputIndex--) {
+                        $prev = $this->inputTokens[$this->inputIndex];
+                        if ($prev instanceof HTMLPurifier_Token_Start) array_pop($this->currentNesting);
+                        elseif ($prev instanceof HTMLPurifier_Token_End) $this->currentNesting[] = $prev->start;
+                    }
+                    $this->inputIndex++;
+                } else {
+                    // adjust the injector skips based on the array substitution
+                    $offset = is_array($token) ? count($token) : 0;
+                    for ($i = 0; $i <= $this->currentInjector; $i++) {
+                        // because of the skip back, we need to add one more
+                        // for uninitialized injectors. I'm not exactly
+                        // sure why this is the case, but I think it has to
+                        // do with the fact that we're decrementing skips
+                        // before re-checking text
+                        if (!$this->injectors[$i]->skip) $this->injectors[$i]->skip++;
+                        $this->injectors[$i]->skip += $offset;
+                    }
                 }
             }
+            // ensure that we reprocess these tokens with the other injectors
+            --$this->inputIndex;
+            
         } elseif ($token) {
             // regular case
             $this->swap($token);
             if ($token instanceof HTMLPurifier_Token_Start) {
                 $this->currentNesting[] = $token;
             } elseif ($token instanceof HTMLPurifier_Token_End) {
-                array_pop($this->currentNesting); // not actually used
+                // not actually used
+                $token->start = array_pop($this->currentNesting);
             }
         } else {
             $this->remove();

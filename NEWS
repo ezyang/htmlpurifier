@@ -18,8 +18,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Proper support for name attribute. It is now allowed and equivalent to the id
   attribute in a and img tags, and is only converted to id when %HTML.TidyLevel 
   is heavy (for all doctypes).
+! %AutoFormat.RemoveEmpty to remove some empty tags from documents. Please don't
+  use on hand-written HTML.
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
+. New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind
+  index to reprocess tokens.
 
 3.1.1, released 2008-06-19
 # %URI.Munge now, by default, does not munge resources (for example, <img src="">)

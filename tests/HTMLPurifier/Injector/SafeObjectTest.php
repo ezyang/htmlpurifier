@@ -10,6 +10,7 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
     
     function setup() {
         parent::setup();
+        // there is no AutoFormat.SafeObject directive
         $this->config->set('AutoFormat', 'Custom', array(new HTMLPurifier_Injector_SafeObject()));
         $this->config->set('HTML', 'Trusted', true);
     }
