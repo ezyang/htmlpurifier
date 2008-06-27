@@ -15,6 +15,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! %Output.AttrSort for when you need your attributes in alphabetical order to
   deal with a bug in FCKEditor. Requested by frank farmer.
 ! Enable HTML comments when %HTML.Trusted is on. Requested by Waldo Jaquith.
+. Strategy_MakeWellFormed now operates in-place, saving memory and allowing
+  for more interesting filter-backtracking
 
 3.1.1, released 2008-06-19
 # %URI.Munge now, by default, does not munge resources (for example, <img src="">)
