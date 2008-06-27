@@ -14,7 +14,7 @@ afraid to cast your vote for the next feature to be implemented!
 - Investigate how early internal structures can be accessed; this would
   prevent structures from being parsed and serialized multiple times.
 - Built-in support for target="_blank" on all external links
-- Gitify the repository
+- Allow <a id="asdf" name="asdf'>
 
 FUTURE VERSIONS
 ---------------

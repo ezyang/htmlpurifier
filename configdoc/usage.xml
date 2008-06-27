@@ -13,7 +13,7 @@
    <line>327</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
-   <line>44</line>
+   <line>47</line>
   </file>
  </directive>
  <directive id="CSS.MaxImgLength">
@@ -151,7 +151,7 @@
  </directive>
  <directive id="HTML.Trusted">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>198</line>
+   <line>199</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>238</line>
@@ -162,30 +162,33 @@
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>34</line>
   </file>
- </directive>
- <directive id="HTML.AllowedModules">
-  <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>205</line>
+  <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
+   <line>23</line>
   </file>
  </directive>
- <directive id="HTML.CoreModules">
+ <directive id="HTML.AllowedModules">
   <file name="HTMLPurifier/HTMLModuleManager.php">
    <line>206</line>
   </file>
  </directive>
+ <directive id="HTML.CoreModules">
+  <file name="HTMLPurifier/HTMLModuleManager.php">
+   <line>207</line>
+  </file>
+ </directive>
  <directive id="HTML.Proprietary">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>220</line>
+   <line>221</line>
   </file>
  </directive>
  <directive id="HTML.SafeObject">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>225</line>
+   <line>226</line>
   </file>
  </directive>
  <directive id="HTML.SafeEmbed">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>228</line>
+   <line>229</line>
   </file>
  </directive>
  <directive id="Attr.IDBlacklist">
@@ -366,7 +369,7 @@
  </directive>
  <directive id="Core.EscapeInvalidTags">
   <file name="HTMLPurifier/Strategy/MakeWellFormed.php">
-   <line>22</line>
+   <line>21</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>19</line>
@@ -374,12 +377,12 @@
  </directive>
  <directive id="Core.RemoveScriptContents">
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
-   <line>22</line>
+   <line>25</line>
   </file>
  </directive>
  <directive id="Core.HiddenElements">
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
-   <line>23</line>
+   <line>26</line>
   </file>
  </directive>
  <directive id="URI.HostBlacklist">

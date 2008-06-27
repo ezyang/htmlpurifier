@@ -63,7 +63,8 @@ class HTMLPurifier_HTMLModuleManager
         $common = array(
             'CommonAttributes', 'Text', 'Hypertext', 'List',
             'Presentation', 'Edit', 'Bdo', 'Tables', 'Image',
-            'StyleAttribute', 'Scripting', 'Object'
+            'StyleAttribute', 'Scripting', 'Object',
+            'Name' // technically legacy, but present in all the specs
         );
         $transitional = array('Legacy', 'Target');
         $xml = array('XMLCommonAttributes');
@@ -82,7 +83,7 @@ class HTMLPurifier_HTMLModuleManager
         $this->doctypes->register(
             'HTML 4.01 Strict', false,
             array_merge($common, $non_xml),
-            array('Tidy_Strict', 'Tidy_Proprietary'),
+            array('Tidy_Strict', 'Tidy_Proprietary', 'Tidy_Name'),
             array(),
             '-//W3C//DTD HTML 4.01//EN',
             'http://www.w3.org/TR/html4/strict.dtd'
@@ -91,7 +92,7 @@ class HTMLPurifier_HTMLModuleManager
         $this->doctypes->register(
             'XHTML 1.0 Transitional', true,
             array_merge($common, $transitional, $xml, $non_xml),
-            array('Tidy_Transitional', 'Tidy_XHTML', 'Tidy_Proprietary'),
+            array('Tidy_Transitional', 'Tidy_XHTML', 'Tidy_Proprietary', 'Tidy_Name'),
             array(),
             '-//W3C//DTD XHTML 1.0 Transitional//EN',
             'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'
@@ -100,7 +101,7 @@ class HTMLPurifier_HTMLModuleManager
         $this->doctypes->register(
             'XHTML 1.0 Strict', true,
             array_merge($common, $xml, $non_xml),
-            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_Strict', 'Tidy_Proprietary'),
+            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_Strict', 'Tidy_Proprietary', 'Tidy_Name'),
             array(),
             '-//W3C//DTD XHTML 1.0 Strict//EN',
             'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'
@@ -109,7 +110,7 @@ class HTMLPurifier_HTMLModuleManager
         $this->doctypes->register(
             'XHTML 1.1', true,
             array_merge($common, $xml, array('Ruby')),
-            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_Proprietary', 'Tidy_Strict'), // Tidy_XHTML1_1
+            array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_Proprietary', 'Tidy_Strict', 'Tidy_Name'), // Tidy_XHTML1_1
             array(),
             '-//W3C//DTD XHTML 1.1//EN',
             'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'
@@ -378,7 +379,11 @@ class HTMLPurifier_HTMLModuleManager
             
             $this->contentSets->generateChildDef($def, $module);
         }
-            
+        
+        // This can occur if there is a blank definition, but no base to
+        // mix it in with
+        if (!$def) return false;
+        
         // add information on required attributes
         foreach ($def->attr as $attr_name => $attr_def) {
             if ($attr_def->required) {

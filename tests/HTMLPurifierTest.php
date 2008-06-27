@@ -226,5 +226,11 @@ alert("<This is compatible with XHTML>");
         );
     }
     
+    function test_name() {
+        $this->config->set('Attr', 'EnableID', true);
+        $this->config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
+        $this->assertPurification('<a name="asdf"></a>');
+    }
+    
 }
 
