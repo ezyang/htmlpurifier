@@ -171,7 +171,7 @@ function htmlpurifier_add_test($test, $test_file, $only_phpt = false) {
  */
 function printTokens($tokens, $index = null) {
     $string = '<pre>';
-    $generator = new HTMLPurifier_Generator();
+    $generator = new HTMLPurifier_Generator(HTMLPurifier_Config::createDefault(), new HTMLPurifier_Context);
     foreach ($tokens as $i => $token) {
         if ($index === $i) $string .= '[<strong>';
         $string .= "<sup>$i</sup>";
