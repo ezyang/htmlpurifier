@@ -10,7 +10,7 @@
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>50</line>
    <line>62</line>
-   <line>327</line>
+   <line>319</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>47</line>

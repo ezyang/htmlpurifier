@@ -9,8 +9,6 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-3.2.0, unknown release date
-
 3.1.2, unknown release date
 ! %Output.AttrSort for when you need your attributes in alphabetical order to
   deal with a bug in FCKEditor. Requested by frank farmer.
@@ -22,6 +20,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   use on hand-written HTML.
 ! Add error-cases for unsupported elements in MakeWellFormed. This enables
   the strategy to be used, standalone, on untrusted input.
+! %Core.AggressivelyFixLt is on by default. This causes more sensible
+  processing of left angled brackets in smileys and other whatnot.
 - Fix two bugs in %URI.MakeAbsolute; one involving empty paths in base URLs,
   the other involving an undefined $is_folder error.
 - Throw error when %Core.Encoding is set to a spurious value. Previously,

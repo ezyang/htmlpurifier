@@ -197,20 +197,12 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 if (!ctype_alpha($segment[0])) {
                     // XML:  $segment[0] !== '_' && $segment[0] !== ':'
                     if ($e) $e->send(E_NOTICE, 'Lexer: Unescaped lt');
-                    $token = new
-                        HTMLPurifier_Token_Text(
-                            '<' .
-                            $this->parseData(
-                                $segment
-                            ) . 
-                            '>'
-                        );
+                    $token = new HTMLPurifier_Token_Text('<');
                     if ($maintain_line_numbers) {
                         $token->line = $current_line;
                         $current_line += $this->substrCount($html, $nl, $cursor, $position_next_gt - $cursor);
                     }
                     $array[] = $token;
-                    $cursor = $position_next_gt + 1;
                     $inside_tag = false;
                     continue;
                 }

@@ -418,14 +418,13 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
     }
     
     function test_tokenizeHTML_emoticonProtection() {
-        $this->config->set('Core', 'AggressivelyFixLt', true);
         $this->assertTokenization(
             '<b>Whoa! <3 That\'s not good >.></b>',
             array(
                 new HTMLPurifier_Token_Start('b'),
                 new HTMLPurifier_Token_Text('Whoa! '),
-                new HTMLPurifier_Token_Text('<3 That\'s not good >'),
-                new HTMLPurifier_Token_Text('.>'),
+                new HTMLPurifier_Token_Text('<'),
+                new HTMLPurifier_Token_Text('3 That\'s not good >.>'),
                 new HTMLPurifier_Token_End('b')
             ),
             array(
@@ -491,7 +490,6 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
     }
     
     function test_tokenizeHTML_entitiesInComment() {
-        $this->config->set('Core', 'AggressivelyFixLt', true);
         $this->assertTokenization(
             '<!-- This comment < &lt; & -->',
             array( new HTMLPurifier_Token_Comment(' This comment < &lt; & ') ),
@@ -508,7 +506,8 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             array(
                 'DirectLex' => array(
                     new HTMLPurifier_Token_Start('a', array('href' => '')),
-                    new HTMLPurifier_Token_Text('<">'),
+                    new HTMLPurifier_Token_Text('<'),
+                    new HTMLPurifier_Token_Text('">'),
                 ),
                 'PEARSax3' => false,
             )
@@ -556,7 +555,7 @@ div {}
         );
     }
     
-    function test_tokenizeHTML_() {
+    function test_tokenizeHTML_tagWithAtSignAndExtraGt() {
         $this->assertTokenization(
             '<a@>>',
             array(
@@ -571,6 +570,65 @@ div {}
                     // mimics Mozilla's parsing of the tag.
                     new HTMLPurifier_Token_Start('a@'),
                     new HTMLPurifier_Token_Text('>'),
+                ),
+            )
+        );
+    }
+    
+    function test_tokenizeHTML_emoticonHeart() {
+        $this->assertTokenization(
+            '<br /><3<br />',
+            array(
+                new HTMLPurifier_Token_Empty('br'),
+                new HTMLPurifier_Token_Text('<'),
+                new HTMLPurifier_Token_Text('3'),
+                new HTMLPurifier_Token_Empty('br'),
+            ),
+            array(
+                'DOMLex' => array(
+                    new HTMLPurifier_Token_Empty('br'),
+                    new HTMLPurifier_Token_Text('<3'),
+                    new HTMLPurifier_Token_Empty('br'),
+                ),
+            )
+        );
+    }
+    
+    function test_tokenizeHTML_emoticonShiftyEyes() {
+        $this->assertTokenization(
+            '<b><<</b>',
+            array(
+                new HTMLPurifier_Token_Start('b'),
+                new HTMLPurifier_Token_Text('<'),
+                new HTMLPurifier_Token_Text('<'),
+                new HTMLPurifier_Token_End('b'),
+            ),
+            array(
+                'DOMLex' => array(
+                    new HTMLPurifier_Token_Start('b'),
+                    new HTMLPurifier_Token_Text('<<'),
+                    new HTMLPurifier_Token_End('b'),
+                ),
+            )
+        );
+    }
+    
+    function test_tokenizeHTML_eon1996() {
+        $this->assertTokenization(
+            '< <b>test</b>',
+            array(
+                new HTMLPurifier_Token_Text('<'),
+                new HTMLPurifier_Token_Text(' '),
+                new HTMLPurifier_Token_Start('b'),
+                new HTMLPurifier_Token_Text('test'),
+                new HTMLPurifier_Token_End('b'),
+            ),
+            array(
+                'DOMLex' => array(
+                    new HTMLPurifier_Token_Text('< '),
+                    new HTMLPurifier_Token_Start('b'),
+                    new HTMLPurifier_Token_Text('test'),
+                    new HTMLPurifier_Token_End('b'),
                 ),
             )
         );
