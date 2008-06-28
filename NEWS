@@ -14,6 +14,11 @@ ERRATA
   If you desire to use it, please use it with the latest, PHP5-only version of 
   HTML Purifier.
 
+2.1.6, unknown release date
+! Proper support for name attribute. It is now allowed and equivalent to the id
+  attribute in a and img tags, and is only converted to id when %HTML.TidyLevel 
+  is heavy (for all doctypes).
+
 2.1.5, released 2008-06-19
 ! More robust imagecrash protection with height/width CSS with %CSS.MaxImgLength,
   and height/width HTML with %HTML.MaxImgLength.

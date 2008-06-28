@@ -61,11 +61,11 @@ a[href|title]
         
         $config1 = HTMLPurifier_Config::create(array(
             'HTML.AllowedElements' => array('b', 'i', 'p', 'a'),
-            'HTML.AllowedAttributes' => array('a.href', '*.id')
+            'HTML.AllowedAttributes' => array('a.href', '*.class')
         ));
         
         $config2 = HTMLPurifier_Config::create(array(
-            'HTML.Allowed' => 'b,i,p,a[href],*[id]'
+            'HTML.Allowed' => 'b,i,p,a[href],*[class]'
         ));
         
         $this->assertEqual($config1->getHTMLDefinition(), $config2->getHTMLDefinition());
