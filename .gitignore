@@ -1,9 +1,13 @@
 conf/
+test-settings.php
 library/HTMLPurifier/DefinitionCache/Serializer/*/
-library/HTMLPurifier.standalone.php
 library/standalone/
+library/HTMLPurifier.standalone.php
+configdoc/*.html
+configdoc/configdoc.xml
 *.phpt.diff
 *.phpt.exp
 *.phpt.log
 *.phpt.out
 *.phpt.php
+*.phpt.skip.php
