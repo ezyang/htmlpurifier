@@ -20,6 +20,8 @@ ERRATA
   is heavy (for all doctypes).
 - Fix two bugs in %URI.MakeAbsolute; one involving empty paths in base URLs,
   the other involving an undefined $is_folder error.
+- Throw error when %Core.Encoding is set to a spurious value. Previously,
+  this errored silently and returned false.
 
 2.1.5, released 2008-06-19
 ! More robust imagecrash protection with height/width CSS with %CSS.MaxImgLength,
