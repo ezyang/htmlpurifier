@@ -26,6 +26,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   the other involving an undefined $is_folder error.
 - Throw error when %Core.Encoding is set to a spurious value. Previously,
   this errored silently and returned false.
+- Redirected stderr to stdout for flush error output.
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind

@@ -201,7 +201,7 @@ class FailedTest extends UnitTestCase {
  * Flushes all caches, and fatally errors out if there's a problem.
  */
 function htmlpurifier_flush($php, $reporter) {
-    exec($php . ' ../maintenance/flush.php ' . $php, $out, $status);
+    exec($php . ' ../maintenance/flush.php ' . $php . ' 2>&1', $out, $status);
     if ($status) {
         $test = new FailedTest(
             'maintenance/flush.php returned non-zero exit status',
