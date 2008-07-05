@@ -1,0 +1,7 @@
+--SKIPIF--
+if (!function_exists('iconv')) return true;
+--INI--
+Core.Encoding = "Shift_JIS"
+Core.EscapeNonASCIICharacters = true
+--HTML--
+<b style="font-family:'&#165;';">111</b>

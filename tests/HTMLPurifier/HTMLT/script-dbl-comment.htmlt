@@ -1,0 +1,10 @@
+--INI--
+HTML.Trusted = true
+--HTML--
+<script type="text/javascript"><![CDATA[
+alert("<This is compatible with XHTML>");
+//]]></script>
+--EXPECT--
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+alert("<This is compatible with XHTML>");
+//--><!]]></script>

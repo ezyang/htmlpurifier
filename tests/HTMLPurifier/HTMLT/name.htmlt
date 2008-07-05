@@ -1,0 +1,5 @@
+--INI--
+Attr.EnableID = true
+HTML.Doctype = "XHTML 1.0 Strict"
+--HTML--
+<a name="asdf"></a>

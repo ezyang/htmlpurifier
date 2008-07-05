@@ -1,0 +1,6 @@
+--INI--
+HTML.Strict = true
+--HTML--
+<blockquote>Illegal contents</blockquote>
+--EXPECT--
+<blockquote><p>Illegal contents</p></blockquote>
