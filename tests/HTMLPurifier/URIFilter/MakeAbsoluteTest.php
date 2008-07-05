@@ -114,6 +114,13 @@ class HTMLPurifier_URIFilter_MakeAbsoluteTest extends HTMLPurifier_URIFilterHarn
         $this->assertFiltering('javascript: window.location = \'http://www.example.com\';', false);
     }
     
+    // miscellaneous
+    
+    function testFilterDomainWithNoSlash() {
+        $this->setBase('http://example.com');
+        $this->assertFiltering('foo', 'http://example.com/foo');
+    }
+    
     // error case
     
     function testErrorNoBase() {

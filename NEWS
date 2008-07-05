@@ -22,6 +22,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   use on hand-written HTML.
 ! Add error-cases for unsupported elements in MakeWellFormed. This enables
   the strategy to be used, standalone, on untrusted input.
+- Fix two bugs in %URI.MakeAbsolute; one involving empty paths in base URLs,
+  the other involving an undefined $is_folder error.
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind
