@@ -4,5 +4,6 @@ CHAIN-ME: 2
 --DESCRIPTION--
 Multiline
 stuff
+--EMPTY--
 --FOR-WHO--
 Single multiline

@@ -31,6 +31,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind
   index to reprocess tokens.
+. StringHashParser now allows for multiline sections with "empty" content; 
+  previously the section would remain undefined.
 
 3.1.1, released 2008-06-19
 # %URI.Munge now, by default, does not munge resources (for example, <img src="">)

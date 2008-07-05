@@ -29,6 +29,7 @@ class HTMLPurifier_StringHashParserTest extends UnitTestCase
             'TYPE' => 'string',
             'CHAIN-ME' => '2',
             'DESCRIPTION' => "Multiline\nstuff\n",
+            'EMPTY' => '',
             'FOR-WHO' => "Single multiline\n",
         ));
     }
