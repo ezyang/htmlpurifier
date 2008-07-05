@@ -11,6 +11,8 @@
  *   - file (f), a single file to test
  *   - xml, whether or not to output XML
  *   - dry, whether or not to do a dry run
+ *   - type, the type of tests to run, can be 'htmlpurifier', 'configdoc',
+ *     'fstools', 'htmlt', 'vtest' or 'phpt'
  *
  * If you're interested in running the test-cases, mosey over to
  * ../test-settings.sample.php, copy the file to test-settings.php and follow
@@ -38,10 +40,9 @@ $AC['xml'] = false;
 $AC['dry'] = false;
 $AC['php'] = $php;
 
-// Convenience parameters for running quicker tests; ideally all tests
-// should be performed.
+$AC['type'] = '';
 $AC['disable-phpt'] = false;
-$AC['only-phpt'] = false;
+$AC['only-phpt'] = false; // alias for --type=phpt
 
 $aliases = array(
     'f' => 'file',
@@ -52,16 +53,16 @@ $aliases = array(
 htmlpurifier_parse_args($AC, $aliases);
 
 // Disable PHPT tests if they're not enabled
-if (!$GLOBALS['HTMLPurifierTest']['PHPT']) $AC['disable-phpt'] = true;
+if (!$GLOBALS['HTMLPurifierTest']['PHPT']) {
+    $AC['disable-phpt'] = true;
+} elseif (!$AC['type'] && $AC['only-phpt']) {
+    // backwards-compat
+    $AC['type'] = 'phpt';
+}
 
 if (!SimpleReporter::inCli()) {
     // Undo any dangerous parameters
     $AC['php'] = $php;
-}
-
-if ($AC['disable-phpt'] && $AC['only-phpt']) {
-    echo "Cannot disable and allow only PHPT tests!\n";
-    exit(1);
 }
 
 // Shell-script code is executed
@@ -102,14 +103,7 @@ if (!$AC['disable-phpt']) {
 }
 
 // load tests
-
-$test_files = array();
-$test_dirs = array();
-$test_dirs_exclude = array();
-$vtest_dirs = array();
-$phpt_dirs  = array();
-
-require 'test_files.php'; // populates $test_files array
+require 'test_files.php';
 
 $FS = new FSTools();
 
@@ -135,6 +129,14 @@ foreach ($vtest_dirs as $dir) {
 foreach ($phpt_dirs as $dir) {
     $phpt_files = $FS->globr($dir, '*.phpt');
     foreach ($phpt_files as $file) {
+        $test_files[] = str_replace('\\', '/', $file);
+    }
+}
+
+// handle htmlt dirs
+foreach ($htmlt_dirs as $dir) {
+    $htmlt_files = $FS->globr($dir, '*.htmlt');
+    foreach ($htmlt_files as $file) {
         $test_files[] = str_replace('\\', '/', $file);
     }
 }

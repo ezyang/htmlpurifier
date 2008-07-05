@@ -5,12 +5,14 @@
  * 
  * This file tests HTML Purifier in all versions of PHP. Arguments
  * are specified like --arg=opt, allowed arguments are:
- *   - exclude-normal, excludes normal tests
- *   - exclude-standalone, excludes standalone tests
- *   - file (f), specifies a single file to test for all versions
- *   - xml, if specified output is XML
  *   - quiet (q), if specified no informative messages are enabled (please use
  *     this if you're outputting XML)
+ *   - distro, allowed values 'normal' or 'standalone', by default all
+ *     distributions are tested. "--standalone" is a shortcut for
+ *     "--distro=standalone".
+ *   - quick, run only the most recent versions of each release series
+ *   - disable-flush, by default flush is run, this disables it
+ *   - file (f), xml, type: these correspond to the parameters in index.php 
  * 
  * @note
  *   It requires a script called phpv that takes an extra argument (the
@@ -24,6 +26,7 @@
  */
 
 define('HTMLPurifierTest', 1);
+chdir(dirname(__FILE__));
 $php = 'php'; // for safety
 
 require_once 'common.php';
@@ -34,19 +37,33 @@ if (!SimpleReporter::inCli()) {
 }
 
 $AC = array(); // parameters
-$AC['exclude-normal'] = false;
-$AC['exclude-standalone'] = false;
 $AC['file']  = '';
 $AC['xml']   = false;
 $AC['quiet'] = false;
 $AC['php'] = $php;
 $AC['disable-phpt'] = false;
-$AC['only-phpt'] = false;
+$AC['disable-flush'] = false;
+$AC['type'] = '';
+$AC['distro'] = ''; // valid values are normal/standalone
+$AC['quick'] = false; // run the latest version on each release series
+$AC['standalone'] = false; // convenience for --distro=standalone
+// Legacy parameters
+$AC['only-phpt'] = false; // --type=phpt
+$AC['exclude-normal'] = false; // --distro=standalone
+$AC['exclude-standalone'] = false; // --distro=normal
 $aliases = array(
     'f' => 'file',
     'q' => 'quiet',
 );
 htmlpurifier_parse_args($AC, $aliases);
+
+// Backwards compat extra parsing
+if ($AC['only-phpt']) {
+    $AC['type'] = 'phpt';
+}
+if ($AC['exclude-normal']) $AC['distro'] = 'standalone';
+elseif ($AC['exclude-standalone']) $AC['distro'] = 'normal';
+elseif ($AC['standalone']) $AC['distro'] = 'standalone';
 
 if ($AC['xml']) {
     $reporter = new XmlReporter();
@@ -55,16 +72,14 @@ if ($AC['xml']) {
 }
 
 // Regenerate any necessary files
-htmlpurifier_flush($AC['php'], $reporter);
+if (!$AC['disable-flush']) htmlpurifier_flush($AC['php'], $reporter);
 
-$file = '';
-
-$test_files = array();
+$file_arg = '';
 require 'test_files.php';
 if ($AC['file']) {
     $test_files_lookup = array_flip($test_files);
     if (isset($test_files_lookup[$AC['file']])) {
-        $file = '--file=' . $AC['file'];
+        $file_arg = '--file=' . $AC['file'];
     } else {
         throw new Exception("Invalid file passed");
     }
@@ -72,36 +87,61 @@ if ($AC['file']) {
 // This allows us to get out of having to do dry runs.
 $size = count($test_files);
 
+$type_arg = '';
+if ($AC['type']) $type_arg = '--type=' . $AC['type'];
+
+if ($AC['quick']) {
+    $seriesArray = array();
+    foreach ($versions_to_test as $version) {
+        $series = substr($version, 0, strpos($version, '.', strpos($version, '.') + 1));
+        if (!isset($seriesArray[$series])) {
+            $seriesArray[$series] = $version;
+            continue;
+        }
+        if (version_compare($version, $seriesArray[$series], '>')) {
+            $seriesArray[$series] = $version;
+        }
+    }
+    $versions_to_test = array_values($seriesArray);
+}
+
 // Setup the test
 $test = new TestSuite('HTML Purifier Multiple Versions Test');
 foreach ($versions_to_test as $version) {
-    $flush = '';
+    // Support for arbitrarily forcing flushes by wrapping the suspect
+    // version name in an array()
+    $flush_arg = '';
     if (is_array($version)) {
         $version = $version[0];
-        $flush = '--flush';
+        $flush_arg = '--flush';
     }
-    if (!$AC['only-phpt']) {
-        if (!$AC['exclude-normal']) {
-            $test->add(
-                new CliTestCase(
-                    "$phpv $version index.php --xml $flush --disable-phpt $file",
-                    $AC['quiet'], $size
-                )
-            );
-        }
-        if (!$AC['exclude-standalone']) {
-            $test->add(
-                new CliTestCase(
-                    "$phpv $version index.php --xml $flush --standalone --disable-phpt $file",
-                    $AC['quiet'], $size
-                )
-            );
+    if ($AC['type'] !== 'phpt') {
+        $break = true;
+        switch ($AC['distro']) {
+            case '':
+                $break = false;
+            case 'normal':
+                $test->add(
+                    new CliTestCase(
+                        "$phpv $version index.php --xml $flush_arg $type_arg --disable-phpt $file_arg",
+                        $AC['quiet'], $size
+                    )
+                );
+                if ($break) break;
+            case 'standalone':
+                $test->add(
+                    new CliTestCase(
+                        "$phpv $version index.php --xml $flush_arg $type_arg --standalone --disable-phpt $file_arg",
+                        $AC['quiet'], $size
+                    )
+                );
+                if ($break) break;
         }
     }
-    if (!$AC['disable-phpt']) { // naming is not consistent
+    if (!$AC['disable-phpt'] && (!$AC['type'] || $AC['type'] == 'phpt')) {
         $test->add(
             new CliTestCase(
-                $AC['php'] . " index.php --xml --php \"$phpv $version\" --only-phpt",
+                $AC['php'] . " index.php --xml --php \"$phpv $version\" --type=phpt",
                 $AC['quiet'], $size
             )
         );

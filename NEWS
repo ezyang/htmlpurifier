@@ -22,6 +22,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   the strategy to be used, standalone, on untrusted input.
 ! %Core.AggressivelyFixLt is on by default. This causes more sensible
   processing of left angled brackets in smileys and other whatnot.
+! Test scripts now have a 'type' parameter, which lets you say 'htmlpurifier',
+  'phpt', 'vtest', etc. in order to only execute those tests. This supercedes
+  the --only-phpt parameter, although for backwards-compatibility the flag
+  will still work. 
 - Fix two bugs in %URI.MakeAbsolute; one involving empty paths in base URLs,
   the other involving an undefined $is_folder error.
 - Throw error when %Core.Encoding is set to a spurious value. Previously,
@@ -33,6 +37,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   index to reprocess tokens.
 . StringHashParser now allows for multiline sections with "empty" content; 
   previously the section would remain undefined.
+. Added --quick option to multitest.php, which tests only the most recent
+  release for each series.
+. Added --distro option to multitest.php, which accepts either 'normal' or
+  'standalone'. This supercedes --exclude-normal and --exclude-standalone
 
 3.1.1, released 2008-06-19
 # %URI.Munge now, by default, does not munge resources (for example, <img src="">)
