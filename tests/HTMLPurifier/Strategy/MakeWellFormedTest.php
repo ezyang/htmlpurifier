@@ -86,5 +86,12 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
         );
     }
     
+    function testUnrecognized() {
+        $this->assertResult(
+            '<asdf><foobar /><biddles>foo</asdf>',
+            '<asdf><foobar /><biddles>foo</biddles></asdf>'
+        );
+    }
+    
 }
 

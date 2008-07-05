@@ -20,6 +20,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   is heavy (for all doctypes).
 ! %AutoFormat.RemoveEmpty to remove some empty tags from documents. Please don't
   use on hand-written HTML.
+! Add error-cases for unsupported elements in MakeWellFormed. This enables
+  the strategy to be used, standalone, on untrusted input.
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind

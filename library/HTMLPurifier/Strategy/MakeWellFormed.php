@@ -110,15 +110,19 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 continue;
             }
             
-            $info = $definition->info[$token->name]->child;
+            if (isset($definition->info[$token->name])) {
+                $type = $definition->info[$token->name]->child->type;
+            } else {
+                $type = false; // Type is unknown, treat accordingly
+            }
             
             // quick tag checks: anything that's *not* an end tag
             $ok = false;
-            if ($info->type === 'empty' && $token instanceof HTMLPurifier_Token_Start) {
+            if ($type === 'empty' && $token instanceof HTMLPurifier_Token_Start) {
                 // test if it claims to be a start tag but is empty
                 $token = new HTMLPurifier_Token_Empty($token->name, $token->attr);
                 $ok = true;
-            } elseif ($info->type !== 'empty' && $token instanceof HTMLPurifier_Token_Empty) {
+            } elseif ($type && $type !== 'empty' && $token instanceof HTMLPurifier_Token_Empty) {
                 // claims to be empty but really is a start tag
                 $token = array(
                     new HTMLPurifier_Token_Start($token->name, $token->attr),
@@ -135,12 +139,14 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 if (!empty($this->currentNesting)) {
                     
                     $parent = array_pop($this->currentNesting);
-                    $parent_info = $definition->info[$parent->name];
+                    if (isset($definition->info[$parent->name])) {
+                        $elements = $definition->info[$parent->name]->child->elements;
+                        $autoclose = !isset($elements[$token->name]);
+                    } else {
+                        $autoclose = false;
+                    }
                     
-                    // this can be replaced with a more general algorithm:
-                    // if the token is not allowed by the parent, auto-close
-                    // the parent
-                    if (!isset($parent_info->child->elements[$token->name])) {
+                    if ($autoclose) {
                         if ($e) $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag auto closed', $parent);
                         // insert parent end tag before this tag; 
                         // end tag isn't processed, but this tag is processed again
