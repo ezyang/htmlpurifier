@@ -4,6 +4,7 @@
 // valid values
 
 error_reporting(E_ALL);
+chdir(dirname(__FILE__));
 define('HTMLPurifierTest', 1);
 define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
 
