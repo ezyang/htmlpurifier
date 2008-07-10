@@ -41,4 +41,11 @@ class HTMLPurifier_URIFilter_DisableExternalTest extends HTMLPurifier_URIFilterH
         );
     }
     
+    function testBaseAsHost() {
+        $this->config->set('URI', 'Base', 'http://www.example.com/foo/bar');
+        $this->assertFiltering(
+            'http://www.example.com/baz'
+        );
+    }
+    
 }

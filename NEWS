@@ -31,6 +31,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Throw error when %Core.Encoding is set to a spurious value. Previously,
   this errored silently and returned false.
 - Redirected stderr to stdout for flush error output.
+- %URI.DisableExternal will now use the host in %URI.Base if %URI.Host is not
+  available.
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind
