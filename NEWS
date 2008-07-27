@@ -33,6 +33,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Redirected stderr to stdout for flush error output.
 - %URI.DisableExternal will now use the host in %URI.Base if %URI.Host is not
   available.
+- Do not re-munge URL if the output URL has the same host as the input URL.
+  Requested by Chris.
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind

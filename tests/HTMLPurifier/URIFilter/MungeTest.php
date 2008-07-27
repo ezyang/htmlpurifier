@@ -112,4 +112,9 @@ class HTMLPurifier_URIFilter_MungeTest extends HTMLPurifier_URIFilterHarness
         $this->assertFiltering('http://google.com', '/links/http%3A%2F%2Fgoogle.com/0072e2f817fd2844825def74e54443debecf0892');
     }
     
+    function testMungeIgnoreSameDomain() {
+        $this->setMunge('http://example.com/%s');
+        $this->assertFiltering('http://example.com/foobar');
+    }
+    
 }
