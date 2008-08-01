@@ -226,11 +226,6 @@ class HTMLPurifier_Lexer
      */
     public function normalize($html, $config, $context) {
         
-        // extract body from document if applicable
-        if ($config->get('Core', 'ConvertDocumentToFragment')) {
-            $html = $this->extractBody($html);
-        }
-        
         // normalize newlines to \n
         $html = str_replace("\r\n", "\n", $html);
         $html = str_replace("\r", "\n", $html);
@@ -242,6 +237,11 @@ class HTMLPurifier_Lexer
         
         // escape CDATA
         $html = $this->escapeCDATA($html);
+        
+        // extract body from document if applicable
+        if ($config->get('Core', 'ConvertDocumentToFragment')) {
+            $html = $this->extractBody($html);
+        }
         
         // expand entities that aren't the big five
         $html = $this->_entity_parser->substituteNonSpecialEntities($html);

@@ -634,6 +634,26 @@ div {}
         );
     }
     
+    function test_tokenizeHTML_bodyInCDATA() {
+        $this->assertTokenization(
+            '<![CDATA[<body>Foo</body>]]>',
+            array(
+                new HTMLPurifier_Token_Text('<body>Foo</body>'),
+            ),
+            array(
+                'PH5P' => array(
+                    new HTMLPurifier_Token_Text('<'),
+                    new HTMLPurifier_Token_Text('body'),
+                    new HTMLPurifier_Token_Text('>'),
+                    new HTMLPurifier_Token_Text('Foo'),
+                    new HTMLPurifier_Token_Text('<'),
+                    new HTMLPurifier_Token_Text('/body'),
+                    new HTMLPurifier_Token_Text('>'),
+                ),
+            )
+        );
+    }
+    
     /*
     
     function test_tokenizeHTML_() {
