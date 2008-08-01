@@ -35,6 +35,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   available.
 - Do not re-munge URL if the output URL has the same host as the input URL.
   Requested by Chris.
+- Fix error in documentation regarding %Filter.ExtractStyleBlocks
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind
