@@ -140,7 +140,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     
                     $parent = array_pop($this->currentNesting);
                     if (isset($definition->info[$parent->name])) {
-                        $elements = $definition->info[$parent->name]->child->elements;
+                        $elements = $definition->info[$parent->name]->child->getNonAutoCloseElements($config);
                         $autoclose = !isset($elements[$token->name]);
                     } else {
                         $autoclose = false;

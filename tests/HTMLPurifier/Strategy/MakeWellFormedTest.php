@@ -93,5 +93,14 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
         );
     }
     
+    function testBlockquoteWithInline() {
+        $this->config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
+        $this->assertResult(
+            // This is actually invalid, but will be fixed by 
+            // ChildDef_StrictBlockquote
+            '<blockquote>foo<b>bar</b></blockquote>'
+        );
+    }
+    
 }
 
