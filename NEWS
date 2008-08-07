@@ -38,6 +38,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix error in documentation regarding %Filter.ExtractStyleBlocks
 - Prevent <![CDATA[<body></body>]]> from triggering %Core.ConvertDocumentToFragment
 - Fix bug with inline elements in blockquotes conflicting with strict doctype
+- Detect if HTML support is disabled for DOM by checking for loadHTML() method.
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind

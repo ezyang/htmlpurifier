@@ -88,7 +88,7 @@ class HTMLPurifier_Lexer
                 break;
             }
             
-            if (class_exists('DOMDocument')) {
+            if (class_exists('DOMDocument') && method_exists('DOMDocument', 'loadHTML')) {
                 // check for DOM support, because, surprisingly enough,
                 // it's *not* part of the core!
                 $lexer = 'DOMLex';
