@@ -26,6 +26,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   'phpt', 'vtest', etc. in order to only execute those tests. This supercedes
   the --only-phpt parameter, although for backwards-compatibility the flag
   will still work. 
+! AutoParagraph auto-formatter will now preserve double-newlines upon output.
+  Users who are not performing inbound filtering, this may seem a little
+  useless, but as a bonus, the test suite and handling of edge cases is also
+  improved.
 - Fix two bugs in %URI.MakeAbsolute; one involving empty paths in base URLs,
   the other involving an undefined $is_folder error.
 - Throw error when %Core.Encoding is set to a spurious value. Previously,

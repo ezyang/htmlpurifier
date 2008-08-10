@@ -29,7 +29,9 @@ Par 1 still</p>'
 'Par1
 
 Par2',
-            '<p>Par1</p><p>Par2</p>'
+"<p>Par1</p>
+
+<p>Par2</p>"
         );
     }
     
@@ -40,7 +42,9 @@ Par2',
  
 
 Par2',
-            '<p>Par1</p><p>Par2</p>'
+'<p>Par1</p>
+
+<p>Par2</p>'
         );
     }
     
@@ -49,7 +53,9 @@ Par2',
 '<b>Par1</b>
 
 <i>Par2</i>',
-            '<p><b>Par1</b></p><p><i>Par2</i></p>'
+'<p><b>Par1</b></p>
+
+<p><i>Par2</i></p>'
         );
     }
     
@@ -67,7 +73,9 @@ Par2</b></p>'
     function testAddParagraphAdjacentToParagraph() {
         $this->assertResult(
             'Par1<p>Par2</p>',
-            '<p>Par1</p><p>Par2</p>'
+'<p>Par1</p>
+
+<p>Par2</p>'
         );
     }
     
@@ -91,7 +99,9 @@ Par1</pre>'
 'Par1
 
   ',
-'<p>Par1</p>'
+'<p>Par1</p>
+
+'
         );
     }
     
@@ -102,7 +112,11 @@ Par1</pre>'
 <div>Par2</div>
 
 Par3',
-'<p>Par1</p><div>Par2</div><p>Par3</p>'
+'<p>Par1</p>
+
+<div>Par2</div>
+
+<p>Par3</p>'
         );
     }
     
@@ -113,23 +127,29 @@ Par3',
         );
     }
     
-    function testIgnoreLeadingWhitespace() {
+    function testPreserveLeadingWhitespace() {
         $this->assertResult(
 '
 
 Par',
-            '<p>Par</p>'
+'
+
+<p>Par</p>'
         );
     }
     
-    function testIgnoreSurroundingWhitespace() {
+    function testPreserveSurroundingWhitespace() {
         $this->assertResult(
 '
 
 Par
 
 ',
-            '<p>Par</p>'
+'
+
+<p>Par</p>
+
+'
         );
     }
     
@@ -138,7 +158,9 @@ Par
 '<div>Par1
 
 Par2</div>',
-            '<div><p>Par1</p><p>Par2</p></div>'
+'<div><p>Par1</p>
+
+<p>Par2</p></div>'
         );
     }
     
@@ -147,7 +169,9 @@ Par2</div>',
 '<div><b>Par1</b>
 
 Par2</div>',
-            '<div><p><b>Par1</b></p><p>Par2</p></div>'
+'<div><p><b>Par1</b></p>
+
+<p>Par2</p></div>'
         );
     }
     
@@ -160,7 +184,9 @@ Par2</div>',
 '<div><b>Par1</b>
 
 <i>Par2</i></div>',
-            '<div><p><b>Par1</b></p><p><i>Par2</i></p></div>'
+'<div><p><b>Par1</b></p>
+
+<p><i>Par2</i></p></div>'
         );
     }
     
@@ -177,7 +203,9 @@ Par2</div>',
 '<div><p>Foo
 
 Bar</p></div>',
-            '<div><p>Foo</p><p>Bar</p></div>'
+'<div><p>Foo</p>
+
+<p>Bar</p></div>'
         );
     }
     
@@ -186,7 +214,9 @@ Bar</p></div>',
 '<div><p><b>Foo</b>
 
 <i>Bar</i></p></div>',
-            '<div><p><b>Foo</b></p><p><i>Bar</i></p></div>'
+'<div><p><b>Foo</b></p>
+
+<p><i>Bar</i></p></div>'
         );
     }
     
@@ -199,7 +229,9 @@ Bar</p></div>',
 '<blockquote>Par1
 
 Par2</blockquote>',
-            '<blockquote><p>Par1</p><p>Par2</p></blockquote>'
+'<blockquote><p>Par1</p>
+
+<p>Par2</p></blockquote>'
         );
     }
     
@@ -218,7 +250,11 @@ Par2</blockquote>',
 Bar
 
 </div>', 
-        '<div><p>Bar</p></div>'
+        '<div>
+
+<p>Bar</p>
+
+</div>'
         );
     }
     
@@ -229,7 +265,9 @@ Bar
 
 
 Par2', 
-        '<p><b>Par1</b>a</p><p>Par2</p>'
+'<p><b>Par1</b>a</p>
+
+<p>Par2</p>'
         );
     }
     
@@ -238,7 +276,9 @@ Par2',
 'Par1
 
 Par2</p>', 
-        '<p>Par1</p><p>Par2</p>'
+'<p>Par1</p>
+
+<p>Par2</p>'
         );
     }
     
@@ -247,7 +287,9 @@ Par2</p>',
 'Par1
 
 Par2</div>', 
-        '<p>Par1</p><p>Par2</p>'
+'<p>Par1</p>
+
+<p>Par2</p>'
         );
     }
     
@@ -264,7 +306,9 @@ Par1
 '<div>Par1
 
 <div>Par2</div></div>',
-'<div><p>Par1</p><div>Par2</div></div>'
+'<div><p>Par1</p>
+
+<div>Par2</div></div>'
         );
     }
     
@@ -280,7 +324,9 @@ Par1
 'Par1
 <div>Par2</div>',
 '<p>Par1
-</p><div>Par2</div>'
+</p>
+
+<div>Par2</div>'
         );
     }
     
@@ -289,7 +335,9 @@ Par1
 'Par1
 
 <b>Par2</b>',
-'<p>Par1</p><p><b>Par2</b></p>'
+'<p>Par1</p>
+
+<p><b>Par2</b></p>'
         );
     }
     
@@ -323,7 +371,9 @@ Par1
 '<div><div>asdf</div>
 
 <b>asdf</b></div>',
-'<div><div>asdf</div><p><b>asdf</b></p></div>'
+'<div><div>asdf</div>
+
+<p><b>asdf</b></p></div>'
         );
     }
     
@@ -354,7 +404,9 @@ Par2'
 '<div><code>bar</code> mmm
 
 <pre>asdf</pre></div>',
-'<div><p><code>bar</code> mmm</p><pre>asdf</pre></div>'
+'<div><p><code>bar</code> mmm</p>
+
+<pre>asdf</pre></div>'
         );
     }
     
@@ -363,7 +415,85 @@ Par2'
 '<div>asdf <code>bar</code> mmm
 
 <pre>asdf</pre></div>',
-'<div><p>asdf <code>bar</code> mmm</p><pre>asdf</pre></div>'
+'<div><p>asdf <code>bar</code> mmm</p>
+
+<pre>asdf</pre></div>'
+        );
+    }
+    
+    function testUpcomingTokenHasNewline() {
+        $this->assertResult(
+'<div>Test<b>foo</b>bar<b>bing</b>bang
+
+boo</div>',
+'<div><p>Test<b>foo</b>bar<b>bing</b>bang</p>
+
+<p>boo</p></div>'
+);
+    }
+    
+    function testEmptyTokenAtEndOfDiv() {
+        $this->assertResult(
+'<div><p>foo</p>
+</div>',
+'<div><p>foo</p>
+</div>'
+);
+    }
+    
+    function testEmptyDoubleLineTokenAtEndOfDiv() {
+        $this->assertResult(
+'<div><p>foo</p>
+
+</div>',
+'<div><p>foo</p>
+
+</div>'
+);
+    }
+    
+    function testTextState11Root() {
+        $this->assertResult('<div></div>   ');
+    }
+    
+    function testTextState11Element() {
+        $this->assertResult(
+"<div><div></div>
+
+</div>");
+    }
+    
+    function testTextStateLikeElementState111NoWhitespace() {
+        $this->assertResult('<div><p>P</p>Boo</div>', '<div><p>P</p>Boo</div>');
+    }
+    
+    function testElementState111NoWhitespace() {
+        $this->assertResult('<div><p>P</p><b>Boo</b></div>', '<div><p>P</p><b>Boo</b></div>');
+    }
+    
+    function testElementState133() {
+        $this->assertResult(
+"<div><b>B</b><pre>Ba</pre>
+
+Bar</div>",
+"<div><b>B</b><pre>Ba</pre>
+
+<p>Bar</p></div>"
+);
+    }
+    
+    function testElementState22() {
+        $this->assertResult(
+            '<ul><li>foo</li></ul>'
+        );
+    }
+    
+    function testElementState311() {
+        $this->assertResult(
+            '<p>Foo</p><b>Bar</b>',
+'<p>Foo</p>
+
+<p><b>Bar</b></p>'
         );
     }
     

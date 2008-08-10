@@ -72,14 +72,18 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
     function testTwoParagraphsContainingOnlyOneLink() {
         $this->assertResult(
             "http://example.com\n\nhttp://dev.example.com",
-            '<p><a href="http://example.com">http://example.com</a></p><p><a href="http://dev.example.com">http://dev.example.com</a></p>'
+'<p><a href="http://example.com">http://example.com</a></p>
+
+<p><a href="http://dev.example.com">http://dev.example.com</a></p>'
         );
     }
     
     function testParagraphNextToDivWithLinks() {
         $this->assertResult(
             'http://example.com <div>http://example.com</div>',
-            '<p><a href="http://example.com">http://example.com</a> </p><div><a href="http://example.com">http://example.com</a></div>'
+'<p><a href="http://example.com">http://example.com</a> </p>
+
+<div><a href="http://example.com">http://example.com</a></div>'
         );
     }
     
@@ -92,24 +96,50 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
     
     function testParagraphAfterLinkifiedURL() {
         $this->assertResult(
-            "http://google.com\n\n<b>b</b>",
-            "<p><a href=\"http://google.com\">http://google.com</a></p><p><b>b</b></p>"
+"http://google.com
+
+<b>b</b>",
+"<p><a href=\"http://google.com\">http://google.com</a></p>
+
+<p><b>b</b></p>"
         );
     }
     
     function testEmptyAndParagraph() {
         // This is a fairly degenerate case, but it demonstrates that
         // the two don't error out together, at least.
+        // Change this behavior!
         $this->assertResult(
-            "<p>asdf\n\nasdf<b></b></p>\n\n<p></p><i></i>",
-            "<p>asdf</p><p>asdf</p>"
+"<p>asdf
+
+asdf<b></b></p>
+
+<p></p><i></i>",
+"<p>asdf</p>
+
+<p>asdf</p>
+
+
+
+"
         );
     }
     
     function testRewindAndParagraph() {
+        // perhaps change the behavior of this?
         $this->assertResult(
-            "bar\n\n<p><i></i>\n\n</p>\n\nfoo",
-            "<p>bar</p><p>foo</p>"
+"bar
+
+<p><i></i>
+
+</p>
+
+foo",
+"<p>bar</p>
+
+<p></p>
+
+<p>foo</p>"
         );
     }
     

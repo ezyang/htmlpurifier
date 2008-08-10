@@ -35,16 +35,6 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
      */
     protected $lexer;
     
-    /**
-     * Default config to fall back on if no config is available
-     */
-    protected $config;
-    
-    /**
-     * Default context to fall back on if no context is available
-     */
-    protected $context;
-    
     public function __construct() {
         $this->lexer     = new HTMLPurifier_Lexer_DirectLex();
         parent::__construct();
@@ -88,7 +78,6 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
                 $expect = $this->generate($expect);
             }
         }
-        
         $this->assertIdentical($expect, $result);
         
     }
