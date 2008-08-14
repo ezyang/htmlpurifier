@@ -55,6 +55,10 @@ class HTMLPurifier_URIFilter_MakeAbsoluteTest extends HTMLPurifier_URIFilterHarn
         $this->assertFiltering('.', 'http://example.com/foo/');
     }
     
+    function testFilterRelativePathMultiDot() {
+        $this->assertFiltering('././foo/./bar/.././baz', 'http://example.com/foo/foo/baz');
+    }
+    
     function testFilterRelativePathWithInternalDotDot() {
         $this->assertFiltering('../baz.txt', 'http://example.com/baz.txt');
     }
