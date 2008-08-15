@@ -67,8 +67,6 @@ class HTMLPurifier_ChildDef_RequiredTest extends HTMLPurifier_ChildDefHarness
             'Out <b>Bold text</b><img />',
             'Out <b>Bold text</b>&lt;img /&gt;'
         );
-        
     }
-    
 }
 

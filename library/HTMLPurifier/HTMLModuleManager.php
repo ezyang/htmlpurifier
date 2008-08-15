@@ -63,8 +63,11 @@ class HTMLPurifier_HTMLModuleManager
         $common = array(
             'CommonAttributes', 'Text', 'Hypertext', 'List',
             'Presentation', 'Edit', 'Bdo', 'Tables', 'Image',
-            'StyleAttribute', 'Scripting', 'Object',
-            'Name' // technically legacy, but present in all the specs
+            'StyleAttribute',
+            // Unsafe:
+            'Scripting', 'Object',  'Forms',
+            // Sorta legacy, but present in strict:
+            'Name', 
         );
         $transitional = array('Legacy', 'Target');
         $xml = array('XMLCommonAttributes');

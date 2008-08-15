@@ -151,7 +151,7 @@
  </directive>
  <directive id="HTML.Trusted">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>199</line>
+   <line>202</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>233</line>
@@ -168,27 +168,27 @@
  </directive>
  <directive id="HTML.AllowedModules">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>206</line>
+   <line>209</line>
   </file>
  </directive>
  <directive id="HTML.CoreModules">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>207</line>
+   <line>210</line>
   </file>
  </directive>
  <directive id="HTML.Proprietary">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>221</line>
+   <line>224</line>
   </file>
  </directive>
  <directive id="HTML.SafeObject">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>226</line>
+   <line>229</line>
   </file>
  </directive>
  <directive id="HTML.SafeEmbed">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>229</line>
+   <line>232</line>
   </file>
  </directive>
  <directive id="Attr.IDBlacklist">

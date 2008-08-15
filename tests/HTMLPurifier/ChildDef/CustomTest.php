@@ -69,5 +69,20 @@ class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
         
     }
     
+    function testPcdata() {
+        $this->obj = new HTMLPurifier_ChildDef_Custom('#PCDATA,a');
+        $this->assertEqual($this->obj->elements, array('#PCDATA' => true, 'a' => true));
+        $this->assertResult('foo<a />');
+        $this->assertResult('<a />', false);
+    }
+    
+    function testWhitespace() {
+        $this->obj = new HTMLPurifier_ChildDef_Custom('a');
+        $this->assertEqual($this->obj->elements, array('a' => true));
+        $this->assertResult('foo<a />', false);
+        $this->assertResult('<a />');
+        $this->assertResult('   <a />');
+    }
+    
 }
 
