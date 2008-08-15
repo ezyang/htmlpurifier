@@ -69,18 +69,18 @@
  <directive id="Core.Encoding">
   <file name="HTMLPurifier/Encoder.php">
    <line>267</line>
-   <line>294</line>
+   <line>300</line>
   </file>
  </directive>
  <directive id="Test.ForceNoIconv">
   <file name="HTMLPurifier/Encoder.php">
    <line>272</line>
-   <line>302</line>
+   <line>308</line>
   </file>
  </directive>
  <directive id="Core.EscapeNonASCIICharacters">
   <file name="HTMLPurifier/Encoder.php">
-   <line>298</line>
+   <line>304</line>
   </file>
  </directive>
  <directive id="Core.MaintainLineNumbers">
@@ -154,7 +154,7 @@
    <line>199</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>238</line>
+   <line>233</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>27</line>
@@ -208,15 +208,12 @@
  </directive>
  <directive id="Core.ConvertDocumentToFragment">
   <file name="HTMLPurifier/Lexer.php">
-   <line>230</line>
+   <line>242</line>
   </file>
  </directive>
  <directive id="URI.Host">
   <file name="HTMLPurifier/URIDefinition.php">
    <line>64</line>
-  </file>
-  <file name="HTMLPurifier/URIFilter/DisableExternal.php">
-   <line>8</line>
   </file>
  </directive>
  <directive id="URI.Base">

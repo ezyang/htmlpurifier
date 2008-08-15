@@ -43,6 +43,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Prevent <![CDATA[<body></body>]]> from triggering %Core.ConvertDocumentToFragment
 - Fix bug with inline elements in blockquotes conflicting with strict doctype
 - Detect if HTML support is disabled for DOM by checking for loadHTML() method.
+- Fix bug where dots and double-dots in absolute URLs without hostname were
+  not collapsed by URIFilter_MakeAbsolute.
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind
