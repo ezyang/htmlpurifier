@@ -15,7 +15,8 @@ $messages = array(
 'Item separator last' => ' and ', // non-Harvard style
 
 'ErrorCollector: No errors' => 'No errors detected. However, because error reporting is still incomplete, there may have been errors that the error collector was not notified of; please inspect the output HTML carefully.',
-'ErrorCollector: At line' => ' at line $line',
+'ErrorCollector: At line'   => ' at line $line',
+'ErrorCollector: Incidental errors'  => 'Incidental errors',
 
 'Lexer: Unclosed comment'      => 'Unclosed comment',
 'Lexer: Unescaped lt'          => 'Unescaped less-than sign (<) should be &lt;',
@@ -52,8 +53,8 @@ $messages = array(
 );
 
 $errorNames = array(
-    E_ERROR => 'Error',
+    E_ERROR   => 'Error',
     E_WARNING => 'Warning',
-    E_NOTICE => 'Notice'
+    E_NOTICE  => 'Notice'
 );
 

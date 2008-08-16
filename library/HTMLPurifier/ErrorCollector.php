@@ -7,7 +7,18 @@
 class HTMLPurifier_ErrorCollector
 {
     
-    protected $errors = array();
+    /**
+     * Identifiers for the returned error array. These are purposely numeric
+     * so list() can be used.
+     */
+    const LINENO   = 0;
+    const SEVERITY = 1;
+    const MESSAGE  = 2;
+    const CHILDREN = 3;
+    
+    protected $errors;
+    protected $_current;
+    protected $_stacks = array(array());
     protected $locale;
     protected $generator;
     protected $context;
@@ -16,13 +27,16 @@ class HTMLPurifier_ErrorCollector
         $this->locale    =& $context->get('Locale');
         $this->generator =& $context->get('Generator');
         $this->context   = $context;
+        $this->_current  =& $this->_stacks[0];
+        $this->errors   =& $this->_stacks[0];
     }
     
     /**
      * Sends an error message to the collector for later use
-     * @param $line Integer line number, or HTMLPurifier_Token that caused error
      * @param $severity int Error severity, PHP error style (don't use E_USER_)
      * @param $msg string Error message text
+     * @param $subst1 string First substitution for $msg
+     * @param $subst2 string ...
      */
     public function send($severity, $msg) {
         
@@ -55,13 +69,65 @@ class HTMLPurifier_ErrorCollector
         
         if (!empty($subst)) $msg = strtr($msg, $subst);
         
-        $this->errors[] = array($line, $severity, $msg);
+        // (numerically indexed)
+        $this->_current[] = array(
+            self::LINENO   => $line,
+            self::SEVERITY => $severity,
+            self::MESSAGE  => $msg,
+            self::CHILDREN => array()
+        );
+    }
+    
+    /**
+     * Begins the collection of a number of sub-errors. This is useful if you
+     * are entering a function that may generate errors, but you are able
+     * to detect the overall state afterwards.
+     */
+    public function start() {
+        $this->_stacks[] = array();
+        $this->_resetCurrent();
+    }
+    
+    /**
+     * Terminates the collection of sub-errors, interface is otherwise identical
+     * to send(). Any sub-errors will be registered as children (3) to this
+     * error.
+     * 
+     * @param $severity int Error severity
+     * @param $msg string Error message text
+     * @param $subst1 string First substitution for $msg
+     * @param $subst2 string ...
+     * 
+     * @note If end() is called with no parameters, it is quiet unless there
+     *       were sub-errors.
+     */
+    public function end() {
+        $stack = array_pop($this->_stacks);
+        $this->_resetCurrent();
+        $args = func_get_args();
+        if ($args) {
+            call_user_func_array(array($this, 'send'), $args);
+        } elseif ($stack) {
+            $this->send(E_NOTICE, 'ErrorCollector: Incidental errors');
+        }
+        if ($stack) {
+            $this->_current[count($this->_current) - 1][3] = $stack;
+        }
+    }
+    
+    /**
+     * Resets the _current member variable to the top of the stacks; i.e.
+     * the active set of errors being collected.
+     */
+    protected function _resetCurrent() {
+        $this->_current =& $this->_stacks[count($this->_stacks) - 1];
     }
     
     /**
      * Retrieves raw error data for custom formatter to use
-     * @param List of arrays in format of array(Error message text,
-     *        token that caused error, tokens surrounding token)
+     * @param List of arrays in format of array(line of error,
+     *        error severity, error message,
+     *        recursive sub-errors array)
      */
     public function getRaw() {
         return $this->errors;
@@ -70,11 +136,12 @@ class HTMLPurifier_ErrorCollector
     /**
      * Default HTML formatting implementation for error messages
      * @param $config Configuration array, vital for HTML output nature
+     * @param $errors Errors array to display; used for recursion.
      */
-    public function getHTMLFormatted($config) {
+    public function getHTMLFormatted($config, $errors = null) {
         $ret = array();
         
-        $errors = $this->errors;
+        if ($errors === null) $errors = $this->errors;
         
         // sort error array by line
         // line numbers are enabled if they aren't explicitly disabled
@@ -83,15 +150,15 @@ class HTMLPurifier_ErrorCollector
             $lines          = array();
             $original_order = array();
             foreach ($errors as $i => $error) {
-                $has_line[] = (int) (bool) $error[0];
-                $lines[] = $error[0];
+                $has_line[] = (int) (bool) $error[self::LINENO];
+                $lines[] = $error[self::LINENO];
                 $original_order[] = $i;
             }
             array_multisort($has_line, SORT_DESC, $lines, SORT_ASC, $original_order, SORT_ASC, $errors);
         }
         
         foreach ($errors as $error) {
-            list($line, $severity, $msg) = $error;
+            list($line, $severity, $msg, $children) = $error;
             $string = '';
             $string .= '<strong>' . $this->locale->getErrorName($severity) . '</strong>: ';
             $string .= $this->generator->escape($msg); 
@@ -100,6 +167,9 @@ class HTMLPurifier_ErrorCollector
                 // textarea to skip to the specified line
                 $string .= $this->locale->formatMessage(
                     'ErrorCollector: At line', array('line' => $line));
+            }
+            if ($children) {
+                $string .= $this->getHTMLFormatted($config, $children);
             }
             $ret[] = $string;
         }

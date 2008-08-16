@@ -3,130 +3,175 @@
 class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
 {
     
+    protected $language, $generator, $line;
+    protected $collector;
+    
     public function setup() {
         generate_mock_once('HTMLPurifier_Language');
         generate_mock_once('HTMLPurifier_Generator');
         parent::setup();
+        $this->language  = new HTMLPurifier_LanguageMock();
+        $this->language->setReturnValue('getErrorName',  'Error',   array(E_ERROR));
+        $this->language->setReturnValue('getErrorName',  'Warning', array(E_WARNING));
+        $this->language->setReturnValue('getErrorName',  'Notice',  array(E_NOTICE));
+        // this might prove to be troublesome if we need to set config
+        $this->generator = new HTMLPurifier_Generator($this->config, $this->context);
+        $this->line = false;
+        $this->context->register('Locale', $this->language);
+        $this->context->register('CurrentLine', $this->line);
+        $this->context->register('Generator', $this->generator);
+        $this->collector = new HTMLPurifier_ErrorCollector($this->context);
     }
     
     function test() {
         
-        $language = new HTMLPurifier_LanguageMock();
-        $language->setReturnValue('getErrorName', 'Error', array(E_ERROR));
-        $language->setReturnValue('getErrorName', 'Warning', array(E_WARNING));
-        $language->setReturnValue('getMessage', 'Message 1', array('message-1'));
-        $language->setReturnValue('formatMessage', 'Message 2', array('message-2', array(1 => 'param')));
+        $language = $this->language;
+        $language->setReturnValue('getMessage',    'Message 1',   array('message-1'));
+        $language->setReturnValue('formatMessage', 'Message 2',   array('message-2', array(1 => 'param')));
         $language->setReturnValue('formatMessage', ' at line 23', array('ErrorCollector: At line', array('line' => 23)));
-        $language->setReturnValue('formatMessage', ' at line 3', array('ErrorCollector: At line', array('line' => 3)));
+        $language->setReturnValue('formatMessage', ' at line 3',  array('ErrorCollector: At line', array('line' => 3)));
         
-        $line = false;
+        $this->line = 23;
+        $this->collector->send(E_ERROR, 'message-1');
         
-        $this->context->register('Locale', $language);
-        $this->context->register('CurrentLine', $line);
-        
-        $generator = new HTMLPurifier_Generator($this->config, $this->context);
-        $this->context->register('Generator', $generator);
-        
-        $collector = new HTMLPurifier_ErrorCollector($this->context);
-        
-        $line = 23;
-        $collector->send(E_ERROR, 'message-1');
-        
-        $line = 3;
-        $collector->send(E_WARNING, 'message-2', 'param');
+        $this->line = 3;
+        $this->collector->send(E_WARNING, 'message-2', 'param');
         
         $result = array(
-            0 => array(23, E_ERROR, 'Message 1'),
-            1 => array(3, E_WARNING, 'Message 2')
+            0 => array(23, E_ERROR, 'Message 1', array()),
+            1 => array(3, E_WARNING, 'Message 2', array())
         );
         
-        $this->assertIdentical($collector->getRaw(), $result);
+        $this->assertIdentical($this->collector->getRaw(), $result);
         
         $formatted_result = 
             '<ul><li><strong>Warning</strong>: Message 2 at line 3</li>'.
             '<li><strong>Error</strong>: Message 1 at line 23</li></ul>';
         
-        $config = HTMLPurifier_Config::create(array('Core.MaintainLineNumbers' => true));
-        
-        $this->assertIdentical($collector->getHTMLFormatted($this->config), $formatted_result);
+        $this->assertIdentical($this->collector->getHTMLFormatted($this->config), $formatted_result);
         
     }
     
     function testNoErrors() {
-        $language = new HTMLPurifier_LanguageMock();
-        $language->setReturnValue('getMessage', 'No errors', array('ErrorCollector: No errors'));
-        $this->context->register('Locale', $language);
+        $this->language->setReturnValue('getMessage', 'No errors', array('ErrorCollector: No errors'));
         
-        $generator = new HTMLPurifier_Generator($this->config, $this->context);
-        $this->context->register('Generator', $generator);
-        
-        $collector = new HTMLPurifier_ErrorCollector($this->context);
         $formatted_result = '<p>No errors</p>';
-        $this->assertIdentical($collector->getHTMLFormatted($this->config), $formatted_result);
+        $this->assertIdentical(
+            $this->collector->getHTMLFormatted($this->config),
+            $formatted_result
+        );
     }
     
     function testNoLineNumbers() {
-        $language = new HTMLPurifier_LanguageMock();
-        $language->setReturnValue('getMessage', 'Message 1', array('message-1'));
-        $language->setReturnValue('getMessage', 'Message 2', array('message-2'));
-        $language->setReturnValue('getErrorName', 'Error', array(E_ERROR));
-        $this->context->register('Locale', $language);
+        $this->language->setReturnValue('getMessage', 'Message 1', array('message-1'));
+        $this->language->setReturnValue('getMessage', 'Message 2', array('message-2'));
         
-        $generator = new HTMLPurifier_Generator($this->config, $this->context);
-        $this->context->register('Generator', $generator);
-        
-        $collector = new HTMLPurifier_ErrorCollector($this->context);
-        $collector->send(E_ERROR, 'message-1');
-        $collector->send(E_ERROR, 'message-2');
+        $this->collector->send(E_ERROR, 'message-1');
+        $this->collector->send(E_ERROR, 'message-2');
         
         $result = array(
-            0 => array(null, E_ERROR, 'Message 1'),
-            1 => array(null, E_ERROR, 'Message 2')
+            0 => array(false, E_ERROR, 'Message 1', array()),
+            1 => array(false, E_ERROR, 'Message 2', array())
         );
-        $this->assertIdentical($collector->getRaw(), $result);
+        $this->assertIdentical($this->collector->getRaw(), $result);
         
         $formatted_result = 
             '<ul><li><strong>Error</strong>: Message 1</li>'.
             '<li><strong>Error</strong>: Message 2</li></ul>';
-        $this->assertIdentical($collector->getHTMLFormatted($this->config), $formatted_result);
+        $this->assertIdentical($this->collector->getHTMLFormatted($this->config), $formatted_result);
     }
     
     function testContextSubstitutions() {
         
-        $language = new HTMLPurifier_LanguageMock();
-        $this->context->register('Locale', $language);
-        
-        $generator = new HTMLPurifier_Generator($this->config, $this->context);
-        $this->context->register('Generator', $generator);
-        
         $current_token = false;
         $this->context->register('CurrentToken', $current_token);
         
-        $collector = new HTMLPurifier_ErrorCollector($this->context);
-        
         // 0
         $current_token = new HTMLPurifier_Token_Start('a', array('href' => 'http://example.com'), 32);
-        $language->setReturnValue('formatMessage', 'Token message',
+        $this->language->setReturnValue('formatMessage', 'Token message',
           array('message-data-token', array('CurrentToken' => $current_token)));
-        $collector->send(E_NOTICE, 'message-data-token');
+        $this->collector->send(E_NOTICE, 'message-data-token');
         
         $current_attr  = 'href';
-        $language->setReturnValue('formatMessage', '$CurrentAttr.Name => $CurrentAttr.Value',
+        $this->language->setReturnValue('formatMessage', '$CurrentAttr.Name => $CurrentAttr.Value',
           array('message-attr', array('CurrentToken' => $current_token)));
         
         // 1
-        $collector->send(E_NOTICE, 'message-attr'); // test when context isn't available
+        $this->collector->send(E_NOTICE, 'message-attr'); // test when context isn't available
         
         // 2
         $this->context->register('CurrentAttr', $current_attr);
-        $collector->send(E_NOTICE, 'message-attr');
+        $this->collector->send(E_NOTICE, 'message-attr');
         
         $result = array(
-            0 => array(32, E_NOTICE, 'Token message'),
-            1 => array(32, E_NOTICE, '$CurrentAttr.Name => $CurrentAttr.Value'),
-            2 => array(32, E_NOTICE, 'href => http://example.com')
+            0 => array(32, E_NOTICE, 'Token message', array()),
+            1 => array(32, E_NOTICE, '$CurrentAttr.Name => $CurrentAttr.Value', array()),
+            2 => array(32, E_NOTICE, 'href => http://example.com', array())
         );
-        $this->assertIdentical($collector->getRaw(), $result);
+        $this->assertIdentical($this->collector->getRaw(), $result);
+        
+    }
+    
+    function testNestedErrors() {
+        $this->language->setReturnValue('getMessage', 'Message 1',   array('message-1'));
+        $this->language->setReturnValue('getMessage', 'Message 2',   array('message-2'));
+        $this->language->setReturnValue('formatMessage', 'End Message', array('end-message', array(1 => 'param')));
+        $this->language->setReturnValue('formatMessage', ' at line 4', array('ErrorCollector: At line', array('line' => 4)));
+        
+        $this->line = 4;
+        $this->collector->start();
+        $this->collector->send(E_WARNING, 'message-1');
+        $this->collector->send(E_NOTICE,  'message-2');
+        $this->collector->end(E_NOTICE, 'end-message', 'param');
+        
+        $expect = array(
+            0 => array(4, E_NOTICE, 'End Message', array(
+                0 => array(4, E_WARNING, 'Message 1', array()),
+                1 => array(4, E_NOTICE,  'Message 2', array()),
+            )),
+        );
+        $result = $this->collector->getRaw();
+        $this->assertIdentical($result, $expect);
+        
+        $formatted_expect =
+            '<ul><li><strong>Notice</strong>: End Message at line 4<ul>'.
+                '<li><strong>Warning</strong>: Message 1 at line 4</li>'.
+                '<li><strong>Notice</strong>: Message 2 at line 4</li></ul>'.
+            '</li></ul>';
+        $formatted_result = $this->collector->getHTMLFormatted($this->config);
+        $this->assertIdentical($formatted_result, $formatted_expect);
+        
+    }
+    
+    function testNestedErrorsQuiet() {
+        
+        $this->language->setReturnValue('getMessage', 'Incidental errors', array('ErrorCollector: Incidental errors'));
+        $this->language->setReturnValue('getMessage', 'Message', array('message'));
+        $this->language->setReturnValue('formatMessage', ' at line 4', array('ErrorCollector: At line', array('line' => 4)));
+        
+        $this->line = 4;
+        $this->collector->start();
+        $this->collector->send(E_WARNING, 'message');
+        $this->collector->end();
+        
+        $expect = array(
+            0 => array(4, E_NOTICE, 'Incidental errors', array(
+                0 => array(4, E_WARNING, 'Message', array()),
+            )),
+        );
+        $result = $this->collector->getRaw();
+        $this->assertIdentical($result, $expect);
+        
+    }
+    
+    function testNestedErrorsReallyQuiet() {
+        
+        $this->collector->start();
+        $this->collector->end();
+        
+        $expect = array();
+        $result = $this->collector->getRaw();
+        $this->assertIdentical($result, $expect);
         
     }
     

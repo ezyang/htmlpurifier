@@ -85,7 +85,7 @@
  </directive>
  <directive id="Core.MaintainLineNumbers">
   <file name="HTMLPurifier/ErrorCollector.php">
-   <line>81</line>
+   <line>148</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>82</line>
