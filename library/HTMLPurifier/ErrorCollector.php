@@ -25,10 +25,9 @@ class HTMLPurifier_ErrorCollector
     
     public function __construct($context) {
         $this->locale    =& $context->get('Locale');
-        $this->generator =& $context->get('Generator');
         $this->context   = $context;
         $this->_current  =& $this->_stacks[0];
-        $this->errors   =& $this->_stacks[0];
+        $this->errors    =& $this->_stacks[0];
     }
     
     /**
@@ -141,6 +140,7 @@ class HTMLPurifier_ErrorCollector
     public function getHTMLFormatted($config, $errors = null) {
         $ret = array();
         
+        $generator = new HTMLPurifier_Generator($config, $this->context);
         if ($errors === null) $errors = $this->errors;
         
         // sort error array by line
@@ -161,7 +161,7 @@ class HTMLPurifier_ErrorCollector
             list($line, $severity, $msg, $children) = $error;
             $string = '';
             $string .= '<strong>' . $this->locale->getErrorName($severity) . '</strong>: ';
-            $string .= $this->generator->escape($msg); 
+            $string .= $generator->escape($msg); 
             if ($line) {
                 // have javascript link generation that causes 
                 // textarea to skip to the specified line
