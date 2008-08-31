@@ -216,9 +216,6 @@ class HTMLPurifier_HTMLModuleManager
             }
         }
         
-        // merge in custom modules
-        $modules = array_merge($modules, $this->userModules);
-        
         // add proprietary module (this gets special treatment because
         // it is completely removed from doctypes, etc.)
         if ($config->get('HTML', 'Proprietary')) {
@@ -232,6 +229,9 @@ class HTMLPurifier_HTMLModuleManager
         if ($config->get('HTML', 'SafeEmbed')) {
             $modules[] = 'SafeEmbed';
         }
+        
+        // merge in custom modules
+        $modules = array_merge($modules, $this->userModules);
         
         foreach ($modules as $module) {
             $this->processModule($module);
