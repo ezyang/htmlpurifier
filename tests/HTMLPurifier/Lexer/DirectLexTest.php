@@ -75,6 +75,8 @@ class HTMLPurifier_Lexer_DirectLexTest extends HTMLPurifier_Harness
     
     function testLineNumbers() {
         
+        //       .  .     .     .  .     .     .           .      .             .
+        //       01234567890123 01234567890123 0123456789012345 0123456789012   012345
         $html = "<b>Line 1</b>\n<i>Line 2</i>\nStill Line 2<br\n/>Now Line 4\n\n<br />";
         
         $expect = array(
@@ -106,17 +108,17 @@ class HTMLPurifier_Lexer_DirectLexTest extends HTMLPurifier_Harness
         $config  = HTMLPurifier_Config::create(array(
             'Core.MaintainLineNumbers' => true
         ));
-        $expect[0]->line = 1;
-        $expect[1]->line = 1;
-        $expect[2]->line = 1;
-        $expect[3]->line = 1;
-        $expect[4]->line = 2;
-        $expect[5]->line = 2;
-        $expect[6]->line = 2;
-        $expect[7]->line = 2;
-        $expect[8]->line = 3;
-        $expect[9]->line = 4;
-        $expect[10]->line = 6;
+        $expect[0]->position(1, 0);
+        $expect[1]->position(1, 3);
+        $expect[2]->position(1, 9);
+        $expect[3]->position(2, -1);
+        $expect[4]->position(2, 0);
+        $expect[5]->position(2, 3);
+        $expect[6]->position(2, 9);
+        $expect[7]->position(3, -1);
+        $expect[8]->position(3, 12);
+        $expect[9]->position(4, 2);
+        $expect[10]->position(6, 0);
         
         $output = $this->DirectLex->tokenizeHTML($html, $config, $context);
         $this->assertIdentical($output, $expect);

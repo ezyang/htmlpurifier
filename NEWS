@@ -31,6 +31,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   useless, but as a bonus, the test suite and handling of edge cases is also
   improved.
 ! Experimental implementation of forms for %HTML.Trusted
+! Track column numbers when maintain line numbers is on
 - Fix two bugs in %URI.MakeAbsolute; one involving empty paths in base URLs,
   the other involving an undefined $is_folder error.
 - Throw error when %Core.Encoding is set to a spurious value. Previously,
