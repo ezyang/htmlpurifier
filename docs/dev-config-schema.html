@@ -239,15 +239,15 @@ Test.Example</pre>
       object; users have a little bit of leeway when setting configuration
       values (for example, a lookup value can be specified as a list;
       HTML Purifier will flip it as necessary.) These types are defined
-      in <a href="http://htmlpurifier.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/VarParser.php">
+      in <a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/VarParser.php">
       library/HTMLPurifier/VarParser.php</a>.
     </p>
     
     <p>
       For more information on what values are allowed, and how they are parsed,
-      consult <a href="http://htmlpurifier.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php">
+      consult <a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php">
       library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php</a>, as well
-      as <a href="http://htmlpurifier.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/ConfigSchema/Interchange/Directive.php">
+      as <a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/ConfigSchema/Interchange/Directive.php">
       library/HTMLPurifier/ConfigSchema/Interchange/Directive.php</a> for
       the semantics of the parsed values.
     </p>
@@ -272,7 +272,7 @@ Test.Example</pre>
     
     <p>
       All directive files go through a rigorous validation process
-      through <a href="http://htmlpurifier.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/ConfigSchema/">
+      through <a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/ConfigSchema/Validator.php">
       library/HTMLPurifier/ConfigSchema/Validator.php</a>, as well
       as some basic checks during building. While
       listing every error out here is out-of-scope for this document, we
@@ -339,7 +339,7 @@ Test.Example</pre>
       The most difficult part is translating the Interchange member variable (valueAliases)
       into a directive file key (VALUE-ALIASES), but there's a one-to-one
       correspondence currently. If the two formats diverge, any discrepancies
-      will be described in <a href="http://htmlpurifier.org/svnroot/htmlpurifier/trunk/library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php">
+      will be described in <a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php">
       library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php</a>.
     </p>
     
@@ -369,8 +369,6 @@ Test.Example</pre>
       which <code>HTMLPurifier_Config</code> uses to validate its incoming
       data. There is also an XML serializer, which is used to build documentation.
     </p>
-    
-    <div id="version">$Id$</div>
 
   </body>
 </html>
