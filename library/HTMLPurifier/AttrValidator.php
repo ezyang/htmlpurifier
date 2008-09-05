@@ -49,22 +49,18 @@ class HTMLPurifier_AttrValidator
         // do global transformations (pre)
         // nothing currently utilizes this
         foreach ($definition->info_attr_transform_pre as $transform) {
-            if ($e) $e->start();
             $attr = $transform->transform($o = $attr, $config, $context);
             if ($e) {
-                if ($attr != $o) $e->end(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
-                else $e->end();
+                if ($attr != $o) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
             }
         }
         
         // do local transformations only applicable to this element (pre)
         // ex. <p align="right"> to <p style="text-align:right;">
         foreach ($definition->info[$token->name]->attr_transform_pre as $transform) {
-            if ($e) $e->start();
             $attr = $transform->transform($o = $attr, $config, $context);
             if ($e) {
-                if ($attr != $o) $e->end(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
-                else $e->end();
+                if ($attr != $o) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
             }
         }
         
@@ -80,7 +76,6 @@ class HTMLPurifier_AttrValidator
         // Watch out for name collisions: $key has previously been used
         foreach ($attr as $attr_key => $value) {
             
-            if ($e) $e->start();
             // call the definition
             if ( isset($defs[$attr_key]) ) {
                 // there is a local definition defined
@@ -112,7 +107,7 @@ class HTMLPurifier_AttrValidator
             if ($result === false || $result === null) {
                 // this is a generic error message that should replaced
                 // with more specific ones when possible
-                if ($e) $e->end(E_ERROR, 'AttrValidator: Attribute removed');
+                if ($e) $e->send(E_ERROR, 'AttrValidator: Attribute removed');
                 
                 // remove the attribute
                 unset($attr[$attr_key]);
@@ -123,9 +118,8 @@ class HTMLPurifier_AttrValidator
                 
                 // simple substitution
                 $attr[$attr_key] = $result;
-                if ($e) $e->end();
             } else {
-                if ($e) $e->end();
+                // nothing happens
             }
             
             // we'd also want slightly more complicated substitution
@@ -141,21 +135,17 @@ class HTMLPurifier_AttrValidator
         
         // global (error reporting untested)
         foreach ($definition->info_attr_transform_post as $transform) {
-            if ($e) $e->start();
             $attr = $transform->transform($o = $attr, $config, $context);
             if ($e) {
-                if ($attr != $o) $e->end(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
-                else $e->end();
+                if ($attr != $o) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
             }
         }
         
         // local (error reporting untested)
         foreach ($definition->info[$token->name]->attr_transform_post as $transform) {
-            if ($e) $e->start();
             $attr = $transform->transform($o = $attr, $config, $context);
             if ($e) {
-                if ($attr != $o) $e->end(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
-                else $e->end();
+                if ($attr != $o) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
             }
         }
         

@@ -112,6 +112,7 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         
     }
     
+    /*
     function testNestedErrors() {
         $this->language->setReturnValue('getMessage', 'Message 1',   array('message-1'));
         $this->language->setReturnValue('getMessage', 'Message 2',   array('message-2'));
@@ -142,38 +143,7 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         $this->assertIdentical($formatted_result, $formatted_expect);
         
     }
-    
-    function testNestedErrorsQuiet() {
-        
-        $this->language->setReturnValue('getMessage', 'Incidental errors', array('ErrorCollector: Incidental errors'));
-        $this->language->setReturnValue('getMessage', 'Message', array('message'));
-        $this->language->setReturnValue('formatMessage', ' at line 4', array('ErrorCollector: At line', array('line' => 4)));
-        
-        $this->line = 4;
-        $this->collector->start();
-        $this->collector->send(E_WARNING, 'message');
-        $this->collector->end();
-        
-        $expect = array(
-            0 => array(4, E_NOTICE, 'Incidental errors', array(
-                0 => array(4, E_WARNING, 'Message', array()),
-            )),
-        );
-        $result = $this->collector->getRaw();
-        $this->assertIdentical($result, $expect);
-        
-    }
-    
-    function testNestedErrorsReallyQuiet() {
-        
-        $this->collector->start();
-        $this->collector->end();
-        
-        $expect = array();
-        $result = $this->collector->getRaw();
-        $this->assertIdentical($result, $expect);
-        
-    }
+    */
     
 }
 

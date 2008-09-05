@@ -78,51 +78,6 @@ class HTMLPurifier_ErrorCollector
     }
     
     /**
-     * Begins the collection of a number of sub-errors. This is useful if you
-     * are entering a function that may generate errors, but you are able
-     * to detect the overall state afterwards.
-     */
-    public function start() {
-        $this->_stacks[] = array();
-        $this->_resetCurrent();
-    }
-    
-    /**
-     * Terminates the collection of sub-errors, interface is otherwise identical
-     * to send(). Any sub-errors will be registered as children (3) to this
-     * error.
-     * 
-     * @param $severity int Error severity
-     * @param $msg string Error message text
-     * @param $subst1 string First substitution for $msg
-     * @param $subst2 string ...
-     * 
-     * @note If end() is called with no parameters, it is quiet unless there
-     *       were sub-errors.
-     */
-    public function end() {
-        $stack = array_pop($this->_stacks);
-        $this->_resetCurrent();
-        $args = func_get_args();
-        if ($args) {
-            call_user_func_array(array($this, 'send'), $args);
-        } elseif ($stack) {
-            $this->send(E_NOTICE, 'ErrorCollector: Incidental errors');
-        }
-        if ($stack) {
-            $this->_current[count($this->_current) - 1][3] = $stack;
-        }
-    }
-    
-    /**
-     * Resets the _current member variable to the top of the stacks; i.e.
-     * the active set of errors being collected.
-     */
-    protected function _resetCurrent() {
-        $this->_current =& $this->_stacks[count($this->_stacks) - 1];
-    }
-    
-    /**
      * Retrieves raw error data for custom formatter to use
      * @param List of arrays in format of array(line of error,
      *        error severity, error message,
