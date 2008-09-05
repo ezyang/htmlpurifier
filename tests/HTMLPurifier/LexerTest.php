@@ -29,6 +29,25 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
         $this->assertIsA($lexer, 'HTMLPurifier_Lexer_DirectLex');
     }
     
+    function test_create_objectLexerImpl() {
+        $this->config->set('Core', 'LexerImpl', new HTMLPurifier_Lexer_DirectLex());
+        $lexer = HTMLPurifier_Lexer::create($this->config);
+        $this->assertIsA($lexer, 'HTMLPurifier_Lexer_DirectLex');
+    }
+    
+    function test_create_unknownLexer() {
+        $this->config->set('Core', 'LexerImpl', 'AsdfAsdf');
+        $this->expectException(new HTMLPurifier_Exception('Cannot instantiate unrecognized Lexer type AsdfAsdf'));
+        HTMLPurifier_Lexer::create($this->config);
+    }
+    
+    function test_create_incompatibleLexer() {
+        $this->config->set('Core', 'LexerImpl', 'DOMLex');
+        $this->config->set('Core', 'MaintainLineNumbers', true);
+        $this->expectException(new HTMLPurifier_Exception('Cannot use lexer that does not support line numbers with Core.MaintainLineNumbers or Core.CollectErrors (use DirectLex instead)'));
+        HTMLPurifier_Lexer::create($this->config);
+    }
+    
     // HTMLPurifier_Lexer->parseData() -----------------------------------------
     
     function assertParseData($input, $expect = true) {

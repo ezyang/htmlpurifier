@@ -13,6 +13,8 @@
 class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
 {
     
+    public $tracksLineNumbers = true;
+    
     /**
      * Whitespace characters for str(c)spn.
      */
