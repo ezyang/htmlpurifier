@@ -41,6 +41,7 @@ require 'HTMLPurifier/Encoder.php';
 require 'HTMLPurifier/EntityLookup.php';
 require 'HTMLPurifier/EntityParser.php';
 require 'HTMLPurifier/ErrorCollector.php';
+require 'HTMLPurifier/ErrorStruct.php';
 require 'HTMLPurifier/Exception.php';
 require 'HTMLPurifier/Filter.php';
 require 'HTMLPurifier/Generator.php';

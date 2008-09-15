@@ -5,12 +5,12 @@
    <line>131</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>85</line>
+   <line>81</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
-   <line>50</line>
-   <line>62</line>
-   <line>319</line>
+   <line>53</line>
+   <line>73</line>
+   <line>348</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>47</line>
@@ -83,17 +83,6 @@
    <line>304</line>
   </file>
  </directive>
- <directive id="Core.MaintainLineNumbers">
-  <file name="HTMLPurifier/ErrorCollector.php">
-   <line>148</line>
-  </file>
-  <file name="HTMLPurifier/Lexer.php">
-   <line>82</line>
-  </file>
-  <file name="HTMLPurifier/Lexer/DirectLex.php">
-   <line>45</line>
-  </file>
- </directive>
  <directive id="Output.CommentScriptContents">
   <file name="HTMLPurifier/Generator.php">
    <line>45</line>
@@ -154,13 +143,13 @@
    <line>202</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>233</line>
+   <line>252</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>27</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
-   <line>34</line>
+   <line>36</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>23</line>
@@ -178,17 +167,17 @@
  </directive>
  <directive id="HTML.Proprietary">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>224</line>
+   <line>221</line>
   </file>
  </directive>
  <directive id="HTML.SafeObject">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>229</line>
+   <line>226</line>
   </file>
  </directive>
  <directive id="HTML.SafeEmbed">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>232</line>
+   <line>229</line>
   </file>
  </directive>
  <directive id="Attr.IDBlacklist">
@@ -203,12 +192,20 @@
  </directive>
  <directive id="Core.LexerImpl">
   <file name="HTMLPurifier/Lexer.php">
-   <line>70</line>
+   <line>76</line>
+  </file>
+ </directive>
+ <directive id="Core.MaintainLineNumbers">
+  <file name="HTMLPurifier/Lexer.php">
+   <line>80</line>
+  </file>
+  <file name="HTMLPurifier/Lexer/DirectLex.php">
+   <line>48</line>
   </file>
  </directive>
  <directive id="Core.ConvertDocumentToFragment">
   <file name="HTMLPurifier/Lexer.php">
-   <line>242</line>
+   <line>261</line>
   </file>
  </directive>
  <directive id="URI.Host">
@@ -361,7 +358,7 @@
  </directive>
  <directive id="Core.DirectLexLineNumberSyncInterval">
   <file name="HTMLPurifier/Lexer/DirectLex.php">
-   <line>59</line>
+   <line>70</line>
   </file>
  </directive>
  <directive id="Core.EscapeInvalidTags">

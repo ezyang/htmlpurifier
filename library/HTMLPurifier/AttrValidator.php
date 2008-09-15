@@ -35,8 +35,8 @@ class HTMLPurifier_AttrValidator
         if (!$current_token) $context->register('CurrentToken', $token);
         
         if (
-          !$token instanceof HTMLPurifier_Token_Start &&
-          !$token instanceof HTMLPurifier_Token_Empty
+            !$token instanceof HTMLPurifier_Token_Start &&
+            !$token instanceof HTMLPurifier_Token_Empty
         ) return $token;
         
         // create alias to global definition array, see also $defs

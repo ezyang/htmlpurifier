@@ -23,6 +23,8 @@ class HTMLPurifier_ErrorCollector
     protected $generator;
     protected $context;
     
+    protected $lines = array();
+    
     public function __construct($context) {
         $this->locale    =& $context->get('Locale');
         $this->context   = $context;
@@ -48,6 +50,7 @@ class HTMLPurifier_ErrorCollector
         
         $token = $this->context->get('CurrentToken', true);
         $line  = $token ? $token->line : $this->context->get('CurrentLine', true);
+        $col   = $token ? $token->col  : $this->context->get('CurrentCol',  true);
         $attr  = $this->context->get('CurrentAttr', true);
         
         // perform special substitutions, also add custom parameters
@@ -69,12 +72,58 @@ class HTMLPurifier_ErrorCollector
         if (!empty($subst)) $msg = strtr($msg, $subst);
         
         // (numerically indexed)
-        $this->_current[] = array(
+        $error = array(
             self::LINENO   => $line,
             self::SEVERITY => $severity,
             self::MESSAGE  => $msg,
             self::CHILDREN => array()
         );
+        $this->_current[] = $error;
+        
+        
+        // NEW CODE BELOW ...
+        
+        $struct = null;
+        // Top-level errors are either:
+        //  TOKEN type, if $value is set appropriately, or
+        //  "syntax" type, if $value is null
+        $new_struct = new HTMLPurifier_ErrorStruct();
+        $new_struct->type = HTMLPurifier_ErrorStruct::TOKEN;
+        if ($token) $new_struct->value = clone $token;
+        if (is_int($line) && is_int($col)) {
+            if (isset($this->lines[$line][$col])) {
+                $struct = $this->lines[$line][$col];
+            } else {
+                $struct = $this->lines[$line][$col] = $new_struct;
+            }
+            // These ksorts may present a performance problem
+            ksort($this->lines[$line], SORT_NUMERIC);
+        } else {
+            if (isset($this->lines[-1])) {
+                $struct = $this->lines[-1];
+            } else {
+                $struct = $this->lines[-1] = $new_struct;
+            }
+        }
+        ksort($this->lines, SORT_NUMERIC);
+        
+        // Now, check if we need to operate on a lower structure
+        if (!empty($attr)) {
+            $struct = $struct->getChild(HTMLPurifier_ErrorStruct::ATTR, $attr);
+            if (!$struct->value) {
+                $struct->value = array($attr, 'PUT VALUE HERE');
+            }
+        }
+        if (!empty($cssprop)) {
+            $struct = $struct->getChild(HTMLPurifier_ErrorStruct::CSSPROP, $cssprop);
+            if (!$struct->value) {
+                // if we tokenize CSS this might be a little more difficult to do
+                $struct->value = array($cssprop, 'PUT VALUE HERE');
+            }
+        }
+        
+        // Ok, structs are all setup, now time to register the error
+        $struct->addError($severity, $msg);
     }
     
     /**
@@ -95,38 +144,20 @@ class HTMLPurifier_ErrorCollector
     public function getHTMLFormatted($config, $errors = null) {
         $ret = array();
         
-        $generator = new HTMLPurifier_Generator($config, $this->context);
+        $this->generator = new HTMLPurifier_Generator($config, $this->context);
         if ($errors === null) $errors = $this->errors;
         
-        // sort error array by line
-        // line numbers are enabled if they aren't explicitly disabled
-        if ($config->get('Core', 'MaintainLineNumbers') !== false) {
-            $has_line       = array();
-            $lines          = array();
-            $original_order = array();
-            foreach ($errors as $i => $error) {
-                $has_line[] = (int) (bool) $error[self::LINENO];
-                $lines[] = $error[self::LINENO];
-                $original_order[] = $i;
-            }
-            array_multisort($has_line, SORT_DESC, $lines, SORT_ASC, $original_order, SORT_ASC, $errors);
-        }
+        // 'At line' message needs to be removed
         
-        foreach ($errors as $error) {
-            list($line, $severity, $msg, $children) = $error;
-            $string = '';
-            $string .= '<strong>' . $this->locale->getErrorName($severity) . '</strong>: ';
-            $string .= $generator->escape($msg); 
-            if ($line) {
-                // have javascript link generation that causes 
-                // textarea to skip to the specified line
-                $string .= $this->locale->formatMessage(
-                    'ErrorCollector: At line', array('line' => $line));
+        // generation code for new structure goes here. It needs to be recursive.
+        foreach ($this->lines as $line => $col_array) {
+            if ($line == -1) continue;
+            foreach ($col_array as $col => $struct) {
+                $this->_renderStruct($ret, $struct, $line, $col);
             }
-            if ($children) {
-                $string .= $this->getHTMLFormatted($config, $children);
-            }
-            $ret[] = $string;
+        }
+        if (isset($this->lines[-1])) {
+            $this->_renderStruct($ret, $this->lines[-1]);
         }
         
         if (empty($errors)) {
@@ -135,6 +166,42 @@ class HTMLPurifier_ErrorCollector
             return '<ul><li>' . implode('</li><li>', $ret) . '</li></ul>';
         }
         
+    }
+    
+    private function _renderStruct(&$ret, $struct, $line = null, $col = null) {
+        $stack = array($struct);
+        $context_stack = array(array());
+        while ($current = array_pop($stack)) {
+            $context = array_pop($context_stack);
+            foreach ($current->errors as $error) {
+                list($severity, $msg) = $error;
+                $string = '';
+                $string .= '<div>';
+                // W3C uses an icon to indicate the severity of the error.
+                $error = $this->locale->getErrorName($severity);
+                $string .= "<span class=\"error e$severity\"><strong>$error</strong></span> ";
+                if (!is_null($line) && !is_null($col)) {
+                    $string .= "<em class=\"location\">Line $line, Column $col: </em> ";
+                } else {
+                    $string .= '<em class="location">End of Document: </em> ';
+                }
+                $string .= '<strong class="description">' . $this->generator->escape($msg) . '</strong> ';
+                $string .= '</div>';
+                // Here, have a marker for the character on the column appropriate.
+                // Be sure to clip extremely long lines.
+                //$string .= '<pre>';
+                //$string .= '';
+                //$string .= '</pre>';
+                $ret[] = $string;
+            }
+            foreach ($current->children as $type => $array) {
+                $context[] = $current;
+                $stack = array_merge($stack, array_reverse($array, true));
+                for ($i = count($array); $i > 0; $i--) {
+                    $context_stack[] = $context;
+                }
+            }
+        }
     }
     
 }

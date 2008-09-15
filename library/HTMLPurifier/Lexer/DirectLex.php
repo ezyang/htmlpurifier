@@ -63,6 +63,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             $length = false;
         }
         $context->register('CurrentLine', $current_line);
+        $context->register('CurrentCol',  $current_col);
         $nl = "\n";
         // how often to manually recalculate. This will ALWAYS be right,
         // but it's pretty wasteful. Set to 0 to turn off
@@ -312,6 +313,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         }
         
         $context->destroy('CurrentLine');
+        $context->destroy('CurrentCol');
         return $array;
     }
     
