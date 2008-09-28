@@ -34,6 +34,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   improved.
 ! Experimental implementation of forms for %HTML.Trusted
 ! Track column numbers when maintain line numbers is on
+! Proprietary 'background' attribute on table-related elements converted into
+  corresponding CSS.  Thanks Fusemail for sponsoring this feature!
 - Fix two bugs in %URI.MakeAbsolute; one involving empty paths in base URLs,
   the other involving an undefined $is_folder error.
 - Throw error when %Core.Encoding is set to a spurious value. Previously,

@@ -109,6 +109,7 @@ require 'HTMLPurifier/AttrDef/URI/Host.php';
 require 'HTMLPurifier/AttrDef/URI/IPv4.php';
 require 'HTMLPurifier/AttrDef/URI/IPv6.php';
 require 'HTMLPurifier/AttrDef/URI/Email/SimpleCheck.php';
+require 'HTMLPurifier/AttrTransform/Background.php';
 require 'HTMLPurifier/AttrTransform/BdoDir.php';
 require 'HTMLPurifier/AttrTransform/BgColor.php';
 require 'HTMLPurifier/AttrTransform/BoolToCSS.php';

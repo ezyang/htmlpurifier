@@ -103,6 +103,7 @@ require_once $__dir . '/HTMLPurifier/AttrDef/URI/Host.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/URI/IPv4.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/URI/IPv6.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/URI/Email/SimpleCheck.php';
+require_once $__dir . '/HTMLPurifier/AttrTransform/Background.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/BdoDir.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/BgColor.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/BoolToCSS.php';
