@@ -29,7 +29,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 // if it doesn't, see the next if-block if you're in the document.
                 
                 $i = $nesting = null;
-                if (!$this->_forwardUntilEndToken($i, $current, $nesting) && $token->is_whitespace) {
+                if (!$this->forwardUntilEndToken($i, $current, $nesting) && $token->is_whitespace) {
                     // State 1.1: ...    ^ (whitespace, then document end)
                     //               ----
                     // This is a degenerate case
@@ -101,7 +101,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                     // Check if this token is adjacent to the parent token
                     // (seek backwards until token isn't whitespace)
                     $i = null;
-                    $this->_backward($i, $prev);
+                    $this->backward($i, $prev);
                     
                     if (!$prev instanceof HTMLPurifier_Token_Start) {
                         // Token wasn't adjacent
@@ -160,7 +160,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 }
                 
                 $i = null;
-                if ($this->_backward($i, $prev)) {
+                if ($this->backward($i, $prev)) {
                     if (
                         !$prev instanceof HTMLPurifier_Token_Text
                     ) {
@@ -296,11 +296,11 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
      * to insert a <p> tag.
      */
     private function _pLookAhead() {
-        $this->_current($i, $current);
+        $this->current($i, $current);
         if ($current instanceof HTMLPurifier_Token_Start) $nesting = 1;
         else $nesting = 0;
         $ok = false;
-        while ($this->_forwardUntilEndToken($i, $current, $nesting)) {
+        while ($this->forwardUntilEndToken($i, $current, $nesting)) {
             $result = $this->_checkNeedsP($current);
             if ($result !== null) {
                 $ok = $result;
@@ -308,69 +308,6 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
             }
         }
         return $ok;
-    }
-    
-    /**
-     * Iterator function, which starts with the next token and continues until
-     * you reach the end of the input tokens.
-     * @warning Please prevent previous references from interfering with this
-     *          functions by setting $i = null beforehand!
-     * @param &$i Current integer index variable for inputTokens
-     * @param &$current Current token variable. Do NOT use $token, as that variable is also a reference
-     */
-    private function _forward(&$i, &$current) {
-        if ($i === null) $i = $this->inputIndex + 1;
-        else $i++;
-        if (!isset($this->inputTokens[$i])) return false;
-        $current = $this->inputTokens[$i];
-        return true;
-    }
-    
-    /**
-     * Similar to _forward, but accepts a third parameter $nesting (which
-     * should be initialized at 0) and stops when we hit the end tag
-     * for the node $this->inputIndex starts in.
-     */
-    private function _forwardUntilEndToken(&$i, &$current, &$nesting) {
-        $result = $this->_forward($i, $current);
-        if (!$result) return false;
-        if ($nesting === null) $nesting = 0;
-        if     ($current instanceof HTMLPurifier_Token_Start) $nesting++;
-        elseif ($current instanceof HTMLPurifier_Token_End) {
-            if ($nesting <= 0) return false;
-            $nesting--;
-        }
-        return true;
-    }
-    
-    /**
-     * Iterator function, starts with the previous token and continues until
-     * you reach the beginning of input tokens.
-     * @warning Please prevent previous references from interfering with this
-     *          functions by setting $i = null beforehand!
-     * @param &$i Current integer index variable for inputTokens
-     * @param &$current Current token variable. Do NOT use $token, as that variable is also a reference
-     */
-    private function _backward(&$i, &$current) {
-        if ($i === null) $i = $this->inputIndex - 1;
-        else $i--;
-        if ($i < 0) return false;
-        $current = $this->inputTokens[$i];
-        return true;
-    }
-    
-    /**
-     * Initializes the iterator at the current position. Use in a do {} while;
-     * loop to force the _forward and _backward functions to start at the
-     * current location.
-     * @warning Please prevent previous references from interfering with this
-     *          functions by setting $i = null beforehand!
-     * @param &$i Current integer index variable for inputTokens
-     * @param &$current Current token variable. Do NOT use $token, as that variable is also a reference
-     */
-    private function _current(&$i, &$current) {
-        if ($i === null) $i = $this->inputIndex;
-        $current = $this->inputTokens[$i];
     }
     
     /**

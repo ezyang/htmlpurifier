@@ -12,6 +12,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 3.1.2, unknown release date
 # Using %Core.CollectErrors forces line number/column tracking on, whereas
   previously you could theoretically turn it off.
+# HTMLPurifier_Injector->notifyEnd() is formally deprecated, and has changed
+  behavior slightly (end tokens it sees are not guaranteed to exist). Please
+  use handleEnd() instead.
 ! %Output.AttrSort for when you need your attributes in alphabetical order to
   deal with a bug in FCKEditor. Requested by frank farmer.
 ! Enable HTML comments when %HTML.Trusted is on. Requested by Waldo Jaquith.
@@ -36,6 +39,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Track column numbers when maintain line numbers is on
 ! Proprietary 'background' attribute on table-related elements converted into
   corresponding CSS.  Thanks Fusemail for sponsoring this feature!
+! Add forward(), forwardUntilEndToken(), backward() and current() to Injector
+  supertype.
+! HTMLPurifier_Injector->handleEnd() permits modification to end tokens. The
+  time of operation varies slightly from notifyEnd() as *all* end tokens are
+  processed by the injector before they are subject to the well-formedness rules.
 - Fix two bugs in %URI.MakeAbsolute; one involving empty paths in base URLs,
   the other involving an undefined $is_folder error.
 - Throw error when %Core.Encoding is set to a spurious value. Previously,

@@ -141,6 +141,69 @@ abstract class HTMLPurifier_Injector
     }
     
     /**
+     * Iterator function, which starts with the next token and continues until
+     * you reach the end of the input tokens.
+     * @warning Please prevent previous references from interfering with this
+     *          functions by setting $i = null beforehand!
+     * @param &$i Current integer index variable for inputTokens
+     * @param &$current Current token variable. Do NOT use $token, as that variable is also a reference
+     */
+    protected function forward(&$i, &$current) {
+        if ($i === null) $i = $this->inputIndex + 1;
+        else $i++;
+        if (!isset($this->inputTokens[$i])) return false;
+        $current = $this->inputTokens[$i];
+        return true;
+    }
+    
+    /**
+     * Similar to _forward, but accepts a third parameter $nesting (which
+     * should be initialized at 0) and stops when we hit the end tag
+     * for the node $this->inputIndex starts in.
+     */
+    protected function forwardUntilEndToken(&$i, &$current, &$nesting) {
+        $result = $this->forward($i, $current);
+        if (!$result) return false;
+        if ($nesting === null) $nesting = 0;
+        if     ($current instanceof HTMLPurifier_Token_Start) $nesting++;
+        elseif ($current instanceof HTMLPurifier_Token_End) {
+            if ($nesting <= 0) return false;
+            $nesting--;
+        }
+        return true;
+    }
+    
+    /**
+     * Iterator function, starts with the previous token and continues until
+     * you reach the beginning of input tokens.
+     * @warning Please prevent previous references from interfering with this
+     *          functions by setting $i = null beforehand!
+     * @param &$i Current integer index variable for inputTokens
+     * @param &$current Current token variable. Do NOT use $token, as that variable is also a reference
+     */
+    protected function backward(&$i, &$current) {
+        if ($i === null) $i = $this->inputIndex - 1;
+        else $i--;
+        if ($i < 0) return false;
+        $current = $this->inputTokens[$i];
+        return true;
+    }
+    
+    /**
+     * Initializes the iterator at the current position. Use in a do {} while;
+     * loop to force the _forward and _backward functions to start at the
+     * current location.
+     * @warning Please prevent previous references from interfering with this
+     *          functions by setting $i = null beforehand!
+     * @param &$i Current integer index variable for inputTokens
+     * @param &$current Current token variable. Do NOT use $token, as that variable is also a reference
+     */
+    protected function current(&$i, &$current) {
+        if ($i === null) $i = $this->inputIndex;
+        $current = $this->inputTokens[$i];
+    }
+    
+    /**
      * Handler that is called when a text token is processed
      */
     public function handleText(&$token) {}
@@ -149,6 +212,13 @@ abstract class HTMLPurifier_Injector
      * Handler that is called when a start or empty token is processed
      */
     public function handleElement(&$token) {}
+    
+    /**
+     * Handler that is called when an end token is processed
+     */
+    public function handleEnd(&$token) {
+        $this->notifyEnd($token);
+    }
     
     /**
      * Notifier that is called when an end token is processed

@@ -12,16 +12,15 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         generate_mock_once('HTMLPurifier_Injector');
     }
     
-    function testEndNotification() {
+    function testEndHandler() {
         $mock = new HTMLPurifier_InjectorMock();
         $mock->skip = false;
         $b = new HTMLPurifier_Token_End('b');
-        $b->start = new HTMLPurifier_Token_Start('b');
-        $mock->expectAt(0, 'notifyEnd', array($b));
+        $mock->expectAt(0, 'handleEnd', array($b));
         $i = new HTMLPurifier_Token_End('i');
-        $i->start = new HTMLPurifier_Token_Start('i');
-        $mock->expectAt(1, 'notifyEnd', array($i));
-        $mock->expectCallCount('notifyEnd', 2);
+        $mock->expectAt(1, 'handleEnd', array($i));
+        $mock->expectCallCount('handleEnd', 2);
+        $mock->setReturnValue('getRewind', false);
         $this->config->set('AutoFormat', 'AutoParagraph', false);
         $this->config->set('AutoFormat', 'Linkify',       false);
         $this->config->set('AutoFormat', 'Custom', array($mock));
