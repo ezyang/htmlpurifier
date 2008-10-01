@@ -16,9 +16,13 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         $mock = new HTMLPurifier_InjectorMock();
         $b = new HTMLPurifier_Token_End('b');
         $b->skip = array(0 => true);
+        $b->start = new HTMLPurifier_Token_Start('b');
+        $b->start->skip = array(0 => true, 1 => true);
         $mock->expectAt(0, 'handleEnd', array($b));
         $i = new HTMLPurifier_Token_End('i');
+        $i->start = new HTMLPurifier_Token_Start('i');
         $i->skip = array(0 => true);
+        $i->start->skip = array(0 => true, 1 => true);
         $mock->expectAt(1, 'handleEnd', array($i));
         $mock->expectCallCount('handleEnd', 2);
         $mock->setReturnValue('getRewind', false);

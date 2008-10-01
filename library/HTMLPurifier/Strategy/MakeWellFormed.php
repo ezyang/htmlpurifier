@@ -274,20 +274,23 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 $reprocess = true;
                 continue;
             }
-            foreach ($this->injectors as $i => $injector) {
-                if (isset($token->skip[$i])) continue;
-                if ($token->rewind !== null && $token->rewind !== $i) continue;
-                $injector->handleEnd($token);
-                $this->processToken($token, $i);
-                $reprocess = true;
-                break;
-            }
-            if ($reprocess) continue;
             
-            // first, check for the simplest case: everything closes neatly
+            // first, check for the simplest case: everything closes neatly.
+            // Eventually, everything passes through here; if there are problems
+            // we modify the input stream accordingly and then punt, so that
+            // the tokens get processed again.
             $current_parent = array_pop($this->stack);
             if ($current_parent->name == $token->name) {
                 $token->start = $current_parent;
+                foreach ($this->injectors as $i => $injector) {
+                    if (isset($token->skip[$i])) continue;
+                    if ($token->rewind !== null && $token->rewind !== $i) continue;
+                    $injector->handleEnd($token);
+                    $this->processToken($token, $i);
+                    $this->stack[] = $current_parent;
+                    $reprocess = true;
+                    break;
+                }
                 continue;
             }
             
@@ -343,6 +346,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 $this->insertBefore($new_token);
             }
             $reprocess = true;
+            continue;
         }
         
         $context->destroy('CurrentNesting');
