@@ -17,13 +17,6 @@ abstract class HTMLPurifier_Injector
     public $name;
     
     /**
-     * Amount of tokens the injector needs to skip + 1. Because
-     * the decrement is the first thing that happens, this needs to
-     * be one greater than the "real" skip count.
-     */
-    public $skip = 1;
-    
-    /**
      * Instance of HTMLPurifier_HTMLDefinition
      */
     protected $htmlDefinition;

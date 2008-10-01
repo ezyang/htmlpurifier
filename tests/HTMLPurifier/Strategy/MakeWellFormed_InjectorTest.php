@@ -14,10 +14,11 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
     
     function testEndHandler() {
         $mock = new HTMLPurifier_InjectorMock();
-        $mock->skip = false;
         $b = new HTMLPurifier_Token_End('b');
+        $b->skip = array(0 => true);
         $mock->expectAt(0, 'handleEnd', array($b));
         $i = new HTMLPurifier_Token_End('i');
+        $i->skip = array(0 => true);
         $mock->expectAt(1, 'handleEnd', array($i));
         $mock->expectCallCount('handleEnd', 2);
         $mock->setReturnValue('getRewind', false);
@@ -125,7 +126,6 @@ asdf<b></b></p>
     }
     
     function testRewindAndParagraph() {
-        // perhaps change the behavior of this?
         $this->assertResult(
 "bar
 
@@ -136,7 +136,7 @@ asdf<b></b></p>
 foo",
 "<p>bar</p>
 
-<p></p>
+
 
 <p>foo</p>"
         );

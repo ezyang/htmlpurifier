@@ -14,6 +14,12 @@ class HTMLPurifier_Token {
      */
     public $armor = array();
     
+    /**
+     * Used during MakeWellFormed.
+     */
+    public $skip;
+    public $rewind;
+    
     public function __get($n) {
       if ($n === 'type') {
         trigger_error('Deprecated type property called; use instanceof', E_USER_NOTICE);

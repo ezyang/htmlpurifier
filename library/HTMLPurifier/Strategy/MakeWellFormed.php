@@ -74,67 +74,89 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             trigger_error("Cannot enable {$injector->name} injector because $error is not allowed", E_USER_WARNING);
         }
         
-        // warning: most foreach loops follow the convention $i => $injector.
-        // Don't define these as loop-wide variables, please!
-        
         // -- end INJECTOR --
         
         $token = false;
         $context->register('CurrentToken', $token);
         
+        $reprocess = false;
+        $i = false; // injector index
+        
         // isset is in loop because $tokens size changes during loop exec
         for (
             $this->inputIndex = 0;
             $this->inputIndex == 0 || isset($tokens[$this->inputIndex - 1]);
-            $this->inputIndex++
+            // only increment if we don't need to reprocess
+            $reprocess ? $reprocess = false : $this->inputIndex++
         ) {
             
-            foreach ($this->injectors as $injector) {
-                if ($injector->skip > 0) $injector->skip--;
+            // check for a rewind
+            if (is_int($i) && $i >= 0) {
+                $rewind_to = $this->injectors[$i]->getRewind();
+                if (is_int($rewind_to) && $rewind_to < $this->inputIndex) {
+                    if ($rewind_to < 0) $rewind_to = 0;
+                    while ($this->inputIndex > $rewind_to) {
+                        $this->inputIndex--;
+                        $prev = $this->inputTokens[$this->inputIndex];
+                        // indicate that other injectors should not process this token,
+                        // but we need to reprocess it
+                        unset($prev->skip[$i]);
+                        $prev->rewind = $i;
+                        if ($prev instanceof HTMLPurifier_Token_Start) array_pop($this->currentNesting);
+                        elseif ($prev instanceof HTMLPurifier_Token_End) $this->currentNesting[] = $prev->start;
+                    }
+                }
+                $i = false;
             }
             
             // handle case of document end
             if (!isset($tokens[$this->inputIndex])) {
-                // we're at the end now, fix all still unclosed tags (this is
-                // duplicated from the end of the loop with some slight modifications)
-                // not using $skipped_tags since it would invariably be all of them
-                if (!empty($this->currentNesting)) {
-                    $top_nesting = array_pop($this->currentNesting);
-                    // please don't redefine $i!
-                    if ($e && !isset($top_nesting->armor['MakeWellFormed_TagClosedError'])) {
-                        $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by document end', $top_nesting);
-                    }
-                    // instead of splice, since we know this is the end
-                    $new_token = new HTMLPurifier_Token_End($top_nesting->name);
-                    $tokens[] = $new_token;
-                    $this->currentNesting[] = $top_nesting;
-                    --$this->inputIndex;
-                    // punt to the regular code to handle the new token
-                    continue;
+                // We're at the end now, fix all still unclosed tags.
+                // This would logically go at the end of the loop, but because
+                // of all of the callbacks we need to be able to run the loop
+                // again.
+                
+                // kill processing if stack is empty
+                if (empty($this->currentNesting)) {
+                    break; 
                 }
-                break;
+                
+                // peek
+                $top_nesting = array_pop($this->currentNesting);
+                $this->currentNesting[] = $top_nesting;
+                
+                // send error
+                if ($e && !isset($top_nesting->armor['MakeWellFormed_TagClosedError'])) {
+                    $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by document end', $top_nesting);
+                }
+                
+                // append, don't splice, since this is the end
+                $tokens[] = new HTMLPurifier_Token_End($top_nesting->name);
+                
+                // punt!
+                $reprocess = true;
+                continue;
             }
             
             // if all goes well, this token will be passed through unharmed
             $token = $tokens[$this->inputIndex];
             
             //echo '<hr>';
-            //printTokens($tokens, $this->inputIndex);
+            //printTokens($this->inputTokens, $this->inputIndex);
             //var_dump($this->currentNesting);
             
             // quick-check: if it's not a tag, no need to process
-            if (empty( $token->is_tag )) {
+            if (empty($token->is_tag)) {
                 if ($token instanceof HTMLPurifier_Token_Text) {
-                     // injector handler code; duplicated for performance reasons
-                     foreach ($this->injectors as $i => $injector) {
-                         if (!$injector->skip) $injector->handleText($token);
-                         if (is_array($token) || is_int($token)) {
-                             $this->currentInjector = $i;
-                             break;
-                         }
-                     }
+                    foreach ($this->injectors as $i => $injector) {
+                        if (isset($token->skip[$i])) continue;
+                        if ($token->rewind !== null && $token->rewind !== $i) continue;
+                        $injector->handleText($token);
+                        $this->processToken($token, $i);
+                        $reprocess = true;
+                        break;
+                    }
                 }
-                $this->processToken($token, $config, $context);
                 continue;
             }
             
@@ -152,11 +174,11 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 $ok = true;
             } elseif ($type && $type !== 'empty' && $token instanceof HTMLPurifier_Token_Empty) {
                 // claims to be empty but really is a start tag
-                $token = array(
-                    new HTMLPurifier_Token_Start($token->name, $token->attr),
-                    new HTMLPurifier_Token_End($token->name)
-                );
-                $ok = true;
+                $this->swap(new HTMLPurifier_Token_End($token->name));
+                $this->insertBefore(new HTMLPurifier_Token_Start($token->name, $token->attr));
+                // punt
+                $reprocess = true;
+                continue;
             } elseif ($token instanceof HTMLPurifier_Token_Empty) {
                 // real empty token
                 $ok = true;
@@ -192,13 +214,22 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // injector handler code; duplicated for performance reasons
             if ($ok) {
                 foreach ($this->injectors as $i => $injector) {
-                    if (!$injector->skip) $injector->handleElement($token);
-                    if (is_array($token) || is_int($token)) {
-                        $this->currentInjector = $i;
-                        break;
+                    if (isset($token->skip[$i])) continue;
+                    if ($token->rewind !== null && $token->rewind !== $i) continue;
+                    $injector->handleElement($token);
+                    $this->processToken($token, $i);
+                    $reprocess = true;
+                    break;
+                }
+                if (!$reprocess) {
+                    // ah, nothing interesting happened; do normal processing
+                    $this->swap($token);
+                    if ($token instanceof HTMLPurifier_Token_Start) {
+                        $this->currentNesting[] = $token;
+                    } elseif ($token instanceof HTMLPurifier_Token_End) {
+                        throw new HTMLPurifier_Exception('Improper handling of end tag in start code; possible error in MakeWellFormed');
                     }
                 }
-                $this->processToken($token, $config, $context);
                 continue;
             }
             
@@ -221,8 +252,15 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 }
                 continue;
             }
-            
-            if (!$this->handleEnd($token)) continue;
+            foreach ($this->injectors as $i => $injector) {
+                if (isset($token->skip[$i])) continue;
+                if ($token->rewind !== null && $token->rewind !== $i) continue;
+                $injector->handleEnd($token);
+                $this->processToken($token, $i);
+                $reprocess = true;
+                break;
+            }
+            if ($reprocess) continue;
             
             // first, check for the simplest case: everything closes neatly
             $current_parent = array_pop($this->currentNesting);
@@ -267,15 +305,12 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             // note that skipped tags contains the element we need closed
             $this->remove();
             for ($i = count($skipped_tags) - 1; $i >= 0; $i--) {
-                // please don't redefine $i!
                 if ($i && $e && !isset($skipped_tags[$i]->armor['MakeWellFormed_TagClosedError'])) {
                     $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by element end', $skipped_tags[$i]);
                 }
                 $new_token = new HTMLPurifier_Token_End($skipped_tags[$i]->name);
                 $new_token->start = $skipped_tags[$i];
                 $this->insertAfter($new_token);
-                //printTokens($tokens, $this->inputIndex);
-                //var_dump($this->currentNesting);
             }
         }
         
@@ -290,34 +325,6 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     }
     
     /**
-     * Inserts a token before the current token. Cursor now points to this token.
-     */
-    protected function insertBefore($token) {
-        array_splice($this->inputTokens, $this->inputIndex, 0, array($token));
-    }
-    
-    /**
-     * Inserts a token after the current token. Cursor now points to this token.
-     */
-    protected function insertAfter($token) {
-        array_splice($this->inputTokens, ++$this->inputIndex, 0, array($token));
-    }
-    
-    /**
-     * Removes current token. Cursor now points to previous token.
-     */
-    protected function remove() {
-        array_splice($this->inputTokens, $this->inputIndex--, 1);
-    }
-    
-    /**
-     * Swap current token with new token. Cursor points to new token (no change).
-     */
-    protected function swap($token) {
-        array_splice($this->inputTokens, $this->inputIndex, 1, array($token));
-    }
-    
-    /**
      * Processes arbitrary token values for complicated substitution patterns.
      * In general:
      * 
@@ -329,93 +336,59 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
      * 
      * If $token is false, the current token is deleted.
      */
-    protected function processToken($token, $config, $context, $is_end = false) {
-        if (is_array($token) || is_int($token)) {
-            // the original token was overloaded by an injector, time
-            // to some fancy acrobatics
-            if (is_array($token)) {
-                array_splice($this->inputTokens, $this->inputIndex, 1, $token);
-            } else {
-                array_splice($this->inputTokens, $this->inputIndex, $token, array());
+    protected function processToken($token, $injector = -1) {
+        
+        // normalize forms of token
+        if (is_object($token)) $token = array(1, $token);
+        if (is_int($token))    $token = array($token);
+        if ($token === false)  $token = array(1);
+        if (!is_array($token)) throw new HTMLPurifier_Exception('Invalid token type from injector');
+        if (!is_int($token[0])) array_unshift($token, 1);
+        if ($token[0] === 0) throw new HTMLPurifier_Exception('Deleting zero tokens is not valid');
+        
+        // $token is now an array with the following form:
+        // array(number nodes to delete, new node 1, new node 2, ...)
+        
+        $delete = array_shift($token);
+        $old = array_splice($this->inputTokens, $this->inputIndex, $delete, $token);
+        
+        if ($injector > -1) {
+            // determine appropriate skips
+            $oldskip = isset($old[0]) ? $old[0]->skip : array();
+            foreach ($token as $object) {
+                $object->skip = $oldskip;
+                $object->skip[$injector] = true;
             }
-            if ($this->injectors) {
-                if (!$this->checkRewind()) {
-                    // adjust the injector skips based on the array substitution
-                    $offset = is_array($token) ? count($token) : 0;
-                    for ($i = 0; $i <= $this->currentInjector; $i++) {
-                        // because of the skip back, we need to add one more
-                        // for uninitialized injectors. I'm not exactly
-                        // sure why this is the case, but I think it has to
-                        // do with the fact that we're decrementing skips
-                        // before re-checking text
-                        if (!$this->injectors[$i]->skip) $this->injectors[$i]->skip++;
-                        $this->injectors[$i]->skip += $offset;
-                    }
-                }
-            }
-            // ensure that we reprocess these tokens with the other injectors
-            --$this->inputIndex;
-            
-        } elseif ($token) {
-            if ($is_end) {
-                $this->swap($token);
-                if (!$token instanceof HTMLPurifier_Token_End) {
-                    --$this->inputIndex;
-                }
-            } else {
-                // regular case
-                $this->swap($token);
-                if ($token instanceof HTMLPurifier_Token_Start) {
-                    $this->currentNesting[] = $token;
-                } elseif ($token instanceof HTMLPurifier_Token_End) {
-                    // not actually used
-                    $token->start = array_pop($this->currentNesting);
-                }
-            }
-        } else {
-            $this->remove();
         }
+        
     }
     
     /**
-     * Checks for a rewind, adjusts the input index and skips accordingly.
+     * Inserts a token before the current token. Cursor now points to this token
      */
-    protected function checkRewind() {
-        $rewind = $this->injectors[$this->currentInjector]->getRewind();
-        if ($rewind < 0) $rewind = 0;
-        if (is_int($rewind)) {
-            $offset = $this->inputIndex - $rewind;
-            if ($this->injectors) {
-                foreach ($this->injectors as $i => $injector) {
-                    if ($i == $this->currentInjector) {
-                        $injector->skip = 0;
-                    } else {
-                        $injector->skip += $offset;
-                    }
-                }
-            }
-            for ($this->inputIndex--; $this->inputIndex >= $rewind; $this->inputIndex--) {
-                $prev = $this->inputTokens[$this->inputIndex];
-                if ($prev instanceof HTMLPurifier_Token_Start) array_pop($this->currentNesting);
-                elseif ($prev instanceof HTMLPurifier_Token_End) $this->currentNesting[] = $prev->start;
-            }
-            $this->inputIndex++;
-            return true;
-        } else {
-            return false;
-        }
+    protected function insertBefore($token) {
+        array_splice($this->inputTokens, $this->inputIndex, 0, array($token));
+    }
+
+    /**
+     * Inserts a token after the current token. Cursor now points to this token
+     */
+    protected function insertAfter($token) {
+        array_splice($this->inputTokens, ++$this->inputIndex, 0, array($token));
+    }
+
+    /**
+     * Removes current token. Cursor now points to previous token.
+     */
+    protected function remove() {
+        array_splice($this->inputTokens, $this->inputIndex--, 1);
     }
     
-    protected function handleEnd($token) {
-        foreach ($this->injectors as $i => $injector) {
-            if (!$injector->skip) $injector->handleEnd($token);
-            if (is_array($token) || is_int($token)) {
-                $this->currentInjector = $i;
-                break;
-            }
-        }
-        $this->processToken($token, $this->config, $this->context, true);
-        return $token instanceof HTMLPurifier_Token_End;
+    /**
+     * Swap current token with new token. Cursor points to new token (no change
+     */
+    protected function swap($token) {
+        array_splice($this->inputTokens, $this->inputIndex, 1, array($token));
     }
     
 }
