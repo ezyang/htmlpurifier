@@ -5,6 +5,11 @@
  * This enables "formatter-like" functionality such as auto-paragraphing,
  * smiley-ification and linkification to take place.
  * 
+ * A note on how handlers create changes; this is done by assigning a new
+ * value to the $token reference. These values can take a variety of forms and
+ * are best described HTMLPurifier_Strategy_MakeWellFormed->processToken()
+ * documentation.
+ * 
  * @todo Allow injectors to request a re-run on their output. This 
  *       would help if an operation is recursive.
  */
@@ -57,6 +62,8 @@ abstract class HTMLPurifier_Injector
      * deleted a node, and now need to see if this change affected any
      * earlier nodes. Rewinding does not affect other injectors, and can
      * result in infinite loops if not used carefully.
+     * @warning HTML Purifier will prevent you from fast-forwarding with this
+     *          function.
      */
     public function rewind($index) {
         $this->rewind = $index;
@@ -216,6 +223,7 @@ abstract class HTMLPurifier_Injector
     /**
      * Notifier that is called when an end token is processed
      * @note This differs from handlers in that the token is read-only
+     * @deprecated
      */
     public function notifyEnd($token) {}
     
