@@ -19,6 +19,7 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
     function testAlternateDefaults() {
         $this->config->set('Attr', 'DefaultInvalidImage', 'blank.png');
         $this->config->set('Attr', 'DefaultInvalidImageAlt', 'Pawned!');
+        $this->config->set('Attr', 'DefaultImageAlt', 'not pawned');
         $this->config->set('Core', 'RemoveInvalidImg', false);
         $this->assertResult(
             array(),
@@ -38,6 +39,14 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
         $this->assertResult(
             array('alt' => 'intrigue'),
             array('alt' => 'intrigue', 'src' => '')
+        );
+    }
+    
+    function testAddDefaultAlt() {
+        $this->config->set('Attr', 'DefaultImageAlt', 'default');
+        $this->assertResult(
+            array('src' => ''),
+            array('src' => '', 'alt' => 'default')
         );
     }
     

@@ -44,6 +44,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! HTMLPurifier_Injector->handleEnd() permits modification to end tokens. The
   time of operation varies slightly from notifyEnd() as *all* end tokens are
   processed by the injector before they are subject to the well-formedness rules.
+! %Attr.DefaultImageAlt allows overriding default behavior of setting alt to
+  basename of image when not present.
 - Fix two bugs in %URI.MakeAbsolute; one involving empty paths in base URLs,
   the other involving an undefined $is_folder error.
 - Throw error when %Core.Encoding is set to a spurious value. Previously,

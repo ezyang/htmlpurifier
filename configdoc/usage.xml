@@ -290,9 +290,14 @@
    <line>19</line>
   </file>
  </directive>
+ <directive id="Attr.DefaultImageAlt">
+  <file name="HTMLPurifier/AttrTransform/ImgRequired.php">
+   <line>25</line>
+  </file>
+ </directive>
  <directive id="Attr.DefaultInvalidImageAlt">
   <file name="HTMLPurifier/AttrTransform/ImgRequired.php">
-   <line>27</line>
+   <line>32</line>
   </file>
  </directive>
  <directive id="Core.EscapeInvalidChildren">
@@ -363,7 +368,7 @@
  </directive>
  <directive id="Core.EscapeInvalidTags">
   <file name="HTMLPurifier/Strategy/MakeWellFormed.php">
-   <line>21</line>
+   <line>45</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>19</line>
