@@ -66,6 +66,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Will now throw exception on many error conditions during lexer creation; also
   throw an exception when MaintainLineNumbers is true, but a non-tracksLineNumbers
   is being used.
+- Detect if domxml extension is loaded, and use DirectLEx accordingly.
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind

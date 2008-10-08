@@ -93,9 +93,15 @@ class HTMLPurifier_Lexer
                     break;
                 }
                 
-                if (class_exists('DOMDocument') && method_exists('DOMDocument', 'loadHTML')) {
-                    // check for DOM support, because, surprisingly enough,
-                    // it's *not* part of the core!
+                if (
+                    class_exists('DOMDocument') &&
+                    method_exists('DOMDocument', 'loadHTML') &&
+                    !extension_loaded('domxml')
+                ) {
+                    // check for DOM support, because while it's part of the
+                    // core, it can be disabled compile time. Also, the PECL
+                    // domxml extension overrides the default DOM, and is evil
+                    // and nasty and we shan't bother to support it
                     $lexer = 'DOMLex';
                 } else {
                     $lexer = 'DirectLex';
