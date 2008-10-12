@@ -30,6 +30,7 @@ class HTMLPurifier_Token {
           case 'HTMLPurifier_Token_End':        return 'end';
           case 'HTMLPurifier_Token_Text':       return 'text';
           case 'HTMLPurifier_Token_Comment':    return 'comment';
+          case 'HTMLPurifier_Token_Span': return 'span';
           default: return null;
         }
       }

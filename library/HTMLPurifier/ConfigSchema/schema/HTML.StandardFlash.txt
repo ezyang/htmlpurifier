@@ -1,0 +1,8 @@
+HTML.StandardFlash
+TYPE: bool
+VERSION: 3.1.1
+DEFAULT: false
+--DESCRIPTION--
+<p>
+    Custom class that takes all the stuff in object tags and rewrites it to a new format
+</p>

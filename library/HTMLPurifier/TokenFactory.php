@@ -19,7 +19,7 @@ class HTMLPurifier_TokenFactory
      * @private
      */
     // p stands for prototype
-    private $p_start, $p_end, $p_empty, $p_text, $p_comment;
+    private $p_start, $p_end, $p_empty, $p_text, $p_comment, $p_span;
 
     /**
      * Generates blank prototypes for cloning.
@@ -30,6 +30,7 @@ class HTMLPurifier_TokenFactory
         $this->p_empty  = new HTMLPurifier_Token_Empty('', array());
         $this->p_text   = new HTMLPurifier_Token_Text('');
         $this->p_comment= new HTMLPurifier_Token_Comment('');
+        $this->p_span= new HTMLPurifier_Token_Span(array());
     }
 
     /**
@@ -89,6 +90,11 @@ class HTMLPurifier_TokenFactory
         return $p;
     }
 
+    public function createSpan($attr = array()) {
+        $p = clone $this->p_span;
+        $p->__construct($attr);
+        return $p;
+    }
 }
 
 // vim: et sw=4 sts=4

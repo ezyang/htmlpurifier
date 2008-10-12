@@ -120,6 +120,15 @@ class HTMLPurifier_Generator
 
         } elseif ($token instanceof HTMLPurifier_Token_Comment) {
             return '<!--' . $token->data . '-->';
+        } elseif ($token instanceof HTMLPurifier_Token_Span) {
+            $input_data = $token->attr["data"];
+            $input_width = $token->attr["width"];
+            $input_height = $token->attr["height"];
+            $input_movie = $token->attr["movie"];
+            $input_flashvars = $token->attr["flashvars"];
+
+            return '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'.$input_width.'" height="'.$input_height.'"><param name="movie" value="'.$input_movie.'" /><param name="flashvars" value="'.$input_flashvars.'" /><!--[if !IE]>--><object type="application/x-shockwave-flash" data="'.$input_data.'" width="'.$input_width.'" height="'.$input_height.'"><param name="flashvars" value="'.$input_flashvars.'" /></object><!--<![endif]--></object>';
+
         } else {
             return '';
 
