@@ -39,10 +39,8 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
     }
     
     function test_convertToUTF8_spuriousEncoding() {
-        // We don't support this as UTF-8, because UTF-8 is the default and
-        // shouldn't be set if not necessary.
-        $this->config->set('Core', 'Encoding', 'utf8');
-        $this->expectError('Invalid encoding utf8');
+        $this->config->set('Core', 'Encoding', 'utf99');
+        $this->expectError('Invalid encoding utf99');
         $this->assertIdentical(
             HTMLPurifier_Encoder::convertToUTF8("\xF6", $this->config, $this->context),
             ''
