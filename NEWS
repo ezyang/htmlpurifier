@@ -66,6 +66,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   throw an exception when MaintainLineNumbers is true, but a non-tracksLineNumbers
   is being used.
 - Detect if domxml extension is loaded, and use DirectLEx accordingly.
+- Improve handling of big numbers with floating point arithmetic in UnitConverter.
+  Reported by David Morton.
 . Strategy_MakeWellFormed now operates in-place, saving memory and allowing
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind

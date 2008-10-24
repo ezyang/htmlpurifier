@@ -36,9 +36,10 @@ $AC = array(); // parameters
 $AC['flush'] = false;
 $AC['standalone'] = false;
 $AC['file'] = '';
-$AC['xml'] = false;
-$AC['dry'] = false;
-$AC['php'] = $php;
+$AC['xml']  = false;
+$AC['dry']  = false;
+$AC['php']  = $php;
+$AC['help'] = false;
 
 $AC['type'] = '';
 $AC['disable-phpt'] = false;
@@ -46,11 +47,27 @@ $AC['only-phpt'] = false; // alias for --type=phpt
 
 $aliases = array(
     'f' => 'file',
+    'h' => 'help'
 );
 
 // It's important that this does not call the autoloader. Not a problem
 // with a function, but could be if we put this in a class.
 htmlpurifier_parse_args($AC, $aliases);
+
+if ($AC['help']) {
+?>HTML Purifier test suite
+Allowed options:
+    --flush
+    --standalone
+    --file (-f) HTMLPurifier/NameOfTest.php
+    --xml
+    --dry
+    --php /path/to/php
+    --type ( htmlpurifier | configdoc | fstools | htmlt | vtest | phpt )
+    --disable-phpt
+<?php
+    exit;
+}
 
 // Disable PHPT tests if they're not enabled
 if (!$GLOBALS['HTMLPurifierTest']['PHPT']) {
