@@ -589,8 +589,10 @@ looks something like: <code>%C3%86</code>. There is no official way of
 determining the character encoding of such a request, since the percent
 encoding operates on a byte level, so it is usually assumed that it
 is the same as the encoding the page containing the form was submitted
-in. You'll run into very few problems if you only use characters in
-the character encoding you chose.</p>
+in. (<a href="http://tools.ietf.org/html/rfc3986#section-2.5">RFC 3986</a>
+recommends that textual identifiers be translated to UTF-8; however, browser
+compliance is spotty.) You'll run into very few problems
+if you only use characters in the character encoding you chose.</p>
 
 <p>However, once you start adding characters outside of your encoding
 (and this is a lot more common than you may think: take curly
