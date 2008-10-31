@@ -1,8 +1,6 @@
-HTML Purifier 3.1.1 is a security and bugfix release. This release addresses
-two security vulnerabilities, both related to CSS, and one of which only
-applies to users using Shift_JIS as their output encoding. There is also
-a security improvement regarding the imagecrash attack. There is a backwards
-incompatible change in which resources are no longer munged
-by default; please enable using %URI.MungeResources. Besides this, there
-are numerous improvements to URI munging, esp. with the addition of
-%URI.MungeSecretKey, as well as an experimental %HTML.SafeObject and %HTML.SafeEmbed.
+HTML Purifier 3.2.0 is an amalgamation of new features and fixes that
+have accumulated over a four month period.  Some notable features
+include %AutoFormat.RemoveEmpty, column tracking for tokens, 
+%AutoFormat.DisplayLinkURI and %Attr.DefaultImageAlt.  There were also
+major improvements to the test suite interface, error collection output
+and the auto-formatter framework.

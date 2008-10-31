@@ -104,5 +104,5 @@ file_put_contents('library/HTMLPurifier/Config.php', $config_c);
 
 passthru('php maintenance/flush.php');
 
-if ($is_dev) echo "Review changes, write something in WHATSNEW and FOCUS, and then SVN commit with log 'Release $version.'" . PHP_EOL;
+if ($is_dev) echo "Review changes, write something in WHATSNEW and FOCUS, and then commit with log 'Release $version.'" . PHP_EOL;
 else echo "Numbers updated to dev, no other modifications necessary!";
