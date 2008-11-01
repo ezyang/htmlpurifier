@@ -481,7 +481,7 @@ if we don't know it's character encoding? And how do we figure out
 the character encoding, if we don't know the contents of the
 <code>META</code> tag?</p>
 
-<p>Fortunantely for us, the characters we need to write the
+<p>Fortunately for us, the characters we need to write the
 <code>META</code> are in ASCII, which is pretty much universal
 over every character encoding that is in common use today. So,
 all the web-browser has to do is parse all the way down until
@@ -526,7 +526,7 @@ you don't have to use those user-unfriendly entities.</p>
 
 <h3 id="whyutf8-user">User-friendly</h3>
 
-<p>Websites encoded in Latin-1 (ISO-8859-1) which ocassionally need
+<p>Websites encoded in Latin-1 (ISO-8859-1) which occasionally need
 a special character outside of their scope often will use a character
 entity reference to achieve the desired effect. For instance, &theta; can be
 written <code>&amp;theta;</code>, regardless of the character encoding's
@@ -584,7 +584,7 @@ disappeared off the web, so I am linking to the Web Archive copy.)</p>
 <h4 id="whyutf8-forms-urlencoded"><code>application/x-www-form-urlencoded</code></h4>
 
 <p>This is the Content-Type that GET requests must use, and POST requests
-use by default. It involves the ubiquituous percent encoding format that
+use by default. It involves the ubiquitous percent encoding format that
 looks something like: <code>%C3%86</code>. There is no official way of
 determining the character encoding of such a request, since the percent
 encoding operates on a byte level, so it is usually assumed that it
@@ -674,7 +674,7 @@ it up to the module iconv to do the dirty work.</p>
 <p>This approach, however, is not perfect. iconv is blithely unaware
 of HTML character entities. HTML Purifier, in order to
 protect against sophisticated escaping schemes, normalizes all character
-and numeric entitie references before processing the text. This leads to
+and numeric entity references before processing the text. This leads to
 one important ramification:</p>
 
 <p><strong>Any character that is not supported by the target character
@@ -770,7 +770,7 @@ the text when you try to convert it to UTF-8. You'll have to convert
 it to a binary field, convert it to a Shift-JIS field (the real encoding),
 and then finally to UTF-8. Many a website had pages irreversibly mangled
 because they didn't realize that they'd been deluding themselves about
-the character encoding all along, don't become the next victim.</p>
+the character encoding all along; don't become the next victim.</p>
 
 <p>For <a href="http://www.postgresql.org/docs/8.2/static/multibyte.html">PostgreSQL</a>, there appears to be no direct way to change the
 encoding of a database (as of 8.2). You will have to dump the data, and then reimport
@@ -790,7 +790,7 @@ usually supported).</p>
 
 <h4 id="migrate-db-binary">Binary</h4>
 
-<p>Due to the abovementioned compatibility issues, a more interoperable
+<p>Due to the aforementioned compatibility issues, a more interoperable
 way of storing UTF-8 text is to stuff it in a binary datatype.
 <code>CHAR</code> becomes <code>BINARY</code>, <code>VARCHAR</code> becomes
 <code>VARBINARY</code> and <code>TEXT</code> becomes <code>BLOB</code>.
@@ -917,8 +917,8 @@ anyway. So we'll deal with the other two edge cases.</p>
 would like to read your website but get heaps of question marks or
 other meaningless characters. Fixing this problem requires the
 installation of a font or language pack which is often highly
-dependent on what the language is. <a href="http://bn.wikipedia.org/wiki/%E0%A6%89%E0%A6%87%E0%A6%95%E0%A6%BF%E0%A6%AA%E0%A7%87%E0%A6%A1%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE:Bangla_script_display_help">Here is an example</a>
-of such a help file for the Bengali language, I am sure there are
+dependent on what the language is. <a href="http://bn.wikipedia.org/wiki/%E0%A6%89%E0%A6%87%E0%A6%95%E0%A6%BF%E0%A6%AA%E0%A7%87%E0%A6%A1%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE:Bangla_script_display_and_input_help">Here is an example</a>
+of such a help file for the Bengali language; I am sure there are
 others out there too. You just have to point users to the appropriate
 help file.</p>
 
@@ -928,7 +928,7 @@ help file.</p>
 characters embedded in what otherwise would be very bland ASCII are
 letters of the
 <a href="http://en.wikipedia.org/wiki/International_Phonetic_Alphabet">International
-Phonetic Alphabet (IPA)</a>, use to designate pronounciations in a very standard
+Phonetic Alphabet (IPA)</a>, use to designate pronunciations in a very standard
 manner (you probably see them all the time in your dictionary). Your
 average font probably won't have support for all of the IPA characters
 like &#664; (bilabial click) or &#658; (voiced postalveolar fricative).
@@ -941,11 +941,11 @@ most widely used browser in the entire world? Microsoft IE 6
 is not smart enough to borrow from other fonts when a character isn't
 present, so more often than not you'll be slapped with a nice big &#65533;.
 To get things to work, MSIE 6 needs a little nudge. You could configure it
-to use a different font to render the text, but you can acheive the same
+to use a different font to render the text, but you can achieve the same
 effect by selectively changing the font for blocks of special characters
 to known good Unicode fonts.</p>
 
-<p>Fortunantely, the folks over at Wikipedia have already done all the
+<p>Fortunately, the folks over at Wikipedia have already done all the
 heavy lifting for you. Get the CSS from the horses mouth here:
 <a href="http://en.wikipedia.org/wiki/MediaWiki:Common.css">Common.css</a>,
 and search for &quot;.IPA&quot; There are also a smattering of
@@ -972,7 +972,7 @@ users.</p>
 <h3 id="migrate-variablewidth">Dealing with variable width in functions</h3>
 
 <p>When people claim that PHP6 will solve all our Unicode problems, they're
-misinformed. It will not fix any of the abovementioned troubles. It will,
+misinformed. It will not fix any of the aforementioned troubles. It will,
 however, fix the problem we are about to discuss: processing UTF-8 text
 in PHP.</p>
 
@@ -1035,7 +1035,7 @@ directory.</p>
 <p>Well, that's it. Hopefully this document has served as a very
 practical springboard into knowledge of how UTF-8 works.  You may have
 decided that you don't want to migrate yet: that's fine, just know
-what will happen to your output and what bug reports you may recieve.</p>
+what will happen to your output and what bug reports you may receive.</p>
 
 <p>Many other developers have already discussed the subject of Unicode,
 UTF-8 and internationalization, and I would like to defer to them for

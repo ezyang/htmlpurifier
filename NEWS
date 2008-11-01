@@ -9,6 +9,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+3.3.0, unknown release date
+
 3.2.0, released 2008-10-31
 # Using %Core.CollectErrors forces line number/column tracking on, whereas
   previously you could theoretically turn it off.
