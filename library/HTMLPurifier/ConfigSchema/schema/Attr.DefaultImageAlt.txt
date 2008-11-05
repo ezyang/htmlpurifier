@@ -1,6 +1,7 @@
 Attr.DefaultImageAlt
 TYPE: string/null
 DEFAULT: null
+VERSION: 3.2.0
 --DESCRIPTION--
 This is the content of the alt tag of an image if the user had not
 previously specified an alt attribute.  This applies to all images without

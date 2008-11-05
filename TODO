@@ -16,6 +16,8 @@ afraid to cast your vote for the next feature to be implemented!
 - Built-in support for target="_blank" on all external links
 - Allow <a id="asdf" name="asdf">
 - Implement overflow CSS property (as per jlp09550)
+- Convert configuration to allow an arbitrary number of namespaces;
+  then rename as appropriate.
 
 FUTURE VERSIONS
 ---------------
