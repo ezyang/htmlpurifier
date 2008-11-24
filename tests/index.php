@@ -40,6 +40,7 @@ $AC['xml']  = false;
 $AC['dry']  = false;
 $AC['php']  = $php;
 $AC['help'] = false;
+$AC['verbose'] = false;
 
 $AC['type'] = '';
 $AC['disable-phpt'] = false;
@@ -47,7 +48,8 @@ $AC['only-phpt'] = false; // alias for --type=phpt
 
 $aliases = array(
     'f' => 'file',
-    'h' => 'help'
+    'h' => 'help',
+    'v' => 'verbose',
 );
 
 // It's important that this does not call the autoloader. Not a problem
@@ -65,6 +67,7 @@ Allowed options:
     --php /path/to/php
     --type ( htmlpurifier | configdoc | fstools | htmlt | vtest | phpt )
     --disable-phpt
+    --verbose (-v)
 <?php
     exit;
 }
@@ -88,7 +91,7 @@ if ($AC['xml']) {
     if (!SimpleReporter::inCli()) header('Content-Type: text/xml;charset=UTF-8');
     $reporter = new XmlReporter();
 } elseif (SimpleReporter::inCli()) {
-    $reporter = new TextReporter();
+    $reporter = new HTMLPurifier_SimpleTest_TextReporter($AC);
 } else {
     $reporter = new HTMLPurifier_SimpleTest_Reporter('UTF-8', $AC);
 }
