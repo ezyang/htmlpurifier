@@ -94,7 +94,7 @@ class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
         $this->assertConversion('11.112pt', '0.15433in');
     }
     
-    function __onlytestRoundingBigNumber() {
+    function testRoundingBigNumber() {
         $this->assertConversion('444400000000000000000000in', '42660000000000000000000000px');
     }
     
