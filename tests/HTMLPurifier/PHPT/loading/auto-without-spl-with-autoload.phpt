@@ -9,7 +9,8 @@ if (function_exists('spl_autoload_register')) {
 --FILE--
 <?php
 function __autoload($class) {
-    echo "Autoloading $class..." . PHP_EOL;
+    echo "Autoloading $class...
+";
     eval("class $class {}");
 }
 require '../library/HTMLPurifier.auto.php';

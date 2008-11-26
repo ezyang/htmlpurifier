@@ -8,14 +8,16 @@ if (!function_exists('spl_autoload_register')) {
 --FILE--
 <?php
 function my_autoload($class) {
-    echo "Autoloading $class..." . PHP_EOL;
+    echo "Autoloading $class...
+";
     eval("class $class {}");
     return true;
 }
 class MyClass {
     public static function myAutoload($class) {
         if ($class == 'Foo') {
-            echo "Special autoloading Foo..." . PHP_EOL;
+            echo "Special autoloading Foo...
+";
             eval("class $class {}");
         }
     }
@@ -28,7 +30,8 @@ require '../library/HTMLPurifier.auto.php';
 require 'HTMLPurifier/PHPT/loading/_autoload.inc';
 $config = HTMLPurifier_Config::createDefault();
 $purifier = new HTMLPurifier($config);
-echo $purifier->purify('<b>Salsa!') . PHP_EOL;
+echo $purifier->purify('<b>Salsa!') . "
+";
 
 // purposely invoke older autoloads
 $foo = new Foo();

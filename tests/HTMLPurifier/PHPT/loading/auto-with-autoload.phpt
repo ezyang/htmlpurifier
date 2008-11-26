@@ -8,7 +8,8 @@ if (!function_exists('spl_autoload_register')) {
 --FILE--
 <?php
 function __autoload($class) {
-    echo "Autoloading $class..." . PHP_EOL;
+    echo "Autoloading $class...
+";
     eval("class $class {}");
 }
 
@@ -16,7 +17,8 @@ require '../library/HTMLPurifier.auto.php';
 require 'HTMLPurifier/PHPT/loading/_autoload.inc';
 $config = HTMLPurifier_Config::createDefault();
 $purifier = new HTMLPurifier($config);
-echo $purifier->purify('<b>Salsa!') . PHP_EOL;
+echo $purifier->purify('<b>Salsa!') . "
+";
 
 // purposely invoke older autoload
 $bar = new Bar();

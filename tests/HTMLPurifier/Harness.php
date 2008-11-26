@@ -18,6 +18,8 @@ class HTMLPurifier_Harness extends UnitTestCase
      */
     public function setUp() {
         list($this->config, $this->context) = $this->createCommon();
+        $this->config->set('Output', 'Newline', '
+');
         $this->purifier = new HTMLPurifier();
     }
     
