@@ -401,8 +401,14 @@ class HTMLPurifier_Encoder
         set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
         if (iconv('UTF-8', $encoding, 'a') === false) return false;
         for ($i = 0x20; $i <= 0x7E; $i++) { // all printable ASCII chars
-            $c = chr($i);
-            if (iconv('UTF-8', "$encoding//IGNORE", $c) === '') {
+            $c = chr($i); // UTF-8 char
+            $r = iconv('UTF-8', "$encoding//IGNORE", $c); // initial conversion
+            if (
+                $r === '' ||
+                // This line is needed for iconv implementations that do not
+                // omit characters that do not exist in the target character set
+                ($r === $c && iconv($encoding, 'UTF-8//IGNORE', $r) !== $c)
+            ) {
                 // Reverse engineer: what's the UTF-8 equiv of this byte
                 // sequence? This assumes that there's no variable width
                 // encoding that doesn't support ASCII.
