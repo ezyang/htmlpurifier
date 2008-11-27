@@ -38,7 +38,7 @@
  </directive>
  <directive id="CSS.AllowedProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>274</line>
+   <line>275</line>
   </file>
  </directive>
  <directive id="Cache.DefinitionImpl">

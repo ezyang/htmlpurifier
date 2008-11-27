@@ -141,6 +141,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->config->set('CSS', 'AllowTricky', true);
         $this->assertDef('display:none;');
         $this->assertDef('visibility:visible;');
+        $this->assertDef('overflow:scroll;');
     }
     
 }

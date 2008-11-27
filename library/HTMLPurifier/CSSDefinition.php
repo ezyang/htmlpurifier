@@ -257,6 +257,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         $this->info['visibility'] = new HTMLPurifier_AttrDef_Enum(array(
             'visible', 'hidden', 'collapse'
         ));
+        $this->info['overflow'] = new HTMLPurifier_AttrDef_Enum(array('visible', 'hidden', 'auto', 'scroll'));
     }
     
     
