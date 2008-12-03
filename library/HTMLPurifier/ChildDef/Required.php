@@ -11,6 +11,10 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
      */
     public $elements = array();
     /**
+     * Whether or not the last passed node was all whitespace.
+     */
+    protected $whitespace = false;
+    /**
      * @param $elements List of allowed element names (lowercase).
      */
     public function __construct($elements) {
@@ -31,6 +35,9 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
     public $allow_empty = false;
     public $type = 'required';
     public function validateChildren($tokens_of_children, $config, $context) {
+        // Flag for subclasses
+        $this->whitespace = false;
+
         // if there are no tokens, delete parent node
         if (empty($tokens_of_children)) return false;
         
@@ -98,7 +105,10 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
             }
         }
         if (empty($result)) return false;
-        if ($all_whitespace) return false;
+        if ($all_whitespace) {
+            $this->whitespace = true;
+            return false;
+        }
         if ($tokens_of_children == $result) return true;
         return $result;
     }

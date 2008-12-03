@@ -20,5 +20,12 @@ class HTMLPurifier_ChildDef_OptionalTest extends HTMLPurifier_ChildDefHarness
         $this->assertResult('');
     }
     
+    function testWhitespace() {
+        $this->assertResult(' ');
+    }
+    
+    function testMultipleWhitespace() {
+        $this->assertResult('    ');
+    }
+    
 }
-
