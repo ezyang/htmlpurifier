@@ -85,6 +85,17 @@ if (!SimpleReporter::inCli()) {
     $AC['php'] = $php;
 }
 
+// initialize and load HTML Purifier
+// use ?standalone to load the alterative standalone stub
+if ($AC['standalone']) {
+    require '../library/HTMLPurifier.standalone.php';
+} else {
+    require '../library/HTMLPurifier.path.php';
+    require 'HTMLPurifier.includes.php';
+}
+require '../library/HTMLPurifier.autoload.php';
+require 'HTMLPurifier/Harness.php';
+
 // Shell-script code is executed
 
 if ($AC['xml']) {
@@ -99,17 +110,6 @@ if ($AC['xml']) {
 if ($AC['flush']) {
     htmlpurifier_flush($AC['php'], $reporter);
 }
-
-// initialize and load HTML Purifier
-// use ?standalone to load the alterative standalone stub
-if ($AC['standalone']) {
-    require '../library/HTMLPurifier.standalone.php';
-} else {
-    require '../library/HTMLPurifier.path.php';
-    require 'HTMLPurifier.includes.php';
-}
-require '../library/HTMLPurifier.autoload.php';
-require 'HTMLPurifier/Harness.php';
 
 // Now, userland code begins to be executed
 
