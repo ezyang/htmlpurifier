@@ -24,3 +24,4 @@ class HTMLPurifier_Strategy_MakeWellFormed_SkipInjectorTest extends HTMLPurifier
     }
 }
 
+// vim: et sw=4 sts=4

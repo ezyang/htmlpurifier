@@ -13,3 +13,5 @@ if (function_exists('spl_autoload_register')) {
         assert('$__r->getFileName() != realpath("../library/HTMLPurifier.autoload.php")');
     }
 }
+
+// vim: et sw=4 sts=4

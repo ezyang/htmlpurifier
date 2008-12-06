@@ -38,3 +38,4 @@ class HTMLPurifier_Strategy_FixNesting_ErrorsTest extends HTMLPurifier_Strategy_
 
 }
 
+// vim: et sw=4 sts=4

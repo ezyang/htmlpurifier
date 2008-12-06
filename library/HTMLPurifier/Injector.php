@@ -230,3 +230,4 @@ abstract class HTMLPurifier_Injector
 
 }
 
+// vim: et sw=4 sts=4

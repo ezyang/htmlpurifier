@@ -118,3 +118,5 @@ class HTMLPurifier_URIFilter_MungeTest extends HTMLPurifier_URIFilterHarness
     }
 
 }
+
+// vim: et sw=4 sts=4

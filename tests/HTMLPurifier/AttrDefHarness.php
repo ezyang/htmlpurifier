@@ -24,3 +24,4 @@ class HTMLPurifier_AttrDefHarness extends HTMLPurifier_Harness
 
 }
 
+// vim: et sw=4 sts=4

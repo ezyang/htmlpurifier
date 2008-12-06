@@ -27,3 +27,4 @@ class HTMLPurifier_HTMLModule_ProprietaryTest extends HTMLPurifier_HTMLModuleHar
 
 }
 
+// vim: et sw=4 sts=4

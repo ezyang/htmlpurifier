@@ -46,3 +46,5 @@ class HTMLPurifier_AttrTransform_SafeParam extends HTMLPurifier_AttrTransform
         return $attr;
     }
 }
+
+// vim: et sw=4 sts=4

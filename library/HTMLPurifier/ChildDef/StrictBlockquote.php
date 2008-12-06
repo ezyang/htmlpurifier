@@ -85,3 +85,4 @@ class HTMLPurifier_ChildDef_StrictBlockquote extends HTMLPurifier_ChildDef_Requi
     }
 }
 
+// vim: et sw=4 sts=4

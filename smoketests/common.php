@@ -33,3 +33,5 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
     fix_magic_quotes($_ENV);
     fix_magic_quotes($_SERVER);
 }
+
+// vim: et sw=4 sts=4

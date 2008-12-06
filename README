@@ -20,3 +20,5 @@ Places to go:
 * See WYSIWYG for information on editors like TinyMCE and FCKeditor
 
 HTML Purifier can be found on the web at: http://htmlpurifier.org/
+
+    vim: et sw=4 sts=4

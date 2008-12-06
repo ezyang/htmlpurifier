@@ -108,3 +108,5 @@ X. Changelog
 2008-06-16
 - Updated code to work with 3.1.0 and later
 - Add Known Bugs and See Also section
+
+    vim: et sw=4 sts=4

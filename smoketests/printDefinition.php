@@ -115,3 +115,6 @@ Null/Disabled will mean that user whitelisting functionality is disabled.</p>
 <?php echo $printer_css_definition->render($config) ?>
 </body>
 </html>
+<?php
+
+// vim: et sw=4 sts=4

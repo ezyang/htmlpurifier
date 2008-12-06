@@ -348,3 +348,4 @@ class HTMLPurifier_Strategy_ValidateAttributes_TidyTest extends HTMLPurifier_Str
 
 }
 
+// vim: et sw=4 sts=4

@@ -19,3 +19,4 @@ $trunk_tag_url  = $svn_info['Repository Root'] . '/htmlpurifier/tags/' . $versio
 echo "Tagging trunk to tags/$version...";
 passthru("svn copy --message \"Tag $version release.\" $trunk_url $trunk_tag_url");
 
+// vim: et sw=4 sts=4

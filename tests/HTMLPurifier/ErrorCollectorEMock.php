@@ -45,3 +45,4 @@ class HTMLPurifier_ErrorCollectorEMock extends HTMLPurifier_ErrorCollectorMock
 
 }
 
+// vim: et sw=4 sts=4

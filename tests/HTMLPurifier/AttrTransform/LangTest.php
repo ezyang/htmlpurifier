@@ -43,3 +43,4 @@ class HTMLPurifier_AttrTransform_LangTest
 
 }
 
+// vim: et sw=4 sts=4

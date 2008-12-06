@@ -41,3 +41,4 @@ class HTMLPurifier_AttrTransform_BgColorTest extends HTMLPurifier_AttrTransformH
 
 }
 
+// vim: et sw=4 sts=4

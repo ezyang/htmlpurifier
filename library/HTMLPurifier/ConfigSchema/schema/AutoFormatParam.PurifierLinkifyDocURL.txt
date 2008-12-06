@@ -9,4 +9,4 @@ DEFAULT: '#%s'
   into the configuration's namespace and directive names sans the percent
   sign.
 </p>
-
+--# vim: et sw=4 sts=4

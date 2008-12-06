@@ -142,3 +142,5 @@ class HTMLPurifier_URIFilter_MakeAbsoluteTest extends HTMLPurifier_URIFilterHarn
     }
 
 }
+
+// vim: et sw=4 sts=4

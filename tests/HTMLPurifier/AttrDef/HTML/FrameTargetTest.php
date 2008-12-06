@@ -25,3 +25,4 @@ class HTMLPurifier_AttrDef_HTML_FrameTargetTest extends HTMLPurifier_AttrDefHarn
 
 }
 
+// vim: et sw=4 sts=4

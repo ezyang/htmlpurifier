@@ -68,3 +68,6 @@ foreach ($purifier->context->get('StyleBlocks') as $style) {
 </form>
 </body>
 </html>
+<?php
+
+// vim: et sw=4 sts=4

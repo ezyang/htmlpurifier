@@ -28,3 +28,4 @@ class HTMLPurifier_AttrTransform_NameTest extends HTMLPurifier_AttrTransformHarn
 
 }
 
+// vim: et sw=4 sts=4

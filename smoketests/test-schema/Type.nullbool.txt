@@ -4,3 +4,4 @@ DEFAULT: null
 --DESCRIPTION--
 Null booleans need to be treated a little specially. See %Type.nullstring
 for information on what the null flag does.
+--# vim: et sw=4 sts=4

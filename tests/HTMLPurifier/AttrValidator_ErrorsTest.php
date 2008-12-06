@@ -65,3 +65,4 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
 
 }
 
+// vim: et sw=4 sts=4

@@ -3,3 +3,4 @@ Attr.EnableID = true
 HTML.Doctype = "XHTML 1.0 Strict"
 --HTML--
 <a name="asdf"></a>
+--# vim: et sw=4 sts=4

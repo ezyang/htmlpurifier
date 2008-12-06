@@ -45,4 +45,4 @@ abstract class HTMLPurifier_ChildDef
     abstract public function validateChildren($tokens_of_children, $config, $context);
 }
 
-
+// vim: et sw=4 sts=4

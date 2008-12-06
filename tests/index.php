@@ -31,7 +31,6 @@ $php = 'php'; // for safety
 ini_set('memory_limit', '64M');
 
 require 'common.php';
-
 $AC = array(); // parameters
 $AC['flush'] = false;
 $AC['standalone'] = false;
@@ -193,3 +192,5 @@ if ($AC['file']) {
 if ($AC['dry']) $reporter->makeDry();
 
 $test->run($reporter);
+
+// vim: et sw=4 sts=4

@@ -39,3 +39,4 @@ foreach ($names as $name) {
 
 echo "Cache flushed successfully.\n";
 
+// vim: et sw=4 sts=4

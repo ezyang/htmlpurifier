@@ -59,3 +59,4 @@ if (php_sapi_name() != 'cli') {
     echo 'Files generated successfully.';
 }
 
+// vim: et sw=4 sts=4

@@ -11,4 +11,4 @@ ALIASES: Filter.ExtractStyleBlocksEscaping
   if the contents of StyleBlocks will be placed in an external stylesheet,
   where there is no risk of it being interpreted as HTML.
 </p>
-
+--# vim: et sw=4 sts=4

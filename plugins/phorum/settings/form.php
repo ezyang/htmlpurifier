@@ -90,3 +90,4 @@ function phorum_htmlpurifier_show_config_info() {
 
 }
 
+// vim: et sw=4 sts=4

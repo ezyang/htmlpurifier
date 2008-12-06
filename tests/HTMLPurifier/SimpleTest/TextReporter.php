@@ -16,3 +16,5 @@ class HTMLPurifier_SimpleTest_TextReporter extends TextReporter {
         }
     }
 }
+
+// vim: et sw=4 sts=4

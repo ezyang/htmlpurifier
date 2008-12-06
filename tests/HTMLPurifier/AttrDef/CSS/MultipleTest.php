@@ -25,3 +25,4 @@ class HTMLPurifier_AttrDef_CSS_MultipleTest extends HTMLPurifier_AttrDefHarness
 
 }
 
+// vim: et sw=4 sts=4

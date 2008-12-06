@@ -53,3 +53,4 @@ class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
 
 }
 
+// vim: et sw=4 sts=4

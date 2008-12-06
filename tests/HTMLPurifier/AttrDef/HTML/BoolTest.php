@@ -19,3 +19,4 @@ class HTMLPurifier_AttrDef_HTML_BoolTest extends HTMLPurifier_AttrDefHarness
 
 }
 
+// vim: et sw=4 sts=4

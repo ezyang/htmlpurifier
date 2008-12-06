@@ -22,3 +22,5 @@ Version 3.0.0 for Phorum 5.2, released January 12, 2008
   compatible with Phorum 5.1.
 - Buggy WYSIWYG mode refined
 . AutoFormatParam added to list of default configuration namespaces
+
+    vim: et sw=4 sts=4

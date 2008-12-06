@@ -20,3 +20,5 @@ class PHPT_Controller_SimpleTest extends SimpleTestCase
     }
 
 }
+
+// vim: et sw=4 sts=4

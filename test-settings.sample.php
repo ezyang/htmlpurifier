@@ -68,3 +68,4 @@ $phpv = false;
 // to true (or, if it's not in the include path, to its install directory).
 $GLOBALS['HTMLPurifierTest']['PEAR'] = false;
 
+// vim: et sw=4 sts=4

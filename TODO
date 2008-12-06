@@ -127,3 +127,5 @@ Wontfix
  - Pretty-printing HTML: users can use Tidy on the output on entire page
  - Native content compression, whitespace stripping: use gzip if this is
    really important
+
+    vim: et sw=4 sts=4

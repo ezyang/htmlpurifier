@@ -52,3 +52,4 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
 
 }
 
+// vim: et sw=4 sts=4

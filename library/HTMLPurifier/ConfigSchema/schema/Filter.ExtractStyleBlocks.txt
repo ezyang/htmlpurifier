@@ -71,3 +71,4 @@ EXTERNAL: CSSTidy
   height (somewhat reasonable). Whether or not these measures should be
   used is left to the reader.
 </p>
+--# vim: et sw=4 sts=4

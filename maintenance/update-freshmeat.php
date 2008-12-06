@@ -152,3 +152,5 @@ $rpc->publishRelease(
     'url_zip',       "http://htmlpurifier.org/releases/htmlpurifier-$version.zip",
     'url_changelog', "http://htmlpurifier.org/svnroot/htmlpurifier/tags/$version/NEWS"
 );
+
+// vim: et sw=4 sts=4

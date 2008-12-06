@@ -52,3 +52,4 @@ alert("<This is compatible with XHTML>");
 
 }
 
+// vim: et sw=4 sts=4

@@ -14,4 +14,4 @@ DEFAULT: NULL
     <strong>Warning:</strong> If set, the scheme on this URI
     overrides the one specified by %URI.DefaultScheme.
 </p>
-
+--# vim: et sw=4 sts=4

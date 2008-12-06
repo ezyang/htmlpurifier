@@ -32,3 +32,5 @@ class FSTools_FileSystemHarness extends UnitTestCase
     }
 
 }
+
+// vim: et sw=4 sts=4

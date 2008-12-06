@@ -35,3 +35,4 @@ class HTMLPurifier_AttrTransform_BorderTest extends HTMLPurifier_AttrTransformHa
 
 }
 
+// vim: et sw=4 sts=4

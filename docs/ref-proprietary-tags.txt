@@ -22,3 +22,5 @@ HTML Purifier context.
 
 These should be put into their own Tidy module, not loaded by default(?). These
 all qualify as "lenient" transforms.
+
+    vim: et sw=4 sts=4

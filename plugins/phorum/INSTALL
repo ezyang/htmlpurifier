@@ -76,4 +76,4 @@ ONLY DO THIS ONCE! BE SURE TO BACK UP YOUR DATABASE!
 ------------
 Configure using Edit settings. See that page for more information.
 
-
+    vim: et sw=4 sts=4

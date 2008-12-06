@@ -23,3 +23,4 @@ abstract class HTMLPurifier_Strategy
 
 }
 
+// vim: et sw=4 sts=4

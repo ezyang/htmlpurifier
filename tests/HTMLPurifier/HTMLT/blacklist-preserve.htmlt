@@ -3,3 +3,4 @@ HTML.ForbiddenElements = b
 HTML.ForbiddenAttributes = a@href
 --HTML--
 <p>foo</p>
+--# vim: et sw=4 sts=4

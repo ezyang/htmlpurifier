@@ -180,3 +180,4 @@ class HTMLPurifier_Generator
 
 }
 
+// vim: et sw=4 sts=4

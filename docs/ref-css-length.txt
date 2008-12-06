@@ -26,3 +26,5 @@ Watch out: font-sizes can also be nested to get successively larger
 (although I do not relish having to keep track of context font-sizes,
 this may be necessary, especially for some of the more advanced features
 for preventing things like white on white).
+
+    vim: et sw=4 sts=4

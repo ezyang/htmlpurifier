@@ -370,3 +370,4 @@ If your website is in a different encoding or doctype, use this code:
     $clean_html = $purifier->purify($dirty_html);
 ?>
 
+    vim: et sw=4 sts=4

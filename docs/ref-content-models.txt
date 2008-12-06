@@ -46,3 +46,5 @@ is eliminated completely, in the latter case, the text of the node
 would is preserved (as the parent node does allow PCDATA).  Custom
 content model implementations probably are not the best way of handling
 these cases, instead, node bubbling should be implemented instead.
+
+    vim: et sw=4 sts=4

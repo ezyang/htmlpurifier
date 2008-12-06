@@ -48,3 +48,4 @@ class HTMLPurifier_AttrDef_CSS_NumberTest extends HTMLPurifier_AttrDefHarness
 
 }
 
+// vim: et sw=4 sts=4

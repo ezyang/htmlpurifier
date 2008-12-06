@@ -41,3 +41,5 @@ switch ($AC['type']) {
             $phpt_dirs[] = 'HTMLPurifier/PHPT';
         }
 }
+
+// vim: et sw=4 sts=4

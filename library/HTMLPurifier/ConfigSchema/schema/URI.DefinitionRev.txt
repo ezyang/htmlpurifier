@@ -8,4 +8,4 @@ DEFAULT: 1
     Revision identifier for your custom definition. See
     %HTML.DefinitionRev for details.
 </p>
-
+--# vim: et sw=4 sts=4

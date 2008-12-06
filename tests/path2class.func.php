@@ -11,3 +11,4 @@ function path2class($path) {
     return $temp;
 }
 
+// vim: et sw=4 sts=4

@@ -69,3 +69,5 @@ hr {height:1em;}
 hr[size='50'] {height:50px;}
 img[border='3'] {border: 3px solid #000;}
 li[type='a'], li[value='5'] {color:#DDD;}
+
+/* vim: et sw=4 sts=4 */

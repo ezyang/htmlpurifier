@@ -44,3 +44,4 @@ class HTMLPurifier_DefinitionCache_Decorator_Template extends
 
 }
 
+// vim: et sw=4 sts=4

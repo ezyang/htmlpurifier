@@ -70,3 +70,4 @@ class HTMLPurifier_AttrTransform_EnumToCSSTest extends HTMLPurifier_AttrTransfor
 
 }
 
+// vim: et sw=4 sts=4

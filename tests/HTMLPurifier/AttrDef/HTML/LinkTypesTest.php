@@ -18,3 +18,4 @@ class HTMLPurifier_AttrDef_HTML_LinkTypesTest extends HTMLPurifier_AttrDefHarnes
 
 }
 
+// vim: et sw=4 sts=4

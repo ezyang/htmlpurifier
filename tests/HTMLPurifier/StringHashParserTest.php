@@ -85,3 +85,5 @@ class HTMLPurifier_StringHashParserTest extends UnitTestCase
     }
 
 }
+
+// vim: et sw=4 sts=4

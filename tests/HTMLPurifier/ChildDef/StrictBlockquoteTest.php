@@ -80,3 +80,4 @@ extends HTMLPurifier_ChildDefHarness
 
 }
 
+// vim: et sw=4 sts=4

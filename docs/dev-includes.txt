@@ -277,3 +277,5 @@ DEPRECATED-VERSION: If the directive was deprecated, when was it deprecated?
 DEPRECATED-USE: If the directive was deprecated, what should the user use now?
 REQUIRES: What classes does this configuration directive require, but are
     not part of the HTML Purifier core?
+
+    vim: et sw=4 sts=4

@@ -72,3 +72,5 @@ q:after {
 .fixme:before {content:"Fix me: "; font-weight:bold; color:#C00; }
 
 #applicability {margin: 1em 5%; font-style:italic;}
+
+/* vim: et sw=4 sts=4 */

@@ -54,3 +54,4 @@ if (strtolower($GLOBALS['PHORUM']['DATA']['CHARSET']) !== 'utf-8') {
   $config->set('Core', 'EscapeNonASCIICharacters', true);
 }
 
+// vim: et sw=4 sts=4

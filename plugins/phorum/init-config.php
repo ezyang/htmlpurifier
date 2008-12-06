@@ -25,3 +25,4 @@ function phorum_htmlpurifier_config_file_exists() {
     return file_exists(dirname(__FILE__) . '/config.php');
 }
 
+// vim: et sw=4 sts=4

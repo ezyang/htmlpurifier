@@ -43,3 +43,4 @@ class HTMLPurifier_DefinitionCache_Decorator_Memory extends
 
 }
 
+// vim: et sw=4 sts=4

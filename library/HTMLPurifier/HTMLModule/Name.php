@@ -14,3 +14,5 @@ class HTMLPurifier_HTMLModule_Name extends HTMLPurifier_HTMLModule
     }
 
 }
+
+// vim: et sw=4 sts=4

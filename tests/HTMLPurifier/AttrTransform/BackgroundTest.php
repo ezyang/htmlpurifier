@@ -37,3 +37,4 @@ class HTMLPurifier_AttrTransform_BackgroundTest extends HTMLPurifier_AttrTransfo
 
 }
 
+// vim: et sw=4 sts=4

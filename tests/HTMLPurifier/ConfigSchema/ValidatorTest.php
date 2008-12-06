@@ -130,3 +130,5 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
     }
 
 }
+
+// vim: et sw=4 sts=4

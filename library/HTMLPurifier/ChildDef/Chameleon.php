@@ -45,3 +45,4 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
     }
 }
 
+// vim: et sw=4 sts=4

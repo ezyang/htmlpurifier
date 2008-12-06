@@ -30,3 +30,4 @@ class HTMLPurifier_HTMLModule_Proprietary extends HTMLPurifier_HTMLModule
 
 }
 
+// vim: et sw=4 sts=4

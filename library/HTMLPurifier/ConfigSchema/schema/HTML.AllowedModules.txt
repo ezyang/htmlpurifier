@@ -17,4 +17,4 @@ DEFAULT: NULL
     by this directive. Modules defined in %HTML.CoreModules are not
     affected by this directive.
 </p>
-
+--# vim: et sw=4 sts=4

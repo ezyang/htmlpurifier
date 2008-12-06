@@ -6,3 +6,4 @@ DEFAULT: array()
 List of allowed reverse document relationships in the rev attribute. This
 attribute is a bit of an edge-case; if you don't know what it is for, stay
 away.
+--# vim: et sw=4 sts=4

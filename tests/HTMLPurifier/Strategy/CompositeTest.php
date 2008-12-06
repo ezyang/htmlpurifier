@@ -63,3 +63,4 @@ class HTMLPurifier_Strategy_CompositeTest extends HTMLPurifier_Harness
 
 }
 
+// vim: et sw=4 sts=4

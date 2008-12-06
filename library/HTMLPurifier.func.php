@@ -20,3 +20,4 @@ function HTMLPurifier($html, $config = null) {
     return $purifier->purify($html, $config);
 }
 
+// vim: et sw=4 sts=4

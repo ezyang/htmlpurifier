@@ -49,3 +49,5 @@ class HTMLPurifier_URIFilter_DisableExternalTest extends HTMLPurifier_URIFilterH
     }
 
 }
+
+// vim: et sw=4 sts=4

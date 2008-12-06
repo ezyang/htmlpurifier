@@ -66,3 +66,5 @@ foreach ($schema->info as $ns => $ns_array) {
         saveHash($adapter->get($ns, $dir));
     }
 }
+
+// vim: et sw=4 sts=4

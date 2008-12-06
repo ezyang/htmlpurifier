@@ -15,3 +15,4 @@ DEFAULT: NULL
     <strong>Warning:</strong> If another directive conflicts with the
     elements here, <em>that</em> directive will win and override.
 </p>
+--# vim: et sw=4 sts=4

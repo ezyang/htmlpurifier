@@ -39,3 +39,6 @@ while (false !== ($filename = readdir($dh))) {
 </div>
 </body>
 </html>
+<?php
+
+// vim: et sw=4 sts=4

@@ -21,3 +21,5 @@ if (function_exists('spl_autoload_register')) {
         return HTMLPurifierExtras::autoload($class);
     }
 }
+
+// vim: et sw=4 sts=4

@@ -29,3 +29,5 @@ class HTMLPurifier_VarParserHarness extends UnitTestCase
     }
 
 }
+
+// vim: et sw=4 sts=4

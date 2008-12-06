@@ -14,3 +14,5 @@ to be effective. Things to remember:
 
 4. CSS: document pending
 Explain which CSS styles we blocked and why.
+
+    vim: et sw=4 sts=4

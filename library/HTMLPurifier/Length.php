@@ -111,3 +111,5 @@ class HTMLPurifier_Length
     }
 
 }
+
+// vim: et sw=4 sts=4

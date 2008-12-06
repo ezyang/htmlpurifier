@@ -52,3 +52,5 @@ class HTMLPurifier_Token {
     }
 
 }
+
+// vim: et sw=4 sts=4

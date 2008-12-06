@@ -8,3 +8,4 @@ and anti-pagerank-leech measure, but comes at a hefty price: nolinks or
 images outside of your domain will be allowed.  Non-linkified URIs will
 still be preserved.  If you want to be able to link to subdomains or use
 absolute URIs, specify %URI.Host for your website.
+--# vim: et sw=4 sts=4

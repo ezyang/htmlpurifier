@@ -225,3 +225,5 @@ function htmlpurifier_dump_error_queue() {
     }
 }
 register_shutdown_function('htmlpurifier_dump_error_queue');
+
+// vim: et sw=4 sts=4

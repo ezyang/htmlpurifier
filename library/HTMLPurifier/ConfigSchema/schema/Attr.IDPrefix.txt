@@ -9,3 +9,4 @@ that they are still usable, but will not conflict with core page IDs.
 Example: setting the directive to 'user_' will result in a user submitted
 'foo' to become 'user_foo'  Be sure to set %HTML.EnableAttrID to true
 before using this.
+--# vim: et sw=4 sts=4

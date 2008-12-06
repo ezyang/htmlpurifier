@@ -24,3 +24,4 @@ class HTMLPurifier_AttrDef_CSS_TextDecorationTest extends HTMLPurifier_AttrDefHa
 
 }
 
+// vim: et sw=4 sts=4

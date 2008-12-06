@@ -85,3 +85,4 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
 
 }
 
+// vim: et sw=4 sts=4

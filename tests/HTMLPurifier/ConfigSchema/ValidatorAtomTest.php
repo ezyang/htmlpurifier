@@ -88,3 +88,5 @@ class HTMLPurifier_ConfigSchema_ValidatorAtomTest extends UnitTestCase
         $this->makeAtom('asdf')->assertIsLookup();
     }
 }
+
+// vim: et sw=4 sts=4

@@ -17,3 +17,5 @@ class HTMLPurifier_HTMLModule_Tidy_Strict extends HTMLPurifier_HTMLModule_Tidy_X
         return new HTMLPurifier_ChildDef_StrictBlockquote($def->content_model);
     }
 }
+
+// vim: et sw=4 sts=4

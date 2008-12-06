@@ -18,3 +18,4 @@ class HTMLPurifier_Token_Comment extends HTMLPurifier_Token
     }
 }
 
+// vim: et sw=4 sts=4

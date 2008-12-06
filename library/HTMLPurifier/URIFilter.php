@@ -41,3 +41,5 @@ abstract class HTMLPurifier_URIFilter
     abstract public function filter(&$uri, $config, $context);
 
 }
+
+// vim: et sw=4 sts=4

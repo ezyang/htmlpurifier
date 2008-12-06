@@ -73,3 +73,5 @@ class PHPT_Reporter_SimpleTest implements PHPT_Reporter
     }
 
 }
+
+// vim: et sw=4 sts=4

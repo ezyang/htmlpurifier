@@ -306,3 +306,4 @@ function phorum_htmlpurifier_editor_after_subject() {
     </div><?php
 }
 
+// vim: et sw=4 sts=4

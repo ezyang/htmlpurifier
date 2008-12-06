@@ -60,3 +60,5 @@ Neat functionality:
 -  Roman numeral formatting
 
 Items marked with a + likely need to be addressed by HTML Purifier
+
+    vim: et sw=4 sts=4

@@ -70,3 +70,5 @@ class HTMLPurifier_PropertyList
         $this->parent = $plist;
     }
 }
+
+// vim: et sw=4 sts=4

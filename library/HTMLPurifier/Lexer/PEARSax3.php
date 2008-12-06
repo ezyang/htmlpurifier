@@ -103,3 +103,4 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
 
 }
 
+// vim: et sw=4 sts=4

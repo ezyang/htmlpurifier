@@ -16,4 +16,4 @@ DEFAULT: NULL
     a given page may be on a sub-domain, but you wish HTML Purifier to be
     more relaxed and allow some of the parent domains too.
 </p>
-
+--# vim: et sw=4 sts=4

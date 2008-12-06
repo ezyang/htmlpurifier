@@ -10,4 +10,4 @@ DEFAULT: NULL
     HTML Purifier library inside DefinitionCache/Serializer. This
     path must be writable by the webserver.
 </p>
-
+--# vim: et sw=4 sts=4

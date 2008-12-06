@@ -289,3 +289,4 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
     }
 }
 
+// vim: et sw=4 sts=4

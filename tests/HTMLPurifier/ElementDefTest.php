@@ -88,3 +88,4 @@ class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
 
 }
 
+// vim: et sw=4 sts=4

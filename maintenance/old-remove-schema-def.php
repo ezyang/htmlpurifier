@@ -28,3 +28,5 @@ foreach ($files as $file) {
         echo "Indented ConfigSchema call in $file\n";
     }
 }
+
+// vim: et sw=4 sts=4

@@ -12,3 +12,5 @@
   <type id="hash">Associative array</type>
   <type id="mixed">Mixed</type>
 </types>
+
+<!-- vim: et sw=4 sts=4 -->

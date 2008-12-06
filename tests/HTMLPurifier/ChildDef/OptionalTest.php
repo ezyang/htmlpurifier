@@ -29,3 +29,5 @@ class HTMLPurifier_ChildDef_OptionalTest extends HTMLPurifier_ChildDefHarness
     }
 
 }
+
+// vim: et sw=4 sts=4

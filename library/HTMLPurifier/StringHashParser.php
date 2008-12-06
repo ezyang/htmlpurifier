@@ -75,7 +75,10 @@ class HTMLPurifier_StringHashParser
             $line = rtrim($line, "\n\r");
             if (!$state && $line === '') continue;
             if ($line === '----') break;
-            if (strncmp('--', $line, 2) === 0) {
+            if (strncmp('--#', $line, 3) === 0) {
+                // Comment
+                continue;
+            } elseif (strncmp('--', $line, 2) === 0) {
                 // Multiline declaration
                 $state = trim($line, '- ');
                 if (!isset($ret[$state])) $ret[$state] = '';
@@ -103,3 +106,5 @@ class HTMLPurifier_StringHashParser
     }
 
 }
+
+// vim: et sw=4 sts=4

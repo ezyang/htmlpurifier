@@ -29,4 +29,5 @@ class HTMLPurifier_Injector_DisplayLinkURITest extends HTMLPurifier_InjectorHarn
     }
 
 }
-?>
+
+// vim: et sw=4 sts=4

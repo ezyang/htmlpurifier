@@ -5,3 +5,4 @@ HTML.ForbiddenAttributes = a@href
 <b>Foo<a href="bar">bar</a></b>
 --EXPECT--
 Foo<a>bar</a>
+--# vim: et sw=4 sts=4

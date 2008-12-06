@@ -41,3 +41,4 @@ implemented, give us a ring, and we'll move it up the priority chain.
     absolute DNS.  While this is actually the preferred method according to
     the RFC, most people opt to use a relative domain name relative to . (root).
 
+    vim: et sw=4 sts=4

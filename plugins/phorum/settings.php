@@ -61,3 +61,4 @@ phorum_htmlpurifier_show_migrate_sigs_form();
 echo '<br />';
 phorum_htmlpurifier_show_form();
 
+// vim: et sw=4 sts=4

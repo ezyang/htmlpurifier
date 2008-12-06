@@ -52,3 +52,5 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token
         $this->col  = $col;
     }
 }
+
+// vim: et sw=4 sts=4

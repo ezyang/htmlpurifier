@@ -60,3 +60,4 @@ class HTMLPurifier_Strategy_ValidateAttributes_IDTest extends HTMLPurifier_Strat
 
 }
 
+// vim: et sw=4 sts=4

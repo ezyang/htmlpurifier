@@ -71,4 +71,4 @@ class HTMLPurifier_AttrTypes
     }
 }
 
-
+// vim: et sw=4 sts=4

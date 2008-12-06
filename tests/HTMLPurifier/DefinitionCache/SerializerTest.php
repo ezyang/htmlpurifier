@@ -195,3 +195,4 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
 
 }
 
+// vim: et sw=4 sts=4

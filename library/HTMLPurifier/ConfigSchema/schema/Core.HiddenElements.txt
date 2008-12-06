@@ -16,4 +16,4 @@ array (
   tag, which defines some presentational changes but does not hide its
   contents.
 </p>
-
+--# vim: et sw=4 sts=4

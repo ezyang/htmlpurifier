@@ -29,3 +29,5 @@ class HTMLPurifier_HTMLT extends HTMLPurifier_Harness
         if (isset($hash['INI'])) unlink($ini_file);
     }
 }
+
+// vim: et sw=4 sts=4

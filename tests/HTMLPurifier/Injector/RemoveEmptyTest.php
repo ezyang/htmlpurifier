@@ -56,3 +56,4 @@ class HTMLPurifier_Injector_RemoveEmptyTest extends HTMLPurifier_InjectorHarness
 
 }
 
+// vim: et sw=4 sts=4

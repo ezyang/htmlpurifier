@@ -67,3 +67,4 @@ class HTMLPurifier_DefinitionCacheFactoryTest extends HTMLPurifier_Harness
 
 }
 
+// vim: et sw=4 sts=4

@@ -28,3 +28,5 @@ foreach ($files as $file) {
         file_put_contents($file, $new_code);
     }
 }
+
+// vim: et sw=4 sts=4

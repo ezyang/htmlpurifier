@@ -50,3 +50,4 @@ class HTMLPurifier_IDAccumulator
 
 }
 
+// vim: et sw=4 sts=4

@@ -206,3 +206,4 @@ class HTMLPurifier_ErrorCollector
 
 }
 
+// vim: et sw=4 sts=4

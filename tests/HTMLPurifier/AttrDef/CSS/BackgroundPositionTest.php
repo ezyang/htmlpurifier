@@ -65,3 +65,4 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPositionTest extends HTMLPurifier_AttrD
 
 }
 
+// vim: et sw=4 sts=4

@@ -25,3 +25,4 @@ class HTMLPurifier_AttrDef_HTML_MultiLengthTest extends HTMLPurifier_AttrDef_HTM
 
 }
 
+// vim: et sw=4 sts=4

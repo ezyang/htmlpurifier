@@ -105,3 +105,4 @@ alert(&lt;b&gt;bold&lt;/b&gt;);
 
 }
 
+// vim: et sw=4 sts=4

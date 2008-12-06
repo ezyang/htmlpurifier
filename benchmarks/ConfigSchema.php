@@ -12,3 +12,5 @@ $begin = xdebug_memory_usage();
 $schema = HTMLPurifier_ConfigSchema::makeFromSerial();
 
 echo xdebug_memory_usage() - $begin;
+
+// vim: et sw=4 sts=4

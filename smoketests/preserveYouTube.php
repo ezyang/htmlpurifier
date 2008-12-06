@@ -42,3 +42,6 @@ echo $youtube_purifier->purify($string);
 
 </body>
 </html>
+<?php
+
+// vim: et sw=4 sts=4

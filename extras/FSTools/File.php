@@ -122,3 +122,5 @@ class FSTools_File
     }
 
 }
+
+// vim: et sw=4 sts=4

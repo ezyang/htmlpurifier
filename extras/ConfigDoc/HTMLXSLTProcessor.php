@@ -83,3 +83,4 @@ class ConfigDoc_HTMLXSLTProcessor
 
 }
 
+// vim: et sw=4 sts=4

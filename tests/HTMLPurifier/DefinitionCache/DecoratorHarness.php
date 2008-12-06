@@ -20,3 +20,4 @@ class HTMLPurifier_DefinitionCache_DecoratorHarness extends HTMLPurifier_Definit
 
 }
 
+// vim: et sw=4 sts=4

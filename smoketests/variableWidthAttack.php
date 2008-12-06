@@ -52,3 +52,6 @@ removed, as well as escaping quotes outside of tags, this is a non-threat.</p>
 
 </body>
 </html>
+<?php
+
+// vim: et sw=4 sts=4

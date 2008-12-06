@@ -36,3 +36,5 @@ class HTMLPurifier_AttrDef_CSS_ImportantDecorator extends HTMLPurifier_AttrDef
         return $string;
     }
 }
+
+// vim: et sw=4 sts=4

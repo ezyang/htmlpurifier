@@ -17,3 +17,4 @@ class HTMLPurifier_URIScheme_nntp extends HTMLPurifier_URIScheme {
 
 }
 
+// vim: et sw=4 sts=4

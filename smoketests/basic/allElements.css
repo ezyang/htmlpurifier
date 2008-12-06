@@ -46,3 +46,5 @@ div > * {background:#F00; color:#FFF; font-weight:bold; padding:0.2em; margin:0.
  {background:#008000; margin:0; padding:0.2em;}
 #module-text span, #module-text div {padding:0; margin:0.1em;}
 #module-list li, #module-list dd, #module-list dt {border:1px solid #FFF;}
+
+/* vim: et sw=4 sts=4 */

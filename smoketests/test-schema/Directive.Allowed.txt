@@ -3,3 +3,4 @@ TYPE: string
 DEFAULT: 'apple'
 ALLOWED: 'apple', 'orange', 'pear', 'peach', 'mango'
 DESCRIPTION: This directive has a constrained set of allowed values.
+--# vim: et sw=4 sts=4

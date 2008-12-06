@@ -221,3 +221,5 @@ class HTMLPurifier_ConfigSchema_Validator
     }
 
 }
+
+// vim: et sw=4 sts=4

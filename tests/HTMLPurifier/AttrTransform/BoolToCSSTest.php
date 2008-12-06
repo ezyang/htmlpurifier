@@ -35,3 +35,4 @@ class HTMLPurifier_AttrTransform_BoolToCSSTest extends HTMLPurifier_AttrTransfor
 
 }
 
+// vim: et sw=4 sts=4

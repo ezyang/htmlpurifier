@@ -8,3 +8,4 @@ function generate_mock_once($name) {
     Mock::generate($name, $mock_name);
 }
 
+// vim: et sw=4 sts=4

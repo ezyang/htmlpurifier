@@ -29,3 +29,5 @@ class HTMLPurifier_Token_Text extends HTMLPurifier_Token
     }
 
 }
+
+// vim: et sw=4 sts=4

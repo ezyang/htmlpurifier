@@ -11,3 +11,5 @@ class HTMLPurifier_URIFilterHarness extends HTMLPurifier_URIHarness
     }
 
 }
+
+// vim: et sw=4 sts=4

@@ -133,3 +133,5 @@ Dramatic - border, list-style-position (list-style), margin, padding,
 
 Dramatic elements substantially change the look of text in ways that should
 probably have been reserved to other areas.
+
+    vim: et sw=4 sts=4

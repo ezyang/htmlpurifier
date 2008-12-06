@@ -10,3 +10,4 @@ class HTMLPurifier_AttrTransformHarness extends HTMLPurifier_ComplexHarness
 
 }
 
+// vim: et sw=4 sts=4

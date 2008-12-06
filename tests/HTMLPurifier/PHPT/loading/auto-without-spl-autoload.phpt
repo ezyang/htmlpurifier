@@ -17,4 +17,3 @@ echo $purifier->purify('<b>Salsa!') . "
 
 --EXPECT--
 <b>Salsa!</b>
-

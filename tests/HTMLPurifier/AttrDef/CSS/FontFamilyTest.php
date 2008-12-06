@@ -36,3 +36,4 @@ class HTMLPurifier_AttrDef_CSS_FontFamilyTest extends HTMLPurifier_AttrDefHarnes
 
 }
 
+// vim: et sw=4 sts=4

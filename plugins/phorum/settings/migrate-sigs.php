@@ -73,3 +73,5 @@ function phorum_htmlpurifier_migrate_sigs($offset) {
     exit;
 
 }
+
+// vim: et sw=4 sts=4

@@ -24,3 +24,5 @@ class HTMLPurifier_AttrDef_CSS_DenyElementDecorator extends HTMLPurifier_AttrDef
         return $this->def->validate($string, $config, $context);
     }
 }
+
+// vim: et sw=4 sts=4

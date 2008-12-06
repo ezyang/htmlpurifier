@@ -52,3 +52,4 @@ class HTMLPurifier_HTMLModule_ImageTest extends HTMLPurifier_HTMLModuleHarness
 
 }
 
+// vim: et sw=4 sts=4

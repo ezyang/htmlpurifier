@@ -15,4 +15,4 @@ DEFAULT: 'p'
     The <code>&lt;p&gt;</code> tags can be replaced with whatever you desire,
     as long as it is a block level element.
 </p>
-
+--# vim: et sw=4 sts=4

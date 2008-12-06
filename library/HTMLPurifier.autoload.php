@@ -17,3 +17,5 @@ if (function_exists('spl_autoload_register') && function_exists('spl_autoload_un
         return HTMLPurifier_Bootstrap::autoload($class);
     }
 }
+
+// vim: et sw=4 sts=4

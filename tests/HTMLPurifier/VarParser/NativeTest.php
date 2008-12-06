@@ -8,3 +8,5 @@ class HTMLPurifier_VarParser_NativeTest extends HTMLPurifier_VarParserHarness
     }
 
 }
+
+// vim: et sw=4 sts=4

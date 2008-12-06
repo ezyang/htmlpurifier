@@ -68,3 +68,4 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
 
 }
 
+// vim: et sw=4 sts=4

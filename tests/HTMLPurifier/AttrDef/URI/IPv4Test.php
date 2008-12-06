@@ -21,3 +21,5 @@ class HTMLPurifier_AttrDef_URI_IPv4Test extends HTMLPurifier_AttrDefHarness
 
     }
 }
+
+// vim: et sw=4 sts=4

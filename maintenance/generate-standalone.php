@@ -43,6 +43,7 @@ $FS = new MergeLibraryFSTools();
  * @param string $text PHP source code to replace includes from
  */
 function replace_includes($text) {
+    // also remove vim modelines
     return preg_replace_callback(
         "/require(?:_once)? ['\"]([^'\"]+)['\"];/",
         'replace_includes_callback',
@@ -52,11 +53,12 @@ function replace_includes($text) {
 
 /**
  * Removes leading PHP tags from included files. Assumes that there is
- * no trailing tag.
+ * no trailing tag. Also removes vim modelines.
  * @note This is safe for files that have internal <?php
  * @param string $text Text to have leading PHP tag from
  */
 function remove_php_tags($text) {
+    $text = preg_replace('#// vim:.+#', '', $text);
     return substr($text, 5);
 }
 
@@ -146,3 +148,5 @@ make_file_standalone('HTMLPurifier/Lexer/PH5P.php');
 make_file_standalone('HTMLPurifier/Lexer/PEARSax3.php');
 
 echo ' done!' . PHP_EOL;
+
+// vim: et sw=4 sts=4

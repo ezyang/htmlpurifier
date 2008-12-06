@@ -78,3 +78,4 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
 
 }
 
+// vim: et sw=4 sts=4

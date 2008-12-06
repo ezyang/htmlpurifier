@@ -132,3 +132,4 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
 
 }
 
+// vim: et sw=4 sts=4

@@ -7,4 +7,4 @@ DEFAULT: 'http'
     Defines through what scheme the output will be served, in order to
     select the proper object validator when no scheme information is present.
 </p>
-
+--# vim: et sw=4 sts=4

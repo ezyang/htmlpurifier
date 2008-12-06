@@ -41,3 +41,5 @@ class HTMLPurifier_Strategy_RemoveForeignElements_TidyTest
     }
 
 }
+
+// vim: et sw=4 sts=4

@@ -2,3 +2,4 @@
 CSS.AllowedProperties = color,background-color
 --HTML--
 <div style="color:#f00;background-color:#ded;">red</div>
+--# vim: et sw=4 sts=4

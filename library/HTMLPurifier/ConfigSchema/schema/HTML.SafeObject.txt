@@ -11,3 +11,4 @@ DEFAULT: false
     although embed tags will cause your website to stop validating.
     <strong>Highly experimental.</strong>
 </p>
+--# vim: et sw=4 sts=4

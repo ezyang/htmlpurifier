@@ -22,3 +22,4 @@ DEFAULT: false
 </p>
 --ALIASES--
 Core.TidyFormat
+--# vim: et sw=4 sts=4

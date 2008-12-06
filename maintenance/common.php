@@ -8,5 +8,15 @@ set environment variable PHP_IS_CLI to work around this).';
     }
 }
 
+function prefix_is($comp, $subject) {
+    return strncmp($comp, $subject, strlen($comp)) === 0;
+}
+
+function postfix_is($comp, $subject) {
+    return strlen($subject) < $comp ? false : substr($subject, -strlen($comp)) === $comp;
+}
+
 // Load useful stuff like FSTools
 require_once '../extras/HTMLPurifierExtras.auto.php';
+
+// vim: et sw=4 sts=4

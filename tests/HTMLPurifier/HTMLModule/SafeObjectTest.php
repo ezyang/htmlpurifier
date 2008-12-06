@@ -40,3 +40,4 @@ class HTMLPurifier_HTMLModule_SafeObjectTest extends HTMLPurifier_HTMLModuleHarn
 
 }
 
+// vim: et sw=4 sts=4

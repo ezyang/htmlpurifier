@@ -20,3 +20,4 @@ class HTMLPurifier_AttrDef_CSS_BackgroundTest extends HTMLPurifier_AttrDefHarnes
 
 }
 
+// vim: et sw=4 sts=4

@@ -57,3 +57,4 @@ class HTMLPurifier_Doctype
     }
 }
 
+// vim: et sw=4 sts=4

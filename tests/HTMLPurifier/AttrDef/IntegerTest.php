@@ -58,3 +58,4 @@ class HTMLPurifier_AttrDef_IntegerTest extends HTMLPurifier_AttrDefHarness
 
 }
 
+// vim: et sw=4 sts=4

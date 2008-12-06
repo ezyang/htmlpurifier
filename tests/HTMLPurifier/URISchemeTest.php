@@ -134,3 +134,4 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
 
 }
 
+// vim: et sw=4 sts=4

@@ -26,3 +26,5 @@ e($php . ' generate-schema-cache.php');
 e($php . ' flush-definition-cache.php');
 e($php . ' generate-standalone.php');
 e($php . ' config-scanner.php');
+
+// vim: et sw=4 sts=4

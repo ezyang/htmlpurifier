@@ -36,3 +36,4 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
 
 }
 
+// vim: et sw=4 sts=4

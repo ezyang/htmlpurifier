@@ -50,3 +50,4 @@ class HTMLPurifier_Lexer_DirectLex_ErrorsTest extends HTMLPurifier_ErrorsHarness
 
 }
 
+// vim: et sw=4 sts=4

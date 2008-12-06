@@ -9,3 +9,4 @@ class HTMLPurifier_URIScheme_https extends HTMLPurifier_URIScheme_http {
 
 }
 
+// vim: et sw=4 sts=4

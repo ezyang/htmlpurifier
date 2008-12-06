@@ -30,3 +30,5 @@ Beyond that, HTML Purifier can magically merge common CSS values together,
 and a whole manner of other heuristic things.  HTML Purifier should also
 make it easy for an admin to re-style the HTML semantically. Speed is not
 an issue. Also, better WYSIWYG editors are needed.
+
+    vim: et sw=4 sts=4

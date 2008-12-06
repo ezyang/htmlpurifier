@@ -83,3 +83,5 @@ class HTMLPurifier_PropertyListTest extends UnitTestCase
     }
 
 }
+
+// vim: et sw=4 sts=4

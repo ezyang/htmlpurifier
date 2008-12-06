@@ -185,3 +185,5 @@ foreach ($files as $file) {
 echo "Writing HTMLPurifier.safe-includes.php... ";
 file_put_contents('HTMLPurifier.safe-includes.php', $php);
 echo "done!\n";
+
+// vim: et sw=4 sts=4

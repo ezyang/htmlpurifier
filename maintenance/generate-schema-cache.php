@@ -27,3 +27,5 @@ $schema = $schema_builder->build($interchange);
 echo "Saving schema... ";
 file_put_contents($target, serialize($schema));
 echo "done!\n";
+
+// vim: et sw=4 sts=4

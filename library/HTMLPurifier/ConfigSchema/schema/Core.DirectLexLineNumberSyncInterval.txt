@@ -14,4 +14,4 @@ DEFAULT: 0
   This has no effect when %Core.MaintainLineNumbers is disabled or DirectLex is
   not being used.
 </p>
-
+--# vim: et sw=4 sts=4

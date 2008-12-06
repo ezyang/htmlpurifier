@@ -13,4 +13,4 @@ class HTMLPurifier_ChildDefHarness extends HTMLPurifier_ComplexHarness
 
 }
 
-
+// vim: et sw=4 sts=4

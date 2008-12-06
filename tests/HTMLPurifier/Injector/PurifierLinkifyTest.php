@@ -56,3 +56,4 @@ class HTMLPurifier_Injector_PurifierLinkifyTest extends HTMLPurifier_InjectorHar
 
 }
 
+// vim: et sw=4 sts=4

@@ -18,3 +18,4 @@ class HTMLPurifier_AttrDef_URI_Email_SimpleCheck extends HTMLPurifier_AttrDef_UR
 
 }
 
+// vim: et sw=4 sts=4

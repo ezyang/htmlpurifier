@@ -27,3 +27,4 @@ class HTMLPurifier_AttrTransform_BdoDirTest extends HTMLPurifier_AttrTransformHa
 
 }
 
+// vim: et sw=4 sts=4

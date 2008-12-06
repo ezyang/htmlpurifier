@@ -17,3 +17,4 @@ class HTMLPurifier_AttrDef_HTML_ColorTest extends HTMLPurifier_AttrDefHarness
     }
 }
 
+// vim: et sw=4 sts=4

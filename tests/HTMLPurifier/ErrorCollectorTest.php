@@ -154,3 +154,4 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
 
 }
 
+// vim: et sw=4 sts=4

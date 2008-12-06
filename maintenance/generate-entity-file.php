@@ -71,3 +71,4 @@ fclose($fh);
 
 echo "Completed successfully.";
 
+// vim: et sw=4 sts=4

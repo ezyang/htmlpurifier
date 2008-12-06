@@ -135,3 +135,4 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
 
 }
 
+// vim: et sw=4 sts=4

@@ -16,3 +16,5 @@ trouble.  Therein lies the solution:
 HTML Purifier is perfect for filtering pure-HTML input from WYSIWYG editors.
 
 Enough said.
+
+    vim: et sw=4 sts=4

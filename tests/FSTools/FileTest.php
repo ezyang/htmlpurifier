@@ -43,3 +43,4 @@ class FSTools_FileTest extends FSTools_FileSystemHarness
 
 }
 
+// vim: et sw=4 sts=4

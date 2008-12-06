@@ -9,4 +9,4 @@ DEFAULT: false
     still link to them though. See %URI.DisableExternalResources for why
     this might be a good idea.
 </p>
-
+--# vim: et sw=4 sts=4

@@ -46,3 +46,4 @@ class HTMLPurifier_AttrDef_CSS_ImportantDecoratorTest extends HTMLPurifier_AttrD
 
 }
 
+// vim: et sw=4 sts=4

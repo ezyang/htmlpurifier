@@ -15,3 +15,4 @@ class HTMLPurifier_Strategy_ErrorsHarness extends HTMLPurifier_ErrorsHarness
 
 }
 
+// vim: et sw=4 sts=4

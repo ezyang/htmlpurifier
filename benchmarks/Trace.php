@@ -17,3 +17,5 @@ $data = $purifier->purify(file_get_contents('samples/Lexer/4.html'));
 xdebug_stop_trace();
 
 echo "Trace finished.";
+
+// vim: et sw=4 sts=4

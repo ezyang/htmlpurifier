@@ -7,4 +7,4 @@ DEFAULT: false
 <p>
     Whether or not to allow safe, proprietary CSS values.
 </p>
-
+--# vim: et sw=4 sts=4

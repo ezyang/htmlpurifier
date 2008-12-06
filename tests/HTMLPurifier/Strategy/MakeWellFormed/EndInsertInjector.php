@@ -14,3 +14,5 @@ class HTMLPurifier_Strategy_MakeWellFormed_EndInsertInjector extends HTMLPurifie
         );
     }
 }
+
+// vim: et sw=4 sts=4

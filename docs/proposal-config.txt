@@ -19,3 +19,5 @@ Definition objects are complex datatypes influenced by their respective
 directive namespaces (HTMLDefinition with HTML and CSSDefinition with CSS).
 If any of these directives is updated, HTML Purifier forces the definition
 to be regenerated.
+
+    vim: et sw=4 sts=4

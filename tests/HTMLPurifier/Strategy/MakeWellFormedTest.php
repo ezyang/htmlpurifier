@@ -104,3 +104,4 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
 
 }
 
+// vim: et sw=4 sts=4

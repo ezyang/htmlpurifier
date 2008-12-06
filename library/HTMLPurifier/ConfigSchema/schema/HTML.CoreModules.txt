@@ -20,4 +20,4 @@ array (
     are used. You can set this to a blank array to disable core module
     protection, but this is not recommended.
 </p>
-
+--# vim: et sw=4 sts=4

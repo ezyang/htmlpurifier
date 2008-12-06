@@ -134,3 +134,4 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
 
 }
 
+// vim: et sw=4 sts=4

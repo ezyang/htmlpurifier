@@ -91,3 +91,4 @@ class HTMLPurifier_AttrTransform_InputTest extends HTMLPurifier_AttrTransformHar
 
 }
 
+// vim: et sw=4 sts=4

@@ -52,3 +52,4 @@ class HTMLPurifier_Strategy_MakeWellFormed_ErrorsTest extends HTMLPurifier_Strat
 
 }
 
+// vim: et sw=4 sts=4

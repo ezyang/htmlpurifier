@@ -162,3 +162,5 @@ array of content set names to content set contents. If the content set
 already exists, your values are appended on to it (great for, say,
 registering the font tag as an inline element), otherwise it is
 created. They are substituted into content_model.
+
+    vim: et sw=4 sts=4

@@ -67,3 +67,6 @@ foreach ($xml->group as $group) {
 ?>
 </body>
 </html>
+<?php
+
+// vim: et sw=4 sts=4

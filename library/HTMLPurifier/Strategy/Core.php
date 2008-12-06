@@ -15,3 +15,4 @@ class HTMLPurifier_Strategy_Core extends HTMLPurifier_Strategy_Composite
 
 }
 
+// vim: et sw=4 sts=4

@@ -153,3 +153,5 @@ foreach ($versions_to_test as $version) {
 // $test->add(new RemoteTestCase('http://htmlpurifier.org/dev/tests/?xml=1', 'http://htmlpurifier.org/dev/tests/?xml=1&dry=1&flush=1'));
 
 $test->run($reporter);
+
+// vim: et sw=4 sts=4

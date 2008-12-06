@@ -58,3 +58,4 @@ $errorNames = array(
     E_NOTICE  => 'Notice'
 );
 
+// vim: et sw=4 sts=4

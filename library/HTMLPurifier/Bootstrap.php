@@ -94,3 +94,5 @@ class HTMLPurifier_Bootstrap
     }
 
 }
+
+// vim: et sw=4 sts=4

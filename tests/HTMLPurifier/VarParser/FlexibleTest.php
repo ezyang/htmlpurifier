@@ -62,3 +62,5 @@ class HTMLPurifier_VarParser_FlexibleTest extends HTMLPurifier_VarParserHarness
     }
 
 }
+
+// vim: et sw=4 sts=4

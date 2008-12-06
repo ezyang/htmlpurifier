@@ -20,3 +20,4 @@ $pure_html = $purifier->purify($html);
 
 echo '<pre>' . htmlspecialchars($pure_html) . '</pre>';
 
+// vim: et sw=4 sts=4

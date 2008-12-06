@@ -80,3 +80,4 @@ DEFAULT: NULL
     was picked because it came after n (and I couldn't use a), p is for
     property.
 </p>
+--# vim: et sw=4 sts=4

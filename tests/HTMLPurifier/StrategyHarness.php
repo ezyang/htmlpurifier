@@ -12,3 +12,4 @@ class HTMLPurifier_StrategyHarness extends HTMLPurifier_ComplexHarness
 
 }
 
+// vim: et sw=4 sts=4

@@ -41,3 +41,5 @@ WYSIWYG editor (you can do this through a common hook or the web
 configuration form).
 
 Visit HTML Purifier at <http://htmlpurifier.org/>.
+
+    vim: et sw=4 sts=4

@@ -38,3 +38,4 @@ class HTMLPurifier_AttrDef_HTML_MultiLength extends HTMLPurifier_AttrDef_HTML_Le
 
 }
 
+// vim: et sw=4 sts=4

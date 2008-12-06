@@ -325,4 +325,4 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 
 }
 
-
+// vim: et sw=4 sts=4

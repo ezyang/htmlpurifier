@@ -19,3 +19,4 @@ function phorum_htmlpurifier_show_migrate_sigs_form() {
     $frm->show();
 }
 
+// vim: et sw=4 sts=4

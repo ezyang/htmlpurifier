@@ -104,3 +104,5 @@ class HTMLPurifier_ConfigSchema_Builder_Xml extends XMLWriter
     }
 
 }
+
+// vim: et sw=4 sts=4

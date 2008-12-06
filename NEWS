@@ -832,3 +832,5 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   + Shorthand CSS properties
   + Table CSS properties
   + Deprecated attribute transformations
+
+    vim: et sw=4 sts=4

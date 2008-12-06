@@ -17,3 +17,5 @@ class HTMLPurifier_ConfigSchema_Interchange_Namespace
     public $description;
 
 }
+
+// vim: et sw=4 sts=4

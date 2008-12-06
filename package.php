@@ -57,3 +57,4 @@ $compat =& $pkg->exportCompatiblePackageFile1();
 $compat->writePackageFile();
 $pkg->writePackageFile();
 
+// vim: et sw=4 sts=4

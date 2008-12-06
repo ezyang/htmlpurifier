@@ -22,3 +22,5 @@ another DirectLex parser, other parsers like ph5p
 <http://jero.net/lab/ph5p/> can be adapted to DOMLex to support much more
 flexible HTML parsing (a cool feature I've seen is how they resolve
 <b>bold<i>both</b>italic</i>).
+
+    vim: et sw=4 sts=4

@@ -13,14 +13,6 @@ assertCli();
 chdir(dirname(__FILE__) . '/..');
 $FS = new FSTools();
 
-function prefix_is($comp, $subject) {
-    return strncmp($comp, $subject, strlen($comp)) === 0;
-}
-
-function postfix_is($comp, $subject) {
-    return strlen($subject) < $comp ? false : substr($subject, -strlen($comp)) === $comp;
-}
-
 $files = $FS->globr('.', '{,.}*', GLOB_BRACE);
 foreach ($files as $file) {
     if (
@@ -41,3 +33,5 @@ foreach ($files as $file) {
     echo "$file\n";
     file_put_contents($file, $result);
 }
+
+// vim: et sw=4 sts=4

@@ -88,3 +88,4 @@ class HTMLPurifier_DefinitionCacheFactory
 
 }
 
+// vim: et sw=4 sts=4

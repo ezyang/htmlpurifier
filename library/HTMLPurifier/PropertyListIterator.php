@@ -28,3 +28,5 @@ class HTMLPurifier_PropertyListIterator extends FilterIterator
     }
 
 }
+
+// vim: et sw=4 sts=4

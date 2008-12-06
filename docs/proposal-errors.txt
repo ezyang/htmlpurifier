@@ -207,3 +207,5 @@ Don't forget to spruce up output.
 
        - We need a standard CSS to apply (check demo.css for some starting
          styling; some buttons would also be hip)
+
+    vim: et sw=4 sts=4

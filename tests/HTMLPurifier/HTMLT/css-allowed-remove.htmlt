@@ -4,3 +4,4 @@ CSS.AllowedProperties = color,background-color
 <div style="color:#f00;border:1px solid #000">red</div>
 --EXPECT--
 <div style="color:#f00;">red</div>
+--# vim: et sw=4 sts=4

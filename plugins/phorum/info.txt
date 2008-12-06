@@ -14,3 +14,5 @@ hook:  tpl_editor_after_subject|phorum_htmlpurifier_editor_after_subject
 # This module is meant to be a drop-in for bbcode, so make it run last.
 priority: run module after *
 priority: run hook format after *
+
+    vim: et sw=4 sts=4

@@ -65,3 +65,5 @@ Sinon, utilisez:
 
     $html_propre = $purificateur->purify($html_salle);
 ?>
+
+    vim: et sw=4 sts=4

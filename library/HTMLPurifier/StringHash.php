@@ -35,3 +35,5 @@ class HTMLPurifier_StringHash extends ArrayObject
         $this->accessed = array();
     }
 }
+
+// vim: et sw=4 sts=4

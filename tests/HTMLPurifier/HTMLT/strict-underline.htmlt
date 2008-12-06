@@ -4,3 +4,4 @@ HTML.Strict = true
 <u>Illegal underline</u>
 --EXPECT--
 <span style="text-decoration:underline;">Illegal underline</span>
+--# vim: et sw=4 sts=4

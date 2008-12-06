@@ -8,3 +8,5 @@ class HTMLPurifier_Strategy_MakeWellFormed_SkipInjector extends HTMLPurifier_Inj
         $token = array(clone $token, clone $token);
     }
 }
+
+// vim: et sw=4 sts=4
