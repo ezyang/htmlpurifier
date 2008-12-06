@@ -3,6 +3,7 @@
 class HTMLPurifier_SimpleTest_TextReporter extends TextReporter {
     protected $verbose = false;
     function __construct($AC) {
+        parent::__construct();
         $this->verbose = $AC['verbose'];
     }
     function paintPass($message) {
