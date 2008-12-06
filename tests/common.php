@@ -76,12 +76,12 @@ require 'path2class.func.php';
  *     - Only strings, integers and booleans are accepted
  * @param $AC
  *   Arguments array to populate. This takes a simple format of 'argument'
- *   => default value. Depending on the type of the default value, 
+ *   => default value. Depending on the type of the default value,
  *   arguments will be typecast accordingly. For example, if
  *   'flag' => false is passed, all arguments for that will be cast to
  *   boolean. Do *not* pass null, as it will not be recognized.
  * @param $aliases
- *   
+ *
  */
 function htmlpurifier_parse_args(&$AC, $aliases) {
     if (empty($_GET)) {

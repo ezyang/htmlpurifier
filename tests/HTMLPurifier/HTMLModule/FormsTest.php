@@ -2,14 +2,14 @@
 
 class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
 {
-    
+
     function setUp() {
         parent::setUp();
         $this->config->set('HTML', 'Trusted', true);
         $this->config->set('Attr', 'EnableID', true);
         $this->config->set('Cache', 'DefinitionImpl', null);
     }
-    
+
     function testBasicUse() {
         $this->assertResult( // need support for label for later
             '
@@ -28,7 +28,7 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
 </form>'
         );
     }
-    
+
     function testSelectOption() {
         $this->assertResult('
 <form action="http://somesite.com/prog/component-select" method="post">
@@ -47,7 +47,7 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
 </form>
         ');
     }
-    
+
     function testSelectOptgroup() {
         $this->assertResult('
 <form action="http://somesite.com/prog/someprog" method="post">
@@ -72,7 +72,7 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
 </form>
         ');
     }
-    
+
     function testTextarea() {
         $this->assertResult('
 <form action="http://somesite.com/prog/text-read" method="post">
@@ -86,9 +86,9 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
 </form>
         ');
     }
-    
+
     // label tests omitted
-    
+
     function testFieldset() {
         $this->assertResult('
 <form action="..." method="post">
@@ -109,7 +109,7 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
  </fieldset>
  <fieldset>
   <legend>Current Medication</legend>
-  Are you currently taking any medication? 
+  Are you currently taking any medication?
   <input name="medication_now" type="radio" value="Yes" tabindex="35" />Yes
   <input name="medication_now" type="radio" value="No" tabindex="35" />No
 
@@ -120,18 +120,18 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
 </form>
         ');
     }
-    
+
     function testInputTransform() {
         $this->assertResult('<input type="checkbox" />', '<input type="checkbox" value="" />');
     }
-    
+
     function testTextareaTransform() {
         $this->assertResult('<textarea></textarea>', '<textarea cols="22" rows="3"></textarea>');
     }
-    
+
     function testTextInFieldset() {
         $this->assertResult('<fieldset>   <legend></legend>foo</fieldset>');
     }
-    
+
 }
 

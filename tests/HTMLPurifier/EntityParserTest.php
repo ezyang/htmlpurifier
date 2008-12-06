@@ -2,21 +2,21 @@
 
 class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
 {
-    
+
     protected $EntityParser;
-    
+
     public function setUp() {
         $this->EntityParser = new HTMLPurifier_EntityParser();
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
     }
-    
+
     function test_substituteNonSpecialEntities() {
         $char_theta = $this->_entity_lookup->table['theta'];
         $this->assertIdentical($char_theta,
             $this->EntityParser->substituteNonSpecialEntities('&theta;') );
         $this->assertIdentical('"',
             $this->EntityParser->substituteNonSpecialEntities('"') );
-        
+
         // numeric tests, adapted from Feyd
         $args = array();
         $args[] = array(1114112,false     );
@@ -45,8 +45,8 @@ class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
         $args[] = array(20108,  'E4BA8C'  ); // 0x00004E8C
         $args[] = array(77,     '4D'      ); // 0x0000004D
         $args[] = array(66306,  'F0908C82'); // 0x00010302
-        $args[] = array(1072,   'D0B0'    ); // 0x00000430 
-        
+        $args[] = array(1072,   'D0B0'    ); // 0x00000430
+
         foreach ($args as $arg) {
             $string = '&#' . $arg[0] . ';' . // decimal
                       '&#x' . dechex($arg[0]) . ';'; // hex
@@ -70,15 +70,15 @@ class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
                 'Identical expectation [Hex: '. dechex($arg[0]) .']'
             );
         }
-        
+
     }
-    
+
     function test_substituteSpecialEntities() {
         $this->assertIdentical(
             "'",
             $this->EntityParser->substituteSpecialEntities('&#39;')
         );
     }
-    
+
 }
 

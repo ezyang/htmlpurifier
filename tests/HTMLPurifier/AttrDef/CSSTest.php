@@ -2,14 +2,14 @@
 
 class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
 {
-    
+
     function setup() {
         parent::setup();
         $this->def = new HTMLPurifier_AttrDef_CSS();
     }
-    
+
     function test() {
-        
+
         // regular cases, singular
         $this->assertDef('text-align:right;');
         $this->assertDef('border-left-style:solid;');
@@ -82,67 +82,67 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('background-position:left 90%;');
         $this->assertDef('border-spacing:1em;');
         $this->assertDef('border-spacing:1em 2em;');
-        
+
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',
                                           'text-align:left;');
-        
+
         // a few composites
         $this->assertDef('font-variant:small-caps;font-weight:900;');
         $this->assertDef('float:right;text-align:right;');
-        
+
         // selective removal
         $this->assertDef('text-transform:capitalize;destroy:it;',
                          'text-transform:capitalize;');
-        
+
         // inherit works for everything
         $this->assertDef('text-align:inherit;');
-        
+
         // bad props
         $this->assertDef('nodice:foobar;', false);
         $this->assertDef('position:absolute;', false);
         $this->assertDef('background-image:url(javascript:alert\(\));', false);
-        
+
         // airy input
         $this->assertDef(' font-weight : bold; color : #ff0000',
                          'font-weight:bold;color:#ff0000;');
-        
+
         // case-insensitivity
         $this->assertDef('FLOAT:LEFT;', 'float:left;');
-        
+
         // !important stripping
         $this->assertDef('float:left !important;', 'float:left;');
-        
+
     }
-    
+
     function testProprietary() {
         $this->config->set('CSS', 'Proprietary', true);
-        
+
         $this->assertDef('scrollbar-arrow-color:#ff0;');
         $this->assertDef('scrollbar-base-color:#ff6347;');
         $this->assertDef('scrollbar-darkshadow-color:#ffa500;');
         $this->assertDef('scrollbar-face-color:#008080;');
         $this->assertDef('scrollbar-highlight-color:#ff69b4;');
         $this->assertDef('scrollbar-shadow-color:#f0f;');
-        
+
         $this->assertDef('opacity:.2;');
         $this->assertDef('-moz-opacity:.2;');
         $this->assertDef('-khtml-opacity:.2;');
         $this->assertDef('filter:alpha(opacity=20);');
-        
+
     }
-    
+
     function testImportant() {
         $this->config->set('CSS', 'AllowImportant', true);
         $this->assertDef('float:left !important;');
     }
-    
+
     function testTricky() {
         $this->config->set('CSS', 'AllowTricky', true);
         $this->assertDef('display:none;');
         $this->assertDef('visibility:visible;');
         $this->assertDef('overflow:scroll;');
     }
-    
+
 }
 

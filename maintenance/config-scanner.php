@@ -9,13 +9,13 @@ assertCli();
 if (version_compare(PHP_VERSION, '5.2.2', '<')) {
     echo "This script requires PHP 5.2.2 or later, for tokenizer line numbers.";
     exit(1);
-} 
+}
 
 /**
  * @file
  * Scans HTML Purifier source code for $config tokens and records the
  * directive being used; configdoc can use this info later.
- * 
+ *
  * Currently, this just dumps all the info onto the console. Eventually, it
  * will create an XML file that our XSLT transform can use.
  */
@@ -74,7 +74,7 @@ foreach ($files as $file) {
             break;
         }
         if (!$ok) continue;
-        
+
         $ok = false;
         for($i++; $i < $c; $i++) {
             if ($tokens[$i] === ',' || $tokens[$i] === ')' || $tokens[$i] === ';') {
@@ -87,46 +87,46 @@ foreach ($files as $file) {
             }
         }
         if (!$ok) continue;
-        
+
         $line = $tokens[$i][2];
-        
+
         consumeWhitespace($tokens, $i);
         if (!testToken($tokens[$i], T_STRING, 'get')) continue;
-        
+
         consumeWhitespace($tokens, $i);
         if (!testToken($tokens[$i], '(')) continue;
-        
+
         $full_counter++;
-        
+
         $matched = false;
         do {
-            
+
             // What we currently don't match are batch retrievals, and
             // wildcard retrievals. This data might be useful in the future,
             // which is why we have a do {} while loop that doesn't actually
             // do anything.
-            
+
             consumeWhitespace($tokens, $i);
             if (!testToken($tokens[$i], T_CONSTANT_ENCAPSED_STRING)) continue;
             $namespace = substr($tokens[$i][1], 1, -1);
-            
+
             consumeWhitespace($tokens, $i);
             if (!testToken($tokens[$i], ',')) continue;
-            
+
             consumeWhitespace($tokens, $i);
             if (!testToken($tokens[$i], T_CONSTANT_ENCAPSED_STRING)) continue;
             $directive = substr($tokens[$i][1], 1, -1);
-            
+
             $counter++;
             $matched = true;
-            
+
             $id = "$namespace.$directive";
             if (!isset($tracker[$id])) $tracker[$id] = array();
             if (!isset($tracker[$id][$file])) $tracker[$id][$file] = array();
             $tracker[$id][$file][] = $line;
-            
+
         } while (0);
-        
+
         //echo "$file:$line uses $namespace.$directive\n";
     }
 }

@@ -9,7 +9,7 @@ if (php_sapi_name() != 'cli') {
 }
 
 if (!isset($argv[1])) {
-    echo 
+    echo
 'php release.php [version]
     HTML Purifier release script
 ';

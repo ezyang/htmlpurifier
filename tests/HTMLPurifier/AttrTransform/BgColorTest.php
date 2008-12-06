@@ -6,30 +6,30 @@
 
 class HTMLPurifier_AttrTransform_BgColorTest extends HTMLPurifier_AttrTransformHarness
 {
-    
+
     function setUp() {
         parent::setUp();
         $this->obj = new HTMLPurifier_AttrTransform_BgColor();
     }
-    
+
     function testEmptyInput() {
         $this->assertResult( array() );
     }
-    
+
     function testBasicTransform() {
         $this->assertResult(
             array('bgcolor' => '#000000'),
             array('style' => 'background-color:#000000;')
         );
     }
-    
+
     function testPrependNewCSS() {
         $this->assertResult(
             array('bgcolor' => '#000000', 'style' => 'font-weight:bold'),
             array('style' => 'background-color:#000000;font-weight:bold')
         );
     }
-    
+
     function testLenientTreatmentOfInvalidInput() {
         // this may change when we natively support the datatype and
         // validate its contents before forwarding it on
@@ -38,6 +38,6 @@ class HTMLPurifier_AttrTransform_BgColorTest extends HTMLPurifier_AttrTransformH
             array('style' => 'background-color:#F00;')
         );
     }
-    
+
 }
 

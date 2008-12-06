@@ -34,7 +34,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   deal with a bug in FCKEditor. Requested by frank farmer.
 ! Enable HTML comments when %HTML.Trusted is on. Requested by Waldo Jaquith.
 ! Proper support for name attribute. It is now allowed and equivalent to the id
-  attribute in a and img tags, and is only converted to id when %HTML.TidyLevel 
+  attribute in a and img tags, and is only converted to id when %HTML.TidyLevel
   is heavy (for all doctypes).
 ! %AutoFormat.RemoveEmpty to remove some empty tags from documents. Please don't
   use on hand-written HTML.
@@ -45,7 +45,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Test scripts now have a 'type' parameter, which lets you say 'htmlpurifier',
   'phpt', 'vtest', etc. in order to only execute those tests. This supercedes
   the --only-phpt parameter, although for backwards-compatibility the flag
-  will still work. 
+  will still work.
 ! AutoParagraph auto-formatter will now preserve double-newlines upon output.
   Users who are not performing inbound filtering, this may seem a little
   useless, but as a bonus, the test suite and handling of edge cases is also
@@ -89,7 +89,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   for more interesting filter-backtracking
 . New HTMLPurifier_Injector->rewind() functionality, allows injectors to rewind
   index to reprocess tokens.
-. StringHashParser now allows for multiline sections with "empty" content; 
+. StringHashParser now allows for multiline sections with "empty" content;
   previously the section would remain undefined.
 . Added --quick option to multitest.php, which tests only the most recent
   release for each series.
@@ -98,7 +98,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 3.1.1, released 2008-06-19
 # %URI.Munge now, by default, does not munge resources (for example, <img src="">)
-  In order to enable this again, please set %URI.MungeResources to true. 
+  In order to enable this again, please set %URI.MungeResources to true.
 ! More robust imagecrash protection with height/width CSS with %CSS.MaxImgLength,
   and height/width HTML with %HTML.MaxImgLength.
 ! %URI.MungeSecretKey for secure URI munging. Thanks Chris
@@ -108,7 +108,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   %URI.MungeSecretKey and and %URI.SecureMunge => %URI.Munge)
 ! Implemented post URI filtering. Set member variable $post to true to set
   a URIFilter as such.
-! Allow modules to define injectors via $info_injector. Injectors are 
+! Allow modules to define injectors via $info_injector. Injectors are
   automatically disabled if injector's needed elements are not found.
 ! Support for "safe" objects added, use %HTML.SafeObject and %HTML.SafeEmbed.
   Thanks Chris for sponsoring. If you've been using ad hoc code from the
@@ -155,10 +155,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   consult changes to HTMLPurifier_Config for details.
 . Variable parsing types now are magic integers instead of strings
 . Added benchmark for ConfigSchema
-. HTMLPurifier_Generator requires $config and $context parameters. If you 
+. HTMLPurifier_Generator requires $config and $context parameters. If you
   don't know what they should be, use HTMLPurifier_Config::createDefault()
   and new HTMLPurifier_Context().
-. Printers now properly distinguish between output configuration, and 
+. Printers now properly distinguish between output configuration, and
   target configuration. This is not applicable to scripts using
   the Printers for HTML Purifier related tasks.
 . HTML/CSS Printers must be primed with prepareGenerator($gen_config), otherwise
@@ -245,7 +245,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   enabled using %Filter.$filter_name or by setting your own filters using
   %Filter.Custom
 # Directive-level safety properties superceded in favor of module-level
-  safety. Internal method HTMLModule->addElement() has changed, although 
+  safety. Internal method HTMLModule->addElement() has changed, although
   the externally visible HTMLDefinition->addElement has *not* changed.
 ! Extra utility classes for testing and non-library operations can
   be found in extras/. Specifically, these are FSTools and ConfigDoc.
@@ -285,7 +285,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Dry runs now supported in SimpleTest; testing facilities improved
 . Bootstrap class added for handling autoloading functionality
 . Implemented recursive glob at FSTools->globr
-. ConfigSchema now has instance methods for all corresponding define* 
+. ConfigSchema now has instance methods for all corresponding define*
   static methods.
 . A couple of new historical maintenance scripts were added.
 . HTMLPurifier/HTMLModule/Tidy/XHTMLAndHTML4.php split into two files
@@ -306,7 +306,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . HTMLPurifier_ConfigSchema->validate() deprecated in favor of
   HTMLPurifier_VarParser->parse()
 . Integers auto-cast into float type by VarParser.
-. HTMLPURIFIER_STRICT removed; no validation is performed on runtime, only 
+. HTMLPURIFIER_STRICT removed; no validation is performed on runtime, only
   during cache generation
 . Reordered script calls in maintenance/flush.php
 . Command line scripts now honor exit codes
@@ -348,7 +348,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   script (you must provide this script!)
 - Fixed poor include ordering for Email URI AttrDefs, causes fatal errors
   on some systems.
-- Injector algorithm further refined: off-by-one error regarding skip 
+- Injector algorithm further refined: off-by-one error regarding skip
   counts for dormant injectors fixed
 - Corrective blockquote definition now enabled for HTML 4.01 Strict
 - Fatal error when <img> tag (or any other element with required attributes)
@@ -373,7 +373,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   facilities in PHP 5
 - Make ErrorCollectorEMock work in both PHP 4 and PHP 5
 - Make PH5P work with PHP 5.0 by removing unnecessary array parameter typedef
-. %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment 
+. %Core.AcceptFullDocuments renamed to %Core.ConvertDocumentToFragment
   to better communicate its purpose
 . Error unit tests can now specify the expectation of no errors. Future
   iterations of the harness will be extremely strict about what errors
@@ -532,7 +532,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   and better modularization
 # Configuration object now finalizes itself when a read operation is
   performed on it, ensuring that its internal state stays consistent.
-  To revert this behavior, you can set the $autoFinalize member variable 
+  To revert this behavior, you can set the $autoFinalize member variable
   off, but it's not recommended.
 # New compact syntax for AttrDef objects that can be used to instantiate
   new objects via make()
@@ -616,7 +616,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   AttrTransform_EnumToCSS, refer to HTMLModule/TransformToStrict.php to
   see how the new equivalent is implemented
 . Unit tests now use exclusively assertIdentical
- 
+
 1.6.0, released 2007-04-01
 ! Support for most common deprecated attributes via transformations:
   + bgcolor in td, th, tr and table

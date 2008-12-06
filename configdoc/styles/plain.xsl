@@ -14,13 +14,13 @@
     />
     <xsl:param name="css" select="'styles/plain.css'"/>
     <xsl:param name="title" select="'Configuration Documentation'"/>
-    
+
     <xsl:variable name="typeLookup"  select="document('../types.xml')/types" />
     <xsl:variable name="usageLookup" select="document('../usage.xml')/usage" />
-    
+
     <!-- Twiddle this variable to get the columns as even as possible -->
     <xsl:variable name="maxNumberAdjust" select="2" />
-    
+
     <xsl:template match="/">
         <html lang="en" xml:lang="en">
             <head>
@@ -45,7 +45,7 @@
             </body>
         </html>
     </xsl:template>
-    
+
     <xsl:template match="title" mode="toc" />
     <xsl:template match="namespace" mode="toc">
         <xsl:param name="overflowNumber" />
@@ -83,9 +83,9 @@
             </li>
         </xsl:if>
     </xsl:template>
-    
+
     <xsl:template match="title" />
-    
+
     <xsl:template match="namespace">
         <div class="namespace">
             <xsl:apply-templates />
@@ -102,7 +102,7 @@
             <xsl:copy-of xmlns:xhtml="http://www.w3.org/1999/xhtml" select="xhtml:div/node()" />
         </div>
     </xsl:template>
-    
+
     <xsl:template match="directive">
         <div>
             <xsl:attribute name="class"><!--
@@ -122,10 +122,10 @@
     <xsl:template match="alias" mode="anchor">
         <a id="{.}"></a>
     </xsl:template>
-    
+
     <!-- Do not pass through -->
     <xsl:template match="alias"></xsl:template>
-    
+
     <xsl:template match="directive/constraints">
         <xsl:param name="id" />
         <table class="constraints">
@@ -179,7 +179,7 @@
             </xsl:for-each>
         </li>
     </xsl:template>
-    
+
     <xsl:template match="constraints/version">
         <tr>
             <th>Version added</th>
@@ -229,5 +229,5 @@
     <xsl:template match="constraints/external/project">
         <li><xsl:value-of select="." /></li>
     </xsl:template>
-    
+
 </xsl:stylesheet>

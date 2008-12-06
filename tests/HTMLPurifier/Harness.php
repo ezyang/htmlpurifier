@@ -5,13 +5,13 @@
  */
 class HTMLPurifier_Harness extends UnitTestCase
 {
-    
+
     public function __construct() {
         parent::__construct();
     }
-    
+
     protected $config, $context, $purifier;
-    
+
     /**
      * Generates easily accessible default config/context, as well as
      * a convenience purifier for integration testing.
@@ -22,7 +22,7 @@ class HTMLPurifier_Harness extends UnitTestCase
 ');
         $this->purifier = new HTMLPurifier();
     }
-    
+
     /**
      * Asserts a purification. Good for integration testing.
      */
@@ -31,8 +31,8 @@ class HTMLPurifier_Harness extends UnitTestCase
         $result = $this->purifier->purify($input, $this->config);
         $this->assertIdentical($expect, $result);
     }
-    
-    
+
+
     /**
      * Accepts config and context and prepares them into a valid state
      * @param &$config Reference to config variable
@@ -42,7 +42,7 @@ class HTMLPurifier_Harness extends UnitTestCase
         $config = HTMLPurifier_Config::create($config);
         if (!$context) $context = new HTMLPurifier_Context();
     }
-    
+
     /**
      * Generates default configuration and context objects
      * @return Defaults in form of array($config, $context)
@@ -50,14 +50,14 @@ class HTMLPurifier_Harness extends UnitTestCase
     protected function createCommon() {
         return array(HTMLPurifier_Config::createDefault(), new HTMLPurifier_Context);
     }
-    
+
     /**
      * Normalizes a string to Unix (\n) endings
      */
     protected function normalize(&$string) {
         $string = str_replace(array("\r\n", "\r"), "\n", $string);
     }
-    
+
     /**
      * If $expect is false, ignore $result and check if status failed.
      * Otherwise, check if $status if true and $result === $expect.
@@ -73,7 +73,7 @@ class HTMLPurifier_Harness extends UnitTestCase
             $this->assertIdentical($result, $expect);
         }
     }
-    
+
     public function getTests() {
         // __onlytest makes only one test get triggered
         foreach (get_class_methods(get_class($this)) as $method) {
@@ -84,6 +84,6 @@ class HTMLPurifier_Harness extends UnitTestCase
         }
         return parent::getTests();
     }
-    
+
 }
 

@@ -5,9 +5,9 @@
  */
 class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
 {
-    
+
     public $name = 'Hypertext';
-    
+
     public function setup($config) {
         $a = $this->addElement(
             'a', 'Inline', 'Inline', 'Common',
@@ -24,6 +24,6 @@ class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
         );
         $a->excludes = array('a' => true);
     }
-    
+
 }
 

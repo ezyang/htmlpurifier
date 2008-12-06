@@ -22,7 +22,7 @@ Relative:
     1 ex ~= 0.5 em, though Mozilla Firefox says 1 ex = 6px
     1 px ~= 1 pt
 
-Watch out: font-sizes can also be nested to get successively larger 
+Watch out: font-sizes can also be nested to get successively larger
 (although I do not relish having to keep track of context font-sizes,
 this may be necessary, especially for some of the more advanced features
 for preventing things like white on white).

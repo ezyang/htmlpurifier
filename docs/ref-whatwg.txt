@@ -18,7 +18,7 @@ committing ourselves till the spec stabilizes, though.
 
 More immediately speaking though, however, is the well-defined parsing
 behavior that HTML 5 adds. While I have little interest in writing
-another DirectLex parser, other parsers like ph5p 
+another DirectLex parser, other parsers like ph5p
 <http://jero.net/lab/ph5p/> can be adapted to DOMLex to support much more
 flexible HTML parsing (a cool feature I've seen is how they resolve
 <b>bold<i>both</b>italic</i>).

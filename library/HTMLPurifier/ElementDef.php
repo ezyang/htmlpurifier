@@ -8,13 +8,13 @@
  */
 class HTMLPurifier_ElementDef
 {
-    
+
     /**
      * Does the definition work by itself, or is it created solely
      * for the purpose of merging into another definition?
      */
     public $standalone = true;
-    
+
     /**
      * Associative array of attribute name to HTMLPurifier_AttrDef
      * @note Before being processed by HTMLPurifier_AttrCollections
@@ -27,22 +27,22 @@ class HTMLPurifier_ElementDef
      *       HTMLPurifier_HTMLDefinition->setup() processing.
      */
     public $attr = array();
-    
+
     /**
      * Indexed list of tag's HTMLPurifier_AttrTransform to be done before validation
      */
     public $attr_transform_pre = array();
-    
+
     /**
      * Indexed list of tag's HTMLPurifier_AttrTransform to be done after validation
      */
     public $attr_transform_post = array();
-    
+
     /**
      * HTMLPurifier_ChildDef of this tag.
      */
     public $child;
-    
+
     /**
      * Abstract string representation of internal ChildDef rules. See
      * HTMLPurifier_ContentSets for how this is parsed and then transformed
@@ -51,7 +51,7 @@ class HTMLPurifier_ElementDef
      *      being processed by HTMLDefinition
      */
     public $content_model;
-    
+
     /**
      * Value of $child->type, used to determine which ChildDef to use,
      * used in combination with $content_model.
@@ -60,23 +60,23 @@ class HTMLPurifier_ElementDef
      *      being processed by HTMLDefinition
      */
     public $content_model_type;
-    
-    
-    
+
+
+
     /**
      * Does the element have a content model (#PCDATA | Inline)*? This
-     * is important for chameleon ins and del processing in 
+     * is important for chameleon ins and del processing in
      * HTMLPurifier_ChildDef_Chameleon. Dynamically set: modules don't
      * have to worry about this one.
      */
     public $descendants_are_inline = false;
-    
+
     /**
      * List of the names of required attributes this element has. Dynamically
      * populated by HTMLPurifier_HTMLDefinition::getElement
      */
     public $required_attr = array();
-    
+
     /**
      * Lookup table of tags excluded from all descendants of this tag.
      * @note SGML permits exclusions for all descendants, but this is
@@ -89,7 +89,7 @@ class HTMLPurifier_ElementDef
      *       distinctions.
      */
     public $excludes = array();
-    
+
     /**
      * Low-level factory constructor for creating new standalone element defs
      */
@@ -100,14 +100,14 @@ class HTMLPurifier_ElementDef
         $def->attr = $attr;
         return $def;
     }
-    
+
     /**
      * Merges the values of another element definition into this one.
      * Values from the new element def take precedence if a value is
      * not mergeable.
      */
     public function mergeIn($def) {
-        
+
         // later keys takes precedence
         foreach($def->attr as $k => $v) {
             if ($k === 0) {
@@ -127,7 +127,7 @@ class HTMLPurifier_ElementDef
         $this->_mergeAssocArray($this->attr_transform_pre, $def->attr_transform_pre);
         $this->_mergeAssocArray($this->attr_transform_post, $def->attr_transform_post);
         $this->_mergeAssocArray($this->excludes, $def->excludes);
-        
+
         if(!empty($def->content_model)) {
             $this->content_model .= ' | ' . $def->content_model;
             $this->child = false;
@@ -138,9 +138,9 @@ class HTMLPurifier_ElementDef
         }
         if(!is_null($def->child)) $this->child = $def->child;
         if($def->descendants_are_inline) $this->descendants_are_inline = $def->descendants_are_inline;
-        
+
     }
-    
+
     /**
      * Merges one array into another, removes values which equal false
      * @param $a1 Array by reference that is merged into
@@ -155,7 +155,7 @@ class HTMLPurifier_ElementDef
             $a1[$k] = $v;
         }
     }
-    
+
 }
 
 

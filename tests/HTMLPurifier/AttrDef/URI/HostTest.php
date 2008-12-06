@@ -5,15 +5,15 @@
 
 class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
 {
-    
+
     function test() {
-        
+
         $this->def = new HTMLPurifier_AttrDef_URI_Host();
-        
+
         $this->assertDef('[2001:DB8:0:0:8:800:200C:417A]'); // IPv6
         $this->assertDef('124.15.6.89'); // IPv4
         $this->assertDef('www.google.com'); // reg-name
-        
+
         // more domain name tests
         $this->assertDef('test.');
         $this->assertDef('sub.test.');
@@ -34,8 +34,8 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('ff.top');
         $this->assertDef('f1.top');
         $this->assertDef('f-.top', false);
-        
+
     }
-    
+
 }
 

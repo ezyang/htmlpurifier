@@ -5,69 +5,69 @@
  *
  * @warning This class is strongly defined: that means that the class
  *          will fail if an undefined directive is retrieved or set.
- * 
+ *
  * @note Many classes that could (although many times don't) use the
  *       configuration object make it a mandatory parameter.  This is
  *       because a configuration object should always be forwarded,
  *       otherwise, you run the risk of missing a parameter and then
  *       being stumped when a configuration directive doesn't work.
- * 
+ *
  * @todo Reconsider some of the public member variables
  */
 class HTMLPurifier_Config
 {
-    
+
     /**
      * HTML Purifier's version
      */
     public $version = '3.2.0';
-    
+
     /**
-     * Bool indicator whether or not to automatically finalize 
+     * Bool indicator whether or not to automatically finalize
      * the object if a read operation is done
      */
     public $autoFinalize = true;
-    
+
     // protected member variables
-    
+
     /**
      * Namespace indexed array of serials for specific namespaces (see
      * getSerial() for more info).
      */
     protected $serials = array();
-    
+
     /**
      * Serial for entire configuration object
      */
     protected $serial;
-    
+
     /**
      * Two-level associative array of configuration directives
      */
     protected $conf;
-    
+
     /**
      * Parser for variables
      */
     protected $parser;
-    
+
     /**
      * Reference HTMLPurifier_ConfigSchema for value checking
      * @note This is public for introspective purposes. Please don't
      *       abuse!
      */
     public $def;
-    
+
     /**
      * Indexed array of definitions
      */
     protected $definitions;
-    
+
     /**
      * Bool indicator whether or not config is finalized
      */
     protected $finalized = false;
-    
+
     /**
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
@@ -77,7 +77,7 @@ class HTMLPurifier_Config
         $this->def  = $definition; // keep a copy around for checking
         $this->parser = new HTMLPurifier_VarParser_Flexible();
     }
-    
+
     /**
      * Convenience constructor that creates a config object based on a mixed var
      * @param mixed $config Variable that defines the state of the config
@@ -101,7 +101,7 @@ class HTMLPurifier_Config
         elseif (is_array($config)) $ret->loadArray($config);
         return $ret;
     }
-    
+
     /**
      * Convenience constructor that creates a default configuration object.
      * @return Default HTMLPurifier_Config object.
@@ -111,7 +111,7 @@ class HTMLPurifier_Config
         $config = new HTMLPurifier_Config($definition);
         return $config;
     }
-    
+
     /**
      * Retreives a value from the configuration.
      * @param $namespace String namespace
@@ -133,7 +133,7 @@ class HTMLPurifier_Config
         }
         return $this->conf[$namespace][$key];
     }
-    
+
     /**
      * Retreives an array of directives to values from a given namespace
      * @param $namespace String namespace
@@ -147,7 +147,7 @@ class HTMLPurifier_Config
         }
         return $this->conf[$namespace];
     }
-    
+
     /**
      * Returns a md5 signature of a segment of the configuration object
      * that uniquely identifies that particular configuration
@@ -163,7 +163,7 @@ class HTMLPurifier_Config
         }
         return $this->serials[$namespace];
     }
-    
+
     /**
      * Returns a md5 signature for the entire configuration object
      * that uniquely identifies that particular configuration
@@ -174,7 +174,7 @@ class HTMLPurifier_Config
         }
         return $this->serial;
     }
-    
+
     /**
      * Retrieves all directives, organized by namespace
      */
@@ -182,7 +182,7 @@ class HTMLPurifier_Config
         if (!$this->finalized && $this->autoFinalize) $this->finalize();
         return $this->conf;
     }
-    
+
     /**
      * Sets a value to configuration.
      * @param $namespace String namespace
@@ -197,7 +197,7 @@ class HTMLPurifier_Config
             return;
         }
         $def = $this->def->info[$namespace][$key];
-        
+
         if (isset($def->isAlias)) {
             if ($from_alias) {
                 trigger_error('Double-aliases not allowed, please fix '.
@@ -210,7 +210,7 @@ class HTMLPurifier_Config
             trigger_error("$namespace.$key is an alias, preferred directive name is $new_ns.$new_dir", E_USER_NOTICE);
             return;
         }
-        
+
         // Raw type might be negative when using the fully optimized form
         // of stdclass, which indicates allow_null == true
         $rtype = is_int($def) ? $def : $def->type;
@@ -221,7 +221,7 @@ class HTMLPurifier_Config
             $type = $rtype;
             $allow_null = isset($def->allow_null);
         }
-        
+
         try {
             $value = $this->parser->parse($value, $type, $allow_null);
         } catch (HTMLPurifier_VarParserException $e) {
@@ -241,17 +241,17 @@ class HTMLPurifier_Config
             }
         }
         $this->conf[$namespace][$key] = $value;
-        
+
         // reset definitions if the directives they depend on changed
-        // this is a very costly process, so it's discouraged 
+        // this is a very costly process, so it's discouraged
         // with finalization
         if ($namespace == 'HTML' || $namespace == 'CSS') {
             $this->definitions[$namespace] = null;
         }
-        
+
         $this->serials[$namespace] = false;
     }
-    
+
     /**
      * Convenience function for error reporting
      */
@@ -260,7 +260,7 @@ class HTMLPurifier_Config
         foreach ($lookup as $name => $b) $list[] = $name;
         return implode(', ', $list);
     }
-    
+
     /**
      * Retrieves object reference to the HTML definition.
      * @param $raw Return a copy that has not been setup yet. Must be
@@ -269,7 +269,7 @@ class HTMLPurifier_Config
     public function getHTMLDefinition($raw = false) {
         return $this->getDefinition('HTML', $raw);
     }
-    
+
     /**
      * Retrieves object reference to the CSS definition
      * @param $raw Return a copy that has not been setup yet. Must be
@@ -278,7 +278,7 @@ class HTMLPurifier_Config
     public function getCSSDefinition($raw = false) {
         return $this->getDefinition('CSS', $raw);
     }
-    
+
     /**
      * Retrieves a definition
      * @param $type Type of definition: HTML, CSS, etc
@@ -334,7 +334,7 @@ class HTMLPurifier_Config
         $cache->set($this->definitions[$type], $this);
         return $this->definitions[$type];
     }
-    
+
     /**
      * Loads configuration values from an array with the following structure:
      * Namespace.Directive => Value
@@ -357,7 +357,7 @@ class HTMLPurifier_Config
             }
         }
     }
-    
+
     /**
      * Returns a list of array(namespace, directive) for all directives
      * that are allowed in a web-form context as per an allowed
@@ -401,13 +401,13 @@ class HTMLPurifier_Config
         }
         return $ret;
     }
-    
+
     /**
      * Loads configuration values from $_GET/$_POST that were posted
      * via ConfigForm
      * @param $array $_GET or $_POST array to import
      * @param $index Index/name that the config variables are in
-     * @param $allowed List of allowed namespaces/directives 
+     * @param $allowed List of allowed namespaces/directives
      * @param $mq_fix Boolean whether or not to enable magic quotes fix
      * @param $schema Instance of HTMLPurifier_ConfigSchema to use, if not global copy
      */
@@ -416,7 +416,7 @@ class HTMLPurifier_Config
         $config = HTMLPurifier_Config::create($ret, $schema);
         return $config;
     }
-    
+
     /**
      * Merges in configuration values from $_GET/$_POST to object. NOT STATIC.
      * @note Same parameters as loadArrayFromForm
@@ -425,7 +425,7 @@ class HTMLPurifier_Config
          $ret = HTMLPurifier_Config::prepareArrayFromForm($array, $index, $allowed, $mq_fix, $this->def);
          $this->loadArray($ret);
     }
-    
+
     /**
      * Prepares an array from a form into something usable for the more
      * strict parts of HTMLPurifier_Config
@@ -433,7 +433,7 @@ class HTMLPurifier_Config
     public static function prepareArrayFromForm($array, $index = false, $allowed = true, $mq_fix = true, $schema = null) {
         if ($index !== false) $array = (isset($array[$index]) && is_array($array[$index])) ? $array[$index] : array();
         $mq = $mq_fix && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc();
-        
+
         $allowed = HTMLPurifier_Config::getAllowedDirectivesForForm($allowed, $schema);
         $ret = array();
         foreach ($allowed as $key) {
@@ -449,7 +449,7 @@ class HTMLPurifier_Config
         }
         return $ret;
     }
-    
+
     /**
      * Loads configuration values from an ini file
      * @param $filename Name of ini file
@@ -459,7 +459,7 @@ class HTMLPurifier_Config
         $array = parse_ini_file($filename, true);
         $this->loadArray($array);
     }
-    
+
     /**
      * Checks whether or not the configuration object is finalized.
      * @param $error String error message, or false for no error
@@ -470,7 +470,7 @@ class HTMLPurifier_Config
         }
         return $this->finalized;
     }
-    
+
     /**
      * Finalizes configuration only if auto finalize is on and not
      * already finalized
@@ -478,14 +478,14 @@ class HTMLPurifier_Config
     public function autoFinalize() {
         if (!$this->finalized && $this->autoFinalize) $this->finalize();
     }
-    
+
     /**
      * Finalizes a configuration object, prohibiting further change
      */
     public function finalize() {
         $this->finalized = true;
     }
-    
+
 }
 
 

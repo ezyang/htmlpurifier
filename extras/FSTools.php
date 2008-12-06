@@ -3,15 +3,15 @@
 /**
  * Filesystem tools not provided by default; can recursively create, copy
  * and delete folders. Some template methods are provided for extensibility.
- * 
+ *
  * @note This class must be instantiated to be used, although it does
  *       not maintain state.
  */
 class FSTools
 {
-    
+
     private static $singleton;
-    
+
     /**
      * Returns a global instance of FSTools
      */
@@ -19,7 +19,7 @@ class FSTools
         if (empty(FSTools::$singleton)) FSTools::$singleton = new FSTools();
         return FSTools::$singleton;
     }
-    
+
     /**
      * Sets our global singleton to something else; useful for overloading
      * functions.
@@ -27,7 +27,7 @@ class FSTools
     static public function setSingleton($singleton) {
         FSTools::$singleton = $singleton;
     }
-    
+
     /**
      * Recursively creates a directory
      * @param string $folder Name of folder to create
@@ -51,7 +51,7 @@ class FSTools
             $base .= DIRECTORY_SEPARATOR;
         }
     }
-    
+
     /**
      * Copy a file, or recursively copy a folder and its contents; modified
      * so that copied files, if PHP, have includes removed
@@ -85,17 +85,17 @@ class FSTools
         $dir->close();
         return true;
     }
-    
+
     /**
      * Overloadable function that tests a filename for copyability. By
      * default, everything should be copied; you can restrict things to
-     * ignore hidden files, unreadable files, etc. This function 
+     * ignore hidden files, unreadable files, etc. This function
      * applies to copyr().
      */
     public function copyable($file) {
         return true;
     }
-    
+
     /**
      * Delete a file, or a folder and its contents
      * @note Adapted from http://aidanlister.com/repos/v/function.rmdirr.php
@@ -106,12 +106,12 @@ class FSTools
         if (!$this->file_exists($dirname)) {
             return false;
         }
-     
+
         // Simple delete for a file
         if ($this->is_file($dirname) || $this->is_link($dirname)) {
             return $this->unlink($dirname);
         }
-     
+
         // Loop through the folder
         $dir = $this->dir($dirname);
         while (false !== $entry = $dir->read()) {
@@ -122,12 +122,12 @@ class FSTools
             // Recurse
             $this->rmdirr($dirname . DIRECTORY_SEPARATOR . $entry);
         }
-     
+
         // Clean up
         $dir->close();
         return $this->rmdir($dirname);
     }
-    
+
     /**
      * Recursively globs a directory.
      */
@@ -140,9 +140,9 @@ class FSTools
             $sub_files = $this->globr($sub_dir, $pattern, $flags);
             $files = array_merge($files, $sub_files);
         }
-        return $files; 
+        return $files;
     }
-    
+
     /**
      * Allows for PHP functions to be called and be stubbed.
      * @warning This function will not work for functions that need
@@ -151,5 +151,5 @@ class FSTools
     public function __call($name, $args) {
         return call_user_func_array($name, $args);
     }
-    
+
 }

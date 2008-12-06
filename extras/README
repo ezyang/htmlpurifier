@@ -24,7 +24,7 @@ the filesystem. It currently consists of two classes:
   to call arbitrary native PHP functions through it like $FS->fopen(...).
   This makes it a lot simpler to mock these filesystem calls for unit testing.
 
-- FSTools_File: This object represents a single file, and has almost any 
+- FSTools_File: This object represents a single file, and has almost any
   method imaginable one would need.
 
 Check the files themselves for more information.

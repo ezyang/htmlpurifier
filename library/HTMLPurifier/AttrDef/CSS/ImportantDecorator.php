@@ -6,7 +6,7 @@
 class HTMLPurifier_AttrDef_CSS_ImportantDecorator extends HTMLPurifier_AttrDef
 {
     protected $def, $allow;
-    
+
     /**
      * @param $def Definition to wrap
      * @param $allow Whether or not to allow !important

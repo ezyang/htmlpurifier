@@ -2,7 +2,7 @@
 
 class HTMLPurifier_URIHarness extends HTMLPurifier_Harness
 {
-    
+
     /**
      * Prepares two URIs into object form
      * @param &$uri Reference to string input URI
@@ -17,7 +17,7 @@ class HTMLPurifier_URIHarness extends HTMLPurifier_Harness
             $expect_uri = $parser->parse($expect_uri);
         }
     }
-    
+
     /**
      * Generates a URI object from the corresponding string
      */
@@ -25,5 +25,5 @@ class HTMLPurifier_URIHarness extends HTMLPurifier_Harness
         $parser = new HTMLPurifier_URIParser();
         return $parser->parse($uri);
     }
-    
+
 }

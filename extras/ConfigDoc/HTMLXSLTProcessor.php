@@ -5,17 +5,17 @@
  */
 class ConfigDoc_HTMLXSLTProcessor
 {
-    
+
     /**
      * Instance of XSLTProcessor
      */
     protected $xsltProcessor;
-    
+
     public function __construct($proc = false) {
         if ($proc === false) $proc = new XSLTProcessor();
         $this->xsltProcessor = $proc;
     }
-    
+
     /**
      * @note Allows a string $xsl filename to be passed
      */
@@ -27,7 +27,7 @@ class ConfigDoc_HTMLXSLTProcessor
         }
         return $this->xsltProcessor->importStylesheet($xsl);
     }
-    
+
     /**
      * Transforms an XML file into compatible XHTML based on the stylesheet
      * @param $xml XML DOM tree, or string filename
@@ -42,12 +42,12 @@ class ConfigDoc_HTMLXSLTProcessor
             $dom = $xml;
         }
         $out = $this->xsltProcessor->transformToXML($dom);
-        
+
         // fudges for HTML backwards compatibility
         // assumes that document is XHTML
         $out = str_replace('/>', ' />', $out); // <br /> not <br/>
         $out = str_replace(' xmlns=""', '', $out); // rm unnecessary xmlns
-        
+
         if (class_exists('Tidy')) {
             // cleanup output
             $config = array(
@@ -60,10 +60,10 @@ class ConfigDoc_HTMLXSLTProcessor
             $tidy->cleanRepair();
             $out = (string) $tidy;
         }
-        
+
         return $out;
     }
-    
+
     /**
      * Bulk sets parameters for the XSL stylesheet
      * @param array $options Associative array of options to set
@@ -73,13 +73,13 @@ class ConfigDoc_HTMLXSLTProcessor
             $this->xsltProcessor->setParameter('', $name, $value);
         }
     }
-    
+
     /**
      * Forward any other calls to the XSLT processor
      */
     public function __call($name, $arguments) {
         call_user_func_array(array($this->xsltProcessor, $name), $arguments);
     }
-    
+
 }
 

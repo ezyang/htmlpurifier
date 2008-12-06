@@ -35,7 +35,7 @@ switch ($AC['type']) {
     case 'vtest':
         $vtest_dirs[] = 'HTMLPurifier/ConfigSchema/Validator';
         if ($break) break;
-    
+
     case 'phpt':
         if (!$AC['disable-phpt'] && version_compare(PHP_VERSION, '5.2', '>=')) {
             $phpt_dirs[] = 'HTMLPurifier/PHPT';

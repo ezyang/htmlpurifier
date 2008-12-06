@@ -2,7 +2,7 @@
 
 /** @file
  * Unit tester
- * 
+ *
  * The heart and soul of HTML Purifier's correctness; anything and everything
  * is tested here! Arguments are specified like --arg=opt, allowed arguments
  * are:
@@ -132,7 +132,7 @@ foreach ($test_dirs as $dir) {
     $raw_files = $FS->globr($dir, '*Test.php');
     foreach ($raw_files as $file) {
         $file = str_replace('\\', '/', $file);
-        if (isset($test_dirs_exclude[$file])) continue; 
+        if (isset($test_dirs_exclude[$file])) continue;
         $test_files[] = $file;
     }
 }
@@ -175,19 +175,19 @@ if ($AC['file']) {
 }
 
 if ($AC['file']) {
-    
+
     $test = new TestSuite($AC['file']);
     htmlpurifier_add_test($test, $AC['file']);
-    
+
 } else {
-    
+
     $standalone = '';
     if ($AC['standalone']) $standalone = ' (standalone)';
     $test = new TestSuite('All HTML Purifier tests on PHP ' . PHP_VERSION . $standalone);
     foreach ($test_files as $test_file) {
         htmlpurifier_add_test($test, $test_file);
     }
-    
+
 }
 
 if ($AC['dry']) $reporter->makeDry();

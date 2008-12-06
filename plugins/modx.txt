@@ -1,7 +1,7 @@
 
 MODx Plugin
 
-MODx <http://www.modxcms.com/> is an open source PHP application framework.  
+MODx <http://www.modxcms.com/> is an open source PHP application framework.
 I first came across them in my referrer logs when tillda asked if anyone
 could implement an HTML Purifier plugin.  This forum thread
 <http://modxcms.com/forums/index.php/topic,6604.0.html> eventually resulted
@@ -34,10 +34,10 @@ textarea:
 $e = &$modx->Event;
 if ($e->name == 'OnBeforeDocFormSave') {
     global $content;
-    
+
     include_once '../assets/plugins/htmlpurifier/library/HTMLPurifier.auto.php';
     $purifier = new HTMLPurifier();
-    
+
     static $magic_quotes = null;
     if ($magic_quotes === null) {
         // this is an ugly hack because this hook hasn't
@@ -45,7 +45,7 @@ if ($e->name == 'OnBeforeDocFormSave') {
         // but HTMLPurifier must not have the quotes slashed.
         $magic_quotes = get_magic_quotes_gpc();
     }
-    
+
     if ($magic_quotes) $content = stripslashes($content);
     $content = $purifier->purify($content);
     if ($magic_quotes) $content = addslashes($content);

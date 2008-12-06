@@ -6,14 +6,14 @@
  */
 class HTMLPurifierExtras
 {
-    
+
     public static function autoload($class) {
         $path = HTMLPurifierExtras::getPath($class);
         if (!$path) return false;
         require $path;
         return true;
     }
-    
+
     public static function getPath($class) {
         if (
             strncmp('FSTools', $class, 7) !== 0 &&
@@ -23,5 +23,5 @@ class HTMLPurifierExtras
         // Standard implementation:
         return str_replace('_', '/', $class) . '.php';
     }
-    
+
 }

@@ -8,14 +8,14 @@ $interchange = HTMLPurifier_ConfigSchema_InterchangeBuilder::buildFromDirectory(
 $interchange->validate();
 
 if (isset($_GET['doc'])) {
-    
+
     // Hijack page generation to supply documentation
-    
+
     if (file_exists('test-schema.html') && !isset($_GET['purge'])) {
         echo file_get_contents('test-schema.html');
         exit;
     }
-    
+
     $style = 'plain';
     $configdoc_xml = 'test-schema.xml';
 
@@ -30,15 +30,15 @@ if (isset($_GET['doc'])) {
       'css' => '../configdoc/styles/plain.css',
     ));
     $html = $xslt->transformToHTML($configdoc_xml);
-    
+
     unlink('test-schema.xml');
     file_put_contents('test-schema.html', $html);
     echo $html;
-    
+
     exit;
 }
 
-?><!DOCTYPE html 
+?><!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

@@ -2,7 +2,7 @@
 
 /** @file
  * Multiple PHP Versions test
- * 
+ *
  * This file tests HTML Purifier in all versions of PHP. Arguments
  * are specified like --arg=opt, allowed arguments are:
  *   - quiet (q), if specified no informative messages are enabled (please use
@@ -12,16 +12,16 @@
  *     "--distro=standalone".
  *   - quick, run only the most recent versions of each release series
  *   - disable-flush, by default flush is run, this disables it
- *   - file (f), xml, type: these correspond to the parameters in index.php 
- * 
+ *   - file (f), xml, type: these correspond to the parameters in index.php
+ *
  * @note
  *   It requires a script called phpv that takes an extra argument (the
  *   version number of PHP) before all other arguments. Contact me if you'd
  *   like to set up a similar script. The name of the script can be
  *   edited with $phpv
- * 
+ *
  * @note
- *   Also, configuration must be set up with a variable called 
+ *   Also, configuration must be set up with a variable called
  *   $versions_to_test specifying version numbers to pass to $phpv
  */
 

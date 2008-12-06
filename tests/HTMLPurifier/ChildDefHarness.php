@@ -2,7 +2,7 @@
 
 class HTMLPurifier_ChildDefHarness extends HTMLPurifier_ComplexHarness
 {
-    
+
     public function setUp() {
         parent::setUp();
         $this->obj       = null;
@@ -10,7 +10,7 @@ class HTMLPurifier_ChildDefHarness extends HTMLPurifier_ComplexHarness
         $this->to_tokens = true;
         $this->to_html   = true;
     }
-    
+
 }
 
 

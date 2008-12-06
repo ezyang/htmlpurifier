@@ -14,14 +14,14 @@
  */
 class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
 {
-    
+
     public $name = 'Text';
     public $content_sets = array(
         'Flow' => 'Heading | Block | Inline'
     );
-    
+
     public function setup($config) {
-        
+
         // Inline Phrasal -------------------------------------------------
         $this->addElement('abbr',    'Inline', 'Inline', 'Common');
         $this->addElement('acronym', 'Inline', 'Inline', 'Common');
@@ -34,11 +34,11 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
         $this->addElement('samp',    'Inline', 'Inline', 'Common');
         $this->addElement('strong',  'Inline', 'Inline', 'Common');
         $this->addElement('var',     'Inline', 'Inline', 'Common');
-        
+
         // Inline Structural ----------------------------------------------
         $this->addElement('span', 'Inline', 'Inline', 'Common');
         $this->addElement('br',   'Inline', 'Empty',  'Core');
-        
+
         // Block Phrasal --------------------------------------------------
         $this->addElement('address',     'Block', 'Inline', 'Common');
         $this->addElement('blockquote',  'Block', 'Optional: Heading | Block | List', 'Common', array('cite' => 'URI') );
@@ -51,12 +51,12 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
         $this->addElement('h4', 'Heading', 'Inline', 'Common');
         $this->addElement('h5', 'Heading', 'Inline', 'Common');
         $this->addElement('h6', 'Heading', 'Inline', 'Common');
-        
+
         // Block Structural -----------------------------------------------
         $this->addElement('p', 'Block', 'Inline', 'Common');
         $this->addElement('div', 'Block', 'Flow', 'Common');
-        
+
     }
-    
+
 }
 

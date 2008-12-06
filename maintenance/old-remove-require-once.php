@@ -11,7 +11,7 @@ exit;
 /**
  * @file
  * Removes leading includes from files.
- * 
+ *
  * @note
  *      This does not remove inline includes; those must be handled manually.
  */

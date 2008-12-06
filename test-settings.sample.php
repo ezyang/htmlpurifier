@@ -37,7 +37,7 @@ $simpletest_location = '/path/to/simpletest/';
 // OPTIONAL SETTINGS
 
 // Note on running PHPT:
-//      Vanilla PHPT from http://phpt.info will not work, because there are 
+//      Vanilla PHPT from http://phpt.info will not work, because there are
 //      a number of bugs that prevent HTML Purifier from doing what they need
 //      to do. If you really want to run PHPT, you'll will need to apply the
 //      patches in maintenance/phpt-modifications.patch on the PHPT Core trunk,

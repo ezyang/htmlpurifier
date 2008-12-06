@@ -2,7 +2,7 @@
 
 /**
  * Debugging tools.
- * 
+ *
  * This file gives a developer a set of tools useful for performing code
  * consistency checks. This includes scoping code blocks to ensure that
  * only the interesting iteration of a loop gets outputted, a paint()
@@ -61,62 +61,62 @@ function isInScopes($array = array()) {
  */
 class Debugger
 {
-    
+
     public $shouldPaint = false;
     public $paints  = 0;
     public $current_scopes = array();
     public $scope_nextID = 1;
     public $add_pre = true;
-    
+
     public function Debugger() {
         $this->add_pre = !extension_loaded('xdebug');
     }
-    
+
     public static function &instance() {
         static $soleInstance = false;
         if (!$soleInstance) $soleInstance = new Debugger();
         return $soleInstance;
     }
-    
+
     public function paintIf($mixed, $conditional)  {
         if (!$conditional) return;
         $this->paint($mixed);
     }
-    
+
     public function paintWhen($mixed, $scopes = array()) {
         if (!$this->isInScopes($scopes)) return;
         $this->paint($mixed);
     }
-    
+
     public function paintIfWhen($mixed, $conditional, $scopes = array()) {
         if (!$conditional) return;
         if (!$this->isInScopes($scopes)) return;
         $this->paint($mixed);
     }
-    
+
     public function paint($mixed) {
         $this->paints++;
         if($this->add_pre) echo '<pre>';
         var_dump($mixed);
         if($this->add_pre) echo '</pre>';
     }
-    
+
     public function addScope($id = false) {
         if ($id == false) {
             $id = $this->scope_nextID++;
         }
         $this->current_scopes[$id] = true;
     }
-    
+
     public function removeScope($id) {
         if (isset($this->current_scopes[$id])) unset($this->current_scopes[$id]);
     }
-    
+
     public function resetScopes() {
         $this->current_scopes = array();
         $this->scope_nextID = 1;
     }
-    
+
     public function isInScopes($scopes = array()) {
         if (empty($this->current_scopes)) {
             return false;
@@ -141,6 +141,6 @@ class Debugger
         }
         return true;
     }
-    
+
 }
 

@@ -206,7 +206,7 @@ $def = $config->getHTMLDefinition(true);</pre>
 <h2>Turn off caching</h2>
 
 <p>
-  To make development easier, we're going to temporarily turn off 
+  To make development easier, we're going to temporarily turn off
   definition caching:
 </p>
 
@@ -401,8 +401,8 @@ $def = $config->getHTMLDefinition(true);
 
 <p>
   Adding attributes is really small-fry stuff, though, and it was possible
-  to add them (albeit a bit more wordy) prior to 2.0. The real gem of 
-  the Advanced API is adding elements. There are five questions to 
+  to add them (albeit a bit more wordy) prior to 2.0. The real gem of
+  the Advanced API is adding elements. There are five questions to
   ask when adding a new element:
 </p>
 
@@ -493,9 +493,9 @@ $def = $config->getHTMLDefinition(true);
 <p>
   The <code>(%flow;)*</code> indicates the allowed children of the
   <code>li</code> tag: <code>li</code> allows any number of flow
-  elements as its children. (The <code>- O</code> allows the closing tag to be 
-  omitted, though in XML this is not allowed.) In HTML Purifier, 
-  we'd write it like <code>Flow</code> (here's where the content sets 
+  elements as its children. (The <code>- O</code> allows the closing tag to be
+  omitted, though in XML this is not allowed.) In HTML Purifier,
+  we'd write it like <code>Flow</code> (here's where the content sets
   we were discussing earlier come into play). There are three shorthand
   content models you can specify:
 </p>
@@ -596,7 +596,7 @@ $def = $config->getHTMLDefinition(true);
   be nuked.  This is why there is are specific content model types like
   Optional and Required: while they could be implemented as <code>Custom:
   (valid | elements)*</code>, the custom classes contain special recovery
-  measures that make sure as much of the user's original content gets 
+  measures that make sure as much of the user's original content gets
   through. HTML Purifier's core, as a rule, does not use Custom.
 </p>
 
@@ -676,7 +676,7 @@ $def = $config->getHTMLDefinition(true);
   href="http://www.w3.org/TR/xhtml-modularization/abstract_modules.html#s_commonatts">abstract
   modules of the XHTML Modularization 1.1</a>. We believe this section
   to be in error, as <code>br</code> permits the use of the <code>style</code>
-  attribute even though it uses the <code>Core</code> collection, and 
+  attribute even though it uses the <code>Core</code> collection, and
   the DTD and XML Schemas supplied by W3C support our interpretation.
 </p>
 

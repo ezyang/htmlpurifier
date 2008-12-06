@@ -177,8 +177,8 @@
         <sample><![CDATA[<ol type="1"><li>1</li><li>2</li></ul>]]></sample>
         <sample><![CDATA[<ol><li type="a">1</li><li type="I">2</li></ul>]]></sample>
     </group>
-    
-    
+
+
     <!-- sample
     <group title="">
         <sample><![CDATA[]]></sample>

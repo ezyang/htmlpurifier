@@ -7,7 +7,7 @@ require_once 'FSTools/FileSystemHarness.php';
  */
 class FSTools_FileTest extends FSTools_FileSystemHarness
 {
-    
+
     function test() {
         $name = 'test.txt';
         $file = new FSTools_File($name);
@@ -18,14 +18,14 @@ class FSTools_FileTest extends FSTools_FileSystemHarness
         $file->delete();
         $this->assertFalse($file->exists());
     }
-    
+
     function testGetNonExistent() {
         $name = 'notfound.txt';
         $file = new FSTools_File($name);
         $this->expectError();
         $this->assertFalse($file->get());
     }
-    
+
     function testHandle() {
         $file = new FSTools_File('foo.txt');
         $this->assertFalse($file->exists());
@@ -40,6 +40,6 @@ class FSTools_FileTest extends FSTools_FileSystemHarness
         $this->assertIdentical('bar', $file->getLine());
         $this->assertTrue($file->eof());
     }
-    
+
 }
 

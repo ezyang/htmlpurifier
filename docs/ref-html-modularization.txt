@@ -121,7 +121,7 @@ a proprietary system called ChildDef for performance and flexibility
 reasons, but this does not line up very well with W3C's notion of
 regexps for defining the allowed children of an element.
 
-HTMLPurifier->elements[$element]->content_model and 
+HTMLPurifier->elements[$element]->content_model and
 HTMLPurifier->elements[$element]->content_model_type store information
 about the final ChildDef that will be stored in
 HTMLPurifier->elements[$element]->child (we use a different variable

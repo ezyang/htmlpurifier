@@ -2,7 +2,7 @@
 
 class HTMLPurifier_StringHashTest extends UnitTestCase
 {
-    
+
     function testUsed() {
         $hash = new HTMLPurifier_StringHash(array(
             'key' => 'value',
@@ -14,5 +14,5 @@ class HTMLPurifier_StringHashTest extends UnitTestCase
         $hash->resetAccessed();
         $this->assertIdentical($hash->getAccessed(), array());
     }
-    
+
 }

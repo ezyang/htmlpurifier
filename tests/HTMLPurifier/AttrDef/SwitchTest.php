@@ -2,9 +2,9 @@
 
 class HTMLPurifier_AttrDef_SwitchTest extends HTMLPurifier_AttrDefHarness
 {
-    
+
     protected $with, $without;
-    
+
     function setUp() {
         parent::setUp();
         generate_mock_once('HTMLPurifier_AttrDef');
@@ -12,7 +12,7 @@ class HTMLPurifier_AttrDef_SwitchTest extends HTMLPurifier_AttrDefHarness
         $this->without = new HTMLPurifier_AttrDefMock();
         $this->def = new HTMLPurifier_AttrDef_Switch('tag', $this->with, $this->without);
     }
-    
+
     function testWith() {
         $token = new HTMLPurifier_Token_Start('tag');
         $this->context->register('CurrentToken', $token);
@@ -20,7 +20,7 @@ class HTMLPurifier_AttrDef_SwitchTest extends HTMLPurifier_AttrDefHarness
         $this->with->setReturnValue('validate', 'foo');
         $this->assertDef('bar', 'foo');
     }
-    
+
     function testWithout() {
         $token = new HTMLPurifier_Token_Start('other-tag');
         $this->context->register('CurrentToken', $token);
@@ -28,5 +28,5 @@ class HTMLPurifier_AttrDef_SwitchTest extends HTMLPurifier_AttrDefHarness
         $this->without->setReturnValue('validate', 'foo');
         $this->assertDef('bar', 'foo');
     }
-    
+
 }

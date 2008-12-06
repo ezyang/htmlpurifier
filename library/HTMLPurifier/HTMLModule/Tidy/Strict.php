@@ -4,13 +4,13 @@ class HTMLPurifier_HTMLModule_Tidy_Strict extends HTMLPurifier_HTMLModule_Tidy_X
 {
     public $name = 'Tidy_Strict';
     public $defaultLevel = 'light';
-    
+
     public function makeFixes() {
         $r = parent::makeFixes();
         $r['blockquote#content_model_type'] = 'strictblockquote';
         return $r;
     }
-    
+
     public $defines_child_def = true;
     public function getChildDef($def) {
         if ($def->content_model_type != 'strictblockquote') return parent::getChildDef($def);

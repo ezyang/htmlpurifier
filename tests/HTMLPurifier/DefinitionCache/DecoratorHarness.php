@@ -4,7 +4,7 @@ generate_mock_once('HTMLPurifier_DefinitionCache');
 
 class HTMLPurifier_DefinitionCache_DecoratorHarness extends HTMLPurifier_DefinitionCacheHarness
 {
-    
+
     function setup() {
         $this->mock     = new HTMLPurifier_DefinitionCacheMock();
         $this->mock->type = 'Test';
@@ -12,11 +12,11 @@ class HTMLPurifier_DefinitionCache_DecoratorHarness extends HTMLPurifier_Definit
         $this->def      = $this->generateDefinition();
         $this->config   = $this->generateConfigMock();
     }
-    
+
     function teardown() {
         unset($this->mock);
         unset($this->cache);
     }
-    
+
 }
 

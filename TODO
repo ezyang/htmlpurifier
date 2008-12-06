@@ -65,7 +65,7 @@ FUTURE VERSIONS
     - Lots of documentation and samples
 
 Ongoing
- - More refactoring to take advantage of PHP5's facilities 
+ - More refactoring to take advantage of PHP5's facilities
  - Refactor unit tests into lots of test methods
  - Plugins for major CMSes (COMPLEX)
     - phpBB

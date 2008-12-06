@@ -19,14 +19,14 @@ function phorum_htmlpurifier_migrate_sigs_check() {
 
 function phorum_htmlpurifier_migrate_sigs($offset) {
     global $PHORUM;
-    
+
     if(!$offset) return; // bail out quick if $offset == 0
-    
+
     // theoretically, we could get rid of this multi-request
     // doo-hickery if safe mode is off
     @set_time_limit(0); // attempt to let this run
     $increment = $PHORUM['mod_htmlpurifier']['migrate-sigs-increment'];
-    
+
     require_once(dirname(__FILE__) . '/../migrate.php');
     // migrate signatures
     // do this in batches so we don't run out of time/space
@@ -51,13 +51,13 @@ function phorum_htmlpurifier_migrate_sigs($offset) {
         }
     }
     unset($userinfos); // free up memory
-    
+
     // query for highest ID in database
     $type = $PHORUM['DBCONFIG']['type'];
     $sql = "select MAX(user_id) from {$PHORUM['user_table']}";
     $row = phorum_db_interact(DB_RETURN_ROW, $sql);
     $top_id = (int) $row[0];
-    
+
     $offset += $increment;
     if ($offset > $top_id) { // test for end condition
         echo 'Migration finished';
@@ -71,5 +71,5 @@ function phorum_htmlpurifier_migrate_sigs($offset) {
     // relies on output buffering to work
     header("Location: http://$host$uri/$extra");
     exit;
-    
+
 }

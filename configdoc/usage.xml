@@ -302,7 +302,7 @@
  </directive>
  <directive id="Core.EscapeInvalidChildren">
   <file name="HTMLPurifier/ChildDef/Required.php">
-   <line>55</line>
+   <line>62</line>
   </file>
  </directive>
  <directive id="Cache.SerializerPath">

@@ -23,7 +23,7 @@ $exclude_dirs = array(
     'HTMLPurifier/Filter/',
     'HTMLPurifier/Printer/',
     /* These should be excluded, but need to have ConfigSchema support first
-    
+
     */
 );
 $exclude_files = array(
@@ -58,7 +58,7 @@ echo "done!\n";
 
 /**
  * Returns a lookup array of dependencies for a file.
- * 
+ *
  * @note This function expects that format $name extends $parent on one line
  *
  * @param $file
@@ -140,13 +140,13 @@ $php = "<?php
  * the core files required by HTML Purifier. Use this if performance is a
  * primary concern and you are using an opcode cache. PLEASE DO NOT EDIT THIS
  * FILE, changes will be overwritten the next time the script is run.
- * 
+ *
  * @version $version
- * 
+ *
  * @warning
  *      You must *not* include any other HTML Purifier files before this file,
  *      because 'require' not 'require_once' is used.
- * 
+ *
  * @warning
  *      This file requires that the include path contains the HTML Purifier
  *      library directory; this is not auto-set.
@@ -170,7 +170,7 @@ $php = "<?php
  * the core files required by HTML Purifier. This is a convenience stub that
  * includes all files using dirname(__FILE__) and require_once. PLEASE DO NOT
  * EDIT THIS FILE, changes will be overwritten the next time the script is run.
- * 
+ *
  * Changes to include_path are not necessary.
  */
 

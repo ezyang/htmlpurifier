@@ -12,9 +12,9 @@
  */
 class HTMLPurifier_HTMLModule_Presentation extends HTMLPurifier_HTMLModule
 {
-    
+
     public $name = 'Presentation';
-    
+
     public function setup($config) {
         $this->addElement('b',      'Inline', 'Inline', 'Common');
         $this->addElement('big',    'Inline', 'Inline', 'Common');
@@ -25,6 +25,6 @@ class HTMLPurifier_HTMLModule_Presentation extends HTMLPurifier_HTMLModule
         $this->addElement('sup',    'Inline', 'Inline', 'Common');
         $this->addElement('tt',     'Inline', 'Inline', 'Common');
     }
-    
+
 }
 

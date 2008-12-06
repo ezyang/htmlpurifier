@@ -25,7 +25,7 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
             }
         }
     }
-    
+
     fix_magic_quotes($_GET);
     fix_magic_quotes($_POST);
     fix_magic_quotes($_COOKIE);

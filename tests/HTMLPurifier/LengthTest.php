@@ -2,24 +2,24 @@
 
 class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
 {
-    
+
     function testConstruct() {
         $l = new HTMLPurifier_Length('23', 'in');
         $this->assertIdentical($l->getN(), '23');
         $this->assertIdentical($l->getUnit(), 'in');
     }
-    
+
     function testMake() {
         $l = HTMLPurifier_Length::make('+23.4in');
         $this->assertIdentical($l->getN(), '+23.4');
         $this->assertIdentical($l->getUnit(), 'in');
     }
-    
+
     function testToString() {
         $l = new HTMLPurifier_Length('23', 'in');
         $this->assertIdentical($l->toString(), '23in');
     }
-    
+
     protected function assertValidate($string, $expect = true) {
         if ($expect === true) $expect = $string;
         $l = HTMLPurifier_Length::make($string);
@@ -27,7 +27,7 @@ class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
         if ($result === false) $this->assertIdentical($expect, false);
         else $this->assertIdentical($l->toString(), $expect);
     }
-    
+
     function testValidate() {
         $this->assertValidate('0');
         $this->assertValidate('+0', '0');
@@ -46,7 +46,7 @@ class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
         $this->assertValidate('3', false);
         $this->assertValidate('3miles', false);
     }
-    
+
     /**
      * @param $s1 First string to compare
      * @param $s2 Second string to compare
@@ -60,12 +60,12 @@ class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
         $this->assertIdentical($r1 == 0 ? 0 : ($r1 > 0 ? 1 : -1), $expect);
         $this->assertIdentical($r2 == 0 ? 0 : ($r2 > 0 ? 1 : -1), - $expect);
     }
-    
+
     function testCompareTo() {
         $this->assertComparison('12in', '12in');
         $this->assertComparison('12in', '12mm', 1);
         $this->assertComparison('1px', '1mm', -1);
         $this->assertComparison(str_repeat('2', 38) . 'in', '100px', 1);
     }
-    
+
 }

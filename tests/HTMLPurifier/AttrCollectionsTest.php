@@ -8,17 +8,17 @@ Mock::generatePartial(
 
 class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
 {
-    
+
     function testConstruction() {
-        
+
         generate_mock_once('HTMLPurifier_AttrTypes');
-        
+
         $collections = new HTMLPurifier_AttrCollections_TestForConstruct();
-        
+
         $types = new HTMLPurifier_AttrTypesMock();
-        
+
         $modules = array();
-        
+
         $modules['Module1'] = new HTMLPurifier_HTMLModule();
         $modules['Module1']->attr_collections = array(
             'Core' => array(
@@ -30,7 +30,7 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
                 'attribute-3' => 'Type3-old' // overwritten
             )
         );
-        
+
         $modules['Module2'] = new HTMLPurifier_HTMLModule();
         $modules['Module2']->attr_collections = array(
             'Core' => array(
@@ -41,7 +41,7 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
             ),
             'Brocolli' => array()
         );
-        
+
         $collections->__construct($types, $modules);
         // this is without identifier expansion or inclusions
         $this->assertIdentical(
@@ -58,13 +58,13 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
                 'Brocolli' => array()
             )
         );
-        
+
     }
-    
+
     function test_performInclusions() {
-        
+
         generate_mock_once('HTMLPurifier_AttrTypes');
-        
+
         $types = new HTMLPurifier_AttrTypesMock();
         $collections = new HTMLPurifier_AttrCollections($types, array());
         $collections->info = array(
@@ -72,17 +72,17 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
             'Inclusion' => array(0 => array('SubInclusion'), 'attr' => 'Type'),
             'SubInclusion' => array('attr2' => 'Type')
         );
-        
+
         $collections->performInclusions($collections->info['Core']);
         $this->assertIdentical(
             $collections->info['Core'],
             array(
-                'attr-original' => 'Type', 
+                'attr-original' => 'Type',
                 'attr' => 'Type',
                 'attr2' => 'Type'
             )
         );
-        
+
         // test recursive
         $collections->info = array(
             'One' => array(0 => array('Two'), 'one' => 'Type'),
@@ -96,28 +96,28 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
                 'two' => 'Type'
             )
         );
-        
+
     }
-    
+
     function test_expandIdentifiers() {
-        
+
         generate_mock_once('HTMLPurifier_AttrTypes');
-        
+
         $types = new HTMLPurifier_AttrTypesMock();
         $collections = new HTMLPurifier_AttrCollections($types, array());
-        
+
         $attr = array(
             'attr1' => 'Color',
             'attr2*' => 'URI'
         );
         $c_object = new HTMLPurifier_AttrDef_HTML_Color();
         $u_object = new HTMLPurifier_AttrDef_URI();
-        
+
         $types->setReturnValue('get', $c_object, array('Color'));
         $types->setReturnValue('get', $u_object, array('URI'));
-        
+
         $collections->expandIdentifiers($attr, $types);
-        
+
         $u_object->required = true;
         $this->assertIdentical(
             $attr,
@@ -126,8 +126,8 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
                 'attr2' => $u_object
             )
         );
-        
+
     }
-    
+
 }
 

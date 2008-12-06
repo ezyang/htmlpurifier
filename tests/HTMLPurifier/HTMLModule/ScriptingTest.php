@@ -2,26 +2,26 @@
 
 class HTMLPurifier_HTMLModule_ScriptingTest extends HTMLPurifier_HTMLModuleHarness
 {
-    
+
     function setUp() {
         parent::setUp();
         $this->config->set('HTML', 'Trusted', true);
         $this->config->set('Output', 'CommentScriptContents', false);
     }
-    
+
     function testDefaultRemoval() {
         $this->config->set('HTML', 'Trusted', false);
         $this->assertResult(
             '<script type="text/javascript">foo();</script>', ''
         );
     }
-    
+
     function testPreserve() {
         $this->assertResult(
             '<script type="text/javascript">foo();</script>'
         );
     }
-    
+
     function testCDATAEnclosure() {
         $this->assertResult(
 '<script type="text/javascript">//<![CDATA[
@@ -29,7 +29,7 @@ alert("<This is compatible with XHTML>");
 //]]></script>'
         );
     }
-    
+
     function testAllAttributes() {
         $this->assertResult(
             '<script
@@ -39,7 +39,7 @@ alert("<This is compatible with XHTML>");
             >PCDATA</script>'
         );
     }
-    
+
     function testUnsupportedAttributes() {
         $this->assertResult(
             '<script
@@ -49,6 +49,6 @@ alert("<This is compatible with XHTML>");
             '<script type="text/javascript">PCDATA</script>'
         );
     }
-    
+
 }
 

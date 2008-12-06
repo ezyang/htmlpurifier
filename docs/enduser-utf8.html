@@ -106,7 +106,7 @@ there are now many character encodings floating around.</p>
     interpret raw zeroes and ones into real characters. It
     usually does this by pairing numbers with characters.</p>
     <p>There are many different types of character encodings floating
-    around, but the ones we deal most frequently with are ASCII, 
+    around, but the ones we deal most frequently with are ASCII,
     8-bit encodings, and Unicode-based encodings.</p>
     <ul>
         <li><strong>ASCII</strong> is a 7-bit encoding based on the
@@ -306,7 +306,7 @@ languages</a>. The appropriate code is:</p>
 
 <p>...replacing UTF-8 with whatever your embedded encoding is.
 This code must come before any output, so be careful about
-stray whitespace in your application (i.e., any whitespace before 
+stray whitespace in your application (i.e., any whitespace before
 output excluding whitespace within &lt;?php ?&gt; tags).</p>
 
 <h4 id="fixcharset-server-phpini">PHP ini directive</h4>
@@ -366,9 +366,9 @@ to send anything at all:</p>
 <pre><a href="http://httpd.apache.org/docs/1.3/mod/core.html#adddefaultcharset">AddDefaultCharset</a> Off</pre>
 
 <p>...making your internal charset declaration (usually the <code>META</code> tags)
-the sole source of character encoding 
-information. In these cases, it is <em>especially</em> important to make 
-sure you have valid <code>META</code> tags on your pages and all the 
+the sole source of character encoding
+information. In these cases, it is <em>especially</em> important to make
+sure you have valid <code>META</code> tags on your pages and all the
 text before them is ASCII.</p>
 
 <blockquote class="aside"><p>These directives can also be
@@ -443,9 +443,9 @@ Declarations. They look like:</p>
 <p>For XHTML, this XML Declaration theoretically
 overrides the <code>META</code> tag. In reality, this happens only when the
 XHTML is actually served as legit XML and not HTML, which is almost always
-never due to Internet Explorer's lack of support for 
+never due to Internet Explorer's lack of support for
 <code>application/xhtml+xml</code> (even though doing so is often
-argued to be <a href="http://www.hixie.ch/advocacy/xhtml">good 
+argued to be <a href="http://www.hixie.ch/advocacy/xhtml">good
 practice</a> and is required by the XHTML 1.1 specification).</p>
 
 <p>For XML, however, this XML Declaration is extremely important.
@@ -456,7 +456,7 @@ ISO-8859-1 encoding (you see this in garbled RSS feeds).</p>
 
 <p>In short, if you use XHTML and have gone through the
 trouble of adding the XML Declaration, make sure it jives
-with your <code>META</code> tags (which should only be present 
+with your <code>META</code> tags (which should only be present
 if served in text/html) and HTTP headers.</p>
 
 <h3 id="fixcharset-internals">Inside the process</h3>
@@ -489,7 +489,7 @@ it gets to the Content-Type tag, extract the character encoding
 tag, then re-parse the document according to this new information.</p>
 
 <p>Obviously this is complicated, so browsers prefer the simpler
-and more efficient solution: get the character encoding from a 
+and more efficient solution: get the character encoding from a
 somewhere other than the document itself, i.e. the HTTP headers,
 much to the chagrin of HTML authors who can't set these headers.</p>
 
@@ -578,7 +578,7 @@ files.</p>
 <a href="http://web.archive.org/web/20060427015200/ppewww.ph.gla.ac.uk/~flavell/charset/form-i18n.html">
 <code>FORM</code> submission and i18n</a>. That document contains lots
 of useful information, but is written in a rambly manner, so
-here I try to get right to the point. (Note: the original has 
+here I try to get right to the point. (Note: the original has
 disappeared off the web, so I am linking to the Web Archive copy.)</p>
 
 <h4 id="whyutf8-forms-urlencoded"><code>application/x-www-form-urlencoded</code></h4>
@@ -886,7 +886,7 @@ sure the page is saved WITHOUT the BOM.</p>
 </blockquote>
 
 <p>If you are reading in text files to insert into the middle of another
-page, it is strongly advised (but not strictly necessary) that you replace out the UTF-8 byte 
+page, it is strongly advised (but not strictly necessary) that you replace out the UTF-8 byte
 sequence for BOM <code>&quot;\xEF\xBB\xBF&quot;</code> before inserting it in,
 via:</p>
 
@@ -949,7 +949,7 @@ to known good Unicode fonts.</p>
 heavy lifting for you. Get the CSS from the horses mouth here:
 <a href="http://en.wikipedia.org/wiki/MediaWiki:Common.css">Common.css</a>,
 and search for &quot;.IPA&quot; There are also a smattering of
-other classes you can use for other purposes, check out 
+other classes you can use for other purposes, check out
 <a href="http://meta.wikimedia.org/wiki/Help:Special_characters#Displaying_Special_Characters">this page</a>
 for more details. For you lazy ones, this should work:</p>
 

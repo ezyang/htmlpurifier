@@ -2,19 +2,19 @@
 
 class HTMLPurifier_VarParserHarness extends UnitTestCase
 {
-    
+
     protected $parser;
-    
+
     public function setup() {
         $class = substr(get_class($this), 0, -4);
         $this->parser = new $class();
     }
-    
+
     function assertValid($var, $type, $ret = null) {
         $ret = ($ret === null) ? $var : $ret;
         $this->assertIdentical($this->parser->parse($var, $type), $ret);
     }
-    
+
     function assertInvalid($var, $type, $msg = null) {
         $caught = false;
         try {
@@ -27,5 +27,5 @@ class HTMLPurifier_VarParserHarness extends UnitTestCase
             $this->fail('Did not catch expected error');
         }
     }
-    
+
 }

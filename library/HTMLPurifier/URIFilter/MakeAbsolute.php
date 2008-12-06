@@ -71,7 +71,7 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
         if (is_null($uri->port))     $uri->port     = $this->base->port;
         return true;
     }
-    
+
     /**
      * Resolve dots and double-dots in a path stack
      */

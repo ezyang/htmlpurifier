@@ -6,13 +6,13 @@
  * the core files required by HTML Purifier. Use this if performance is a
  * primary concern and you are using an opcode cache. PLEASE DO NOT EDIT THIS
  * FILE, changes will be overwritten the next time the script is run.
- * 
+ *
  * @version 3.2.0
- * 
+ *
  * @warning
  *      You must *not* include any other HTML Purifier files before this file,
  *      because 'require' not 'require_once' is used.
- * 
+ *
  * @warning
  *      This file requires that the include path contains the HTML Purifier
  *      library directory; this is not auto-set.
@@ -55,6 +55,8 @@ require 'HTMLPurifier/LanguageFactory.php';
 require 'HTMLPurifier/Length.php';
 require 'HTMLPurifier/Lexer.php';
 require 'HTMLPurifier/PercentEncoder.php';
+require 'HTMLPurifier/PropertyList.php';
+require 'HTMLPurifier/PropertyListIterator.php';
 require 'HTMLPurifier/Strategy.php';
 require 'HTMLPurifier/StringHash.php';
 require 'HTMLPurifier/StringHashParser.php';

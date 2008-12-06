@@ -2,7 +2,7 @@
 
 class HTMLPurifier_AttrDef_HTML_ColorTest extends HTMLPurifier_AttrDefHarness
 {
-    
+
     function test() {
         $this->def = new HTMLPurifier_AttrDef_HTML_Color();
         $this->assertDef('', false);

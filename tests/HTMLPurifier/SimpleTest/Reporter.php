@@ -2,14 +2,14 @@
 
 class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
 {
-    
+
     protected $ac;
-    
+
     public function __construct($encoding, $ac) {
         $this->ac = $ac;
         parent::__construct($encoding);
     }
-    
+
     public function paintHeader($test_name) {
         parent::paintHeader($test_name);
 ?>
@@ -28,7 +28,7 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
 <?php
         flush();
     }
-    
+
     public function paintFooter($test_name) {
         if (function_exists('xdebug_peak_memory_usage')) {
             $max_mem = number_format(xdebug_peak_memory_usage());
@@ -36,7 +36,7 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
         }
         parent::paintFooter($test_name);
     }
-    
+
     protected function getCss() {
         $css = parent::getCss();
         $css .= '
@@ -44,6 +44,6 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
         ';
         return $css;
     }
-    
+
 }
 

@@ -2,7 +2,7 @@
 
 class HTMLPurifier_DefinitionCacheHarness extends HTMLPurifier_Harness
 {
-    
+
     /**
      * Generate a configuration mock object that returns $values
      * to a getBatch() call
@@ -15,7 +15,7 @@ class HTMLPurifier_DefinitionCacheHarness extends HTMLPurifier_Harness
         $config->version = '1.0.0';
         return $config;
     }
-    
+
     /**
      * Returns an anonymous def that has been setup and named Test
      */
@@ -28,6 +28,6 @@ class HTMLPurifier_DefinitionCacheHarness extends HTMLPurifier_Harness
         }
         return $def;
     }
-    
+
 }
 

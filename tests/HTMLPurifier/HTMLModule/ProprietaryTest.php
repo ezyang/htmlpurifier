@@ -2,12 +2,12 @@
 
 class HTMLPurifier_HTMLModule_ProprietaryTest extends HTMLPurifier_HTMLModuleHarness
 {
-    
+
     function setUp() {
         parent::setUp();
         $this->config->set('HTML', 'Proprietary', true);
     }
-    
+
     function testMarquee() {
         $this->assertResult(
             '<span><marquee
@@ -24,6 +24,6 @@ class HTMLPurifier_HTMLModule_ProprietaryTest extends HTMLPurifier_HTMLModuleHar
                 ><div>Block</div><span>Inline</span>Text</marquee></span>'
         );
     }
-    
+
 }
 

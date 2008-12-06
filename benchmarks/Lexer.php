@@ -9,7 +9,7 @@ require_once 'Text/Password.php'; // for generating random input
 
 $LEXERS = array();
 $RUNS = isset($GLOBALS['HTMLPurifierTest']['Runs'])
-    ? $GLOBALS['HTMLPurifierTest']['Runs'] : 2; 
+    ? $GLOBALS['HTMLPurifierTest']['Runs'] : 2;
 
 require_once 'HTMLPurifier/Lexer/DirectLex.php';
 $LEXERS['DirectLex'] = new HTMLPurifier_Lexer_DirectLex();
@@ -22,48 +22,48 @@ if (version_compare(PHP_VERSION, '5', '>=')) {
 // custom class to aid unit testing
 class RowTimer extends Benchmark_Timer
 {
-    
+
     var $name;
-    
+
     function RowTimer($name, $auto = false) {
         $this->name = htmlentities($name);
         $this->Benchmark_Timer($auto);
     }
-    
+
     function getOutput() {
 
         $total  = $this->TimeElapsed();
         $result = $this->getProfiling();
         $dashes = '';
-        
+
         $out = '<tr>';
-        
+
         $out .= "<td>{$this->name}</td>";
-        
+
         $standard = false;
-        
+
         foreach ($result as $k => $v) {
             if ($v['name'] == 'Start' || $v['name'] == 'Stop') continue;
-            
+
             //$perc = (($v['diff'] * 100) / $total);
             //$tperc = (($v['total'] * 100) / $total);
-            
+
             //$out .= '<td align="right">' . $v['diff'] . '</td>';
-            
+
             if ($standard == false) $standard = $v['diff'];
-            
+
             $perc = $v['diff'] * 100 / $standard;
             $bad_run = ($v['diff'] < 0);
-            
+
             $out .= '<td align="right"'.
                    ($bad_run ? ' style="color:#AAA;"' : '').
                    '>' . number_format($perc, 2, '.', '') .
                    '%</td><td>'.number_format($v['diff'],4,'.','').'</td>';
-            
+
         }
-        
+
         $out .= '</tr>';
-        
+
         return $out;
     }
 }
@@ -80,18 +80,18 @@ function print_lexers() {
 
 function do_benchmark($name, $document) {
     global $LEXERS, $RUNS;
-    
+
     $config = HTMLPurifier_Config::createDefault();
     $context = new HTMLPurifier_Context();
-    
+
     $timer = new RowTimer($name);
     $timer->start();
-    
+
     foreach($LEXERS as $key => $lexer) {
         for ($i=0; $i<$RUNS; $i++) $tokens = $lexer->tokenizeHTML($document, $config, $context);
         $timer->setMarker($key);
     }
-    
+
     $timer->stop();
     $timer->display();
 }
@@ -118,11 +118,11 @@ foreach ($LEXERS as $key => $value) {
 $dir = 'samples/Lexer';
 $dh  = opendir($dir);
 while (false !== ($filename = readdir($dh))) {
-    
+
     if (strpos($filename, '.html') !== strlen($filename) - 5) continue;
     $document = file_get_contents($dir . '/' . $filename);
     do_benchmark("File: $filename", $document);
-    
+
 }
 
 // crashers, caused infinite loops before

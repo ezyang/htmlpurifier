@@ -7,39 +7,39 @@
  */
 class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
 {
-    
+
     /**
      * Instance of the object that will execute the method
      */
     protected $obj;
-    
+
     /**
      * Name of the function to be executed
      */
     protected $func;
-    
+
     /**
      * Whether or not the method deals in tokens. If set to true, assertResult()
      * will transparently convert HTML to and back from tokens.
      */
     protected $to_tokens = false;
-    
+
     /**
      * Whether or not to convert tokens back into HTML before performing
      * equality check, has no effect on bools.
      */
     protected $to_html = false;
-    
+
     /**
      * Instance of an HTMLPurifier_Lexer implementation.
      */
     protected $lexer;
-    
+
     public function __construct() {
         $this->lexer     = new HTMLPurifier_Lexer_DirectLex();
         parent::__construct();
     }
-    
+
     /**
      * Asserts a specific result from a one parameter + config/context function
      * @param $input Input parameter
@@ -50,7 +50,7 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
      *                       context object.
      */
     protected function assertResult($input, $expect = true) {
-        
+
         if ($this->to_tokens && is_string($input)) {
             // $func may cause $input to change, so "clone" another copy
             // to sacrifice
@@ -59,11 +59,11 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
         } else {
             $input_c = $input;
         }
-        
+
         // call the function
         $func = $this->func;
         $result = $this->obj->$func($input_c, $this->config, $this->context);
-        
+
         // test a bool result
         if (is_bool($result)) {
             $this->assertIdentical($expect, $result);
@@ -71,7 +71,7 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
         } elseif (is_bool($expect)) {
             $expect = $input;
         }
-        
+
         if ($this->to_html) {
             $result = $this->generate($result);
             if (is_array($expect)) {
@@ -79,20 +79,20 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
             }
         }
         $this->assertIdentical($expect, $result);
-        
+
         if ($expect !== $result) {
             echo '<pre>' . htmlspecialchars($result) . '</pre>';
         }
-        
+
     }
-    
+
     /**
      * Tokenize HTML into tokens, uses member variables for common variables
      */
     protected function tokenize($html) {
         return $this->lexer->tokenizeHTML($html, $this->config, $this->context);
     }
-    
+
     /**
      * Generate textual HTML from tokens
      */
@@ -100,7 +100,7 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
         $generator = new HTMLPurifier_Generator($this->config, $this->context);
         return $generator->generateFromTokens($tokens);
     }
-    
+
 }
 
 

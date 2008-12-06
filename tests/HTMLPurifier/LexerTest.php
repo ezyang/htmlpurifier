@@ -2,9 +2,9 @@
 
 class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 {
-    
+
     protected $_has_pear = false;
-    
+
     public function __construct() {
         parent::__construct();
         // E_STRICT = 2048, int used for PHP4 compat: this check disables
@@ -20,99 +20,99 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             require_once 'HTMLPurifier/Lexer/PH5P.php';
         }
     }
-    
+
     // HTMLPurifier_Lexer::create() --------------------------------------------
-    
+
     function test_create() {
         $this->config->set('Core', 'MaintainLineNumbers', true);
         $lexer = HTMLPurifier_Lexer::create($this->config);
         $this->assertIsA($lexer, 'HTMLPurifier_Lexer_DirectLex');
     }
-    
+
     function test_create_objectLexerImpl() {
         $this->config->set('Core', 'LexerImpl', new HTMLPurifier_Lexer_DirectLex());
         $lexer = HTMLPurifier_Lexer::create($this->config);
         $this->assertIsA($lexer, 'HTMLPurifier_Lexer_DirectLex');
     }
-    
+
     function test_create_unknownLexer() {
         $this->config->set('Core', 'LexerImpl', 'AsdfAsdf');
         $this->expectException(new HTMLPurifier_Exception('Cannot instantiate unrecognized Lexer type AsdfAsdf'));
         HTMLPurifier_Lexer::create($this->config);
     }
-    
+
     function test_create_incompatibleLexer() {
         $this->config->set('Core', 'LexerImpl', 'DOMLex');
         $this->config->set('Core', 'MaintainLineNumbers', true);
         $this->expectException(new HTMLPurifier_Exception('Cannot use lexer that does not support line numbers with Core.MaintainLineNumbers or Core.CollectErrors (use DirectLex instead)'));
         HTMLPurifier_Lexer::create($this->config);
     }
-    
+
     // HTMLPurifier_Lexer->parseData() -----------------------------------------
-    
+
     function assertParseData($input, $expect = true) {
         if ($expect === true) $expect = $input;
         $lexer = new HTMLPurifier_Lexer();
         $this->assertIdentical($expect, $lexer->parseData($input));
     }
-    
+
     function test_parseData_plainText() {
         $this->assertParseData('asdf');
     }
-    
+
     function test_parseData_ampersandEntity() {
         $this->assertParseData('&amp;', '&');
     }
-    
+
     function test_parseData_quotEntity() {
         $this->assertParseData('&quot;', '"');
     }
-    
+
     function test_parseData_aposNumericEntity() {
         $this->assertParseData('&#039;', "'");
     }
-    
+
     function test_parseData_aposCompactNumericEntity() {
         $this->assertParseData('&#39;', "'");
     }
-    
+
     function test_parseData_adjacentAmpersandEntities() {
         $this->assertParseData('&amp;&amp;&amp;', '&&&');
     }
-    
+
     function test_parseData_trailingUnescapedAmpersand() {
         $this->assertParseData('&amp;&', '&&');
     }
-    
+
     function test_parseData_internalUnescapedAmpersand() {
         $this->assertParseData('Procter & Gamble');
     }
-    
+
     function test_parseData_improperEntityFaultToleranceTest() {
         $this->assertParseData('&#x2D;');
     }
-    
+
     // HTMLPurifier_Lexer->extractBody() ---------------------------------------
-    
+
     function assertExtractBody($text, $extract = true) {
         $lexer = new HTMLPurifier_Lexer();
         $result = $lexer->extractBody($text);
         if ($extract === true) $extract = $text;
         $this->assertIdentical($extract, $result);
     }
-    
+
     function test_extractBody_noBodyTags() {
         $this->assertExtractBody('<b>Bold</b>');
     }
-    
+
     function test_extractBody_lowercaseBodyTags() {
         $this->assertExtractBody('<html><body><b>Bold</b></body></html>', '<b>Bold</b>');
     }
-    
+
     function test_extractBody_uppercaseBodyTags() {
         $this->assertExtractBody('<HTML><BODY><B>Bold</B></BODY></HTML>', '<B>Bold</B>');
     }
-    
+
     function test_extractBody_realisticUseCase() {
         $this->assertExtractBody(
 '<?xml version="1.0"
@@ -142,17 +142,17 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
       </form>
    ');
     }
-    
+
     function test_extractBody_bodyWithAttributes() {
         $this->assertExtractBody('<html><body bgcolor="#F00"><b>Bold</b></body></html>', '<b>Bold</b>');
     }
-    
+
     function test_extractBody_preserveUnclosedBody() {
         $this->assertExtractBody('<body>asdf'); // not closed, don't accept
     }
-    
+
     // HTMLPurifier_Lexer->tokenizeHTML() --------------------------------------
-    
+
     function assertTokenization($input, $expect, $alt_expect = array()) {
         $lexers = array();
         $lexers['DirectLex']  = new HTMLPurifier_Lexer_DirectLex();
@@ -177,11 +177,11 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             }
         }
     }
-    
+
     function test_tokenizeHTML_emptyInput() {
         $this->assertTokenization('', array());
     }
-    
+
     function test_tokenizeHTML_plainText() {
         $this->assertTokenization(
             'This is regular text.',
@@ -190,7 +190,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_textAndTags() {
         $this->assertTokenization(
             'This is <b>bold</b> text',
@@ -203,7 +203,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_normalizeCase() {
         $this->assertTokenization(
             '<DIV>Totally rad dude. <b>asdf</b></div>',
@@ -217,7 +217,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_notWellFormed() {
         $this->assertTokenization(
             '<asdf></asdf><d></d><poOloka><poolasdf><ds></asdf></ASDF>',
@@ -246,7 +246,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_whitespaceInTag() {
         $this->assertTokenization(
             '<a'."\t".'href="foobar.php"'."\n".'title="foo!">Link to <b id="asdf">foobar</b></a>',
@@ -260,14 +260,14 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_emptyTag() {
         $this->assertTokenization(
             '<br />',
             array( new HTMLPurifier_Token_Empty('br') )
         );
     }
-    
+
     function test_tokenizeHTML_comment() {
         $this->assertTokenization(
             '<!-- Comment -->',
@@ -277,7 +277,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_malformedComment() {
         $this->assertTokenization(
             '<!-- not so well formed --->',
@@ -287,7 +287,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_unterminatedTag() {
         $this->assertTokenization(
             '<a href=""',
@@ -300,7 +300,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_specialEntities() {
         $this->assertTokenization(
             '&lt;b&gt;',
@@ -318,7 +318,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_earlyQuote() {
         $this->assertTokenization(
             '<a "=>',
@@ -333,7 +333,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_earlyQuote_PH5P() {
         if (!class_exists('DOMDocument')) return;
         $lexer = new HTMLPurifier_Lexer_PH5P();
@@ -348,14 +348,14 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             ), $result);
         }
     }
-    
+
     function test_tokenizeHTML_unescapedQuote() {
         $this->assertTokenization(
             '"',
             array( new HTMLPurifier_Token_Text('"') )
         );
     }
-    
+
     function test_tokenizeHTML_escapedQuote() {
         $this->assertTokenization(
             '&quot;',
@@ -365,7 +365,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_cdata() {
         $this->assertTokenization(
             '<![CDATA[You <b>can&#39;t</b> get me!]]>',
@@ -389,14 +389,14 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_characterEntity() {
         $this->assertTokenization(
             '&theta;',
             array( new HTMLPurifier_Token_Text("\xCE\xB8") )
         );
     }
-    
+
     function test_tokenizeHTML_characterEntityInCDATA() {
         $this->assertTokenization(
             '<![CDATA[&rarr;]]>',
@@ -410,7 +410,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_entityInAttribute() {
         $this->assertTokenization(
             '<a href="index.php?title=foo&amp;id=bar">Link</a>',
@@ -421,21 +421,21 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_preserveUTF8() {
         $this->assertTokenization(
             "\xCE\xB8",
             array( new HTMLPurifier_Token_Text("\xCE\xB8") )
         );
     }
-    
+
     function test_tokenizeHTML_specialEntityInAttribute() {
         $this->assertTokenization(
             '<br test="x &lt; 6" />',
             array( new HTMLPurifier_Token_Empty('br', array('test' => 'x < 6')) )
         );
     }
-    
+
     function test_tokenizeHTML_emoticonProtection() {
         $this->assertTokenization(
             '<b>Whoa! <3 That\'s not good >.></b>',
@@ -464,7 +464,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_commentWithFunkyChars() {
         $this->assertTokenization(
             '<!-- This >< comment --><br />',
@@ -477,7 +477,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_unterminatedComment() {
         $this->assertTokenization(
             '<!-- This >< comment',
@@ -489,7 +489,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_scriptCDATAContents() {
         $this->config->set('HTML', 'Trusted', true);
         $this->assertTokenization(
@@ -507,7 +507,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_entitiesInComment() {
         $this->assertTokenization(
             '<!-- This comment < &lt; & -->',
@@ -517,7 +517,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_attributeWithSpecialCharacters() {
         $this->assertTokenization(
             '<a href="><>">',
@@ -532,14 +532,14 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             )
         );
     }
-    
+
     function test_tokenizeHTML_emptyTagWithSlashInAttribute() {
         $this->assertTokenization(
             '<param name="src" value="http://example.com/video.wmv" />',
             array( new HTMLPurifier_Token_Empty('param', array('name' => 'src', 'value' => 'http://example.com/video.wmv')) )
         );
     }
-    
+
     function test_tokenizeHTML_style() {
         $extra = array(
                 // PH5P doesn't seem to like style tags
@@ -573,7 +573,7 @@ div {}
             $extra
         );
     }
-    
+
     function test_tokenizeHTML_tagWithAtSignAndExtraGt() {
         $this->assertTokenization(
             '<a@>>',
@@ -593,7 +593,7 @@ div {}
             )
         );
     }
-    
+
     function test_tokenizeHTML_emoticonHeart() {
         $this->assertTokenization(
             '<br /><3<br />',
@@ -612,7 +612,7 @@ div {}
             )
         );
     }
-    
+
     function test_tokenizeHTML_emoticonShiftyEyes() {
         $this->assertTokenization(
             '<b><<</b>',
@@ -631,7 +631,7 @@ div {}
             )
         );
     }
-    
+
     function test_tokenizeHTML_eon1996() {
         $this->assertTokenization(
             '< <b>test</b>',
@@ -652,7 +652,7 @@ div {}
             )
         );
     }
-    
+
     function test_tokenizeHTML_bodyInCDATA() {
         $this->assertTokenization(
             '<![CDATA[<body>Foo</body>]]>',
@@ -672,18 +672,18 @@ div {}
             )
         );
     }
-    
+
     /*
-    
+
     function test_tokenizeHTML_() {
         $this->assertTokenization(
             ,
             array(
-                
+
             )
         );
     }
     */
-    
+
 }
 

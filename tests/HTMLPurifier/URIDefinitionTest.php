@@ -2,7 +2,7 @@
 
 class HTMLPurifier_URIDefinitionTest extends HTMLPurifier_URIHarness
 {
-    
+
     protected function createFilterMock($expect = true, $result = true, $post = false, $setup = true) {
         static $i = 0;
         generate_mock_once('HTMLPurifier_URIFilter');
@@ -15,7 +15,7 @@ class HTMLPurifier_URIDefinitionTest extends HTMLPurifier_URIHarness
         $mock->post = $post;
         return $mock;
     }
-    
+
     function test_filter() {
         $def = new HTMLPurifier_URIDefinition();
         $def->addFilter($this->createFilterMock(), $this->config);
@@ -23,7 +23,7 @@ class HTMLPurifier_URIDefinitionTest extends HTMLPurifier_URIHarness
         $uri = $this->createURI('test');
         $this->assertTrue($def->filter($uri, $this->config, $this->context));
     }
-    
+
     function test_filter_earlyAbortIfFail() {
         $def = new HTMLPurifier_URIDefinition();
         $def->addFilter($this->createFilterMock(true, false), $this->config);
@@ -31,7 +31,7 @@ class HTMLPurifier_URIDefinitionTest extends HTMLPurifier_URIHarness
         $uri = $this->createURI('test');
         $this->assertFalse($def->filter($uri, $this->config, $this->context));
     }
-    
+
     function test_setupMemberVariables_collisionPrecedenceIsHostBaseScheme() {
         $this->config->set('URI', 'Host', $host = 'example.com');
         $this->config->set('URI', 'Base', $base = 'http://sub.example.com/foo/bar.html');
@@ -42,19 +42,19 @@ class HTMLPurifier_URIDefinitionTest extends HTMLPurifier_URIHarness
         $this->assertIdentical($def->base, $this->createURI($base));
         $this->assertIdentical($def->defaultScheme, 'http'); // not ftp!
     }
-    
+
     function test_setupMemberVariables_onlyScheme() {
         $this->config->set('URI', 'DefaultScheme', 'ftp');
         $def = new HTMLPurifier_URIDefinition();
         $def->setup($this->config);
         $this->assertIdentical($def->defaultScheme, 'ftp');
     }
-    
+
     function test_setupMemberVariables_onlyBase() {
         $this->config->set('URI', 'Base', 'http://sub.example.com/foo/bar.html');
         $def = new HTMLPurifier_URIDefinition();
         $def->setup($this->config);
         $this->assertIdentical($def->host, 'sub.example.com');
     }
-    
+
 }

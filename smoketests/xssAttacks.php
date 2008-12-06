@@ -3,7 +3,7 @@
 require_once('common.php');
 
 function formatCode($string) {
-    return 
+    return
         str_replace(
             array("\t", '»', '\0(null)'),
             array('<strong>\t</strong>', '<span class="linebreak">»</span>', '<strong>\0</strong>'),
@@ -15,7 +15,7 @@ function formatCode($string) {
         );
 }
 
-?><!DOCTYPE html 
+?><!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -64,18 +64,18 @@ $purifier = new HTMLPurifier($config);
 $i = 0;
 foreach ($xml->attack as $attack) {
     $code = $attack->code;
-    
+
     // custom code for null byte injection tests
     if (substr($code, 0, 7) == 'perl -e') {
         $code = substr($code, $i=strpos($code, '"')+1, strrpos($code, '"') - $i);
         $code = str_replace('\0', "\0", $code);
     }
-    
+
     // disable vectors we cannot test in any meaningful way
     if ($code == 'See Below') continue; // event handlers, whitelist defeats
     if ($attack->name == 'OBJECT w/Flash 2') continue; // requires ActionScript
     if ($attack->name == 'IMG Embedded commands 2') continue; // is an HTTP response
-    
+
     // custom code for US-ASCII, which couldn't be expressed in XML without encoding
     if ($attack->name == 'US-ASCII encoding') $code = urldecode($code);
 ?>

@@ -91,14 +91,14 @@ use the stub for all cases (which might not be a bad idea).
     Deprecated
     ----------
     One of the things I'd like to do is have the code search for any classes
-    that are explicitly mentioned in the code. If a class isn't mentioned, I 
+    that are explicitly mentioned in the code. If a class isn't mentioned, I
     get to assume that it is "optional," i.e. included via introspection.
     The choice is either to use PHP's tokenizer or use regexps; regexps would
     be faster but a tokenizer would be more correct. If this ends up being
     unfeasible, adding dependency comments isn't a bad idea. (This could
     even be done automatically by search/replacing require_once, although
     we'd have to manually inspect the results for the optional requires.)
-    
+
     NOTE: This ends up not being necessary, as we're going to make the user
     figure out all the extra classes they need, and only include the core
     which is predetermined.
@@ -193,7 +193,7 @@ configuration directives would be used to generate our key (meta-directives!)
     mechanism works better. However, we can uniquely identify the
     schema based on the directories they loaded, so there's no need
     for a DefinitionId until we give them full programmatic control.
-    
+
     These variables should be directly incorporated into ConfigSchema,
     and ConfigSchema should handle serialization. Some refactoring will be
     necessary for the DefinitionCache classes, as they are built with

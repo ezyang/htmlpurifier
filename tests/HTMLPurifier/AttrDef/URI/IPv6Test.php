@@ -5,18 +5,18 @@
 
 class HTMLPurifier_AttrDef_URI_IPv6Test extends HTMLPurifier_AttrDefHarness
 {
-    
+
     function test() {
-        
+
         $this->def = new HTMLPurifier_AttrDef_URI_IPv6();
-        
+
         $this->assertDef('2001:DB8:0:0:8:800:200C:417A'); // unicast, full
         $this->assertDef('FF01:0:0:0:0:0:0:101'); // multicast, full
         $this->assertDef('0:0:0:0:0:0:0:1'); // loopback, full
         $this->assertDef('0:0:0:0:0:0:0:0'); // unspecified, full
         $this->assertDef('2001:DB8::8:800:200C:417A'); // unicast, compressed
         $this->assertDef('FF01::101'); // multicast, compressed
-        
+
         $this->assertDef('::1'); // loopback, compressed, non-routable
         $this->assertDef('::'); // unspecified, compressed, non-routable
         $this->assertDef('0:0:0:0:0:0:13.1.68.3'); // IPv4-compatible IPv6 address, full, deprecated
@@ -31,12 +31,12 @@ class HTMLPurifier_AttrDef_URI_IPv6Test extends HTMLPurifier_AttrDefHarness
         $this->assertDef('FF00::/8'); // compressed, multicast address type
         $this->assertDef('FE80::/10'); // compressed, link-local unicast, non-routable
         $this->assertDef('FEC0::/10'); // compressed, site-local unicast, deprecated
-        
+
         $this->assertDef('2001:DB8:0:0:8:800:200C:417A:221', false); // unicast, full
         $this->assertDef('FF01::101::2', false); //multicast, compressed
-        $this->assertDef('', false); // nothing 
-        
+        $this->assertDef('', false); // nothing
+
     }
-    
+
 }
 

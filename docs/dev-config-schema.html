@@ -9,29 +9,29 @@
     <title>Config Schema - HTML Purifier</title>
   </head>
   <body>
-    
+
     <h1>Config Schema</h1>
-    
+
     <div id="filing">Filed under Development</div>
     <div id="index">Return to the <a href="index.html">index</a>.</div>
     <div id="home"><a href="http://htmlpurifier.org/">HTML Purifier</a> End-User Documentation</div>
-    
+
     <p>
       HTML Purifier has a fairly complex system for configuration. Users
       interact with a <code>HTMLPurifier_Config</code> object to
       set configuration directives. The values they set are validated according
       to a configuration schema, <code>HTMLPurifier_ConfigSchema</code>.
     </p>
-    
+
     <p>
       The schema is mostly transparent to end-users, but if you're doing development
       work for HTML Purifier and need to define a new configuration directive,
       you'll need to interact with it. We'll also talk about how to define
       userspace configuration directives at the very end.
     </p>
-    
+
     <h2>Write a directive file</h2>
-    
+
     <p>
       Directive files define configuration directives to be used by
       HTML Purifier. They are placed in <code>library/HTMLPurifier/ConfigSchema/schema/</code>
@@ -42,7 +42,7 @@
       <a href="http://qa.php.net/write-test.php">PHPT</a> tests. Here's a
       sample directive file, <code>Test.Sample.txt</code>:
     </p>
-    
+
     <pre>Test.Sample
 TYPE: string/null
 DEFAULT: NULL
@@ -54,11 +54,11 @@ This is a sample configuration directive for the purposes of the
 &lt;code&gt;dev-config-schema.html&lt;code&gt; documentation.
 --ALIASES--
 Test.Example</pre>
-    
+
     <p>
       Each of these segments has a specific meaning:
     </p>
-    
+
     <table class="table">
       <thead>
         <tr>
@@ -143,11 +143,11 @@ Test.Example</pre>
         </tr>
       </tbody>
     </table>
-    
+
     <p>
       Some notes on format and style:
     </p>
-    
+
     <ul>
       <li>
         Each of these keys can be expressed in the short format
@@ -162,11 +162,11 @@ Test.Example</pre>
         not rely on editor word-wrapping.
       </li>
     </ul>
-    
+
     <p>
       Also, as promised, here is the set of possible types:
     </p>
-    
+
     <table class="table">
       <thead>
         <tr>
@@ -233,7 +233,7 @@ Test.Example</pre>
         </tr>
       </tbody>
     </table>
-    
+
     <p>
       The examples represent what will be returned out of the configuration
       object; users have a little bit of leeway when setting configuration
@@ -242,7 +242,7 @@ Test.Example</pre>
       in <a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/VarParser.php">
       library/HTMLPurifier/VarParser.php</a>.
     </p>
-    
+
     <p>
       For more information on what values are allowed, and how they are parsed,
       consult <a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php">
@@ -251,9 +251,9 @@ Test.Example</pre>
       library/HTMLPurifier/ConfigSchema/Interchange/Directive.php</a> for
       the semantics of the parsed values.
     </p>
-    
+
     <h2>Refreshing the cache</h2>
-    
+
     <p>
       You may have noticed that your directive file isn't doing anything
       yet. That's because it hasn't been added to the runtime
@@ -262,14 +262,14 @@ Test.Example</pre>
       If there were no errors, you're good to go! Don't forget to add
       some unit tests for your functionality!
     </p>
-    
+
     <p>
       If you ever make changes to your configuration directives, you
       will need to run this script again.
     </p>
-    
+
     <h2>Errors</h2>
-    
+
     <p>
       All directive files go through a rigorous validation process
       through <a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/ConfigSchema/Validator.php">
@@ -279,16 +279,16 @@ Test.Example</pre>
       can give some general tips for interpreting error messages.
       There are two types of errors: builder errors and validation errors.
     </p>
-    
+
     <h3>Builder errors</h3>
-    
+
     <blockquote>
       <p>
         <strong>Exception:</strong> Expected type string, got
         integer in DEFAULT in directive hash 'Ns.Dir'
       </p>
     </blockquote>
-    
+
     <p>
       You can identify a builder error by the keyword "directive hash."
       These are the easiest to deal with, because they directly correspond
@@ -298,28 +298,28 @@ Test.Example</pre>
       This particular error would occur if your default value is not the same
       type as TYPE.
     </p>
-    
+
     <h3>Validation errors</h3>
-    
+
     <blockquote>
       <p>
         <strong>Exception:</strong> Alias 3 in valueAliases in directive
         'Ns.Dir' must be a string
       </p>
     </blockquote>
-    
+
     <p>
       These are a little trickier, because we're not actually validating
       your directive file, or even the direct string hash representation.
       We're validating an Interchange object, and the error messages do
       not mention any string hash keys.
     </p>
-    
+
     <p>
       Nevertheless, it's not difficult to figure out what went wrong.
       Read the "context" statements in reverse:
     </p>
-    
+
     <dl>
       <dt>in directive 'Ns.Dir'</dt>
         <dd>This means we need to look at the directive file <code>Ns.Dir.txt</code></dd>
@@ -329,12 +329,12 @@ Test.Example</pre>
       <dt>Alias 3</dt>
         <dd>The value alias that is equal to 3 is the culprit.</dd>
     </dl>
-    
+
     <p>
       In this particular case, you're not allowed to alias integers values to
       strings values.
     </p>
-    
+
     <p>
       The most difficult part is translating the Interchange member variable (valueAliases)
       into a directive file key (VALUE-ALIASES), but there's a one-to-one
@@ -342,9 +342,9 @@ Test.Example</pre>
       will be described in <a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php">
       library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php</a>.
     </p>
-    
+
     <h2>Internals</h2>
-    
+
     <p>
       Much of the configuration schema framework's codebase deals with
       shuffling data from one format to another, and doing validation on this
@@ -352,7 +352,7 @@ Test.Example</pre>
       The keystone of all of this is the <code>HTMLPurifier_ConfigSchema_Interchange</code>
       class, which represents the purest, parsed representation of the schema.
     </p>
-    
+
     <p>
       Hand-writing this data is unwieldy, however, so we write directive files.
       These directive files are parsed by <code>HTMLPurifier_StringHashParser</code>
@@ -360,7 +360,7 @@ Test.Example</pre>
       are run through <code>HTMLPurifier_ConfigSchema_InterchangeBuilder</code>
       to construct the interchange object.
     </p>
-    
+
     <p>
       From the interchange object, the data can be siphoned into other forms
       using <code>HTMLPurifier_ConfigSchema_Builder</code> subclasses.

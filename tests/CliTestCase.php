@@ -36,11 +36,11 @@ class CliTestCase
             return false;
         }
         $parser = &$this->_createParser($reporter);
-        
+
         set_error_handler(array($this, '_errorHandler'));
         $status = $parser->parse($xml);
         restore_error_handler();
-        
+
         if (! $status) {
             if (!$this->_quiet) {
                 foreach ($this->_errors as $error) {

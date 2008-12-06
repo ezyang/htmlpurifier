@@ -12,15 +12,15 @@ assertCli();
 
 class XmlRpc_Freshmeat
 {
-    
+
     const URL = 'http://freshmeat.net/xmlrpc/';
-    
+
     public $chatty = false;
-    
+
     public $encodeOptions = array(
         'encoding' => 'utf-8',
     );
-    
+
     /**
      * This array defines shortcut method signatures for dealing with simple
      * XML RPC methods. More complex ones (publish_release) should use the named parameter
@@ -32,9 +32,9 @@ class XmlRpc_Freshmeat
         'fetch_release'    => array('project_name', 'branch_name', 'version'),
         'withdraw_release' => array('project_name', 'branch_name', 'version'),
     );
-    
+
     protected $sid = null;
-    
+
     /**
      * @param $username Username to login with
      * @param $password Password to login with
@@ -44,13 +44,13 @@ class XmlRpc_Freshmeat
             $this->login($username, $password);
         }
     }
-    
+
     /**
      * Performs a raw XML RPC call to self::URL
      */
     protected function call($method, $params) {
         $request = xmlrpc_encode_request($method, $params, $this->encodeOptions);
-        $ch = curl_init();  
+        $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, self::URL);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 1);
@@ -59,7 +59,7 @@ class XmlRpc_Freshmeat
             'Content-length: ' . strlen($request)
         ));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-        $data = curl_exec($ch);      
+        $data = curl_exec($ch);
         if ($errno = curl_errno($ch)) {
             throw new Exception("Curl error [$errno]: " . curl_error($ch));
         } else {
@@ -67,7 +67,7 @@ class XmlRpc_Freshmeat
             return xmlrpc_decode($data);
         }
     }
-    
+
     /**
      * Performs an XML RPC call to Freshmeat.
      * @param $name Name of method to call, can be methodName or method_name
@@ -98,7 +98,7 @@ class XmlRpc_Freshmeat
         if ($this->chatty) print_r($result);
         return $result;
     }
-    
+
     /**
      * Munge methodName to method_name
      */
@@ -111,14 +111,14 @@ class XmlRpc_Freshmeat
         }
         return $method;
     }
-    
+
     /**
      * Automatically logout at end of scope
      */
     public function __destruct() {
         if ($this->sid) $this->logout();
     }
-    
+
 }
 
 $rpc = new XmlRpc_Freshmeat($argv[1], $argv[2]);

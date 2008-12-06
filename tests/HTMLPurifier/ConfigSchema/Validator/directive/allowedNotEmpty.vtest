@@ -7,4 +7,4 @@ ID: Ns.Dir
 TYPE: string
 DESCRIPTION: Description
 DEFAULT: 'asdf'
-ALLOWED: 
+ALLOWED:

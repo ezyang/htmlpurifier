@@ -2,21 +2,21 @@
 
 /**
  * HTML Purifier Phorum Mod. Filter your HTML the Standards-Compliant Way!
- * 
+ *
  * This Phorum mod enables users to post raw HTML into Phorum.  But never
  * fear: with the help of HTML Purifier, this HTML will be beat into
  * de-XSSed and standards-compliant form, safe for general consumption.
  * It is not recommended, but possible to run this mod in parallel
  * with other formatters (in short, please DISABLE the BBcode mod).
- * 
+ *
  * For help migrating from your previous markup language to pure HTML
  * please check the migrate.bbcode.php file.
- * 
+ *
  * If you'd like to use this with a WYSIWYG editor, make sure that
  * editor sets $PHORUM['mod_htmlpurifier']['wysiwyg'] to true. Otherwise,
  * administrators who need to edit other people's comments may be at
  * risk for some nasty attacks.
- * 
+ *
  * Tested with Phorum 5.2.6.
  */
 
@@ -31,29 +31,29 @@
 function phorum_htmlpurifier_format($data)
 {
     $PHORUM = $GLOBALS["PHORUM"];
-    
+
     $purifier =& HTMLPurifier::getInstance();
     $cache_serial = $PHORUM['mod_htmlpurifier']['body_cache_serial'];
-    
+
     foreach($data as $message_id => $message){
         if(isset($message['body'])) {
-            
+
             if ($message_id) {
                 // we're dealing with a real message, not a fake, so
                 // there a number of shortcuts that can be taken
-                
+
                 if (isset($message['meta']['htmlpurifier_light'])) {
                     // format hook was called outside of Phorum's normal
                     // functions, do the abridged purification
                     $data[$message_id]['body'] = $purifier->purify($message['body']);
                     continue;
                 }
-                
+
                 if (!empty($PHORUM['args']['purge'])) {
                     // purge the cache, must be below the following if
                     unset($message['meta']['body_cache']);
                 }
-                
+
                 if (
                     isset($message['meta']['body_cache']) &&
                     isset($message['meta']['body_cache_serial']) &&
@@ -64,11 +64,11 @@ function phorum_htmlpurifier_format($data)
                     continue;
                 }
             }
-            
+
             // migration might edit this array, that's why it's defined
             // so early
             $updated_message = array();
-            
+
             // create the $body variable
             if (
                 $message_id && // message must be real to migrate
@@ -94,28 +94,28 @@ function phorum_htmlpurifier_format($data)
                     $body = str_replace(array('&lt;','&gt;','&amp;', '&quot;'), array('<','>','&','"'), $body);
                 }
             }
-            
+
             $body = $purifier->purify($body);
-            
+
             // dynamically update the cache (MUST BE DONE HERE!)
             // this is inefficient because it's one db call per
             // cache miss, but once the cache is in place things are
             // a lot zippier.
-            
+
             if ($message_id) { // make sure it's not a fake id
                 $updated_message['meta'] = $message['meta'];
                 $updated_message['meta']['body_cache'] = base64_encode($body);
                 $updated_message['meta']['body_cache_serial'] = $cache_serial;
                 phorum_db_update_message($message_id, $updated_message);
             }
-            
+
             // must not get overloaded until after we cache it, otherwise
             // we'll inadvertently change the original text
             $data[$message_id]['body'] = $body;
-            
+
         }
     }
-    
+
     return $data;
 }
 
@@ -201,16 +201,16 @@ function phorum_htmlpurifier_quote($array) {
  * @credits <http://secretsauce.phorum.org/snippets/make_bbcode_last_formatter.php.txt>
  */
 function phorum_htmlpurifier_common() {
-    
+
     require_once(dirname(__FILE__).'/htmlpurifier/HTMLPurifier.auto.php');
     require(dirname(__FILE__).'/init-config.php');
-    
+
     $config = phorum_htmlpurifier_get_config();
     HTMLPurifier::getInstance($config);
-    
+
     // increment revision.txt if you want to invalidate the cache
     $GLOBALS['PHORUM']['mod_htmlpurifier']['body_cache_serial'] = $config->getSerial();
-    
+
     // load migration
     if (file_exists(dirname(__FILE__) . '/migrate.php')) {
         include(dirname(__FILE__) . '/migrate.php');
@@ -220,12 +220,12 @@ function phorum_htmlpurifier_common() {
         how to migrate from your previous markup language.';
         exit;
     }
-    
+
     if (!function_exists('phorum_htmlpurifier_migrate')) {
         // Dummy function
         function phorum_htmlpurifier_migrate($data) {return $data;}
     }
-    
+
 }
 
 /**
