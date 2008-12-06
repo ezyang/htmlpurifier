@@ -11,6 +11,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 
 3.3.0, unknown release date
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.
+! Implement generic property list classess
 - Fix bug with testEncodingSupportsASCII() algorithm when iconv() implementation
   does not do the "right thing" with characters not supported in the output
   set.
