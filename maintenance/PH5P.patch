@@ -1,5 +1,5 @@
---- C:\Users\Edward\Webs\htmlpurifier\maintenance\PH5P.php	2007-11-05 00:01:51.643585000 -0500
-+++ C:\Users\Edward\Webs\htmlpurifier\maintenance/PH5P.new.php	2008-04-05 00:26:39.343160000 -0400
+--- C:\Users\Edward\Webs\htmlpurifier\maintenance\PH5P.php	2008-07-07 09:12:12.000000000 -0400
++++ C:\Users\Edward\Webs\htmlpurifier\maintenance/PH5P.new.php	2008-12-06 02:29:34.988800000 -0500
 @@ -65,7 +65,7 @@
  
      public function __construct($data) {

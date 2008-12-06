@@ -24,6 +24,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 . Fix missing version number in configuration %Attr.DefaultImageAlt (added 3.2.0)
 . Fix newline errors that caused spurious failures when CRLF HTML Purifier was
   tested on Linux.
+. Removed trailing whitespace from all text files, see
+  remote-trailing-whitespace.php maintenance script.
 
 3.2.0, released 2008-10-31
 # Using %Core.CollectErrors forces line number/column tracking on, whereas
