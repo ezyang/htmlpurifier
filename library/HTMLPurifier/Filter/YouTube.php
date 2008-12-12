@@ -14,19 +14,27 @@ class HTMLPurifier_Filter_YouTube extends HTMLPurifier_Filter
 
     public function postFilter($html, $config, $context) {
         $post_regex = '#<span class="youtube-embed">([A-Za-z0-9\-_]+)</span>#';
-        $post_replace = '<object width="425" height="350" '.
-            'data="http://www.youtube.com/v/\1">'.
-            '<param name="movie" value="http://www.youtube.com/v/\1"></param>'.
+        return preg_replace_callback($post_regex, array($this, 'postFilterCallback'), $html);
+    }
+
+    protected function armorUrl($url) {
+        return str_replace('--', '-&#45;', $url);
+    }
+
+    protected function postFilterCallback($matches) {
+        $url = $this->armorUrl($matches[1]);
+        return '<object width="425" height="350" '.
+            'data="http://www.youtube.com/v/'.$url.'">'.
+            '<param name="movie" value="http://www.youtube.com/v/'.$url.'"></param>'.
             '<param name="wmode" value="transparent"></param>'.
             '<!--[if IE]>'.
-            '<embed src="http://www.youtube.com/v/\1"'.
+            '<embed src="http://www.youtube.com/v/'.$url.'"'.
             'type="application/x-shockwave-flash"'.
             'wmode="transparent" width="425" height="350" />'.
             '<![endif]-->'.
             '</object>';
-        return preg_replace($post_regex, $post_replace, $html);
-    }
 
+    }
 }
 
 // vim: et sw=4 sts=4

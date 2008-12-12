@@ -6,7 +6,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
 ?><!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>HTML Purifier Preserve YouTube Smoketest</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -15,7 +15,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
 <h1>HTML Purifier Preserve YouTube Smoketest</h1>
 <?php
 
-$string = '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/JzqumbhfxRo"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/JzqumbhfxRo" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
+$string = '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/BdU--T8rLns"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/BdU--T8rLns" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
 
 $regular_purifier = new HTMLPurifier();
 

@@ -19,6 +19,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix improper removal of the contents of elements with only whitespace. Thanks
   Eric Wald for reporting.
 - Fix broken test suite in versions of PHP without spl_autoload_register()
+- Fix degenerate case with YouTube filter involving double hyphens.
+  Thanks Pierre Attar for reporting.
 . Add verbose mode to command line test runner, use (--verbose)
 . Turn on unit tests for UnitConverter
 . Fix missing version number in configuration %Attr.DefaultImageAlt (added 3.2.0)
