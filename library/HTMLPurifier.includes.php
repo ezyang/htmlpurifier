@@ -204,5 +204,3 @@ require 'HTMLPurifier/URIScheme/news.php';
 require 'HTMLPurifier/URIScheme/nntp.php';
 require 'HTMLPurifier/VarParser/Flexible.php';
 require 'HTMLPurifier/VarParser/Native.php';
-
-// vim: et sw=4 sts=4
