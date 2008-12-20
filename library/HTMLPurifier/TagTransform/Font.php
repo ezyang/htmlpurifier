@@ -11,6 +11,9 @@
  *       Thanks to
  *       http://style.cleverchimp.com/font_size_intervals/altintervals.html
  *       for reasonable mappings.
+ * @warning This doesn't work completely correctly; specifically, this
+ *          TagTransform operates before well-formedness is enforced, so
+ *          the "active formatting elements" algorithm doesn't get applied.
  */
 class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
 {

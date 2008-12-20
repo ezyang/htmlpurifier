@@ -22,7 +22,7 @@ class HTMLPurifier_Strategy_MakeWellFormed_EndInsertInjectorTest extends HTMLPur
         $this->assertResult('<i><i>Foo', '<i><i>Foo<b>Comment</b></i><b>Comment</b></i>');
     }
     function testEndOfNodeProcessing() {
-        $this->assertResult('<div><i>Foo</div>', '<div><i>Foo<b>Comment</b></i></div>');
+        $this->assertResult('<div><i>Foo</div>asdf', '<div><i>Foo<b>Comment</b></i></div><i>asdf<b>Comment</b></i>');
     }
     function testEmptyToStartEndProcessing() {
         $this->assertResult('<i />', '<i><b>Comment</b></i>');

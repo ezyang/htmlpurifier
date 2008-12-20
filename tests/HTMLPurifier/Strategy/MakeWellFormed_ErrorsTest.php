@@ -20,8 +20,15 @@ class HTMLPurifier_Strategy_MakeWellFormed_ErrorsTest extends HTMLPurifier_Strat
         $this->invoke('</b>');
     }
 
-    function testTagAutoClosed() {
-        $this->expectErrorCollection(E_NOTICE, 'Strategy_MakeWellFormed: Tag auto closed', new HTMLPurifier_Token_Start('b', array(), 1, 0));
+    function testTagAutoclose() {
+        $this->expectErrorCollection(E_NOTICE, 'Strategy_MakeWellFormed: Tag auto closed', new HTMLPurifier_Token_Start('p', array(), 1, 0));
+        $this->expectContext('CurrentToken', new HTMLPurifier_Token_Start('div', array(), 1, 6));
+        $this->invoke('<p>Foo<div>Bar</div>');
+    }
+
+    function testTagCarryOver() {
+        $b = new HTMLPurifier_Token_Start('b', array(), 1, 0);
+        $this->expectErrorCollection(E_NOTICE, 'Strategy_MakeWellFormed: Tag carryover', $b);
         $this->expectContext('CurrentToken', new HTMLPurifier_Token_Start('div', array(), 1, 6));
         $this->invoke('<b>Foo<div>Bar</div>');
     }

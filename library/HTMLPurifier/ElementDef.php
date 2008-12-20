@@ -5,6 +5,8 @@
  * HTMLPurifier_HTMLDefinition and HTMLPurifier_HTMLModule.
  * @note This class is inspected by HTMLPurifier_Printer_HTMLDefinition.
  *       Please update that class too.
+ * @warning If you add new properties to this class, you MUST update
+ *          the mergeIn() method.
  */
 class HTMLPurifier_ElementDef
 {
@@ -91,6 +93,17 @@ class HTMLPurifier_ElementDef
     public $excludes = array();
 
     /**
+     * This tag is explicitly auto-closed by the following tags.
+     */
+    public $autoclose = array();
+
+    /**
+     * Whether or not this is a formatting element affected by the
+     * "Active Formatting Elements" algorithm.
+     */
+    public $formatting;
+
+    /**
      * Low-level factory constructor for creating new standalone element defs
      */
     public static function create($content_model, $content_model_type, $attr) {
@@ -137,6 +150,7 @@ class HTMLPurifier_ElementDef
             $this->child = false;
         }
         if(!is_null($def->child)) $this->child = $def->child;
+        if(!is_null($def->formatting)) $this->formatting = $def->formatting;
         if($def->descendants_are_inline) $this->descendants_are_inline = $def->descendants_are_inline;
 
     }

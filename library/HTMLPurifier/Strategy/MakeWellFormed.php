@@ -159,12 +159,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 continue;
             }
 
-            // if all goes well, this token will be passed through unharmed
             $token = $tokens[$t];
 
-            //echo '<hr>';
-            //printTokens($tokens, $t);
-            //var_dump($this->stack);
+            //echo '<br>'; printTokens($tokens, $t); printTokens($this->stack);
 
             // quick-check: if it's not a tag, no need to process
             if (empty($token->is_tag)) {
@@ -214,18 +211,36 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     $this->stack[] = $parent;
 
                     if (isset($definition->info[$parent->name])) {
-                        $elements = $definition->info[$parent->name]->child->getNonAutoCloseElements($config);
+                        $elements = $definition->info[$parent->name]->child->getAllowedElements($config);
                         $autoclose = !isset($elements[$token->name]);
                     } else {
                         $autoclose = false;
                     }
 
+                    $carryover = false;
+                    if ($autoclose && $definition->info[$parent->name]->formatting) {
+                        $carryover = true;
+                    }
+
                     if ($autoclose) {
-                        if ($e) $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag auto closed', $parent);
-                        // insert parent end tag before this tag
+                        // errors need to be updated
                         $new_token = new HTMLPurifier_Token_End($parent->name);
                         $new_token->start = $parent;
-                        $this->insertBefore($new_token);
+                        if ($carryover) {
+                            $element = clone $parent;
+                            $element->armor['MakeWellFormed_TagClosedError'] = true;
+                            $element->carryover = true;
+                            $this->processToken(array($new_token, $token, $element));
+                        } else {
+                            $this->insertBefore($new_token);
+                        }
+                        if ($e && !isset($parent->armor['MakeWellFormed_TagClosedError'])) {
+                            if (!$carryover) {
+                                $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag auto closed', $parent);
+                            } else {
+                                $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag carryover', $parent);
+                            }
+                        }
                         $reprocess = true;
                         continue;
                     }
@@ -339,12 +354,20 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             }
 
             // insert tags, in FORWARD $j order: c,b,a with </a></b></c>
+            $replace = array($token);
             for ($j = 1; $j < $c; $j++) {
                 // ...as well as from the insertions
                 $new_token = new HTMLPurifier_Token_End($skipped_tags[$j]->name);
                 $new_token->start = $skipped_tags[$j];
-                $this->insertBefore($new_token);
+                array_unshift($replace, $new_token);
+                if (isset($definition->info[$new_token->name]) && $definition->info[$new_token->name]->formatting) {
+                    $element = clone $skipped_tags[$j];
+                    $element->carryover = true;
+                    $element->armor['MakeWellFormed_TagClosedError'] = true;
+                    $replace[] = $element;
+                }
             }
+            $this->processToken($replace);
             $reprocess = true;
             continue;
         }

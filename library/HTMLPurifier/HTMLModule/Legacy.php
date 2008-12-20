@@ -41,9 +41,15 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
         $this->addElement('menu', 'Block', 'Required: li', 'Common', array(
             'compact' => 'Bool#compact'
         ));
-        $this->addElement('s', 'Inline', 'Inline', 'Common');
-        $this->addElement('strike', 'Inline', 'Inline', 'Common');
-        $this->addElement('u', 'Inline', 'Inline', 'Common');
+
+        $s = $this->addElement('s', 'Inline', 'Inline', 'Common');
+        $s->formatting = true;
+
+        $strike = $this->addElement('strike', 'Inline', 'Inline', 'Common');
+        $strike->formatting = true;
+
+        $u = $this->addElement('u', 'Inline', 'Inline', 'Common');
+        $u->formatting = true;
 
         // setup modifications to old elements
 

@@ -22,6 +22,7 @@ class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
                 // 'type' => 'ContentType',
             )
         );
+        $a->formatting = true;
         $a->excludes = array('a' => true);
     }
 

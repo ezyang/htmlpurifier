@@ -26,7 +26,7 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
     function testUnclosedTagTerminatedByParentNodeEnd() {
         $this->assertResult(
             '<b><i>Bold and italic?</b>',
-            '<b><i>Bold and italic?</i></b>'
+            '<b><i>Bold and italic?</i></b><i></i>'
         );
     }
 
@@ -81,8 +81,8 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
 
     function testAutoCloseMultiple() {
         $this->assertResult(
-            '<span><span><div></div>',
-            '<span><span></span></span><div></div>'
+            '<b><span><div></div>asdf',
+            '<b><span></span></b><div><b></b></div><b>asdf</b>'
         );
     }
 
@@ -99,6 +99,20 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
             // This is actually invalid, but will be fixed by
             // ChildDef_StrictBlockquote
             '<blockquote>foo<b>bar</b></blockquote>'
+        );
+    }
+
+    function testLongCarryOver() {
+        $this->assertResult(
+            '<b>asdf<div>asdf<i>df</i></div>asdf</b>',
+            '<b>asdf</b><div><b>asdf<i>df</i></b></div><b>asdf</b>'
+        );
+    }
+
+    function testInterleaved() {
+        $this->assertResult(
+            '<u>foo<i>bar</u>baz</i>',
+            '<u>foo<i>bar</i></u><i>baz</i>'
         );
     }
 

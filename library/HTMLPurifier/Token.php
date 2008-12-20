@@ -19,6 +19,7 @@ class HTMLPurifier_Token {
      */
     public $skip;
     public $rewind;
+    public $carryover;
 
     public function __get($n) {
       if ($n === 'type') {

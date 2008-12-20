@@ -22,7 +22,7 @@ class HTMLPurifier_Strategy_CoreTest extends HTMLPurifier_StrategyHarness
     function testFixNesting() {
         $this->assertResult(
             '<b><div>Fix nesting.</div></b>',
-            '<b></b><div>Fix nesting.</div>'
+            '<b></b><div><b>Fix nesting.</b></div><b></b>'
         );
     }
 
@@ -36,7 +36,7 @@ class HTMLPurifier_Strategy_CoreTest extends HTMLPurifier_StrategyHarness
     function testFirstThree() {
         $this->assertResult(
             '<foo><b><div>All three.</div></b>',
-            '<b></b><div>All three.</div>'
+            '<b></b><div><b>All three.</b></div><b></b>'
         );
     }
 
