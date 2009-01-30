@@ -5,10 +5,10 @@
  * or a module configuration value
  * @return Instance of HTMLPurifier_Config
  */
-function phorum_htmlpurifier_get_config() {
+function phorum_htmlpurifier_get_config($default = false) {
     global $PHORUM;
     $config_exists = phorum_htmlpurifier_config_file_exists();
-    if ($config_exists || !isset($PHORUM['mod_htmlpurifier']['config'])) {
+    if ($default || $config_exists || !isset($PHORUM['mod_htmlpurifier']['config'])) {
         $config = HTMLPurifier_Config::createDefault();
         include(dirname(__FILE__) . '/config.default.php');
         if ($config_exists) {

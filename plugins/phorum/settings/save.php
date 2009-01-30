@@ -6,7 +6,7 @@ function phorum_htmlpurifier_save_settings() {
         echo "Cannot update settings, <code>mods/htmlpurifier/config.php</code> already exists. To change
         settings, edit that file. To use the web form, delete that file.<br />";
     } else {
-        $config = phorum_htmlpurifier_get_config();
+        $config = phorum_htmlpurifier_get_config(true);
         if (!isset($_POST['reset'])) $config->mergeArrayFromForm($_POST, 'config', $PHORUM['mod_htmlpurifier']['directives']);
         $PHORUM['mod_htmlpurifier']['config'] = $config->getAll();
     }
