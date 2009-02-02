@@ -42,11 +42,6 @@ class HTMLPurifier_Config
     protected $serial;
 
     /**
-     * Two-level associative array of configuration directives
-     */
-    protected $conf;
-
-    /**
      * Parser for variables
      */
     protected $parser;
@@ -69,12 +64,17 @@ class HTMLPurifier_Config
     protected $finalized = false;
 
     /**
+     * Property list containing configuration directives.
+     */
+    protected $plist;
+
+    /**
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
      */
     public function __construct($definition) {
-        $this->conf = $definition->defaults; // set up, copy in defaults
-        $this->def  = $definition; // keep a copy around for checking
+        $this->plist = new HTMLPurifier_PropertyList($definition->defaultPlist);
+        $this->def = $definition; // keep a copy around for checking
         $this->parser = new HTMLPurifier_VarParser_Flexible();
     }
 
@@ -118,7 +118,7 @@ class HTMLPurifier_Config
      * @param $key String key
      */
     public function get($namespace, $key) {
-        if (!$this->finalized && $this->autoFinalize) $this->finalize();
+        if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
         if (!isset($this->def->info[$namespace][$key])) {
             // can't add % due to SimpleTest bug
             trigger_error('Cannot retrieve value of undefined directive ' . htmlspecialchars("$namespace.$key"),
@@ -131,7 +131,7 @@ class HTMLPurifier_Config
                 E_USER_ERROR);
             return;
         }
-        return $this->conf[$namespace][$key];
+        return $this->plist->get("$namespace.$key");
     }
 
     /**
@@ -139,13 +139,14 @@ class HTMLPurifier_Config
      * @param $namespace String namespace
      */
     public function getBatch($namespace) {
-        if (!$this->finalized && $this->autoFinalize) $this->finalize();
+        if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
         if (!isset($this->def->info[$namespace])) {
             trigger_error('Cannot retrieve undefined namespace ' . htmlspecialchars($namespace),
                 E_USER_WARNING);
             return;
         }
-        return $this->conf[$namespace];
+        $full = $this->getAll();
+        return $full[$namespace];
     }
 
     /**
@@ -179,8 +180,13 @@ class HTMLPurifier_Config
      * Retrieves all directives, organized by namespace
      */
     public function getAll() {
-        if (!$this->finalized && $this->autoFinalize) $this->finalize();
-        return $this->conf;
+        if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
+        $ret = array();
+        foreach ($this->plist->squash() as $name => $value) {
+            list($ns, $key) = explode('.', $name, 2);
+            $ret[$ns][$key] = $value;
+        }
+        return $ret;
     }
 
     /**
@@ -240,7 +246,7 @@ class HTMLPurifier_Config
                 return;
             }
         }
-        $this->conf[$namespace][$key] = $value;
+        $this->plist->set("$namespace.$key", $value);
 
         // reset definitions if the directives they depend on changed
         // this is a very costly process, so it's discouraged
@@ -285,7 +291,7 @@ class HTMLPurifier_Config
      * @param $raw  Whether or not definition should be returned raw
      */
     public function getDefinition($type, $raw = false) {
-        if (!$this->finalized && $this->autoFinalize) $this->finalize();
+        if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
         $factory = HTMLPurifier_DefinitionCacheFactory::instance();
         $cache = $factory->create($type, $this);
         if (!$raw) {

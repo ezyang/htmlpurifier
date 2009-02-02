@@ -65,23 +65,29 @@ class HTMLPurifier_PropertyListTest extends UnitTestCase
         $this->assertIdentical($plist->has('key3'), false);
     }
 
-    function testIterator() {
-        $plist = new HTMLPurifier_PropertyList();
-        $plist->set('nkey1', 'v');
-        $plist->set('nkey2', 'v');
-        $plist->set('rkey3', 'v');
-        $a = array();
-        foreach ($plist->getIterator() as $key => $value) {
-            $a[$key] = $value;
-        }
-        $this->assertIdentical($a, array('nkey1' => 'v', 'nkey2' => 'v', 'rkey3' => 'v'));
-        $a = array();
-        foreach ($plist->getIterator('nkey') as $key => $value) {
-            $a[$key] = $value;
-        }
-        $this->assertIdentical($a, array('nkey1' => 'v', 'nkey2' => 'v'));
+    function testSquash() {
+        $parent = new HTMLPurifier_PropertyList();
+        $parent->set('key1', 'hidden');
+        $parent->set('key2', 2);
+        $plist = new HTMLPurifier_PropertyList($parent);
+        $plist->set('key1', 1);
+        $plist->set('key3', 3);
+        $this->assertIdentical(
+            $plist->squash(),
+            array('key1' => 1, 'key2' => 2, 'key3' => 3)
+        );
+        // updates don't show up...
+        $plist->set('key2', 22);
+        $this->assertIdentical(
+            $plist->squash(),
+            array('key1' => 1, 'key2' => 2, 'key3' => 3)
+        );
+        // until you force
+        $this->assertIdentical(
+            $plist->squash(true),
+            array('key1' => 1, 'key2' => 22, 'key3' => 3)
+        );
     }
-
 }
 
 // vim: et sw=4 sts=4

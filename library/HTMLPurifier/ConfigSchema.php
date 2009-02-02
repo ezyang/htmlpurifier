@@ -12,6 +12,11 @@ class HTMLPurifier_ConfigSchema {
     public $defaults = array();
 
     /**
+     * The default property list. Do not edit this property list.
+     */
+    public $defaultPlist;
+
+    /**
      * Definition of the directives. The structure of this is:
      *
      *  array(
@@ -46,6 +51,10 @@ class HTMLPurifier_ConfigSchema {
      * Application-wide singleton
      */
     static protected $singleton;
+
+    public function __construct() {
+        $this->defaultPlist = new HTMLPurifier_PropertyList();
+    }
 
     /**
      * Unserializes the default ConfigSchema.
@@ -84,6 +93,7 @@ class HTMLPurifier_ConfigSchema {
         if ($allow_null) $obj->allow_null = true;
         $this->info[$namespace][$name] = $obj;
         $this->defaults[$namespace][$name] = $default;
+        $this->defaultPlist->set("$namespace.$name", $default);
     }
 
     /**

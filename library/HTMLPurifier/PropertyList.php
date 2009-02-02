@@ -15,11 +15,18 @@ class HTMLPurifier_PropertyList
      */
     protected $parent;
 
+    protected $cache;
+
+    public function __construct($parent = null) {
+        $this->parent = $parent;
+    }
+
     /**
      * Recursively retrieves the value for a key
      */
     public function get($name) {
         if ($this->has($name)) return $this->data[$name];
+        // possible performance bottleneck, convert to iterative if necessary
         if ($this->parent) return $this->parent->get($name);
         throw new HTMLPurifier_Exception("Key '$name' not found");
     }
@@ -48,12 +55,17 @@ class HTMLPurifier_PropertyList
     }
 
     /**
-     * Returns an iterator for traversing this array, optionally filtering
-     * for a certain prefix.
+     * Squashes this property list and all of its property lists into a single
+     * array, and returns the array. This value is cached by default.
+     * @param $force If true, ignores the cache and regenerates the array.
      */
-    public function getIterator($filter = null) {
-        $a = new ArrayObject($this->data);
-        return new HTMLPurifier_PropertyListIterator($a->getIterator(), $filter);
+    public function squash($force = false) {
+        if ($this->cache !== null && !$force) return $this->cache;
+        if ($this->parent) {
+            return $this->cache = array_merge($this->parent->squash($force), $this->data);
+        } else {
+            return $this->cache = $this->data;
+        }
     }
 
     /**

@@ -28,6 +28,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   tested on Linux.
 . Removed trailing whitespace from all text files, see
   remote-trailing-whitespace.php maintenance script.
+. Convert configuration to use property list backend.
 
 3.2.0, released 2008-10-31
 # Using %Core.CollectErrors forces line number/column tracking on, whereas
