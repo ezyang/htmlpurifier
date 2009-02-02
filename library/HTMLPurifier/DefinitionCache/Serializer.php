@@ -114,7 +114,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
             if (!is_dir($base)) {
                 trigger_error('Base directory '.$base.' does not exist,
                     please create or change using %Cache.SerializerPath',
-                    E_USER_ERROR);
+                    E_USER_WARNING);
                 return false;
             } elseif (!$this->_testPermissions($base)) {
                 return false;
@@ -139,7 +139,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
             // generally, you'll want to handle this beforehand
             // so a more specific error message can be given
             trigger_error('Directory '.$dir.' does not exist',
-                E_USER_ERROR);
+                E_USER_WARNING);
             return false;
         }
         if (function_exists('posix_getuid')) {
@@ -157,12 +157,12 @@ class HTMLPurifier_DefinitionCache_Serializer extends
             }
             trigger_error('Directory '.$dir.' not writable, '.
                 'please chmod to ' . $chmod,
-                E_USER_ERROR);
+                E_USER_WARNING);
         } else {
             // generic error message
             trigger_error('Directory '.$dir.' not writable, '.
                 'please alter file permissions',
-                E_USER_ERROR);
+                E_USER_WARNING);
         }
         return false;
     }
