@@ -110,7 +110,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                         $collection[] = $token;
                         continue;
                     default:
-                        if ($token instanceof HTMLPurifier_Token_Text && $token->is_whitespace) {
+                        if (!empty($token->is_whitespace)) {
                             $collection[] = $token;
                             $tag_index++;
                         }

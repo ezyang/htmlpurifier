@@ -6,6 +6,7 @@
 class HTMLPurifier_Token_Comment extends HTMLPurifier_Token
 {
     public $data; /**< Character data within comment. */
+    public $is_whitespace = true;
     /**
      * Transparent constructor.
      *
