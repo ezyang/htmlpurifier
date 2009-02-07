@@ -55,20 +55,15 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
             throw new HTMLPurifier_ConfigSchema_Exception('Hash does not have any ID');
         }
         if (strpos($hash['ID'], '.') === false) {
-            $this->buildNamespace($interchange, $hash);
+            if (count($hash) == 2 && isset($hash['DESCRIPTION'])) {
+                $hash->offsetGet('DESCRIPTION'); // prevent complaining
+            } else {
+                throw new HTMLPurifier_ConfigSchema_Exception('All directives must have a namespace');
+            }
         } else {
             $this->buildDirective($interchange, $hash);
         }
         $this->_findUnused($hash);
-    }
-
-    public function buildNamespace($interchange, $hash) {
-        $namespace = new HTMLPurifier_ConfigSchema_Interchange_Namespace();
-        $namespace->namespace   = $hash->offsetGet('ID');
-        if (isset($hash['DESCRIPTION'])) {
-            $namespace->description = $hash->offsetGet('DESCRIPTION');
-        }
-        $interchange->addNamespace($namespace);
     }
 
     public function buildDirective($interchange, $hash) {

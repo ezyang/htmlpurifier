@@ -1,6 +1,0 @@
-ERROR: Namespace in id 'Rd.Dir' in directive 'Rd.Dir' does not exist
-----
-ID: Rd.Dir
-TYPE: int
-DESCRIPTION: Description
-DEFAULT: 0

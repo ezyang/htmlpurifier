@@ -13,17 +13,15 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     // test functionality based on ConfigSchema
 
     function testNormal() {
-        $this->schema->addNamespace('Element');
-
-        $this->schema->add('Element', 'Abbr', 'H', 'string', false);
-        $this->schema->add('Element', 'Name', 'hydrogen', 'istring', false);
-        $this->schema->add('Element', 'Number', 1, 'int', false);
-        $this->schema->add('Element', 'Mass', 1.00794, 'float', false);
-        $this->schema->add('Element', 'Radioactive', false, 'bool', false);
-        $this->schema->add('Element', 'Isotopes', array(1 => true, 2 => true, 3 => true), 'lookup', false);
-        $this->schema->add('Element', 'Traits', array('nonmetallic', 'odorless', 'flammable'), 'list', false);
-        $this->schema->add('Element', 'IsotopeNames', array(1 => 'protium', 2 => 'deuterium', 3 => 'tritium'), 'hash', false);
-        $this->schema->add('Element', 'Object', new stdClass(), 'mixed', false);
+        $this->schema->add('Element.Abbr', 'H', 'string', false);
+        $this->schema->add('Element.Name', 'hydrogen', 'istring', false);
+        $this->schema->add('Element.Number', 1, 'int', false);
+        $this->schema->add('Element.Mass', 1.00794, 'float', false);
+        $this->schema->add('Element.Radioactive', false, 'bool', false);
+        $this->schema->add('Element.Isotopes', array(1 => true, 2 => true, 3 => true), 'lookup', false);
+        $this->schema->add('Element.Traits', array('nonmetallic', 'odorless', 'flammable'), 'list', false);
+        $this->schema->add('Element.IsotopeNames', array(1 => 'protium', 2 => 'deuterium', 3 => 'tritium'), 'hash', false);
+        $this->schema->add('Element.Object', new stdClass(), 'mixed', false);
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
@@ -74,22 +72,20 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     function testEnumerated() {
 
-        $this->schema->addNamespace('Instrument', 'Of the musical type.');
-
         // case sensitive
-        $this->schema->add('Instrument', 'Manufacturer', 'Yamaha', 'string', false);
-        $this->schema->addAllowedValues('Instrument', 'Manufacturer', array(
+        $this->schema->add('Instrument.Manufacturer', 'Yamaha', 'string', false);
+        $this->schema->addAllowedValues('Instrument.Manufacturer', array(
             'Yamaha' => true, 'Conn-Selmer' => true, 'Vandoren' => true,
             'Laubin' => true, 'Buffet' => true, 'other' => true));
-        $this->schema->addValueAliases('Instrument', 'Manufacturer', array(
+        $this->schema->addValueAliases('Instrument.Manufacturer', array(
             'Selmer' => 'Conn-Selmer'));
 
         // case insensitive
-        $this->schema->add('Instrument', 'Family', 'woodwind', 'istring', false);
-        $this->schema->addAllowedValues('Instrument', 'Family', array(
+        $this->schema->add('Instrument.Family', 'woodwind', 'istring', false);
+        $this->schema->addAllowedValues('Instrument.Family', array(
             'brass' => true, 'woodwind' => true, 'percussion' => true,
             'string' => true, 'keyboard' => true, 'electronic' => true));
-        $this->schema->addValueAliases('Instrument', 'Family', array(
+        $this->schema->addValueAliases('Instrument.Family', array(
             'synth' => 'electronic'));
 
         $config = new HTMLPurifier_Config($this->schema);
@@ -124,9 +120,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     function testNull() {
 
-        $this->schema->addNamespace('ReportCard');
-        $this->schema->add('ReportCard', 'English', null, 'string', true);
-        $this->schema->add('ReportCard', 'Absences', 0, 'int', false);
+        $this->schema->add('ReportCard.English', null, 'string', true);
+        $this->schema->add('ReportCard.Absences', 0, 'int', false);
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
@@ -145,9 +140,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     function testAliases() {
 
-        $this->schema->addNamespace('Home');
-        $this->schema->add('Home', 'Rug', 3, 'int', false);
-        $this->schema->addAlias('Home', 'Carpet', 'Home', 'Rug');
+        $this->schema->add('Home.Rug', 3, 'int', false);
+        $this->schema->addAlias('Home.Carpet', 'Home.Rug');
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
@@ -167,9 +161,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     function test_getBatch() {
 
-        $this->schema->addNamespace('Variables');
-        $this->schema->add('Variables', 'TangentialAcceleration', 'a_tan', 'string', false);
-        $this->schema->add('Variables', 'AngularAcceleration', 'alpha', 'string', false);
+        $this->schema->add('Variables.TangentialAcceleration', 'a_tan', 'string', false);
+        $this->schema->add('Variables.AngularAcceleration', 'alpha', 'string', false);
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
@@ -191,10 +184,9 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     function test_loadIni() {
 
-        $this->schema->addNamespace('Shortcut', 'Keyboard shortcuts for commands');
-        $this->schema->add('Shortcut', 'Copy', 'c', 'istring', false);
-        $this->schema->add('Shortcut', 'Paste', 'v', 'istring', false);
-        $this->schema->add('Shortcut', 'Cut', 'x', 'istring', false);
+        $this->schema->add('Shortcut.Copy', 'c', 'istring', false);
+        $this->schema->add('Shortcut.Paste', 'v', 'istring', false);
+        $this->schema->add('Shortcut.Cut', 'x', 'istring', false);
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
@@ -259,9 +251,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     }
 
     function test_getDefinition() {
-        $this->schema->addNamespace('Cache', 'Cache stuff');
-        $this->schema->add('Cache', 'DefinitionImpl', null, 'string', true);
-        $this->schema->addNamespace('Crust', 'Krusty Krabs');
+        $this->schema->add('Cache.DefinitionImpl', null, 'string', true);
         $config = new HTMLPurifier_Config($this->schema);
         $this->expectException(new HTMLPurifier_Exception("Definition of Crust type not supported"));
         $config->getDefinition('Crust');
@@ -269,11 +259,10 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     function test_loadArray() {
         // setup a few dummy namespaces/directives for our testing
-        $this->schema->addNamespace('Zoo');
-        $this->schema->add('Zoo', 'Aadvark', 0, 'int', false);
-        $this->schema->add('Zoo', 'Boar',    0, 'int', false);
-        $this->schema->add('Zoo', 'Camel',   0, 'int', false);
-        $this->schema->add('Zoo', 'Others', array(), 'list', false);
+        $this->schema->add('Zoo.Aadvark', 0, 'int', false);
+        $this->schema->add('Zoo.Boar',    0, 'int', false);
+        $this->schema->add('Zoo.Camel',   0, 'int', false);
+        $this->schema->add('Zoo.Others', array(), 'list', false);
 
         $config_manual   = new HTMLPurifier_Config($this->schema);
         $config_loadabbr = new HTMLPurifier_Config($this->schema);
@@ -309,9 +298,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     function test_create() {
 
-        $this->schema->addNamespace('Cake');
-        $this->schema->add('Cake', 'Sprinkles', 666, 'int', false);
-        $this->schema->add('Cake', 'Flavor', 'vanilla', 'string', false);
+        $this->schema->add('Cake.Sprinkles', 666, 'int', false);
+        $this->schema->add('Cake.Flavor', 'vanilla', 'string', false);
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->set('Cake', 'Sprinkles', 42);
@@ -334,8 +322,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         // test finalization
 
-        $this->schema->addNamespace('Poem');
-        $this->schema->add('Poem', 'Meter', 'iambic', 'string', false);
+        $this->schema->add('Poem.Meter', 'iambic', 'string', false);
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
@@ -357,17 +344,15 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     function test_loadArrayFromForm() {
 
-        $this->schema->addNamespace('Pancake');
-        $this->schema->add('Pancake', 'Mix', 'buttermilk', 'string', false);
-        $this->schema->add('Pancake', 'Served', true, 'bool', false);
-        $this->schema->addNamespace('Toppings', false);
-        $this->schema->add('Toppings', 'Syrup', true, 'bool', false);
-        $this->schema->add('Toppings', 'Flavor', 'maple', 'string', false);
-        $this->schema->add('Toppings', 'Strawberries', 3, 'int', false);
-        $this->schema->add('Toppings', 'Calories', 2000, 'int', true);
-        $this->schema->add('Toppings', 'DefinitionID', null, 'string', true);
-        $this->schema->add('Toppings', 'DefinitionRev', 1, 'int', false);
-        $this->schema->add('Toppings', 'Protected', 1, 'int', false);
+        $this->schema->add('Pancake.Mix', 'buttermilk', 'string', false);
+        $this->schema->add('Pancake.Served', true, 'bool', false);
+        $this->schema->add('Toppings.Syrup', true, 'bool', false);
+        $this->schema->add('Toppings.Flavor', 'maple', 'string', false);
+        $this->schema->add('Toppings.Strawberries', 3, 'int', false);
+        $this->schema->add('Toppings.Calories', 2000, 'int', true);
+        $this->schema->add('Toppings.DefinitionID', null, 'string', true);
+        $this->schema->add('Toppings.DefinitionRev', 1, 'int', false);
+        $this->schema->add('Toppings.Protected', 1, 'int', false);
 
         $get = array(
             'breakfast' => array(
@@ -418,16 +403,13 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     }
 
     function test_getAllowedDirectivesForForm() {
-        $this->schema->addNamespace('Unused');
-        $this->schema->add('Unused', 'Unused', 'Foobar', 'string', false);
-        $this->schema->addNamespace('Partial');
-        $this->schema->add('Partial', 'Allowed', true, 'bool', false);
-        $this->schema->add('Partial', 'Unused', 'Foobar', 'string', false);
-        $this->schema->addNamespace('All');
-        $this->schema->add('All', 'Allowed', true, 'bool', false);
-        $this->schema->add('All', 'Blacklisted', 'Foobar', 'string', false); // explicitly blacklisted
-        $this->schema->add('All', 'DefinitionID', 'Foobar', 'string', true); // auto-blacklisted
-        $this->schema->add('All', 'DefinitionRev', 2, 'int', false); // auto-blacklisted
+        $this->schema->add('Unused.Unused', 'Foobar', 'string', false);
+        $this->schema->add('Partial.Allowed', true, 'bool', false);
+        $this->schema->add('Partial.Unused', 'Foobar', 'string', false);
+        $this->schema->add('All.Allowed', true, 'bool', false);
+        $this->schema->add('All.Blacklisted', 'Foobar', 'string', false); // explicitly blacklisted
+        $this->schema->add('All.DefinitionID', 'Foobar', 'string', true); // auto-blacklisted
+        $this->schema->add('All.DefinitionRev', 2, 'int', false); // auto-blacklisted
 
         $input = array('Partial.Allowed', 'All', '-All.Blacklisted');
         $output = HTMLPurifier_Config::getAllowedDirectivesForForm($input, $this->schema);

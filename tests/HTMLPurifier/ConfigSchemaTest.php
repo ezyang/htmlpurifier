@@ -9,41 +9,32 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
         $this->schema = new HTMLPurifier_ConfigSchema();
     }
 
-    function test_defineNamespace() {
-        $this->schema->addNamespace('http');
-        $this->assertIdentical($this->schema->info['http'], array());
-        $this->assertIdentical($this->schema->defaults['http'], array());
-    }
-
     function test_define() {
-        $this->schema->addNamespace('Car');
+        $this->schema->add('Car.Seats', 5, 'int', false);
 
-        $this->schema->add('Car', 'Seats', 5, 'int', false);
+        $this->assertIdentical($this->schema->defaults['Car.Seats'], 5);
+        $this->assertIdentical($this->schema->info['Car.Seats']->type, HTMLPurifier_VarParser::INT);
 
-        $this->assertIdentical($this->schema->defaults['Car']['Seats'], 5);
-        $this->assertIdentical($this->schema->info['Car']['Seats']->type, HTMLPurifier_VarParser::INT);
+        $this->schema->add('Car.Age', null, 'int', true);
 
-        $this->schema->add('Car', 'Age', null, 'int', true);
-
-        $this->assertIdentical($this->schema->defaults['Car']['Age'], null);
-        $this->assertIdentical($this->schema->info['Car']['Age']->type, HTMLPurifier_VarParser::INT);
+        $this->assertIdentical($this->schema->defaults['Car.Age'], null);
+        $this->assertIdentical($this->schema->info['Car.Age']->type, HTMLPurifier_VarParser::INT);
 
     }
 
     function test_defineAllowedValues() {
-        $this->schema->addNamespace('QuantumNumber', 'D');
-        $this->schema->add('QuantumNumber', 'Spin', 0.5, 'float', false);
-        $this->schema->add('QuantumNumber', 'Current', 's', 'string', false);
-        $this->schema->add('QuantumNumber', 'Difficulty', null, 'string', true);
+        $this->schema->add('QuantumNumber.Spin', 0.5, 'float', false);
+        $this->schema->add('QuantumNumber.Current', 's', 'string', false);
+        $this->schema->add('QuantumNumber.Difficulty', null, 'string', true);
 
         $this->schema->addAllowedValues( // okay, since default is null
-            'QuantumNumber', 'Difficulty', array('easy' => true, 'medium' => true, 'hard' => true)
+            'QuantumNumber.Difficulty', array('easy' => true, 'medium' => true, 'hard' => true)
         );
 
-        $this->assertIdentical($this->schema->defaults['QuantumNumber']['Difficulty'], null);
-        $this->assertIdentical($this->schema->info['QuantumNumber']['Difficulty']->type, HTMLPurifier_VarParser::STRING);
-        $this->assertIdentical($this->schema->info['QuantumNumber']['Difficulty']->allow_null, true);
-        $this->assertIdentical($this->schema->info['QuantumNumber']['Difficulty']->allowed,
+        $this->assertIdentical($this->schema->defaults['QuantumNumber.Difficulty'], null);
+        $this->assertIdentical($this->schema->info['QuantumNumber.Difficulty']->type, HTMLPurifier_VarParser::STRING);
+        $this->assertIdentical($this->schema->info['QuantumNumber.Difficulty']->allow_null, true);
+        $this->assertIdentical($this->schema->info['QuantumNumber.Difficulty']->allowed,
             array(
                 'easy' => true,
                 'medium' => true,
@@ -54,37 +45,36 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
     }
 
     function test_defineValueAliases() {
-        $this->schema->addNamespace('Abbrev', 'Stuff on abbreviations.');
-        $this->schema->add('Abbrev', 'HTH', 'Happy to Help', 'string', false);
+        $this->schema->add('Abbrev.HTH', 'Happy to Help', 'string', false);
         $this->schema->addAllowedValues(
-            'Abbrev', 'HTH', array(
+            'Abbrev.HTH', array(
                 'Happy to Help' => true,
                 'Hope that Helps' => true,
                 'HAIL THE HAND!' => true,
             )
         );
         $this->schema->addValueAliases(
-            'Abbrev', 'HTH', array(
+            'Abbrev.HTH', array(
                 'happy' => 'Happy to Help',
                 'hope' => 'Hope that Helps'
             )
         );
         $this->schema->addValueAliases( // delayed addition
-            'Abbrev', 'HTH', array(
+            'Abbrev.HTH', array(
                 'hail' => 'HAIL THE HAND!'
             )
         );
 
-        $this->assertIdentical($this->schema->defaults['Abbrev']['HTH'], 'Happy to Help');
-        $this->assertIdentical($this->schema->info['Abbrev']['HTH']->type, HTMLPurifier_VarParser::STRING);
-        $this->assertIdentical($this->schema->info['Abbrev']['HTH']->allowed,
+        $this->assertIdentical($this->schema->defaults['Abbrev.HTH'], 'Happy to Help');
+        $this->assertIdentical($this->schema->info['Abbrev.HTH']->type, HTMLPurifier_VarParser::STRING);
+        $this->assertIdentical($this->schema->info['Abbrev.HTH']->allowed,
             array(
                 'Happy to Help' => true,
                 'Hope that Helps' => true,
                 'HAIL THE HAND!' => true
             )
         );
-        $this->assertIdentical($this->schema->info['Abbrev']['HTH']->aliases,
+        $this->assertIdentical($this->schema->info['Abbrev.HTH']->aliases,
         array(
                 'happy' => 'Happy to Help',
                 'hope' => 'Hope that Helps',
@@ -95,14 +85,12 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
     }
 
     function testAlias() {
-        $this->schema->addNamespace('Home');
-        $this->schema->add('Home', 'Rug', 3, 'int', false);
-        $this->schema->addAlias('Home', 'Carpet', 'Home', 'Rug');
+        $this->schema->add('Home.Rug', 3, 'int', false);
+        $this->schema->addAlias('Home.Carpet', 'Home.Rug');
 
-        $this->assertTrue(!isset($this->schema->defaults['Home']['Carpet']));
-        $this->assertIdentical($this->schema->info['Home']['Carpet']->namespace, 'Home');
-        $this->assertIdentical($this->schema->info['Home']['Carpet']->name, 'Rug');
-        $this->assertIdentical($this->schema->info['Home']['Carpet']->isAlias, true);
+        $this->assertTrue(!isset($this->schema->defaults['Home.Carpet']));
+        $this->assertIdentical($this->schema->info['Home.Carpet']->key, 'Home.Rug');
+        $this->assertIdentical($this->schema->info['Home.Carpet']->isAlias, true);
 
     }
 

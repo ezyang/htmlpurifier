@@ -1,8 +1,5 @@
 ERROR: Alias 'Ns.BothWantThisName' in aliases in directive 'Ns.Dir2' collides with alias for directive 'Ns.Dir'
 ----
-Ns
-DESCRIPTION: Namespace
-----
 Ns.Dir
 DESCRIPTION: Directive
 TYPE: int

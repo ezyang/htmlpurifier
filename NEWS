@@ -10,7 +10,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.0.0, unknown release date
-(no items yet)
+# APIs for ConfigSchema subsystem have substantially changed. See
+  docs/dev-config-bcbreaks.txt for details; in essence, anything that
+  had both namespace and directive now have a single unified key.
 
 3.3.0, released 2009-02-16
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.

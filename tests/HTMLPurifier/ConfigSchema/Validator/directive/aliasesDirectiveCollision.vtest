@@ -1,8 +1,5 @@
 ERROR: Alias 'Ns.Innocent' in aliases in directive 'Ns.Dir' collides with another directive
 ----
-Ns
-DESCRIPTION: Namespace
-----
 Ns.Innocent
 DESCRIPTION: Innocent directive
 TYPE: int
