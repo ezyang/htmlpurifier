@@ -5,6 +5,7 @@ library/standalone/
 library/HTMLPurifier.standalone.php
 library/HTMLPurifier*.tgz
 library/package*.xml
+smoketests/test-schema.html
 configdoc/*.html
 configdoc/configdoc.xml
 docs/doxygen*
