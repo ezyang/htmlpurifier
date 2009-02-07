@@ -5,7 +5,7 @@
  */
 class HTMLPurifier_AttrDef_CSS_DenyElementDecorator extends HTMLPurifier_AttrDef
 {
-    protected $def, $element;
+    public $def, $element;
 
     /**
      * @param $def Definition to wrap

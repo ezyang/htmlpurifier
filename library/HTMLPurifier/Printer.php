@@ -158,6 +158,14 @@ class HTMLPurifier_Printer
                 $class .= $this->getClass($obj->single, $sec_prefix) . ', ';
                 $class .= $obj->max;
                 break;
+            case 'css_denyelementdecorator':
+                $class .= $this->getClass($obj->def, $sec_prefix) . ', ';
+                $class .= $obj->element;
+                break;
+            case 'css_importantdecorator':
+                $class .= $this->getClass($obj->def, $sec_prefix);
+                if ($obj->allow) $class .= ', !important';
+                break;
         }
         $class .= ')';
         return $class;

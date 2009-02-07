@@ -41,8 +41,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
         .HTMLPurifier_Printer td, .HTMLPurifier_Printer th {padding:3px;
             border:1px solid #000;background:#CCC; vertical-align: baseline;}
         .HTMLPurifier_Printer th {text-align:left;background:#CCF;width:20%;}
-        .HTMLPurifier_Printer caption {font-size:1.5em; font-weight:bold;
-            width:100%;}
+        .HTMLPurifier_Printer caption {font-size:1.5em; font-weight:bold;}
         .HTMLPurifier_Printer .heavy {background:#99C;text-align:center;}
         .HTMLPurifier_Printer .unsafe {background:#C99;}
         dt {font-weight:bold;}

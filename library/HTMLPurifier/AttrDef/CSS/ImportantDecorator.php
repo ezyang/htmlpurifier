@@ -5,7 +5,7 @@
  */
 class HTMLPurifier_AttrDef_CSS_ImportantDecorator extends HTMLPurifier_AttrDef
 {
-    protected $def, $allow;
+    public $def, $allow;
 
     /**
      * @param $def Definition to wrap
