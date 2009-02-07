@@ -1,8 +1,5 @@
 ERROR: Allowed in directive 'Ns.Dir' must not be empty
 ----
-Ns
-DESCRIPTION: Generic namespace.
-----
 ID: Ns.Dir
 TYPE: string
 DESCRIPTION: Description

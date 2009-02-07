@@ -1,8 +1,5 @@
 ERROR: Type in directive 'Ns.Dir' must be a string type when used with allowed or value aliases
 ----
-Ns
-DESCRIPTION: Namespace
-----
 Ns.Dir
 DESCRIPTION: Directive
 TYPE: int

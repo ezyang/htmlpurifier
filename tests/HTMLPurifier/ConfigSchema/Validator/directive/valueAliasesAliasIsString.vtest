@@ -1,8 +1,5 @@
 ERROR: Alias 3 in valueAliases in directive 'Ns.Dir' must be a string
 ----
-Ns
-DESCRIPTION: Namespace
-----
 Ns.Dir
 DESCRIPTION: Directive
 TYPE: string

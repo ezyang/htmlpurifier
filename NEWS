@@ -10,6 +10,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.0.0, unknown release date
+# APIs for ConfigSchema subsystem have substantially changed. See
+  docs/dev-config-bcbreaks.txt for details; in essence, anything that
+  had both namespace and directive now have a single unified key.
 ! More robust support for name="" and id=""
 
 3.3.0, released 2009-02-16

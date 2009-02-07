@@ -117,21 +117,22 @@ class HTMLPurifier_Config
      * @param $namespace String namespace
      * @param $key String key
      */
-    public function get($namespace, $key) {
+    public function get($namespace, $directive) {
+        $key = "$namespace.$directive";
         if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
-        if (!isset($this->def->info[$namespace][$key])) {
+        if (!isset($this->def->info[$key])) {
             // can't add % due to SimpleTest bug
-            trigger_error('Cannot retrieve value of undefined directive ' . htmlspecialchars("$namespace.$key"),
+            trigger_error('Cannot retrieve value of undefined directive ' . htmlspecialchars($key),
                 E_USER_WARNING);
             return;
         }
-        if (isset($this->def->info[$namespace][$key]->isAlias)) {
-            $d = $this->def->info[$namespace][$key];
-            trigger_error('Cannot get value from aliased directive, use real name ' . $d->namespace . '.' . $d->name,
+        if (isset($this->def->info[$key]->isAlias)) {
+            $d = $this->def->info[$key];
+            trigger_error('Cannot get value from aliased directive, use real name ' . $d->key,
                 E_USER_ERROR);
             return;
         }
-        return $this->plist->get("$namespace.$key");
+        return $this->plist->get($key);
     }
 
     /**
@@ -140,12 +141,12 @@ class HTMLPurifier_Config
      */
     public function getBatch($namespace) {
         if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
-        if (!isset($this->def->info[$namespace])) {
+        $full = $this->getAll();
+        if (!isset($full[$namespace])) {
             trigger_error('Cannot retrieve undefined namespace ' . htmlspecialchars($namespace),
                 E_USER_WARNING);
             return;
         }
-        $full = $this->getAll();
         return $full[$namespace];
     }
 
@@ -195,25 +196,26 @@ class HTMLPurifier_Config
      * @param $key String key
      * @param $value Mixed value
      */
-    public function set($namespace, $key, $value, $from_alias = false) {
+    public function set($namespace, $directive, $value, $from_alias = false) {
+        $key = "$namespace.$directive";
         if ($this->isFinalized('Cannot set directive after finalization')) return;
-        if (!isset($this->def->info[$namespace][$key])) {
-            trigger_error('Cannot set undefined directive ' . htmlspecialchars("$namespace.$key") . ' to value',
+        if (!isset($this->def->info[$key])) {
+            trigger_error('Cannot set undefined directive ' . htmlspecialchars($key) . ' to value',
                 E_USER_WARNING);
             return;
         }
-        $def = $this->def->info[$namespace][$key];
+        $def = $this->def->info[$key];
 
         if (isset($def->isAlias)) {
             if ($from_alias) {
                 trigger_error('Double-aliases not allowed, please fix '.
-                    'ConfigSchema bug with' . "$namespace.$key", E_USER_ERROR);
+                    'ConfigSchema bug with' . $key, E_USER_ERROR);
                 return;
             }
-            $this->set($new_ns  = $def->namespace,
-                       $new_dir = $def->name,
+            list($alias_namespace, $alias_directive) = explode('.', $def->key, 2);
+            $this->set($alias_namespace, $alias_directive,
                        $value, true);
-            trigger_error("$namespace.$key is an alias, preferred directive name is $new_ns.$new_dir", E_USER_NOTICE);
+            trigger_error("$key is an alias, preferred directive name is {$def->key}", E_USER_NOTICE);
             return;
         }
 
@@ -231,7 +233,7 @@ class HTMLPurifier_Config
         try {
             $value = $this->parser->parse($value, $type, $allow_null);
         } catch (HTMLPurifier_VarParserException $e) {
-            trigger_error('Value for ' . "$namespace.$key" . ' is of invalid type, should be ' . HTMLPurifier_VarParser::getTypeName($type), E_USER_WARNING);
+            trigger_error('Value for ' . $key . ' is of invalid type, should be ' . HTMLPurifier_VarParser::getTypeName($type), E_USER_WARNING);
             return;
         }
         if (is_string($value) && is_object($def)) {
@@ -246,7 +248,7 @@ class HTMLPurifier_Config
                 return;
             }
         }
-        $this->plist->set("$namespace.$key", $value);
+        $this->plist->set($key, $value);
 
         // reset definitions if the directives they depend on changed
         // this is a very costly process, so it's discouraged
@@ -351,8 +353,7 @@ class HTMLPurifier_Config
         foreach ($config_array as $key => $value) {
             $key = str_replace('_', '.', $key);
             if (strpos($key, '.') !== false) {
-                // condensed form
-                list($namespace, $directive) = explode('.', $key);
+                list($namespace, $directive) = explode(".", $key, 2);
                 $this->set($namespace, $directive, $value);
             } else {
                 $namespace = $key;
@@ -394,16 +395,15 @@ class HTMLPurifier_Config
              }
         }
         $ret = array();
-        foreach ($schema->info as $ns => $keypairs) {
-            foreach ($keypairs as $directive => $def) {
-                if ($allowed !== true) {
-                    if (isset($blacklisted_directives["$ns.$directive"])) continue;
-                    if (!isset($allowed_directives["$ns.$directive"]) && !isset($allowed_ns[$ns])) continue;
-                }
-                if (isset($def->isAlias)) continue;
-                if ($directive == 'DefinitionID' || $directive == 'DefinitionRev') continue;
-                $ret[] = array($ns, $directive);
+        foreach ($schema->info as $key => $def) {
+            list($ns, $directive) = explode('.', $key, 2);
+            if ($allowed !== true) {
+                if (isset($blacklisted_directives["$ns.$directive"])) continue;
+                if (!isset($allowed_directives["$ns.$directive"]) && !isset($allowed_ns[$ns])) continue;
             }
+            if (isset($def->isAlias)) continue;
+            if ($directive == 'DefinitionID' || $directive == 'DefinitionRev') continue;
+            $ret[] = array($ns, $directive);
         }
         return $ret;
     }
