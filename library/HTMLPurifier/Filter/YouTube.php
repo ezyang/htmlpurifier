@@ -23,10 +23,9 @@ class HTMLPurifier_Filter_YouTube extends HTMLPurifier_Filter
 
     protected function postFilterCallback($matches) {
         $url = $this->armorUrl($matches[1]);
-        return '<object width="425" height="350" '.
+        return '<object width="425" height="350" type="application/x-shockwave-flash" '.
             'data="http://www.youtube.com/v/'.$url.'">'.
             '<param name="movie" value="http://www.youtube.com/v/'.$url.'"></param>'.
-            '<param name="wmode" value="transparent"></param>'.
             '<!--[if IE]>'.
             '<embed src="http://www.youtube.com/v/'.$url.'"'.
             'type="application/x-shockwave-flash"'.
