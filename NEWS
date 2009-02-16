@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-3.3.0, unknown release date
+3.3.0, released 2009-02-16
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.
 ! Implement generic property list classess
 - Fix bug with testEncodingSupportsASCII() algorithm when iconv() implementation

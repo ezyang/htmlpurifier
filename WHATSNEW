@@ -1,6 +1,6 @@
-HTML Purifier 3.2.0 is an amalgamation of new features and fixes that
-have accumulated over a four month period.  Some notable features
-include %AutoFormat.RemoveEmpty, column tracking for tokens,
-%AutoFormat.DisplayLinkURI and %Attr.DefaultImageAlt.  There were also
-major improvements to the test suite interface, error collection output
-and the auto-formatter framework.
+HTML Purifier 3.3.0 is fixes a number of obscure bugs reported and fixed
+over a four month period.  It is probably the last release in the 3.x
+series.  Notable new features include support for the overflow CSS
+property; notable bugfixes include fixed YouTube rendering in certain
+versions of Firefox, CSSDefinition Printer, improved early PHP support
+and bugs in iconv.
