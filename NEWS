@@ -23,6 +23,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   Thanks Pierre Attar for reporting.
 - Fix YouTube rendering problem on certain versions of Firefox.
 - Fix CSSDefinition Printer problems with decorators
+- Add text parameter to unit tests, forces text output
 . Add verbose mode to command line test runner, use (--verbose)
 . Turn on unit tests for UnitConverter
 . Fix missing version number in configuration %Attr.DefaultImageAlt (added 3.2.0)

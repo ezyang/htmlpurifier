@@ -40,6 +40,7 @@ $AC['dry']  = false;
 $AC['php']  = $php;
 $AC['help'] = false;
 $AC['verbose'] = false;
+$AC['txt'] = false;
 
 $AC['type'] = '';
 $AC['disable-phpt'] = false;
@@ -62,6 +63,7 @@ Allowed options:
     --standalone
     --file (-f) HTMLPurifier/NameOfTest.php
     --xml
+    --txt
     --dry
     --php /path/to/php
     --type ( htmlpurifier | configdoc | fstools | htmlt | vtest | phpt )
@@ -100,7 +102,8 @@ require 'HTMLPurifier/Harness.php';
 if ($AC['xml']) {
     if (!SimpleReporter::inCli()) header('Content-Type: text/xml;charset=UTF-8');
     $reporter = new XmlReporter();
-} elseif (SimpleReporter::inCli()) {
+} elseif (SimpleReporter::inCli() || $AC['txt']) {
+    if (!SimpleReporter::inCli()) header('Content-Type: text/plain;charset=UTF-8');
     $reporter = new HTMLPurifier_SimpleTest_TextReporter($AC);
 } else {
     $reporter = new HTMLPurifier_SimpleTest_Reporter('UTF-8', $AC);
