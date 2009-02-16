@@ -551,14 +551,14 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
                     new HTMLPurifier_Token_End('style'),
                 ),
             );
-        if (!defined('LIBXML_VERSION') || LIBXML_VERSION < 20628) {
+        if (!defined('LIBXML_VERSION')) {
+            // LIBXML_VERSION is missing in early versions of PHP
+            // prior to 1.30 of php-src/ext/libxml/libxml.c (version-wise,
+            // this translates to 5.0.x. In such cases, punt the test entirely.
+            return;
+        } elseif (LIBXML_VERSION < 20628) {
             // libxml's behavior is wrong prior to this version, so make
             // appropriate accomodations
-            // :NOTE: LIBXML_VERSION is missing in early versions of PHP
-            // prior to 1.30 of php-src/ext/libxml/libxml.c (version-wise,
-            // this translates to 5.0.x. In such cases, we assume that an old
-            // version of libxml is being used, although that *might* not
-            // be the case (it's very unlikely though)
             $extra['DOMLex'] = $extra['DirectLex'];
         }
         $this->assertTokenization(
