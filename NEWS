@@ -9,6 +9,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.0.0, unknown release date
+(no items yet)
+
 3.3.0, released 2009-02-16
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.
 ! Implement generic property list classess

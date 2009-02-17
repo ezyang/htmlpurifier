@@ -3,6 +3,7 @@
 set_time_limit(0);
 
 require_once 'PEAR/PackageFileManager2.php';
+require_once 'PEAR/PackageFileManager/File.php';
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 $pkg = new PEAR_PackageFileManager2;
 
@@ -17,6 +18,8 @@ $pkg->setOptions(
         'ignore' => array(
             'HTMLPurifier.standalone.php',
             'HTMLPurifier.path.php',
+            '*.tar.gz',
+            '*.tgz',
             'standalone/'
         ),
     )
