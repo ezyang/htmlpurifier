@@ -437,6 +437,20 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->expectError('Using deprecated API: use $config->get(\'Foo.Bar\') instead');
         $this->assertIdentical($config->get('Foo', 'Bar'), 4);
     }
+
+    function testInherit() {
+        $this->schema->add('Phantom.Masked', 25, 'int', false);
+        $this->schema->add('Phantom.Unmasked', 89, 'int', false);
+        $this->schema->add('Phantom.Latemasked', 11, 'int', false);
+        $config = new HTMLPurifier_Config($this->schema);
+        $config->set('Phantom.Masked', 800);
+        $subconfig = HTMLPurifier_Config::inherit($config);
+        $config->set('Phantom.Latemasked', 100, 'int', false);
+        $this->assertIdentical($subconfig->get('Phantom.Masked'), 800);
+        $this->assertIdentical($subconfig->get('Phantom.Unmasked'), 89);
+        $this->assertIdentical($subconfig->get('Phantom.Latemasked'), 100);
+    }
+
 }
 
 // vim: et sw=4 sts=4

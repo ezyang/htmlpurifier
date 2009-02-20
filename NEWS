@@ -14,6 +14,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   docs/dev-config-bcbreaks.txt for details; in essence, anything that
   had both namespace and directive now have a single unified key.
 ! More robust support for name="" and id=""
+! HTMLPurifier_Config::inherit($config) allows you to inherit one
+  configuration, and have changes to that configuration be propagated
+  to all of its children.
 
 3.3.0, released 2009-02-16
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.

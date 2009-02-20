@@ -84,8 +84,9 @@ class HTMLPurifier_Config
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
      */
-    public function __construct($definition) {
-        $this->plist = new HTMLPurifier_PropertyList($definition->defaultPlist);
+    public function __construct($definition, $parent = null) {
+        $parent = $parent ? $parent : $definition->defaultPlist;
+        $this->plist = new HTMLPurifier_PropertyList($parent);
         $this->def = $definition; // keep a copy around for checking
         $this->parser = new HTMLPurifier_VarParser_Flexible();
     }
@@ -115,6 +116,16 @@ class HTMLPurifier_Config
     }
 
     /**
+     * Creates a new config object that inherits from a previous one.
+     * @param HTMLPurifier_Config $config Configuration object to inherit
+     *        from.
+     * @return HTMLPurifier_Config object with $config as its parent.
+     */
+    public static function inherit(HTMLPurifier_Config $config) {
+        return new HTMLPurifier_Config($config->def, $config->plist);
+    }
+
+    /**
      * Convenience constructor that creates a default configuration object.
      * @return Default HTMLPurifier_Config object.
      */
@@ -126,7 +137,6 @@ class HTMLPurifier_Config
 
     /**
      * Retreives a value from the configuration.
-     * @param $namespace String namespace
      * @param $key String key
      */
     public function get($key, $a = null) {
@@ -134,7 +144,7 @@ class HTMLPurifier_Config
             $this->triggerError("Using deprecated API: use \$config->get('$key.$a') instead", E_USER_WARNING);
             $key = "$key.$a";
         }
-        if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
+        if (!$this->finalized) $this->autoFinalize();
         if (!isset($this->def->info[$key])) {
             // can't add % due to SimpleTest bug
             $this->triggerError('Cannot retrieve value of undefined directive ' . htmlspecialchars($key),
@@ -155,7 +165,7 @@ class HTMLPurifier_Config
      * @param $namespace String namespace
      */
     public function getBatch($namespace) {
-        if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
+        if (!$this->finalized) $this->autoFinalize();
         $full = $this->getAll();
         if (!isset($full[$namespace])) {
             $this->triggerError('Cannot retrieve undefined namespace ' . htmlspecialchars($namespace),
@@ -196,7 +206,7 @@ class HTMLPurifier_Config
      * Retrieves all directives, organized by namespace
      */
     public function getAll() {
-        if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
+        if (!$this->finalized) $this->autoFinalize();
         $ret = array();
         foreach ($this->plist->squash() as $name => $value) {
             list($ns, $key) = explode('.', $name, 2);
@@ -207,7 +217,6 @@ class HTMLPurifier_Config
 
     /**
      * Sets a value to configuration.
-     * @param $namespace String namespace
      * @param $key String key
      * @param $value Mixed value
      */
@@ -316,7 +325,7 @@ class HTMLPurifier_Config
      * @param $raw  Whether or not definition should be returned raw
      */
     public function getDefinition($type, $raw = false) {
-        if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
+        if (!$this->finalized) $this->autoFinalize();
         $factory = HTMLPurifier_DefinitionCacheFactory::instance();
         $cache = $factory->create($type, $this);
         if (!$raw) {
@@ -376,7 +385,6 @@ class HTMLPurifier_Config
         foreach ($config_array as $key => $value) {
             $key = str_replace('_', '.', $key);
             if (strpos($key, '.') !== false) {
-                list($namespace, $directive) = explode(".", $key, 2);
                 $this->set($key, $value);
             } else {
                 $namespace = $key;
@@ -505,7 +513,11 @@ class HTMLPurifier_Config
      * already finalized
      */
     public function autoFinalize() {
-        if (!$this->finalized && $this->autoFinalize) $this->finalize();
+        if ($this->autoFinalize) {
+            $this->finalize();
+        } else {
+            $this->plist->squash(true);
+        }
     }
 
     /**
