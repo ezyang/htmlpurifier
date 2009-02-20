@@ -6,7 +6,7 @@ class HTMLPurifier_Strategy_ValidateAttributes_IDTest extends HTMLPurifier_Strat
     function setUp() {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_ValidateAttributes();
-        $this->config->set('Attr', 'EnableID', true);
+        $this->config->set('Attr.EnableID', true);
     }
 
 
@@ -43,7 +43,7 @@ class HTMLPurifier_Strategy_ValidateAttributes_IDTest extends HTMLPurifier_Strat
     }
 
     function testIDBlacklist() {
-        $this->config->set('Attr', 'IDBlacklist', array('invalid'));
+        $this->config->set('Attr.IDBlacklist', array('invalid'));
         $this->assertResult(
             '<div id="invalid">Invalid</div>',
             '<div>Invalid</div>'
@@ -51,7 +51,7 @@ class HTMLPurifier_Strategy_ValidateAttributes_IDTest extends HTMLPurifier_Strat
     }
 
     function testNameConvertedToID() {
-        $this->config->set('HTML', 'TidyLevel', 'heavy');
+        $this->config->set('HTML.TidyLevel', 'heavy');
         $this->assertResult(
             '<a name="foobar" />',
             '<a id="foobar" />'

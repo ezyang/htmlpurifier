@@ -10,7 +10,7 @@ class HTMLPurifier_DefinitionCacheTest extends HTMLPurifier_Harness
         generate_mock_once('HTMLPurifier_Config');
         $config = new HTMLPurifier_ConfigMock();
         $config->version = '1.0.0'; // hopefully no conflicts
-        $config->setReturnValue('get', 10, array('Test', 'DefinitionRev'));
+        $config->setReturnValue('get', 10, array('Test.DefinitionRev'));
         $config->setReturnValue('getBatchSerial', 'hash', array('Test'));
 
         $this->assertIdentical($cache->isOld('1.0.0,hash,10', $config), false);

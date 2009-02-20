@@ -5,7 +5,7 @@ class HTMLPurifier_Injector_DisplayLinkURITest extends HTMLPurifier_InjectorHarn
 
     function setup() {
         parent::setup();
-        $this->config->set('AutoFormat', 'DisplayLinkURI', true);
+        $this->config->set('AutoFormat.DisplayLinkURI', true);
     }
 
     function testBasicLink() {

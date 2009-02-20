@@ -49,7 +49,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
     }
 
     function testConfigMunge() {
-        $this->config->set('URI', 'Munge', 'http://www.google.com/url?q=%s');
+        $this->config->set('URI.Munge', 'http://www.google.com/url?q=%s');
         $this->assertDef(
             'http://www.example.com/',
             'http://www.google.com/url?q=http%3A%2F%2Fwww.example.com%2F'
@@ -77,7 +77,7 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
     function testURIDefinitionValidation() {
         $parser = new HTMLPurifier_URIParser();
         $uri = $parser->parse('http://example.com');
-        $this->config->set('URI', 'DefinitionID', 'HTMLPurifier_AttrDef_URITest->testURIDefinitionValidation');
+        $this->config->set('URI.DefinitionID', 'HTMLPurifier_AttrDef_URITest->testURIDefinitionValidation');
 
         generate_mock_once('HTMLPurifier_URIDefinition');
         $uri_def = new HTMLPurifier_URIDefinitionMock();
@@ -121,8 +121,8 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
     /*
     function test_validate_configWhitelist() {
 
-        $this->config->set('URI', 'HostPolicy', 'DenyAll');
-        $this->config->set('URI', 'HostWhitelist', array(null, 'google.com'));
+        $this->config->set('URI.HostPolicy', 'DenyAll');
+        $this->config->set('URI.HostWhitelist', array(null, 'google.com'));
 
         $this->assertDef('http://example.com/fo/google.com', false);
         $this->assertDef('server.txt');

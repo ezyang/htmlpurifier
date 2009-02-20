@@ -52,7 +52,7 @@ $xml = simplexml_load_file('xssAttacks.xml');
 // programatically disallow google.com for URI evasion tests
 // not complete
 $config = HTMLPurifier_Config::createDefault();
-$config->set('URI', 'HostBlacklist', array('google.com'));
+$config->set('URI.HostBlacklist', array('google.com'));
 $purifier = new HTMLPurifier($config);
 
 ?>

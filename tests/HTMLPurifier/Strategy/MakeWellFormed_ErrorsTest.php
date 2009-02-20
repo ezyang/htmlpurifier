@@ -14,7 +14,7 @@ class HTMLPurifier_Strategy_MakeWellFormed_ErrorsTest extends HTMLPurifier_Strat
     }
 
     function testUnnecessaryEndTagToText() {
-        $this->config->set('Core', 'EscapeInvalidTags', true);
+        $this->config->set('Core.EscapeInvalidTags', true);
         $this->expectErrorCollection(E_WARNING, 'Strategy_MakeWellFormed: Unnecessary end tag to text');
         $this->expectContext('CurrentToken', new HTMLPurifier_Token_End('b', array(), 1, 0));
         $this->invoke('</b>');
@@ -40,7 +40,7 @@ class HTMLPurifier_Strategy_MakeWellFormed_ErrorsTest extends HTMLPurifier_Strat
     }
 
     function testStrayEndTagToText() {
-        $this->config->set('Core', 'EscapeInvalidTags', true);
+        $this->config->set('Core.EscapeInvalidTags', true);
         $this->expectErrorCollection(E_WARNING, 'Strategy_MakeWellFormed: Stray end tag to text');
         $this->expectContext('CurrentToken', new HTMLPurifier_Token_End('b', array(), 1, 3));
         $this->invoke('<i></b></i>');

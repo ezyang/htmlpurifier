@@ -6,9 +6,9 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
     function setUp() {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_MakeWellFormed();
-        $this->config->set('AutoFormat', 'AutoParagraph', true);
-        $this->config->set('AutoFormat', 'Linkify', true);
-        $this->config->set('AutoFormat', 'RemoveEmpty', true);
+        $this->config->set('AutoFormat.AutoParagraph', true);
+        $this->config->set('AutoFormat.Linkify', true);
+        $this->config->set('AutoFormat.RemoveEmpty', true);
         generate_mock_once('HTMLPurifier_Injector');
     }
 
@@ -26,21 +26,21 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         $mock->expectAt(1, 'handleEnd', array($i));
         $mock->expectCallCount('handleEnd', 2);
         $mock->setReturnValue('getRewind', false);
-        $this->config->set('AutoFormat', 'AutoParagraph', false);
-        $this->config->set('AutoFormat', 'Linkify',       false);
-        $this->config->set('AutoFormat', 'Custom', array($mock));
+        $this->config->set('AutoFormat.AutoParagraph', false);
+        $this->config->set('AutoFormat.Linkify',       false);
+        $this->config->set('AutoFormat.Custom', array($mock));
         $this->assertResult('<i><b>asdf</b>', '<i><b>asdf</b></i>');
     }
 
     function testErrorRequiredElementNotAllowed() {
-        $this->config->set('HTML', 'Allowed', '');
+        $this->config->set('HTML.Allowed', '');
         $this->expectError('Cannot enable AutoParagraph injector because p is not allowed');
         $this->expectError('Cannot enable Linkify injector because a is not allowed');
         $this->assertResult('Foobar');
     }
 
     function testErrorRequiredAttributeNotAllowed() {
-        $this->config->set('HTML', 'Allowed', 'a,p');
+        $this->config->set('HTML.Allowed', 'a,p');
         $this->expectError('Cannot enable Linkify injector because a.href is not allowed');
         $this->assertResult('<p>http://example.com</p>');
     }

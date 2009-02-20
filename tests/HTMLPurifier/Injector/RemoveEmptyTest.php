@@ -5,7 +5,7 @@ class HTMLPurifier_Injector_RemoveEmptyTest extends HTMLPurifier_InjectorHarness
 
     public function setup() {
         parent::setup();
-        $this->config->set('AutoFormat', 'RemoveEmpty', true);
+        $this->config->set('AutoFormat.RemoveEmpty', true);
     }
 
     function testPreserve() {
@@ -33,12 +33,12 @@ class HTMLPurifier_Injector_RemoveEmptyTest extends HTMLPurifier_InjectorHarness
     }
 
     function testPreserveId() {
-        $this->config->set('Attr', 'EnableID', true);
+        $this->config->set('Attr.EnableID', true);
         $this->assertResult('<a id="asdf"></a>');
     }
 
     function testPreserveName() {
-        $this->config->set('Attr', 'EnableID', true);
+        $this->config->set('Attr.EnableID', true);
         $this->assertResult('<a name="asdf"></a>');
     }
 

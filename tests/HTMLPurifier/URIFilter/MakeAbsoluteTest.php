@@ -10,7 +10,7 @@ class HTMLPurifier_URIFilter_MakeAbsoluteTest extends HTMLPurifier_URIFilterHarn
     }
 
     function setBase($base = 'http://example.com/foo/bar.html?q=s#frag') {
-        $this->config->set('URI', 'Base', $base);
+        $this->config->set('URI.Base', $base);
     }
 
     // corresponding to RFC 2396

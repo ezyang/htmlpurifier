@@ -52,7 +52,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
 
     function testOnlyXMLLangInXHTML11() {
-        $this->config->set('HTML', 'Doctype', 'XHTML 1.1');
+        $this->config->set('HTML.Doctype', 'XHTML 1.1');
         $this->assertResult(
             '<b lang="en">asdf</b>',
             '<b xml:lang="en">asdf</b>'
@@ -85,7 +85,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
 
     function testBdoAlternateDefaultDir() {
-        $this->config->set('Attr', 'DefaultTextDir', 'rtl');
+        $this->config->set('Attr.DefaultTextDir', 'rtl');
         $this->assertResult(
             '<bdo>Go right.</bdo>',
             '<bdo dir="rtl">Go right.</bdo>'
@@ -127,7 +127,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
 
     function testImgAddDefaults() {
-        $this->config->set('Core', 'RemoveInvalidImg', false);
+        $this->config->set('Core.RemoveInvalidImg', false);
         $this->assertResult(
             '<img />',
             '<img src="" alt="Invalid image" />'
@@ -142,7 +142,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
 
     function testImgAddDefaultSrc() {
-        $this->config->set('Core', 'RemoveInvalidImg', false);
+        $this->config->set('Core.RemoveInvalidImg', false);
         $this->assertResult(
             '<img alt="pretty picture" />',
             '<img alt="pretty picture" src="" />'
@@ -150,7 +150,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
 
     function testImgRemoveNonRetrievableProtocol() {
-        $this->config->set('Core', 'RemoveInvalidImg', false);
+        $this->config->set('Core.RemoveInvalidImg', false);
         $this->assertResult(
             '<img src="mailto:foo@example.com" />',
             '<img alt="mailto:foo@example.com" src="" />'
@@ -158,19 +158,19 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
 
     function testPreserveRel() {
-        $this->config->set('Attr', 'AllowedRel', 'nofollow');
+        $this->config->set('Attr.AllowedRel', 'nofollow');
         $this->assertResult('<a href="foo" rel="nofollow" />');
     }
 
     function testPreserveTarget() {
-        $this->config->set('Attr', 'AllowedFrameTargets', '_top');
-        $this->config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');
+        $this->config->set('Attr.AllowedFrameTargets', '_top');
+        $this->config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
         $this->assertResult('<a href="foo" target="_top" />');
     }
 
     function testRemoveTargetWhenNotSupported() {
-        $this->config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
-        $this->config->set('Attr', 'AllowedFrameTargets', '_top');
+        $this->config->set('HTML.Doctype', 'XHTML 1.0 Strict');
+        $this->config->set('Attr.AllowedFrameTargets', '_top');
         $this->assertResult(
             '<a href="foo" target="_top" />',
             '<a href="foo" />'
@@ -191,7 +191,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
 
     function testRemoveLargeCSSWidthAndHeightOnImgWithUserConf() {
-        $this->config->set('CSS', 'MaxImgLength', '1px');
+        $this->config->set('CSS.MaxImgLength', '1px');
         $this->assertResult(
             '<img src="" alt="" style="width:1mm;height:1mm;border:1px solid #000;" />',
             '<img src="" alt="" style="border:1px solid #000;" />'
@@ -199,14 +199,14 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
 
     function testKeepLargeCSSWidthAndHeightOnImgWhenToldTo() {
-        $this->config->set('CSS', 'MaxImgLength', null);
+        $this->config->set('CSS.MaxImgLength', null);
         $this->assertResult(
             '<img src="" alt="" style="width:10000000px;height:10000000px;border:1px solid #000;" />'
         );
     }
 
     function testKeepPercentCSSWidthAndHeightOnImgWhenToldTo() {
-        $this->config->set('CSS', 'MaxImgLength', null);
+        $this->config->set('CSS.MaxImgLength', null);
         $this->assertResult(
             '<img src="" alt="" style="width:100%;height:100%;border:1px solid #000;" />'
         );

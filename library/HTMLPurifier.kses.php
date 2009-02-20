@@ -17,11 +17,11 @@ function kses($string, $allowed_html, $allowed_protocols = null) {
             $allowed_attributes["$element.$attribute"] = true;
         }
     }
-    $config->set('HTML', 'AllowedElements', $allowed_elements);
-    $config->set('HTML', 'AllowedAttributes', $allowed_attributes);
+    $config->set('HTML.AllowedElements', $allowed_elements);
+    $config->set('HTML.AllowedAttributes', $allowed_attributes);
     $allowed_schemes = array();
     if ($allowed_protocols !== null) {
-        $config->set('URI', 'AllowedSchemes', $allowed_protocols);
+        $config->set('URI.AllowedSchemes', $allowed_protocols);
     }
     $purifier = new HTMLPurifier($config);
     return $purifier->purify($string);

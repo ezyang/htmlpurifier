@@ -9,12 +9,12 @@ class HTMLPurifier_URIFilter_MungeTest extends HTMLPurifier_URIFilterHarness
     }
 
     protected function setMunge($uri = 'http://www.google.com/url?q=%s') {
-        $this->config->set('URI', 'Munge', $uri);
+        $this->config->set('URI.Munge', $uri);
     }
 
     protected function setSecureMunge($key = 'secret') {
         $this->setMunge('/redirect.php?url=%s&checksum=%t');
-        $this->config->set('URI', 'MungeSecretKey', $key);
+        $this->config->set('URI.MungeSecretKey', $key);
     }
 
     function testMunge() {
@@ -62,7 +62,7 @@ class HTMLPurifier_URIFilter_MungeTest extends HTMLPurifier_URIFilterHarness
 
     function testProcessEmbedded() {
         $this->setMunge();
-        $this->config->set('URI', 'MungeResources', true);
+        $this->config->set('URI.MungeResources', true);
         $embeds = true;
         $this->context->register('EmbeddedURI', $embeds);
         $this->assertFiltering('http://www.example.com/', 'http://www.google.com/url?q=http%3A%2F%2Fwww.example.com%2F');

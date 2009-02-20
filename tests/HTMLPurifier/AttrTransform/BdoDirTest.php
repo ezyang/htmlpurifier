@@ -17,7 +17,7 @@ class HTMLPurifier_AttrTransform_BdoDirTest extends HTMLPurifier_AttrTransformHa
     }
 
     function testAlternateDefault() {
-        $this->config->set('Attr', 'DefaultTextDir', 'rtl');
+        $this->config->set('Attr.DefaultTextDir', 'rtl');
         $this->assertResult(
             array(),
             array('dir' => 'rtl')

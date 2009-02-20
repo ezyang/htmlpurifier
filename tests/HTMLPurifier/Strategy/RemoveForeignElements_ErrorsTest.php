@@ -5,7 +5,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
 
     public function setup() {
         parent::setup();
-        $this->config->set('HTML', 'TidyLevel', 'heavy');
+        $this->config->set('HTML.TidyLevel', 'heavy');
     }
 
     protected function getStrategy() {
@@ -26,7 +26,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
     }
 
     function testForeignElementToText() {
-        $this->config->set('Core', 'EscapeInvalidTags', true);
+        $this->config->set('Core.EscapeInvalidTags', true);
         $this->expectErrorCollection(E_WARNING, 'Strategy_RemoveForeignElements: Foreign element to text');
         $this->expectContext('CurrentToken', new HTMLPurifier_Token_Start('invalid', array(), 1));
         $this->invoke('<invalid>');
@@ -46,14 +46,14 @@ class HTMLPurifier_Strategy_RemoveForeignElements_ErrorsTest extends HTMLPurifie
     }
 
     function testTrailingHyphenInCommentRemoved() {
-        $this->config->set('HTML', 'Trusted', true);
+        $this->config->set('HTML.Trusted', true);
         $this->expectErrorCollection(E_NOTICE, 'Strategy_RemoveForeignElements: Trailing hyphen in comment removed');
         $this->expectContext('CurrentToken', new HTMLPurifier_Token_Comment(' test --', 1));
         $this->invoke('<!-- test ---->');
     }
 
     function testDoubleHyphenInCommentRemoved() {
-        $this->config->set('HTML', 'Trusted', true);
+        $this->config->set('HTML.Trusted', true);
         $this->expectErrorCollection(E_NOTICE, 'Strategy_RemoveForeignElements: Hyphens in comment collapsed');
         $this->expectContext('CurrentToken', new HTMLPurifier_Token_Comment(' test --- test -- test ', 1));
         $this->invoke('<!-- test --- test -- test -->');

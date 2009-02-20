@@ -91,7 +91,7 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
         $all = array();
         foreach ($allowed as $key) {
             list($ns, $directive) = $key;
-            $all[$ns][$directive] = $config->get($ns, $directive);
+            $all[$ns][$directive] = $config->get($ns .'.'. $directive);
         }
 
         $ret = '';

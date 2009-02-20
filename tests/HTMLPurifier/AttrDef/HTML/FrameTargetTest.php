@@ -16,7 +16,7 @@ class HTMLPurifier_AttrDef_HTML_FrameTargetTest extends HTMLPurifier_AttrDefHarn
     }
 
     function test() {
-        $this->config->set('Attr', 'AllowedFrameTargets', 'foo,_blank');
+        $this->config->set('Attr.AllowedFrameTargets', 'foo,_blank');
         $this->assertDef('', false);
         $this->assertDef('foo');
         $this->assertDef('_blank');

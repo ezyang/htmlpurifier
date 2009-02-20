@@ -15,7 +15,7 @@ class HTMLPurifier_LanguageFactoryTest extends HTMLPurifier_Harness
 
     function test() {
 
-        $this->config->set('Core', 'Language', 'en');
+        $this->config->set('Core.Language', 'en');
         $language = $this->factory->create($this->config, $this->context);
 
         $this->assertIsA($language, 'HTMLPurifier_Language');
@@ -30,7 +30,7 @@ class HTMLPurifier_LanguageFactoryTest extends HTMLPurifier_Harness
 
     function testFallback() {
 
-        $this->config->set('Core', 'Language', 'en-x-test');
+        $this->config->set('Core.Language', 'en-x-test');
         $language = $this->factory->create($this->config, $this->context);
 
         $this->assertIsA($language, 'HTMLPurifier_Language_en_x_test');
@@ -47,7 +47,7 @@ class HTMLPurifier_LanguageFactoryTest extends HTMLPurifier_Harness
     }
 
     function testFallbackWithNoClass() {
-        $this->config->set('Core', 'Language', 'en-x-testmini');
+        $this->config->set('Core.Language', 'en-x-testmini');
         $language = $this->factory->create($this->config, $this->context);
         $this->assertIsA($language, 'HTMLPurifier_Language');
         $this->assertIdentical($language->code, 'en-x-testmini');
@@ -58,7 +58,7 @@ class HTMLPurifier_LanguageFactoryTest extends HTMLPurifier_Harness
     }
 
     function testNoSuchLanguage() {
-        $this->config->set('Core', 'Language', 'en-x-testnone');
+        $this->config->set('Core.Language', 'en-x-testnone');
         $language = $this->factory->create($this->config, $this->context);
         $this->assertIsA($language, 'HTMLPurifier_Language');
         $this->assertIdentical($language->code, 'en-x-testnone');

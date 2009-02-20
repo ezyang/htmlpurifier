@@ -5,8 +5,8 @@ class HTMLPurifier_Injector_PurifierLinkifyTest extends HTMLPurifier_InjectorHar
 
     function setup() {
         parent::setup();
-        $this->config->set('AutoFormat', 'PurifierLinkify', true);
-        $this->config->set('AutoFormatParam', 'PurifierLinkifyDocURL', '#%s');
+        $this->config->set('AutoFormat.PurifierLinkify', true);
+        $this->config->set('AutoFormatParam.PurifierLinkifyDocURL', '#%s');
     }
 
     function testNoTriggerCharacer() {
@@ -49,7 +49,7 @@ class HTMLPurifier_Injector_PurifierLinkifyTest extends HTMLPurifier_InjectorHar
     }
 
     function testNeeded() {
-        $this->config->set('HTML', 'Allowed', 'b');
+        $this->config->set('HTML.Allowed', 'b');
         $this->expectError('Cannot enable PurifierLinkify injector because a is not allowed');
         $this->assertResult('%Namespace.Directive');
     }

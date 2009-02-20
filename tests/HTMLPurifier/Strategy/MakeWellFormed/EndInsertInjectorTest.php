@@ -5,7 +5,7 @@ class HTMLPurifier_Strategy_MakeWellFormed_EndInsertInjectorTest extends HTMLPur
     function setUp() {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_MakeWellFormed();
-        $this->config->set('AutoFormat', 'Custom', array(
+        $this->config->set('AutoFormat.Custom', array(
             new HTMLPurifier_Strategy_MakeWellFormed_EndInsertInjector()
         ));
     }

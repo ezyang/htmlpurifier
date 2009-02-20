@@ -7,7 +7,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements_TidyTest
     function setUp() {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_RemoveForeignElements();
-        $this->config->set('HTML', 'TidyLevel', 'heavy');
+        $this->config->set('HTML.TidyLevel', 'heavy');
     }
 
     function testCenterTransform() {
@@ -26,7 +26,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements_TidyTest
     }
 
     function testTransformToForbiddenElement() {
-        $this->config->set('HTML', 'Allowed', 'div');
+        $this->config->set('HTML.Allowed', 'div');
         $this->assertResult(
             '<font color="red" face="Arial" size="6">Big Warning!</font>',
             'Big Warning!'

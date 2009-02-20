@@ -21,28 +21,28 @@ class HTMLPurifier_URIFilter_DisableExternalTest extends HTMLPurifier_URIFilterH
     }
 
     function testPreserveOurHost() {
-        $this->config->set('URI', 'Host', 'example.com');
+        $this->config->set('URI.Host', 'example.com');
         $this->assertFiltering(
             'http://example.com'
         );
     }
 
     function testPreserveOurSubdomain() {
-        $this->config->set('URI', 'Host', 'example.com');
+        $this->config->set('URI.Host', 'example.com');
         $this->assertFiltering(
             'http://www.example.com'
         );
     }
 
     function testRemoveSuperdomain() {
-        $this->config->set('URI', 'Host', 'www.example.com');
+        $this->config->set('URI.Host', 'www.example.com');
         $this->assertFiltering(
             'http://example.com', false
         );
     }
 
     function testBaseAsHost() {
-        $this->config->set('URI', 'Base', 'http://www.example.com/foo/bar');
+        $this->config->set('URI.Base', 'http://www.example.com/foo/bar');
         $this->assertFiltering(
             'http://www.example.com/baz'
         );
