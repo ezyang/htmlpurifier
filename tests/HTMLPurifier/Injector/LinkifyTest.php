@@ -5,7 +5,7 @@ class HTMLPurifier_Injector_LinkifyTest extends HTMLPurifier_InjectorHarness
 
     function setup() {
         parent::setup();
-        $this->config->set('AutoFormat', 'Linkify', true);
+        $this->config->set('AutoFormat.Linkify', true);
     }
 
     function testLinkifyURLInRootNode() {
@@ -36,7 +36,7 @@ class HTMLPurifier_Injector_LinkifyTest extends HTMLPurifier_InjectorHarness
     }
 
     function testNeeded() {
-        $this->config->set('HTML', 'Allowed', 'b');
+        $this->config->set('HTML.Allowed', 'b');
         $this->expectError('Cannot enable Linkify injector because a is not allowed');
         $this->assertResult('http://example.com/');
     }

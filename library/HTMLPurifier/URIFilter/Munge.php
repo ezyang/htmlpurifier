@@ -9,10 +9,10 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
     protected $replace = array();
 
     public function prepare($config) {
-        $this->target    = $config->get('URI', $this->name);
+        $this->target    = $config->get('URI.' . $this->name);
         $this->parser    = new HTMLPurifier_URIParser();
-        $this->doEmbed   = $config->get('URI', 'MungeResources');
-        $this->secretKey = $config->get('URI', 'MungeSecretKey');
+        $this->doEmbed   = $config->get('URI.MungeResources');
+        $this->secretKey = $config->get('URI.MungeSecretKey');
         return true;
     }
     public function filter(&$uri, $config, $context) {

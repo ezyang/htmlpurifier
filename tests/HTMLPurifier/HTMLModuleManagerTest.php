@@ -6,7 +6,7 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
     protected function createManager() {
         $manager = new HTMLPurifier_HTMLModuleManager();
 
-        $this->config->set('HTML', 'CustomDoctype', 'Blank');
+        $this->config->set('HTML.CustomDoctype', 'Blank');
         $manager->doctypes->register('Blank');
 
         $attrdef_nmtokens = new HTMLPurifier_AttrDef_HTML_Nmtokens();
@@ -47,8 +47,8 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         $manager->addModule($unsafe_module);
 
         $config = HTMLPurifier_Config::createDefault();
-        $config->set('HTML', 'Trusted', false);
-        $config->set('HTML', 'CustomDoctype', 'Blank');
+        $config->set('HTML.Trusted', false);
+        $config->set('HTML.CustomDoctype', 'Blank');
 
         $manager->setup($config);
 

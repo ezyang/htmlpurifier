@@ -6,7 +6,7 @@ class HTMLPurifier_Strategy_ValidateAttributes_TidyTest extends HTMLPurifier_Str
     function setUp() {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_ValidateAttributes();
-        $this->config->set('HTML', 'TidyLevel', 'heavy');
+        $this->config->set('HTML.TidyLevel', 'heavy');
     }
 
     function testConvertCenterAlign() {

@@ -5,11 +5,11 @@ class HTMLPurifier_HTMLModule_ObjectTest extends HTMLPurifier_HTMLModuleHarness
 
     function setUp() {
         parent::setUp();
-        $this->config->set('HTML', 'Trusted', true);
+        $this->config->set('HTML.Trusted', true);
     }
 
     function testDefaultRemoval() {
-        $this->config->set('HTML', 'Trusted', false);
+        $this->config->set('HTML.Trusted', false);
         $this->assertResult(
             '<object></object>', ''
         );

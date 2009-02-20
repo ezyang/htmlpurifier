@@ -66,7 +66,7 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
         $scheme = 'foobar';
 
         $scheme_mock = $this->setUpSchemeMock($scheme);
-        $this->config->set('URI', 'DefaultScheme', $scheme);
+        $this->config->set('URI.DefaultScheme', $scheme);
 
         $uri = $this->createURI('hmm');
         $scheme_obj = $uri->getSchemeObj($this->config, $this->context);
@@ -77,7 +77,7 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
 
     function test_getSchemaObj_invalidDefaultScheme() {
         $this->setUpNoValidSchemes();
-        $this->config->set('URI', 'DefaultScheme', 'foobar');
+        $this->config->set('URI.DefaultScheme', 'foobar');
 
         $uri = $this->createURI('hmm');
 

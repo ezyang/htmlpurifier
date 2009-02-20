@@ -38,7 +38,7 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest extends HTMLPurifier_Strat
     }
 
     function testRemoveOnlyScriptTagsLegacy() {
-        $this->config->set('Core', 'RemoveScriptContents', false);
+        $this->config->set('Core.RemoveScriptContents', false);
         $this->assertResult(
             '<script>alert();</script>',
             'alert();'
@@ -46,7 +46,7 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest extends HTMLPurifier_Strat
     }
 
     function testRemoveOnlyScriptTags() {
-        $this->config->set('Core', 'HiddenElements', array());
+        $this->config->set('Core.HiddenElements', array());
         $this->assertResult(
             '<script>alert();</script>',
             'alert();'
@@ -62,13 +62,13 @@ class HTMLPurifier_Strategy_RemoveForeignElementsTest extends HTMLPurifier_Strat
     }
 
     function testPreserveInvalidImgWhenRemovalIsDisabled() {
-        $this->config->set('Core', 'RemoveInvalidImg', false);
+        $this->config->set('Core.RemoveInvalidImg', false);
         $this->assertResult('<img />');
     }
 
     function testTextifyCommentedScriptContents() {
-        $this->config->set('HTML', 'Trusted', true);
-        $this->config->set('Output', 'CommentScriptContents', false); // simplify output
+        $this->config->set('HTML.Trusted', true);
+        $this->config->set('Output.CommentScriptContents', false); // simplify output
         $this->assertResult(
 '<script type="text/javascript"><!--
 alert(<b>bold</b>);
@@ -80,7 +80,7 @@ alert(&lt;b&gt;bold&lt;/b&gt;);
     }
 
     function testRequiredAttributesTestNotPerformedOnEndTag() {
-        $this->config->set('HTML', 'DefinitionID',
+        $this->config->set('HTML.DefinitionID',
             'HTMLPurifier_Strategy_RemoveForeignElementsTest'.
             '->testRequiredAttributesTestNotPerformedOnEndTag');
         $def = $this->config->getHTMLDefinition(true);
@@ -89,17 +89,17 @@ alert(&lt;b&gt;bold&lt;/b&gt;);
     }
 
     function testPreserveCommentsWithHTMLTrusted() {
-        $this->config->set('HTML', 'Trusted', true);
+        $this->config->set('HTML.Trusted', true);
         $this->assertResult('<!-- foo -->');
     }
 
     function testRemoveTrailingHyphensInComment() {
-        $this->config->set('HTML', 'Trusted', true);
+        $this->config->set('HTML.Trusted', true);
         $this->assertResult('<!-- foo ----->', '<!-- foo -->');
     }
 
     function testCollapseDoubleHyphensInComment() {
-        $this->config->set('HTML', 'Trusted', true);
+        $this->config->set('HTML.Trusted', true);
         $this->assertResult('<!-- bo --- asdf--as -->', '<!-- bo - asdf-as -->');
     }
 

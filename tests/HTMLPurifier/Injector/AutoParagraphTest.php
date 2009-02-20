@@ -5,7 +5,7 @@ class HTMLPurifier_Injector_AutoParagraphTest extends HTMLPurifier_InjectorHarne
 
     function setup() {
         parent::setup();
-        $this->config->set('AutoFormat', 'AutoParagraph', true);
+        $this->config->set('AutoFormat.AutoParagraph', true);
     }
 
     function testSingleParagraph() {
@@ -385,7 +385,7 @@ Par1
     }
 
     function testNoParagraphWithInlineRootNode() {
-        $this->config->set('HTML', 'Parent', 'span');
+        $this->config->set('HTML.Parent', 'span');
         $this->assertResult(
 'Par
 
@@ -498,7 +498,7 @@ Bar</div>",
     }
 
     function testErrorNeeded() {
-        $this->config->set('HTML', 'Allowed', 'b');
+        $this->config->set('HTML.Allowed', 'b');
         $this->expectError('Cannot enable AutoParagraph injector because p is not allowed');
         $this->assertResult('<b>foobar</b>');
     }

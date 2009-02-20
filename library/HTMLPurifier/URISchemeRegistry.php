@@ -39,8 +39,8 @@ class HTMLPurifier_URISchemeRegistry
         $null = null; // for the sake of passing by reference
 
         // important, otherwise attacker could include arbitrary file
-        $allowed_schemes = $config->get('URI', 'AllowedSchemes');
-        if (!$config->get('URI', 'OverrideAllowedSchemes') &&
+        $allowed_schemes = $config->get('URI.AllowedSchemes');
+        if (!$config->get('URI.OverrideAllowedSchemes') &&
             !isset($allowed_schemes[$scheme])
         ) {
             return $null;

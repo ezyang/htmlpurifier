@@ -50,8 +50,8 @@ if ($page) {
 </div>
 <?php
     $config = HTMLPurifier_Config::createDefault();
-    $config->set('Attr', 'EnableID', true);
-    $config->set('HTML', 'Strict', $strict);
+    $config->set('Attr.EnableID', true);
+    $config->set('HTML.Strict', $strict);
     $purifier = new HTMLPurifier($config);
     echo $purifier->purify(file_get_contents("basic/$page.html"));
 } else {

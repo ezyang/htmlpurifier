@@ -5,12 +5,12 @@ class HTMLPurifier_HTMLModule_ScriptingTest extends HTMLPurifier_HTMLModuleHarne
 
     function setUp() {
         parent::setUp();
-        $this->config->set('HTML', 'Trusted', true);
-        $this->config->set('Output', 'CommentScriptContents', false);
+        $this->config->set('HTML.Trusted', true);
+        $this->config->set('Output.CommentScriptContents', false);
     }
 
     function testDefaultRemoval() {
-        $this->config->set('HTML', 'Trusted', false);
+        $this->config->set('HTML.Trusted', false);
         $this->assertResult(
             '<script type="text/javascript">foo();</script>', ''
         );

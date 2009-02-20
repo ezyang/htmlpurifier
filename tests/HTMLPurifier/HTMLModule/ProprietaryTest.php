@@ -5,7 +5,7 @@ class HTMLPurifier_HTMLModule_ProprietaryTest extends HTMLPurifier_HTMLModuleHar
 
     function setUp() {
         parent::setUp();
-        $this->config->set('HTML', 'Proprietary', true);
+        $this->config->set('HTML.Proprietary', true);
     }
 
     function testMarquee() {

@@ -24,7 +24,7 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
     }
 
     function testEscapeBlockInInline() {
-        $this->config->set('Core', 'EscapeInvalidChildren', true);
+        $this->config->set('Core.EscapeInvalidChildren', true);
         $this->assertResult(
             '<b><div>Illegal div.</div></b>',
             '<b>&lt;div&gt;Illegal div.&lt;/div&gt;</b>'
@@ -78,7 +78,7 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
     }
 
     function testChameleonEscapeInvalidBlockInInline() {
-        $this->config->set('Core', 'EscapeInvalidChildren', true);
+        $this->config->set('Core.EscapeInvalidChildren', true);
         $this->assertResult( // alt config
           '<span><ins><div>Not allowed!</div></ins></span>',
           '<span><ins>&lt;div&gt;Not allowed!&lt;/div&gt;</ins></span>'
@@ -94,19 +94,19 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
     }
 
     function testPreserveInlineNodeInInlineRootNode() {
-        $this->config->set('HTML', 'Parent', 'span');
+        $this->config->set('HTML.Parent', 'span');
         $this->assertResult('<b>Bold</b>');
     }
 
     function testRemoveBlockNodeInInlineRootNode() {
-        $this->config->set('HTML', 'Parent', 'span');
+        $this->config->set('HTML.Parent', 'span');
         $this->assertResult('<div>Reject</div>', 'Reject');
    }
 
    function testInvalidParentError() {
         // test fallback to div
-        $this->config->set('HTML', 'Parent', 'obviously-impossible');
-        $this->config->set('Cache', 'DefinitionImpl', null);
+        $this->config->set('HTML.Parent', 'obviously-impossible');
+        $this->config->set('Cache.DefinitionImpl', null);
         $this->expectError('Cannot use unrecognized element as parent');
         $this->assertResult('<div>Accept</div>');
     }
@@ -128,7 +128,7 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
     }
 
     function testStrictBlockquoteInHTML401() {
-        $this->config->set('HTML', 'Doctype', 'HTML 4.01 Strict');
+        $this->config->set('HTML.Doctype', 'HTML 4.01 Strict');
         $this->assertResult('<blockquote>text</blockquote>', '<blockquote><p>text</p></blockquote>');
     }
 

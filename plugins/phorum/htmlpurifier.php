@@ -274,7 +274,7 @@ function phorum_htmlpurifier_editor_after_subject() {
     </p><?php
             $purifier =& HTMLPurifier::getInstance();
             $config = $purifier->config;
-            if ($config->get('AutoFormat', 'AutoParagraph')) {
+            if ($config->get('AutoFormat.AutoParagraph')) {
                 ?><p>
                     <strong>Auto-paragraphing</strong> is enabled. Double
                     newlines will be converted to paragraphs; for single

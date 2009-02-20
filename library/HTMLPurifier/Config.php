@@ -69,6 +69,18 @@ class HTMLPurifier_Config
     protected $plist;
 
     /**
+     * Whether or not a set is taking place due to an
+     * alias lookup.
+     */
+    private $aliasMode;
+
+    /**
+     * Set to false if you do not want line and file numbers in errors
+     * (useful when unit testing)
+     */
+    public $chatty = true;
+
+    /**
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
      */
@@ -117,18 +129,21 @@ class HTMLPurifier_Config
      * @param $namespace String namespace
      * @param $key String key
      */
-    public function get($namespace, $directive) {
-        $key = "$namespace.$directive";
+    public function get($key, $a = null) {
+        if ($a !== null) {
+            $this->triggerError("Using deprecated API: use \$config->get('$key.$a') instead", E_USER_WARNING);
+            $key = "$key.$a";
+        }
         if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
         if (!isset($this->def->info[$key])) {
             // can't add % due to SimpleTest bug
-            trigger_error('Cannot retrieve value of undefined directive ' . htmlspecialchars($key),
+            $this->triggerError('Cannot retrieve value of undefined directive ' . htmlspecialchars($key),
                 E_USER_WARNING);
             return;
         }
         if (isset($this->def->info[$key]->isAlias)) {
             $d = $this->def->info[$key];
-            trigger_error('Cannot get value from aliased directive, use real name ' . $d->key,
+            $this->triggerError('Cannot get value from aliased directive, use real name ' . $d->key,
                 E_USER_ERROR);
             return;
         }
@@ -143,7 +158,7 @@ class HTMLPurifier_Config
         if (!$this->finalized) $this->autoFinalize ? $this->finalize() : $this->plist->squash(true);
         $full = $this->getAll();
         if (!isset($full[$namespace])) {
-            trigger_error('Cannot retrieve undefined namespace ' . htmlspecialchars($namespace),
+            $this->triggerError('Cannot retrieve undefined namespace ' . htmlspecialchars($namespace),
                 E_USER_WARNING);
             return;
         }
@@ -196,26 +211,34 @@ class HTMLPurifier_Config
      * @param $key String key
      * @param $value Mixed value
      */
-    public function set($namespace, $directive, $value, $from_alias = false) {
-        $key = "$namespace.$directive";
+    public function set($key, $value, $a = null) {
+        if (strpos($key, '.') === false) {
+            $namespace = $key;
+            $directive = $value;
+            $value = $a;
+            $key = "$key.$directive";
+            $this->triggerError("Using deprecated API: use \$config->set('$key', ...) instead", E_USER_NOTICE);
+        } else {
+            list($namespace) = explode('.', $key);
+        }
         if ($this->isFinalized('Cannot set directive after finalization')) return;
         if (!isset($this->def->info[$key])) {
-            trigger_error('Cannot set undefined directive ' . htmlspecialchars($key) . ' to value',
+            $this->triggerError('Cannot set undefined directive ' . htmlspecialchars($key) . ' to value',
                 E_USER_WARNING);
             return;
         }
         $def = $this->def->info[$key];
 
         if (isset($def->isAlias)) {
-            if ($from_alias) {
-                trigger_error('Double-aliases not allowed, please fix '.
+            if ($this->aliasMode) {
+                $this->triggerError('Double-aliases not allowed, please fix '.
                     'ConfigSchema bug with' . $key, E_USER_ERROR);
                 return;
             }
-            list($alias_namespace, $alias_directive) = explode('.', $def->key, 2);
-            $this->set($alias_namespace, $alias_directive,
-                       $value, true);
-            trigger_error("$key is an alias, preferred directive name is {$def->key}", E_USER_NOTICE);
+            $this->aliasMode = true;
+            $this->set($def->key, $value);
+            $this->aliasMode = false;
+            $this->triggerError("$key is an alias, preferred directive name is {$def->key}", E_USER_NOTICE);
             return;
         }
 
@@ -233,7 +256,7 @@ class HTMLPurifier_Config
         try {
             $value = $this->parser->parse($value, $type, $allow_null);
         } catch (HTMLPurifier_VarParserException $e) {
-            trigger_error('Value for ' . $key . ' is of invalid type, should be ' . HTMLPurifier_VarParser::getTypeName($type), E_USER_WARNING);
+            $this->triggerError('Value for ' . $key . ' is of invalid type, should be ' . HTMLPurifier_VarParser::getTypeName($type), E_USER_WARNING);
             return;
         }
         if (is_string($value) && is_object($def)) {
@@ -243,7 +266,7 @@ class HTMLPurifier_Config
             }
             // check to see if the value is allowed
             if (isset($def->allowed) && !isset($def->allowed[$value])) {
-                trigger_error('Value not supported, valid values are: ' .
+                $this->triggerError('Value not supported, valid values are: ' .
                     $this->_listify($def->allowed), E_USER_WARNING);
                 return;
             }
@@ -330,7 +353,7 @@ class HTMLPurifier_Config
         }
         // quick abort if raw
         if ($raw) {
-            if (is_null($this->get($type, 'DefinitionID'))) {
+            if (is_null($this->get($type . '.DefinitionID'))) {
                 // fatally error out if definition ID not set
                 throw new HTMLPurifier_Exception("Cannot retrieve raw version without specifying %$type.DefinitionID");
             }
@@ -354,12 +377,12 @@ class HTMLPurifier_Config
             $key = str_replace('_', '.', $key);
             if (strpos($key, '.') !== false) {
                 list($namespace, $directive) = explode(".", $key, 2);
-                $this->set($namespace, $directive, $value);
+                $this->set($key, $value);
             } else {
                 $namespace = $key;
                 $namespace_values = $value;
                 foreach ($namespace_values as $directive => $value) {
-                    $this->set($namespace, $directive, $value);
+                    $this->set($namespace .'.'. $directive, $value);
                 }
             }
         }
@@ -472,7 +495,7 @@ class HTMLPurifier_Config
      */
     public function isFinalized($error = false) {
         if ($this->finalized && $error) {
-            trigger_error($error, E_USER_ERROR);
+            $this->triggerError($error, E_USER_ERROR);
         }
         return $this->finalized;
     }
@@ -490,6 +513,23 @@ class HTMLPurifier_Config
      */
     public function finalize() {
         $this->finalized = true;
+    }
+
+    /**
+     * Produces a nicely formatted error message by supplying the
+     * stack frame information from two levels up and OUTSIDE of
+     * HTMLPurifier_Config.
+     */
+    protected function triggerError($msg, $no) {
+        // determine previous stack frame
+        $backtrace = debug_backtrace();
+        if ($this->chatty && isset($backtrace[1])) {
+            $frame = $backtrace[1];
+            $extra = " on line {$frame['line']} in file {$frame['file']}";
+        } else {
+            $extra = '';
+        }
+        trigger_error($msg . $extra, $no);
     }
 
 }

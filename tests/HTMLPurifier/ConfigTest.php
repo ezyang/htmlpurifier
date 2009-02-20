@@ -25,48 +25,49 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
+        $config->chatty = false;
 
         // test default value retrieval
-        $this->assertIdentical($config->get('Element', 'Abbr'), 'H');
-        $this->assertIdentical($config->get('Element', 'Name'), 'hydrogen');
-        $this->assertIdentical($config->get('Element', 'Number'), 1);
-        $this->assertIdentical($config->get('Element', 'Mass'), 1.00794);
-        $this->assertIdentical($config->get('Element', 'Radioactive'), false);
-        $this->assertIdentical($config->get('Element', 'Isotopes'), array(1 => true, 2 => true, 3 => true));
-        $this->assertIdentical($config->get('Element', 'Traits'), array('nonmetallic', 'odorless', 'flammable'));
-        $this->assertIdentical($config->get('Element', 'IsotopeNames'), array(1 => 'protium', 2 => 'deuterium', 3 => 'tritium'));
-        $this->assertIdentical($config->get('Element', 'Object'), new stdClass());
+        $this->assertIdentical($config->get('Element.Abbr'), 'H');
+        $this->assertIdentical($config->get('Element.Name'), 'hydrogen');
+        $this->assertIdentical($config->get('Element.Number'), 1);
+        $this->assertIdentical($config->get('Element.Mass'), 1.00794);
+        $this->assertIdentical($config->get('Element.Radioactive'), false);
+        $this->assertIdentical($config->get('Element.Isotopes'), array(1 => true, 2 => true, 3 => true));
+        $this->assertIdentical($config->get('Element.Traits'), array('nonmetallic', 'odorless', 'flammable'));
+        $this->assertIdentical($config->get('Element.IsotopeNames'), array(1 => 'protium', 2 => 'deuterium', 3 => 'tritium'));
+        $this->assertIdentical($config->get('Element.Object'), new stdClass());
 
         // test setting values
-        $config->set('Element', 'Abbr', 'Pu');
-        $config->set('Element', 'Name', 'PLUTONIUM'); // test decaps
-        $config->set('Element', 'Number', '94'); // test parsing
-        $config->set('Element', 'Mass', '244.'); // test parsing
-        $config->set('Element', 'Radioactive', true);
-        $config->set('Element', 'Isotopes', array(238, 239)); // test inversion
-        $config->set('Element', 'Traits', 'nuclear, heavy, actinide'); // test parsing
-        $config->set('Element', 'IsotopeNames', array(238 => 'Plutonium-238', 239 => 'Plutonium-239'));
-        $config->set('Element', 'Object', false); // unmodeled
+        $config->set('Element.Abbr', 'Pu');
+        $config->set('Element.Name', 'PLUTONIUM'); // test decaps
+        $config->set('Element.Number', '94'); // test parsing
+        $config->set('Element.Mass', '244.'); // test parsing
+        $config->set('Element.Radioactive', true);
+        $config->set('Element.Isotopes', array(238, 239)); // test inversion
+        $config->set('Element.Traits', 'nuclear, heavy, actinide'); // test parsing
+        $config->set('Element.IsotopeNames', array(238 => 'Plutonium-238', 239 => 'Plutonium-239'));
+        $config->set('Element.Object', false); // unmodeled
 
         $this->expectError('Cannot set undefined directive Element.Metal to value');
-        $config->set('Element', 'Metal', true);
+        $config->set('Element.Metal', true);
 
         $this->expectError('Value for Element.Radioactive is of invalid type, should be bool');
-        $config->set('Element', 'Radioactive', 'very');
+        $config->set('Element.Radioactive', 'very');
 
         // test value retrieval
-        $this->assertIdentical($config->get('Element', 'Abbr'), 'Pu');
-        $this->assertIdentical($config->get('Element', 'Name'), 'plutonium');
-        $this->assertIdentical($config->get('Element', 'Number'), 94);
-        $this->assertIdentical($config->get('Element', 'Mass'), 244.);
-        $this->assertIdentical($config->get('Element', 'Radioactive'), true);
-        $this->assertIdentical($config->get('Element', 'Isotopes'), array(238 => true, 239 => true));
-        $this->assertIdentical($config->get('Element', 'Traits'), array('nuclear', 'heavy', 'actinide'));
-        $this->assertIdentical($config->get('Element', 'IsotopeNames'), array(238 => 'Plutonium-238', 239 => 'Plutonium-239'));
-        $this->assertIdentical($config->get('Element', 'Object'), false);
+        $this->assertIdentical($config->get('Element.Abbr'), 'Pu');
+        $this->assertIdentical($config->get('Element.Name'), 'plutonium');
+        $this->assertIdentical($config->get('Element.Number'), 94);
+        $this->assertIdentical($config->get('Element.Mass'), 244.);
+        $this->assertIdentical($config->get('Element.Radioactive'), true);
+        $this->assertIdentical($config->get('Element.Isotopes'), array(238 => true, 239 => true));
+        $this->assertIdentical($config->get('Element.Traits'), array('nuclear', 'heavy', 'actinide'));
+        $this->assertIdentical($config->get('Element.IsotopeNames'), array(238 => 'Plutonium-238', 239 => 'Plutonium-239'));
+        $this->assertIdentical($config->get('Element.Object'), false);
 
         $this->expectError('Cannot retrieve value of undefined directive Element.Metal');
-        $config->get('Element', 'Metal');
+        $config->get('Element.Metal');
 
     }
 
@@ -90,31 +91,32 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
+        $config->chatty = false;
 
         // case sensitive
 
-        $config->set('Instrument', 'Manufacturer', 'Vandoren');
-        $this->assertIdentical($config->get('Instrument', 'Manufacturer'), 'Vandoren');
+        $config->set('Instrument.Manufacturer', 'Vandoren');
+        $this->assertIdentical($config->get('Instrument.Manufacturer'), 'Vandoren');
 
-        $config->set('Instrument', 'Manufacturer', 'Selmer');
-        $this->assertIdentical($config->get('Instrument', 'Manufacturer'), 'Conn-Selmer');
+        $config->set('Instrument.Manufacturer', 'Selmer');
+        $this->assertIdentical($config->get('Instrument.Manufacturer'), 'Conn-Selmer');
 
         $this->expectError('Value not supported, valid values are: Yamaha, Conn-Selmer, Vandoren, Laubin, Buffet, other');
-        $config->set('Instrument', 'Manufacturer', 'buffet');
+        $config->set('Instrument.Manufacturer', 'buffet');
 
         // case insensitive
 
-        $config->set('Instrument', 'Family', 'brass');
-        $this->assertIdentical($config->get('Instrument', 'Family'), 'brass');
+        $config->set('Instrument.Family', 'brass');
+        $this->assertIdentical($config->get('Instrument.Family'), 'brass');
 
-        $config->set('Instrument', 'Family', 'PERCUSSION');
-        $this->assertIdentical($config->get('Instrument', 'Family'), 'percussion');
+        $config->set('Instrument.Family', 'PERCUSSION');
+        $this->assertIdentical($config->get('Instrument.Family'), 'percussion');
 
-        $config->set('Instrument', 'Family', 'synth');
-        $this->assertIdentical($config->get('Instrument', 'Family'), 'electronic');
+        $config->set('Instrument.Family', 'synth');
+        $this->assertIdentical($config->get('Instrument.Family'), 'electronic');
 
-        $config->set('Instrument', 'Family', 'Synth');
-        $this->assertIdentical($config->get('Instrument', 'Family'), 'electronic');
+        $config->set('Instrument.Family', 'Synth');
+        $this->assertIdentical($config->get('Instrument.Family'), 'electronic');
 
     }
 
@@ -125,16 +127,17 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
+        $config->chatty = false;
 
-        $config->set('ReportCard', 'English', 'B-');
-        $this->assertIdentical($config->get('ReportCard', 'English'), 'B-');
+        $config->set('ReportCard.English', 'B-');
+        $this->assertIdentical($config->get('ReportCard.English'), 'B-');
 
-        $config->set('ReportCard', 'English', null); // not yet graded
-        $this->assertIdentical($config->get('ReportCard', 'English'), null);
+        $config->set('ReportCard.English', null); // not yet graded
+        $this->assertIdentical($config->get('ReportCard.English'), null);
 
         // error
         $this->expectError('Value for ReportCard.Absences is of invalid type, should be int');
-        $config->set('ReportCard', 'Absences', null);
+        $config->set('ReportCard.Absences', null);
 
     }
 
@@ -145,15 +148,16 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
+        $config->chatty = false;
 
-        $this->assertIdentical($config->get('Home', 'Rug'), 3);
+        $this->assertIdentical($config->get('Home.Rug'), 3);
 
         $this->expectError('Cannot get value from aliased directive, use real name Home.Rug');
-        $config->get('Home', 'Carpet');
+        $config->get('Home.Carpet');
 
         $this->expectError('Home.Carpet is an alias, preferred directive name is Home.Rug');
-        $config->set('Home', 'Carpet', 999);
-        $this->assertIdentical($config->get('Home', 'Rug'), 999);
+        $config->set('Home.Carpet', 999);
+        $this->assertIdentical($config->get('Home.Rug'), 999);
 
     }
 
@@ -166,6 +170,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
+        $config->chatty = false;
 
         // grab a namespace
         $this->assertIdentical(
@@ -193,9 +198,9 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         $config->loadIni(dirname(__FILE__) . '/ConfigTest-loadIni.ini');
 
-        $this->assertIdentical($config->get('Shortcut', 'Copy'), 'q');
-        $this->assertIdentical($config->get('Shortcut', 'Paste'), 'p');
-        $this->assertIdentical($config->get('Shortcut', 'Cut'), 't');
+        $this->assertIdentical($config->get('Shortcut.Copy'), 'q');
+        $this->assertIdentical($config->get('Shortcut.Paste'), 'p');
+        $this->assertIdentical($config->get('Shortcut.Cut'), 't');
 
     }
 
@@ -205,7 +210,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         // generation routines have dependencies on configuration values
 
         $config = HTMLPurifier_Config::createDefault();
-        $config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
+        $config->set('HTML.Doctype', 'XHTML 1.0 Strict');
         $config->autoFinalize = false;
 
         $def = $config->getCSSDefinition();
@@ -219,15 +224,15 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         $old_def = clone $def2;
 
-        $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
+        $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
         $def = $config->getHTMLDefinition();
         $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
         $this->assertNotEqual($def, $old_def);
         $this->assertTrue($def->setup);
 
         // test retrieval of raw definition
-        $config->set('HTML', 'DefinitionID', 'HTMLPurifier_ConfigTest->test_getHTMLDefinition()');
-        $config->set('HTML', 'DefinitionRev', 3);
+        $config->set('HTML.DefinitionID', 'HTMLPurifier_ConfigTest->test_getHTMLDefinition()');
+        $config->set('HTML.DefinitionRev', 3);
         $def = $config->getHTMLDefinition(true);
         $this->assertNotEqual($def, $old_def);
         $this->assertEqual(false, $def->setup);
@@ -268,10 +273,10 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $config_loadabbr = new HTMLPurifier_Config($this->schema);
         $config_loadfull = new HTMLPurifier_Config($this->schema);
 
-        $config_manual->set('Zoo', 'Aadvark', 3);
-        $config_manual->set('Zoo', 'Boar', 5);
-        $config_manual->set('Zoo', 'Camel', 2000); // that's a lotta camels!
-        $config_manual->set('Zoo', 'Others', array('Peacock', 'Dodo')); // wtf!
+        $config_manual->set('Zoo.Aadvark', 3);
+        $config_manual->set('Zoo.Boar', 5);
+        $config_manual->set('Zoo.Camel', 2000); // that's a lotta camels!
+        $config_manual->set('Zoo.Others', array('Peacock', 'Dodo')); // wtf!
 
         // condensed form
         $config_loadabbr->loadArray(array(
@@ -302,7 +307,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->schema->add('Cake.Flavor', 'vanilla', 'string', false);
 
         $config = new HTMLPurifier_Config($this->schema);
-        $config->set('Cake', 'Sprinkles', 42);
+        $config->set('Cake.Sprinkles', 42);
 
         // test flat pass-through
         $created_config = HTMLPurifier_Config::create($config, $this->schema);
@@ -326,13 +331,14 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         $config = new HTMLPurifier_Config($this->schema);
         $config->autoFinalize = false;
+        $config->chatty = false;
 
-        $config->set('Poem', 'Meter', 'irregular');
+        $config->set('Poem.Meter', 'irregular');
 
         $config->finalize();
 
         $this->expectError('Cannot set directive after finalization');
-        $config->set('Poem', 'Meter', 'vedic');
+        $config->set('Poem.Meter', 'vedic');
 
         $this->expectError('Cannot load directives after finalization');
         $config->loadArray(array('Poem.Meter' => 'octosyllable'));
@@ -422,6 +428,15 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
+    function testDeprecatedAPI() {
+        $this->schema->add('Foo.Bar', 2, 'int', false);
+        $config = new HTMLPurifier_Config($this->schema);
+        $config->chatty = false;
+        $this->expectError('Using deprecated API: use $config->set(\'Foo.Bar\', ...) instead');
+        $config->set('Foo', 'Bar', 4);
+        $this->expectError('Using deprecated API: use $config->get(\'Foo.Bar\') instead');
+        $this->assertIdentical($config->get('Foo', 'Bar'), 4);
+    }
 }
 
 // vim: et sw=4 sts=4

@@ -5,7 +5,7 @@ class HTMLPurifier_HTMLModule_RubyTest extends HTMLPurifier_HTMLModuleHarness
 
     function setUp() {
         parent::setUp();
-        $this->config->set('HTML', 'Doctype', 'XHTML 1.1');
+        $this->config->set('HTML.Doctype', 'XHTML 1.1');
     }
 
     function testBasicUse() {

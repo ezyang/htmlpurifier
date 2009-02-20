@@ -5,7 +5,7 @@ class HTMLPurifier_HTMLModule_SafeObjectTest extends HTMLPurifier_HTMLModuleHarn
 
     function setUp() {
         parent::setUp();
-        $this->config->set('HTML', 'DefinitionID', 'HTMLPurifier_HTMLModule_SafeObjectTest');
+        $this->config->set('HTML.DefinitionID', 'HTMLPurifier_HTMLModule_SafeObjectTest');
         $def = $this->config->getHTMLDefinition(true);
         $def->manager->addModule('SafeObject');
     }

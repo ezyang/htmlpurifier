@@ -15,7 +15,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
 
     public function setUp() {
         parent::setUp();
-        $this->config->set('Output', 'Newline', "\n");
+        $this->config->set('Output.Newline', "\n");
     }
 
     /**
@@ -138,7 +138,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
 
 
     function test_generateAttributes_minimized() {
-        $this->config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
+        $this->config->set('HTML.Doctype', 'HTML 4.01 Transitional');
         $this->assertGenerateAttributes(
             array('compact' => 'compact'), 'compact', 'menu'
         );
@@ -197,7 +197,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
     }
 
     function test_generateFromTokens_Scripting_disableWrapper() {
-        $this->config->set('Output', 'CommentScriptContents', false);
+        $this->config->set('Output.CommentScriptContents', false);
         $this->assertGeneration(
             array(
                 new HTMLPurifier_Token_Start('script'),
@@ -209,7 +209,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
     }
 
     function test_generateFromTokens_XHTMLoff() {
-        $this->config->set('HTML', 'XHTML', false);
+        $this->config->set('HTML.XHTML', false);
 
         // omit trailing slash
         $this->assertGeneration(
@@ -236,8 +236,8 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         // just don't test; Tidy is exploding on me.
         return;
 
-        $this->config->set('Core', 'TidyFormat', true);
-        $this->config->set('Output', 'Newline', "\n");
+        $this->config->set('Core.TidyFormat', true);
+        $this->config->set('Output.Newline', "\n");
 
         // nice wrapping please
         $this->assertGeneration(
@@ -252,7 +252,7 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
     }
 
     function test_generateFromTokens_sortAttr() {
-        $this->config->set('Output', 'SortAttr', true);
+        $this->config->set('Output.SortAttr', true);
 
         $this->assertGeneration(
             array( new HTMLPurifier_Token_Start('p', array('b'=>'c', 'a'=>'d')) ),

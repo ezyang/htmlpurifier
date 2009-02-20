@@ -5,9 +5,9 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
 
     function setUp() {
         parent::setUp();
-        $this->config->set('HTML', 'Trusted', true);
-        $this->config->set('Attr', 'EnableID', true);
-        $this->config->set('Cache', 'DefinitionImpl', null);
+        $this->config->set('HTML.Trusted', true);
+        $this->config->set('Attr.EnableID', true);
+        $this->config->set('Cache.DefinitionImpl', null);
     }
 
     function testBasicUse() {

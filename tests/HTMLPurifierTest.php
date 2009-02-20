@@ -28,8 +28,8 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
     }
 
     function testMakeAbsolute() {
-        $this->config->set('URI', 'Base', 'http://example.com/bar/baz.php');
-        $this->config->set('URI', 'MakeAbsolute', true);
+        $this->config->set('URI.Base', 'http://example.com/bar/baz.php');
+        $this->config->set('URI.MakeAbsolute', true);
         $this->assertPurification(
             '<a href="foo.txt">Foobar</a>',
             '<a href="http://example.com/bar/foo.txt">Foobar</a>'

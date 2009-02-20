@@ -18,7 +18,7 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
     }
 
     function testAttributesTransformedGlobalPre() {
-        $this->config->set('HTML', 'DefinitionID',
+        $this->config->set('HTML.DefinitionID',
           'HTMLPurifier_AttrValidator_ErrorsTest::testAttributesTransformedGlobalPre');
         $def = $this->config->getHTMLDefinition(true);
         generate_mock_once('HTMLPurifier_AttrTransform');
@@ -39,7 +39,7 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
     }
 
     function testAttributesTransformedLocalPre() {
-        $this->config->set('HTML', 'TidyLevel', 'heavy');
+        $this->config->set('HTML.TidyLevel', 'heavy');
         $input = array('align' => 'right');
         $output = array('style' => 'text-align:right;');
         $token = new HTMLPurifier_Token_Start('p', $input, 1);

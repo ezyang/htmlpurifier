@@ -33,7 +33,7 @@ look something like %Filter.YouTube.Blacklist. While you could technically
 set it with ('HTML', 'YouTube.Blacklist'), the logical extension
 ('HTML', 'YouTube', 'Blacklist') does not work.
 
-[more changes coming]
+The old API will still work, but will emit E_USER_NOTICEs.
 
 
 

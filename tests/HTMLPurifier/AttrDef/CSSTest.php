@@ -116,7 +116,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
     }
 
     function testProprietary() {
-        $this->config->set('CSS', 'Proprietary', true);
+        $this->config->set('CSS.Proprietary', true);
 
         $this->assertDef('scrollbar-arrow-color:#ff0;');
         $this->assertDef('scrollbar-base-color:#ff6347;');
@@ -133,12 +133,12 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
     }
 
     function testImportant() {
-        $this->config->set('CSS', 'AllowImportant', true);
+        $this->config->set('CSS.AllowImportant', true);
         $this->assertDef('float:left !important;');
     }
 
     function testTricky() {
-        $this->config->set('CSS', 'AllowTricky', true);
+        $this->config->set('CSS.AllowTricky', true);
         $this->assertDef('display:none;');
         $this->assertDef('visibility:visible;');
         $this->assertDef('overflow:scroll;');

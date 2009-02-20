@@ -15,7 +15,7 @@ class HTMLPurifier_HTMLT extends HTMLPurifier_Harness
         if (isset($hash['SKIPIF'])) {
             if (eval($hash['SKIPIF'])) return;
         }
-        $this->config->set('Output', 'Newline', "\n");
+        $this->config->set('Output.Newline', "\n");
         if (isset($hash['INI'])) {
             // there should be a more efficient way than writing another
             // ini file every time... probably means building a parser for

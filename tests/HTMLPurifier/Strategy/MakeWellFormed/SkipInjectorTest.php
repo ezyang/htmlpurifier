@@ -5,7 +5,7 @@ class HTMLPurifier_Strategy_MakeWellFormed_SkipInjectorTest extends HTMLPurifier
     function setUp() {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_MakeWellFormed();
-        $this->config->set('AutoFormat', 'Custom', array(
+        $this->config->set('AutoFormat.Custom', array(
             new HTMLPurifier_Strategy_MakeWellFormed_SkipInjector()
         ));
     }
@@ -16,7 +16,7 @@ class HTMLPurifier_Strategy_MakeWellFormed_SkipInjectorTest extends HTMLPurifier
         $this->assertResult('<br />', '<br /><br />');
     }
     function testMultiplyMultiply() {
-        $this->config->set('AutoFormat', 'Custom', array(
+        $this->config->set('AutoFormat.Custom', array(
             new HTMLPurifier_Strategy_MakeWellFormed_SkipInjector(),
             new HTMLPurifier_Strategy_MakeWellFormed_SkipInjector()
         ));

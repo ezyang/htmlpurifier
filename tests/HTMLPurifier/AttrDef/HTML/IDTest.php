@@ -8,7 +8,7 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 
         $id_accumulator = new HTMLPurifier_IDAccumulator();
         $this->context->register('IDAccumulator', $id_accumulator);
-        $this->config->set('Attr', 'EnableID', true);
+        $this->config->set('Attr.EnableID', true);
         $this->def = new HTMLPurifier_AttrDef_HTML_ID();
 
     }
@@ -37,7 +37,7 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 
     function testPrefix() {
 
-        $this->config->set('Attr', 'IDPrefix', 'user_');
+        $this->config->set('Attr.IDPrefix', 'user_');
 
         $this->assertDef('alpha', 'user_alpha');
         $this->assertDef('<asa', false);
@@ -52,8 +52,8 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 
     function testTwoPrefixes() {
 
-        $this->config->set('Attr', 'IDPrefix', 'user_');
-        $this->config->set('Attr', 'IDPrefixLocal', 'story95_');
+        $this->config->set('Attr.IDPrefix', 'user_');
+        $this->config->set('Attr.IDPrefixLocal', 'story95_');
 
         $this->assertDef('alpha', 'user_story95_alpha');
         $this->assertDef('<asa', false);
@@ -66,8 +66,8 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 
     function testLocalPrefixWithoutMainPrefix() {
         // no effect when IDPrefix isn't set
-        $this->config->set('Attr', 'IDPrefix', '');
-        $this->config->set('Attr', 'IDPrefixLocal', 'story95_');
+        $this->config->set('Attr.IDPrefix', '');
+        $this->config->set('Attr.IDPrefixLocal', 'story95_');
         $this->expectError('%Attr.IDPrefixLocal cannot be used unless '.
             '%Attr.IDPrefix is set');
         $this->assertDef('amherst');
@@ -96,7 +96,7 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 
     function testRegexp() {
 
-        $this->config->set('Attr', 'IDBlacklistRegexp', '/^g_/');
+        $this->config->set('Attr.IDBlacklistRegexp', '/^g_/');
 
         $this->assertDef('good_id');
         $this->assertDef('g_bad_id', false);

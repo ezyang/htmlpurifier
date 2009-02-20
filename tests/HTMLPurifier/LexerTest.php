@@ -24,26 +24,26 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
     // HTMLPurifier_Lexer::create() --------------------------------------------
 
     function test_create() {
-        $this->config->set('Core', 'MaintainLineNumbers', true);
+        $this->config->set('Core.MaintainLineNumbers', true);
         $lexer = HTMLPurifier_Lexer::create($this->config);
         $this->assertIsA($lexer, 'HTMLPurifier_Lexer_DirectLex');
     }
 
     function test_create_objectLexerImpl() {
-        $this->config->set('Core', 'LexerImpl', new HTMLPurifier_Lexer_DirectLex());
+        $this->config->set('Core.LexerImpl', new HTMLPurifier_Lexer_DirectLex());
         $lexer = HTMLPurifier_Lexer::create($this->config);
         $this->assertIsA($lexer, 'HTMLPurifier_Lexer_DirectLex');
     }
 
     function test_create_unknownLexer() {
-        $this->config->set('Core', 'LexerImpl', 'AsdfAsdf');
+        $this->config->set('Core.LexerImpl', 'AsdfAsdf');
         $this->expectException(new HTMLPurifier_Exception('Cannot instantiate unrecognized Lexer type AsdfAsdf'));
         HTMLPurifier_Lexer::create($this->config);
     }
 
     function test_create_incompatibleLexer() {
-        $this->config->set('Core', 'LexerImpl', 'DOMLex');
-        $this->config->set('Core', 'MaintainLineNumbers', true);
+        $this->config->set('Core.LexerImpl', 'DOMLex');
+        $this->config->set('Core.MaintainLineNumbers', true);
         $this->expectException(new HTMLPurifier_Exception('Cannot use lexer that does not support line numbers with Core.MaintainLineNumbers or Core.CollectErrors (use DirectLex instead)'));
         HTMLPurifier_Lexer::create($this->config);
     }
@@ -491,7 +491,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
     }
 
     function test_tokenizeHTML_scriptCDATAContents() {
-        $this->config->set('HTML', 'Trusted', true);
+        $this->config->set('HTML.Trusted', true);
         $this->assertTokenization(
             'Foo: <script>alert("<foo>");</script>',
             array(
