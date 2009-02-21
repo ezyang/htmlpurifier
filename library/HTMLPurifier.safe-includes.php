@@ -117,6 +117,7 @@ require_once $__dir . '/HTMLPurifier/AttrTransform/Input.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/Lang.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/Length.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/Name.php';
+require_once $__dir . '/HTMLPurifier/AttrTransform/NameSync.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/SafeEmbed.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/SafeObject.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/SafeParam.php';

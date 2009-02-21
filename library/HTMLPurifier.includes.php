@@ -123,6 +123,7 @@ require 'HTMLPurifier/AttrTransform/Input.php';
 require 'HTMLPurifier/AttrTransform/Lang.php';
 require 'HTMLPurifier/AttrTransform/Length.php';
 require 'HTMLPurifier/AttrTransform/Name.php';
+require 'HTMLPurifier/AttrTransform/NameSync.php';
 require 'HTMLPurifier/AttrTransform/SafeEmbed.php';
 require 'HTMLPurifier/AttrTransform/SafeObject.php';
 require 'HTMLPurifier/AttrTransform/SafeParam.php';

@@ -10,7 +10,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.0.0, unknown release date
-(no items yet)
+! More robust support for name="" and id=""
 
 3.3.0, released 2009-02-16
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.

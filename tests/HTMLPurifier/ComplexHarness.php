@@ -81,7 +81,7 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
         $this->assertIdentical($expect, $result);
 
         if ($expect !== $result) {
-            echo '<pre>' . htmlspecialchars($result) . '</pre>';
+            echo '<pre>' . var_dump($result) . '</pre>';
         }
 
     }
