@@ -8,7 +8,7 @@ class HTMLPurifier_AttrTransform_NameSyncTest extends HTMLPurifier_AttrTransform
         $this->obj = new HTMLPurifier_AttrTransform_NameSync();
         $this->accumulator = new HTMLPurifier_IDAccumulator();
         $this->context->register('IDAccumulator', $this->accumulator);
-        $this->config->set('Attr', 'EnableID', true);
+        $this->config->set('Attr.EnableID', true);
     }
 
     function testEmpty() {
