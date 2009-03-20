@@ -17,6 +17,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! HTMLPurifier_Config::inherit($config) allows you to inherit one
   configuration, and have changes to that configuration be propagated
   to all of its children.
+! Implement %HTML.Attr.Name.UseCDATA, which relaxes validation rules on
+  the name attribute when set. Use with care. Thanks Ian Cook for
+  sponsoring.
 
 3.3.0, released 2009-02-16
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.
