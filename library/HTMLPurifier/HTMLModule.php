@@ -210,7 +210,7 @@ class HTMLPurifier_HTMLModule
             if (empty($attr_includes)) $attr_includes = array();
             else $attr_includes = array($attr_includes);
         }
-        $attr[0] = $attr_includes;
+        array_unshift( $attr, $attr_includes );
     }
 
     /**
