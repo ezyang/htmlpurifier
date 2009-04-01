@@ -23,6 +23,7 @@ class HTMLPurifier_AttrTypes
         $this->info['ID']       = new HTMLPurifier_AttrDef_HTML_ID();
         $this->info['Length']   = new HTMLPurifier_AttrDef_HTML_Length();
         $this->info['MultiLength'] = new HTMLPurifier_AttrDef_HTML_MultiLength();
+        $this->info['Name']     = new HTMLPurifier_AttrDef_HTML_Name();
         $this->info['NMTOKENS'] = new HTMLPurifier_AttrDef_HTML_Nmtokens();
         $this->info['Pixels']   = new HTMLPurifier_AttrDef_HTML_Pixels();
         $this->info['Text']     = new HTMLPurifier_AttrDef_Text();
