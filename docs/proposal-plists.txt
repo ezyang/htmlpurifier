@@ -215,3 +215,4 @@ this is to squash all of the parents.
 
 But I don't need iteration.
 
+    vim: et sw=4 sts=4

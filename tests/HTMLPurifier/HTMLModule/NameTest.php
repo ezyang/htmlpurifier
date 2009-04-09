@@ -28,3 +28,5 @@ class HTMLPurifier_HTMLModule_NameTest extends HTMLPurifier_HTMLModuleHarness
     }
 
 }
+
+// vim: et sw=4 sts=4

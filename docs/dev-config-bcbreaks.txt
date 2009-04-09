@@ -1,7 +1,7 @@
 
 Configuration Backwards-Compatibility Breaks
 
-In version 3.3.0, the configuration subsystem (composed of the outwards
+In version 4.0.0, the configuration subsystem (composed of the outwards
 facing Config class, as well as the ConfigSchema and ConfigSchema_Interchange
 subsystems), was significantly revamped to make use of property lists.
 While most of the changes are internal, some internal APIs were changed for the
@@ -76,4 +76,4 @@ Any method that took $namespace, $directive now takes $key.
 
 Removed.
 
-
+    vim: et sw=4 sts=4

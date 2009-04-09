@@ -31,4 +31,4 @@ foreach ($raw_files as $file) {
     file_put_contents($file, $contents);
 }
 
-
+// vim: et sw=4 sts=4

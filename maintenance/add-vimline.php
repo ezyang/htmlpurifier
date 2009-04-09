@@ -21,6 +21,7 @@ foreach ($files as $file) {
         !is_file($file) ||
         prefix_is('./docs/doxygen', $file) ||
         prefix_is('./library/standalone', $file) ||
+        prefix_is('./docs/specimens', $file) ||
         postfix_is('.ser', $file) ||
         postfix_is('.tgz', $file) ||
         postfix_is('.patch', $file) ||
@@ -38,6 +39,7 @@ foreach ($files as $file) {
         postfix_is('configdoc/usage.xml', $file) ||
         postfix_is('library/HTMLPurifier.includes.php', $file) ||
         postfix_is('library/HTMLPurifier.safe-includes.php', $file) ||
+        postfix_is('smoketests/xssAttacks.xml', $file) ||
         // phpt files
         postfix_is('.diff', $file) ||
         postfix_is('.exp', $file) ||
@@ -71,7 +73,7 @@ foreach ($files as $file) {
         case '.xsl':
         case '.xml':
         case '.htc':
-            $line = '<!-- %s -->';
+            $line = "<!-- %s\n-->";
             break;
         case '.htmlt':
             $no_nl = true;

@@ -160,27 +160,14 @@
 </p>
 
 <pre>$uri = $config->getDefinition('URI');
-$uri->addFilter(new HTMLPurifier_URIFilter_<strong>NameOfFilter</strong>());</pre>
+$uri->addFilter(new HTMLPurifier_URIFilter_<strong>NameOfFilter</strong>(), $config);</pre>
 
 <p>
-  If you want to be really fancy, you can define a configuration directive
-  for your filter and have HTML Purifier automatically manage whether or
-  not your filter gets loaded or not (this is how internal filters manage
-  things):
+    After adding a filter, you won't be able to set configuration directives.
+    Structure your code accordingly.
 </p>
 
-<pre>HTMLPurifier_ConfigSchema::define(
-    'URI', '<strong>NameOfFilter</strong>', false, 'bool',
-    '<strong>What your filter does.</strong>'
-);
-$uri = $config->getDefinition('URI', true);
-$uri->registerFilter(new HTMLPurifier_URIFilter_<strong>NameOfFilter</strong>());
-</pre>
-
-<p>
-  Now, your filter will only be called when %URI.<strong>NameOfFilter</strong>
-  is set to true.
-</p>
+<!-- XXX: link to new documentation system -->
 
 <h2>Post-filter</h2>
 
@@ -213,4 +200,5 @@ $uri->registerFilter(new HTMLPurifier_URIFilter_<strong>NameOfFilter</strong>())
 
 </body></html>
 
-<!-- vim: et sw=4 sts=4 -->
+<!-- vim: et sw=4 sts=4
+-->
