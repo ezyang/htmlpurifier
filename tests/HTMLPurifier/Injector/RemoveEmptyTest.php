@@ -54,6 +54,27 @@ class HTMLPurifier_Injector_RemoveEmptyTest extends HTMLPurifier_InjectorHarness
         $this->assertResult('<b> <i> <u> </u> </i> </b>', '');
     }
 
+    function testRemoveNbsp() {
+        $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
+        $this->assertResult('<b>&nbsp;</b>', '');
+    }
+
+    function testRemoveNbspMix() {
+        $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
+        $this->assertResult('<b>&nbsp;   &nbsp;</b>', '');
+    }
+
+    function testDontRemoveNbsp() {
+        $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
+        $this->assertResult('<td>&nbsp;</b>', "<td>\xC2\xA0</td>");
+    }
+
+    function testRemoveNbspExceptionsSpecial() {
+        $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
+        $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp.Exceptions', 'b');
+        $this->assertResult('<b>&nbsp;</b>', "<b>\xC2\xA0</b>");
+    }
+
 }
 
 // vim: et sw=4 sts=4

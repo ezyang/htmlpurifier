@@ -20,6 +20,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Implement %HTML.Attr.Name.UseCDATA, which relaxes validation rules on
   the name attribute when set. Use with care. Thanks Ian Cook for
   sponsoring.
+! Implement %AutoFormat.RemoveEmpty.RemoveNbsp, which removes empty
+  tags that contain non-breaking spaces as well other whitespace. You
+  can also modify which tags should have &nbsp; maintained with
+  %AutoFormat.RemoveEmpty.RemoveNbsp.Exceptions.
 
 3.3.0, released 2009-02-16
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.
