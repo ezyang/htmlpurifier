@@ -6,7 +6,7 @@ class HTMLPurifier_Injector_PurifierLinkifyTest extends HTMLPurifier_InjectorHar
     function setup() {
         parent::setup();
         $this->config->set('AutoFormat.PurifierLinkify', true);
-        $this->config->set('AutoFormatParam.PurifierLinkifyDocURL', '#%s');
+        $this->config->set('AutoFormat.PurifierLinkify.DocURL', '#%s');
     }
 
     function testNoTriggerCharacer() {

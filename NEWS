@@ -13,6 +13,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 # APIs for ConfigSchema subsystem have substantially changed. See
   docs/dev-config-bcbreaks.txt for details; in essence, anything that
   had both namespace and directive now have a single unified key.
+# Some configuration directives were renamed, specifically:
+    %AutoFormatParam.PurifierLinkifyDocURL -> %AutoFormat.PurifierLinkify.DocURL
 ! More robust support for name="" and id=""
 ! HTMLPurifier_Config::inherit($config) allows you to inherit one
   configuration, and have changes to that configuration be propagated
