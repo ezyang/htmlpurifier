@@ -23,7 +23,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     function assertExtractStyleBlocks($html, $expect = true, $styles = array()) {
         $filter = new HTMLPurifier_Filter_ExtractStyleBlocks(); // disable cleaning
         if ($expect === true) $expect = $html;
-        $this->config->set('FilterParam.ExtractStyleBlocksTidyImpl', false);
+        $this->config->set('Filter.ExtractStyleBlocks.TidyImpl', false);
         $result = $filter->preFilter($html, $this->config, $this->context);
         $this->assertIdentical($result, $expect);
         $this->assertIdentical($this->context->get('StyleBlocks'), $styles);
@@ -104,14 +104,14 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     }
 
     function test_cleanCSS_noEscapeCodes() {
-        $this->config->set('FilterParam.ExtractStyleBlocksEscaping', false);
+        $this->config->set('Filter.ExtractStyleBlocks.Escaping', false);
         $this->assertCleanCSS(
             ".class {\nfont-family:'</style>';\n}"
         );
     }
 
     function test_cleanCSS_scope() {
-        $this->config->set('FilterParam.ExtractStyleBlocksScope', '#foo');
+        $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
         $this->assertCleanCSS(
             "p {\ntext-indent:1em;\n}",
             "#foo p {\ntext-indent:1em;\n}"
@@ -119,7 +119,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     }
 
     function test_cleanCSS_scopeWithSelectorCommas() {
-        $this->config->set('FilterParam.ExtractStyleBlocksScope', '#foo');
+        $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
         $this->assertCleanCSS(
             "b, i {\ntext-decoration:underline;\n}",
             "#foo b, #foo i {\ntext-decoration:underline;\n}"
@@ -127,17 +127,17 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     }
 
     function test_cleanCSS_scopeWithNaughtySelector() {
-        $this->config->set('FilterParam.ExtractStyleBlocksScope', '#foo');
+        $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
         $this->assertCleanCSS("  + p {\ntext-indent:1em;\n}", '');
     }
 
     function test_cleanCSS_scopeWithMultipleNaughtySelectors() {
-        $this->config->set('FilterParam.ExtractStyleBlocksScope', '#foo');
+        $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
         $this->assertCleanCSS("  ++ ++ p {\ntext-indent:1em;\n}", '');
     }
 
     function test_cleanCSS_scopeWithCommas() {
-        $this->config->set('FilterParam.ExtractStyleBlocksScope', '#foo, .bar');
+        $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo, .bar');
         $this->assertCleanCSS(
             "p {\ntext-indent:1em;\n}",
             "#foo p, .bar p {\ntext-indent:1em;\n}"
@@ -145,7 +145,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     }
 
     function test_cleanCSS_scopeAllWithCommas() {
-        $this->config->set('FilterParam.ExtractStyleBlocksScope', '#foo, .bar');
+        $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo, .bar');
         $this->assertCleanCSS(
             "p, div {\ntext-indent:1em;\n}",
             "#foo p, #foo div, .bar p, .bar div {\ntext-indent:1em;\n}"
@@ -153,7 +153,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     }
 
     function test_cleanCSS_scopeWithConflicts() {
-        $this->config->set('FilterParam.ExtractStyleBlocksScope', 'p');
+        $this->config->set('Filter.ExtractStyleBlocks.Scope', 'p');
         $this->assertCleanCSS(
 "div {
 text-align:right;

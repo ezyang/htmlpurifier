@@ -13,7 +13,6 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
     }
 
     public static function buildFromDirectory($dir = null) {
-        $parser      = new HTMLPurifier_StringHashParser();
         $builder     = new HTMLPurifier_ConfigSchema_InterchangeBuilder();
         $interchange = new HTMLPurifier_ConfigSchema_Interchange();
 
@@ -33,13 +32,18 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
 
         sort($files);
         foreach ($files as $file) {
-            $builder->build(
-                $interchange,
-                new HTMLPurifier_StringHash( $parser->parseFile($dir . $file) )
-            );
+            $builder->buildFile($interchange, $dir . $file);
         }
 
         return $interchange;
+    }
+
+    public function buildFile($interchange, $file) {
+        $parser = new HTMLPurifier_StringHashParser();
+        $this->build(
+            $interchange,
+            new HTMLPurifier_StringHash( $parser->parseFile($dir . $file) )
+        );
     }
 
     /**

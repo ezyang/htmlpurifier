@@ -15,6 +15,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   had both namespace and directive now have a single unified key.
 # Some configuration directives were renamed, specifically:
     %AutoFormatParam.PurifierLinkifyDocURL -> %AutoFormat.PurifierLinkify.DocURL
+    %FilterParam.ExtractStyleBlocksEscaping -> %Filter.ExtractStyleBlocks.Escaping
+    %FilterParam.ExtractStyleBlocksScope -> %Filter.ExtractStyleBlocks.Scope
+    %FilterParam.ExtractStyleBlocksTidyImpl -> %Filter.ExtractStyleBlocks.TidyImpl
+  As usual, the old directive names will still work, but will through E_NOTICE
+  errors.
 ! More robust support for name="" and id=""
 ! HTMLPurifier_Config::inherit($config) allows you to inherit one
   configuration, and have changes to that configuration be propagated
@@ -26,6 +31,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   tags that contain non-breaking spaces as well other whitespace. You
   can also modify which tags should have &nbsp; maintained with
   %AutoFormat.RemoveEmpty.RemoveNbsp.Exceptions.
+. Created script maintenance/rename-config.php for renaming a configuration
+  directive while maintaining its alias.  This script does not change source code.
 
 3.3.0, released 2009-02-16
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.
