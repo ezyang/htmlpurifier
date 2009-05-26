@@ -31,6 +31,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   tags that contain non-breaking spaces as well other whitespace. You
   can also modify which tags should have &nbsp; maintained with
   %AutoFormat.RemoveEmpty.RemoveNbsp.Exceptions.
+! Implement %Attr.AllowedClasses, which allows administrators to restrict
+  classes users can use to a specified finite set of classes, and
+  %Attr.ForbiddenClasses, which is the logical inverse.
 . Created script maintenance/rename-config.php for renaming a configuration
   directive while maintaining its alias.  This script does not change source code.
 
