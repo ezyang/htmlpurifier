@@ -82,8 +82,6 @@ AutoFormat
 
 Optimizations
  - Reduce size of internal data-structures (esp. HTMLDefinition)
- - Research memory usage of objects versus arrays
- - Combine multiple strategies into a single, single-pass strategy
  - Get PH5P working with the latest versions of DOM, which have much more
    stringent error checking procedures. Maybe convert straight to tokens.
  - Get rid of set_include_path(). Save this for another major release.
@@ -107,14 +105,17 @@ Neat feature related
  - Full set of color keywords. Also, a way to add onto them without
    finalizing the configuration object.
  - Write a var_export and memcached DefinitionCache - Denis
- - Allow restriction of allowed class values
 
 Maintenance related (slightly boring)
  # CHMOD install script for PEAR installs
  ! Factor out command line parser into its own class, and unit test it
- ! Nested configuration namespaces
- - Distinguish between default settings and explicitly set settings, so
-   configurations can be merged
+ - Allow merging configurations.  Thus,
+        a -> b -> default
+        c -> d -> default
+   becomes
+        a -> b -> c -> d -> default
+   Maybe allow more fine-grained tuning of this behavior. Alternatively,
+   encourage people to use short plist depths before building them up.
  - Time PHPT tests
 
 ChildDef related (very boring)
