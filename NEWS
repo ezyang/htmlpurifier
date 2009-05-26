@@ -18,8 +18,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     %FilterParam.ExtractStyleBlocksEscaping -> %Filter.ExtractStyleBlocks.Escaping
     %FilterParam.ExtractStyleBlocksScope -> %Filter.ExtractStyleBlocks.Scope
     %FilterParam.ExtractStyleBlocksTidyImpl -> %Filter.ExtractStyleBlocks.TidyImpl
-  As usual, the old directive names will still work, but will through E_NOTICE
+  As usual, the old directive names will still work, but will throw E_NOTICE
   errors.
+# The allowed values for class have been relaxed to allow all of CDATA for
+  doctypes that are not XHTML 1.1 or XHTML 2.0.  For old behavior, set
+  %Attr.ClassUseCDATA to false.
 ! More robust support for name="" and id=""
 ! HTMLPurifier_Config::inherit($config) allows you to inherit one
   configuration, and have changes to that configuration be propagated

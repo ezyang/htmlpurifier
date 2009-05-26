@@ -32,6 +32,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     }
 
     function testSelectivelyRemoveInvalidClasses() {
+        $this->config->set('HTML.Doctype', 'XHTML 1.1');
         $this->assertResult(
             '<div class="valid 0invalid">Keep valid.</div>',
             '<div class="valid">Keep valid.</div>'

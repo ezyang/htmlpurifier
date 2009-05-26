@@ -18,8 +18,6 @@ afraid to cast your vote for the next feature to be implemented!
   http://htmlpurifier.org/phorum/read.php?3,3491,3548
 - Fix ImgRequired to handle data correctly
 - Think about allowing explicit order of operations hooks for transforms
-- Allow more relaxed "class" definition than NMTOKENS for appropriate
-  doctypes
 
 FUTURE VERSIONS
 ---------------

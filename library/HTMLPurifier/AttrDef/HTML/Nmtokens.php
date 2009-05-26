@@ -13,7 +13,7 @@ class HTMLPurifier_AttrDef_HTML_Nmtokens extends HTMLPurifier_AttrDef
         // early abort: '' and '0' (strings that convert to false) are invalid
         if (!$string) return false;
 
-        $tokens = $this->split($string);
+        $tokens = $this->split($string, $config, $context);
         $tokens = $this->filter($tokens, $config, $context);
         if (empty($tokens)) return false;
         return implode(' ', $tokens);
@@ -23,7 +23,7 @@ class HTMLPurifier_AttrDef_HTML_Nmtokens extends HTMLPurifier_AttrDef
     /**
      * Splits a space separated list of tokens into its constituent parts.
      */
-    protected function split($string) {
+    protected function split($string, $config, $context) {
         // OPTIMIZABLE!
         // do the preg_match, capture all subpatterns for reformulation
 
