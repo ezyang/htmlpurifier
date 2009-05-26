@@ -81,6 +81,11 @@ class HTMLPurifier_Config
     public $chatty = true;
 
     /**
+     * Current lock; only gets to this namespace are allowed.
+     */
+    private $lock;
+
+    /**
      * @param $definition HTMLPurifier_ConfigSchema that defines what directives
      *                    are allowed.
      */
@@ -156,6 +161,13 @@ class HTMLPurifier_Config
             $this->triggerError('Cannot get value from aliased directive, use real name ' . $d->key,
                 E_USER_ERROR);
             return;
+        }
+        if ($this->lock) {
+            list($ns) = explode('.', $key);
+            if ($ns !== $this->lock) {
+                $this->triggerError('Cannot get value of namespace ' . $ns . ' when lock for ' . $this->lock . ' is active, this probably indicates a Definition setup method is accessing directives that are not within its namespace', E_USER_ERROR);
+                return;
+            }
         }
         return $this->plist->get($key);
     }
@@ -285,7 +297,7 @@ class HTMLPurifier_Config
         // reset definitions if the directives they depend on changed
         // this is a very costly process, so it's discouraged
         // with finalization
-        if ($namespace == 'HTML' || $namespace == 'CSS') {
+        if ($namespace == 'HTML' || $namespace == 'CSS' || $namespace == 'URI') {
             $this->definitions[$namespace] = null;
         }
 
@@ -326,8 +338,12 @@ class HTMLPurifier_Config
      */
     public function getDefinition($type, $raw = false) {
         if (!$this->finalized) $this->autoFinalize();
+        // temporarily suspend locks, so we can handle recursive definition calls
+        $lock = $this->lock;
+        $this->lock = null;
         $factory = HTMLPurifier_DefinitionCacheFactory::instance();
         $cache = $factory->create($type, $this);
+        $this->lock = $lock;
         if (!$raw) {
             // see if we can quickly supply a definition
             if (!empty($this->definitions[$type])) {
@@ -369,7 +385,9 @@ class HTMLPurifier_Config
             return $this->definitions[$type];
         }
         // set it up
+        $this->lock = $type;
         $this->definitions[$type]->setup($this);
+        $this->lock = null;
         // save in cache
         $cache->set($this->definitions[$type], $this);
         return $this->definitions[$type];

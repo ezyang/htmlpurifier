@@ -34,8 +34,13 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Implement %Attr.AllowedClasses, which allows administrators to restrict
   classes users can use to a specified finite set of classes, and
   %Attr.ForbiddenClasses, which is the logical inverse.
+- Fix bug where URIDefinition would not get cleared if it's directives got
+  changed.
 . Created script maintenance/rename-config.php for renaming a configuration
   directive while maintaining its alias.  This script does not change source code.
+. Implement namespace locking for definition construction, to prevent
+  bugs where a directive is used for definition construction but is not
+  used to construct the cache hash.
 
 3.3.0, released 2009-02-16
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.

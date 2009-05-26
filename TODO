@@ -20,8 +20,6 @@ afraid to cast your vote for the next feature to be implemented!
 - Think about allowing explicit order of operations hooks for transforms
 - Allow more relaxed "class" definition than NMTOKENS for appropriate
   doctypes
-- Lock when configuring Definition objects so we CAN'T access configuration
-  directives outside of what dependency has been registered.
 
 FUTURE VERSIONS
 ---------------
