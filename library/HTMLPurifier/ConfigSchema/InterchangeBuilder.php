@@ -42,7 +42,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         $parser = new HTMLPurifier_StringHashParser();
         $this->build(
             $interchange,
-            new HTMLPurifier_StringHash( $parser->parseFile($dir . $file) )
+            new HTMLPurifier_StringHash( $parser->parseFile($file) )
         );
     }
 
