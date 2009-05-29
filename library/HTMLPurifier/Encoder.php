@@ -17,7 +17,7 @@ class HTMLPurifier_Encoder
     /**
      * Error-handler that mutes errors, alternative to shut-up operator.
      */
-    private static function muteErrorHandler() {}
+    public static function muteErrorHandler() {}
 
     /**
      * Cleans a UTF-8 string for well-formedness and SGML validity

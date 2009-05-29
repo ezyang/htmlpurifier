@@ -39,6 +39,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   %Attr.ForbiddenClasses, which is the logical inverse.
 - Fix bug where URIDefinition would not get cleared if it's directives got
   changed.
+- Fix fatal error in HTMLPurifier_Encoder on certain platforms (probably NetBSD 5.0)
 . Created script maintenance/rename-config.php for renaming a configuration
   directive while maintaining its alias.  This script does not change source code.
 . Implement namespace locking for definition construction, to prevent
