@@ -543,6 +543,7 @@ class HTMLPurifier_Config
      */
     public function finalize() {
         $this->finalized = true;
+        unset($this->parser);
     }
 
     /**

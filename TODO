@@ -11,13 +11,22 @@ If no interest is expressed for a feature that may require a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
-- Investigate how early internal structures can be accessed; this would
-  prevent structures from being parsed and serialized multiple times.
 - Built-in support for target="_blank" on all external links
 - Incorporate data: support as implemented here:
   http://htmlpurifier.org/phorum/read.php?3,3491,3548
 - Fix ImgRequired to handle data correctly
+- Incorporate download and resize support as implemented here:
+  http://htmlpurifier.org/phorum/read.php?3,2795,3628
 - Think about allowing explicit order of operations hooks for transforms
+- Make it dead easy for other authors to maintain their own configuration
+  pools. Encourage them to namespace them (this flies counter to our
+  "hey, let's use convention idea", so that's why the "register" extra
+  field will end up being a good idea: because it means we can forgo
+  convention for external things
+- Make it easy for people to cache their entire configuration (so that
+  they have one script they run to change configuration, and then a stub
+  loader to get that configuration)
+ - Implement <area>
 
 FUTURE VERSIONS
 ---------------
@@ -27,7 +36,6 @@ FUTURE VERSIONS
  # Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
  # Frameset XHTML 1.0 and HTML 4.01 doctypes
- - Implement <area>
  - Figure out how to simultaneously set %CSS.Trusted and %HTML.Trusted (?)
 
 4.2 release [Error'ed]
