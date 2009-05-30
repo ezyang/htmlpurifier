@@ -31,7 +31,7 @@ by default.</p>
 
 <p>IDs, however, are quite useful functionality to have, so if users start
 complaining about broken anchors you'll probably want to turn them back on
-with %HTML.EnableAttrID. But before you go mucking around with the config
+with %Attr.EnableID. But before you go mucking around with the config
 object, it's probably worth to take some precautions to keep your page
 validating. Why?</p>
 
@@ -56,8 +56,8 @@ validating. Why?</p>
 deal with the most obvious solution: preventing users from using any IDs that
 appear elsewhere on the document.  The method is simple:</p>
 
-<pre>$config->set('HTML', 'EnableAttrID', true);
-$config->set('Attr', 'IDBlacklist' array(
+<pre>$config-&gt;set('Attr.EnableID', true);
+$config-&gt;set('Attr.IDBlacklist' array(
     'list', 'of', 'attribute', 'values', 'that', 'are', 'forbidden'
 ));</pre>
 
@@ -88,8 +88,8 @@ all, they might have simply specified a duplicate ID by accident.</p>
 <p>This method, too, is quite simple: add a prefix to all user IDs. With this
 code:</p>
 
-<pre>$config->set('HTML', 'EnableAttrID', true);
-$config->set('Attr', 'IDPrefix', 'user_');</pre>
+<pre>$config-&gt;set('Attr.EnableID', true);
+$config-&gt;set('Attr.IDPrefix', 'user_');</pre>
 
 <p>...this:</p>
 
@@ -109,7 +109,7 @@ user_ to the beginning.&quot;</p>
 nothing about multiple HTML Purifier outputs on one page.  Thus, we have
 a second configuration value to piggy-back off of: %Attr.IDPrefixLocal:</p>
 
-<pre>$config->set('Attr', 'IDPrefixLocal', 'comment' . $id . '_');</pre>
+<pre>$config-&gt;set('Attr.IDPrefixLocal', 'comment' . $id . '_');</pre>
 
 <p>This new attributes does nothing but append on to regular IDPrefix, but is
 special in that it is volatile: it's value is determined at run-time and
@@ -137,7 +137,7 @@ anchors is beyond me.</p>
 
 <p>To revert back to pre-1.2.0 behavior, simply:</p>
 
-<pre>$config->set('HTML', 'EnableAttrID', true);</pre>
+<pre>$config-&gt;set('Attr.EnableID', true);</pre>
 
 <p>Don't come crying to me when your page mysteriously stops validating, though.</p>
 

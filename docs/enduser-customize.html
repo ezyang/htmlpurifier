@@ -155,9 +155,9 @@
 </p>
 
 <pre>$config = HTMLPurifier_Config::createDefault();
-$config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
-$config->set('HTML', 'DefinitionRev', 1);
-$def = $config->getHTMLDefinition(true);</pre>
+$config-&gt;set('HTML.DefinitionID', 'enduser-customize.html tutorial');
+$config-&gt;set('HTML.DefinitionRev', 1);
+$def = $config-&gt;getHTMLDefinition(true);</pre>
 
 <p>
   Assuming that HTML Purifier has already been properly loaded (hint:
@@ -210,10 +210,10 @@ $def = $config->getHTMLDefinition(true);</pre>
 </p>
 
 <pre>$config = HTMLPurifier_Config::createDefault();
-$config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
-$config->set('HTML', 'DefinitionRev', 1);
-<strong>$config->set('Cache', 'DefinitionImpl', null); // remove this later!</strong>
-$def = $config->getHTMLDefinition(true);</pre>
+$config-&gt;set('HTML.DefinitionID', 'enduser-customize.html tutorial');
+$config-&gt;set('HTML.DefinitionRev', 1);
+<strong>$config-&gt;set('Cache.DefinitionImpl', null); // TODO: remove this later!</strong>
+$def = $config-&gt;getHTMLDefinition(true);</pre>
 
 <p>
   A few things should be mentioned about the caching mechanism before
@@ -266,10 +266,10 @@ $def = $config->getHTMLDefinition(true);</pre>
 </p>
 
 <pre>$config = HTMLPurifier_Config::createDefault();
-$config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
-$config->set('HTML', 'DefinitionRev', 1);
-$config->set('Cache', 'DefinitionImpl', null); // remove this later!
-$def = $config->getHTMLDefinition(true);
+$config-&gt;set('HTML.DefinitionID', 'enduser-customize.html tutorial');
+$config-&gt;set('HTML.DefinitionRev', 1);
+$config-&gt;set('Cache.DefinitionImpl', null); // remove this later!
+$def = $config-&gt;getHTMLDefinition(true);
 <strong>$def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');</strong></pre>
 
 <p>
@@ -384,11 +384,11 @@ $def = $config->getHTMLDefinition(true);
 </p>
 
 <pre>$config = HTMLPurifier_Config::createDefault();
-$config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
-$config->set('HTML', 'DefinitionRev', 1);
-$config->set('Cache', 'DefinitionImpl', null); // remove this later!
-$def = $config->getHTMLDefinition(true);
-<strong>$def->addAttribute('a', 'target', new HTMLPurifier_AttrDef_Enum(
+$config-&gt;set('HTML.DefinitionID', 'enduser-customize.html tutorial');
+$config-&gt;set('HTML.DefinitionRev', 1);
+$config-&gt;set('Cache.DefinitionImpl', null); // remove this later!
+$def = $config-&gt;getHTMLDefinition(true);
+<strong>$def-&gt;addAttribute('a', 'target', new HTMLPurifier_AttrDef_Enum(
   array('_blank','_self','_target','_top')
 ));</strong></pre>
 
@@ -731,14 +731,14 @@ $def = $config->getHTMLDefinition(true);
 </p>
 
 <pre>$config = HTMLPurifier_Config::createDefault();
-$config->set('HTML', 'DefinitionID', 'enduser-customize.html tutorial');
-$config->set('HTML', 'DefinitionRev', 1);
-$config->set('Cache', 'DefinitionImpl', null); // remove this later!
-$def = $config->getHTMLDefinition(true);
-$def->addAttribute('a', 'target', new HTMLPurifier_AttrDef_Enum(
+$config-&gt;set('HTML.DefinitionID', 'enduser-customize.html tutorial');
+$config-&gt;set('HTML.DefinitionRev', 1);
+$config-&gt;set('Cache.DefinitionImpl', null); // remove this later!
+$def = $config-&gt;getHTMLDefinition(true);
+$def-&gt;addAttribute('a', 'target', new HTMLPurifier_AttrDef_Enum(
   array('_blank','_self','_target','_top')
 ));
-<strong>$form = $def->addElement(
+<strong>$form = $def-&gt;addElement(
   'form',   // name
   'Block',  // content set
   'Flow', // allowed children
@@ -749,7 +749,7 @@ $def->addAttribute('a', 'target', new HTMLPurifier_AttrDef_Enum(
     'name' => 'ID'
   )
 );
-$form->excludes = array('form' => true);</strong></pre>
+$form-&gt;excludes = array('form' => true);</strong></pre>
 
 <p>
   Each of the parameters corresponds to one of the questions we asked.

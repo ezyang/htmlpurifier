@@ -18,14 +18,13 @@ afraid to cast your vote for the next feature to be implemented!
 - Incorporate download and resize support as implemented here:
   http://htmlpurifier.org/phorum/read.php?3,2795,3628
 - Think about allowing explicit order of operations hooks for transforms
-- Make it dead easy for other authors to maintain their own configuration
-  pools. Encourage them to namespace them (this flies counter to our
-  "hey, let's use convention idea", so that's why the "register" extra
-  field will end up being a good idea: because it means we can forgo
-  convention for external things
+- Add "register" field to config schemas to eliminate dependence on
+  naming conventions
 - Make it easy for people to cache their entire configuration (so that
   they have one script they run to change configuration, and then a stub
   loader to get that configuration)
+- Add examples to everything (make built-in which also automatically
+  gives output)
 
 FUTURE VERSIONS
 ---------------

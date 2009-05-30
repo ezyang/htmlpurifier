@@ -76,7 +76,7 @@ associated with it, although it may change depending on your doctype.</p>
 change the level of cleaning by setting the %HTML.TidyLevel configuration
 directive:</p>
 
-<pre>$config->set('HTML', 'TidyLevel', 'heavy'); // burn baby burn!</pre>
+<pre>$config-&gt;set('HTML.TidyLevel', 'heavy'); // burn baby burn!</pre>
 
 <h2>Is the light level really light?</h2>
 
@@ -165,17 +165,17 @@ smoketest</a>.</p>
 so happy about the br@clear implementation. That's perfectly fine!
 HTML Purifier will make accomodations:</p>
 
-<pre>$config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');
-$config->set('HTML', 'TidyLevel', 'heavy'); // all changes, minus...
-<strong>$config->set('HTML', 'TidyRemove', 'br@clear');</strong></pre>
+<pre>$config-&gt;set('HTML.Doctype', 'XHTML 1.0 Transitional');
+$config-&gt;set('HTML.TidyLevel', 'heavy'); // all changes, minus...
+<strong>$config-&gt;set('HTML.TidyRemove', 'br@clear');</strong></pre>
 
 <p>That third line does the magic, removing the br@clear fix
 from the module, ensuring that <code>&lt;br clear="both" /&gt;</code>
 will pass through unharmed. The reverse is possible too:</p>
 
-<pre>$config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');
-$config->set('HTML', 'TidyLevel', 'none'); // no changes, plus...
-<strong>$config->set('HTML', 'TidyAdd', 'p@align');</strong></pre>
+<pre>$config-&gt;set('HTML.Doctype', 'XHTML 1.0 Transitional');
+$config-&gt;set('HTML.TidyLevel', 'none'); // no changes, plus...
+<strong>$config-&gt;set('HTML.TidyAdd', 'p@align');</strong></pre>
 
 <p>In this case, all transformations are shut off, except for the p@align
 one, which you found handy.</p>

@@ -231,12 +231,12 @@ HTML Purifier uses iconv to support other character encodings, as such,
 any encoding that iconv supports <http://www.gnu.org/software/libiconv/>
 HTML Purifier supports with this code:
 
-    $config->set('Core', 'Encoding', /* put your encoding here */);
+    $config->set('Core.Encoding', /* put your encoding here */);
 
 An example usage for Latin-1 websites (the most common encoding for English
 websites):
 
-    $config->set('Core', 'Encoding', 'ISO-8859-1');
+    $config->set('Core.Encoding', 'ISO-8859-1');
 
 Note that HTML Purifier's support for non-Unicode encodings is crippled by the
 fact that any character not supported by that encoding will be silently
@@ -251,7 +251,7 @@ reason, I do not include the solution in this document).
 For those of you using HTML 4.01 Transitional, you can disable
 XHTML output like this:
 
-    $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
+    $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
 
 Other supported doctypes include:
 
@@ -277,14 +277,14 @@ are, respectively, %HTML.Allowed, %URI.MakeAbsolute and %URI.Base, and
 %AutoFormat.AutoParagraph. The %Namespace.Directive naming convention
 translates to:
 
-    $config->set('Namespace', 'Directive', $value);
+    $config->set('Namespace.Directive', $value);
 
 E.g.
 
-    $config->set('HTML', 'Allowed', 'p,b,a[href],i');
-    $config->set('URI', 'Base', 'http://www.example.com');
-    $config->set('URI', 'MakeAbsolute', true);
-    $config->set('AutoFormat', 'AutoParagraph', true);
+    $config->set('HTML.Allowed', 'p,b,a[href],i');
+    $config->set('URI.Base', 'http://www.example.com');
+    $config->set('URI.MakeAbsolute', true);
+    $config->set('AutoFormat.AutoParagraph', true);
 
 
 ---------------------------------------------------------------------------
@@ -318,11 +318,11 @@ If you are unable or unwilling to give write permissions to the cache
 directory, you can either disable the cache (and suffer a performance
 hit):
 
-    $config->set('Core', 'DefinitionCache', null);
+    $config->set('Core.DefinitionCache', null);
 
 Or move the cache directory somewhere else (no trailing slash):
 
-    $config->set('Cache', 'SerializerPath', '/home/user/absolute/path');
+    $config->set('Cache.SerializerPath', '/home/user/absolute/path');
 
 
 ---------------------------------------------------------------------------
@@ -363,8 +363,8 @@ If your website is in a different encoding or doctype, use this code:
     require_once '/path/to/htmlpurifier/library/HTMLPurifier.auto.php';
 
     $config = HTMLPurifier_Config::createDefault();
-    $config->set('Core', 'Encoding', 'ISO-8859-1'); // replace with your encoding
-    $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional'); // replace with your doctype
+    $config->set('Core.Encoding', 'ISO-8859-1'); // replace with your encoding
+    $config->set('HTML.Doctype', 'HTML 4.01 Transitional'); // replace with your doctype
     $purifier = new HTMLPurifier($config);
 
     $clean_html = $purifier->purify($dirty_html);
