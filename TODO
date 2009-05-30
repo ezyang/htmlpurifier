@@ -20,9 +20,6 @@ afraid to cast your vote for the next feature to be implemented!
 - Think about allowing explicit order of operations hooks for transforms
 - Add "register" field to config schemas to eliminate dependence on
   naming conventions
-- Make it easy for people to cache their entire configuration (so that
-  they have one script they run to change configuration, and then a stub
-  loader to get that configuration)
 - Add examples to everything (make built-in which also automatically
   gives output)
 

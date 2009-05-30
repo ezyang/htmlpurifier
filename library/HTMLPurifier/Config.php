@@ -564,6 +564,17 @@ class HTMLPurifier_Config
         trigger_error($msg . $extra, $no);
     }
 
+    /**
+     * Returns a serialized form of the configuration object that can
+     * be reconstituted.
+     */
+    public function serialize() {
+        $this->getDefinition('HTML');
+        $this->getDefinition('CSS');
+        $this->getDefinition('URI');
+        return serialize($this);
+    }
+
 }
 
 // vim: et sw=4 sts=4

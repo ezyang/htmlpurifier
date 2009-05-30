@@ -451,6 +451,13 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->assertIdentical($subconfig->get('Phantom.Latemasked'), 100);
     }
 
+    function testSerialize() {
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML.Allowed', 'a');
+        $config2 = unserialize($config->serialize());
+        $this->assertIdentical($config, $config2);
+    }
+
 }
 
 // vim: et sw=4 sts=4
