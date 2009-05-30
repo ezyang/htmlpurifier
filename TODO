@@ -26,7 +26,6 @@ afraid to cast your vote for the next feature to be implemented!
 - Make it easy for people to cache their entire configuration (so that
   they have one script they run to change configuration, and then a stub
   loader to get that configuration)
- - Implement <area>
 
 FUTURE VERSIONS
 ---------------
@@ -35,6 +34,8 @@ FUTURE VERSIONS
  # Implement untrusted, dangerous elements/attributes
  # Implement IDREF support (harder than it seems, since you cannot have
    IDREFs to non-existent IDs)
+     - Implement <area> (client and server side image maps are blocking
+       on IDREF support)
  # Frameset XHTML 1.0 and HTML 4.01 doctypes
  - Figure out how to simultaneously set %CSS.Trusted and %HTML.Trusted (?)
 

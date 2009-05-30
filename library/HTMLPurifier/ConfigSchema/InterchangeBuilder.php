@@ -15,10 +15,15 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
     public static function buildFromDirectory($dir = null) {
         $builder     = new HTMLPurifier_ConfigSchema_InterchangeBuilder();
         $interchange = new HTMLPurifier_ConfigSchema_Interchange();
+        return $builder->buildDir($interchange, $dir);
+    }
 
-        if (!$dir) $dir = HTMLPURIFIER_PREFIX . '/HTMLPurifier/ConfigSchema/schema/';
-        $info = parse_ini_file($dir . 'info.ini');
-        $interchange->name = $info['name'];
+    public function buildDir($interchange, $dir = null) {
+        if (!$dir) $dir = HTMLPURIFIER_PREFIX . '/HTMLPurifier/ConfigSchema/schema';
+        if (file_exists($dir . '/info.ini')) {
+            $info = parse_ini_file($dir . '/info.ini');
+            $interchange->name = $info['name'];
+        }
 
         $files = array();
         $dh = opendir($dir);
@@ -32,7 +37,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
 
         sort($files);
         foreach ($files as $file) {
-            $builder->buildFile($interchange, $dir . $file);
+            $this->buildFile($interchange, $dir . '/' . $file);
         }
 
         return $interchange;

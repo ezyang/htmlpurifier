@@ -37,6 +37,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Implement %Attr.AllowedClasses, which allows administrators to restrict
   classes users can use to a specified finite set of classes, and
   %Attr.ForbiddenClasses, which is the logical inverse.
+! You can now maintain your own configuration schema directories by
+  creating a config-schema.php file or passing an extra argument. Check
+  docs/dev-config-schema.html for more details.
 - Fix bug where URIDefinition would not get cleared if it's directives got
   changed.
 - Fix fatal error in HTMLPurifier_Encoder on certain platforms (probably NetBSD 5.0)

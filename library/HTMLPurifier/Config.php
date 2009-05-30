@@ -216,6 +216,7 @@ class HTMLPurifier_Config
 
     /**
      * Retrieves all directives, organized by namespace
+     * @warning This is a pretty inefficient function, avoid if you can
      */
     public function getAll() {
         if (!$this->finalized) $this->autoFinalize();

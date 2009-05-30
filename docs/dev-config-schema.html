@@ -114,7 +114,7 @@ Test.Example</pre>
         </tr>
         <tr>
           <td>VALUE-ALIASES</td>
-          <td>'baz' => 'bar'</td>
+          <td>'baz' =&gt; 'bar'</td>
           <td><em>Optional</em>. Mapping of one value to another, and
           should be a comma separated list of keypair duples. This
           is only allowed string, istring, text and itext TYPEs.</td>
@@ -213,7 +213,7 @@ Test.Example</pre>
         </tr>
         <tr>
           <td>lookup</td>
-          <td>array('key' => true)</td>
+          <td>array('key' =&gt; true)</td>
           <td>Lookup array, used with <code>isset($var[$key])</code></td>
         </tr>
         <tr>
@@ -223,7 +223,7 @@ Test.Example</pre>
         </tr>
         <tr>
           <td>hash</td>
-          <td>array('key' => 'val')</td>
+          <td>array('key' =&gt; 'val')</td>
           <td>Associative array of keys to values</td>
         </tr>
         <tr>
@@ -267,6 +267,41 @@ Test.Example</pre>
       If you ever make changes to your configuration directives, you
       will need to run this script again.
     </p>
+    <h2>Adding in-house schema definitions</h2>
+
+    <p>
+      Placing stuff directly in HTML Purifier's source tree is generally not a
+      good idea, so HTML Purifier 4.0.0+ has some facilities in place to make your
+      life easier.
+    </p>
+
+    <p>
+      The first is to pass an extra parameter to <code>maintenance/generate-schema-cache.php</code>
+      with the location of your directory (relative or absolute path will do). For example,
+      if I'm storing my custom definitions in <em>/var/htmlpurifier/myschema</em>, run:
+      <code>php maintenance/generate-schema-cache.php /var/htmlpurifier/myschema</code>.
+    </p>
+
+    <p>
+      Alternatively, you can create a small loader PHP file in the HTML Purifier base
+      directory named <code>config-schema.php</code> (this is the same directory
+      you would place a <code>test-settings.php</code> file).  In this file, add
+      the following line for each directory you want to load:
+    </p>
+
+<pre>$builder-&gt;buildDir($interchange, '/var/htmlpurifier/myschema');</pre>
+
+    <p>You can even load a single file using:</p>
+
+<pre>$builder-&gt;buildFile($interchange, '/var/htmlpurifier/myschema/MyApp.Directive.txt');</pre>
+
+    <p>Storing custom definitions that you don't plan on sending back upstream in
+    a separate directory is <em>definitely</em> a good idea! Additionally, picking
+    a good namespace can go a long way to saving you grief if you want to use
+    someone else's change, but they picked the same name, or if HTML Purifier
+    decides to add support for a configuration directive that has the same name.</p>
+
+    <!-- TODO: how to name directives that rely on naming conventions -->
 
     <h2>Errors</h2>
 
