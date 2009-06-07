@@ -21,11 +21,14 @@ class HTMLPurifier_AttrDef_HTML_Class extends HTMLPurifier_AttrDef_HTML_Nmtokens
         foreach ($tokens as $token) {
             if (
                 ($allowed === null || isset($allowed[$token])) &&
-                !isset($forbidden[$token])
+                !isset($forbidden[$token]) &&
+                // We need this O(n) check because of PHP's array
+                // implementation that casts -0 to 0.
+                !in_array($token, $ret, true)
             ) {
-                $ret[$token] = true;
+                $ret[] = $token;
             }
         }
-        return array_keys($ret);
+        return $ret;
     }
 }
