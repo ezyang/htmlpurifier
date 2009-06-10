@@ -41,6 +41,10 @@ class HTMLPurifier_Injector_LinkifyTest extends HTMLPurifier_InjectorHarness
         $this->assertResult('http://example.com/');
     }
 
+    function testExcludes() {
+        $this->assertResult('<a><span>http://example.com</span></a>');
+    }
+
 }
 
 // vim: et sw=4 sts=4
