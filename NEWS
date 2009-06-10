@@ -23,6 +23,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 # The allowed values for class have been relaxed to allow all of CDATA for
   doctypes that are not XHTML 1.1 or XHTML 2.0.  For old behavior, set
   %Attr.ClassUseCDATA to false.
+# Instead of appending the content model to an old content model, a blank
+  element will replace the old content model.  You can use #SUPER to get
+  the old content model.
 ! More robust support for name="" and id=""
 ! HTMLPurifier_Config::inherit($config) allows you to inherit one
   configuration, and have changes to that configuration be propagated
@@ -46,6 +49,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix bug where URIDefinition would not get cleared if it's directives got
   changed.
 - Fix fatal error in HTMLPurifier_Encoder on certain platforms (probably NetBSD 5.0)
+- Fix bug in Linkify autoformatter involving <a><span>http://foo</span></a>
 . Created script maintenance/rename-config.php for renaming a configuration
   directive while maintaining its alias.  This script does not change source code.
 . Implement namespace locking for definition construction, to prevent

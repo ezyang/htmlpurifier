@@ -51,7 +51,7 @@ class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
             'removed-transform' => false,
         );
         $def2->child = $new;
-        $def2->content_model = 'new';
+        $def2->content_model = '#SUPER | new';
         $def2->content_model_type = $overloaded_new;
         $def2->descendants_are_inline = true;
         $def2->excludes = array(
