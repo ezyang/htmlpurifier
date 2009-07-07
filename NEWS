@@ -50,6 +50,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   changed.
 - Fix fatal error in HTMLPurifier_Encoder on certain platforms (probably NetBSD 5.0)
 - Fix bug in Linkify autoformatter involving <a><span>http://foo</span></a>
+- Make %URI.Munge not apply to links that have the same host as your host.
 . Created script maintenance/rename-config.php for renaming a configuration
   directive while maintaining its alias.  This script does not change source code.
 . Implement namespace locking for definition construction, to prevent

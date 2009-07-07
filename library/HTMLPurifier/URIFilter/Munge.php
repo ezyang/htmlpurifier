@@ -23,6 +23,10 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
         if (is_null($uri->host) || empty($scheme_obj->browsable)) {
             return true;
         }
+        // don't redirect if target host is our host
+        if ($uri->host === $config->getDefinition('URI')->host) {
+            return true;
+        }
 
         $this->makeReplace($uri, $config, $context);
         $this->replace = array_map('rawurlencode', $this->replace);

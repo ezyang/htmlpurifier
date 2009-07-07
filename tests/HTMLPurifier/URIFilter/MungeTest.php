@@ -117,6 +117,12 @@ class HTMLPurifier_URIFilter_MungeTest extends HTMLPurifier_URIFilterHarness
         $this->assertFiltering('http://example.com/foobar');
     }
 
+    function testMungeIgnoresSourceHost() {
+        $this->config->set('URI.Host', 'foo.example.com');
+        $this->setMunge('http://example.com/%s');
+        $this->assertFiltering('http://foo.example.com/bar');
+    }
+
 }
 
 // vim: et sw=4 sts=4
