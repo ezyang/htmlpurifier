@@ -108,19 +108,11 @@ foreach ($files as $file) {
 
             consumeWhitespace($tokens, $i);
             if (!testToken($tokens[$i], T_CONSTANT_ENCAPSED_STRING)) continue;
-            $namespace = substr($tokens[$i][1], 1, -1);
-
-            consumeWhitespace($tokens, $i);
-            if (!testToken($tokens[$i], ',')) continue;
-
-            consumeWhitespace($tokens, $i);
-            if (!testToken($tokens[$i], T_CONSTANT_ENCAPSED_STRING)) continue;
-            $directive = substr($tokens[$i][1], 1, -1);
+            $id = substr($tokens[$i][1], 1, -1);
 
             $counter++;
             $matched = true;
 
-            $id = "$namespace.$directive";
             if (!isset($tracker[$id])) $tracker[$id] = array();
             if (!isset($tracker[$id][$file])) $tracker[$id][$file] = array();
             $tracker[$id][$file][] = $line;
