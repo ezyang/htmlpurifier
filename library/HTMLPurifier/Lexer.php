@@ -285,7 +285,7 @@ class HTMLPurifier_Lexer
      */
     public function extractBody($html) {
         $matches = array();
-        $result = preg_match('!<body[^>]*>(.+?)</body>!is', $html, $matches);
+        $result = preg_match('!<body[^>]*>(.*)</body>!is', $html, $matches);
         if ($result) {
             return $matches[1];
         } else {

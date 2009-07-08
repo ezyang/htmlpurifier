@@ -151,6 +151,10 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
         $this->assertExtractBody('<body>asdf'); // not closed, don't accept
     }
 
+    function test_extractBody_useLastBody() {
+        $this->assertExtractBody('<body>foo</body>bar</body>', 'foo</body>bar');
+    }
+
     // HTMLPurifier_Lexer->tokenizeHTML() --------------------------------------
 
     function assertTokenization($input, $expect, $alt_expect = array()) {
