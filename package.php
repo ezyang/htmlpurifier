@@ -10,7 +10,7 @@ $pkg = new PEAR_PackageFileManager2;
 $pkg->setOptions(
     array(
         'baseinstalldir' => '/',
-        'packagefile' => 'package2.xml',
+        'packagefile' => 'package.xml',
         'packagedirectory' => realpath(dirname(__FILE__) . '/library'),
         'filelistgenerator' => 'file',
         'include' => array('*'),
@@ -56,8 +56,6 @@ $pkg->setPearinstallerDep('1.4.3');
 
 $pkg->generateContents();
 
-$compat =& $pkg->exportCompatiblePackageFile1();
-$compat->writePackageFile();
 $pkg->writePackageFile();
 
 // vim: et sw=4 sts=4
