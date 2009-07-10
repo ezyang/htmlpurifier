@@ -9,6 +9,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.1.0, unknown release date
+
 4.0.0, released 2009-07-07
 # APIs for ConfigSchema subsystem have substantially changed. See
   docs/dev-config-bcbreaks.txt for details; in essence, anything that
