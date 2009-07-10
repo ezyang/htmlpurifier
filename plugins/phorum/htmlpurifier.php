@@ -17,7 +17,7 @@
  * administrators who need to edit other people's comments may be at
  * risk for some nasty attacks.
  *
- * Tested with Phorum 5.2.6.
+ * Tested with Phorum 5.2.11.
  */
 
 // Note: Cache data is base64 encoded because Phorum insists on flinging

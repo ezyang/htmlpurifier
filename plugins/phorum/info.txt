@@ -2,7 +2,7 @@ title:   HTML Purifier Phorum Mod
 desc:    This module enables standards-compliant HTML filtering on Phorum. Please check migrate.bbcode.php before enabling this mod.
 author:  Edward Z. Yang
 url:     http://htmlpurifier.org/
-version: 3.0.0
+version: 4.0.0
 
 hook:  format|phorum_htmlpurifier_format
 hook:  quote|phorum_htmlpurifier_quote

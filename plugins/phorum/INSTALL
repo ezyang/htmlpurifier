@@ -2,6 +2,11 @@
 Install
     How to install the Phorum HTML Purifier plugin
 
+0. PREREQUISITES
+----------------
+This Phorum module only works on PHP5 and with HTML Purifier 4.0.0
+or later.
+
 1. UNZIP
 --------
 Unzip phorum-htmlpurifier-x.y.z, producing an htmlpurifier folder.
