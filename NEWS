@@ -10,6 +10,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.1.0, unknown release date
+! Support proprietary height attribute on table element
 
 4.0.0, released 2009-07-07
 # APIs for ConfigSchema subsystem have substantially changed. See
