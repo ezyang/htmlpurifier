@@ -24,6 +24,9 @@ Things to do as soon as possible:
 
  - Fix ImgRequired to handle data correctly
  - Think about allowing explicit order of operations hooks for transforms
+ - Make flashvars work
+ - Inputs don't do the right thing with submit
+ - Fix "<.<" bug (trailing < is removed if not EOD)
 
 FUTURE VERSIONS
 ---------------
