@@ -170,6 +170,7 @@ require_once $__dir . '/HTMLPurifier/Injector/DisplayLinkURI.php';
 require_once $__dir . '/HTMLPurifier/Injector/Linkify.php';
 require_once $__dir . '/HTMLPurifier/Injector/PurifierLinkify.php';
 require_once $__dir . '/HTMLPurifier/Injector/RemoveEmpty.php';
+require_once $__dir . '/HTMLPurifier/Injector/RemoveSpansWithoutAttributes.php';
 require_once $__dir . '/HTMLPurifier/Injector/SafeObject.php';
 require_once $__dir . '/HTMLPurifier/Lexer/DOMLex.php';
 require_once $__dir . '/HTMLPurifier/Lexer/DirectLex.php';
