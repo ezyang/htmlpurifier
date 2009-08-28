@@ -83,6 +83,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             $this->injectors[] = $injector;
         }
         foreach ($custom_injectors as $injector) {
+            if (!$injector) continue;
             if (is_string($injector)) {
                 $injector = "HTMLPurifier_Injector_$injector";
                 $injector = new $injector;
