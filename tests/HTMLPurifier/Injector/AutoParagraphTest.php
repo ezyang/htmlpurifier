@@ -497,6 +497,13 @@ Bar</div>",
         );
     }
 
+    function testAutoClose() {
+        $this->assertResult(
+            '<p></p>
+<hr />'
+        );
+    }
+
     function testErrorNeeded() {
         $this->config->set('HTML.Allowed', 'b');
         $this->expectError('Cannot enable AutoParagraph injector because p is not allowed');
