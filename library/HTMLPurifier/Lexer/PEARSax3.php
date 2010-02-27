@@ -26,6 +26,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
      * Internal accumulator array for SAX parsers.
      */
     protected $tokens = array();
+    protected $last_token_was_empty;
 
     private $parent_handler;
     private $stack = array();
@@ -33,6 +34,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
     public function tokenizeHTML($string, $config, $context) {
 
         $this->tokens = array();
+        $this->last_token_was_empty = false;
 
         $string = $this->normalize($string, $config, $context);
 
@@ -65,6 +67,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
         }
         if ($closed) {
             $this->tokens[] = new HTMLPurifier_Token_Empty($name, $attrs);
+            $this->last_token_was_empty = true;
         } else {
             $this->tokens[] = new HTMLPurifier_Token_Start($name, $attrs);
         }
@@ -79,7 +82,8 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
         // HTMLSax3 seems to always send empty tags an extra close tag
         // check and ignore if you see it:
         // [TESTME] to make sure it doesn't overreach
-        if ($this->tokens[count($this->tokens)-1] instanceof HTMLPurifier_Token_Empty) {
+        if ($this->last_token_was_empty) {
+            $this->last_token_was_empty = false;
             return true;
         }
         $this->tokens[] = new HTMLPurifier_Token_End($name);
@@ -91,6 +95,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
      * Data event handler, interface is defined by PEAR package.
      */
     public function dataHandler(&$parser, $data) {
+        $this->last_token_was_empty = false;
         $this->tokens[] = new HTMLPurifier_Token_Text($data);
         return true;
     }
@@ -111,6 +116,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
             } else {
                 $this->tokens[] = new HTMLPurifier_Token_Comment($data);
             }
+            $this->last_token_was_empty = false;
         }
         // CDATA is handled elsewhere, but if it was handled here:
         //if (strpos($data, '[CDATA[') === 0) {
