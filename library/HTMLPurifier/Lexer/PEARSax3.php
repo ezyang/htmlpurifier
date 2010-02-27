@@ -27,11 +27,15 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
      */
     protected $tokens = array();
 
+    private $parent_handler;
+
     public function tokenizeHTML($string, $config, $context) {
 
         $this->tokens = array();
 
         $string = $this->normalize($string, $config, $context);
+
+        $this->parent_handler = set_error_handler(array($this, 'muteStrictErrorHandler'));
 
         $parser = new XML_HTMLSax3();
         $parser->set_object($this);
@@ -43,6 +47,8 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
         $parser->set_option('XML_OPTION_ENTITIES_PARSED', 1);
 
         $parser->parse($string);
+
+        restore_error_handler();
 
         return $this->tokens;
 
@@ -99,6 +105,14 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
         //        substr($data, 7, strlen($data) - 9) );
         //}
         return true;
+    }
+
+    /**
+     * An error handler that mutes strict errors
+     */
+    public function muteStrictErrorHandler($errno, $errstr, $errfile=null, $errline=null, $errcontext=null) {
+        if ($errno == E_STRICT) return;
+        return call_user_func($this->parent_handler, $errno, $errstr, $errfile, $errline, $errcontext);
     }
 
 }

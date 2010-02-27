@@ -27,6 +27,7 @@ Things to do as soon as possible:
  - Make flashvars work
  - Inputs don't do the right thing with submit
  - Fix "<.<" bug (trailing < is removed if not EOD)
+ - http://htmlpurifier.org/phorum/read.php?5,2267,4308#msg-4308
 
 FUTURE VERSIONS
 ---------------

@@ -7,12 +7,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 
     public function __construct() {
         parent::__construct();
-        // E_STRICT = 2048, int used for PHP4 compat: this check disables
-        // PEAR if PHP 5 strict mode is on, since the class is not strict safe
-        if (
-            $GLOBALS['HTMLPurifierTest']['PEAR'] &&
-            ((error_reporting() & 2048) != 2048) // ought to be a better way
-        ) {
+        if ($GLOBALS['HTMLPurifierTest']['PEAR']) {
             require_once 'HTMLPurifier/Lexer/PEARSax3.php';
             $this->_has_pear = true;
         }
@@ -673,6 +668,17 @@ div {}
                     new HTMLPurifier_Token_Text('/body'),
                     new HTMLPurifier_Token_Text('>'),
                 ),
+            )
+        );
+    }
+
+    function test_tokenizeHTML_() {
+        $this->assertTokenization(
+            '<a><img /></a>',
+            array(
+                new HTMLPurifier_Token_Start('a'),
+                new HTMLPurifier_Token_Empty('img'),
+                new HTMLPurifier_Token_End('a'),
             )
         );
     }
