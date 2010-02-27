@@ -28,6 +28,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
     protected $tokens = array();
 
     private $parent_handler;
+    private $stack = array();
 
     public function tokenizeHTML($string, $config, $context) {
 
@@ -67,6 +68,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
         } else {
             $this->tokens[] = new HTMLPurifier_Token_Start($name, $attrs);
         }
+        $this->stack[] = $name;
         return true;
     }
 
@@ -81,6 +83,7 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
             return true;
         }
         $this->tokens[] = new HTMLPurifier_Token_End($name);
+        if (!empty($this->stack)) array_pop($this->stack);
         return true;
     }
 
@@ -97,7 +100,17 @@ class HTMLPurifier_Lexer_PEARSax3 extends HTMLPurifier_Lexer
      */
     public function escapeHandler(&$parser, $data) {
         if (strpos($data, '--') === 0) {
-            $this->tokens[] = new HTMLPurifier_Token_Comment($data);
+            // remove trailing and leading double-dashes
+            $data = substr($data, 2);
+            if (strlen($data) >= 2 && substr($data, -2) == "--") {
+                $data = substr($data, 0, -2);
+            }
+            if (isset($this->stack[sizeof($this->stack) - 1]) &&
+                $this->stack[sizeof($this->stack) - 1] == "style") {
+                $this->tokens[] = new HTMLPurifier_Token_Text($data);
+            } else {
+                $this->tokens[] = new HTMLPurifier_Token_Comment($data);
+            }
         }
         // CDATA is handled elsewhere, but if it was handled here:
         //if (strpos($data, '[CDATA[') === 0) {
