@@ -15,7 +15,9 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
 <h1>HTML Purifier Preserve YouTube Smoketest</h1>
 <?php
 
-$string = '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/BdU--T8rLns"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/BdU--T8rLns" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
+$string = '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/BdU--T8rLns"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/BdU--T8rLns" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>
+
+<object width="416" height="337"><param name="movie" value="http://www.youtube.com/cp/vjVQa1PpcFNbP_fag8PvopkXZyiXyT0J8U47lw7x5Fc="></param><embed src="http://www.youtube.com/cp/vjVQa1PpcFNbP_fag8PvopkXZyiXyT0J8U47lw7x5Fc=" type="application/x-shockwave-flash" width="416" height="337"></embed></object>';
 
 $regular_purifier = new HTMLPurifier();
 
