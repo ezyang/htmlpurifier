@@ -40,7 +40,7 @@ class HTMLPurifier_Injector_RemoveSpansWithoutAttributes extends HTMLPurifier_In
 
         $nesting = 0;
         $spanContentTokens = array();
-        while ($this->forwardUntilEndToken(&$i, &$current, &$nesting)) {}
+        while ($this->forwardUntilEndToken($i, $current, $nesting)) {}
 
         if ($current instanceof HTMLPurifier_Token_End && $current->name === 'span') {
             // Mark closing span tag for deletion
