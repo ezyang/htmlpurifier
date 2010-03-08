@@ -210,7 +210,7 @@
  </directive>
  <directive id="URI.">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>55</line>
+   <line>56</line>
   </file>
   <file name="HTMLPurifier/URIFilter/Munge.php">
    <line>12</line>
@@ -218,17 +218,17 @@
  </directive>
  <directive id="URI.Host">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>64</line>
+   <line>65</line>
   </file>
  </directive>
  <directive id="URI.Base">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>65</line>
+   <line>66</line>
   </file>
  </directive>
  <directive id="URI.DefaultScheme">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>72</line>
+   <line>73</line>
   </file>
  </directive>
  <directive id="URI.AllowedSchemes">
@@ -428,6 +428,13 @@
  <directive id="URI.HostBlacklist">
   <file name="HTMLPurifier/URIFilter/HostBlacklist.php">
    <line>8</line>
+  </file>
+ </directive>
+ <directive id="URI">
+  <file name="HTMLPurifier/URIFilter/ImgCache.php">
+   <line>11</line>
+   <line>12</line>
+   <line>13</line>
   </file>
  </directive>
  <directive id="URI.MungeResources">

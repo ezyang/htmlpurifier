@@ -1,0 +1,21 @@
+URI.ImgCacheMaxWidth
+TYPE: int/null
+DEFAULT: null
+VERSION: 3.3.0
+--DESCRIPTION--
+<p>
+This directive controls the maximum width in pixels of image tag embedded resources 
+found in <img src="">. If the width of an image is larger than this value, the image will 
+be resampled and cached into onto your server at the path defined by URI.ImgCachePath.
+Note that this is an integer value.
+</p>
+<p>
+Both this and ImgCacheMaxHeight must be set to non-zero values in order for 
+ImgCache to do its thing. The cached image is given a new unique file name.
+</p>
+<p>
+Appropriate width and height attributes will automatically be added to the img tag.
+Be careful using this with HTML.MaxImgLength. If the value of HTML.MaxImgLength is 
+smaller than URI.ImgCacheMaxWidth, the width attribute will be set to HTML.MaxImgLength,
+but the image will be resampled using URI.ImgCacheMaxWidth.
+</p>

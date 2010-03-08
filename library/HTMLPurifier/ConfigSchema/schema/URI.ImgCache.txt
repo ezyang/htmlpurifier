@@ -1,0 +1,10 @@
+URI.ImgCache
+TYPE: bool
+VERSION: 3.3.0
+DEFAULT: false
+--DESCRIPTION--
+<p>
+Takes any embedded resources to external websites, downloads the content,
+and then serves it locally. In order to enable this, you will also need
+to set %URI.ImgCachePath.
+</p>

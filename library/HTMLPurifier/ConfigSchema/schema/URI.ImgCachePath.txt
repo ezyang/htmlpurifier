@@ -1,0 +1,34 @@
+URI.ImgCachePath
+TYPE: string/null
+VERSION: 3.3.0
+DEFAULT: NULL
+--DESCRIPTION--
+<p>
+If you have set URI.ImgCacheMaxHeight and URI.ImgCacheMaxWidth to positive values, 
+then this directive determines where the cached image is saved. It is a path relative 
+to the program that called HTMLPurifier. 
+</p>
+<p>
+The final characters of the path can be a prefix that will be appended to the start of
+every cached image file name. Since the cached image is given a new unique file name
+with no obvious identifying characteristics, adding a dynamic prefix can help you figure
+out the location of the html that calls the image. For example, if you are running a 
+discussion board where each post has a unique $post_id, you could set URI.ImgCachePath
+with code such as 
+<pre><![CDATA[
+$config->set('URI', 'ImgCachePath', 'imgcache/' . $post_id . '_');
+]]></pre>
+Be sure to end with a separator such as an underscore or you may find it difficult to tell 
+where the prefix ends and the assigned name begins!
+</p>
+<p>
+If you do not use a prefix, be sure to include a trailing slash. Otherwise, instead of 
+caching to your imgcache directory (for example), it will cache to a file in the same
+directory as the program that called HTMLPurifier and add the prefix 'imgcache' to the
+start of the filename.
+</p>
+<p>
+If URI.ImgCachePath is not assigned a value, but you have set URI.ImgCacheMaxHeight and 
+URI.ImgCacheMaxWidth to positive values, then the image will be cached to the same
+directory as the program that called HTMLPurifier and no prefix will be added.
+</p>

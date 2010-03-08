@@ -43,8 +43,9 @@ class HTMLPurifier_AttrValidator
         // DEFINITION CALL
         $d_defs = $definition->info_global_attr;
 
-        // don't update token until the very end, to ensure an atomic update
-        $attr = $token->attr;
+        // attr is a reference, so other code can update the token and
+        // we will see the changes
+        $attr =& $token->attr;
 
         // do global transformations (pre)
         // nothing currently utilizes this
