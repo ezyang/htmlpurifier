@@ -20,10 +20,11 @@ Things to do as soon as possible:
 
  - Fix ImgRequired to handle data correctly
  - Think about allowing explicit order of operations hooks for transforms
- - Make flashvars work
  - Inputs don't do the right thing with submit
  - Fix "<.<" bug (trailing < is removed if not EOD)
  - http://htmlpurifier.org/phorum/read.php?5,2267,4308#msg-4308
+ - Build in better internal state dumps and debugging tools for remote
+   debugging
 
 FUTURE VERSIONS
 ---------------

@@ -20,6 +20,7 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
     protected $allowedParam = array(
         'wmode' => true,
         'movie' => true,
+        'flashvars' => true,
     );
 
     public function prepare($config, $context) {
