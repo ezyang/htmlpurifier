@@ -11,18 +11,11 @@ If no interest is expressed for a feature that may require a considerable
 amount of effort to implement, it may get endlessly delayed. Do not be
 afraid to cast your vote for the next feature to be implemented!
 
-Standing patches:
-
- - Incorporate download and resize support as implemented here:
-   http://htmlpurifier.org/phorum/read.php?3,2795,3628
-
 Things to do as soon as possible:
 
- - Fix ImgRequired to handle data correctly
  - Think about allowing explicit order of operations hooks for transforms
  - Inputs don't do the right thing with submit
  - Fix "<.<" bug (trailing < is removed if not EOD)
- - http://htmlpurifier.org/phorum/read.php?5,2267,4308#msg-4308
  - Build in better internal state dumps and debugging tools for remote
    debugging
 
