@@ -25,6 +25,11 @@ $youtube_purifier = new HTMLPurifier(array(
     'Filter.YouTube' => true,
 ));
 
+$safeobject_purifier = new HTMLPurifier(array(
+    'HTML.SafeObject' => true,
+    'Output.FlashCompat' => true,
+));
+
 ?>
 <h2>Unpurified</h2>
 <p><a href="?break">Click here to see the unpurified version (breaks validation).</a></p>
@@ -40,6 +45,11 @@ echo $regular_purifier->purify($string);
 <h2>With YouTube exception</h2>
 <div><?php
 echo $youtube_purifier->purify($string);
+?></div>
+
+<h2>With SafeObject exception and flash compatibility</h2>
+<div><?php
+echo $safeobject_purifier->purify($string);
 ?></div>
 
 </body>

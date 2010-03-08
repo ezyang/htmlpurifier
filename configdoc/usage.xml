@@ -85,22 +85,27 @@
  </directive>
  <directive id="Output.CommentScriptContents">
   <file name="HTMLPurifier/Generator.php">
-   <line>45</line>
+   <line>56</line>
   </file>
  </directive>
  <directive id="Output.SortAttr">
   <file name="HTMLPurifier/Generator.php">
-   <line>46</line>
+   <line>57</line>
+  </file>
+ </directive>
+ <directive id="Output.FlashCompat">
+  <file name="HTMLPurifier/Generator.php">
+   <line>58</line>
   </file>
  </directive>
  <directive id="Output.TidyFormat">
   <file name="HTMLPurifier/Generator.php">
-   <line>75</line>
+   <line>87</line>
   </file>
  </directive>
  <directive id="Output.Newline">
   <file name="HTMLPurifier/Generator.php">
-   <line>89</line>
+   <line>101</line>
   </file>
  </directive>
  <directive id="HTML.BlockWrapper">
@@ -320,7 +325,7 @@
  </directive>
  <directive id="Attr.DefaultInvalidImageAlt">
   <file name="HTMLPurifier/AttrTransform/ImgRequired.php">
-   <line>32</line>
+   <line>33</line>
   </file>
  </directive>
  <directive id="HTML.Attr.Name.UseCDATA">
