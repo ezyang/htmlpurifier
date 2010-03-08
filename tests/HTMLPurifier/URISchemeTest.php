@@ -6,8 +6,21 @@
 class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
 {
 
+    private $pngBase64;
+
+    public function __construct() {
+        $this->pngBase64 =
+            'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGP'.
+            'C/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YGARc5KB0XV+IA'.
+            'AAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAF1J'.
+            'REFUGNO9zL0NglAAxPEfdLTs4BZM4DIO4C7OwQg2JoQ9LE1exdlYvBBeZ7jq'.
+            'ch9//q1uH4TLzw4d6+ErXMMcXuHWxId3KOETnnXXV6MJpcq2MLaI97CER3N0'.
+            'vr4MkhoXe0rZigAAAABJRU5ErkJggg==';
+    }
+
     protected function assertValidation($uri, $expect_uri = true) {
         $this->prepareURI($uri, $expect_uri);
+        $this->config->set('URI.AllowedSchemes', array($uri->scheme));
         // convenience hack: the scheme should be explicitly specified
         $scheme = $uri->getSchemeObj($this->config, $this->context);
         $result = $scheme->validate($uri, $this->config, $this->context);
@@ -129,6 +142,26 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         $this->assertValidation(
             'mailto://user@example.com:80/bob@example.com?subject=Foo#frag',
             'mailto:/bob@example.com?subject=Foo#frag'
+        );
+    }
+
+    function test_data_png() {
+        $this->assertValidation(
+            'data:image/png;base64,'.$this->pngBase64
+        );
+    }
+
+    function test_data_malformed() {
+        $this->assertValidation(
+            'data:image/png;base64,vr4MkhoXJRU5ErkJggg==',
+            false
+        );
+    }
+
+    function test_data_implicit() {
+        $this->assertValidation(
+            'data:base64,'.$this->pngBase64,
+            'data:image/png;base64,'.$this->pngBase64
         );
     }
 
