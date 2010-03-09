@@ -117,9 +117,6 @@ class HTMLPurifier_Lexer
                 case 'DirectLex':
                     $inst = new HTMLPurifier_Lexer_DirectLex();
                     break;
-                case 'PH5P':
-                    $inst = new HTMLPurifier_Lexer_PH5P();
-                    break;
                 default:
                     throw new HTMLPurifier_Exception("Cannot instantiate unrecognized Lexer type " . htmlspecialchars($lexer));
             }

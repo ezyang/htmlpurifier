@@ -153,7 +153,11 @@ class HTMLPurifier_LanguageFactory
             $filename = $this->dir . '/Language/messages/en.php';
             $cache = array();
         } else {
-            include $filename;
+            if ($code == "en") {
+                include "Language/messages/en.php";
+            } else {
+                trigger_error("unsupported language", E_USER_ERROR);
+            }
             $cache = compact($this->keys);
         }
 

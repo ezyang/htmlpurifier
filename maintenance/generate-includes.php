@@ -29,7 +29,12 @@ $exclude_dirs = array(
 $exclude_files = array(
     'HTMLPurifier/Lexer/PEARSax3.php',
     'HTMLPurifier/Lexer/PH5P.php',
+    'HTMLPurifier/VarParser/Native.php',
     'HTMLPurifier/Printer.php',
+    'HTMLPurifier/StringHashParser.php',
+    'HTMLPurifier/StringHash.php',
+    'HTMLPurifier/ConfigSchema/InterchangeBuilder.php',
+    'HTMLPurifier/PropertyListIterator.php',
 );
 
 // Determine what files need to be included:
