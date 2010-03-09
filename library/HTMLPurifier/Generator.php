@@ -83,20 +83,6 @@ class HTMLPurifier_Generator
             $html .= $this->generateFromToken($tokens[$i]);
         }
 
-        // Tidy cleanup
-        if (extension_loaded('tidy') && $this->config->get('Output.TidyFormat')) {
-            $tidy = new Tidy;
-            $tidy->parseString($html, array(
-               'indent'=> true,
-               'output-xhtml' => $this->_xhtml,
-               'show-body-only' => true,
-               'indent-spaces' => 2,
-               'wrap' => 68,
-            ), 'utf8');
-            $tidy->cleanRepair();
-            $html = (string) $tidy; // explicit cast necessary
-        }
-
         // Normalize newlines to system defined value
         $nl = $this->config->get('Output.Newline');
         if ($nl === null) $nl = PHP_EOL;
