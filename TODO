@@ -18,6 +18,7 @@ Things to do as soon as possible:
  - Fix "<.<" bug (trailing < is removed if not EOD)
  - Build in better internal state dumps and debugging tools for remote
    debugging
+ - Allowed/Allowed* have strange interactions when both set
 
 FUTURE VERSIONS
 ---------------

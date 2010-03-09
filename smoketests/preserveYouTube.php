@@ -17,13 +17,14 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
 
 $string = '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/BdU--T8rLns"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/BdU--T8rLns" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>
 
-<object width="416" height="337"><param name="movie" value="http://www.youtube.com/cp/vjVQa1PpcFNbP_fag8PvopkXZyiXyT0J8U47lw7x5Fc="></param><embed src="http://www.youtube.com/cp/vjVQa1PpcFNbP_fag8PvopkXZyiXyT0J8U47lw7x5Fc=" type="application/x-shockwave-flash" width="416" height="337"></embed></object>';
+<object width="416" height="337"><param name="movie" value="http://www.youtube.com/cp/vjVQa1PpcFNbP_fag8PvopkXZyiXyT0J8U47lw7x5Fc="></param><embed src="http://www.youtube.com/cp/vjVQa1PpcFNbP_fag8PvopkXZyiXyT0J8U47lw7x5Fc=" type="application/x-shockwave-flash" width="416" height="337"></embed></object>
+
+<object width="640" height="385"><param name="movie" value="http://www.youtube.com/v/uNxBeJNyAqA&hl=en_US&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/uNxBeJNyAqA&hl=en_US&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="640" height="385"></embed></object>
+
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" height="385" width="480"><param name="width" value="480" /><param name="height" value="385" /><param name="src" value="http://www.youtube.com/p/E37ADDDFCA0FD050&amp;hl=en" /><embed height="385" src="http://www.youtube.com/p/E37ADDDFCA0FD050&amp;hl=en" type="application/x-shockwave-flash" width="480"></embed></object>
+';
 
 $regular_purifier = new HTMLPurifier();
-
-$youtube_purifier = new HTMLPurifier(array(
-    'Filter.YouTube' => true,
-));
 
 $safeobject_purifier = new HTMLPurifier(array(
     'HTML.SafeObject' => true,
@@ -40,11 +41,6 @@ if (isset($_GET['break'])) echo $string;
 <h2>Without YouTube exception</h2>
 <div><?php
 echo $regular_purifier->purify($string);
-?></div>
-
-<h2>With YouTube exception</h2>
-<div><?php
-echo $youtube_purifier->purify($string);
 ?></div>
 
 <h2>With SafeObject exception and flash compatibility</h2>

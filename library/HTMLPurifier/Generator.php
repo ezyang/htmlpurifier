@@ -142,8 +142,8 @@ class HTMLPurifier_Generator
                         if ($name == "movie") $name = "src";
                         $compat_token->attr[$name] = $val;
                     }
+                    $_extra = "<!--[if IE]>".$this->generateFromToken($compat_token)."<![endif]-->";
                 }
-                $_extra = "<!--[if IE]>".$this->generateFromToken($compat_token)."<![endif]-->";
             }
             return $_extra . '</' . $token->name . '>';
 

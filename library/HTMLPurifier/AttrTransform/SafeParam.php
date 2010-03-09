@@ -37,6 +37,8 @@ class HTMLPurifier_AttrTransform_SafeParam extends HTMLPurifier_AttrTransform
                 $attr['value'] = 'window';
                 break;
             case 'movie':
+            case 'src':
+                $attr['name'] = "movie";
                 $attr['value'] = $this->uri->validate($attr['value'], $config, $context);
                 break;
             case 'flashvars':
