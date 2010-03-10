@@ -116,6 +116,27 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
         );
     }
 
+    function testNestedOl() {
+        $this->assertResult(
+            '<ol><ol></ol></ol>',
+            '<ol><li><ol></ol></li></ol>'
+        );
+    }
+
+    function testNestedUl() {
+        $this->assertResult(
+            '<ul><ul></ul></ul>',
+            '<ul><li><ul></ul></li></ul>'
+        );
+    }
+
+    function testNestedOlWithStrangeEnding() {
+        $this->assertResult(
+            '<ol><li><ol><ol><li>foo</li></ol></li><li>foo</li></ol>',
+            '<ol><li><ol><li><ol><li>foo</li></ol></li><li>foo</li></ol></li></ol>'
+        );
+    }
+
 }
 
 // vim: et sw=4 sts=4

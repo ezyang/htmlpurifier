@@ -17,6 +17,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Support flashvars when using %HTML.SafeObject
 ! Support for Internet Explorer compatibility with %HTML.SafeObject
   using %Output.FlashCompat.
+! Handle <ol><ol> properly, by inserting the necessary <li> tag.
 
 4.0.0, released 2009-07-07
 # APIs for ConfigSchema subsystem have substantially changed. See
