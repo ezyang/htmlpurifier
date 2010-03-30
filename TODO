@@ -19,6 +19,7 @@ Things to do as soon as possible:
  - Build in better internal state dumps and debugging tools for remote
    debugging
  - Allowed/Allowed* have strange interactions when both set
+ - Transform lone embeds into object tags
 
 FUTURE VERSIONS
 ---------------

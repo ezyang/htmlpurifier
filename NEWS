@@ -14,7 +14,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Support YouTube slideshows that contain /cp/ in their URL.
 ! Support for data: URI scheme; not enabled by default, add it using
   %URI.AllowedSchemes
-! Support flashvars when using %HTML.SafeObject
+! Support flashvars when using %HTML.SafeObject and %HTML.SafeEmbed.
 ! Support for Internet Explorer compatibility with %HTML.SafeObject
   using %Output.FlashCompat.
 ! Handle <ol><ol> properly, by inserting the necessary <li> tag.
