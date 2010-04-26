@@ -25,7 +25,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('text-transform:capitalize;');
         $this->assertDef('background-color:rgb(0,0,255);');
         $this->assertDef('background-color:transparent;');
-        $this->assertDef('background:#333 url(chess.png) repeat fixed 50% top;');
+        $this->assertDef('background:#333 url(\'chess.png\') repeat fixed 50% top;');
         $this->assertDef('color:#F00;');
         $this->assertDef('border-top-color:#F00;');
         $this->assertDef('border-color:#F00 #FF0;');
@@ -73,9 +73,9 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('vertical-align:12px;');
         $this->assertDef('vertical-align:50%;');
         $this->assertDef('table-layout:fixed;');
-        $this->assertDef('list-style-image:url(nice.jpg);');
-        $this->assertDef('list-style:disc url(nice.jpg) inside;');
-        $this->assertDef('background-image:url(foo.jpg);');
+        $this->assertDef('list-style-image:url(\'nice.jpg\');');
+        $this->assertDef('list-style:disc url(\'nice.jpg\') inside;');
+        $this->assertDef('background-image:url(\'foo.jpg\');');
         $this->assertDef('background-image:none;');
         $this->assertDef('background-repeat:repeat-y;');
         $this->assertDef('background-attachment:fixed;');
@@ -101,7 +101,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         // bad props
         $this->assertDef('nodice:foobar;', false);
         $this->assertDef('position:absolute;', false);
-        $this->assertDef('background-image:url(javascript:alert\(\));', false);
+        $this->assertDef('background-image:url(\'javascript:alert\(\)\');', false);
 
         // airy input
         $this->assertDef(' font-weight : bold; color : #ff0000',

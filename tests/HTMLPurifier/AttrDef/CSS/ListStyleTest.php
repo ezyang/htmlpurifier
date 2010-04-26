@@ -13,14 +13,14 @@ class HTMLPurifier_AttrDef_CSS_ListStyleTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('circle outside');
         $this->assertDef('inside');
         $this->assertDef('none');
-        $this->assertDef('url(foo.gif)');
-        $this->assertDef('circle url(foo.gif) inside');
+        $this->assertDef('url(\'foo.gif\')');
+        $this->assertDef('circle url(\'foo.gif\') inside');
 
         // invalid values
         $this->assertDef('outside inside', 'outside');
 
         // ordering
-        $this->assertDef('url(foo.gif) none', 'none url(foo.gif)');
+        $this->assertDef('url(foo.gif) none', 'none url(\'foo.gif\')');
         $this->assertDef('circle lower-alpha', 'circle');
         // the spec is ambiguous about what happens in these
         // cases, so we're going off the W3C CSS validator
