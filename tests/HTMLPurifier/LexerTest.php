@@ -7,7 +7,10 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 
     public function __construct() {
         parent::__construct();
-        if ($GLOBALS['HTMLPurifierTest']['PEAR']) {
+        if ($GLOBALS['HTMLPurifierTest']['PEAR'] &&
+        // PEARSax3 is not maintained and throws loads of DEPRECATED
+        // errors in PHP 5.3
+        version_compare(PHP_VERSION, '5.3', '<')) {
             require_once 'HTMLPurifier/Lexer/PEARSax3.php';
             $this->_has_pear = true;
         }

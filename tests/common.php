@@ -48,7 +48,9 @@ require_once $simpletest_location . 'remote.php';
 
 // load CSS Tidy
 if ($csstidy_location !== false) {
+    $old = error_reporting(E_ALL);
     require $csstidy_location . 'class.csstidy.php';
+    error_reporting($old);
 }
 
 // load PEAR to include path
