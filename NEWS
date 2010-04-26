@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.1.0, unknown release date
+4.1.0, released 2010-04-26
 ! Support proprietary height attribute on table element
 ! Support YouTube slideshows that contain /cp/ in their URL.
 ! Support for data: URI scheme; not enabled by default, add it using

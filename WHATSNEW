@@ -1,7 +1,6 @@
-HTML Purifier 4.0 is a major feature release focused on configuration
-It deprecates the $config->set('Ns', 'Directive', $value) syntax for
-$config->set('Ns.Directive', $value); both syntaxes work but the
-former will throw errors.  There are also some new features:  robust
-support for name/id, configuration inheritance, remove nbsp in
-the RemoveEmpty autoformatter, userland configuration directives
-and configuration serialization.
+HTML Purifier 4.1 is a major security release that fixes an XSS
+vulnerability exploitable on Internet Explorer.  It also contains
+a number of new features, including dramatically more flexible Flash
+support, including %Output.FlashCompat to replace %HTML.SafeEmbed,
+optional support for the data: URI scheme and better HTML parsing
+capabilities.
