@@ -13,6 +13,11 @@ class HTMLPurifier_Lexer_DirectLex_ErrorsTest extends HTMLPurifier_ErrorsHarness
         $lexer->parseAttributeString($input, $this->config, $this->context);
     }
 
+    function testExtractBody() {
+        $this->expectErrorCollection(E_WARNING, 'Lexer: Extracted body');
+        $this->invoke('<body>foo</body>');
+    }
+
     function testUnclosedComment() {
         $this->expectErrorCollection(E_WARNING, 'Lexer: Unclosed comment');
         $this->expectContext('CurrentLine', 1);
