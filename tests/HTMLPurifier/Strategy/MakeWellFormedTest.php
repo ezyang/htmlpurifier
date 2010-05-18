@@ -118,8 +118,8 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
 
     function testNestedOl() {
         $this->assertResult(
-            '<ol><ol></ol></ol>',
-            '<ol><li><ol></ol></li></ol>'
+            '<ol><ol><li>foo</li></ol></ol>',
+            '<ol><li><ol><li>foo</li></ol></li></ol>'
         );
     }
 

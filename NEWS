@@ -12,6 +12,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 4.1.1, unknown release date
 - Emit an error for CollectErrors if a body is extracted
 - Fix bug where in background-position for center keyword handling.
+- Fix infinite loop when a wrapper element is inserted in a context
+  where it's not allowed.  Thanks Lars <lars@renoz.dk> for reporting.
 
 4.1.0, released 2010-04-26
 ! Support proprietary height attribute on table element
