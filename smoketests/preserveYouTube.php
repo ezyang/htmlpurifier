@@ -22,6 +22,8 @@ $string = '<object width="425" height="350"><param name="movie" value="http://ww
 <object width="640" height="385"><param name="movie" value="http://www.youtube.com/v/uNxBeJNyAqA&hl=en_US&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/uNxBeJNyAqA&hl=en_US&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="640" height="385"></embed></object>
 
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" height="385" width="480"><param name="width" value="480" /><param name="height" value="385" /><param name="src" value="http://www.youtube.com/p/E37ADDDFCA0FD050&amp;hl=en" /><embed height="385" src="http://www.youtube.com/p/E37ADDDFCA0FD050&amp;hl=en" type="application/x-shockwave-flash" width="480"></embed></object>
+
+<object height="385" width="480"><param name="width" value="480" /><param name="height" value="385" /><param name="src" value="http://www.youtube.com/p/E37ADDDFCA0FD050&amp;hl=en" /></object>
 ';
 
 $regular_purifier = new HTMLPurifier();
