@@ -16,6 +16,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   where it's not allowed.  Thanks Lars <lars@renoz.dk> for reporting.
 - Remove +x bit and shebang from index.php; only supported mode is to
   explicitly call it with php.
+- Make test script less chatty when log_errors is on.
 
 4.1.0, released 2010-04-26
 ! Support proprietary height attribute on table element
