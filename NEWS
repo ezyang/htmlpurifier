@@ -14,6 +14,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix bug where in background-position for center keyword handling.
 - Fix infinite loop when a wrapper element is inserted in a context
   where it's not allowed.  Thanks Lars <lars@renoz.dk> for reporting.
+- Remove +x bit and shebang from index.php; only supported mode is to
+  explicitly call it with php.
 
 4.1.0, released 2010-04-26
 ! Support proprietary height attribute on table element
