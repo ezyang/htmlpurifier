@@ -81,7 +81,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     function test_cleanCSS_angledBrackets() {
         $this->assertCleanCSS(
             ".class {\nfont-family:'</style>';\n}",
-            ".class {\nfont-family:'\\3C /style\\3E ';\n}"
+            ".class {\nfont-family:\"\\3C /style\\3E \";\n}"
         );
     }
 
@@ -99,14 +99,14 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
 
     function test_cleanCSS_escapeCodes() {
         $this->assertCleanCSS(
-            ".class {\nfont-family:'\\3C /style\\3E ';\n}"
+            ".class {\nfont-family:\"\\3C /style\\3E \";\n}"
         );
     }
 
     function test_cleanCSS_noEscapeCodes() {
         $this->config->set('Filter.ExtractStyleBlocks.Escaping', false);
         $this->assertCleanCSS(
-            ".class {\nfont-family:'</style>';\n}"
+            ".class {\nfont-family:\"</style>\";\n}"
         );
     }
 

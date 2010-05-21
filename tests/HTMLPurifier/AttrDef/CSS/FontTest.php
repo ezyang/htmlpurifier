@@ -11,10 +11,10 @@ class HTMLPurifier_AttrDef_CSS_FontTest extends HTMLPurifier_AttrDefHarness
         // hodgepodge of usage cases from W3C spec, but " -> '
         $this->assertDef('12px/14px sans-serif');
         $this->assertDef('80% sans-serif');
-        $this->assertDef('x-large/110% \'New Century Schoolbook\', serif');
+        $this->assertDef('x-large/110% "New Century Schoolbook", serif');
         $this->assertDef('bold italic large Palatino, serif');
         $this->assertDef('normal small-caps 120%/120% fantasy');
-        $this->assertDef('300 italic 1.3em/1.7em \'FB Armada\', sans-serif');
+        $this->assertDef('300 italic 1.3em/1.7em "FB Armada", sans-serif');
         $this->assertDef('600 9px Charcoal');
         $this->assertDef('600 9px/ 12px Charcoal', '600 9px/12px Charcoal');
 

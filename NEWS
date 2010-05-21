@@ -10,6 +10,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.1.1, unknown release date
+- Rewrite CSS output logic for font-family and url().  Thanks Mario
+  Heiderich <mario.heiderich@googlemail.com> for reporting and Takeshi
+  Terada <t-terada@violet.plala.or.jp> for suggesting the fix.
 - Emit an error for CollectErrors if a body is extracted
 - Fix bug where in background-position for center keyword handling.
 - Fix infinite loop when a wrapper element is inserted in a context

@@ -25,7 +25,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('text-transform:capitalize;');
         $this->assertDef('background-color:rgb(0,0,255);');
         $this->assertDef('background-color:transparent;');
-        $this->assertDef('background:#333 url(\'chess.png\') repeat fixed 50% top;');
+        $this->assertDef('background:#333 url("chess.png") repeat fixed 50% top;');
         $this->assertDef('color:#F00;');
         $this->assertDef('border-top-color:#F00;');
         $this->assertDef('border-color:#F00 #FF0;');
@@ -62,7 +62,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('width:-50px;', false);
         $this->assertDef('text-decoration:underline;');
         $this->assertDef('font-family:sans-serif;');
-        $this->assertDef('font-family:Gill, \'Times New Roman\', sans-serif;');
+        $this->assertDef('font-family:Gill, "Times New Roman", sans-serif;');
         $this->assertDef('font:12px serif;');
         $this->assertDef('border:1px solid #000;');
         $this->assertDef('border-bottom:2em double #FF00FA;');
@@ -73,9 +73,9 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('vertical-align:12px;');
         $this->assertDef('vertical-align:50%;');
         $this->assertDef('table-layout:fixed;');
-        $this->assertDef('list-style-image:url(\'nice.jpg\');');
-        $this->assertDef('list-style:disc url(\'nice.jpg\') inside;');
-        $this->assertDef('background-image:url(\'foo.jpg\');');
+        $this->assertDef('list-style-image:url("nice.jpg");');
+        $this->assertDef('list-style:disc url("nice.jpg") inside;');
+        $this->assertDef('background-image:url("foo.jpg");');
         $this->assertDef('background-image:none;');
         $this->assertDef('background-repeat:repeat-y;');
         $this->assertDef('background-attachment:fixed;');

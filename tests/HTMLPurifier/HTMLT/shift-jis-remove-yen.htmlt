@@ -3,7 +3,7 @@ if (!function_exists('iconv')) return true;
 --INI--
 Core.Encoding = Shift_JIS
 --HTML--
-<b style="font-family:'&#165;';">111</b>
+<b style="font-family:&quot;&#165;&quot;;">111</b>
 --EXPECT--
-<b style="font-family:'';">111</b>
+<b style="font-family:&quot;&quot;;">111</b>
 --# vim: et sw=4 sts=4
