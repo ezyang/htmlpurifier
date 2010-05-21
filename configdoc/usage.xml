@@ -367,7 +367,7 @@
  </directive>
  <directive id="HTML.FlashAllowFullScreen">
   <file name="HTMLPurifier/AttrTransform/SafeParam.php">
-   <line>37</line>
+   <line>38</line>
   </file>
  </directive>
  <directive id="Core.EscapeInvalidChildren">

@@ -132,19 +132,7 @@ class HTMLPurifier_Generator
             $_extra = '';
             if ($this->_flashCompat) {
                 if ($token->name == "object" && !empty($this->_flashStack)) {
-                    $flash = array_pop($this->_flashStack);
-                    $compat_token = new HTMLPurifier_Token_Empty("embed");
-                    foreach ($flash->attr as $name => $val) {
-                        if ($name == "classid") continue;
-                        if ($name == "type") continue;
-                        if ($name == "data") $name = "src";
-                        $compat_token->attr[$name] = $val;
-                    }
-                    foreach ($flash->param as $name => $val) {
-                        if ($name == "movie") $name = "src";
-                        $compat_token->attr[$name] = $val;
-                    }
-                    $_extra = "<!--[if IE]>".$this->generateFromToken($compat_token)."<![endif]-->";
+                    // doesn't do anything for now
                 }
             }
             return $_extra . '</' . $token->name . '>';
