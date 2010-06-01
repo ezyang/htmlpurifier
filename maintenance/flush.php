@@ -18,8 +18,7 @@ function e($cmd) {
     if ($status) exit($status);
 }
 
-$php = $_SERVER['argv'][1];
-if (!$php) $php = 'php';
+$php = empty($_SERVER['argv'][1]) ? 'php' : $_SERVER['argv'][1];
 
 e($php . ' generate-includes.php');
 e($php . ' generate-schema-cache.php');

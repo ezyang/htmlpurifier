@@ -10,6 +10,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.1.1, unknown release date
+- Fix undefined index warnings in maintenance scripts.
 - Fix bug in DirectLex for parsing elements with a single attribute
   with entities.
 - Rewrite CSS output logic for font-family and url().  Thanks Mario

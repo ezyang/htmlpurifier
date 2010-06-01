@@ -80,8 +80,9 @@ function get_dependency_lookup($file) {
         if (strncmp('class', $line, 5) === 0) {
             // The implementation here is fragile and will break if we attempt
             // to use interfaces. Beware!
-            list(, $parent) = explode(' extends ', trim($line, ' {'."\n\r"), 2);
-            if (empty($parent)) break;
+            $arr = explode(' extends ', trim($line, ' {'."\n\r"), 2);
+            if (count($arr) < 2) break;
+            $parent = $arr[1];
             $dep_file = HTMLPurifier_Bootstrap::getPath($parent);
             if (!$dep_file) break;
             $deps[$dep_file] = true;
