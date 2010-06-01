@@ -10,6 +10,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.1.1, unknown release date
+- Fix bug in DirectLex for parsing elements with a single attribute
+  with entities.
 - Rewrite CSS output logic for font-family and url().  Thanks Mario
   Heiderich <mario.heiderich@googlemail.com> for reporting and Takeshi
   Terada <t-terada@violet.plala.or.jp> for suggesting the fix.

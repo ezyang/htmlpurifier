@@ -262,6 +262,15 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
         );
     }
 
+    function test_tokenizeHTML_singleAttribute() {
+        $this->assertTokenization(
+            '<br style="&amp;" />',
+            array(
+                new HTMLPurifier_Token_Empty('br', array('style' => '&'))
+            )
+        );
+    }
+
     function test_tokenizeHTML_emptyTag() {
         $this->assertTokenization(
             '<br />',

@@ -6,6 +6,7 @@
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>81</line>
+   <line>269</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>53</line>
