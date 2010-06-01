@@ -1,6 +1,5 @@
-HTML Purifier 4.1 is a major security release that fixes an XSS
-vulnerability exploitable on Internet Explorer.  It also contains
-a number of new features, including dramatically more flexible Flash
-support, including %Output.FlashCompat to replace %HTML.SafeEmbed,
-optional support for the data: URI scheme and better HTML parsing
-capabilities.
+HTML Purifier 4.1.1 is a major security and bugfix release that
+improves on 4.1's fix for an XSS vulnerability exploitable on Internet
+Explorer.  It also contains a number of important bugfixes, including
+the removal of improper logic that could result in infinite loops and
+fixed parsing for single-attributes with entities with DirectLex.

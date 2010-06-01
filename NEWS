@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.1.1, unknown release date
+4.1.1, released 2010-05-31
 - Fix undefined index warnings in maintenance scripts.
 - Fix bug in DirectLex for parsing elements with a single attribute
   with entities.
