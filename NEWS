@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.1.2, unknown release date
+- Fix improper handling of Internet Explorer conditional comments
+  by parser.  Thanks zmonteca for reporting.
+
 4.1.1, released 2010-05-31
 - Fix undefined index warnings in maintenance scripts.
 - Fix bug in DirectLex for parsing elements with a single attribute

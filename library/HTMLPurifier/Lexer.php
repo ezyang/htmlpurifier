@@ -231,6 +231,17 @@ class HTMLPurifier_Lexer
     }
 
     /**
+     * Special Internet Explorer conditional comments should be removed.
+     */
+    protected static function removeIEConditional($string) {
+        return preg_replace(
+            '#<!--\[if [^>]+\]>.*<!\[endif\]-->#si', // probably should generalize for all strings
+            '',
+            $string
+        );
+    }
+
+    /**
      * Callback function for escapeCDATA() that does the work.
      *
      * @warning Though this is public in order to let the callback happen,
@@ -259,6 +270,8 @@ class HTMLPurifier_Lexer
             // escape convoluted CDATA
             $html = $this->escapeCommentedCDATA($html);
         }
+
+        $html = $this->removeIEConditional($html);
 
         // escape CDATA
         $html = $this->escapeCDATA($html);

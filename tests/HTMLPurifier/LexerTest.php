@@ -710,6 +710,13 @@ div {}
         );
     }
 
+    function test_tokenizeHTML_ignoreIECondComment() {
+        $this->assertTokenization(
+            '<!--[if IE]>foo<a>bar<!-- baz --><![endif]-->',
+            array()
+        );
+    }
+
     /*
 
     function test_tokenizeHTML_() {
