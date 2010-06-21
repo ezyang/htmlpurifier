@@ -717,6 +717,14 @@ div {}
         );
     }
 
+    function test_tokenizeHTML_removeProcessingInstruction() {
+        $this->config->set('Core.RemoveProcessingInstructions', true);
+        $this->assertTokenization(
+            '<?xml blah blah ?>',
+            array()
+        );
+    }
+
     /*
 
     function test_tokenizeHTML_() {

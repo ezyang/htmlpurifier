@@ -297,6 +297,11 @@ class HTMLPurifier_Lexer
         // represent non-SGML characters (horror, horror!)
         $html = HTMLPurifier_Encoder::cleanUTF8($html);
 
+        // if processing instructions are to removed, remove them now
+        if ($config->get('Core.RemoveProcessingInstructions')) {
+            $html = preg_replace('#<\?.+?\?>#s', '', $html);
+        }
+
         return $html;
     }
 
