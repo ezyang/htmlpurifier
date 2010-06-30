@@ -12,6 +12,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 4.1.2, unknown release date
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
   <? ... ?> statements.
+! Added %URI.DisableResources functionality; the directive originally
+  did nothing.  Thanks David Rothstein for reporting.
 - Fix improper handling of Internet Explorer conditional comments
   by parser.  Thanks zmonteca for reporting.
 
