@@ -18,3 +18,5 @@ docs/doxygen*
 *.phpt.php
 *.phpt.skip.php
 *.htmlt.ini
+*.patch
+/*.php
