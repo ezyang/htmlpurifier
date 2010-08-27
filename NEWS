@@ -16,6 +16,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   did nothing.  Thanks David Rothstein for reporting.
 - Fix improper handling of Internet Explorer conditional comments
   by parser.  Thanks zmonteca for reporting.
+- Fix missing attributes bug when running on Mac Snow Leopard and APC.
+  Thanks sidepodcast for the fix.
 
 4.1.1, released 2010-05-31
 - Fix undefined index warnings in maintenance scripts.
