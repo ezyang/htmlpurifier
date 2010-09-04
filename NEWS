@@ -18,6 +18,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   by parser.  Thanks zmonteca for reporting.
 - Fix missing attributes bug when running on Mac Snow Leopard and APC.
   Thanks sidepodcast for the fix.
+- Warn if an element is allowed, but an attribute it requires is
+  not allowed.
 
 4.1.1, released 2010-05-31
 - Fix undefined index warnings in maintenance scripts.

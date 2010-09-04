@@ -122,17 +122,20 @@ a[href|title]
     }
 
     function test_AllowedAttributes_global_preferredSyntax() {
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', 'style');
         $this->assertPurification_AllowedAttributes_global_style();
     }
 
     function test_AllowedAttributes_global_verboseSyntax() {
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', '*@style');
         $this->assertPurification_AllowedAttributes_global_style();
     }
 
     function test_AllowedAttributes_global_discouragedSyntax() {
         // Emit errors eventually
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', '*.style');
         $this->assertPurification_AllowedAttributes_global_style();
     }
@@ -144,16 +147,19 @@ a[href|title]
     }
 
     function test_AllowedAttributes_local_preferredSyntax() {
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', 'p@style');
         $this->assertPurification_AllowedAttributes_local_p_style();
     }
 
     function test_AllowedAttributes_local_discouragedSyntax() {
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', 'p.style');
         $this->assertPurification_AllowedAttributes_local_p_style();
     }
 
     function test_AllowedAttributes_multiple() {
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', 'p@style,br@class,title');
         $this->assertPurification(
             '<p style="font-weight:bold;" class="foo" title="foo">Jelly</p><br style="clear:both;" class="foo" title="foo" />',
@@ -162,29 +168,34 @@ a[href|title]
     }
 
     function test_AllowedAttributes_local_invalidAttribute() {
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', array('p@style', 'p@<foo>'));
         $this->expectError(new PatternExpectation("/Attribute '&lt;foo&gt;' in element 'p' not supported/"));
         $this->assertPurification_AllowedAttributes_local_p_style();
     }
 
     function test_AllowedAttributes_global_invalidAttribute() {
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', array('style', '<foo>'));
         $this->expectError(new PatternExpectation("/Global attribute '&lt;foo&gt;' is not supported in any elements/"));
         $this->assertPurification_AllowedAttributes_global_style();
     }
 
     function test_AllowedAttributes_local_invalidAttributeDueToMissingElement() {
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', 'p.style,foo.style');
         $this->expectError(new PatternExpectation("/Cannot allow attribute 'style' if element 'foo' is not allowed\/supported/"));
         $this->assertPurification_AllowedAttributes_local_p_style();
     }
 
     function test_AllowedAttributes_duplicate() {
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', 'p.style,p@style');
         $this->assertPurification_AllowedAttributes_local_p_style();
     }
 
     function test_AllowedAttributes_multipleErrors() {
+        $this->config->set('HTML.AllowedElements', array('p', 'br'));
         $this->config->set('HTML.AllowedAttributes', 'p.style,foo.style,<foo>');
         $this->expectError(new PatternExpectation("/Cannot allow attribute 'style' if element 'foo' is not allowed\/supported/"));
         $this->expectError(new PatternExpectation("/Global attribute '&lt;foo&gt;' is not supported in any elements/"));
@@ -345,6 +356,12 @@ a[href|title]
             $this->config->getHTMLDefinition()->info_injector,
             array()
         );
+    }
+
+    function test_notAllowedRequiredAttributeError() {
+        $this->expectError("Required attribute 'src' in element 'img' was not allowed, which means 'img' will not be allowed either");
+        $this->config->set('HTML.Allowed', 'img[alt]');
+        $this->config->getHTMLDefinition();
     }
 
 }
