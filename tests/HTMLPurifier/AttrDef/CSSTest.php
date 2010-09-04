@@ -144,6 +144,12 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('overflow:scroll;');
     }
 
+    function testForbidden() {
+        $this->config->set('CSS.ForbiddenProperties', 'float');
+        $this->assertDef('float:left;', false);
+        $this->assertDef('text-align:right;');
+    }
+
 }
 
 // vim: et sw=4 sts=4

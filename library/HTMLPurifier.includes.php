@@ -196,6 +196,7 @@ require 'HTMLPurifier/Token/Start.php';
 require 'HTMLPurifier/Token/Text.php';
 require 'HTMLPurifier/URIFilter/DisableExternal.php';
 require 'HTMLPurifier/URIFilter/DisableExternalResources.php';
+require 'HTMLPurifier/URIFilter/DisableResources.php';
 require 'HTMLPurifier/URIFilter/HostBlacklist.php';
 require 'HTMLPurifier/URIFilter/MakeAbsolute.php';
 require 'HTMLPurifier/URIFilter/Munge.php';

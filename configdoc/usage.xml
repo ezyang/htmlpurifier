@@ -42,6 +42,11 @@
    <line>275</line>
   </file>
  </directive>
+ <directive id="CSS.ForbiddenProperties">
+  <file name="HTMLPurifier/CSSDefinition.php">
+   <line>289</line>
+  </file>
+ </directive>
  <directive id="Cache.DefinitionImpl">
   <file name="HTMLPurifier/DefinitionCacheFactory.php">
    <line>49</line>
@@ -136,12 +141,12 @@
  </directive>
  <directive id="HTML.ForbiddenElements">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>337</line>
+   <line>342</line>
   </file>
  </directive>
  <directive id="HTML.ForbiddenAttributes">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>338</line>
+   <line>343</line>
   </file>
  </directive>
  <directive id="HTML.Trusted">
