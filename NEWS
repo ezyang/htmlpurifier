@@ -14,6 +14,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   <? ... ?> statements.
 ! Added %URI.DisableResources functionality; the directive originally
   did nothing.  Thanks David Rothstein for reporting.
+! Add documentation about configuration directive types.
 - Fix improper handling of Internet Explorer conditional comments
   by parser.  Thanks zmonteca for reporting.
 - Fix missing attributes bug when running on Mac Snow Leopard and APC.

@@ -40,10 +40,24 @@
                             </xsl:apply-templates>
                         </ul>
                     </div>
+                    <div id="typesContainer">
+                        <h2>Types</h2>
+                        <xsl:apply-templates select="$typeLookup" mode="types" />
+                    </div>
                     <xsl:apply-templates />
                 </div>
             </body>
         </html>
+    </xsl:template>
+
+    <xsl:template match="type" mode="types">
+        <div class="type-block">
+            <xsl:attribute name="id">type-<xsl:value-of select="@id" /></xsl:attribute>
+            <h3><code><xsl:value-of select="@id" /></code>: <xsl:value-of select="@name" /></h3>
+            <div class="type-description">
+                <xsl:copy-of xmlns:xhtml="http://www.w3.org/1999/xhtml" select="xhtml:div/node()" />
+            </div>
+        </div>
     </xsl:template>
 
     <xsl:template match="title" mode="toc" />
@@ -192,10 +206,13 @@
             <td>
                 <xsl:variable name="type" select="text()" />
                 <xsl:attribute name="class">type type-<xsl:value-of select="$type" /></xsl:attribute>
-                <xsl:value-of select="$typeLookup/type[@id=$type]/text()" />
-                <xsl:if test="@allow-null='yes'">
-                    (or null)
-                </xsl:if>
+                <a>
+                    <xsl:attribute name="href">#type-<xsl:value-of select="$type" /></xsl:attribute>
+                    <xsl:value-of select="$typeLookup/type[@id=$type]/@name" />
+                    <xsl:if test="@allow-null='yes'">
+                        (or null)
+                    </xsl:if>
+                </a>
             </td>
         </tr>
     </xsl:template>
