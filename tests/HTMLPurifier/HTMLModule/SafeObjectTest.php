@@ -6,8 +6,7 @@ class HTMLPurifier_HTMLModule_SafeObjectTest extends HTMLPurifier_HTMLModuleHarn
     function setUp() {
         parent::setUp();
         $this->config->set('HTML.DefinitionID', 'HTMLPurifier_HTMLModule_SafeObjectTest');
-        $def = $this->config->getHTMLDefinition(true);
-        $def->manager->addModule('SafeObject');
+        $this->config->set('HTML.SafeObject', true);
     }
 
     function testMinimal() {
@@ -35,6 +34,13 @@ class HTMLPurifier_HTMLModule_SafeObjectTest extends HTMLPurifier_HTMLModuleHarn
     function testFull() {
         $this->assertResult(
             '<b><object width="425" height="344" type="application/x-shockwave-flash" data="Foobar"><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="flashvars" value="foobarbaz=bally" /><param name="movie" value="http://www.youtube.com/v/RVtEQxH7PWA&amp;hl=en" /><param name="wmode" value="window" /></object></b>'
+        );
+    }
+
+    function testFullScreen() {
+        $this->config->set('HTML.FlashAllowFullScreen', true);
+        $this->assertResult(
+            '<b><object width="425" height="344" type="application/x-shockwave-flash" data="Foobar"><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="flashvars" value="foobarbaz=bally" /><param name="movie" value="http://www.youtube.com/v/RVtEQxH7PWA&amp;hl=en" /><param name="wmode" value="window" /><param name="allowFullScreen" value="true" /></object></b>'
         );
     }
 

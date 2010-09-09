@@ -347,6 +347,11 @@
    <line>13</line>
   </file>
  </directive>
+ <directive id="HTML.FlashAllowFullScreen">
+  <file name="HTMLPurifier/AttrTransform/SafeParam.php">
+   <line>37</line>
+  </file>
+ </directive>
  <directive id="Core.EscapeInvalidChildren">
   <file name="HTMLPurifier/ChildDef/Required.php">
    <line>62</line>
