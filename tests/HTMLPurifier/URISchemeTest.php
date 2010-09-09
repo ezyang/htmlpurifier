@@ -165,6 +165,13 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
+    function test_file_basic() {
+        $this->assertValidation(
+            'file://user@MYCOMPUTER:12/foo/bar?baz#frag',
+            'file://MYCOMPUTER/foo/bar#frag'
+        );
+    }
+
 }
 
 // vim: et sw=4 sts=4
