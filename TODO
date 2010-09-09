@@ -20,6 +20,9 @@ Things to do as soon as possible:
    debugging
  - Allowed/Allowed* have strange interactions when both set
  - Transform lone embeds into object tags
+ - Deprecated config options that emit warnings when you set them (with'
+   a way of muting the warning if you really want to)
+ - Make HTML.Trusted work with Output.FlashCompat
 
 FUTURE VERSIONS
 ---------------
