@@ -1,0 +1,9 @@
+HTML.NewlineNormalization
+TYPE: bool
+VERSION: 4.2.0
+DEFAULT: true
+--DESCRIPTION--
+<p>
+    Whether or not to normalize newlines.
+</p>
+--# vim: et sw=4 sts=4

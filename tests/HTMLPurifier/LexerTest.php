@@ -725,6 +725,24 @@ div {}
         );
     }
 
+   function test_tokenizeHTML_removeNewline() {
+        $this->config->set('HTML.NewlineNormalization', true);
+        $input = "plain text\r\n";
+        $expect = array(
+            new HTMLPurifier_Token_Text("plain text\n")
+        );
+   }
+
+   function test_tokenizeHTML_noRemoveNewline() {
+        $this->config->set('HTML.NewlineNormalization', false);
+        $input = "plain text\r\n";
+        $expect = array(
+            new HTMLPurifier_Token_Text("plain text\r\n")
+        );
+        $this->assertTokenization($input, $expect);
+     }
+
+
     /*
 
     function test_tokenizeHTML_() {
