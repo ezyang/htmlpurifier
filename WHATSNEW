@@ -1,5 +1,8 @@
-HTML Purifier 4.1.1 is a major security and bugfix release that
-improves on 4.1's fix for an XSS vulnerability exploitable on Internet
-Explorer.  It also contains a number of important bugfixes, including
-the removal of improper logic that could result in infinite loops and
-fixed parsing for single-attributes with entities with DirectLex.
+HTML Purifier 4.2.0 is a minor release that implements a number of
+feature requests accumulated over half a year.  New configuration
+options include %Core.RemoveProcessingInstructions,
+%CSS.ForbiddenProperties, %HTML.FlashAllowFullScreen and
+%Core.NormalizeNewlines.  Additionally,%URI.DisableResources is
+now functional and file: is an optionally supported URI scheme.
+There are also some minor bugfixes, usability improvements and
+documentation updates.
