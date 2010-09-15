@@ -109,9 +109,17 @@
    <line>87</line>
   </file>
  </directive>
- <directive id="Output.Newline">
+ <directive id="Core.NormalizeNewlines">
   <file name="HTMLPurifier/Generator.php">
    <line>101</line>
+  </file>
+  <file name="HTMLPurifier/Lexer.php">
+   <line>266</line>
+  </file>
+ </directive>
+ <directive id="Output.Newline">
+  <file name="HTMLPurifier/Generator.php">
+   <line>102</line>
   </file>
  </directive>
  <directive id="HTML.BlockWrapper">
@@ -212,11 +220,6 @@
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>48</line>
-  </file>
- </directive>
- <directive id="HTML.NewlineNormalization">
-  <file name="HTMLPurifier/Lexer.php">
-   <line>266</line>
   </file>
  </directive>
  <directive id="Core.ConvertDocumentToFragment">

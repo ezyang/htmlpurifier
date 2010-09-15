@@ -726,18 +726,18 @@ div {}
     }
 
    function test_tokenizeHTML_removeNewline() {
-        $this->config->set('HTML.NewlineNormalization', true);
-        $input = "plain text\r\n";
+        $this->config->set('Core.NormalizeNewlines', true);
+        $input = "plain\rtext\r\n";
         $expect = array(
-            new HTMLPurifier_Token_Text("plain text\n")
+            new HTMLPurifier_Token_Text("plain\ntext\n")
         );
    }
 
    function test_tokenizeHTML_noRemoveNewline() {
-        $this->config->set('HTML.NewlineNormalization', false);
-        $input = "plain text\r\n";
+        $this->config->set('Core.NormalizeNewlines', false);
+        $input = "plain\rtext\r\n";
         $expect = array(
-            new HTMLPurifier_Token_Text("plain text\r\n")
+            new HTMLPurifier_Token_Text("plain\rtext\r\n")
         );
         $this->assertTokenization($input, $expect);
      }

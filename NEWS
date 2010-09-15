@@ -20,6 +20,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   to utilize full-screen mode.
 ! Add optional support for the <code>file</code> URI scheme, enable
   by explicitly setting %URI.AllowedSchemes.
+! Add %Core.NormalizeNewlines options to allow turning off newline
+  normalization.
 - Fix improper handling of Internet Explorer conditional comments
   by parser.  Thanks zmonteca for reporting.
 - Fix missing attributes bug when running on Mac Snow Leopard and APC.

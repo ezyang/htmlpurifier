@@ -98,9 +98,11 @@ class HTMLPurifier_Generator
         }
 
         // Normalize newlines to system defined value
-        $nl = $this->config->get('Output.Newline');
-        if ($nl === null) $nl = PHP_EOL;
-        if ($nl !== "\n") $html = str_replace("\n", $nl, $html);
+        if ($this->config->get('Core.NormalizeNewlines')) {
+            $nl = $this->config->get('Output.Newline');
+            if ($nl === null) $nl = PHP_EOL;
+            if ($nl !== "\n") $html = str_replace("\n", $nl, $html);
+        }
         return $html;
     }
 

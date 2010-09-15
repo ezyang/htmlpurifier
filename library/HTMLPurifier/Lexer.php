@@ -263,7 +263,7 @@ class HTMLPurifier_Lexer
     public function normalize($html, $config, $context) {
 
         // normalize newlines to \n
-        if ($config->get('HTML.NewlineNormalization')) {
+        if ($config->get('Core.NormalizeNewlines')) {
             $html = str_replace("\r\n", "\n", $html);
             $html = str_replace("\r", "\n", $html);
         }
