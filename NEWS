@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.1.2, unknown release date
+4.2.0, unknown release date
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
   <? ... ?> statements.
 ! Added %URI.DisableResources functionality; the directive originally
