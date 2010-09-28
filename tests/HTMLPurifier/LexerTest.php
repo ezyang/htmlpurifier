@@ -727,20 +727,32 @@ div {}
 
    function test_tokenizeHTML_removeNewline() {
         $this->config->set('Core.NormalizeNewlines', true);
-        $input = "plain\rtext\r\n";
-        $expect = array(
-            new HTMLPurifier_Token_Text("plain\ntext\n")
+        $this->assertTokenization(
+            "plain\rtext\r\n",
+            array(
+                new HTMLPurifier_Token_Text("plain\ntext\n")
+            )
         );
    }
 
    function test_tokenizeHTML_noRemoveNewline() {
         $this->config->set('Core.NormalizeNewlines', false);
-        $input = "plain\rtext\r\n";
-        $expect = array(
-            new HTMLPurifier_Token_Text("plain\rtext\r\n")
+        $this->assertTokenization(
+            "plain\rtext\r\n",
+            array(
+                new HTMLPurifier_Token_Text("plain\rtext\r\n")
+            )
         );
-        $this->assertTokenization($input, $expect);
      }
+
+    function test_tokenizeHTML_conditionalCommentUngreedy() {
+        $this->assertTokenization(
+            '<!--[if gte mso 9]>a<![endif]-->b<!--[if gte mso 9]>c<![endif]-->',
+            array(
+                new HTMLPurifier_Token_Text("b")
+            )
+        );
+    }
 
 
     /*

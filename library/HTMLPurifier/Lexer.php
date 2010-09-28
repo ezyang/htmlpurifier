@@ -235,7 +235,7 @@ class HTMLPurifier_Lexer
      */
     protected static function removeIEConditional($string) {
         return preg_replace(
-            '#<!--\[if [^>]+\]>.*<!\[endif\]-->#si', // probably should generalize for all strings
+            '#<!--\[if [^>]+\]>.*?<!\[endif\]-->#si', // probably should generalize for all strings
             '',
             $string
         );

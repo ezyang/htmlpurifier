@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.2.1, unknown release date
+- Make removal of conditional IE comments ungreedy; thanks Bernd
+  for reporting.
+
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
   <? ... ?> statements.
