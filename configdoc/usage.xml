@@ -186,15 +186,20 @@
  </directive>
  <directive id="HTML.Proprietary">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>221</line>
+   <line>220</line>
   </file>
  </directive>
  <directive id="HTML.SafeObject">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>226</line>
+   <line>223</line>
   </file>
  </directive>
  <directive id="HTML.SafeEmbed">
+  <file name="HTMLPurifier/HTMLModuleManager.php">
+   <line>226</line>
+  </file>
+ </directive>
+ <directive id="HTML.Nofollow">
   <file name="HTMLPurifier/HTMLModuleManager.php">
    <line>229</line>
   </file>

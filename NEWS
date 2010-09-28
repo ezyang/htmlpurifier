@@ -10,6 +10,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.2.1, unknown release date
+! Added %HTML.Nofollow to add rel="nofollow" to external links.
 - Make removal of conditional IE comments ungreedy; thanks Bernd
   for reporting.
 
