@@ -273,10 +273,10 @@ class HTMLPurifier_Lexer
             $html = $this->escapeCommentedCDATA($html);
         }
 
-        $html = $this->removeIEConditional($html);
-
         // escape CDATA
         $html = $this->escapeCDATA($html);
+
+        $html = $this->removeIEConditional($html);
 
         // extract body from document if applicable
         if ($config->get('Core.ConvertDocumentToFragment')) {

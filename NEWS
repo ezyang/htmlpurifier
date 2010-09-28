@@ -13,6 +13,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added %HTML.Nofollow to add rel="nofollow" to external links.
 - Make removal of conditional IE comments ungreedy; thanks Bernd
   for reporting.
+- Escape CDATA before removing Internet Explorer comments.
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
