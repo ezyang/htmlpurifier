@@ -5,6 +5,9 @@ Error when registering autoload with non-static autoload already on SPL stack
 if (!function_exists('spl_autoload_register')) {
     echo "skip - spl_autoload_register() not available";
 }
+if (version_compare(PHP_VERSION, '5.2.11', '>=')) {
+    echo "skip - non-buggy version of PHP";
+}
 --FILE--
 <?php
 class NotStatic

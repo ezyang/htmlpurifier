@@ -65,10 +65,11 @@ class HTMLPurifier_Bootstrap
         if ( ($funcs = spl_autoload_functions()) === false ) {
             spl_autoload_register($autoload);
         } elseif (function_exists('spl_autoload_unregister')) {
+            $buggy  = version_compare(PHP_VERSION, '5.2.11', '<');
             $compat = version_compare(PHP_VERSION, '5.1.2', '<=') &&
                       version_compare(PHP_VERSION, '5.1.0', '>=');
             foreach ($funcs as $func) {
-                if (is_array($func)) {
+                if ($buggy && is_array($func)) {
                     // :TRICKY: There are some compatibility issues and some
                     // places where we need to error out
                     $reflector = new ReflectionMethod($func[0], $func[1]);
