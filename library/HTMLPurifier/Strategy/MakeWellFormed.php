@@ -193,12 +193,12 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             $ok = false;
             if ($type === 'empty' && $token instanceof HTMLPurifier_Token_Start) {
                 // claims to be a start tag but is empty
-                $token = new HTMLPurifier_Token_Empty($token->name, $token->attr);
+                $token = new HTMLPurifier_Token_Empty($token->name, $token->attr, $token->line, $token->col, $token->armor);
                 $ok = true;
             } elseif ($type && $type !== 'empty' && $token instanceof HTMLPurifier_Token_Empty) {
                 // claims to be empty but really is a start tag
                 $this->swap(new HTMLPurifier_Token_End($token->name));
-                $this->insertBefore(new HTMLPurifier_Token_Start($token->name, $token->attr));
+                $this->insertBefore(new HTMLPurifier_Token_Start($token->name, $token->attr, $token->line, $token->col, $token->armor));
                 // punt (since we had to modify the input stream in a non-trivial way)
                 $reprocess = true;
                 continue;

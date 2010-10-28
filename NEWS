@@ -15,6 +15,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Make removal of conditional IE comments ungreedy; thanks Bernd
   for reporting.
 - Escape CDATA before removing Internet Explorer comments.
+- Fix removal of id attributes under certain conditions by ensuring
+  armor attributes are preserved when recreating tags.
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
