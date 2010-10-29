@@ -17,6 +17,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Escape CDATA before removing Internet Explorer comments.
 - Fix removal of id attributes under certain conditions by ensuring
   armor attributes are preserved when recreating tags.
+- Check if schema.ser was corrupted.
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
