@@ -1,0 +1,158 @@
+
+URI and IRI reg-names
+
+An 'ireg-name' as per RFC 3987, which is basically reg-name 
+from RFC 3986 with some extra stuff thrown in:
+
+---------------------------------------------------------------------
+IRIs are defined similarly to URIs in [RFC3986], but the class of
+unreserved characters is extended by adding the characters of the UCS
+(Universal Character Set, [ISO10646]) beyond U+007F, subject to the
+limitations given in the syntax rules below and in section 6.1.
+
+Otherwise, the syntax and use of components and reserved characters
+is the same as that in [RFC3986].  All the operations defined in
+[RFC3986], such as the resolution of relative references, can be
+applied to IRIs by IRI-processing software in exactly the same way as
+they are for URIs by URI-processing software.
+
+Characters outside the US-ASCII repertoire are not reserved and
+therefore MUST NOT be used for syntactical purposes, such as to
+delimit components in newly defined schemes.  For example, U+00A2,
+CENT SIGN, is not allowed as a delimiter in IRIs, because it is in
+the 'iunreserved' category. This is similar to the fact that it is
+not possible to use '-' as a delimiter in URIs, because it is in the
+'unreserved' category.
+
+ireg-name      = *( iunreserved / pct-encoded / sub-delims )
+iunreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~" /  ucschar
+ucschar        = %xA0-D7FF / %xF900-FDCF / %xFDF0-FFEF
+               / %x10000-1FFFD / %x20000-2FFFD / %x30000-3FFFD
+               / %x40000-4FFFD / %x50000-5FFFD / %x60000-6FFFD
+               / %x70000-7FFFD / %x80000-8FFFD / %x90000-9FFFD
+               / %xA0000-AFFFD / %xB0000-BFFFD / %xC0000-CFFFD
+               / %xD0000-DFFFD / %xE1000-EFFFD
+pct-encoded    = "%" HEXDIG HEXDIG
+sub-delims     = "!" / "$" / "&" / "'" / "(" / ")"
+               / "*" / "+" / "," / ";" / "="
+---------------------------------------------------------------------
+
+This is pretty damn flexible, and there's no convincing
+evidence that browsers will handle the full generality of
+the RFC properly.
+
+We'll make several adjustments:
+
+     - We'll never output a percent encoded reg-name, since it's
+       unfriendly to legacy clients.  See this following
+       comment from RFC 3986:
+
+The reg-name syntax allows percent-encoded octets in order to
+represent non-ASCII registered names in a uniform way that is
+independent of the underlying name resolution technology.  Non-ASCII
+characters must first be encoded according to UTF-8 [STD63], and then
+each octet of the corresponding UTF-8 sequence must be percent-
+encoded to be represented as URI characters.  URI producing
+applications must not use percent-encoding in host unless it is used
+to represent a UTF-8 character sequence.  When a non-ASCII registered
+name represents an internationalized domain name intended for
+resolution via the DNS, the name must be transformed to the IDNA
+encoding [RFC3490] prior to name lookup.  URI producers should
+provide these registered names in the IDNA encoding, rather than a
+percent-encoding, if they wish to maximize interoperability with
+legacy URI resolvers.
+
+     - We assume DNS (which happens to be true for all of the
+       schemes we support, and is also basically true for
+       every scheme in existence), which means we get to use
+       the recommendations from... some RFC.  (Note that
+       RFC 3986 makes no such mandate, explicitly stating it
+       does not mandate a registered name lookup technology.
+       Fortunately, it does state that producing URIs that 
+       conform to DNS is a good idea: "URI producers should use names
+       that conform to the DNS syntax, even when use of DNS is not
+       immediately apparent, and should limit these names to no more than
+       255 characters in length.")
+
+       There are a lot of variously contradicting statements 
+       about what can be put in domain name.  Here is a sampling:
+
+------------------------------------------------------------------------
+RFC 952
+1. A "name" (Net, Host, Gateway, or Domain name) is a text string up
+to 24 characters drawn from the alphabet (A-Z), digits (0-9), minus
+sign (-), and period (.).  Note that periods are only allowed when
+they serve to delimit components of "domain style names". (See
+RFC-921, "Domain Name System Implementation Schedule", for
+background).  No blank or space characters are permitted as part of a
+name. No distinction is made between upper and lower case.  The first
+character must be an alpha character.  The last character must not be
+a minus sign or period.  A host which serves as a GATEWAY should have
+"-GATEWAY" or "-GW" as part of its name.  Hosts which do not serve as
+Internet gateways should not use "-GATEWAY" and "-GW" as part of
+their names. A host which is a TAC should have "-TAC" as the last
+part of its host name, if it is a DoD host.  Single character names
+or nicknames are not allowed.
+
+--------------------------------------------------------------------------
+RFC 1034
+The following syntax will result in fewer problems with many
+applications that use domain names (e.g., mail, TELNET).
+
+<domain> ::= <subdomain> | " "
+<subdomain> ::= <label> | <subdomain> "." <label>
+<label> ::= <letter> [ [ <ldh-str> ] <let-dig> ]
+<ldh-str> ::= <let-dig-hyp> | <let-dig-hyp> <ldh-str>
+<let-dig-hyp> ::= <let-dig> | "-"
+<let-dig> ::= <letter> | <digit>
+<letter> ::= any one of the 52 alphabetic characters A through Z in
+upper case and a through z in lower case
+<digit> ::= any one of the ten digits 0 through 9
+
+Note that while upper and lower case letters are allowed in domain
+names, no significance is attached to the case.  That is, two names with
+the same spelling but different case are to be treated as if identical.
+
+The labels must follow the rules for ARPANET host names.  They must
+start with a letter, end with a letter or digit, and have as interior
+characters only letters, digits, and hyphen.  There are also some
+restrictions on the length.  Labels must be 63 characters or less.
+
+-----------------------------------------------------------------------
+RFC 1123
+
+The syntax of a legal Internet host name was specified in RFC-952
+[DNS:4].  One aspect of host name syntax is hereby changed: the
+restriction on the first character is relaxed to allow either a
+letter or a digit.  Host software MUST support this more liberal
+syntax.
+
+Host software MUST handle host names of up to 63 characters and
+SHOULD handle host names of up to 255 characters.
+
+
+-----------------------------------------------------------------------
+RFC 2396
+   hostname      = *( domainlabel "." ) toplabel [ "." ]
+   domainlabel   = alphanum | alphanum *( alphanum | "-" ) alphanum
+   toplabel      = alpha | alpha *( alphanum | "-" ) alphanum
+   IPv4address   = 1*digit "." 1*digit "." 1*digit "." 1*digit
+   port          = *digit
+
+Hostnames take the form described in Section 3 of [RFC1034] and
+Section 2.1 of [RFC1123]: a sequence of domain labels separated by
+".", each domain label starting and ending with an alphanumeric
+character and possibly also containing "-" characters.  The rightmost
+domain label of a fully qualified domain name will never start with a
+digit, thus syntactically distinguishing domain names from IPv4
+addresses, and may be followed by a single "." if it is necessary to
+distinguish between the complete domain name and any local domain.
+To actually be "Uniform" as a resource locator, a URL hostname should
+be a fully qualified domain name.  In practice, however, the host
+component may be a local domain literal.
+
+-----------------------------------------------------------------------
+
+Our current working definition appears to be derived from RFC 2396,
+however, we should verify that this truly is the most permissive
+form out of all of the RFC's specifications.
