@@ -755,6 +755,15 @@ div {}
     }
 
     function test_tokenizeHTML_imgTag() {
+        $start = array(
+                        new HTMLPurifier_Token_Start('img',
+                            array(
+                                'src' => 'img_11775.jpg',
+                                'alt' => '[Img #11775]',
+                                'id' => 'EMBEDDED_IMG_11775',
+                            )
+                        )
+                    );
         $this->assertTokenization(
             '<img src="img_11775.jpg" alt="[Img #11775]" id="EMBEDDED_IMG_11775" >',
             array(
@@ -767,15 +776,8 @@ div {}
                 )
             ),
             array(
-                'DirectLex' => array(
-                        new HTMLPurifier_Token_Start('img',
-                            array(
-                                'src' => 'img_11775.jpg',
-                                'alt' => '[Img #11775]',
-                                'id' => 'EMBEDDED_IMG_11775',
-                            )
-                        )
-                    ),
+                'DirectLex' => $start,
+                'PEARSax3' => $start,
                 )
         );
     }
