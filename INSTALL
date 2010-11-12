@@ -26,6 +26,12 @@ These optional extensions can enhance the capabilities of HTML Purifier:
     * bcmath : Used for unit conversion and imagecrash protection
     * tidy   : Used for pretty-printing HTML
 
+The following optional PEAR library can enhance the capabilities of
+HTML Purifier:
+
+    * Net_IDNA2 : Allows HTML Purifier to convert IDNAs to traditional
+      domain names; otherwise they are discarded.
+
 
 ---------------------------------------------------------------------------
 2.  Reconnaissance

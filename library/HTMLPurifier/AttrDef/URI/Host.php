@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Validates a host according to the IPv4, IPv6 and DNS (future) specifications.
+ * Validates a host according to the IPv4, IPv6 and DNS (future)
+ * specifications.  See docs/ref-reg-name.txt for details.
  */
 class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
 {
@@ -38,10 +39,6 @@ class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
 
         // A regular domain name.
 
-        // This breaks I18N domain names, but we don't have proper IRI support,
-        // so force users to insert Punycode. If there's complaining we'll
-        // try to fix things into an international friendly form.
-
         // The productions describing this are:
         $a   = '[a-z]';     // alpha
         $an  = '[a-z0-9]';  // alphanum
@@ -52,7 +49,20 @@ class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
         $toplabel      = "$a($and*$an)?";
         // hostname    = *( domainlabel "." ) toplabel [ "." ]
         $match = preg_match("/^($domainlabel\.)*$toplabel\.?$/i", $string);
-        if (!$match) return false;
+        if (!$match) {
+            if (!class_exists('Net_IDNA2')) {
+                return false;
+            }
+            // Remember, this is a hostname in a URI.  So we don't output
+            // funny Unicode business.  But users might want it, so we'll
+            // have to make it Punycode.
+            if (strpos($string, '%') !== FALSE) {
+                // Normalize percent encoding (preserving sub-delimiters
+                // because they'll be invalid anyway)
+                $pct = new HTMLPurifier_PercentEncoder('!$&\'()*+,;=');
+            }
+            return false;
+        }
 
         return $string;
     }
