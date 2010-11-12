@@ -18,6 +18,7 @@ with these contents.
 HTML Purifier is PHP 5 only, and is actively tested from PHP 5.0.5 and
 up. It has no core dependencies with other libraries. PHP
 4 support was deprecated on December 31, 2007 with HTML Purifier 3.0.0.
+HTML Purifier is not compatible with zend.ze1_compatibility_mode.
 
 These optional extensions can enhance the capabilities of HTML Purifier:
 

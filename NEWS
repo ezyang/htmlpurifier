@@ -18,6 +18,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix removal of id attributes under certain conditions by ensuring
   armor attributes are preserved when recreating tags.
 - Check if schema.ser was corrupted.
+- Check if zend.ze1_compatibility_mode is on, and error out if it is.
+  This safety check is only done for HTMLPurifier.auto.php; if you
+  are using standalone or the specialized includes files, you're
+  expected to know what you're doing.
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
