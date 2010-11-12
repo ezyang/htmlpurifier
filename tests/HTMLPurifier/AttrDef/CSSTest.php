@@ -150,6 +150,15 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('text-align:right;');
     }
 
+    function testTrusted() {
+        $this->config->set('CSS.Trusted', true);
+        $this->assertDef('position:relative;');
+        $this->assertDef('left:2px;');
+        $this->assertDef('right:100%;');
+        $this->assertDef('top:auto;');
+        $this->assertDef('z-index:-2;');
+    }
+
 }
 
 // vim: et sw=4 sts=4

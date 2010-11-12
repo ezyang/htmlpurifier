@@ -12,6 +12,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 4.2.1, unknown release date
 ! Added %HTML.Nofollow to add rel="nofollow" to external links.
 ! More types of SPL autoloaders allowed on later versions of PHP.
+! Implementations for position, top, left, right, bottom, z-index
+  when %CSS.Trusted is on.
 - Make removal of conditional IE comments ungreedy; thanks Bernd
   for reporting.
 - Escape CDATA before removing Internet Explorer comments.
