@@ -37,13 +37,14 @@ $simpletest_location = '/path/to/simpletest/';
 // OPTIONAL SETTINGS
 
 // Note on running PHPT:
-//      Vanilla PHPT from http://phpt.info will not work, because there are
-//      a number of bugs that prevent HTML Purifier from doing what they need
-//      to do. If you really want to run PHPT, you'll will need to apply the
-//      patches in maintenance/phpt-modifications.patch on the PHPT Core trunk,
-//      which can be checked out using:
+//      Vanilla PHPT from https://github.com/tswicegood/PHPT_Core should
+//      work fine on Linux w/o multitest.
 //
-//        $ svn co https://svn.phpt.info/Core/trunk phpt-core
+//      To do multitest or Windows testing, you'll need some more
+//      patches at https://github.com/ezyang/PHPT_Core
+//
+//      I haven't tested the Windows setup in a while so I don't know if
+//      it still works.
 
 // Should PHPT tests be enabled?
 $GLOBALS['HTMLPurifierTest']['PHPT'] = false;
