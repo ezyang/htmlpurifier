@@ -172,6 +172,7 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
      * Asserts that a file does not exist, ignoring the stat cache
      */
     function assertFileNotExist($file) {
+        clearstatcache();
         $this->assertFalse(file_exists($file), 'Expected ' . $file . ' does not exist');
     }
 

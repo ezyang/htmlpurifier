@@ -9,7 +9,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.2.1, unknown release date
+4.3.0, unknown release date
+# Fixed broken caching of customized raw definitions, but requires an
+  API change.  The old API still works but will emit a warning,
+  see http://htmlpurifier.org/docs/enduser-customize.html#optimized
+  for how to upgrade your code.
 ! Added %HTML.Nofollow to add rel="nofollow" to external links.
 ! More types of SPL autoloaders allowed on later versions of PHP.
 ! Implementations for position, top, left, right, bottom, z-index
@@ -24,6 +28,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   This safety check is only done for HTMLPurifier.auto.php; if you
   are using standalone or the specialized includes files, you're
   expected to know what you're doing.
+- Stop repeatedly writing the cache file after I'm done customizing a
+  raw definition.
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove

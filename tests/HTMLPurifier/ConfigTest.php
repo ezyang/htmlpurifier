@@ -4,6 +4,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 {
 
     protected $schema;
+    protected $oldFactory;
 
     public function setUp() {
         // set up a dummy schema object for testing
@@ -230,23 +231,58 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->assertNotEqual($def, $old_def);
         $this->assertTrue($def->setup);
 
-        // test retrieval of raw definition
+    }
+
+    function test_getHTMLDefinition_deprecatedRawError() {
+        $config = HTMLPurifier_Config::createDefault();
+        $config->chatty = false;
+        // test deprecated retrieval of raw definition
         $config->set('HTML.DefinitionID', 'HTMLPurifier_ConfigTest->test_getHTMLDefinition()');
         $config->set('HTML.DefinitionRev', 3);
+        $this->expectError("Useless DefinitionID declaration");
         $def = $config->getHTMLDefinition(true);
-        $this->assertNotEqual($def, $old_def);
         $this->assertEqual(false, $def->setup);
 
         // auto initialization
         $config->getHTMLDefinition();
         $this->assertTrue($def->setup);
+    }
 
+    function test_getHTMLDefinition_optimizedRawError() {
+        $this->expectException(new HTMLPurifier_Exception("Cannot set optimized = true when raw = false"));
+        $config = HTMLPurifier_Config::createDefault();
+        $config->getHTMLDefinition(false, true);
+    }
+
+    function test_getHTMLDefinition_rawAfterSetupError() {
+        $this->expectException(new HTMLPurifier_Exception("Cannot retrieve raw definition after it has already been setup"));
+        $config = HTMLPurifier_Config::createDefault();
+        $config->chatty = false;
+        $config->getHTMLDefinition();
+        $config->getHTMLDefinition(true);
+    }
+
+    function test_getHTMLDefinition_inconsistentOptimizedError() {
+        $this->expectError("Useless DefinitionID declaration");
+        $this->expectException(new HTMLPurifier_Exception("Inconsistent use of optimized and unoptimized raw definition retrievals"));
+        $config = HTMLPurifier_Config::create(array('HTML.DefinitionID' => 'HTMLPurifier_ConfigTest->test_getHTMLDefinition_inconsistentOptimizedError'));
+        $config->chatty = false;
+        $config->getHTMLDefinition(true, false);
+        $config->getHTMLDefinition(true, true);
+    }
+
+    function test_getHTMLDefinition_inconsistentOptimizedError2() {
+        $this->expectException(new HTMLPurifier_Exception("Inconsistent use of optimized and unoptimized raw definition retrievals"));
+        $config = HTMLPurifier_Config::create(array('HTML.DefinitionID' => 'HTMLPurifier_ConfigTest->test_getHTMLDefinition_inconsistentOptimizedError2'));
+        $config->chatty = false;
+        $config->getHTMLDefinition(true, true);
+        $config->getHTMLDefinition(true, false);
     }
 
     function test_getHTMLDefinition_rawError() {
         $config = HTMLPurifier_Config::createDefault();
         $this->expectException(new HTMLPurifier_Exception('Cannot retrieve raw version without specifying %HTML.DefinitionID'));
-        $def = $config->getHTMLDefinition(true);
+        $def = $config->getHTMLDefinition(true, true);
     }
 
     function test_getCSSDefinition() {
@@ -456,6 +492,64 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $config->set('HTML.Allowed', 'a');
         $config2 = unserialize($config->serialize());
         $this->assertIdentical($config, $config2);
+    }
+
+    function testDefinitionCachingNothing() {
+        list($mock, $config) = $this->setupCacheMock('HTML');
+        // should not touch the cache
+        $mock->expectNever('get');
+        $mock->expectNever('add');
+        $mock->expectNever('set');
+        $config->getDefinition('HTML', true);
+        $config->getDefinition('HTML', true);
+        $config->getDefinition('HTML');
+        $this->teardownCacheMock();
+    }
+
+    function testDefinitionCachingOptimized() {
+        list($mock, $config) = $this->setupCacheMock('HTML');
+        $mock->expectNever('set');
+        $config->set('HTML.DefinitionID', 'HTMLPurifier_ConfigTest->testDefinitionCachingOptimized');
+        $mock->expectOnce('get');
+        $mock->setReturnValue('get', null);
+        $this->assertTrue($config->maybeGetRawHTMLDefinition());
+        $this->assertTrue($config->maybeGetRawHTMLDefinition());
+        $mock->expectOnce('add');
+        $config->getDefinition('HTML');
+        $this->teardownCacheMock();
+    }
+
+    function testDefinitionCachingOptimizedHit() {
+        $fake_config = HTMLPurifier_Config::createDefault();
+        $fake_def = $fake_config->getHTMLDefinition();
+        list($mock, $config) = $this->setupCacheMock('HTML');
+        // should never frob cache
+        $mock->expectNever('add');
+        $mock->expectNever('set');
+        $config->set('HTML.DefinitionID', 'HTMLPurifier_ConfigTest->testDefinitionCachingOptimizedHit');
+        $mock->expectOnce('get');
+        $mock->setReturnValue('get', $fake_def);
+        $this->assertNull($config->maybeGetRawHTMLDefinition());
+        $config->getDefinition('HTML');
+        $config->getDefinition('HTML');
+        $this->teardownCacheMock();
+    }
+
+    protected function setupCacheMock($type) {
+        // inject our definition cache mock globally (borrowed from
+        // DefinitionFactoryTest)
+        generate_mock_once("HTMLPurifier_DefinitionCacheFactory");
+        $factory = new HTMLPurifier_DefinitionCacheFactoryMock();
+        $this->oldFactory = HTMLPurifier_DefinitionCacheFactory::instance();
+        HTMLPurifier_DefinitionCacheFactory::instance($factory);
+        generate_mock_once("HTMLPurifier_DefinitionCache");
+        $mock = new HTMLPurifier_DefinitionCacheMock();
+        $config = HTMLPurifier_Config::createDefault();
+        $factory->setReturnValue('create', $mock, array($type, $config));
+        return array($mock, $config);
+    }
+    protected function teardownCacheMock() {
+        HTMLPurifier_DefinitionCacheFactory::instance($this->oldFactory);
     }
 
 }

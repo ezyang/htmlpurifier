@@ -146,7 +146,9 @@
 <pre>$config = HTMLPurifier_Config::createDefault();
 $config-&gt;set('HTML.DefinitionID', 'enduser-customize.html tutorial');
 $config-&gt;set('HTML.DefinitionRev', 1);
-$def = $config-&gt;getHTMLDefinition(true);</pre>
+if ($def = $config-&gt;maybeGetRawHTMLDefinition()) {
+    // our code will go here
+}</pre>
 
 <p>
   Assuming that HTML Purifier has already been properly loaded (hint:
@@ -174,22 +176,14 @@ $def = $config-&gt;getHTMLDefinition(true);</pre>
   </li>
   <li>
     The fourth line retrieves a raw <code>HTMLPurifier_HTMLDefinition</code>
-    object that we will be tweaking. If the parameter was removed, we
-    would be retrieving a fully formed definition object, which is somewhat
-    useless for customization purposes.
+    object that we will be tweaking.  Interestingly enough, we have
+    placed it in an if block: this is because
+    <code>maybeGetRawHTMLDefinition</code>, as its name suggests, may
+    return a NULL, in which case we should skip doing any
+    initialization.  This, in fact, will correspond to when our fully
+    customized object is already in the cache.
   </li>
 </ul>
-
-<h3>Broken backwards-compatibility</h3>
-
-<p>
-  Those of you who have already been twiddling around with the raw
-  HTML definition object, you'll be noticing that you're getting an error
-  when you attempt to retrieve the raw definition object without specifying
-  a DefinitionID.  It is vital to caching (see below) that you make a unique
-  name for your customized definition, so make up something right now and
-  things will operate again.
-</p>
 
 <h2>Turn off caching</h2>
 
@@ -780,6 +774,75 @@ $form-&gt;excludes = array('form' => true);</strong></pre>
   <li><a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/HTMLModule.php"><code>library/HTMLPurifier/HTMLModule.php</code></a></li>
   <li><a href="http://repo.or.cz/w/htmlpurifier.git?a=blob;hb=HEAD;f=library/HTMLPurifier/ElementDef.php"><code>library/HTMLPurifier/ElementDef.php</code></a></li>
 </ul>
+
+<h2 id="optimized">Notes for HTML Purifier 4.2.0 and earlier</h3>
+
+<p>
+    Previously, this tutorial gave some incorrect template code for
+    editing raw definitions, and that template code will now produce the
+    error <q>Due to a documentation error in previous version of HTML
+    Purifier...</q>  Here is how to mechanically transform old-style
+    code into new-style code.
+</p>
+
+<p>
+    First, identify all code that edits the raw definition object, and
+    put it together.  Ensure none of this code must be run on every
+    request; if some sub-part needs to always be run, move it outside
+    this block.  Here is an example below, with the raw definition
+    object code bolded.
+</p>
+
+<pre>$config = HTMLPurifier_Config::createDefault();
+$config-&gt;set('HTML.DefinitionID', 'enduser-customize.html tutorial');
+$config-&gt;set('HTML.DefinitionRev', 1);
+$def = $config-&gt;getHTMLDefinition(true);
+<strong>$def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');</strong>
+$purifier = new HTMLPurifier($config);</pre>
+
+<p>
+    Next, replace the raw definition retrieval with a
+    maybeGetRawHTMLDefinition method call inside an if conditional, and
+    place the editing code inside that if block.
+</p>
+
+<pre>$config = HTMLPurifier_Config::createDefault();
+$config-&gt;set('HTML.DefinitionID', 'enduser-customize.html tutorial');
+$config-&gt;set('HTML.DefinitionRev', 1);
+<strong>if ($def = $config-&gt;maybeGetRawHTMLDefinition()) {
+    $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+}</strong>
+$purifier = new HTMLPurifier($config);</pre>
+
+<p>
+    And you're done!  Alternatively, if you're OK with not ever caching
+    your code, the following will still work and not emit warnings.
+</p>
+
+<pre>$config = HTMLPurifier_Config::createDefault();
+$def = $config-&gt;getHTMLDefinition(true);
+$def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+$purifier = new HTMLPurifier($config);</pre>
+
+<p>
+    A slightly less efficient version of this was what was going on with
+    old versions of HTML Purifier.
+</p>
+
+<p>
+    <em>Technical notes:</em> ajh pointed out on <a
+        href="http://htmlpurifier.org/phorum/read.php?5,5164,5169#msg-5169">in a forum topic</a> that
+    HTML Purifier appeared to be repeatedly writing to the cache even
+    when a cache entry already existed.  Investigation lead to the
+    discovery of the following infelicity: caching of customized
+    definitions didn't actually work!  The problem was that even though
+    a cache file would be written out at the end of the process, there
+    was no way for HTML Purifier to say, <q>Actually, I've already got a
+        copy of your work, no need to reconfigure your
+        customizations</q>.  This required the API to change: placing
+    all of the customizations to the raw definition object in a
+    conditional which could be skipped.
+</p>
 
 </body></html>
 

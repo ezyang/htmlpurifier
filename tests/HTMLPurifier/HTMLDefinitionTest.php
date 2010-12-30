@@ -254,9 +254,7 @@ a[href|title]
 
     function test_addAttribute() {
 
-        $config = HTMLPurifier_Config::create(array(
-            'HTML.DefinitionID' => 'HTMLPurifier_HTMLDefinitionTest->test_addAttribute'
-        ));
+        $config = HTMLPurifier_Config::createDefault();
         $def = $config->getHTMLDefinition(true);
         $def->addAttribute('span', 'custom', 'Enum#attribute');
 
@@ -269,9 +267,7 @@ a[href|title]
 
     function test_addAttribute_multiple() {
 
-        $config = HTMLPurifier_Config::create(array(
-            'HTML.DefinitionID' => 'HTMLPurifier_HTMLDefinitionTest->test_addAttribute_multiple'
-        ));
+        $config = HTMLPurifier_Config::createDefault();
         $def = $config->getHTMLDefinition(true);
         $def->addAttribute('span', 'custom', 'Enum#attribute');
         $def->addAttribute('span', 'foo', 'Text');
@@ -285,9 +281,7 @@ a[href|title]
 
     function test_addElement() {
 
-        $config = HTMLPurifier_Config::create(array(
-            'HTML.DefinitionID' => 'HTMLPurifier_HTMLDefinitionTest->test_addElement'
-        ));
+        $config = HTMLPurifier_Config::createDefault();
         $def = $config->getHTMLDefinition(true);
         $def->addElement('marquee', 'Inline', 'Inline', 'Common', array('width' => 'Length'));
 
@@ -299,8 +293,6 @@ a[href|title]
     }
 
     function test_injector() {
-        $this->config->set('HTML.DefinitionID', 'HTMLPurifier_HTMLDefinitionTest->test_injector');
-
         generate_mock_once('HTMLPurifier_Injector');
         $injector = new HTMLPurifier_InjectorMock();
         $injector->name = 'MyInjector';
@@ -317,8 +309,6 @@ a[href|title]
     }
 
     function test_injectorMissingNeeded() {
-        $this->config->set('HTML.DefinitionID', 'HTMLPurifier_HTMLDefinitionTest->test_injectorMissingNeeded');
-
         generate_mock_once('HTMLPurifier_Injector');
         $injector = new HTMLPurifier_InjectorMock();
         $injector->name = 'MyInjector';
@@ -333,8 +323,6 @@ a[href|title]
     }
 
     function test_injectorIntegration() {
-        $this->config->set('HTML.DefinitionID', 'HTMLPurifier_HTMLDefinitionTest->test_injectorIntegration');
-
         $module = $this->config->getHTMLDefinition(true)->getAnonymousModule();
         $module->info_injector[] = 'Linkify';
 
@@ -345,8 +333,6 @@ a[href|title]
     }
 
     function test_injectorIntegrationFail() {
-        $this->config->set('HTML.DefinitionID', 'HTMLPurifier_HTMLDefinitionTest->test_injectorIntegrationFail');
-
         $this->config->set('HTML.Allowed', 'p');
 
         $module = $this->config->getHTMLDefinition(true)->getAnonymousModule();

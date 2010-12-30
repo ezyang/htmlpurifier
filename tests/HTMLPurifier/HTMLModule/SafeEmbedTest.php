@@ -5,7 +5,6 @@ class HTMLPurifier_HTMLModule_SafeEmbedTest extends HTMLPurifier_HTMLModuleHarne
 
     function setUp() {
         parent::setUp();
-        $this->config->set('HTML.DefinitionID', 'HTMLPurifier_HTMLModule_SafeEmbedTest');
         $def = $this->config->getHTMLDefinition(true);
         $def->manager->addModule('SafeEmbed');
     }
