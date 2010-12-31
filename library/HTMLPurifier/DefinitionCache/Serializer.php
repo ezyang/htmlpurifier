@@ -9,14 +9,14 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         $file = $this->generateFilePath($config);
         if (file_exists($file)) return false;
         if (!$this->_prepareDir($config)) return false;
-        return $this->_write($file, serialize($def));
+        return file_put_contents($file, serialize($def));
     }
 
     public function set($def, $config) {
         if (!$this->checkDefType($def)) return;
         $file = $this->generateFilePath($config);
         if (!$this->_prepareDir($config)) return false;
-        return $this->_write($file, serialize($def));
+        return file_put_contents($file, serialize($def));
     }
 
     public function replace($def, $config) {
@@ -24,7 +24,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         $file = $this->generateFilePath($config);
         if (!file_exists($file)) return false;
         if (!$this->_prepareDir($config)) return false;
-        return $this->_write($file, serialize($def));
+        return file_put_contents($file, serialize($def));
     }
 
     public function get($config) {
@@ -91,16 +91,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         $base = $config->get('Cache.SerializerPath');
         $base = is_null($base) ? HTMLPURIFIER_PREFIX . '/HTMLPurifier/DefinitionCache/Serializer' : $base;
         return $base;
-    }
-
-    /**
-     * Convenience wrapper function for file_put_contents
-     * @param $file File name to write to
-     * @param $data Data to write into file
-     * @return Number of bytes written if success, or false if failure.
-     */
-    private function _write($file, $data) {
-        return file_put_contents($file, $data);
     }
 
     /**

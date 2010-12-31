@@ -32,6 +32,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   raw definition.  Reported by ajh.
 - Switch to using require_once in the Bootstrap to work around bad
   interaction with Zend Debugger and APC.  Reported by Antonio Parraga.
+. Remove obsolete private method DefinitionCache_Serializer->_write
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
