@@ -29,7 +29,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   are using standalone or the specialized includes files, you're
   expected to know what you're doing.
 - Stop repeatedly writing the cache file after I'm done customizing a
-  raw definition.
+  raw definition.  Reported by ajh.
+- Switch to using require_once in the Bootstrap to work around bad
+  interaction with Zend Debugger and APC.  Reported by Antonio Parraga.
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove

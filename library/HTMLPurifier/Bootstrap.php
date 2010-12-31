@@ -37,7 +37,12 @@ class HTMLPurifier_Bootstrap
     public static function autoload($class) {
         $file = HTMLPurifier_Bootstrap::getPath($class);
         if (!$file) return false;
-        require HTMLPURIFIER_PREFIX . '/' . $file;
+        // Technically speaking, it should be ok and more efficient to
+        // just do 'require', but Antonio Parraga reports that with
+        // Zend extensions such as Zend debugger and APC, this invariant
+        // may be broken.  Since we have efficient alternatives, pay
+        // the cost here and avoid the bug.
+        require_once HTMLPURIFIER_PREFIX . '/' . $file;
         return true;
     }
 
