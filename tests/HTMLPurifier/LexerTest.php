@@ -717,10 +717,47 @@ div {}
         );
     }
 
+    function test_tokenizeHTML_escapeProcessingInstruction() {
+        $this->assertTokenization(
+            '<?xml blah blah ?>',
+            array()
+        );
+    }
+
     function test_tokenizeHTML_removeProcessingInstruction() {
         $this->config->set('Core.RemoveProcessingInstructions', true);
         $this->assertTokenization(
             '<?xml blah blah ?>',
+            array()
+        );
+    }
+
+    function test_tokenizeHTML_escapeShortProcessingInstruction() {
+        $this->assertTokenization(
+            '<? blah blah ?>',
+            array()
+        );
+    }
+
+    function test_tokenizeHTML_removeShortProcessingInstruction() {
+        $this->config->set('Core.RemoveProcessingInstructions', true);
+        $this->assertTokenization(
+            '<? blah blah ?>',
+            array()
+        );
+    }
+
+    function test_tokenizeHTML_escapeEchoProcessingInstruction() {
+        $this->assertTokenization(
+            '<?=$foo ?>',
+            array()
+        );
+    }
+
+    function test_tokenizeHTML_removeEchoProcessingInstruction() {
+        $this->config->set('Core.RemoveProcessingInstructions', true);
+        $this->assertTokenization(
+            '<?=$foo ?>',
             array()
         );
     }
