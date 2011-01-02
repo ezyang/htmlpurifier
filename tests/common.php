@@ -86,7 +86,7 @@ require 'path2class.func.php';
  *
  */
 function htmlpurifier_parse_args(&$AC, $aliases) {
-    if (empty($_GET)) {
+    if (empty($_GET) && !empty($_SERVER['argv'])) {
         array_shift($_SERVER['argv']);
         $o = false;
         $bool = false;
