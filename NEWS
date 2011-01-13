@@ -24,6 +24,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   This safety check is only done for HTMLPurifier.auto.php; if you
   are using standalone or the specialized includes files, you're
   expected to know what you're doing.
+! Add %Cache.SerializerPermissions option for custom serializer
+  directory/file permissions
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
