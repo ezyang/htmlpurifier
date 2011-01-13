@@ -18,6 +18,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! More types of SPL autoloaders allowed on later versions of PHP.
 ! Implementations for position, top, left, right, bottom, z-index
   when %CSS.Trusted is on.
+! Add %Cache.SerializerPermissions option for custom serializer
+  directory/file permissions
 - Make removal of conditional IE comments ungreedy; thanks Bernd
   for reporting.
 - Escape CDATA before removing Internet Explorer comments.
