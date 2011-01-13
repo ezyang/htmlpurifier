@@ -380,6 +380,12 @@
    <line>91</line>
   </file>
  </directive>
+ <directive id="Cache.SerializerPermissions">
+  <file name="HTMLPurifier/DefinitionCache/Serializer.php">
+   <line>107</line>
+   <line>124</line>
+  </file>
+ </directive>
  <directive id="Filter.ExtractStyleBlocks.TidyImpl">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
    <line>41</line>
