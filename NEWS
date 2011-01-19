@@ -20,6 +20,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   when %CSS.Trusted is on.
 ! Add %Cache.SerializerPermissions option for custom serializer
   directory/file permissions
+- Switch to an iterative traversal of the DOM, which prevents us
+  from running out of stack space for deeply nested documents.
+  Thanks Maxim Krizhanovsky for contributing a patch.
 - Make removal of conditional IE comments ungreedy; thanks Bernd
   for reporting.
 - Escape CDATA before removing Internet Explorer comments.
