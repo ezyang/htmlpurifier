@@ -49,6 +49,10 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         }
 
         foreach($tokens as $token) {
+            // we need to disambiguate the token's name right now
+            if (!ctype_lower($token)) {
+                $ltoken = ctype_lower($token);
+            }
             if ($remove_until) {
                 if (empty($token->is_tag) || $token->name !== $remove_until) {
                     continue;
