@@ -74,6 +74,15 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('mailto:this-looks-like-a-path@example.com');
     }
 
+    function testResolveNullSchemeAmbiguity() {
+        $this->assertDef('///foo', '/foo');
+    }
+
+    function testResolveNullSchemeDoubleAmbiguity() {
+        $this->config->set('URI.Host', 'example.com');
+        $this->assertDef('////foo', '//example.com//foo');
+    }
+
     function testURIDefinitionValidation() {
         $parser = new HTMLPurifier_URIParser();
         $uri = $parser->parse('http://example.com');

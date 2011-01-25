@@ -39,6 +39,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   raw definition.  Reported by ajh.
 - Switch to using require_once in the Bootstrap to work around bad
   interaction with Zend Debugger and APC.  Reported by Antonio Parraga.
+- Fix URI handling when hostname is missing but scheme is present.
+  Reported by Neike Taika-Tessaro.
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove

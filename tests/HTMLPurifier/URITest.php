@@ -157,7 +157,7 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
     }
 
     function test_validate_invalidHostThatLooksLikeIPv6() {
-        $this->assertValidation('http://[2001:0db8:85z3:08d3:1319:8a2e:0370:7334]', 'http:');
+        $this->assertValidation('http://[2001:0db8:85z3:08d3:1319:8a2e:0370:7334]', '');
     }
 
     function test_validate_removeRedundantScheme() {

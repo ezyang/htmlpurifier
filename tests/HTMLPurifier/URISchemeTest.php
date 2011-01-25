@@ -172,6 +172,17 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
+    function test_file_local() {
+        $this->assertValidation(
+            'file:///foo/bar?baz#frag',
+            'file:///foo/bar#frag'
+        );
+    }
+
+    function test_ftp_empty_host() {
+        $this->assertValidation('ftp:///example.com', false);
+    }
+
 }
 
 // vim: et sw=4 sts=4
