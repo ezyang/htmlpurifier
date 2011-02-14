@@ -18,6 +18,8 @@ class HTMLPurifier_HTMLModule_SafeIframe extends HTMLPurifier_HTMLModule
                 'width' => 'Pixels#' . $max,
                 'height' => 'Pixels#' . $max,
                 'name' => 'ID',
+                'scrolling' => 'Enum#yes,no,auto',
+                'frameborder' => 'Enum#0,1',
             )
         );
 

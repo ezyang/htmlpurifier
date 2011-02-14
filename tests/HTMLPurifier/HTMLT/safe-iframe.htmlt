@@ -1,0 +1,12 @@
+--INI--
+HTML.SafeIframe = true
+URI.IframeHostWhitelist = www.example.com,dev.example.com
+--HTML--
+<iframe src="http://www.example.com/"></iframe>
+<iframe src="http://malicious.host.com/"></iframe>
+<iframe src="http://dev.example.com/"></iframe>
+--EXPECT--
+<iframe src="http://www.example.com/"></iframe>
+
+<iframe src="http://dev.example.com/"></iframe>
+--# vim: et sw=4 sts=4
