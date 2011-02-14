@@ -35,7 +35,7 @@ class HTMLPurifier_HTMLModule_Forms extends HTMLPurifier_HTMLModule
             'name' => 'CDATA',
             'readonly' => 'Bool#readonly',
             'size' => 'Number',
-            'src' => 'URI#embeds',
+            'src' => 'URI#embedded',
             'tabindex' => 'Number',
             'type' => 'Enum#text,password,checkbox,button,radio,submit,reset,file,hidden,image',
             'value' => 'CDATA',

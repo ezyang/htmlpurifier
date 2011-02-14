@@ -20,6 +20,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   a standards compliant way, by moving them into the preceding <li>
 ! Added %HTML.AllowedComments and %HTML.AllowedCommentsRegexp for
   limited allowed comments in untrusted situations.
+! Implement iframes (trusted mode only), and allow them to be used
+  in untrusted mode with %URI.SafeIframeRegexp.
 - Color keywords are now case insensitive.  Thanks Yzmir Ramirez
   <yramirez-htmlpurifier@adicio.com> for reporting.
 - Explicitly initialize anonModule variable to null.

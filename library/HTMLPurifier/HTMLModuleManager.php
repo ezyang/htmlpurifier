@@ -65,11 +65,11 @@ class HTMLPurifier_HTMLModuleManager
             'Presentation', 'Edit', 'Bdo', 'Tables', 'Image',
             'StyleAttribute',
             // Unsafe:
-            'Scripting', 'Object',  'Forms',
+            'Scripting', 'Object', 'Forms',
             // Sorta legacy, but present in strict:
             'Name',
         );
-        $transitional = array('Legacy', 'Target');
+        $transitional = array('Legacy', 'Target', 'Iframe');
         $xml = array('XMLCommonAttributes');
         $non_xml = array('NonXMLCommonAttributes');
 
@@ -112,7 +112,9 @@ class HTMLPurifier_HTMLModuleManager
 
         $this->doctypes->register(
             'XHTML 1.1', true,
-            array_merge($common, $xml, array('Ruby')),
+            // Iframe is a real XHTML 1.1 module, despite being
+            // "transitional"!
+            array_merge($common, $xml, array('Ruby', 'Iframe')),
             array('Tidy_Strict', 'Tidy_XHTML', 'Tidy_Proprietary', 'Tidy_Strict', 'Tidy_Name'), // Tidy_XHTML1_1
             array(),
             '-//W3C//DTD XHTML 1.1//EN',
