@@ -172,6 +172,9 @@
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>27</line>
   </file>
+  <file name="HTMLPurifier/HTMLModule/SafeIframe.php">
+   <line>27</line>
+  </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>36</line>
   </file>
@@ -417,7 +420,7 @@
    <line>13</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/SafeIframe.php">
-   <line>13</line>
+   <line>12</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/SafeObject.php">
    <line>19</line>
