@@ -204,9 +204,14 @@
    <line>226</line>
   </file>
  </directive>
- <directive id="HTML.Nofollow">
+ <directive id="HTML.SafeIframe">
   <file name="HTMLPurifier/HTMLModuleManager.php">
    <line>229</line>
+  </file>
+ </directive>
+ <directive id="HTML.Nofollow">
+  <file name="HTMLPurifier/HTMLModuleManager.php">
+   <line>232</line>
   </file>
  </directive>
  <directive id="Attr.IDBlacklist">
@@ -244,7 +249,7 @@
  </directive>
  <directive id="URI.">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>55</line>
+   <line>56</line>
   </file>
   <file name="HTMLPurifier/URIFilter/Munge.php">
    <line>12</line>
@@ -252,17 +257,20 @@
  </directive>
  <directive id="URI.Host">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>64</line>
+   <line>65</line>
+  </file>
+  <file name="HTMLPurifier/URIScheme.php">
+   <line>75</line>
   </file>
  </directive>
  <directive id="URI.Base">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>65</line>
+   <line>66</line>
   </file>
  </directive>
  <directive id="URI.DefaultScheme">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>72</line>
+   <line>73</line>
   </file>
  </directive>
  <directive id="URI.AllowedSchemes">
@@ -408,6 +416,9 @@
   <file name="HTMLPurifier/HTMLModule/SafeEmbed.php">
    <line>13</line>
   </file>
+  <file name="HTMLPurifier/HTMLModule/SafeIframe.php">
+   <line>13</line>
+  </file>
   <file name="HTMLPurifier/HTMLModule/SafeObject.php">
    <line>19</line>
   </file>
@@ -472,6 +483,11 @@
  </directive>
  <directive id="URI.HostBlacklist">
   <file name="HTMLPurifier/URIFilter/HostBlacklist.php">
+   <line>8</line>
+  </file>
+ </directive>
+ <directive id="URI.IframeHostWhitelist">
+  <file name="HTMLPurifier/URIFilter/IframeHostWhitelist.php">
    <line>8</line>
   </file>
  </directive>

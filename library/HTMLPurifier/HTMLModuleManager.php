@@ -226,6 +226,9 @@ class HTMLPurifier_HTMLModuleManager
         if ($config->get('HTML.SafeEmbed')) {
             $modules[] = 'SafeEmbed';
         }
+        if ($config->get('HTML.SafeIframe')) {
+            $modules[] = 'SafeIframe';
+        }
         if ($config->get('HTML.Nofollow')) {
             $modules[] = 'Nofollow';
         }

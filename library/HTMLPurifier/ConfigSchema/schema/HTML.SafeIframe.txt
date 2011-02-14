@@ -1,0 +1,10 @@
+HTML.SafeIframe
+TYPE: bool
+VERSION: 4.3.0
+DEFAULT: false
+--DESCRIPTION--
+<p>
+    Whether or not to permit iframe tags in documents.  By default hosts are
+    denied unless they are added to %URI.IframeHostWhitelist.
+</p>
+--# vim: et sw=4 sts=4

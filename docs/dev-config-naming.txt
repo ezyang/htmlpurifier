@@ -123,6 +123,7 @@ tweaks for HTML handling abilities.
         Attribute twiddle? (applies to two attributes)
     Proprietary
     SafeEmbed
+    SafeIframe
     SafeObject
     Trusted
         Extra functionality/tagsets
@@ -155,6 +156,7 @@ twiddles.
         Contextual/authority tuning
     HostBlacklist
         Authority tuning
+    IframeHostWhitelist
     MakeAbsolute
     MungeResources
     MungeSecretKey
