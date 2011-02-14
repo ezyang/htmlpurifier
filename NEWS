@@ -22,6 +22,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   directory/file permissions
 ! Fix longstanding bug in Flash support for non-IE browsers, and
   allow more wmode attributes.
+! Add %AutoFormat.LinkifyEmail option for automatically linking
+  to e-mail addresses.
 - Switch to an iterative traversal of the DOM, which prevents us
   from running out of stack space for deeply nested documents.
   Thanks Maxim Krizhanovsky for contributing a patch.

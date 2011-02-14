@@ -254,6 +254,9 @@
   <file name="HTMLPurifier/URIDefinition.php">
    <line>64</line>
   </file>
+  <file name="HTMLPurifier/URIScheme.php">
+   <line>75</line>
+  </file>
  </directive>
  <directive id="URI.Base">
   <file name="HTMLPurifier/URIDefinition.php">

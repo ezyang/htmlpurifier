@@ -1,0 +1,12 @@
+AutoFormat.LinkifyEmail
+TYPE: bool
+VERSION: 4.3.0
+DEFAULT: false
+--DESCRIPTION--
+
+<p>
+  This directive turns on e-mail linkification, auto-linking e-mail addresses.
+  <code>a</code> tags with the <code>href</code> attribute
+  must be allowed.
+</p>
+--# vim: et sw=4 sts=4
