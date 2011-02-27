@@ -41,6 +41,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   interaction with Zend Debugger and APC.  Reported by Antonio Parraga.
 - Fix URI handling when hostname is missing but scheme is present.
   Reported by Neike Taika-Tessaro.
+- Fix missing numeric entities on DirectLex; thanks Neike Taika-Tessaro
+  for reporting.
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove

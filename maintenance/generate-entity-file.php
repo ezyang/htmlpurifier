@@ -36,7 +36,7 @@ function unichr($dec) {
 }
 
 if ( !is_dir($entity_dir) ) exit("Fatal Error: Can't find entity directory.\n");
-if ( file_exists($output_file) ) exit("Fatal Error: entity-lookup.txt already exists.\n");
+if ( file_exists($output_file) ) exit("Fatal Error: output file already exists.\n");
 
 $dh = @opendir($entity_dir);
 if ( !$dh ) exit("Fatal Error: Cannot read entity directory.\n");
@@ -52,7 +52,7 @@ closedir($dh);
 if ( !$entity_files ) exit("Fatal Error: No entity files to parse.\n");
 
 $entity_table = array();
-$regexp = '/<!ENTITY\s+([A-Za-z]+)\s+"&#(?:38;#)?([0-9]+);">/';
+$regexp = '/<!ENTITY\s+([A-Za-z0-9]+)\s+"&#(?:38;#)?([0-9]+);">/';
 
 foreach ( $entity_files as $file ) {
     $contents = file_get_contents($entity_dir . $file);
