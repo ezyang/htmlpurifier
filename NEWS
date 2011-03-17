@@ -43,6 +43,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   Reported by Neike Taika-Tessaro.
 - Fix missing numeric entities on DirectLex; thanks Neike Taika-Tessaro
   for reporting.
+- Fix harmless notice from indexing into empty string.  Thanks Matthijs
+  Kooijman <matthijs@stdin.nl> for reporting.
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
