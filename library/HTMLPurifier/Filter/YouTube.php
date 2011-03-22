@@ -6,10 +6,19 @@ class HTMLPurifier_Filter_YouTube extends HTMLPurifier_Filter
     public $name = 'YouTube';
 
     public function preFilter($html, $config, $context) {
-        $pre_regex = '#<object[^>]+>.+?'.
-            'http://www.youtube.com/((?:v|cp)/[A-Za-z0-9\-_=]+).+?</object>#s';
+        // Notes:
+        //  - Parameters are not preserved (such as 'hd', 'rel', 'fs',
+        //    or 'hl'
+        //  - HTTPS mode is not preserved
+        //  - Nocookie mode is not preserved
+        // Everything is normalized to an object.
+        $url_regex_fragment = 'https?://www.youtube(?:-nocookie)?.com/(?:embed/)?((?:(?:v|cp)/)?[A-Za-z0-9\-_=]+)';
+        $pre_regex = '#<object[^>]+>.+?'.$url_regex_fragment.'.+?</object>#s';
         $pre_replace = '<span class="youtube-embed">\1</span>';
-        return preg_replace($pre_regex, $pre_replace, $html);
+        $pre_regex_iframe = '#<iframe[^>]+?'.$url_regex_fragment.'.+?</iframe>#';
+        $pre_replace_iframe = '<span class="youtube-embed">v/\1</span>';
+        return preg_replace($pre_regex_iframe, $pre_replace_iframe,
+               preg_replace($pre_regex, $pre_replace, $html));
     }
 
     public function postFilter($html, $config, $context) {
