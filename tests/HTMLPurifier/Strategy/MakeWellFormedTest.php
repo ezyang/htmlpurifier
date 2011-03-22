@@ -137,6 +137,13 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
         );
     }
 
+    function testNoAutocloseIfNoParentsCanAccomodateTag() {
+        $this->assertResult(
+            '<table><tr><td><li>foo</li></td></tr></table>',
+            '<table><tr><td>foo</td></tr></table>'
+        );
+    }
+
 }
 
 // vim: et sw=4 sts=4
