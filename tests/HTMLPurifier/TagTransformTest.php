@@ -162,6 +162,10 @@ class HTMLPurifier_TagTransformTest extends HTMLPurifier_Harness
         $this->assertSizeToStyle($transformer, '+3', '200%');
         $this->assertSizeToStyle($transformer, '+4', '300%');
         $this->assertSizeToStyle($transformer, '+5', '300%');
+        $this->assertTransformation(
+            $transformer, 'font', array('size' => ''),
+            'span', array()
+        );
 
         // test multiple transforms, the alphabetical ordering is important
         $this->assertTransformation(

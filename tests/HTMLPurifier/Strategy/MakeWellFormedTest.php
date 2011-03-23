@@ -125,8 +125,8 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
 
     function testNestedUl() {
         $this->assertResult(
-            '<ul><ul></ul></ul>',
-            '<ul><li><ul></ul></li></ul>'
+            '<ul><ul><li>foo</li></ul></ul>',
+            '<ul><li><ul><li>foo</li></ul></li></ul>'
         );
     }
 
@@ -134,6 +134,13 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
         $this->assertResult(
             '<ol><li><ol><ol><li>foo</li></ol></li><li>foo</li></ol>',
             '<ol><li><ol><li><ol><li>foo</li></ol></li><li>foo</li></ol></li></ol>'
+        );
+    }
+
+    function testNoAutocloseIfNoParentsCanAccomodateTag() {
+        $this->assertResult(
+            '<table><tr><td><li>foo</li></td></tr></table>',
+            '<table><tr><td>foo</td></tr></table>'
         );
     }
 

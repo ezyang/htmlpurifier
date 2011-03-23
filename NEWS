@@ -43,6 +43,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   interaction with Zend Debugger and APC.  Reported by Antonio Parraga.
 - Fix URI handling when hostname is missing but scheme is present.
   Reported by Neike Taika-Tessaro.
+- Fix missing numeric entities on DirectLex; thanks Neike Taika-Tessaro
+  for reporting.
+- Fix harmless notice from indexing into empty string.  Thanks Matthijs
+  Kooijman <matthijs@stdin.nl> for reporting.
+- Don't autoclose no parent elements are able to support the element
+  that triggered the autoclose.  In particular fixes strange behavior
+  of stray <li> tags.  Thanks pkuliga@gmail.com for reporting and
+  Neike Taika-Tessaro <pinkgothic@gmail.com> for debugging assistance.
 
 4.2.0, released 2010-09-15
 ! Added %Core.RemoveProcessingInstructions, which lets you remove
