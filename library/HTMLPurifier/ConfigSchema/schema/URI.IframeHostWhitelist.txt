@@ -1,9 +1,7 @@
-URI.IframeHostWhitelist
+URI.IframeWhitelistRegexp
 TYPE: list
 VERSION: 4.3.0
 DEFAULT: array()
 --DESCRIPTION--
-A list of hostnames that are allowed in an iframe URI.  Only iframes
-whose URI matches an element of this array will be allowed.  Requires
-%HTML.SafeIframe to be enabled.
+An array of PCRE regular expressions to be matched against each iframe URI. If any expression matches, the URI is allowed. To function, %HTML.SafeIframe must also be enabled.
 --# vim: et sw=4 sts=4

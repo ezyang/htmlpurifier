@@ -27,7 +27,7 @@ class HTMLPurifier_URIDefinition extends HTMLPurifier_Definition
         $this->registerFilter(new HTMLPurifier_URIFilter_DisableExternal());
         $this->registerFilter(new HTMLPurifier_URIFilter_DisableExternalResources());
         $this->registerFilter(new HTMLPurifier_URIFilter_HostBlacklist());
-        $this->registerFilter(new HTMLPurifier_URIFilter_IframeHostWhitelist());
+        $this->registerFilter(new HTMLPurifier_URIFilter_IframeWhitelistRegexp());
         $this->registerFilter(new HTMLPurifier_URIFilter_MakeAbsolute());
         $this->registerFilter(new HTMLPurifier_URIFilter_Munge());
     }

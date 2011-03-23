@@ -156,7 +156,7 @@ twiddles.
         Contextual/authority tuning
     HostBlacklist
         Authority tuning
-    IframeHostWhitelist
+    IframeWhitelistRegexp
     MakeAbsolute
     MungeResources
     MungeSecretKey

@@ -22,7 +22,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   directory/file permissions
 ! Fix longstanding bug in Flash support for non-IE browsers, and
   allow more wmode attributes.
-! Add %HTML.SafeIframe and %URI.IframeHostWhitelist for allowing
+! Add %HTML.SafeIframe and %URI.IframeWhitelistRegexp for allowing
   the iframe tag with whitelisted URIs.
 - Switch to an iterative traversal of the DOM, which prevents us
   from running out of stack space for deeply nested documents.

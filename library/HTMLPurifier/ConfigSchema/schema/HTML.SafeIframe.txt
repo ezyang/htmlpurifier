@@ -4,7 +4,7 @@ VERSION: 4.3.0
 DEFAULT: false
 --DESCRIPTION--
 <p>
-    Whether or not to permit iframe tags in documents.  By default hosts are
-    denied unless they are added to %URI.IframeHostWhitelist.
+    Whether or not to permit iframe tags in documents.  By default URIs are
+    denied unless they are added to %URI.IframeWhitelistRegexp.
 </p>
 --# vim: et sw=4 sts=4

@@ -489,8 +489,8 @@
    <line>8</line>
   </file>
  </directive>
- <directive id="URI.IframeHostWhitelist">
-  <file name="HTMLPurifier/URIFilter/IframeHostWhitelist.php">
+ <directive id="URI.IframeWhitelistRegexp">
+  <file name="HTMLPurifier/URIFilter/IframeWhitelistRegexp.php">
    <line>8</line>
   </file>
  </directive>
