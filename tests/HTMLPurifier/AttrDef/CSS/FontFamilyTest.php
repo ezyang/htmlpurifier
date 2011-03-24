@@ -34,6 +34,17 @@ class HTMLPurifier_AttrDef_CSS_FontFamilyTest extends HTMLPurifier_AttrDefHarnes
         $this->assertDef("'\\\nf'", "f");
     }
 
+    function testAllowed() {
+        $this->config->set('CSS.AllowedFonts', array('serif', 'Times New Roman'));
+
+        $this->assertDef('serif');
+        $this->assertDef('sans-serif', false);
+        $this->assertDef('serif, sans-serif', 'serif');
+        $this->assertDef('Times New Roman', '"Times New Roman"');
+        $this->assertDef('"Times New Roman"');
+        $this->assertDef('foo', false);
+    }
+
 }
 
 // vim: et sw=4 sts=4

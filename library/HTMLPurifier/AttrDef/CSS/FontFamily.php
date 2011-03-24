@@ -2,7 +2,6 @@
 
 /**
  * Validates a font family list according to CSS spec
- * @todo whitelisting allowed fonts would be nice
  */
 class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
 {
@@ -15,6 +14,7 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
             'fantasy' => true,
             'cursive' => true
         );
+        $allowed_fonts = $config->get('CSS.AllowedFonts');
 
         // assume that no font names contain commas in them
         $fonts = explode(',', $string);
@@ -24,7 +24,9 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
             if ($font === '') continue;
             // match a generic name
             if (isset($generic_names[$font])) {
-                $final .= $font . ', ';
+                if ($allowed_fonts === null || isset($allowed_fonts[$font])) {
+                    $final .= $font . ', ';
+                }
                 continue;
             }
             // match a quoted name
@@ -39,6 +41,10 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
             $font = $this->expandCSSEscape($font);
 
             // $font is a pure representation of the font name
+
+            if ($allowed_fonts !== null && !isset($allowed_fonts[$font])) {
+                continue;
+            }
 
             if (ctype_alnum($font) && $font !== '') {
                 // very simple font, allow it in unharmed

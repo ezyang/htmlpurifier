@@ -22,6 +22,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   directory/file permissions
 ! Fix longstanding bug in Flash support for non-IE browsers, and
   allow more wmode attributes.
+! Add %CSS.AllowedFonts to restrict permissible font names.
 - Switch to an iterative traversal of the DOM, which prevents us
   from running out of stack space for deeply nested documents.
   Thanks Maxim Krizhanovsky for contributing a patch.
