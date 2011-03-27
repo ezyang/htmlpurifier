@@ -62,7 +62,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('width:-50px;', false);
         $this->assertDef('text-decoration:underline;');
         $this->assertDef('font-family:sans-serif;');
-        $this->assertDef('font-family:Gill, "Times New Roman", sans-serif;');
+        $this->assertDef("font-family:Gill, 'Times New Roman', sans-serif;");
         $this->assertDef('font:12px serif;');
         $this->assertDef('border:1px solid #000;');
         $this->assertDef('border-bottom:2em double #FF00FA;');

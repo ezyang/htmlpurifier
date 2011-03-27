@@ -19,6 +19,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   spaces.  This constitutes a slight semantic change, which can be
   reverted using %Output.FixInnerHTML.  Reported by Neike Taika-Tessaro
   and Mario Heiderich.
+# Protect against cssText/innerHTML by restricting allowed characters
+  used in fonts further than mandated by the specification.  Reported
+  by Neike Taika-Tessaro and Mario Heiderich.
 ! Added %HTML.Nofollow to add rel="nofollow" to external links.
 ! More types of SPL autoloaders allowed on later versions of PHP.
 ! Implementations for position, top, left, right, bottom, z-index

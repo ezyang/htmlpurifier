@@ -96,27 +96,32 @@
  </directive>
  <directive id="Output.CommentScriptContents">
   <file name="HTMLPurifier/Generator.php">
-   <line>56</line>
+   <line>61</line>
+  </file>
+ </directive>
+ <directive id="Output.FixInnerHTML">
+  <file name="HTMLPurifier/Generator.php">
+   <line>62</line>
   </file>
  </directive>
  <directive id="Output.SortAttr">
   <file name="HTMLPurifier/Generator.php">
-   <line>57</line>
+   <line>63</line>
   </file>
  </directive>
  <directive id="Output.FlashCompat">
   <file name="HTMLPurifier/Generator.php">
-   <line>58</line>
+   <line>64</line>
   </file>
  </directive>
  <directive id="Output.TidyFormat">
   <file name="HTMLPurifier/Generator.php">
-   <line>87</line>
+   <line>93</line>
   </file>
  </directive>
  <directive id="Core.NormalizeNewlines">
   <file name="HTMLPurifier/Generator.php">
-   <line>101</line>
+   <line>107</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>266</line>
@@ -124,7 +129,7 @@
  </directive>
  <directive id="Output.Newline">
   <file name="HTMLPurifier/Generator.php">
-   <line>102</line>
+   <line>108</line>
   </file>
  </directive>
  <directive id="HTML.BlockWrapper">
@@ -254,6 +259,9 @@
   <file name="HTMLPurifier/URIDefinition.php">
    <line>64</line>
   </file>
+  <file name="HTMLPurifier/URIScheme.php">
+   <line>75</line>
+  </file>
  </directive>
  <directive id="URI.Base">
   <file name="HTMLPurifier/URIDefinition.php">
@@ -286,6 +294,11 @@
   </file>
   <file name="HTMLPurifier/AttrDef/HTML/Color.php">
    <line>12</line>
+  </file>
+ </directive>
+ <directive id="CSS.AllowedFonts">
+  <file name="HTMLPurifier/AttrDef/CSS/FontFamily.php">
+   <line>50</line>
   </file>
  </directive>
  <directive id="Attr.AllowedClasses">
@@ -454,7 +467,7 @@
  </directive>
  <directive id="Core.EscapeInvalidTags">
   <file name="HTMLPurifier/Strategy/MakeWellFormed.php">
-   <line>45</line>
+   <line>53</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>19</line>
