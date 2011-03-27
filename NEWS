@@ -14,6 +14,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   API change.  The old API still works but will emit a warning,
   see http://htmlpurifier.org/docs/enduser-customize.html#optimized
   for how to upgrade your code.
+# Protect against Internet Explorer innerHTML behavior by specially
+  treating attributes with backticks but no angled brackets, quotes or
+  spaces.  This constitutes a slight semantic change, which can be
+  reverted using %Output.FixInnerHTML.  Reported by Neike Taika-Tessaro
+  and Mario Heiderich.
 ! Added %HTML.Nofollow to add rel="nofollow" to external links.
 ! More types of SPL autoloaders allowed on later versions of PHP.
 ! Implementations for position, top, left, right, bottom, z-index
