@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.3.0, unknown release date
+4.3.0, released 2011-03-27
 # Fixed broken caching of customized raw definitions, but requires an
   API change.  The old API still works but will emit a warning,
   see http://htmlpurifier.org/docs/enduser-customize.html#optimized
