@@ -23,9 +23,16 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
         if (is_null($uri->host) || empty($scheme_obj->browsable)) {
             return true;
         }
+        $uri_definition = $config->getDefinition('URI');
         // don't redirect if target host is our host
-        if ($uri->host === $config->getDefinition('URI')->host) {
-            return true;
+        if ($uri->host === $uri_definition->host) {
+            // but do redirect if we're currently on a secure scheme,
+            // and the target scheme is insecure
+            $current_scheme_obj = HTMLPurifier_URISchemeRegistry::instance()->getScheme($uri_definition->defaultScheme, $config, $context);
+            if ($scheme_obj->secure || !$current_scheme_obj->secure) {
+                return true;
+            }
+            // target scheme was not secure, but we were secure
         }
 
         $this->makeReplace($uri, $config, $context);
