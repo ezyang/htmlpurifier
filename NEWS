@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.3.1, unknown release date
+- Color keywords are now case insensitive.  Thanks Yzmir Ramirez
+  <yramirez-htmlpurifier@adicio.com> for reporting.
+
 4.3.0, released 2011-03-27
 # Fixed broken caching of customized raw definitions, but requires an
   API change.  The old API still works but will emit a warning,
