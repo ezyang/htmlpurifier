@@ -117,6 +117,23 @@ class HTMLPurifier_URIFilter_MungeTest extends HTMLPurifier_URIFilterHarness
         $this->assertFiltering('http://example.com/foobar');
     }
 
+    function testMungeIgnoreSameDomainInsecureToSecure() {
+        $this->setMunge('http://example.com/%s');
+        $this->assertFiltering('https://example.com/foobar');
+    }
+
+    function testMungeIgnoreSameDomainSecureToSecure() {
+        $this->config->set('URI.Base', 'https://example.com');
+        $this->setMunge('http://example.com/%s');
+        $this->assertFiltering('https://example.com/foobar');
+    }
+
+    function testMungeSameDomainSecureToInsecure() {
+        $this->config->set('URI.Base', 'https://example.com');
+        $this->setMunge('/%s');
+        $this->assertFiltering('http://example.com/foobar', '/http%3A%2F%2Fexample.com%2Ffoobar');
+    }
+
     function testMungeIgnoresSourceHost() {
         $this->config->set('URI.Host', 'foo.example.com');
         $this->setMunge('http://example.com/%s');

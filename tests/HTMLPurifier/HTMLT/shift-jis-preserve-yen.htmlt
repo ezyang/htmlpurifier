@@ -4,5 +4,5 @@ if (!function_exists('iconv')) return true;
 Core.Encoding = "Shift_JIS"
 Core.EscapeNonASCIICharacters = true
 --HTML--
-<b style="font-family:&quot;&#165;&quot;;">111</b>
+<b style="font-family:'&#165;';">111</b>
 --# vim: et sw=4 sts=4

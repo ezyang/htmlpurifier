@@ -9,11 +9,26 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.3.0, unknown release date
+4.3.1, unknown release date
+# URI.Munge now munges URIs inside the same host that go from https
+  to http.  Reported by Neike Taika-Tessaro.
+- Color keywords are now case insensitive.  Thanks Yzmir Ramirez
+  <yramirez-htmlpurifier@adicio.com> for reporting.
+
+4.3.0, released 2011-03-27
 # Fixed broken caching of customized raw definitions, but requires an
   API change.  The old API still works but will emit a warning,
   see http://htmlpurifier.org/docs/enduser-customize.html#optimized
   for how to upgrade your code.
+# Protect against Internet Explorer innerHTML behavior by specially
+  treating attributes with backticks but no angled brackets, quotes or
+  spaces.  This constitutes a slight semantic change, which can be
+  reverted using %Output.FixInnerHTML.  Reported by Neike Taika-Tessaro
+  and Mario Heiderich.
+# Protect against cssText/innerHTML by restricting allowed characters
+  used in fonts further than mandated by the specification and encoding
+  some extra special characters in URLs.  Reported by Neike
+  Taika-Tessaro and Mario Heiderich.
 ! Added %HTML.Nofollow to add rel="nofollow" to external links.
 ! More types of SPL autoloaders allowed on later versions of PHP.
 ! Implementations for position, top, left, right, bottom, z-index
@@ -22,6 +37,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   directory/file permissions
 ! Fix longstanding bug in Flash support for non-IE browsers, and
   allow more wmode attributes.
+! Add %CSS.AllowedFonts to restrict permissible font names.
 ! Add %HTML.SafeIframe and %URI.IframeWhitelistRegexp for allowing
   the iframe tag with whitelisted URIs.
 - Switch to an iterative traversal of the DOM, which prevents us

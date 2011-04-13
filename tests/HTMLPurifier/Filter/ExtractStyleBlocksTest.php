@@ -79,10 +79,13 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     }
 
     function test_cleanCSS_angledBrackets() {
-        $this->assertCleanCSS(
-            ".class {\nfont-family:'</style>';\n}",
-            ".class {\nfont-family:\"\\3C /style\\3E \";\n}"
-        );
+        // [Content] No longer can smuggle in angled brackets using
+        // font-family; when we add support for 'content', reinstate
+        // this test.
+        //$this->assertCleanCSS(
+        //    ".class {\nfont-family:'</style>';\n}",
+        //    ".class {\nfont-family:\"\\3C /style\\3E \";\n}"
+        //);
     }
 
     function test_cleanCSS_angledBrackets2() {
@@ -97,6 +100,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         $this->assertCleanCSS("div {bogus:tree;}", "div {\n}");
     }
 
+    /* [CONTENT]
     function test_cleanCSS_escapeCodes() {
         $this->assertCleanCSS(
             ".class {\nfont-family:\"\\3C /style\\3E \";\n}"
@@ -109,6 +113,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
             ".class {\nfont-family:\"</style>\";\n}"
         );
     }
+     */
 
     function test_cleanCSS_scope() {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');

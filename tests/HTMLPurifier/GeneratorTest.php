@@ -82,11 +82,33 @@ class HTMLPurifier_GeneratorTest extends HTMLPurifier_Harness
         $this->assertGenerateFromToken( null, '' );
     }
 
-    function test_generateFromToken_() {
+    function test_generateFromToken_unicode() {
         $theta_char = $this->_entity_lookup->table['theta'];
         $this->assertGenerateFromToken(
             new HTMLPurifier_Token_Text($theta_char),
             $theta_char
+        );
+    }
+
+    function test_generateFromToken_backtick() {
+        $this->assertGenerateFromToken(
+            new HTMLPurifier_Token_Start('img', array('alt' => '`foo')),
+            '<img alt="`foo ">'
+        );
+    }
+
+    function test_generateFromToken_backtickDisabled() {
+        $this->config->set('Output.FixInnerHTML', false);
+        $this->assertGenerateFromToken(
+            new HTMLPurifier_Token_Start('img', array('alt' => '`')),
+            '<img alt="`">'
+        );
+    }
+
+    function test_generateFromToken_backtickNoChange() {
+        $this->assertGenerateFromToken(
+            new HTMLPurifier_Token_Start('img', array('alt' => '`foo` bar')),
+            '<img alt="`foo` bar">'
         );
     }
 

@@ -185,7 +185,7 @@ class HTMLPurifier_URI
 
         // Reconstruct the result
         // One might wonder about parsing quirks from browsers after
-        // this reconstruction.  Unfortunately, parsing behaviro depends
+        // this reconstruction.  Unfortunately, parsing behavior depends
         // on what *scheme* was employed (file:///foo is handled *very*
         // differently than http:///foo), so unfortunately we have to
         // defer to the schemes to do the right thing.

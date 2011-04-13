@@ -37,6 +37,11 @@ class HTMLPurifier_Generator
     private $_flashCompat;
 
     /**
+     * Cache of %Output.FixInnerHTML
+     */
+    private $_innerHTMLFix;
+
+    /**
      * Stack for keeping track of object information when outputting IE
      * compatibility code.
      */
@@ -54,6 +59,7 @@ class HTMLPurifier_Generator
     public function __construct($config, $context) {
         $this->config = $config;
         $this->_scriptFix = $config->get('Output.CommentScriptContents');
+        $this->_innerHTMLFix = $config->get('Output.FixInnerHTML');
         $this->_sortAttr = $config->get('Output.SortAttr');
         $this->_flashCompat = $config->get('Output.FlashCompat');
         $this->_def = $config->getHTMLDefinition();
@@ -188,6 +194,37 @@ class HTMLPurifier_Generator
                 if ($element && !empty($this->_def->info[$element]->attr[$key]->minimized)) {
                     $html .= $key . ' ';
                     continue;
+                }
+            }
+            // Workaround for Internet Explorer innerHTML bug.
+            // Essentially, Internet Explorer, when calculating
+            // innerHTML, omits quotes if there are no instances of
+            // angled brackets, quotes or spaces.  However, when parsing
+            // HTML (for example, when you assign to innerHTML), it
+            // treats backticks as quotes.  Thus,
+            //      <img alt="``" />
+            // becomes
+            //      <img alt=`` />
+            // becomes
+            //      <img alt='' />
+            // Fortunately, all we need to do is trigger an appropriate
+            // quoting style, which we do by adding an extra space.
+            // This also is consistent with the W3C spec, which states
+            // that user agents may ignore leading or trailing
+            // whitespace (in fact, most don't, at least for attributes
+            // like alt, but an extra space at the end is barely
+            // noticeable).  Still, we have a configuration knob for
+            // this, since this transformation is not necesary if you
+            // don't process user input with innerHTML or you don't plan
+            // on supporting Internet Explorer.
+            if ($this->_innerHTMLFix) {
+                if (strpos($value, '`') !== false) {
+                    // check if correct quoting style would not already be
+                    // triggered
+                    if (strcspn($value, '"\' <>') === strlen($value)) {
+                        // protect!
+                        $value .= ' ';
+                    }
                 }
             }
             $html .= $key.'="'.$this->escape($value).'" ';
