@@ -14,6 +14,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   to http.  Reported by Neike Taika-Tessaro.
 - Color keywords are now case insensitive.  Thanks Yzmir Ramirez
   <yramirez-htmlpurifier@adicio.com> for reporting.
+- Explicitly initialize anonModule variable to null.
 
 4.3.0, released 2011-03-27
 # Fixed broken caching of customized raw definitions, but requires an
