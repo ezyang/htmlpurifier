@@ -260,7 +260,7 @@
    <line>64</line>
   </file>
   <file name="HTMLPurifier/URIScheme.php">
-   <line>75</line>
+   <line>81</line>
   </file>
  </directive>
  <directive id="URI.Base">

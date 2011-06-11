@@ -331,11 +331,6 @@ Or move the cache directory somewhere else (no trailing slash):
 
 The interface is mind-numbingly simple:
 
-    $purifier = new HTMLPurifier();
-    $clean_html = $purifier->purify( $dirty_html );
-
-...or, if you're using the configuration object:
-
     $purifier = new HTMLPurifier($config);
     $clean_html = $purifier->purify( $dirty_html );
 
@@ -354,7 +349,8 @@ If your website is in UTF-8 and XHTML Transitional, use this code:
 <?php
     require_once '/path/to/htmlpurifier/library/HTMLPurifier.auto.php';
 
-    $purifier = new HTMLPurifier();
+    $config = HTMLPurifier_Config::createDefault();
+    $purifier = new HTMLPurifier($config);
     $clean_html = $purifier->purify($dirty_html);
 ?>
 
