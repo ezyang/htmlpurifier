@@ -15,6 +15,12 @@ class HTMLPurifier_HTMLModule_NofollowTest extends HTMLPurifier_HTMLModuleHarnes
         );
     }
 
+    function testNofollowDupe() {
+        $this->assertResult(
+            '<a href="http://google.com" rel="nofollow">a</a><a href="/local">b</a><a href="mailto:foo@example.com">c</a>'
+        );
+    }
+
 }
 
 // vim: et sw=4 sts=4

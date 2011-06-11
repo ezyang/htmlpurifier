@@ -15,6 +15,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Color keywords are now case insensitive.  Thanks Yzmir Ramirez
   <yramirez-htmlpurifier@adicio.com> for reporting.
 - Explicitly initialize anonModule variable to null.
+- Do not duplicate nofollow if already present.  Thanks 178
+  for reporting.
 
 4.3.0, released 2011-03-27
 # Fixed broken caching of customized raw definitions, but requires an
