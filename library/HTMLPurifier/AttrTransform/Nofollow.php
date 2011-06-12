@@ -24,7 +24,7 @@ class HTMLPurifier_AttrTransform_Nofollow extends HTMLPurifier_AttrTransform
         $url = $this->parser->parse($attr['href']);
         $scheme = $url->getSchemeObj($config, $context);
 
-        if (!is_null($url->host) && $scheme !== false && $scheme->browsable) {
+        if ($scheme->browsable && !$url->isLocal($config, $context)) {
             if (isset($attr['rel'])) {
                 $rels = explode(' ', $attr);
                 if (!in_array('nofollow', $rels)) {

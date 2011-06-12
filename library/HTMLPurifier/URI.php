@@ -199,6 +199,21 @@ class HTMLPurifier_URI
         return $result;
     }
 
+    /**
+     * Returns true if this URL might be considered a 'local' URL given
+     * the current context.  This is true when the host is null, or
+     * when it matches the host supplied to the configuration.
+     *
+     * Note that this does not do any scheme checking (URI.Munge, I'm
+     * looking at you).
+     */
+    public function isLocal($config, $context) {
+        if ($this->host === null) return true;
+        $uri_def = $config->getDefinition('URI');
+        if ($uri_def->host === $this->host) return true;
+        return false;
+    }
+
 }
 
 // vim: et sw=4 sts=4

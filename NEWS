@@ -17,6 +17,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Explicitly initialize anonModule variable to null.
 - Do not duplicate nofollow if already present.  Thanks 178
   for reporting.
+- Do not add nofollow if hostname matches our current host.  Thanks 178
+  for reporting, and Neike Taika-Tessaro for helping diagnose.
 
 4.3.0, released 2011-03-27
 # Fixed broken caching of customized raw definitions, but requires an
