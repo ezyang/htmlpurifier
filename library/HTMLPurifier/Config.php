@@ -44,7 +44,7 @@ class HTMLPurifier_Config
     /**
      * Parser for variables
      */
-    protected $parser;
+    protected $parser = null;
 
     /**
      * Reference HTMLPurifier_ConfigSchema for value checking
@@ -668,7 +668,7 @@ class HTMLPurifier_Config
      */
     public function finalize() {
         $this->finalized = true;
-        unset($this->parser);
+        $this->parser = null;
     }
 
     /**
