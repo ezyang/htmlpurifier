@@ -181,6 +181,27 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
         );
     }
 
+    function testIconvTruncateBug() {
+        if (!function_exists('iconv')) return;
+        if (HTMLPurifier_Encoder::testIconvTruncateBug() !== HTMLPurifier_Encoder::ICONV_TRUNCATES) return;
+        $this->config->set('Core.Encoding', 'ISO-8859-1');
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::convertFromUTF8("\xE4\xB8\xAD" . str_repeat('a', 10000), $this->config, $this->context),
+            str_repeat('a', 10000)
+        );
+    }
+
+    function testIconvChunking() {
+        if (!function_exists('iconv')) return;
+        if (HTMLPurifier_Encoder::testIconvTruncateBug() !== HTMLPurifier_Encoder::ICONV_TRUNCATES) return;
+        $this->assertIdentical(HTMLPurifier_Encoder::iconv('utf-8', 'iso-8859-1//IGNORE', "a\xF3\xA0\x80\xA0b", 4), 'ab');
+        $this->assertIdentical(HTMLPurifier_Encoder::iconv('utf-8', 'iso-8859-1//IGNORE', "aa\xE4\xB8\xADb", 4), 'aab');
+        $this->assertIdentical(HTMLPurifier_Encoder::iconv('utf-8', 'iso-8859-1//IGNORE', "aaa\xCE\xB1b", 4), 'aaab');
+        $this->assertIdentical(HTMLPurifier_Encoder::iconv('utf-8', 'iso-8859-1//IGNORE', "aaaa\xF3\xA0\x80\xA0b", 4), 'aaaab');
+        $this->assertIdentical(HTMLPurifier_Encoder::iconv('utf-8', 'iso-8859-1//IGNORE', "aaaa\xE4\xB8\xADb", 4), 'aaaab');
+        $this->assertIdentical(HTMLPurifier_Encoder::iconv('utf-8', 'iso-8859-1//IGNORE', "aaaa\xCE\xB1b", 4), 'aaaab');
+    }
+
 }
 
 // vim: et sw=4 sts=4

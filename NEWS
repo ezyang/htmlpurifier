@@ -21,6 +21,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   for reporting, and Neike Taika-Tessaro for helping diagnose.
 - Do not unset parser variable; this fixes intermittent serialization
   problems.
+- Fix iconv truncation bug, where non-UTF-8 target encodings see
+  output truncated after around 8000 characters.
 
 4.3.0, released 2011-03-27
 # Fixed broken caching of customized raw definitions, but requires an
