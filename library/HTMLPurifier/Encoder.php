@@ -365,12 +365,12 @@ class HTMLPurifier_Encoder
      */
     public static function convertFromUTF8($str, $config, $context) {
         $encoding = $config->get('Core.Encoding');
-        if ($encoding === 'utf-8') return $str;
-        static $iconv = null;
-        if ($iconv === null) $iconv = self::iconvAvailable();
         if ($escape = $config->get('Core.EscapeNonASCIICharacters')) {
             $str = self::convertToASCIIDumbLossless($str);
         }
+        if ($encoding === 'utf-8') return $str;
+        static $iconv = null;
+        if ($iconv === null) $iconv = self::iconvAvailable();
         if ($iconv && !$config->get('Test.ForceNoIconv')) {
             // Undo our previous fix in convertToUTF8, otherwise iconv will barf
             $ascii_fix = self::testEncodingSupportsASCII($encoding);

@@ -123,7 +123,15 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
             HTMLPurifier_Encoder::convertFromUTF8($this->getZhongWen(), $this->config, $this->context),
             "&#20013;&#25991; (Chinese)"
         );
+    }
 
+    function test_convertFromUTF8_withProtectionButUtf8() {
+        // Preserve the characters!
+        $this->config->set('Core.EscapeNonASCIICharacters', true);
+        $this->assertIdentical(
+            HTMLPurifier_Encoder::convertFromUTF8($this->getZhongWen(), $this->config, $this->context),
+            "&#20013;&#25991; (Chinese)"
+        );
     }
 
     function test_convertToASCIIDumbLossless() {
