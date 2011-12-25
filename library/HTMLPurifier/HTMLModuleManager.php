@@ -229,6 +229,9 @@ class HTMLPurifier_HTMLModuleManager
         if ($config->get('HTML.Nofollow')) {
             $modules[] = 'Nofollow';
         }
+        if ($config->get('HTML.TargetBlank')) {
+            $modules[] = 'TargetBlank';
+        }
 
         // merge in custom modules
         $modules = array_merge($modules, $this->userModules);

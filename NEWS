@@ -15,6 +15,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 # Core.EscapeNonASCIICharacters now always transforms entities to
   entities, even if target encoding is UTF-8.
 ! Added support for 'scope' attribute on tables.
+! Added %HTML.TargetBlank, which adds target="blank" to all outgoing links.
 - Color keywords are now case insensitive.  Thanks Yzmir Ramirez
   <yramirez-htmlpurifier@adicio.com> for reporting.
 - Explicitly initialize anonModule variable to null.
