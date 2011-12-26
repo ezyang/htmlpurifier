@@ -29,6 +29,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   problems.
 - Fix iconv truncation bug, where non-UTF-8 target encodings see
   output truncated after around 8000 characters.
+- Fix broken table content model for XHTML1.1 (and also earlier
+  versions, although the W3C validator doesn't catch those violations)
 
 4.3.0, released 2011-03-27
 # Fixed broken caching of customized raw definitions, but requires an

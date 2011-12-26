@@ -28,7 +28,21 @@ class HTMLPurifier_ChildDef_TableTest extends HTMLPurifier_ChildDefHarness
     function testReorderContents() {
         $this->assertResult(
           '<col /><colgroup /><tbody /><tfoot /><thead /><tr>1</tr><caption /><tr />',
-          '<caption /><col /><colgroup /><thead /><tfoot /><tbody /><tr>1</tr><tr />');
+          '<caption /><col /><colgroup /><thead /><tfoot /><tbody /><tbody><tr>1</tr><tr /></tbody>');
+    }
+
+    function testXhtml11Illegal() {
+        $this->assertResult(
+            '<thead><tr><th>a</th></tr></thead><tr><td>a</td></tr>',
+            '<thead><tr><th>a</th></tr></thead><tbody><tr><td>a</td></tr></tbody>'
+        );
+    }
+
+    function testTrOverflowAndClose() {
+        $this->assertResult(
+            '<tr><td>a</td></tr><tr><td>b</td></tr><tbody><tr><td>c</td></tr></tbody><tr><td>d</td></tr>',
+            '<tbody><tr><td>a</td></tr><tr><td>b</td></tr></tbody><tbody><tr><td>c</td></tr></tbody><tbody><tr><td>d</td></tr></tbody>'
+        );
     }
 
     function testDuplicateProcessing() {

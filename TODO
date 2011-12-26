@@ -112,6 +112,10 @@ Neat feature related
     3. Extend the tag exclusion system to specify whether or not the
     contents should be dropped or not (currently, there's code that could do
     something like this if it didn't drop the inner text too.)
+ ? Make AutoParagraph also support paragraph-izing double <br> tags, and not
+   just double newlines.  This is kind of tough to do in the current framework,
+   though, and might be reasonably approximated by search replacing double <br>s
+   with newlines before running it through HTML Purifier.
 
 Maintenance related (slightly boring)
  # CHMOD install script for PEAR installs
