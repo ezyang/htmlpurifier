@@ -14,7 +14,7 @@
    <line>348</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
-   <line>47</line>
+   <line>50</line>
   </file>
  </directive>
  <directive id="CSS.MaxImgLength">
@@ -478,14 +478,24 @@
    <line>19</line>
   </file>
  </directive>
- <directive id="Core.RemoveScriptContents">
+ <directive id="HTML.AllowedComments">
+  <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
+   <line>24</line>
+  </file>
+ </directive>
+ <directive id="HTML.AllowedCommentsRegexp">
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>25</line>
   </file>
  </directive>
+ <directive id="Core.RemoveScriptContents">
+  <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
+   <line>28</line>
+  </file>
+ </directive>
  <directive id="Core.HiddenElements">
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
-   <line>26</line>
+   <line>29</line>
   </file>
  </directive>
  <directive id="URI.HostBlacklist">

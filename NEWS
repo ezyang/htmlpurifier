@@ -18,6 +18,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Added %HTML.TargetBlank, which adds target="blank" to all outgoing links.
 ! Properly handle sub-lists directly nested inside of lists in
   a standards compliant way, by moving them into the preceding <li>
+! Added %HTML.AllowedComments and %HTML.AllowedCommentsRegexp for
+  limited allowed comments in untrusted situations.
 - Color keywords are now case insensitive.  Thanks Yzmir Ramirez
   <yramirez-htmlpurifier@adicio.com> for reporting.
 - Explicitly initialize anonModule variable to null.

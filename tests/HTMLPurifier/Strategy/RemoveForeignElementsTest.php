@@ -100,6 +100,16 @@ alert(&lt;b&gt;bold&lt;/b&gt;);
         $this->assertResult('<!-- bo --- asdf--as -->', '<!-- bo - asdf-as -->');
     }
 
+    function testPreserveCommentsWithLookup() {
+        $this->config->set('HTML.AllowedComments', array('allowed'));
+        $this->assertResult('<!-- allowed --><!-- not allowed -->', '<!-- allowed -->');
+    }
+
+    function testPreserveCommentsWithRegexp() {
+        $this->config->set('HTML.AllowedCommentsRegexp', '/^allowed[1-9]$/');
+        $this->assertResult('<!-- allowed1 --><!-- not allowed -->', '<!-- allowed1 -->');
+    }
+
 }
 
 // vim: et sw=4 sts=4
