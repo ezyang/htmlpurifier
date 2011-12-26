@@ -28,11 +28,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Do not add nofollow if hostname matches our current host.  Thanks 178
   for reporting, and Neike Taika-Tessaro for helping diagnose.
 - Do not unset parser variable; this fixes intermittent serialization
-  problems.
+  problems.  Thanks Neike Taika-Tessaro for reporting, bill
+  <10010tiger@gmail.com> for diagnosing.
 - Fix iconv truncation bug, where non-UTF-8 target encodings see
-  output truncated after around 8000 characters.
+  output truncated after around 8000 characters.  Thanks Jörg Ludwig
+  <joerg.ludwig@iserv.eu> for reporting.
 - Fix broken table content model for XHTML1.1 (and also earlier
-  versions, although the W3C validator doesn't catch those violations)
+  versions, although the W3C validator doesn't catch those violations).
+  Thanks GlitchMr <glitch.mr@gmail.com> for reporting.
 
 4.3.0, released 2011-03-27
 # Fixed broken caching of customized raw definitions, but requires an
