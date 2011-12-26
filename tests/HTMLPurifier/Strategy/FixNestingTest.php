@@ -35,10 +35,17 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
         $this->assertResult('<ul></ul>', '');
     }
 
-    function testRemoveIllegalPCDATA() {
+    function testListHandleIllegalPCDATA() {
         $this->assertResult(
             '<ul>Illegal text<li>Legal item</li></ul>',
-            '<ul><li>Legal item</li></ul>'
+            '<ul><li>Illegal text</li><li>Legal item</li></ul>'
+        );
+    }
+
+    function testRemoveIllegalPCDATA() {
+        $this->assertResult(
+            '<table><tr>Illegal text<td></td></tr></table>',
+            '<table><tr><td></td></tr></table>'
         );
     }
 

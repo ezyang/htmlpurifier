@@ -129,6 +129,7 @@ require_once $__dir . '/HTMLPurifier/AttrTransform/Textarea.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/Chameleon.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/Custom.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/Empty.php';
+require_once $__dir . '/HTMLPurifier/ChildDef/List.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/Required.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/Optional.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/StrictBlockquote.php';

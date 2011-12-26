@@ -135,6 +135,7 @@ require 'HTMLPurifier/AttrTransform/Textarea.php';
 require 'HTMLPurifier/ChildDef/Chameleon.php';
 require 'HTMLPurifier/ChildDef/Custom.php';
 require 'HTMLPurifier/ChildDef/Empty.php';
+require 'HTMLPurifier/ChildDef/List.php';
 require 'HTMLPurifier/ChildDef/Required.php';
 require 'HTMLPurifier/ChildDef/Optional.php';
 require 'HTMLPurifier/ChildDef/StrictBlockquote.php';

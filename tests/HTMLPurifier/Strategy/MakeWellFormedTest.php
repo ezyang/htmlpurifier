@@ -119,21 +119,21 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
     function testNestedOl() {
         $this->assertResult(
             '<ol><ol><li>foo</li></ol></ol>',
-            '<ol><li><ol><li>foo</li></ol></li></ol>'
+            '<ol><ol><li>foo</li></ol></ol>'
         );
     }
 
     function testNestedUl() {
         $this->assertResult(
             '<ul><ul><li>foo</li></ul></ul>',
-            '<ul><li><ul><li>foo</li></ul></li></ul>'
+            '<ul><ul><li>foo</li></ul></ul>'
         );
     }
 
     function testNestedOlWithStrangeEnding() {
         $this->assertResult(
             '<ol><li><ol><ol><li>foo</li></ol></li><li>foo</li></ol>',
-            '<ol><li><ol><li><ol><li>foo</li></ol></li><li>foo</li></ol></li></ol>'
+            '<ol><li><ol><ol><li>foo</li></ol></ol></li><li>foo</li></ol>'
         );
     }
 
