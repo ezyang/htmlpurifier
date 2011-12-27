@@ -23,6 +23,11 @@ Things to do as soon as possible:
  - Deprecated config options that emit warnings when you set them (with'
    a way of muting the warning if you really want to)
  - Make HTML.Trusted work with Output.FlashCompat
+ - HTML.Trusted and HTML.SafeObject have funny interaction; general
+   problem is what to do when a module "supersedes" another
+   (see also tables and basic tables.)  This is a little dicier
+   because HTML.SafeObject has some extra functionality that
+   trusted might find useful.  See http://htmlpurifier.org/phorum/read.php?3,5762,6100
 
 FUTURE VERSIONS
 ---------------
