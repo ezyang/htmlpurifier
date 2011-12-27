@@ -14,12 +14,11 @@ afraid to cast your vote for the next feature to be implemented!
 Things to do as soon as possible:
 
  - Think about allowing explicit order of operations hooks for transforms
- - Inputs don't do the right thing with submit
  - Fix "<.<" bug (trailing < is removed if not EOD)
  - Build in better internal state dumps and debugging tools for remote
    debugging
  - Allowed/Allowed* have strange interactions when both set
- - Transform lone embeds into object tags
+ ? Transform lone embeds into object tags
  - Deprecated config options that emit warnings when you set them (with'
    a way of muting the warning if you really want to)
  - Make HTML.Trusted work with Output.FlashCompat
