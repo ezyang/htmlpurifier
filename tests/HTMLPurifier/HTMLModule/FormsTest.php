@@ -7,10 +7,10 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
         parent::setUp();
         $this->config->set('HTML.Trusted', true);
         $this->config->set('Attr.EnableID', true);
-        $this->config->set('Cache.DefinitionImpl', null);
     }
 
     function testBasicUse() {
+        $this->config->set('HTML.Doctype', 'HTML 4.01 Strict');
         $this->assertResult( // need support for label for later
             '
 <form action="http://somesite.com/prog/adduser" method="post">
@@ -30,6 +30,7 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
     }
 
     function testSelectOption() {
+        $this->config->set('HTML.Doctype', 'HTML 4.01 Strict');
         $this->assertResult('
 <form action="http://somesite.com/prog/component-select" method="post">
    <p>
@@ -49,6 +50,7 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
     }
 
     function testSelectOptgroup() {
+        $this->config->set('HTML.Doctype', 'HTML 4.01 Strict');
         $this->assertResult('
 <form action="http://somesite.com/prog/someprog" method="post">
 <p>
@@ -74,6 +76,7 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
     }
 
     function testTextarea() {
+        $this->config->set('HTML.Doctype', 'HTML 4.01 Strict');
         $this->assertResult('
 <form action="http://somesite.com/prog/text-read" method="post">
    <p>
@@ -90,6 +93,7 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
     // label tests omitted
 
     function testFieldset() {
+        $this->config->set('HTML.Doctype', 'HTML 4.01 Strict');
         $this->assertResult('
 <form action="..." method="post">
  <fieldset>
@@ -122,15 +126,28 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
     }
 
     function testInputTransform() {
+        $this->config->set('HTML.Doctype', 'XHTML 1.0 Strict');
         $this->assertResult('<input type="checkbox" />', '<input type="checkbox" value="" />');
     }
 
     function testTextareaTransform() {
+        $this->config->set('HTML.Doctype', 'HTML 4.01 Strict');
         $this->assertResult('<textarea></textarea>', '<textarea cols="22" rows="3"></textarea>');
     }
 
     function testTextInFieldset() {
+        $this->config->set('HTML.Doctype', 'HTML 4.01 Strict');
         $this->assertResult('<fieldset>   <legend></legend>foo</fieldset>');
+    }
+
+    function testStrict() {
+        $this->config->set('HTML.Doctype', 'HTML 4.01 Strict');
+        $this->assertResult('<form action=""></form>', '');
+    }
+
+    function testLegacy() {
+        $this->assertResult('<form action=""></form>');
+        $this->assertResult('<form action=""><input align="left" /></form>');
     }
 
 }

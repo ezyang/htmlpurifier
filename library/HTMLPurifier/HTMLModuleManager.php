@@ -369,6 +369,13 @@ class HTMLPurifier_HTMLModuleManager
                 // :TODO:
                 // non-standalone definitions that don't have a standalone
                 // to merge into could be deferred to the end
+                // HOWEVER, it is perfectly valid for a non-standalone
+                // definition to lack a standalone definition, even
+                // after all processing: this allows us to safely
+                // specify extra attributes for elements that may not be
+                // enabled all in one place.  In particular, this might
+                // be the case for trusted elements.  WARNING: care must
+                // be taken that the /extra/ definitions are all safe.
                 continue;
             }
 

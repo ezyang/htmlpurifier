@@ -67,6 +67,7 @@ require_once $__dir . '/HTMLPurifier/UnitConverter.php';
 require_once $__dir . '/HTMLPurifier/VarParser.php';
 require_once $__dir . '/HTMLPurifier/VarParserException.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS.php';
+require_once $__dir . '/HTMLPurifier/AttrDef/Clone.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/Enum.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/Integer.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/Lang.php';

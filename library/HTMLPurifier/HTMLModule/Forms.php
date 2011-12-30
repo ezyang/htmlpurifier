@@ -84,7 +84,8 @@ class HTMLPurifier_HTMLModule_Forms extends HTMLPurifier_HTMLModule
         $button->excludes = $this->makeLookup(
             'form', 'fieldset', // Form
             'input', 'select', 'textarea', 'label', 'button', // Formctrl
-            'a' // as per HTML 4.01 spec, this is omitted by modularization
+            'a', // as per HTML 4.01 spec, this is omitted by modularization
+            'isindex', 'iframe' // legacy items
         );
 
         // Extra exclusion: img usemap="" is not permitted within this element.
