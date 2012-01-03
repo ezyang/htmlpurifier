@@ -10,6 +10,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.4.0, unknown release date
+# Removed PEARSax3 handler.
 # URI.Munge now munges URIs inside the same host that go from https
   to http.  Reported by Neike Taika-Tessaro.
 # Core.EscapeNonASCIICharacters now always transforms entities to

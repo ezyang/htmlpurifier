@@ -7,13 +7,6 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 
     public function __construct() {
         parent::__construct();
-        if ($GLOBALS['HTMLPurifierTest']['PEAR'] &&
-        // PEARSax3 is not maintained and throws loads of DEPRECATED
-        // errors in PHP 5.3
-        version_compare(PHP_VERSION, '5.3', '<')) {
-            require_once 'HTMLPurifier/Lexer/PEARSax3.php';
-            $this->_has_pear = true;
-        }
         if ($GLOBALS['HTMLPurifierTest']['PH5P']) {
             require_once 'HTMLPurifier/Lexer/PH5P.php';
         }
@@ -158,7 +151,6 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
     function assertTokenization($input, $expect, $alt_expect = array()) {
         $lexers = array();
         $lexers['DirectLex']  = new HTMLPurifier_Lexer_DirectLex();
-        if ($this->_has_pear) $lexers['PEARSax3']   = new HTMLPurifier_Lexer_PEARSax3();
         if (class_exists('DOMDocument')) {
             $lexers['DOMLex'] = new HTMLPurifier_Lexer_DOMLex();
             $lexers['PH5P']   = new HTMLPurifier_Lexer_PH5P();
@@ -299,7 +291,6 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             array(
                 // I like our behavior better, but it's non-standard
                 'DOMLex'   => array( new HTMLPurifier_Token_Empty('a', array('href'=>'')) ),
-                'PEARSax3' => array( new HTMLPurifier_Token_Start('a', array('href'=>'')) ),
                 'PH5P' => false, // total barfing, grabs scaffolding too
             )
         );
@@ -313,12 +304,11 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             ),
             array(
                 // some parsers will separate entities out
-                'PEARSax3' => $split = array(
+                'PH5P' => array(
                     new HTMLPurifier_Token_Text('<'),
                     new HTMLPurifier_Token_Text('b'),
                     new HTMLPurifier_Token_Text('>'),
                 ),
-                'PH5P' => $split,
             )
         );
     }
@@ -329,10 +319,9 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             array( new HTMLPurifier_Token_Empty('a') ),
             array(
                 // we barf on this input
-                'DirectLex' => $tokens = array(
+                'DirectLex' => array(
                     new HTMLPurifier_Token_Start('a', array('"' => ''))
                 ),
-                'PEARSax3' => $tokens,
                 'PH5P' => false, // behavior varies; handle this personally
             )
         );
@@ -363,10 +352,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
     function test_tokenizeHTML_escapedQuote() {
         $this->assertTokenization(
             '&quot;',
-            array( new HTMLPurifier_Token_Text('"') ),
-            array(
-                'PEARSax3' => false, // PEAR barfs on this
-            )
+            array( new HTMLPurifier_Token_Text('"') )
         );
     }
 
@@ -375,8 +361,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             '<![CDATA[You <b>can&#39;t</b> get me!]]>',
             array( new HTMLPurifier_Token_Text('You <b>can&#39;t</b> get me!') ),
             array(
-                // PEAR splits up all of the CDATA
-                'PEARSax3' => $split = array(
+                'PH5P' =>  array(
                     new HTMLPurifier_Token_Text('You '),
                     new HTMLPurifier_Token_Text('<'),
                     new HTMLPurifier_Token_Text('b'),
@@ -389,7 +374,6 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
                     new HTMLPurifier_Token_Text('>'),
                     new HTMLPurifier_Token_Text(' get me!'),
                 ),
-                'PH5P' => $split,
             )
         );
     }
@@ -406,11 +390,10 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             '<![CDATA[&rarr;]]>',
             array( new HTMLPurifier_Token_Text("&rarr;") ),
             array(
-                'PEARSax3' => $split = array(
+                'PH5P' => array(
                     new HTMLPurifier_Token_Text('&'),
                     new HTMLPurifier_Token_Text('rarr;'),
                 ),
-                'PH5P' => $split,
             )
         );
     }
@@ -457,7 +440,6 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
                     new HTMLPurifier_Token_Text('Whoa! <3 That\'s not good >.>'),
                     new HTMLPurifier_Token_End('b'),
                 ),
-                'PEARSax3' => false, // totally mangled
                 'PH5P' => array( // interesting grouping
                     new HTMLPurifier_Token_Start('b'),
                     new HTMLPurifier_Token_Text('Whoa! '),
@@ -475,9 +457,6 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             array(
                 new HTMLPurifier_Token_Comment(' This >< comment '),
                 new HTMLPurifier_Token_Empty('br'),
-            ),
-            array(
-                'PEARSax3' => false,
             )
         );
     }
@@ -488,7 +467,6 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             array( new HTMLPurifier_Token_Comment(' This >< comment') ),
             array(
                 'DOMLex'   => false,
-                'PEARSax3' => false,
                 'PH5P'     => false,
             )
         );
@@ -505,7 +483,6 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
                 new HTMLPurifier_Token_End('script'),
             ),
             array(
-                'PEARSax3' => false,
                 // PH5P, for some reason, bubbles the script to <head>
                 'PH5P' => false,
             )
@@ -515,10 +492,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
     function test_tokenizeHTML_entitiesInComment() {
         $this->assertTokenization(
             '<!-- This comment < &lt; & -->',
-            array( new HTMLPurifier_Token_Comment(' This comment < &lt; & ') ),
-            array(
-                'PEARSax3' => false
-            )
+            array( new HTMLPurifier_Token_Comment(' This comment < &lt; & ') )
         );
     }
 
@@ -531,8 +505,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
                     new HTMLPurifier_Token_Start('a', array('href' => '')),
                     new HTMLPurifier_Token_Text('<'),
                     new HTMLPurifier_Token_Text('">'),
-                ),
-                'PEARSax3' => false,
+                )
             )
         );
     }
@@ -595,7 +568,6 @@ div {}
             ),
             array(
                 'DirectLex' => $alt_expect,
-                'PEARSax3' => $alt_expect,
             )
         );
     }
@@ -614,11 +586,6 @@ div {}
                     new HTMLPurifier_Token_Empty('br'),
                     new HTMLPurifier_Token_Text('<3'),
                     new HTMLPurifier_Token_Empty('br'),
-                ),
-                'PEARSax3' => array(
-                    // bah too lazy to fix this
-                    new HTMLPurifier_Token_Empty('br'),
-                    new HTMLPurifier_Token_Empty('3<br'),
                 ),
             )
         );
@@ -639,12 +606,6 @@ div {}
                     new HTMLPurifier_Token_Text('<<'),
                     new HTMLPurifier_Token_End('b'),
                 ),
-                'PEARSax3' => array(
-                    // also too lazy to fix
-                    new HTMLPurifier_Token_Start('b'),
-                    new HTMLPurifier_Token_Empty('<<'),
-                    new HTMLPurifier_Token_Text('b>'),
-                ),
             )
         );
     }
@@ -662,13 +623,6 @@ div {}
             array(
                 'DOMLex' => array(
                     new HTMLPurifier_Token_Text('< '),
-                    new HTMLPurifier_Token_Start('b'),
-                    new HTMLPurifier_Token_Text('test'),
-                    new HTMLPurifier_Token_End('b'),
-                ),
-                'PEARSax3' => array(
-                    // totally doing the wrong thing here
-                    new HTMLPurifier_Token_Text(' '),
                     new HTMLPurifier_Token_Start('b'),
                     new HTMLPurifier_Token_Text('test'),
                     new HTMLPurifier_Token_End('b'),
@@ -694,7 +648,6 @@ div {}
             ),
             array(
                 'PH5P' => $alt_tokens,
-                'PEARSax3' => $alt_tokens,
             )
         );
     }
@@ -777,7 +730,6 @@ div {}
             ),
             array(
                 'DirectLex' => $start,
-                'PEARSax3' => $start,
                 )
         );
     }
