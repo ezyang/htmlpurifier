@@ -347,6 +347,11 @@
    <line>30</line>
   </file>
  </directive>
+ <directive id="Core.EnableIDNA">
+  <file name="HTMLPurifier/AttrDef/URI/Host.php">
+   <line>67</line>
+  </file>
+ </directive>
  <directive id="Attr.DefaultTextDir">
   <file name="HTMLPurifier/AttrTransform/BdoDir.php">
    <line>13</line>

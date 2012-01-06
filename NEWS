@@ -25,6 +25,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   %HTML.SafeIframe and %URI.SafeIframeRegexp.  Thanks Bradley M. Froehle
   <brad.froehle@gmail.com> for submitting an initial version of the patch.
 ! The Forms module now works properly for transitional doctypes.
+! Added support for internationalized domain names. You need the PEAR
+  Net_IDNA2 module to be in your path; if it is installed, ensure the
+  class can be loaded and then set %Core.EnableIDNA to true.
 - Color keywords are now case insensitive.  Thanks Yzmir Ramirez
   <yramirez-htmlpurifier@adicio.com> for reporting.
 - Explicitly initialize anonModule variable to null.

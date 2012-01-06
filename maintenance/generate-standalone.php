@@ -145,7 +145,6 @@ make_dir_standalone('HTMLPurifier/Filter');
 make_dir_standalone('HTMLPurifier/Printer');
 make_file_standalone('HTMLPurifier/Printer.php');
 make_file_standalone('HTMLPurifier/Lexer/PH5P.php');
-make_file_standalone('HTMLPurifier/Lexer/PEARSax3.php');
 
 echo ' done!' . PHP_EOL;
 

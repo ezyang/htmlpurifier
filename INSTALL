@@ -26,6 +26,10 @@ These optional extensions can enhance the capabilities of HTML Purifier:
     * bcmath : Used for unit conversion and imagecrash protection
     * tidy   : Used for pretty-printing HTML
 
+These optional libraries can enhance the capabilities of HTML Purifier:
+
+    * CSSTidy : Clean CSS stylesheets using %Core.ExtractStyleBlocks
+    * Net_IDNA2 (PEAR) : IRI support using %Core.EnableIDNA
 
 ---------------------------------------------------------------------------
 2.  Reconnaissance

@@ -69,4 +69,8 @@ $phpv = false;
 // to true (or, if it's not in the include path, to its install directory).
 $GLOBALS['HTMLPurifierTest']['PEAR'] = false;
 
+// If PEAR is enabled, what PEAR tests should be run? (Note: you will
+// need to ensure these libraries are installed)
+$GLOBALS['HTMLPurifierTest']['Net_IDNA2'] = true;
+
 // vim: et sw=4 sts=4
