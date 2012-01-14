@@ -15,6 +15,13 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   to http.  Reported by Neike Taika-Tessaro.
 # Core.EscapeNonASCIICharacters now always transforms entities to
   entities, even if target encoding is UTF-8.
+# Tighten up selector validation in ExtractStyleBlocks.
+  Non-syntactically valid selectors are now rejected, along with
+  some of the more obscure ones such as attribute selectors, the
+  :lang pseudoselector, and anything not in CSS2.1.  Furthermore,
+  ID and class selectors now work properly with the relevant
+  configuration attributes.  Also, mute errors when parsing CSS
+  with CSS Tidy.
 ! Added support for 'scope' attribute on tables.
 ! Added %HTML.TargetBlank, which adds target="blank" to all outgoing links.
 ! Properly handle sub-lists directly nested inside of lists in

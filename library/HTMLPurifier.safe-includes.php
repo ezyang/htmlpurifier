@@ -85,6 +85,7 @@ require_once $__dir . '/HTMLPurifier/AttrDef/CSS/DenyElementDecorator.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Filter.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Font.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/FontFamily.php';
+require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Ident.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/ImportantDecorator.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Length.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/ListStyle.php';

@@ -10,7 +10,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     function test_tokenizeHTML_extractStyleBlocks() {
         $this->config->set('Filter.ExtractStyleBlocks', true);
         $purifier = new HTMLPurifier($this->config);
-        $result = $purifier->purify('<style type="text/css">.foo {text-align:center;bogus:remove-me;}</style>Test<style>* {font-size:12pt;}</style>');
+        $result = $purifier->purify('<style type="text/css">.foo {text-align:center;bogus:remove-me;} body.class[foo="attr"] {text-align:right;}</style>Test<style>* {font-size:12pt;}</style>');
         $this->assertIdentical($result, 'Test');
         $this->assertIdentical($purifier->context->get('StyleBlocks'),
             array(
@@ -153,7 +153,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo, .bar');
         $this->assertCleanCSS(
             "p, div {\ntext-indent:1em;\n}",
-            "#foo p, #foo div, .bar p, .bar div {\ntext-indent:1em;\n}"
+            "#foo p, .bar p, #foo div, .bar div {\ntext-indent:1em;\n}"
         );
     }
 
@@ -189,6 +189,41 @@ text-align:right;
 text-align:right;
 }"
         );
+    }
+
+    function test_atSelector() {
+        $this->assertCleanCSS(
+"{
+    b { text-align: center; }
+}",
+""
+            );
+    }
+
+    function test_selectorValidation() {
+        $this->assertCleanCSS(
+"&, & {
+text-align: center;
+}",
+""
+        );
+        $this->assertCleanCSS(
+"&, b {
+text-align:center;
+}",
+"b {
+text-align:center;
+}"
+        );
+        $this->assertCleanCSS(
+"& a #foo:hover.bar   +b > i {
+text-align:center;
+}",
+"a #foo:hover.bar + b \\3E  i {
+text-align:center;
+}"
+        );
+        $this->assertCleanCSS("doesnt-exist { text-align:center }", "");
     }
 
 }

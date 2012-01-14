@@ -323,23 +323,23 @@
  </directive>
  <directive id="Attr.EnableID">
   <file name="HTMLPurifier/AttrDef/HTML/ID.php">
-   <line>20</line>
+   <line>30</line>
   </file>
  </directive>
  <directive id="Attr.IDPrefix">
   <file name="HTMLPurifier/AttrDef/HTML/ID.php">
-   <line>26</line>
+   <line>36</line>
   </file>
  </directive>
  <directive id="Attr.IDPrefixLocal">
   <file name="HTMLPurifier/AttrDef/HTML/ID.php">
-   <line>28</line>
-   <line>31</line>
+   <line>38</line>
+   <line>41</line>
   </file>
  </directive>
  <directive id="Attr.IDBlacklistRegexp">
   <file name="HTMLPurifier/AttrDef/HTML/ID.php">
-   <line>54</line>
+   <line>64</line>
   </file>
  </directive>
  <directive id="Attr.">
@@ -411,17 +411,17 @@
  </directive>
  <directive id="Filter.ExtractStyleBlocks.TidyImpl">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>41</line>
+   <line>53</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Scope">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>65</line>
+   <line>77</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Escaping">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>123</line>
+   <line>275</line>
   </file>
  </directive>
  <directive id="HTML.SafeIframe">
@@ -513,7 +513,7 @@
  </directive>
  <directive id="URI.HostBlacklist">
   <file name="HTMLPurifier/URIFilter/HostBlacklist.php">
-   <line>8</line>
+   <line>12</line>
   </file>
  </directive>
  <directive id="URI.MungeResources">

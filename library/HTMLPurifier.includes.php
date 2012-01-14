@@ -91,6 +91,7 @@ require 'HTMLPurifier/AttrDef/CSS/DenyElementDecorator.php';
 require 'HTMLPurifier/AttrDef/CSS/Filter.php';
 require 'HTMLPurifier/AttrDef/CSS/Font.php';
 require 'HTMLPurifier/AttrDef/CSS/FontFamily.php';
+require 'HTMLPurifier/AttrDef/CSS/Ident.php';
 require 'HTMLPurifier/AttrDef/CSS/ImportantDecorator.php';
 require 'HTMLPurifier/AttrDef/CSS/Length.php';
 require 'HTMLPurifier/AttrDef/CSS/ListStyle.php';
