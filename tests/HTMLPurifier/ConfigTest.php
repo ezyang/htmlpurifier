@@ -220,7 +220,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $def  = $config->getHTMLDefinition();
         $def2 = $config->getHTMLDefinition();
         $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
-        $this->assertSame($def, $def2);
+        $this->assertTrue($def === $def2);
         $this->assertTrue($def->setup);
 
         $old_def = clone $def2;
@@ -228,7 +228,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
         $def = $config->getHTMLDefinition();
         $this->assertIsA($def, 'HTMLPurifier_HTMLDefinition');
-        $this->assertNotEqual($def, $old_def);
+        $this->assertTrue($def !== $old_def);
         $this->assertTrue($def->setup);
 
     }
@@ -491,7 +491,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML.Allowed', 'a');
         $config2 = unserialize($config->serialize());
-        $this->assertIdentical($config, $config2);
+        $this->assertIdentical($config->get('HTML.Allowed'), $config2->get('HTML.Allowed'));
     }
 
     function testDefinitionCachingNothing() {
