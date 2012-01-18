@@ -107,6 +107,14 @@ if ($AC['standalone']) {
 require '../library/HTMLPurifier.autoload.php';
 require 'HTMLPurifier/Harness.php';
 
+// immediately load external libraries, so we can bail out early if
+// they're bad
+if ($GLOBALS['HTMLPurifierTest']['PEAR']) {
+    if ($GLOBALS['HTMLPurifierTest']['Net_IDNA2']) {
+        require_once 'Net/IDNA2.php';
+    }
+}
+
 // Shell-script code is executed
 
 if ($AC['xml']) {

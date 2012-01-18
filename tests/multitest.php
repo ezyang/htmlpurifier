@@ -51,9 +51,11 @@ $AC['standalone'] = false; // convenience for --distro=standalone
 $AC['only-phpt'] = false; // --type=phpt
 $AC['exclude-normal'] = false; // --distro=standalone
 $AC['exclude-standalone'] = false; // --distro=normal
+$AC['verbose'] = false;
 $aliases = array(
     'f' => 'file',
     'q' => 'quiet',
+    'v' => 'verbose',
 );
 htmlpurifier_parse_args($AC, $aliases);
 
@@ -68,7 +70,7 @@ elseif ($AC['standalone']) $AC['distro'] = 'standalone';
 if ($AC['xml']) {
     $reporter = new XmlReporter();
 } else {
-    $reporter = new TextReporter();
+    $reporter = new HTMLPurifier_SimpleTest_TextReporter($AC);
 }
 
 // Regenerate any necessary files

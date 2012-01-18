@@ -23,11 +23,11 @@ class CliTestCase
     public function getLabel() {
         return $this->_command;
     }
-    public function run(&$reporter) {
+    public function run($reporter) {
         if (!$this->_quiet) $reporter->paintFormattedMessage('Running ['.$this->_command.']');
         return $this->_invokeCommand($this->_command, $reporter);
     }
-    public function _invokeCommand($command, &$reporter) {
+    public function _invokeCommand($command, $reporter) {
        $xml = shell_exec($command);
         if (! $xml) {
             if (!$this->_quiet) {
@@ -35,7 +35,7 @@ class CliTestCase
             }
             return false;
         }
-        $parser = &$this->_createParser($reporter);
+        $parser = $this->_createParser($reporter);
 
         set_error_handler(array($this, '_errorHandler'));
         $status = $parser->parse($xml);
@@ -59,7 +59,7 @@ class CliTestCase
         }
         return true;
     }
-    public function &_createParser(&$reporter) {
+    public function _createParser($reporter) {
         $parser = new SimpleTestXmlParser($reporter);
         return $parser;
     }
