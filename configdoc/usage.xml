@@ -411,17 +411,17 @@
  </directive>
  <directive id="Filter.ExtractStyleBlocks.TidyImpl">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>53</line>
+   <line>50</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Scope">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>77</line>
+   <line>74</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Escaping">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>275</line>
+   <line>272</line>
   </file>
  </directive>
  <directive id="HTML.SafeIframe">

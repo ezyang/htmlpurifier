@@ -1,5 +1,11 @@
 <?php
 
+// why is this a top level function? Because PHP 5.2.0 doesn't seem to
+// understand how to interpret this filter if it's a static method.
+// It's all really silly, but if we go this route it might be reasonable
+// to coalesce all of these methods into one.
+function htmlpurifier_filter_extractstyleblocks_muteerrorhandler() {}
+
 /**
  * This filter extracts <style> blocks from input HTML, cleans them up
  * using CSSTidy, and then places them in $purifier->context->get('StyleBlocks')
@@ -31,11 +37,6 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
         $this->_class_attrdef = new HTMLPurifier_AttrDef_CSS_Ident();
         $this->_enum_attrdef = new HTMLPurifier_AttrDef_Enum(array('first-child', 'link', 'visited', 'active', 'hover', 'focus'));
     }
-
-    /**
-     * Error-handler that mutes errors, alternative to shut-up operator.
-     */
-    public static function muteErrorHandler() {}
 
     /**
      * Save the contents of CSS blocks to style matches
@@ -89,7 +90,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
             $css = substr($css, 0, -3);
         }
         $css = trim($css);
-        set_error_handler(array('HTMLPurifier_Filter_ExtractStyleBlocks', 'muteErrorHandler'));
+        set_error_handler('htmlpurifier_filter_extractstyleblocks_muteerrorhandler');
         $this->_tidy->parse($css);
         restore_error_handler();
         $css_definition = $config->getDefinition('CSS');
