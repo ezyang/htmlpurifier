@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.4.0, unknown release date
+4.4.0, released 2012-01-18
 # Removed PEARSax3 handler.
 # URI.Munge now munges URIs inside the same host that go from https
   to http.  Reported by Neike Taika-Tessaro.

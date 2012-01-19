@@ -1,8 +1,8 @@
-HTML Purifier 4.3.0 is a major security release addressing various
-security vulnerabilities related to user-submitted code and legitimate
-client-side scripts.  It also contains an accumulation of new features
-and bugfixes over half a year.  New configuration options include
-%CSS.Trusted, %CSS.AllowedFonts and %Cache.SerializerPermissions.
-There is a backwards-incompatible API change for customized raw
-definitions, see <http://htmlpurifier.org/docs/enduser-customize.html#optimized>
-for details.
+HTML Purifier 4.4.0 is a minor security release addressing a security
+vulnerability associated with some optional functionality.  It also
+contains an accumulation of new features and bugfixes over half a year.
+New configuration options include %HTML.TargetBlank,
+%HTML.AllowedComments, %HTML.AllowedCommentsRegexp, %HTML.SafeIframe,
+%URI.SafeIframeRegexp, %Core.EnableIDNA (requires PEAR Net_IDNA2 module and
+doesn't work for PHP 5.0.5).  We also now support the 'scope' attribute on
+tables.
