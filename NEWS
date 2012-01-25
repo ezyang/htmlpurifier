@@ -9,6 +9,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.5.0, unknown release date
+
 4.4.0, released 2012-01-18
 # Removed PEARSax3 handler.
 # URI.Munge now munges URIs inside the same host that go from https
@@ -21,7 +23,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   :lang pseudoselector, and anything not in CSS2.1.  Furthermore,
   ID and class selectors now work properly with the relevant
   configuration attributes.  Also, mute errors when parsing CSS
-  with CSS Tidy.
+  with CSS Tidy.  Reported by Mario Heiderich and Norman Hippert.
 ! Added support for 'scope' attribute on tables.
 ! Added %HTML.TargetBlank, which adds target="blank" to all outgoing links.
 ! Properly handle sub-lists directly nested inside of lists in
