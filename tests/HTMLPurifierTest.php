@@ -36,6 +36,11 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
         );
     }
 
+    function testDisableResources() {
+        $this->config->set('URI.DisableResources', true);
+        $this->assertPurification('<img src="foo.jpg" />', '');
+    }
+
     function test_addFilter_deprecated() {
         $this->expectError('HTMLPurifier->addFilter() is deprecated, use configuration directives in the Filter namespace or Filter.Custom');
         generate_mock_once('HTMLPurifier_Filter');
