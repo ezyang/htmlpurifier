@@ -254,7 +254,7 @@
  </directive>
  <directive id="URI.">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>59</line>
+   <line>60</line>
   </file>
   <file name="HTMLPurifier/URIFilter/Munge.php">
    <line>12</line>
@@ -262,7 +262,7 @@
  </directive>
  <directive id="URI.Host">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>69</line>
+   <line>70</line>
   </file>
   <file name="HTMLPurifier/URIScheme.php">
    <line>81</line>
@@ -270,12 +270,12 @@
  </directive>
  <directive id="URI.Base">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>70</line>
+   <line>71</line>
   </file>
  </directive>
  <directive id="URI.DefaultScheme">
   <file name="HTMLPurifier/URIDefinition.php">
-   <line>77</line>
+   <line>78</line>
   </file>
  </directive>
  <directive id="URI.AllowedSchemes">

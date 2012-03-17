@@ -22,12 +22,16 @@ class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
             'overloaded-attr' => $overloaded_old,
             'removed-attr' => $removed,
         );
+        /*
         $def1->attr_transform_pre =
         $def1->attr_transform_post = array(
             'old-transform' => $old,
             'overloaded-transform' => $overloaded_old,
             'removed-transform' => $removed,
         );
+         */
+        $def1->attr_transform_pre[] = $old;
+        $def1->attr_transform_post[] = $old;
         $def1->child = $overloaded_old;
         $def1->content_model = 'old';
         $def1->content_model_type = $overloaded_old;
@@ -44,12 +48,16 @@ class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
             'overloaded-attr' => $overloaded_new,
             'removed-attr' => false,
         );
+        /*
         $def2->attr_transform_pre =
         $def2->attr_transform_post = array(
             'new-transform' => $new,
             'overloaded-transform' => $overloaded_new,
             'removed-transform' => false,
         );
+         */
+        $def2->attr_transform_pre[] = $new;
+        $def2->attr_transform_post[] = $new;
         $def2->child = $new;
         $def2->content_model = '#SUPER | new';
         $def2->content_model_type = $overloaded_new;
@@ -70,11 +78,14 @@ class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
             'new-attr' => $new,
         ));
         $this->assertIdentical($def1->attr_transform_pre, $def1->attr_transform_post);
+        $this->assertIdentical($def1->attr_transform_pre, array($old, $new));
+        /*
         $this->assertIdentical($def1->attr_transform_pre, array(
             'old-transform' => $old,
             'overloaded-transform' => $overloaded_new,
             'new-transform' => $new,
         ));
+         */
         $this->assertIdentical($def1->child, $new);
         $this->assertIdentical($def1->content_model, 'old | new');
         $this->assertIdentical($def1->content_model_type, $overloaded_new);
