@@ -209,14 +209,22 @@
    <line>228</line>
   </file>
  </directive>
- <directive id="HTML.Nofollow">
+ <directive id="HTML.SafeScripting">
   <file name="HTMLPurifier/HTMLModuleManager.php">
    <line>231</line>
+  </file>
+  <file name="HTMLPurifier/HTMLModule/SafeScripting.php">
+   <line>17</line>
+  </file>
+ </directive>
+ <directive id="HTML.Nofollow">
+  <file name="HTMLPurifier/HTMLModuleManager.php">
+   <line>234</line>
   </file>
  </directive>
  <directive id="HTML.TargetBlank">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>234</line>
+   <line>237</line>
   </file>
  </directive>
  <directive id="Attr.IDBlacklist">

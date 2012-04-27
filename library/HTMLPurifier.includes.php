@@ -165,6 +165,7 @@ require 'HTMLPurifier/HTMLModule/Proprietary.php';
 require 'HTMLPurifier/HTMLModule/Ruby.php';
 require 'HTMLPurifier/HTMLModule/SafeEmbed.php';
 require 'HTMLPurifier/HTMLModule/SafeObject.php';
+require 'HTMLPurifier/HTMLModule/SafeScripting.php';
 require 'HTMLPurifier/HTMLModule/Scripting.php';
 require 'HTMLPurifier/HTMLModule/StyleAttribute.php';
 require 'HTMLPurifier/HTMLModule/Tables.php';
