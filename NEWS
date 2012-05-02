@@ -14,6 +14,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   this also means it's no longer possible to override attribute
   transforms in later modules.  No internal code was using this
   but this may break some clients.
+- Use prepend for SPL autoloading on PHP 5.3 and later.
 
 4.4.0, released 2012-01-18
 # Removed PEARSax3 handler.
