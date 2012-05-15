@@ -13,6 +13,7 @@ afraid to cast your vote for the next feature to be implemented!
 
 Things to do as soon as possible:
 
+ - http://htmlpurifier.org/phorum/read.php?3,5560,6307#msg-6307
  - Think about allowing explicit order of operations hooks for transforms
  - Fix "<.<" bug (trailing < is removed if not EOD)
  - Build in better internal state dumps and debugging tools for remote
