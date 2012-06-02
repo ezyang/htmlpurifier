@@ -17,6 +17,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Support display:inline-block
 - Use prepend for SPL autoloading on PHP 5.3 and later.
 - Fix bug with nofollow transform when pre-existing rel exists.
+- Fix bug where background:url() always gets lower-cased
+  (but not background-image:url())
 
 4.4.0, released 2012-01-18
 # Removed PEARSax3 handler.

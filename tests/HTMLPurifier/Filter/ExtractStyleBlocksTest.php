@@ -226,6 +226,10 @@ text-align:center;
         $this->assertCleanCSS("doesnt-exist { text-align:center }", "");
     }
 
+    function test_cleanCSS_caseSensitive() {
+        $this->assertCleanCSS("a .foo #ID div.cl#foo {\nbackground:url(\"http://foo/BAR\");\n}");
+    }
+
 }
 
 // vim: et sw=4 sts=4
