@@ -208,8 +208,9 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
 
         $this->info['border-spacing'] = new HTMLPurifier_AttrDef_CSS_Multiple(new HTMLPurifier_AttrDef_CSS_Length(), 2);
 
-        // partial support
-        $this->info['white-space'] = new HTMLPurifier_AttrDef_Enum(array('nowrap'));
+        // These CSS properties don't work on many browsers, but we live
+        // in THE FUTURE!
+        $this->info['white-space'] = new HTMLPurifier_AttrDef_Enum(array('nowrap', 'normal', 'pre', 'pre-wrap', 'pre-line'));
 
         if ($config->get('CSS.Proprietary')) {
             $this->doSetupProprietary($config);
