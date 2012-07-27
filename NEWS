@@ -16,6 +16,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   but this may break some clients.
 ! Support display:inline-block
 ! Support for more white-space CSS values.
+! Permit underscores in font families
 - Use prepend for SPL autoloading on PHP 5.3 and later.
 - Fix bug with nofollow transform when pre-existing rel exists.
 - Fix bug where background:url() always gets lower-cased
