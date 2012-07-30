@@ -9,6 +9,7 @@ class HTMLPurifier_AttrDef_HTML_ColorTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('foo', false);
         $this->assertDef('43', false);
         $this->assertDef('red', '#FF0000');
+        $this->assertDef('RED', '#FF0000');
         $this->assertDef('#FF0000');
         $this->assertDef('#453443');
         $this->assertDef('453443', '#453443');
