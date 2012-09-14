@@ -20,3 +20,5 @@ docs/doxygen*
 *.htmlt.ini
 *.patch
 /*.php
+vendor
+composer.lock
