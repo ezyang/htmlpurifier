@@ -250,6 +250,11 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         // only opacity, for now
         $this->info['filter'] = new HTMLPurifier_AttrDef_CSS_Filter();
 
+        // more CSS3
+        $this->info['page-break-after'] =
+        $this->info['page-break-before'] = new HTMLPurifier_AttrDef_Enum(array('auto','always','avoid','left','right'));
+        $this->info['page-break-inside'] = new HTMLPurifier_AttrDef_Enum(array('auto','avoid'));
+
     }
 
     protected function doSetupTricky($config) {
