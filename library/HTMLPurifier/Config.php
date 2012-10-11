@@ -682,6 +682,7 @@ class HTMLPurifier_Config
             $trace = debug_backtrace();
             // zip(tail(trace), trace) -- but PHP is not Haskell har har
             for ($i = 0, $c = count($trace); $i < $c - 1; $i++) {
+                // XXX this is not correct on some versions of HTML Purifier
                 if ($trace[$i + 1]['class'] === 'HTMLPurifier_Config') {
                     continue;
                 }
