@@ -142,6 +142,12 @@ Autoload compatibility
     for you, which can collide with an autoloader that was added by *you*
     later.
 
+    If you use the Composer (a tool for dependency management in PHP) you
+    just should manually call HTMLPurifier_Bootstrap::registerAutoloader().
+    This call will register an additional autoloader for HTMLPurifier. You
+    don't need to include or require HTMLPurifier_Bootstrap class itself
+    because Composer will does it for you. See https://getcomposer.org/
+    for an additional information.
 
 For better performance
 ----------------------

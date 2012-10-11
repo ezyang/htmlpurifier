@@ -16,6 +16,6 @@
         "php": ">=5.2"
     },
     "autoload": {
-        "classmap": ["library/"]
+        "files": ["library/HTMLPurifier/Bootstrap.php"]
     }
 }
