@@ -14,6 +14,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   this also means it's no longer possible to override attribute
   transforms in later modules.  No internal code was using this
   but this may break some clients.
+# We now use SHA-1 to identify cached definitions, instead of MD5.
 ! Support display:inline-block
 ! Support for more white-space CSS values.
 ! Permit underscores in font families
