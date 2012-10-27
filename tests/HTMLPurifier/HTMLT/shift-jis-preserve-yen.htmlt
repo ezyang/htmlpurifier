@@ -1,5 +1,5 @@
 --SKIPIF--
-if (!function_exists('iconv')) return true;
+if (!HTMLPurifier_Encoder::iconvAvailable()) return true;
 --INI--
 Core.Encoding = "Shift_JIS"
 Core.EscapeNonASCIICharacters = true
