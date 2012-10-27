@@ -24,6 +24,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Fix bug where background:url() always gets lower-cased
   (but not background-image:url())
 - Fix bug with non lower-case color names in HTML
+- Fix bug where data URI validation doesn't remove temporary files.
+  Thanks Javier Marín Ros <javiermarinros@gmail.com> for reporting.
 
 4.4.0, released 2012-01-18
 # Removed PEARSax3 handler.
