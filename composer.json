@@ -16,6 +16,7 @@
         "php": ">=5.2"
     },
     "autoload": {
-        "classmap": ["library/"]
+        "psr-0": { "HTMLPurifier": "library/" },
+        "files": ["library/HTMLPurifier.composer.php"]
     }
 }
