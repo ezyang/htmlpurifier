@@ -15,7 +15,7 @@
 function HTMLPurifier($html, $config = null) {
     static $purifier = false;
     if (!$purifier) {
-        $purifier = new HTMLPurifier();
+        $purifier = new HTMLPurifier_Core();
     }
     return $purifier->purify($html, $config);
 }
