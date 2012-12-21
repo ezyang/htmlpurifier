@@ -19,6 +19,7 @@
  */
 
 require 'HTMLPurifier.php';
+require 'HTMLPurifier/Core.php';
 require 'HTMLPurifier/AttrCollections.php';
 require 'HTMLPurifier/AttrDef.php';
 require 'HTMLPurifier/AttrTransform.php';

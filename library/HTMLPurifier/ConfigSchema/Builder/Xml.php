@@ -13,7 +13,7 @@ class HTMLPurifier_ConfigSchema_Builder_Xml extends XMLWriter
     protected function writeHTMLDiv($html) {
         $this->startElement('div');
 
-        $purifier = HTMLPurifier::getInstance();
+        $purifier = HTMLPurifier_Core::getInstance();
         $html = $purifier->purify($html);
         $this->writeAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
         $this->writeRaw($html);
