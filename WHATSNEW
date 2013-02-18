@@ -1,8 +1,6 @@
-HTML Purifier 4.4.0 is a minor security release addressing a security
-vulnerability associated with some optional functionality.  It also
-contains an accumulation of new features and bugfixes over half a year.
-New configuration options include %HTML.TargetBlank,
-%HTML.AllowedComments, %HTML.AllowedCommentsRegexp, %HTML.SafeIframe,
-%URI.SafeIframeRegexp, %Core.EnableIDNA (requires PEAR Net_IDNA2 module and
-doesn't work for PHP 5.0.5).  We also now support the 'scope' attribute on
-tables.
+HTML Purifier 4.5.0 is a minor bugfix and feature release, containing an
+accumulation of changes over a year.  CSS support has been extended to
+support display:inline-block, white-space, underscores in font families,
+page-break-* CSS3 properties (when proprietary is enabled.)  We now use
+SHA-1 to identify cached definitions, and the semantics of stacked
+attribute transforms has changed slightly.
