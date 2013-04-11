@@ -466,6 +466,16 @@
    <line>50</line>
   </file>
  </directive>
+ <directive id="URI.FlashHostWhitelist">
+  <file name="HTMLPurifier/Injector/FlashHostWhitelist.php">
+   <line>16</line>
+  </file>
+ </directive>
+ <directive id="URI.HostWhitelist">
+  <file name="HTMLPurifier/Injector/HostWhitelist.php">
+   <line>15</line>
+  </file>
+ </directive>
  <directive id="AutoFormat.PurifierLinkify.DocURL">
   <file name="HTMLPurifier/Injector/PurifierLinkify.php">
    <line>15</line>

@@ -182,6 +182,8 @@ require 'HTMLPurifier/HTMLModule/Tidy/Transitional.php';
 require 'HTMLPurifier/HTMLModule/Tidy/XHTML.php';
 require 'HTMLPurifier/Injector/AutoParagraph.php';
 require 'HTMLPurifier/Injector/DisplayLinkURI.php';
+require 'HTMLPurifier/Injector/FlashHostWhitelist.php';
+require 'HTMLPurifier/Injector/HostWhitelist.php';
 require 'HTMLPurifier/Injector/Linkify.php';
 require 'HTMLPurifier/Injector/PurifierLinkify.php';
 require 'HTMLPurifier/Injector/RemoveEmpty.php';
