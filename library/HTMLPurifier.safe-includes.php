@@ -176,6 +176,8 @@ require_once $__dir . '/HTMLPurifier/HTMLModule/Tidy/Transitional.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/Tidy/XHTML.php';
 require_once $__dir . '/HTMLPurifier/Injector/AutoParagraph.php';
 require_once $__dir . '/HTMLPurifier/Injector/DisplayLinkURI.php';
+require_once $__dir . '/HTMLPurifier/Injector/FlashHostWhitelist.php';
+require_once $__dir . '/HTMLPurifier/Injector/HostWhitelist.php';
 require_once $__dir . '/HTMLPurifier/Injector/Linkify.php';
 require_once $__dir . '/HTMLPurifier/Injector/PurifierLinkify.php';
 require_once $__dir . '/HTMLPurifier/Injector/RemoveEmpty.php';
