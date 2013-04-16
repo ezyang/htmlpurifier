@@ -30,7 +30,7 @@ class HTMLPurifier_URIParser
         // Note that ["<>] are an addition to the RFC's recommended
         // characters, because they represent external delimeters.
         $r_URI = '!'.
-            '(([^:/?#"<>]+):)?'. // 2. Scheme
+            '(([a-zA-Z0-9\.\+\-]+):)?'. // 2. Scheme
             '(//([^/?#"<>]*))?'. // 4. Authority
             '([^?#"<>]*)'.       // 5. Path
             '(\?([^#"<>]*))?'.   // 7. Query

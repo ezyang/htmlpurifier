@@ -9,6 +9,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.6.0, unknown release date
+# URI parsing algorithm was made more strict, so only prefixes which
+  looks like schemes will actually be schemes.  Thanks
+  Michael Gusev <mgusev@sugarcrm.com> for fixing.
+
 4.5.0, released 2013-02-17
 # Fix bug where stacked attribute transforms clobber each other;
   this also means it's no longer possible to override attribute
