@@ -133,7 +133,7 @@ class HTMLPurifier_Config
 
     /**
      * Convenience constructor that creates a default configuration object.
-     * @return Default HTMLPurifier_Config object.
+     * @return HTMLPurifier_Config default object.
      */
     public static function createDefault() {
         $definition = HTMLPurifier_ConfigSchema::instance();
