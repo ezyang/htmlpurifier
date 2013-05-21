@@ -13,6 +13,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 # URI parsing algorithm was made more strict, so only prefixes which
   looks like schemes will actually be schemes.  Thanks
   Michael Gusev <mgusev@sugarcrm.com> for fixing.
+- Made Linkify URL parser a bit less permissive, so that non-breaking
+  spaces and commas are not included as part of URL.  Thanks nAS for fixing.
 
 4.5.0, released 2013-02-17
 # Fix bug where stacked attribute transforms clobber each other;
