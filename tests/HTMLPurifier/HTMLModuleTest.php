@@ -3,8 +3,8 @@
 class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
 {
 
-    function test_addElementToContentSet() {
-
+    public function test_addElementToContentSet()
+    {
         $module = new HTMLPurifier_HTMLModule();
 
         $module->addElementToContentSet('b', 'Inline');
@@ -15,8 +15,8 @@ class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
 
     }
 
-    function test_addElement() {
-
+    public function test_addElement()
+    {
         $module = new HTMLPurifier_HTMLModule();
         $def = $module->addElement(
             'a', 'Inline', 'Optional: #PCDATA', array('Common'),
@@ -43,8 +43,8 @@ class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
 
     }
 
-    function test_parseContents() {
-
+    public function test_parseContents()
+    {
         $module = new HTMLPurifier_HTMLModule();
 
         // pre-defined templates
@@ -90,8 +90,8 @@ class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
 
     }
 
-    function test_mergeInAttrIncludes() {
-
+    public function test_mergeInAttrIncludes()
+    {
         $module = new HTMLPurifier_HTMLModule();
 
         $attr = array();
@@ -104,8 +104,8 @@ class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
 
     }
 
-    function test_addBlankElement() {
-
+    public function test_addBlankElement()
+    {
         $module = new HTMLPurifier_HTMLModule();
         $def = $module->addBlankElement('a');
 
@@ -117,8 +117,8 @@ class HTMLPurifier_HTMLModuleTest extends HTMLPurifier_Harness
 
     }
 
-    function test_makeLookup() {
-
+    public function test_makeLookup()
+    {
         $module = new HTMLPurifier_HTMLModule();
 
         $this->assertIdentical(

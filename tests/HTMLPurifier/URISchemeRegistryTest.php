@@ -3,8 +3,8 @@
 class HTMLPurifier_URISchemeRegistryTest extends HTMLPurifier_Harness
 {
 
-    function test() {
-
+    public function test()
+    {
         generate_mock_once('HTMLPurifier_URIScheme');
 
         $config = HTMLPurifier_Config::create(array(

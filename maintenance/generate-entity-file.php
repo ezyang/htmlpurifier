@@ -21,10 +21,11 @@ $entity_dir = '../docs/entities/';
 $output_file = '../library/HTMLPurifier/EntityLookup/entities.ser';
 
 // courtesy of a PHP manual comment
-function unichr($dec) {
+function unichr($dec)
+{
     if ($dec < 128) {
         $utf  = chr($dec);
-    } else if ($dec < 2048) {
+    } elseif ($dec < 2048) {
         $utf  = chr(192 + (($dec - ($dec % 64)) / 64));
         $utf .= chr(128 + ($dec % 64));
     } else {

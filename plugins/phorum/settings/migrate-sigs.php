@@ -1,6 +1,7 @@
 <?php
 
-function phorum_htmlpurifier_migrate_sigs_check() {
+function phorum_htmlpurifier_migrate_sigs_check()
+{
     global $PHORUM;
     $offset = 0;
     if (!empty($_POST['migrate-sigs'])) {
@@ -17,7 +18,8 @@ function phorum_htmlpurifier_migrate_sigs_check() {
     return $offset;
 }
 
-function phorum_htmlpurifier_migrate_sigs($offset) {
+function phorum_htmlpurifier_migrate_sigs($offset)
+{
     global $PHORUM;
 
     if(!$offset) return; // bail out quick if $offset == 0

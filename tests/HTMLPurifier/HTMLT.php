@@ -4,12 +4,14 @@ class HTMLPurifier_HTMLT extends HTMLPurifier_Harness
 {
     protected $path;
 
-    public function __construct($path) {
+    public function __construct($path)
+    {
         $this->path = $path;
         parent::__construct($path);
     }
 
-    public function testHtmlt() {
+    public function testHtmlt()
+    {
         $parser = new HTMLPurifier_StringHashParser();
         $hash = $parser->parseFile($this->path); // assume parser normalizes to "\n"
         if (isset($hash['SKIPIF'])) {

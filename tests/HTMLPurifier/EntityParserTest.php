@@ -5,12 +5,14 @@ class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
 
     protected $EntityParser;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->EntityParser = new HTMLPurifier_EntityParser();
         $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
     }
 
-    function test_substituteNonSpecialEntities() {
+    public function test_substituteNonSpecialEntities()
+    {
         $char_theta = $this->_entity_lookup->table['theta'];
         $this->assertIdentical($char_theta,
             $this->EntityParser->substituteNonSpecialEntities('&theta;') );
@@ -73,7 +75,8 @@ class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
 
     }
 
-    function test_substituteSpecialEntities() {
+    public function test_substituteSpecialEntities()
+    {
         $this->assertIdentical(
             "'",
             $this->EntityParser->substituteSpecialEntities('&#39;')

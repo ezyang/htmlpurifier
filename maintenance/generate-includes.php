@@ -61,12 +61,13 @@ echo "done!\n";
  *
  * @note This function expects that format $name extends $parent on one line
  *
- * @param $file
+ * @param string $file
  *      File to check dependencies of.
- * @return
+ * @return array
  *      Lookup array of files the file is dependent on, sorted accordingly.
  */
-function get_dependency_lookup($file) {
+function get_dependency_lookup($file)
+{
     static $cache = array();
     if (isset($cache[$file])) return $cache[$file];
     if (!file_exists($file)) {
@@ -108,7 +109,8 @@ function get_dependency_lookup($file) {
  * @return
  *      Sorted array ($files is not modified by reference!)
  */
-function dep_sort($files) {
+function dep_sort($files)
+{
     $ret = array();
     $cache = array();
     foreach ($files as $file) {

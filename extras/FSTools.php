@@ -15,7 +15,8 @@ class FSTools
     /**
      * Returns a global instance of FSTools
      */
-    static public function singleton() {
+    public static function singleton()
+    {
         if (empty(FSTools::$singleton)) FSTools::$singleton = new FSTools();
         return FSTools::$singleton;
     }
@@ -24,7 +25,8 @@ class FSTools
      * Sets our global singleton to something else; useful for overloading
      * functions.
      */
-    static public function setSingleton($singleton) {
+    public static function setSingleton($singleton)
+    {
         FSTools::$singleton = $singleton;
     }
 
@@ -33,7 +35,8 @@ class FSTools
      * @param string $folder Name of folder to create
      * @note Adapted from the PHP manual comment 76612
      */
-    public function mkdirr($folder) {
+    public function mkdirr($folder)
+    {
         $folders = preg_split("#[\\\\/]#", $folder);
         $base = '';
         for($i = 0, $c = count($folders); $i < $c; $i++) {
@@ -57,7 +60,8 @@ class FSTools
      * so that copied files, if PHP, have includes removed
      * @note Adapted from http://aidanlister.com/repos/v/function.copyr.php
      */
-    public function copyr($source, $dest) {
+    public function copyr($source, $dest)
+    {
         // Simple copy for a file
         if (is_file($source)) {
             return $this->copy($source, $dest);
@@ -92,7 +96,8 @@ class FSTools
      * ignore hidden files, unreadable files, etc. This function
      * applies to copyr().
      */
-    public function copyable($file) {
+    public function copyable($file)
+    {
         return true;
     }
 
@@ -131,7 +136,8 @@ class FSTools
     /**
      * Recursively globs a directory.
      */
-    public function globr($dir, $pattern, $flags = NULL) {
+    public function globr($dir, $pattern, $flags = NULL)
+    {
         $files = $this->glob("$dir/$pattern", $flags);
         if ($files === false) $files = array();
         $sub_dirs = $this->glob("$dir/*", GLOB_ONLYDIR);
@@ -148,7 +154,8 @@ class FSTools
      * @warning This function will not work for functions that need
      *      to pass references; manually define a stub function for those.
      */
-    public function __call($name, $args) {
+    public function __call($name, $args)
+    {
         return call_user_func_array($name, $args);
     }
 

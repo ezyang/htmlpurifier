@@ -11,7 +11,8 @@ class ConfigDoc_HTMLXSLTProcessor
      */
     protected $xsltProcessor;
 
-    public function __construct($proc = false) {
+    public function __construct($proc = false)
+    {
         if ($proc === false) $proc = new XSLTProcessor();
         $this->xsltProcessor = $proc;
     }
@@ -19,7 +20,8 @@ class ConfigDoc_HTMLXSLTProcessor
     /**
      * @note Allows a string $xsl filename to be passed
      */
-    public function importStylesheet($xsl) {
+    public function importStylesheet($xsl)
+    {
         if (is_string($xsl)) {
             $xsl_file = $xsl;
             $xsl = new DOMDocument();
@@ -34,7 +36,8 @@ class ConfigDoc_HTMLXSLTProcessor
      * @return string HTML output
      * @todo Rename to transformToXHTML, as transformToHTML is misleading
      */
-    public function transformToHTML($xml) {
+    public function transformToHTML($xml)
+    {
         if (is_string($xml)) {
             $dom = new DOMDocument();
             $dom->load($xml);
@@ -68,7 +71,8 @@ class ConfigDoc_HTMLXSLTProcessor
      * Bulk sets parameters for the XSL stylesheet
      * @param array $options Associative array of options to set
      */
-    public function setParameters($options) {
+    public function setParameters($options)
+    {
         foreach ($options as $name => $value) {
             $this->xsltProcessor->setParameter('', $name, $value);
         }
@@ -77,7 +81,8 @@ class ConfigDoc_HTMLXSLTProcessor
     /**
      * Forward any other calls to the XSLT processor
      */
-    public function __call($name, $arguments) {
+    public function __call($name, $arguments)
+    {
         call_user_func_array(array($this->xsltProcessor, $name), $arguments);
     }
 

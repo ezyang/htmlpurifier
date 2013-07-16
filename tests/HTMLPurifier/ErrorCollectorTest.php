@@ -9,7 +9,8 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
     protected $language, $generator, $line;
     protected $collector;
 
-    public function setup() {
+    public function setup()
+    {
         generate_mock_once('HTMLPurifier_Language');
         generate_mock_once('HTMLPurifier_Generator');
         parent::setup();
@@ -26,8 +27,8 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         $this->collector = new HTMLPurifier_ErrorCollector($this->context);
     }
 
-    function test() {
-
+    public function test()
+    {
         $language = $this->language;
         $language->setReturnValue('getMessage',    'Message 1',   array('message-1'));
         $language->setReturnValue('formatMessage', 'Message 2',   array('message-2', array(1 => 'param')));
@@ -57,7 +58,8 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
 
     }
 
-    function testNoErrors() {
+    public function testNoErrors()
+    {
         $this->language->setReturnValue('getMessage', 'No errors', array('ErrorCollector: No errors'));
 
         $formatted_result = '<p>No errors</p>';
@@ -67,7 +69,8 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         );
     }
 
-    function testNoLineNumbers() {
+    public function testNoLineNumbers()
+    {
         $this->language->setReturnValue('getMessage', 'Message 1', array('message-1'));
         $this->language->setReturnValue('getMessage', 'Message 2', array('message-2'));
 
@@ -88,8 +91,8 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         */
     }
 
-    function testContextSubstitutions() {
-
+    public function testContextSubstitutions()
+    {
         $current_token = false;
         $this->context->register('CurrentToken', $current_token);
 
@@ -120,7 +123,8 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
     }
 
     /*
-    function testNestedErrors() {
+    public function testNestedErrors()
+    {
         $this->language->setReturnValue('getMessage', 'Message 1',   array('message-1'));
         $this->language->setReturnValue('getMessage', 'Message 2',   array('message-2'));
         $this->language->setReturnValue('formatMessage', 'End Message', array('end-message', array(1 => 'param')));

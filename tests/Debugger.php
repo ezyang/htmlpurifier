@@ -21,35 +21,43 @@ TODO
 /**#@+
  * Convenience global functions. Corresponds to method on Debugger.
  */
-function paint($mixed) {
+function paint($mixed)
+{
     $Debugger =& Debugger::instance();
     return $Debugger->paint($mixed);
 }
-function paintIf($mixed, $conditional) {
+function paintIf($mixed, $conditional)
+{
     $Debugger =& Debugger::instance();
     return $Debugger->paintIf($mixed, $conditional);
 }
-function paintWhen($mixed, $scopes = array()) {
+function paintWhen($mixed, $scopes = array())
+{
     $Debugger =& Debugger::instance();
     return $Debugger->paintWhen($mixed, $scopes);
 }
-function paintIfWhen($mixed, $conditional, $scopes = array()) {
+function paintIfWhen($mixed, $conditional, $scopes = array())
+{
     $Debugger =& Debugger::instance();
     return $Debugger->paintIfWhen($mixed, $conditional, $scopes);
 }
-function addScope($id = false) {
+function addScope($id = false)
+{
     $Debugger =& Debugger::instance();
     return $Debugger->addScope($id);
 }
-function removeScope($id) {
+function removeScope($id)
+{
     $Debugger =& Debugger::instance();
     return $Debugger->removeScope($id);
 }
-function resetScopes() {
+function resetScopes()
+{
     $Debugger =& Debugger::instance();
     return $Debugger->resetScopes();
 }
-function isInScopes($array = array()) {
+function isInScopes($array = array())
+{
     $Debugger =& Debugger::instance();
     return $Debugger->isInScopes($array);
 }
@@ -68,7 +76,8 @@ class Debugger
     public $scope_nextID = 1;
     public $add_pre = true;
 
-    public function Debugger() {
+    public function Debugger()
+    {
         $this->add_pre = !extension_loaded('xdebug');
     }
 
@@ -78,46 +87,54 @@ class Debugger
         return $soleInstance;
     }
 
-    public function paintIf($mixed, $conditional)  {
+    public function paintIf($mixed, $conditional)
+    {
         if (!$conditional) return;
         $this->paint($mixed);
     }
 
-    public function paintWhen($mixed, $scopes = array()) {
+    public function paintWhen($mixed, $scopes = array())
+    {
         if (!$this->isInScopes($scopes)) return;
         $this->paint($mixed);
     }
 
-    public function paintIfWhen($mixed, $conditional, $scopes = array()) {
+    public function paintIfWhen($mixed, $conditional, $scopes = array())
+    {
         if (!$conditional) return;
         if (!$this->isInScopes($scopes)) return;
         $this->paint($mixed);
     }
 
-    public function paint($mixed) {
+    public function paint($mixed)
+    {
         $this->paints++;
         if($this->add_pre) echo '<pre>';
         var_dump($mixed);
         if($this->add_pre) echo '</pre>';
     }
 
-    public function addScope($id = false) {
+    public function addScope($id = false)
+    {
         if ($id == false) {
             $id = $this->scope_nextID++;
         }
         $this->current_scopes[$id] = true;
     }
 
-    public function removeScope($id) {
+    public function removeScope($id)
+    {
         if (isset($this->current_scopes[$id])) unset($this->current_scopes[$id]);
     }
 
-    public function resetScopes() {
+    public function resetScopes()
+    {
         $this->current_scopes = array();
         $this->scope_nextID = 1;
     }
 
-    public function isInScopes($scopes = array()) {
+    public function isInScopes($scopes = array())
+    {
         if (empty($this->current_scopes)) {
             return false;
         }

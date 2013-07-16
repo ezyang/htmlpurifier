@@ -3,24 +3,28 @@
 class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
 {
 
-    function testConstruct() {
+    public function testConstruct()
+    {
         $l = new HTMLPurifier_Length('23', 'in');
         $this->assertIdentical($l->getN(), '23');
         $this->assertIdentical($l->getUnit(), 'in');
     }
 
-    function testMake() {
+    public function testMake()
+    {
         $l = HTMLPurifier_Length::make('+23.4in');
         $this->assertIdentical($l->getN(), '+23.4');
         $this->assertIdentical($l->getUnit(), 'in');
     }
 
-    function testToString() {
+    public function testToString()
+    {
         $l = new HTMLPurifier_Length('23', 'in');
         $this->assertIdentical($l->toString(), '23in');
     }
 
-    protected function assertValidate($string, $expect = true) {
+    protected function assertValidate($string, $expect = true)
+    {
         if ($expect === true) $expect = $string;
         $l = HTMLPurifier_Length::make($string);
         $result = $l->isValid();
@@ -28,7 +32,8 @@ class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
         else $this->assertIdentical($l->toString(), $expect);
     }
 
-    function testValidate() {
+    public function testValidate()
+    {
         $this->assertValidate('0');
         $this->assertValidate('+0', '0');
         $this->assertValidate('-0', '0');
@@ -52,7 +57,8 @@ class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
      * @param $s2 Second string to compare
      * @param $expect 0 for $s1 == $s2, 1 for $s1 > $s2 and -1 for $s1 < $s2
      */
-    protected function assertComparison($s1, $s2, $expect = 0) {
+    protected function assertComparison($s1, $s2, $expect = 0)
+    {
         $l1 = HTMLPurifier_Length::make($s1);
         $l2 = HTMLPurifier_Length::make($s2);
         $r1 = $l1->compareTo($l2);
@@ -61,7 +67,8 @@ class HTMLPurifier_LengthTest extends HTMLPurifier_Harness
         $this->assertIdentical($r2 == 0 ? 0 : ($r2 > 0 ? 1 : -1), - $expect);
     }
 
-    function testCompareTo() {
+    public function testCompareTo()
+    {
         $this->assertComparison('12in', '12in');
         $this->assertComparison('12in', '12mm', 1);
         $this->assertComparison('1px', '1mm', -1);

@@ -9,14 +9,16 @@ if (!isset($_GET['standalone'])) {
 }
 error_reporting(E_ALL);
 
-function escapeHTML($string) {
+function escapeHTML($string)
+{
     $string = HTMLPurifier_Encoder::cleanUTF8($string);
     $string = htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
     return $string;
 }
 
 if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-    function fix_magic_quotes(&$array) {
+    function fix_magic_quotes(&$array)
+    {
         foreach ($array as $k => $val) {
             if (!is_array($val)) {
                 $array[$k] = stripslashes($val);

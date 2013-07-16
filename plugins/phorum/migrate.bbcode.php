@@ -23,7 +23,8 @@ require_once(dirname(__FILE__) . "/../bbcode/bbcode.php");
  * 'format' hook style function that will be called to convert
  * legacy markup into HTML.
  */
-function phorum_htmlpurifier_migrate($data) {
+function phorum_htmlpurifier_migrate($data)
+{
     return phorum_mod_bbcode_format($data); // bbcode's 'format' hook
 }
 

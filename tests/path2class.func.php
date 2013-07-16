@@ -1,6 +1,7 @@
 <?php
 
-function path2class($path) {
+function path2class($path)
+{
     $temp = $path;
     $temp = str_replace('./', '',  $temp); // remove leading './'
     $temp = str_replace('.\\', '',  $temp); // remove leading '.\'

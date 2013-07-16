@@ -4,20 +4,23 @@ class HTMLPurifier_Strategy_RemoveForeignElements_TidyTest
   extends HTMLPurifier_StrategyHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_RemoveForeignElements();
         $this->config->set('HTML.TidyLevel', 'heavy');
     }
 
-    function testCenterTransform() {
+    public function testCenterTransform()
+    {
         $this->assertResult(
             '<center>Look I am Centered!</center>',
             '<div style="text-align:center;">Look I am Centered!</div>'
         );
     }
 
-    function testFontTransform() {
+    public function testFontTransform()
+    {
         $this->assertResult(
             '<font color="red" face="Arial" size="6">Big Warning!</font>',
             '<span style="color:red;font-family:Arial;font-size:xx-large;">Big'.
@@ -25,7 +28,8 @@ class HTMLPurifier_Strategy_RemoveForeignElements_TidyTest
         );
     }
 
-    function testTransformToForbiddenElement() {
+    public function testTransformToForbiddenElement()
+    {
         $this->config->set('HTML.Allowed', 'div');
         $this->assertResult(
             '<font color="red" face="Arial" size="6">Big Warning!</font>',
@@ -33,7 +37,8 @@ class HTMLPurifier_Strategy_RemoveForeignElements_TidyTest
         );
     }
 
-    function testMenuTransform() {
+    public function testMenuTransform()
+    {
         $this->assertResult(
             '<menu><li>Item 1</li></menu>',
             '<ul><li>Item 1</li></ul>'

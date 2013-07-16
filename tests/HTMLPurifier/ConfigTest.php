@@ -6,14 +6,16 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
     protected $schema;
     protected $oldFactory;
 
-    public function setUp() {
+    public function setUp()
+    {
         // set up a dummy schema object for testing
         $this->schema = new HTMLPurifier_ConfigSchema();
     }
 
     // test functionality based on ConfigSchema
 
-    function testNormal() {
+    public function testNormal()
+    {
         $this->schema->add('Element.Abbr', 'H', 'string', false);
         $this->schema->add('Element.Name', 'hydrogen', 'istring', false);
         $this->schema->add('Element.Number', 1, 'int', false);
@@ -72,8 +74,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
-    function testEnumerated() {
-
+    public function testEnumerated()
+    {
         // case sensitive
         $this->schema->add('Instrument.Manufacturer', 'Yamaha', 'string', false);
         $this->schema->addAllowedValues('Instrument.Manufacturer', array(
@@ -121,8 +123,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
-    function testNull() {
-
+    public function testNull()
+    {
         $this->schema->add('ReportCard.English', null, 'string', true);
         $this->schema->add('ReportCard.Absences', 0, 'int', false);
 
@@ -142,8 +144,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
-    function testAliases() {
-
+    public function testAliases()
+    {
         $this->schema->add('Home.Rug', 3, 'int', false);
         $this->schema->addAlias('Home.Carpet', 'Home.Rug');
 
@@ -164,8 +166,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     // test functionality based on method
 
-    function test_getBatch() {
-
+    public function test_getBatch()
+    {
         $this->schema->add('Variables.TangentialAcceleration', 'a_tan', 'string', false);
         $this->schema->add('Variables.AngularAcceleration', 'alpha', 'string', false);
 
@@ -188,8 +190,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
-    function test_loadIni() {
-
+    public function test_loadIni()
+    {
         $this->schema->add('Shortcut.Copy', 'c', 'istring', false);
         $this->schema->add('Shortcut.Paste', 'v', 'istring', false);
         $this->schema->add('Shortcut.Cut', 'x', 'istring', false);
@@ -205,8 +207,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
-    function test_getHTMLDefinition() {
-
+    public function test_getHTMLDefinition()
+    {
         // we actually want to use the old copy, because the definition
         // generation routines have dependencies on configuration values
 
@@ -233,7 +235,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
-    function test_getHTMLDefinition_deprecatedRawError() {
+    public function test_getHTMLDefinition_deprecatedRawError()
+    {
         $config = HTMLPurifier_Config::createDefault();
         $config->chatty = false;
         // test deprecated retrieval of raw definition
@@ -248,13 +251,15 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->assertTrue($def->setup);
     }
 
-    function test_getHTMLDefinition_optimizedRawError() {
+    public function test_getHTMLDefinition_optimizedRawError()
+    {
         $this->expectException(new HTMLPurifier_Exception("Cannot set optimized = true when raw = false"));
         $config = HTMLPurifier_Config::createDefault();
         $config->getHTMLDefinition(false, true);
     }
 
-    function test_getHTMLDefinition_rawAfterSetupError() {
+    public function test_getHTMLDefinition_rawAfterSetupError()
+    {
         $this->expectException(new HTMLPurifier_Exception("Cannot retrieve raw definition after it has already been setup"));
         $config = HTMLPurifier_Config::createDefault();
         $config->chatty = false;
@@ -262,7 +267,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $config->getHTMLDefinition(true);
     }
 
-    function test_getHTMLDefinition_inconsistentOptimizedError() {
+    public function test_getHTMLDefinition_inconsistentOptimizedError()
+    {
         $this->expectError("Useless DefinitionID declaration");
         $this->expectException(new HTMLPurifier_Exception("Inconsistent use of optimized and unoptimized raw definition retrievals"));
         $config = HTMLPurifier_Config::create(array('HTML.DefinitionID' => 'HTMLPurifier_ConfigTest->test_getHTMLDefinition_inconsistentOptimizedError'));
@@ -271,7 +277,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $config->getHTMLDefinition(true, true);
     }
 
-    function test_getHTMLDefinition_inconsistentOptimizedError2() {
+    public function test_getHTMLDefinition_inconsistentOptimizedError2()
+    {
         $this->expectException(new HTMLPurifier_Exception("Inconsistent use of optimized and unoptimized raw definition retrievals"));
         $config = HTMLPurifier_Config::create(array('HTML.DefinitionID' => 'HTMLPurifier_ConfigTest->test_getHTMLDefinition_inconsistentOptimizedError2'));
         $config->chatty = false;
@@ -279,26 +286,30 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $config->getHTMLDefinition(true, false);
     }
 
-    function test_getHTMLDefinition_rawError() {
+    public function test_getHTMLDefinition_rawError()
+    {
         $config = HTMLPurifier_Config::createDefault();
         $this->expectException(new HTMLPurifier_Exception('Cannot retrieve raw version without specifying %HTML.DefinitionID'));
         $def = $config->getHTMLDefinition(true, true);
     }
 
-    function test_getCSSDefinition() {
+    public function test_getCSSDefinition()
+    {
         $config = HTMLPurifier_Config::createDefault();
         $def = $config->getCSSDefinition();
         $this->assertIsA($def, 'HTMLPurifier_CSSDefinition');
     }
 
-    function test_getDefinition() {
+    public function test_getDefinition()
+    {
         $this->schema->add('Cache.DefinitionImpl', null, 'string', true);
         $config = new HTMLPurifier_Config($this->schema);
         $this->expectException(new HTMLPurifier_Exception("Definition of Crust type not supported"));
         $config->getDefinition('Crust');
     }
 
-    function test_loadArray() {
+    public function test_loadArray()
+    {
         // setup a few dummy namespaces/directives for our testing
         $this->schema->add('Zoo.Aadvark', 0, 'int', false);
         $this->schema->add('Zoo.Boar',    0, 'int', false);
@@ -337,8 +348,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
-    function test_create() {
-
+    public function test_create()
+    {
         $this->schema->add('Cake.Sprinkles', 666, 'int', false);
         $this->schema->add('Cake.Flavor', 'vanilla', 'string', false);
 
@@ -359,8 +370,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
-    function test_finalize() {
-
+    public function test_finalize()
+    {
         // test finalization
 
         $this->schema->add('Poem.Meter', 'iambic', 'string', false);
@@ -384,8 +395,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
-    function test_loadArrayFromForm() {
-
+    public function test_loadArrayFromForm()
+    {
         $this->schema->add('Pancake.Mix', 'buttermilk', 'string', false);
         $this->schema->add('Pancake.Served', true, 'bool', false);
         $this->schema->add('Toppings.Syrup', true, 'bool', false);
@@ -444,7 +455,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         */
     }
 
-    function test_getAllowedDirectivesForForm() {
+    public function test_getAllowedDirectivesForForm()
+    {
         $this->schema->add('Unused.Unused', 'Foobar', 'string', false);
         $this->schema->add('Partial.Allowed', true, 'bool', false);
         $this->schema->add('Partial.Unused', 'Foobar', 'string', false);
@@ -464,7 +476,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
     }
 
-    function testDeprecatedAPI() {
+    public function testDeprecatedAPI()
+    {
         $this->schema->add('Foo.Bar', 2, 'int', false);
         $config = new HTMLPurifier_Config($this->schema);
         $config->chatty = false;
@@ -474,7 +487,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->assertIdentical($config->get('Foo', 'Bar'), 4);
     }
 
-    function testInherit() {
+    public function testInherit()
+    {
         $this->schema->add('Phantom.Masked', 25, 'int', false);
         $this->schema->add('Phantom.Unmasked', 89, 'int', false);
         $this->schema->add('Phantom.Latemasked', 11, 'int', false);
@@ -487,14 +501,16 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->assertIdentical($subconfig->get('Phantom.Latemasked'), 100);
     }
 
-    function testSerialize() {
+    public function testSerialize()
+    {
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML.Allowed', 'a');
         $config2 = unserialize($config->serialize());
         $this->assertIdentical($config->get('HTML.Allowed'), $config2->get('HTML.Allowed'));
     }
 
-    function testDefinitionCachingNothing() {
+    public function testDefinitionCachingNothing()
+    {
         list($mock, $config) = $this->setupCacheMock('HTML');
         // should not touch the cache
         $mock->expectNever('get');
@@ -506,7 +522,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->teardownCacheMock();
     }
 
-    function testDefinitionCachingOptimized() {
+    public function testDefinitionCachingOptimized()
+    {
         list($mock, $config) = $this->setupCacheMock('HTML');
         $mock->expectNever('set');
         $config->set('HTML.DefinitionID', 'HTMLPurifier_ConfigTest->testDefinitionCachingOptimized');
@@ -519,7 +536,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->teardownCacheMock();
     }
 
-    function testDefinitionCachingOptimizedHit() {
+    public function testDefinitionCachingOptimizedHit()
+    {
         $fake_config = HTMLPurifier_Config::createDefault();
         $fake_def = $fake_config->getHTMLDefinition();
         list($mock, $config) = $this->setupCacheMock('HTML');
@@ -535,7 +553,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $this->teardownCacheMock();
     }
 
-    protected function setupCacheMock($type) {
+    protected function setupCacheMock($type)
+    {
         // inject our definition cache mock globally (borrowed from
         // DefinitionFactoryTest)
         generate_mock_once("HTMLPurifier_DefinitionCacheFactory");
@@ -548,7 +567,8 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $factory->setReturnValue('create', $mock, array($type, $config));
         return array($mock, $config);
     }
-    protected function teardownCacheMock() {
+    protected function teardownCacheMock()
+    {
         HTMLPurifier_DefinitionCacheFactory::instance($this->oldFactory);
     }
 

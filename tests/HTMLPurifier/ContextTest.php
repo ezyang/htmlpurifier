@@ -6,12 +6,13 @@ class HTMLPurifier_ContextTest extends HTMLPurifier_Harness
 
     protected $context;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->context = new HTMLPurifier_Context();
     }
 
-    function testStandardUsage() {
-
+    public function testStandardUsage()
+    {
         generate_mock_once('HTMLPurifier_IDAccumulator');
 
         $this->assertFalse($this->context->exists('IDAccumulator'));
@@ -35,8 +36,8 @@ class HTMLPurifier_ContextTest extends HTMLPurifier_Harness
 
     }
 
-    function testReRegister() {
-
+    public function testReRegister()
+    {
         $var = true;
         $this->context->register('OnceOnly', $var);
 
@@ -49,8 +50,8 @@ class HTMLPurifier_ContextTest extends HTMLPurifier_Harness
 
     }
 
-    function test_loadArray() {
-
+    public function test_loadArray()
+    {
         // references can be *really* wonky!
 
         $context_manual = new HTMLPurifier_Context();

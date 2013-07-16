@@ -4,12 +4,13 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
 {
     protected $purifier;
 
-    function testNull() {
+    public function testNull()
+    {
         $this->assertPurification("Null byte\0", "Null byte");
     }
 
-    function test_purifyArray() {
-
+    public function test_purifyArray()
+    {
         $this->assertIdentical(
             $this->purifier->purifyArray(
                 array('Good', '<b>Sketchy', 'foo' => '<script>bad</script>')
@@ -21,13 +22,15 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
 
     }
 
-    function testGetInstance() {
+    public function testGetInstance()
+    {
         $purifier  = HTMLPurifier::getInstance();
         $purifier2 = HTMLPurifier::getInstance();
         $this->assertReference($purifier, $purifier2);
     }
 
-    function testMakeAbsolute() {
+    public function testMakeAbsolute()
+    {
         $this->config->set('URI.Base', 'http://example.com/bar/baz.php');
         $this->config->set('URI.MakeAbsolute', true);
         $this->assertPurification(
@@ -36,12 +39,14 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
         );
     }
 
-    function testDisableResources() {
+    public function testDisableResources()
+    {
         $this->config->set('URI.DisableResources', true);
         $this->assertPurification('<img src="foo.jpg" />', '');
     }
 
-    function test_addFilter_deprecated() {
+    public function test_addFilter_deprecated()
+    {
         $this->expectError('HTMLPurifier->addFilter() is deprecated, use configuration directives in the Filter namespace or Filter.Custom');
         generate_mock_once('HTMLPurifier_Filter');
         $this->purifier->addFilter($mock = new HTMLPurifier_FilterMock());

@@ -3,87 +3,105 @@
 class HTMLPurifier_ConfigSchema_ValidatorAtomTest extends UnitTestCase
 {
 
-    protected function expectValidationException($msg) {
+    protected function expectValidationException($msg)
+    {
         $this->expectException(new HTMLPurifier_ConfigSchema_Exception($msg));
     }
 
-    protected function makeAtom($value) {
+    protected function makeAtom($value)
+    {
         $obj = new stdClass();
         $obj->property = $value;
         // Note that 'property' and 'context' are magic wildcard values
         return new HTMLPurifier_ConfigSchema_ValidatorAtom('context', $obj, 'property');
     }
 
-    function testAssertIsString() {
+    public function testAssertIsString()
+    {
         $this->makeAtom('foo')->assertIsString();
     }
 
-    function testAssertIsStringFail() {
+    public function testAssertIsStringFail()
+    {
         $this->expectValidationException("Property in context must be a string");
         $this->makeAtom(3)->assertIsString();
     }
 
-    function testAssertNotNull() {
+    public function testAssertNotNull()
+    {
         $this->makeAtom('foo')->assertNotNull();
     }
 
-    function testAssertNotNullFail() {
+    public function testAssertNotNullFail()
+    {
         $this->expectValidationException("Property in context must not be null");
         $this->makeAtom(null)->assertNotNull();
     }
 
-    function testAssertAlnum() {
+    public function testAssertAlnum()
+    {
         $this->makeAtom('foo2')->assertAlnum();
     }
 
-    function testAssertAlnumFail() {
+    public function testAssertAlnumFail()
+    {
         $this->expectValidationException("Property in context must be alphanumeric");
         $this->makeAtom('%a')->assertAlnum();
     }
 
-    function testAssertAlnumFailIsString() {
+    public function testAssertAlnumFailIsString()
+    {
         $this->expectValidationException("Property in context must be a string");
         $this->makeAtom(3)->assertAlnum();
     }
 
-    function testAssertNotEmpty() {
+    public function testAssertNotEmpty()
+    {
         $this->makeAtom('foo')->assertNotEmpty();
     }
 
-    function testAssertNotEmptyFail() {
+    public function testAssertNotEmptyFail()
+    {
         $this->expectValidationException("Property in context must not be empty");
         $this->makeAtom('')->assertNotEmpty();
     }
 
-    function testAssertIsBool() {
+    public function testAssertIsBool()
+    {
         $this->makeAtom(false)->assertIsBool();
     }
 
-    function testAssertIsBoolFail() {
+    public function testAssertIsBoolFail()
+    {
         $this->expectValidationException("Property in context must be a boolean");
         $this->makeAtom('0')->assertIsBool();
     }
 
-    function testAssertIsArray() {
+    public function testAssertIsArray()
+    {
         $this->makeAtom(array())->assertIsArray();
     }
 
-    function testAssertIsArrayFail() {
+    public function testAssertIsArrayFail()
+    {
         $this->expectValidationException("Property in context must be an array");
         $this->makeAtom('asdf')->assertIsArray();
     }
 
 
-    function testAssertIsLookup() {
+    public function testAssertIsLookup()
+    {
         $this->makeAtom(array('foo' => true))->assertIsLookup();
     }
 
-    function testAssertIsLookupFail() {
+    public function testAssertIsLookupFail()
+    {
         $this->expectValidationException("Property in context must be a lookup array");
         $this->makeAtom(array('foo' => 4))->assertIsLookup();
     }
 
-    function testAssertIsLookupFailIsArray() {
+    public function testAssertIsLookupFailIsArray()
+    {
         $this->expectValidationException("Property in context must be an array");
         $this->makeAtom('asdf')->assertIsLookup();
     }

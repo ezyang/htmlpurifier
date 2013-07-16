@@ -3,45 +3,52 @@
 class HTMLPurifier_Injector_LinkifyTest extends HTMLPurifier_InjectorHarness
 {
 
-    function setup() {
+    public function setup()
+    {
         parent::setup();
         $this->config->set('AutoFormat.Linkify', true);
     }
 
-    function testLinkifyURLInRootNode() {
+    public function testLinkifyURLInRootNode()
+    {
         $this->assertResult(
             'http://example.com',
             '<a href="http://example.com">http://example.com</a>'
         );
     }
 
-    function testLinkifyURLInInlineNode() {
+    public function testLinkifyURLInInlineNode()
+    {
         $this->assertResult(
             '<b>http://example.com</b>',
             '<b><a href="http://example.com">http://example.com</a></b>'
         );
     }
 
-    function testBasicUsageCase() {
+    public function testBasicUsageCase()
+    {
         $this->assertResult(
             'This URL http://example.com is what you need',
             'This URL <a href="http://example.com">http://example.com</a> is what you need'
         );
     }
 
-    function testIgnoreURLInATag() {
+    public function testIgnoreURLInATag()
+    {
         $this->assertResult(
             '<a>http://example.com/</a>'
         );
     }
 
-    function testNeeded() {
+    public function testNeeded()
+    {
         $this->config->set('HTML.Allowed', 'b');
         $this->expectError('Cannot enable Linkify injector because a is not allowed');
         $this->assertResult('http://example.com/');
     }
 
-    function testExcludes() {
+    public function testExcludes()
+    {
         $this->assertResult('<a><span>http://example.com</span></a>');
     }
 

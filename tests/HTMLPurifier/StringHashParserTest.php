@@ -11,19 +11,22 @@ class HTMLPurifier_StringHashParserTest extends UnitTestCase
      */
     protected $parser;
 
-    public function setup() {
+    public function setup()
+    {
         $this->parser = new HTMLPurifier_StringHashParser();
     }
 
     /**
      * Assert that $file gets parsed into the form of $expect
      */
-    protected function assertParse($file, $expect) {
+    protected function assertParse($file, $expect)
+    {
         $result = $this->parser->parseFile(dirname(__FILE__) . '/StringHashParser/' . $file);
         $this->assertIdentical($result, $expect);
     }
 
-    function testSimple() {
+    public function testSimple()
+    {
         $this->assertParse('Simple.txt', array(
             'ID' => 'Namespace.Directive',
             'TYPE' => 'string',
@@ -34,26 +37,30 @@ class HTMLPurifier_StringHashParserTest extends UnitTestCase
         ));
     }
 
-    function testOverrideSingle() {
+    public function testOverrideSingle()
+    {
         $this->assertParse('OverrideSingle.txt', array(
             'KEY' => 'New',
         ));
     }
 
-    function testAppendMultiline() {
+    public function testAppendMultiline()
+    {
         $this->assertParse('AppendMultiline.txt', array(
             'KEY' => "Line1\nLine2\n",
         ));
     }
 
-    function testDefault() {
+    public function testDefault()
+    {
         $this->parser->default = 'NEW-ID';
         $this->assertParse('Default.txt', array(
             'NEW-ID' => 'DefaultValue',
         ));
     }
 
-    function testError() {
+    public function testError()
+    {
         try {
             $this->parser->parseFile('NoExist.txt');
         } catch (HTMLPurifier_ConfigSchema_Exception $e) {
@@ -61,7 +68,8 @@ class HTMLPurifier_StringHashParserTest extends UnitTestCase
         }
     }
 
-    function testParseMultiple() {
+    public function testParseMultiple()
+    {
         $result = $this->parser->parseMultiFile(dirname(__FILE__) . '/StringHashParser/Multi.txt');
         $this->assertIdentical(
             $result,

@@ -3,97 +3,112 @@
 class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_MakeWellFormed();
     }
 
-    function testEmptyInput() {
+    public function testEmptyInput()
+    {
         $this->assertResult('');
     }
 
-    function testWellFormedInput() {
+    public function testWellFormedInput()
+    {
         $this->assertResult('This is <b>bold text</b>.');
     }
 
-    function testUnclosedTagTerminatedByDocumentEnd() {
+    public function testUnclosedTagTerminatedByDocumentEnd()
+    {
         $this->assertResult(
             '<b>Unclosed tag, gasp!',
             '<b>Unclosed tag, gasp!</b>'
         );
     }
 
-    function testUnclosedTagTerminatedByParentNodeEnd() {
+    public function testUnclosedTagTerminatedByParentNodeEnd()
+    {
         $this->assertResult(
             '<b><i>Bold and italic?</b>',
             '<b><i>Bold and italic?</i></b><i></i>'
         );
     }
 
-    function testRemoveStrayClosingTag() {
+    public function testRemoveStrayClosingTag()
+    {
         $this->assertResult(
             'Unused end tags... recycle!</b>',
             'Unused end tags... recycle!'
         );
     }
 
-    function testConvertStartToEmpty() {
+    public function testConvertStartToEmpty()
+    {
         $this->assertResult(
             '<br style="clear:both;">',
             '<br style="clear:both;" />'
         );
     }
 
-    function testConvertEmptyToStart() {
+    public function testConvertEmptyToStart()
+    {
         $this->assertResult(
             '<div style="clear:both;" />',
             '<div style="clear:both;"></div>'
         );
     }
 
-    function testAutoCloseParagraph() {
+    public function testAutoCloseParagraph()
+    {
         $this->assertResult(
             '<p>Paragraph 1<p>Paragraph 2',
             '<p>Paragraph 1</p><p>Paragraph 2</p>'
         );
     }
 
-    function testAutoCloseParagraphInsideDiv() {
+    public function testAutoCloseParagraphInsideDiv()
+    {
         $this->assertResult(
             '<div><p>Paragraphs<p>In<p>A<p>Div</div>',
             '<div><p>Paragraphs</p><p>In</p><p>A</p><p>Div</p></div>'
         );
     }
 
-    function testAutoCloseListItem() {
+    public function testAutoCloseListItem()
+    {
         $this->assertResult(
             '<ol><li>Item 1<li>Item 2</ol>',
             '<ol><li>Item 1</li><li>Item 2</li></ol>'
         );
     }
 
-    function testAutoCloseColgroup() {
+    public function testAutoCloseColgroup()
+    {
         $this->assertResult(
             '<table><colgroup><col /><tr></tr></table>',
             '<table><colgroup><col /></colgroup><tr></tr></table>'
         );
     }
 
-    function testAutoCloseMultiple() {
+    public function testAutoCloseMultiple()
+    {
         $this->assertResult(
             '<b><span><div></div>asdf',
             '<b><span></span></b><div><b></b></div><b>asdf</b>'
         );
     }
 
-    function testUnrecognized() {
+    public function testUnrecognized()
+    {
         $this->assertResult(
             '<asdf><foobar /><biddles>foo</asdf>',
             '<asdf><foobar /><biddles>foo</biddles></asdf>'
         );
     }
 
-    function testBlockquoteWithInline() {
+    public function testBlockquoteWithInline()
+    {
         $this->config->set('HTML.Doctype', 'XHTML 1.0 Strict');
         $this->assertResult(
             // This is actually invalid, but will be fixed by
@@ -102,42 +117,48 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
         );
     }
 
-    function testLongCarryOver() {
+    public function testLongCarryOver()
+    {
         $this->assertResult(
             '<b>asdf<div>asdf<i>df</i></div>asdf</b>',
             '<b>asdf</b><div><b>asdf<i>df</i></b></div><b>asdf</b>'
         );
     }
 
-    function testInterleaved() {
+    public function testInterleaved()
+    {
         $this->assertResult(
             '<u>foo<i>bar</u>baz</i>',
             '<u>foo<i>bar</i></u><i>baz</i>'
         );
     }
 
-    function testNestedOl() {
+    public function testNestedOl()
+    {
         $this->assertResult(
             '<ol><ol><li>foo</li></ol></ol>',
             '<ol><ol><li>foo</li></ol></ol>'
         );
     }
 
-    function testNestedUl() {
+    public function testNestedUl()
+    {
         $this->assertResult(
             '<ul><ul><li>foo</li></ul></ul>',
             '<ul><ul><li>foo</li></ul></ul>'
         );
     }
 
-    function testNestedOlWithStrangeEnding() {
+    public function testNestedOlWithStrangeEnding()
+    {
         $this->assertResult(
             '<ol><li><ol><ol><li>foo</li></ol></li><li>foo</li></ol>',
             '<ol><li><ol><ol><li>foo</li></ol></ol></li><li>foo</li></ol>'
         );
     }
 
-    function testNoAutocloseIfNoParentsCanAccomodateTag() {
+    public function testNoAutocloseIfNoParentsCanAccomodateTag()
+    {
         $this->assertResult(
             '<table><tr><td><li>foo</li></td></tr></table>',
             '<table><tr><td>foo</td></tr></table>'

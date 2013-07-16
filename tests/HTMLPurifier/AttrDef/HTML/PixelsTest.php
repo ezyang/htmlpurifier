@@ -3,12 +3,13 @@
 class HTMLPurifier_AttrDef_HTML_PixelsTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function setup() {
+    public function setup()
+    {
         $this->def = new HTMLPurifier_AttrDef_HTML_Pixels();
     }
 
-    function test() {
-
+    public function test()
+    {
         $this->assertDef('1');
         $this->assertDef('0');
 
@@ -33,7 +34,8 @@ class HTMLPurifier_AttrDef_HTML_PixelsTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function test_make() {
+    public function test_make()
+    {
         $factory = new HTMLPurifier_AttrDef_HTML_Pixels();
         $this->def = $factory->make('30');
         $this->assertDef('25');

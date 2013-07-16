@@ -8,19 +8,22 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
 {
     public $validator, $interchange;
 
-    public function setup() {
+    public function setup()
+    {
         $this->validator = new HTMLPurifier_ConfigSchema_Validator();
         $this->interchange = new HTMLPurifier_ConfigSchema_Interchange();
     }
 
-    function testDirectiveIntegrityViolation() {
+    public function testDirectiveIntegrityViolation()
+    {
         $d = $this->makeDirective('Ns.Dir');
         $d->id = new HTMLPurifier_ConfigSchema_Interchange_Id('Ns.Dir2');
         $this->expectValidationException("Integrity violation: key 'Ns.Dir' does not match internal id 'Ns.Dir2'");
         $this->validator->validate($this->interchange);
     }
 
-    function testDirectiveTypeNotEmpty() {
+    public function testDirectiveTypeNotEmpty()
+    {
         $d = $this->makeDirective('Ns.Dir');
         $d->default = 0;
         $d->description = 'Description';
@@ -29,7 +32,8 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
 
-    function testDirectiveDefaultInvalid() {
+    public function testDirectiveDefaultInvalid()
+    {
         $d = $this->makeDirective('Ns.Dir');
         $d->default = 'asdf';
         $d->type = 'int';
@@ -39,7 +43,8 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
 
-    function testDirectiveIdIsString() {
+    public function testDirectiveIdIsString()
+    {
         $d = $this->makeDirective(3);
         $d->default = 0;
         $d->type = 'int';
@@ -49,7 +54,8 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
 
-    function testDirectiveTypeAllowsNullIsBool() {
+    public function testDirectiveTypeAllowsNullIsBool()
+    {
         $d = $this->makeDirective('Ns.Dir');
         $d->default = 0;
         $d->type = 'int';
@@ -60,7 +66,8 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
 
-    function testDirectiveValueAliasesIsArray() {
+    public function testDirectiveValueAliasesIsArray()
+    {
         $d = $this->makeDirective('Ns.Dir');
         $d->default = 'a';
         $d->type = 'string';
@@ -71,7 +78,8 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
         $this->validator->validate($this->interchange);
     }
 
-    function testDirectiveAllowedIsLookup() {
+    public function testDirectiveAllowedIsLookup()
+    {
         $d = $this->makeDirective('Ns.Dir');
         $d->default = 'foo';
         $d->type = 'string';
@@ -85,14 +93,16 @@ class HTMLPurifier_ConfigSchema_ValidatorTest extends UnitTestCase
     // helper functions
 
 
-    protected function makeDirective($key) {
+    protected function makeDirective($key)
+    {
         $directive = new HTMLPurifier_ConfigSchema_Interchange_Directive();
         $directive->id = new HTMLPurifier_ConfigSchema_Interchange_Id($key);
         $this->interchange->addDirective($directive);
         return $directive;
     }
 
-    protected function expectValidationException($msg) {
+    protected function expectValidationException($msg)
+    {
         $this->expectException(new HTMLPurifier_ConfigSchema_Exception($msg));
     }
 

@@ -3,7 +3,8 @@
 class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_DefinitionCacheHarness
 {
 
-    function test() {
+    public function test()
+    {
         // XXX SimpleTest does some really crazy stuff in the background
         // to do equality checks. Unfortunately, this makes some
         // versions of PHP segfault. So we need to define a better,
@@ -66,7 +67,8 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
 
     }
 
-    function test_errors() {
+    public function test_errors()
+    {
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
         $def = $this->generateDefinition();
         $def->setup = true;
@@ -83,8 +85,8 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $cache->replace($def, $config);
     }
 
-    function test_flush() {
-
+    public function test_flush()
+    {
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
 
         $config1 = $this->generateConfigMock('test1');
@@ -111,8 +113,8 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
 
     }
 
-    function testCleanup() {
-
+    public function testCleanup()
+    {
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
 
         // in order of age, oldest first
@@ -139,8 +141,8 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
 
     }
 
-    function testCleanupOnlySameID() {
-
+    public function testCleanupOnlySameID()
+    {
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
 
         $config1 = $this->generateConfigMock('serial1');
@@ -168,7 +170,8 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
     /**
      * Asserts that a file exists, ignoring the stat cache
      */
-    function assertFileExist($file) {
+    public function assertFileExist($file)
+    {
         clearstatcache();
         $this->assertTrue(file_exists($file), 'Expected ' . $file . ' exists');
     }
@@ -176,13 +179,14 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
     /**
      * Asserts that a file does not exist, ignoring the stat cache
      */
-    function assertFileNotExist($file) {
+    public function assertFileNotExist($file)
+    {
         clearstatcache();
         $this->assertFalse(file_exists($file), 'Expected ' . $file . ' does not exist');
     }
 
-    function testAlternatePath() {
-
+    public function testAlternatePath()
+    {
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
         $config = $this->generateConfigMock('serial');
         $config->version = '1.0.0';
@@ -199,8 +203,8 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
 
     }
 
-    function testAlternatePermissions() {
-
+    public function testAlternatePermissions()
+    {
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
         $config = $this->generateConfigMock('serial');
         $config->version = '1.0.0';

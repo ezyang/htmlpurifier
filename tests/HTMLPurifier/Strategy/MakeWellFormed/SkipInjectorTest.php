@@ -2,20 +2,24 @@
 
 class HTMLPurifier_Strategy_MakeWellFormed_SkipInjectorTest extends HTMLPurifier_StrategyHarness
 {
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_MakeWellFormed();
         $this->config->set('AutoFormat.Custom', array(
             new HTMLPurifier_Strategy_MakeWellFormed_SkipInjector()
         ));
     }
-    function testEmpty() {
+    public function testEmpty()
+    {
         $this->assertResult('');
     }
-    function testMultiply() {
+    public function testMultiply()
+    {
         $this->assertResult('<br />', '<br /><br />');
     }
-    function testMultiplyMultiply() {
+    public function testMultiplyMultiply()
+    {
         $this->config->set('AutoFormat.Custom', array(
             new HTMLPurifier_Strategy_MakeWellFormed_SkipInjector(),
             new HTMLPurifier_Strategy_MakeWellFormed_SkipInjector()

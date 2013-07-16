@@ -3,8 +3,8 @@
 class HTMLPurifier_AttrDef_CSS_FontFamilyTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_CSS_FontFamily();
 
         $this->assertDef('Gill, Helvetica, sans-serif');
@@ -36,7 +36,8 @@ class HTMLPurifier_AttrDef_CSS_FontFamilyTest extends HTMLPurifier_AttrDefHarnes
         //$this->assertDef('"\'"', "\"'\"");
     }
 
-    function testAllowed() {
+    public function testAllowed()
+    {
         $this->config->set('CSS.AllowedFonts', array('serif', 'Times New Roman'));
 
         $this->assertDef('serif');

@@ -3,8 +3,8 @@
 class HTMLPurifier_AttrDef_CSS_LengthTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_CSS_Length();
 
         $this->assertDef('0');
@@ -26,8 +26,8 @@ class HTMLPurifier_AttrDef_CSS_LengthTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function testNonNegative() {
-
+    public function testNonNegative()
+    {
         $this->def = new HTMLPurifier_AttrDef_CSS_Length('0');
 
         $this->assertDef('3cm');
@@ -35,7 +35,8 @@ class HTMLPurifier_AttrDef_CSS_LengthTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function testBounding() {
+    public function testBounding()
+    {
         $this->def = new HTMLPurifier_AttrDef_CSS_Length('-1in', '1in');
         $this->assertDef('1cm');
         $this->assertDef('-1cm');

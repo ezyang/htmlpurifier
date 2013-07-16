@@ -3,7 +3,8 @@
 class HTMLPurifier_VarParser_NativeTest extends HTMLPurifier_VarParserHarness
 {
 
-    public function testValidateSimple() {
+    public function testValidateSimple()
+    {
         $this->assertValid('"foo\\\\"', 'string', 'foo\\');
     }
 

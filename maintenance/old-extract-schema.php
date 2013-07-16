@@ -29,7 +29,8 @@ require_once 'HTMLPurifier/Filter/ExtractStyleBlocks.php';
 /**
  * Takes a hash and saves its contents to library/HTMLPurifier/ConfigSchema/
  */
-function saveHash($hash) {
+function saveHash($hash)
+{
     if ($hash === false) return;
     $dir = realpath(dirname(__FILE__) . '/../library/HTMLPurifier/ConfigSchema');
     $name = $hash['ID'] . '.txt';

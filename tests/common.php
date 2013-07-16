@@ -7,7 +7,8 @@ if (!defined('HTMLPurifierTest')) {
 
 // setup our own autoload, checking for HTMLPurifier library if spl_autoload_register
 // is not allowed
-function __autoload($class) {
+function __autoload($class)
+{
     if (!function_exists('spl_autoload_register')) {
         if (HTMLPurifier_Bootstrap::autoload($class)) return true;
         if (HTMLPurifierExtras::autoload($class)) return true;
@@ -85,7 +86,8 @@ require 'path2class.func.php';
  * @param $aliases
  *
  */
-function htmlpurifier_parse_args(&$AC, $aliases) {
+function htmlpurifier_parse_args(&$AC, $aliases)
+{
     if (empty($_GET) && !empty($_SERVER['argv'])) {
         array_shift($_SERVER['argv']);
         $o = false;
@@ -143,7 +145,8 @@ function htmlpurifier_parse_args(&$AC, $aliases) {
  * @param $o Argument name
  * @param $v Argument value
  */
-function htmlpurifier_args(&$AC, $aliases, $o, $v) {
+function htmlpurifier_args(&$AC, $aliases, $o, $v)
+{
     if (isset($aliases[$o])) $o = $aliases[$o];
     if (!isset($AC[$o])) return;
     if (is_string($AC[$o])) $AC[$o] = $v;
@@ -154,7 +157,8 @@ function htmlpurifier_args(&$AC, $aliases, $o, $v) {
 /**
  * Adds a test-class; we use file extension to determine which class to use.
  */
-function htmlpurifier_add_test($test, $test_file, $only_phpt = false) {
+function htmlpurifier_add_test($test, $test_file, $only_phpt = false)
+{
     switch (strrchr($test_file, ".")) {
         case '.phpt':
             return $test->add(new PHPT_Controller_SimpleTest($test_file));
@@ -173,7 +177,8 @@ function htmlpurifier_add_test($test, $test_file, $only_phpt = false) {
 /**
  * Debugging function that prints tokens in a user-friendly manner.
  */
-function printTokens($tokens, $index = null) {
+function printTokens($tokens, $index = null)
+{
     $string = '<pre>';
     $generator = new HTMLPurifier_Generator(HTMLPurifier_Config::createDefault(), new HTMLPurifier_Context);
     foreach ($tokens as $i => $token) {
@@ -189,13 +194,16 @@ function printTokens($tokens, $index = null) {
 /**
  * Convenient "insta-fail" test-case to add if any outside things fail
  */
-class FailedTest extends UnitTestCase {
+class FailedTest extends UnitTestCase
+{
     protected $msg, $details;
-    public function __construct($msg, $details = null) {
+    public function __construct($msg, $details = null)
+    {
         $this->msg = $msg;
         $this->details = $details;
     }
-    public function test() {
+    public function test()
+    {
         $this->fail($this->msg);
         if ($this->details) $this->reporter->paintFormattedMessage($this->details);
     }
@@ -204,7 +212,8 @@ class FailedTest extends UnitTestCase {
 /**
  * Flushes all caches, and fatally errors out if there's a problem.
  */
-function htmlpurifier_flush($php, $reporter) {
+function htmlpurifier_flush($php, $reporter)
+{
     exec($php . ' ../maintenance/flush.php ' . $php . ' 2>&1', $out, $status);
     if ($status) {
         $test = new FailedTest(
@@ -219,7 +228,8 @@ function htmlpurifier_flush($php, $reporter) {
 /**
  * Dumps error queue, useful if there has been a fatal error.
  */
-function htmlpurifier_dump_error_queue() {
+function htmlpurifier_dump_error_queue()
+{
     $context = SimpleTest::getContext();
     $queue = $context->get('SimpleErrorQueue');
     while (($error = $queue->extract()) !== false) {

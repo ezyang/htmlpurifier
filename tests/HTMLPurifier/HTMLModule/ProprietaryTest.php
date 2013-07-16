@@ -3,12 +3,14 @@
 class HTMLPurifier_HTMLModule_ProprietaryTest extends HTMLPurifier_HTMLModuleHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->config->set('HTML.Proprietary', true);
     }
 
-    function testMarquee() {
+    public function testMarquee()
+    {
         $this->assertResult(
             '<span><marquee
                 width="20%"

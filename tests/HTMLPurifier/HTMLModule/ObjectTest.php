@@ -3,23 +3,27 @@
 class HTMLPurifier_HTMLModule_ObjectTest extends HTMLPurifier_HTMLModuleHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->config->set('HTML.Trusted', true);
     }
 
-    function testDefaultRemoval() {
+    public function testDefaultRemoval()
+    {
         $this->config->set('HTML.Trusted', false);
         $this->assertResult(
             '<object></object>', ''
         );
     }
 
-    function testMinimal() {
+    public function testMinimal()
+    {
         $this->assertResult('<object></object>');
     }
 
-    function testStandardUseCase() {
+    public function testStandardUseCase()
+    {
         $this->assertResult(
 '<object type="video/x-ms-wmv" data="http://domain.com/video.wmv" width="320" height="256">
 <param name="src" value="http://domain.com/video.wmv" />

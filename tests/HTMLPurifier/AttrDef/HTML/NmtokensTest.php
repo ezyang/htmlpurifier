@@ -3,13 +3,14 @@
 class HTMLPurifier_AttrDef_HTML_NmtokensTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->def = new HTMLPurifier_AttrDef_HTML_Nmtokens();
     }
 
-    function testDefault() {
-
+    public function testDefault()
+    {
         $this->assertDef('valid');
         $this->assertDef('a0-_');
         $this->assertDef('-valid');

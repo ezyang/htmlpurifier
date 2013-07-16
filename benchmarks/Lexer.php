@@ -23,15 +23,16 @@ if (version_compare(PHP_VERSION, '5', '>=')) {
 class RowTimer extends Benchmark_Timer
 {
 
-    var $name;
+    public $name;
 
-    function RowTimer($name, $auto = false) {
+    public function RowTimer($name, $auto = false)
+    {
         $this->name = htmlentities($name);
         $this->Benchmark_Timer($auto);
     }
 
-    function getOutput() {
-
+    public function getOutput()
+    {
         $total  = $this->TimeElapsed();
         $result = $this->getProfiling();
         $dashes = '';
@@ -68,7 +69,8 @@ class RowTimer extends Benchmark_Timer
     }
 }
 
-function print_lexers() {
+function print_lexers()
+{
     global $LEXERS;
     $first = true;
     foreach ($LEXERS as $key => $value) {
@@ -78,7 +80,8 @@ function print_lexers() {
     }
 }
 
-function do_benchmark($name, $document) {
+function do_benchmark($name, $document)
+{
     global $LEXERS, $RUNS;
 
     $config = HTMLPurifier_Config::createDefault();

@@ -3,24 +3,28 @@
 class HTMLPurifier_HTMLModule_RubyTest extends HTMLPurifier_HTMLModuleHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->config->set('HTML.Doctype', 'XHTML 1.1');
     }
 
-    function testBasicUse() {
+    public function testBasicUse()
+    {
         $this->assertResult(
             '<ruby><rb>WWW</rb><rt>World Wide Web</rt></ruby>'
         );
     }
 
-    function testRPUse() {
+    public function testRPUse()
+    {
         $this->assertResult(
             '<ruby><rb>WWW</rb><rp>(</rp><rt>World Wide Web</rt><rp>)</rp></ruby>'
         );
     }
 
-    function testComplexUse() {
+    public function testComplexUse()
+    {
         $this->assertResult(
 '<ruby>
   <rbc>
@@ -40,7 +44,8 @@ class HTMLPurifier_HTMLModule_RubyTest extends HTMLPurifier_HTMLModuleHarness
         );
 
         /* not implemented
-        function testBackwardsCompat() {
+        function testBackwardsCompat()
+        {
             $this->assertResult(
                 '<ruby>A<rp>(</rp><rt>aaa</rt><rp>)</rp></ruby>',
                 '<ruby><rb>A</rb><rp>(</rp><rt>aaa</rt><rp>)</rp></ruby>'

@@ -3,45 +3,55 @@
 class HTMLPurifier_ChildDef_ListTest extends HTMLPurifier_ChildDefHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_ChildDef_List();
     }
 
-    function testEmptyInput() {
+    public function testEmptyInput()
+    {
         $this->assertResult('', false);
     }
 
-    function testSingleLi() {
+    public function testSingleLi()
+    {
         $this->assertResult('<li />');
     }
 
-    function testSomeLi() {
+    public function testSomeLi()
+    {
         $this->assertResult('<li>asdf</li><li />');
     }
 
-    function testIllegal() {
+    public function testIllegal()
+    {
         // XXX actually this never gets triggered in practice
         $this->assertResult('<li /><b />', '<li /><li><b /></li>');
     }
 
-    function testOlAtBeginning() {
+    public function testOlAtBeginning()
+    {
         $this->assertResult('<ol />', '<li><ol /></li>');
     }
 
-    function testOlAtBeginningWithOtherJunk() {
+    public function testOlAtBeginningWithOtherJunk()
+    {
         $this->assertResult('<ol /><li />', '<li><ol /></li><li />');
     }
 
-    function testOlInMiddle() {
+    public function testOlInMiddle()
+    {
         $this->assertResult('<li>Foo</li><ol><li>Bar</li></ol>', '<li>Foo<ol><li>Bar</li></ol></li>');
     }
 
-    function testMultipleOl() {
+    public function testMultipleOl()
+    {
         $this->assertResult('<li /><ol /><ol />', '<li><ol /><ol /></li>');
     }
 
-    function testUlAtBeginning() {
+    public function testUlAtBeginning()
+    {
         $this->assertResult('<ul />', '<li><ul /></li>');
     }
 
