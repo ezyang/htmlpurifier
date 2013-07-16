@@ -12,4 +12,3 @@ $serial = $config->serialize();
 $result = unserialize($serial);
 $purifier = new HTMLPurifier($result);
 echo htmlspecialchars($purifier->purify('<b>Bold</b><br><i><a href="http://google.com">no</a> formatting</i>'));
-

@@ -3,13 +3,14 @@
 class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function setup() {
+    public function setup()
+    {
         parent::setup();
         $this->def = new HTMLPurifier_AttrDef_CSS();
     }
 
-    function test() {
-
+    public function test()
+    {
         // regular cases, singular
         $this->assertDef('text-align:right;');
         $this->assertDef('border-left-style:solid;');
@@ -115,7 +116,8 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function testProprietary() {
+    public function testProprietary()
+    {
         $this->config->set('CSS.Proprietary', true);
 
         $this->assertDef('scrollbar-arrow-color:#ff0;');
@@ -132,25 +134,29 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function testImportant() {
+    public function testImportant()
+    {
         $this->config->set('CSS.AllowImportant', true);
         $this->assertDef('float:left !important;');
     }
 
-    function testTricky() {
+    public function testTricky()
+    {
         $this->config->set('CSS.AllowTricky', true);
         $this->assertDef('display:none;');
         $this->assertDef('visibility:visible;');
         $this->assertDef('overflow:scroll;');
     }
 
-    function testForbidden() {
+    public function testForbidden()
+    {
         $this->config->set('CSS.ForbiddenProperties', 'float');
         $this->assertDef('float:left;', false);
         $this->assertDef('text-align:right;');
     }
 
-    function testTrusted() {
+    public function testTrusted()
+    {
         $this->config->set('CSS.Trusted', true);
         $this->assertDef('position:relative;');
         $this->assertDef('left:2px;');

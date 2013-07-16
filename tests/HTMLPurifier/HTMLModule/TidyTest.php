@@ -9,8 +9,8 @@ Mock::generatePartial(
 class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
 {
 
-    function test_getFixesForLevel() {
-
+    public function test_getFixesForLevel()
+    {
         $module = new HTMLPurifier_HTMLModule_Tidy();
         $module->fixesForLevel['light'][]  = 'light-fix';
         $module->fixesForLevel['medium'][] = 'medium-fix';
@@ -38,8 +38,8 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
 
     }
 
-    function test_setup() {
-
+    public function test_setup()
+    {
         $i = 0; // counter, helps us isolate expectations
 
         // initialize partial mock
@@ -113,8 +113,8 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
 
     }
 
-    function test_makeFixesForLevel() {
-
+    public function test_makeFixesForLevel()
+    {
         $module = new HTMLPurifier_HTMLModule_Tidy();
         $module->defaultLevel = 'heavy';
 
@@ -129,8 +129,8 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
         $this->assertIdentical($module->fixesForLevel['light'], array());
 
     }
-    function test_makeFixesForLevel_undefinedLevel() {
-
+    public function test_makeFixesForLevel_undefinedLevel()
+    {
         $module = new HTMLPurifier_HTMLModule_Tidy();
         $module->defaultLevel = 'bananas';
 
@@ -142,8 +142,8 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
 
     }
 
-    function test_getFixType() {
-
+    public function test_getFixType()
+    {
         // syntax needs documenting
 
         $module = new HTMLPurifier_HTMLModule_Tidy();
@@ -190,8 +190,8 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
 
     }
 
-    function test_populate() {
-
+    public function test_populate()
+    {
         $i = 0;
 
         $module = new HTMLPurifier_HTMLModule_Tidy();

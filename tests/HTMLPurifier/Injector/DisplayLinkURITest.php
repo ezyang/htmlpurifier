@@ -3,25 +3,29 @@
 class HTMLPurifier_Injector_DisplayLinkURITest extends HTMLPurifier_InjectorHarness
 {
 
-    function setup() {
+    public function setup()
+    {
         parent::setup();
         $this->config->set('AutoFormat.DisplayLinkURI', true);
     }
 
-    function testBasicLink() {
+    public function testBasicLink()
+    {
         $this->assertResult(
             '<a href="http://malware.example.com">Don\'t go here!</a>',
             '<a>Don\'t go here!</a> (http://malware.example.com)'
         );
     }
 
-    function testEmptyLink() {
+    public function testEmptyLink()
+    {
         $this->assertResult(
             '<a>Don\'t go here!</a>',
             '<a>Don\'t go here!</a>'
         );
     }
-    function testEmptyText() {
+    public function testEmptyText()
+    {
         $this->assertResult(
             '<a href="http://malware.example.com"></a>',
             '<a></a> (http://malware.example.com)'

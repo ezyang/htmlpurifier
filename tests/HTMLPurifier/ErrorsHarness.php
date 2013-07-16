@@ -10,7 +10,8 @@ class HTMLPurifier_ErrorsHarness extends HTMLPurifier_Harness
     protected $config, $context;
     protected $collector, $generator, $callCount;
 
-    public function setup() {
+    public function setup()
+    {
         $this->config = HTMLPurifier_Config::create(array('Core.CollectErrors' => true));
         $this->context = new HTMLPurifier_Context();
         generate_mock_once('HTMLPurifier_ErrorCollector');
@@ -20,16 +21,19 @@ class HTMLPurifier_ErrorsHarness extends HTMLPurifier_Harness
         $this->callCount = 0;
     }
 
-    protected function expectNoErrorCollection() {
+    protected function expectNoErrorCollection()
+    {
         $this->collector->expectNever('send');
     }
 
-    protected function expectErrorCollection() {
+    protected function expectErrorCollection()
+    {
         $args = func_get_args();
         $this->collector->expectOnce('send', $args);
     }
 
-    protected function expectContext($key, $value) {
+    protected function expectContext($key, $value)
+    {
         $this->collector->expectContext($key, $value);
     }
 

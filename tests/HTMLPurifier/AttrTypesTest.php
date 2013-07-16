@@ -3,7 +3,8 @@
 class HTMLPurifier_AttrTypesTest extends HTMLPurifier_Harness
 {
 
-    function test_get() {
+    public function test_get()
+    {
         $types = new HTMLPurifier_AttrTypes();
 
         $this->assertIdentical(

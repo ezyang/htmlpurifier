@@ -3,26 +3,30 @@
 class HTMLPurifier_HTMLModule_ScriptingTest extends HTMLPurifier_HTMLModuleHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->config->set('HTML.Trusted', true);
         $this->config->set('Output.CommentScriptContents', false);
     }
 
-    function testDefaultRemoval() {
+    public function testDefaultRemoval()
+    {
         $this->config->set('HTML.Trusted', false);
         $this->assertResult(
             '<script type="text/javascript">foo();</script>', ''
         );
     }
 
-    function testPreserve() {
+    public function testPreserve()
+    {
         $this->assertResult(
             '<script type="text/javascript">foo();</script>'
         );
     }
 
-    function testCDATAEnclosure() {
+    public function testCDATAEnclosure()
+    {
         $this->assertResult(
 '<script type="text/javascript">//<![CDATA[
 alert("<This is compatible with XHTML>");
@@ -30,7 +34,8 @@ alert("<This is compatible with XHTML>");
         );
     }
 
-    function testAllAttributes() {
+    public function testAllAttributes()
+    {
         $this->assertResult(
             '<script
                 defer="defer"
@@ -40,7 +45,8 @@ alert("<This is compatible with XHTML>");
         );
     }
 
-    function testUnsupportedAttributes() {
+    public function testUnsupportedAttributes()
+    {
         $this->assertResult(
             '<script
                 type="text/javascript"

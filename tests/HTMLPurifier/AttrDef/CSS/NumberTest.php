@@ -3,8 +3,8 @@
 class HTMLPurifier_AttrDef_CSS_NumberTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_CSS_Number();
 
         $this->assertDef('0');
@@ -38,8 +38,8 @@ class HTMLPurifier_AttrDef_CSS_NumberTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function testNonNegative() {
-
+    public function testNonNegative()
+    {
         $this->def = new HTMLPurifier_AttrDef_CSS_Number(true);
         $this->assertDef('23');
         $this->assertDef('-12', false);

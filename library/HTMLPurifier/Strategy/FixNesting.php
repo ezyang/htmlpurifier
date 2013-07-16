@@ -47,7 +47,14 @@
 class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 {
 
-    public function execute($tokens, $config, $context) {
+    /**
+     * @param HTMLPurifier_Token[] $tokens
+     * @param HTMLPurifier_Config $config
+     * @param HTMLPurifier_Context $context
+     * @return array|HTMLPurifier_Token[]
+     */
+    public function execute($tokens, $config, $context)
+    {
         //####################################################################//
         // Pre-processing
 
@@ -95,7 +102,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 
         // iterate through all start nodes. Determining the start node
         // is complicated so it has been omitted from the loop construct
-        for ($i = 0, $size = count($tokens) ; $i < $size; ) {
+        for ($i = 0, $size = count($tokens); $i < $size;) {
 
             //################################################################//
             // Gather information on children
@@ -110,12 +117,16 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                     $depth++;
                     // skip token assignment on first iteration, this is the
                     // token we currently are on
-                    if ($depth == 1) continue;
+                    if ($depth == 1) {
+                        continue;
+                    }
                 } elseif ($tokens[$j] instanceof HTMLPurifier_Token_End) {
                     $depth--;
                     // skip token assignment on last iteration, this is the
                     // end token of the token we're currently on
-                    if ($depth == 0) break;
+                    if ($depth == 0) {
+                        break;
+                    }
                 }
                 $child_tokens[] = $tokens[$j];
             }
@@ -130,12 +141,12 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 
             // calculate parent information
             if ($count = count($stack)) {
-                $parent_index = $stack[$count-1];
-                $parent_name  = $tokens[$parent_index]->name;
+                $parent_index = $stack[$count - 1];
+                $parent_name = $tokens[$parent_index]->name;
                 if ($parent_index == 0) {
-                    $parent_def   = $definition->info_parent_def;
+                    $parent_def = $definition->info_parent_def;
                 } else {
-                    $parent_def   = $definition->info[$parent_name];
+                    $parent_def = $definition->info[$parent_name];
                 }
             } else {
                 // processing as if the parent were the "root" node
@@ -195,7 +206,10 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 if (!empty($def->child)) {
                     // have DTD child def validate children
                     $result = $def->child->validateChildren(
-                        $child_tokens, $config, $context);
+                        $child_tokens,
+                        $config,
+                        $context
+                    );
                 } else {
                     // weird, no child definition, get rid of everything
                     $result = false;
@@ -217,12 +231,14 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 $stack[] = $i;
 
                 // register exclusions if there are any
-                if (!empty($excludes)) $exclude_stack[] = $excludes;
+                if (!empty($excludes)) {
+                    $exclude_stack[] = $excludes;
+                }
 
                 // move cursor to next possible start node
                 $i++;
 
-            } elseif($result === false) {
+            } elseif ($result === false) {
                 // remove entire node
 
                 if ($e) {
@@ -286,11 +302,12 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 $stack[] = $i;
 
                 // register exclusions if there are any
-                if (!empty($excludes)) $exclude_stack[] = $excludes;
+                if (!empty($excludes)) {
+                    $exclude_stack[] = $excludes;
+                }
 
                 // move cursor to next possible start node
                 $i++;
-
             }
 
             //################################################################//
@@ -336,11 +353,8 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 
         //####################################################################//
         // Return
-
         return $tokens;
-
     }
-
 }
 
 // vim: et sw=4 sts=4

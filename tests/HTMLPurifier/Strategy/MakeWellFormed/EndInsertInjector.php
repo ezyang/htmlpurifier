@@ -4,7 +4,8 @@ class HTMLPurifier_Strategy_MakeWellFormed_EndInsertInjector extends HTMLPurifie
 {
     public $name = 'EndInsertInjector';
     public $needed = array('span');
-    public function handleEnd(&$token) {
+    public function handleEnd(&$token)
+    {
         if ($token->name == 'div') return;
         $token = array(
             new HTMLPurifier_Token_Start('b'),

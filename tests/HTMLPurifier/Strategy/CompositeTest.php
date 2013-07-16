@@ -4,7 +4,8 @@ class HTMLPurifier_Strategy_Composite_Test
     extends HTMLPurifier_Strategy_Composite
 {
 
-    public function __construct(&$strategies) {
+    public function __construct(&$strategies)
+    {
         $this->strategies =& $strategies;
     }
 
@@ -14,8 +15,8 @@ class HTMLPurifier_Strategy_Composite_Test
 class HTMLPurifier_Strategy_CompositeTest extends HTMLPurifier_Harness
 {
 
-    function test() {
-
+    public function test()
+    {
         generate_mock_once('HTMLPurifier_Strategy');
         generate_mock_once('HTMLPurifier_Config');
         generate_mock_once('HTMLPurifier_Context');

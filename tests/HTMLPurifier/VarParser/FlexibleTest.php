@@ -3,8 +3,8 @@
 class HTMLPurifier_VarParser_FlexibleTest extends HTMLPurifier_VarParserHarness
 {
 
-    function testValidate() {
-
+    public function testValidate()
+    {
         $this->assertValid('foobar', 'string');
         $this->assertValid('foobar', 'text');
         $this->assertValid('FOOBAR', 'istring', 'foobar');
@@ -51,11 +51,13 @@ class HTMLPurifier_VarParser_FlexibleTest extends HTMLPurifier_VarParserHarness
 
     }
 
-    function testValidate_withMagicNumbers() {
+    public function testValidate_withMagicNumbers()
+    {
         $this->assertValid('foobar', HTMLPurifier_VarParser::STRING);
     }
 
-    function testValidate_null() {
+    public function testValidate_null()
+    {
         $this->assertIdentical($this->parser->parse(null, 'string', true), null);
         $this->expectException('HTMLPurifier_VarParserException');
         $this->parser->parse(null, 'string', false);

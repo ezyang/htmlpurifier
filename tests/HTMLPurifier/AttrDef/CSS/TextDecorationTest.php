@@ -3,8 +3,8 @@
 class HTMLPurifier_AttrDef_CSS_TextDecorationTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function testCaseInsensitive() {
-
+    public function testCaseInsensitive()
+    {
         $this->def = new HTMLPurifier_AttrDef_CSS_TextDecoration();
 
         $this->assertDef('none');

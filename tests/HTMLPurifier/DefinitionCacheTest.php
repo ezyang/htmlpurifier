@@ -3,7 +3,8 @@
 class HTMLPurifier_DefinitionCacheTest extends HTMLPurifier_Harness
 {
 
-    function test_isOld() {
+    public function test_isOld()
+    {
         // using null subclass because parent is abstract
         $cache = new HTMLPurifier_DefinitionCache_Null('Test');
 

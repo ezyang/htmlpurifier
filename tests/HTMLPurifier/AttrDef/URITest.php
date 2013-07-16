@@ -6,12 +6,14 @@
 class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         $this->def = new HTMLPurifier_AttrDef_URI();
         parent::setUp();
     }
 
-    function testIntegration() {
+    public function testIntegration()
+    {
         $this->assertDef('http://www.google.com/');
         $this->assertDef('http:', '');
         $this->assertDef('http:/foo', '/foo');
@@ -22,33 +24,38 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('mailto:bob@example.com');
     }
 
-    function testIntegrationWithPercentEncoder() {
+    public function testIntegrationWithPercentEncoder()
+    {
         $this->assertDef(
             'http://www.example.com/%56%fc%GJ%5%FC',
             'http://www.example.com/V%FC%25GJ%255%FC'
         );
     }
 
-    function testPercentEncoding() {
+    public function testPercentEncoding()
+    {
         $this->assertDef(
             'http:colon:mercenary',
             'colon%3Amercenary'
         );
     }
 
-    function testPercentEncodingPreserve() {
+    public function testPercentEncodingPreserve()
+    {
         $this->assertDef(
             'http://www.example.com/abcABC123-_.!~*()\''
         );
     }
 
-    function testEmbeds() {
+    public function testEmbeds()
+    {
         $this->def = new HTMLPurifier_AttrDef_URI(true);
         $this->assertDef('http://sub.example.com/alas?foo=asd');
         $this->assertDef('mailto:foo@example.com', false);
     }
 
-    function testConfigMunge() {
+    public function testConfigMunge()
+    {
         $this->config->set('URI.Munge', 'http://www.google.com/url?q=%s');
         $this->assertDef(
             'http://www.example.com/',
@@ -58,32 +65,39 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('javascript:foobar();', false);
     }
 
-    function testDefaultSchemeRemovedInBlank() {
+    public function testDefaultSchemeRemovedInBlank()
+    {
         $this->assertDef('http:', '');
     }
 
-    function testDefaultSchemeRemovedInRelativeURI() {
+    public function testDefaultSchemeRemovedInRelativeURI()
+    {
         $this->assertDef('http:/foo/bar', '/foo/bar');
     }
 
-    function testDefaultSchemeNotRemovedInAbsoluteURI() {
+    public function testDefaultSchemeNotRemovedInAbsoluteURI()
+    {
         $this->assertDef('http://example.com/foo/bar');
     }
 
-    function testAltSchemeNotRemoved() {
+    public function testAltSchemeNotRemoved()
+    {
         $this->assertDef('mailto:this-looks-like-a-path@example.com');
     }
 
-    function testResolveNullSchemeAmbiguity() {
+    public function testResolveNullSchemeAmbiguity()
+    {
         $this->assertDef('///foo', '/foo');
     }
 
-    function testResolveNullSchemeDoubleAmbiguity() {
+    public function testResolveNullSchemeDoubleAmbiguity()
+    {
         $this->config->set('URI.Host', 'example.com');
         $this->assertDef('////foo', '//example.com//foo');
     }
 
-    function testURIDefinitionValidation() {
+    public function testURIDefinitionValidation()
+    {
         $parser = new HTMLPurifier_URIParser();
         $uri = $parser->parse('http://example.com');
         $this->config->set('URI.DefinitionID', 'HTMLPurifier_AttrDef_URITest->testURIDefinitionValidation');
@@ -116,7 +130,8 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         HTMLPurifier_DefinitionCacheFactory::instance($old);
     }
 
-    function test_make() {
+    public function test_make()
+    {
         $factory = new HTMLPurifier_AttrDef_URI();
         $def = $factory->make('');
         $def2 = new HTMLPurifier_AttrDef_URI();
@@ -128,8 +143,8 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
     }
 
     /*
-    function test_validate_configWhitelist() {
-
+    public function test_validate_configWhitelist()
+    {
         $this->config->set('URI.HostPolicy', 'DenyAll');
         $this->config->set('URI.HostWhitelist', array(null, 'google.com'));
 

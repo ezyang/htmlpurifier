@@ -3,7 +3,8 @@
 class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_StrategyHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_MakeWellFormed();
         $this->config->set('AutoFormat.AutoParagraph', true);
@@ -12,7 +13,8 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         generate_mock_once('HTMLPurifier_Injector');
     }
 
-    function testEndHandler() {
+    public function testEndHandler()
+    {
         $mock = new HTMLPurifier_InjectorMock();
         $b = new HTMLPurifier_Token_End('b');
         $b->skip = array(0 => true);
@@ -32,48 +34,55 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         $this->assertResult('<i><b>asdf</b>', '<i><b>asdf</b></i>');
     }
 
-    function testErrorRequiredElementNotAllowed() {
+    public function testErrorRequiredElementNotAllowed()
+    {
         $this->config->set('HTML.Allowed', '');
         $this->expectError('Cannot enable AutoParagraph injector because p is not allowed');
         $this->expectError('Cannot enable Linkify injector because a is not allowed');
         $this->assertResult('Foobar');
     }
 
-    function testErrorRequiredAttributeNotAllowed() {
+    public function testErrorRequiredAttributeNotAllowed()
+    {
         $this->config->set('HTML.Allowed', 'a,p');
         $this->expectError('Cannot enable Linkify injector because a.href is not allowed');
         $this->assertResult('<p>http://example.com</p>');
     }
 
-    function testOnlyAutoParagraph() {
+    public function testOnlyAutoParagraph()
+    {
         $this->assertResult(
             'Foobar',
             '<p>Foobar</p>'
         );
     }
 
-    function testParagraphWrappingOnlyLink() {
+    public function testParagraphWrappingOnlyLink()
+    {
         $this->assertResult(
             'http://example.com',
             '<p><a href="http://example.com">http://example.com</a></p>'
         );
     }
 
-    function testParagraphWrappingNodeContainingLink() {
+    public function testParagraphWrappingNodeContainingLink()
+    {
         $this->assertResult(
             '<b>http://example.com</b>',
             '<p><b><a href="http://example.com">http://example.com</a></b></p>'
         );
     }
 
-    function testParagraphWrappingPoorlyFormedNodeContainingLink() {
+    public function testParagraphWrappingPoorlyFormedNodeContainingLink()
+    {
         $this->assertResult(
             '<b>http://example.com',
             '<p><b><a href="http://example.com">http://example.com</a></b></p>'
         );
     }
 
-    function testTwoParagraphsContainingOnlyOneLink() {
+    public function testTwoParagraphsContainingOnlyOneLink()
+    {
         $this->assertResult(
             "http://example.com\n\nhttp://dev.example.com",
 '<p><a href="http://example.com">http://example.com</a></p>
@@ -82,7 +91,8 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         );
     }
 
-    function testParagraphNextToDivWithLinks() {
+    public function testParagraphNextToDivWithLinks()
+    {
         $this->assertResult(
             'http://example.com <div>http://example.com</div>',
 '<p><a href="http://example.com">http://example.com</a> </p>
@@ -91,14 +101,16 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         );
     }
 
-    function testRealisticLinkInSentence() {
+    public function testRealisticLinkInSentence()
+    {
         $this->assertResult(
             'This URL http://example.com is what you need',
             '<p>This URL <a href="http://example.com">http://example.com</a> is what you need</p>'
         );
     }
 
-    function testParagraphAfterLinkifiedURL() {
+    public function testParagraphAfterLinkifiedURL()
+    {
         $this->assertResult(
 "http://google.com
 
@@ -109,7 +121,8 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         );
     }
 
-    function testEmptyAndParagraph() {
+    public function testEmptyAndParagraph()
+    {
         // This is a fairly degenerate case, but it demonstrates that
         // the two don't error out together, at least.
         // Change this behavior!
@@ -127,7 +140,8 @@ asdf<b></b></p>
         );
     }
 
-    function testRewindAndParagraph() {
+    public function testRewindAndParagraph()
+    {
         $this->assertResult(
 "bar
 

@@ -6,17 +6,20 @@ class HTMLPurifier_PercentEncoderTest extends HTMLPurifier_Harness
     protected $PercentEncoder;
     protected $func;
 
-    function setUp() {
+    public function setUp()
+    {
         $this->PercentEncoder = new HTMLPurifier_PercentEncoder();
         $this->func = '';
     }
 
-    function assertDecode($string, $expect = true) {
+    public function assertDecode($string, $expect = true)
+    {
         if ($expect === true) $expect = $string;
         $this->assertIdentical($this->PercentEncoder->{$this->func}($string), $expect);
     }
 
-    function test_normalize() {
+    public function test_normalize()
+    {
         $this->func = 'normalize';
 
         $this->assertDecode('Aw.../-$^8'); // no change
@@ -35,26 +38,31 @@ class HTMLPurifier_PercentEncoderTest extends HTMLPurifier_Harness
 
     }
 
-    function assertEncode($string, $expect = true, $preserve = false) {
+    public function assertEncode($string, $expect = true, $preserve = false)
+    {
         if ($expect === true) $expect = $string;
         $encoder = new HTMLPurifier_PercentEncoder($preserve);
         $result = $encoder->encode($string);
         $this->assertIdentical($result, $expect);
     }
 
-    function test_encode_noChange() {
+    public function test_encode_noChange()
+    {
         $this->assertEncode('abc012-_~.');
     }
 
-    function test_encode_encode() {
+    public function test_encode_encode()
+    {
         $this->assertEncode('>', '%3E');
     }
 
-    function test_encode_preserve() {
+    public function test_encode_preserve()
+    {
         $this->assertEncode('<>', '<%3E', '<');
     }
 
-    function test_encode_low() {
+    public function test_encode_low()
+    {
         $this->assertEncode("\1", '%01');
     }
 

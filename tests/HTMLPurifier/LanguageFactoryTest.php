@@ -8,13 +8,14 @@ class HTMLPurifier_LanguageFactoryTest extends HTMLPurifier_Harness
      */
     protected $factory;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->factory = HTMLPurifier_LanguageFactory::instance();
         parent::setUp();
     }
 
-    function test() {
-
+    public function test()
+    {
         $this->config->set('Core.Language', 'en');
         $language = $this->factory->create($this->config, $this->context);
 
@@ -28,8 +29,8 @@ class HTMLPurifier_LanguageFactoryTest extends HTMLPurifier_Harness
 
     }
 
-    function testFallback() {
-
+    public function testFallback()
+    {
         $this->config->set('Core.Language', 'en-x-test');
         $language = $this->factory->create($this->config, $this->context);
 
@@ -46,7 +47,8 @@ class HTMLPurifier_LanguageFactoryTest extends HTMLPurifier_Harness
 
     }
 
-    function testFallbackWithNoClass() {
+    public function testFallbackWithNoClass()
+    {
         $this->config->set('Core.Language', 'en-x-testmini');
         $language = $this->factory->create($this->config, $this->context);
         $this->assertIsA($language, 'HTMLPurifier_Language');
@@ -57,7 +59,8 @@ class HTMLPurifier_LanguageFactoryTest extends HTMLPurifier_Harness
         $this->assertIdentical($language->error, false);
     }
 
-    function testNoSuchLanguage() {
+    public function testNoSuchLanguage()
+    {
         $this->config->set('Core.Language', 'en-x-testnone');
         $language = $this->factory->create($this->config, $this->context);
         $this->assertIsA($language, 'HTMLPurifier_Language');

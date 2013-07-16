@@ -5,8 +5,8 @@
 class HTMLPurifier_EntityLookupTest extends HTMLPurifier_Harness
 {
 
-    function test() {
-
+    public function test()
+    {
         $lookup = HTMLPurifier_EntityLookup::instance();
 
         // latin char

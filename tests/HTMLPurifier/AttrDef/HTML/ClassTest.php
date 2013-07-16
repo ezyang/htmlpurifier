@@ -2,23 +2,27 @@
 
 class HTMLPurifier_AttrDef_HTML_ClassTest extends HTMLPurifier_AttrDef_HTML_NmtokensTest
 {
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->def = new HTMLPurifier_AttrDef_HTML_Class();
     }
-    function testAllowedClasses() {
+    public function testAllowedClasses()
+    {
         $this->config->set('Attr.AllowedClasses', array('foo'));
         $this->assertDef('foo');
         $this->assertDef('bar', false);
         $this->assertDef('foo bar', 'foo');
     }
-    function testForbiddenClasses() {
+    public function testForbiddenClasses()
+    {
         $this->config->set('Attr.ForbiddenClasses', array('bar'));
         $this->assertDef('foo');
         $this->assertDef('bar', false);
         $this->assertDef('foo bar', 'foo');
     }
-    function testDefault() {
+    public function testDefault()
+    {
         $this->assertDef('valid');
         $this->assertDef('a0-_');
         $this->assertDef('-valid');
@@ -40,7 +44,8 @@ class HTMLPurifier_AttrDef_HTML_ClassTest extends HTMLPurifier_AttrDef_HTML_Nmto
         // test duplicate removal
         $this->assertDef('valid valid', 'valid');
     }
-    function testXHTML11Behavior() {
+    public function testXHTML11Behavior()
+    {
         $this->config->set('HTML.Doctype', 'XHTML 1.1');
         $this->assertDef('0invalid', false);
         $this->assertDef('valid valid', 'valid');

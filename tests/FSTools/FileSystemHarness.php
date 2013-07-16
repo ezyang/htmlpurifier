@@ -11,7 +11,8 @@ class FSTools_FileSystemHarness extends UnitTestCase
 
     protected $dir, $oldDir;
 
-    function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->dir = 'tmp/' . md5(uniqid(rand(), true)) . '/';
         mkdir($this->dir);
@@ -19,15 +20,18 @@ class FSTools_FileSystemHarness extends UnitTestCase
 
     }
 
-    function __destruct() {
+    public function __destruct()
+    {
         FSTools::singleton()->rmdirr($this->dir);
     }
 
-    function setup() {
+    public function setup()
+    {
         chdir($this->dir);
     }
 
-    function tearDown() {
+    public function tearDown()
+    {
         chdir($this->oldDir);
     }
 

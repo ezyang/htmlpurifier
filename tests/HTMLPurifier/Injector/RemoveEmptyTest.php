@@ -3,73 +3,89 @@
 class HTMLPurifier_Injector_RemoveEmptyTest extends HTMLPurifier_InjectorHarness
 {
 
-    public function setup() {
+    public function setup()
+    {
         parent::setup();
         $this->config->set('AutoFormat.RemoveEmpty', true);
     }
 
-    function testPreserve() {
+    public function testPreserve()
+    {
         $this->assertResult('<b>asdf</b>');
     }
 
-    function testRemove() {
+    public function testRemove()
+    {
         $this->assertResult('<b></b>', '');
     }
 
-    function testRemoveWithSpace() {
+    public function testRemoveWithSpace()
+    {
         $this->assertResult('<b>   </b>', '');
     }
 
-    function testRemoveWithAttr() {
+    public function testRemoveWithAttr()
+    {
         $this->assertResult('<b class="asdf"></b>', '');
     }
 
-    function testRemoveIdAndName() {
+    public function testRemoveIdAndName()
+    {
         $this->assertResult('<a id="asdf" name="asdf"></a>', '');
     }
 
-    function testPreserveColgroup() {
+    public function testPreserveColgroup()
+    {
         $this->assertResult('<colgroup></colgroup>');
     }
 
-    function testPreserveId() {
+    public function testPreserveId()
+    {
         $this->config->set('Attr.EnableID', true);
         $this->assertResult('<a id="asdf"></a>');
     }
 
-    function testPreserveName() {
+    public function testPreserveName()
+    {
         $this->config->set('Attr.EnableID', true);
         $this->assertResult('<a name="asdf"></a>');
     }
 
-    function testRemoveNested() {
+    public function testRemoveNested()
+    {
         $this->assertResult('<b><i></i></b>', '');
     }
 
-    function testRemoveNested2() {
+    public function testRemoveNested2()
+    {
         $this->assertResult('<b><i><u></u></i></b>', '');
     }
 
-    function testRemoveNested3() {
+    public function testRemoveNested3()
+    {
         $this->assertResult('<b> <i> <u> </u> </i> </b>', '');
     }
 
-    function testRemoveNbsp() {
+    public function testRemoveNbsp()
+    {
         $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
         $this->assertResult('<b>&nbsp;</b>', '');
     }
 
-    function testRemoveNbspMix() {
+    public function testRemoveNbspMix()
+    {
         $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
         $this->assertResult('<b>&nbsp;   &nbsp;</b>', '');
     }
 
-    function testDontRemoveNbsp() {
+    public function testDontRemoveNbsp()
+    {
         $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
         $this->assertResult('<td>&nbsp;</b>', "<td>\xC2\xA0</td>");
     }
 
-    function testRemoveNbspExceptionsSpecial() {
+    public function testRemoveNbspExceptionsSpecial()
+    {
         $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
         $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp.Exceptions', 'b');
         $this->assertResult('<b>&nbsp;</b>', "<b>\xC2\xA0</b>");

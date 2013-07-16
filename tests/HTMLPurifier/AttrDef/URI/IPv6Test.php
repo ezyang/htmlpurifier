@@ -6,8 +6,8 @@
 class HTMLPurifier_AttrDef_URI_IPv6Test extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_URI_IPv6();
 
         $this->assertDef('2001:DB8:0:0:8:800:200C:417A'); // unicast, full

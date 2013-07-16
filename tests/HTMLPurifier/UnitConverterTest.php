@@ -3,7 +3,8 @@
 class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
 {
 
-    protected function assertConversion($input, $expect, $unit = null, $test_negative = true) {
+    protected function assertConversion($input, $expect, $unit = null, $test_negative = true)
+    {
         $length = HTMLPurifier_Length::make($input);
         if ($expect !== false) $expectl = HTMLPurifier_Length::make($expect);
         else $expectl = false;
@@ -29,12 +30,14 @@ class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
         }
     }
 
-    function testFail() {
+    public function testFail()
+    {
         $this->assertConversion('1in', false, 'foo');
         $this->assertConversion('1foo', false, 'in');
     }
 
-    function testZero() {
+    public function testZero()
+    {
         $this->assertConversion('0', '0', 'in', false);
         $this->assertConversion('-0', '0', 'in', false);
         $this->assertConversion('0in', '0', 'in', false);
@@ -43,7 +46,8 @@ class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
         $this->assertConversion('-0in', '0', 'pt', false);
     }
 
-    function testEnglish() {
+    public function testEnglish()
+    {
         $this->assertConversion('1in', '6pc');
         $this->assertConversion('6pc', '1in');
 
@@ -61,20 +65,23 @@ class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
         $this->assertConversion('96px', '1in');
     }
 
-    function testMetric() {
+    public function testMetric()
+    {
         $this->assertConversion('1cm', '10mm');
         $this->assertConversion('10mm', '1cm');
         $this->assertConversion('1mm', '0.1cm');
         $this->assertConversion('100mm', '10cm');
     }
 
-    function testEnglishMetric() {
+    public function testEnglishMetric()
+    {
         $this->assertConversion('2.835pt', '1mm');
         $this->assertConversion('1mm', '2.835pt');
         $this->assertConversion('0.3937in', '1cm');
     }
 
-    function testRoundingMinPrecision() {
+    public function testRoundingMinPrecision()
+    {
         // One sig-fig, modified to be four, conversion rounds up
         $this->assertConversion('100pt', '1.389in');
         $this->assertConversion('1000pt', '13.89in');
@@ -83,7 +90,8 @@ class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
         $this->assertConversion('1000000pt', '13890in');
     }
 
-    function testRoundingUserPrecision() {
+    public function testRoundingUserPrecision()
+    {
         // Five sig-figs, conversion rounds down
         $this->assertConversion('11112000pt', '154330in');
         $this->assertConversion('1111200pt', '15433in');
@@ -94,17 +102,20 @@ class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
         $this->assertConversion('11.112pt', '0.15433in');
     }
 
-    function testRoundingBigNumber() {
+    public function testRoundingBigNumber()
+    {
         $this->assertConversion('444400000000000000000000in', '42660000000000000000000000px');
     }
 
-    protected function assertSigFig($n, $sigfigs) {
+    protected function assertSigFig($n, $sigfigs)
+    {
         $converter = new HTMLPurifier_UnitConverter();
         $result = $converter->getSigFigs($n);
         $this->assertIdentical($result, $sigfigs);
     }
 
-    function test_getSigFigs() {
+    public function test_getSigFigs()
+    {
         $this->assertSigFig('0', 0);
         $this->assertSigFig('1', 1);
         $this->assertSigFig('-1', 1);

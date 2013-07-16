@@ -24,14 +24,16 @@ $GLOBALS['loaded'] = array();
  */
 class MergeLibraryFSTools extends FSTools
 {
-    function copyable($entry) {
+    public function copyable($entry)
+    {
         // Skip hidden files
         if ($entry[0] == '.') {
             return false;
         }
         return true;
     }
-    function copy($source, $dest) {
+    public function copy($source, $dest)
+    {
         copy_and_remove_includes($source, $dest);
     }
 }
@@ -42,7 +44,8 @@ $FS = new MergeLibraryFSTools();
  * source.
  * @param string $text PHP source code to replace includes from
  */
-function replace_includes($text) {
+function replace_includes($text)
+{
     // also remove vim modelines
     return preg_replace_callback(
         "/require(?:_once)? ['\"]([^'\"]+)['\"];/",
@@ -57,7 +60,8 @@ function replace_includes($text) {
  * @note This is safe for files that have internal <?php
  * @param string $text Text to have leading PHP tag from
  */
-function remove_php_tags($text) {
+function remove_php_tags($text)
+{
     $text = preg_replace('#// vim:.+#', '', $text);
     return substr($text, 5);
 }
@@ -66,7 +70,8 @@ function remove_php_tags($text) {
  * Copies the contents of a directory to the standalone directory
  * @param string $dir Directory to copy
  */
-function make_dir_standalone($dir) {
+function make_dir_standalone($dir)
+{
     global $FS;
     return $FS->copyr($dir, 'standalone/' . $dir);
 }
@@ -75,7 +80,8 @@ function make_dir_standalone($dir) {
  * Copies the contents of a file to the standalone directory
  * @param string $file File to copy
  */
-function make_file_standalone($file) {
+function make_file_standalone($file)
+{
     global $FS;
     $FS->mkdirr('standalone/' . dirname($file));
     copy_and_remove_includes($file, 'standalone/' . $file);
@@ -88,7 +94,8 @@ function make_file_standalone($file) {
  * @param string $file Original file
  * @param string $sfile New location of file
  */
-function copy_and_remove_includes($file, $sfile) {
+function copy_and_remove_includes($file, $sfile)
+{
     $contents = file_get_contents($file);
     if (strrchr($file, '.') === '.php') $contents = replace_includes($contents);
     return file_put_contents($sfile, $contents);
@@ -98,7 +105,8 @@ function copy_and_remove_includes($file, $sfile) {
  * @param $matches preg_replace_callback matches array, where index 1
  *        is the filename to include
  */
-function replace_includes_callback($matches) {
+function replace_includes_callback($matches)
+{
     $file = $matches[1];
     $preserve = array(
       // PEAR (external)

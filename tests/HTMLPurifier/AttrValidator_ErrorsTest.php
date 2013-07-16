@@ -3,7 +3,8 @@
 class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
 {
 
-    public function setup() {
+    public function setup()
+    {
         parent::setup();
         $config = HTMLPurifier_Config::createDefault();
         $this->language = HTMLPurifier_LanguageFactory::instance()->create($config, $this->context);
@@ -12,12 +13,14 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
         $this->context->register('Generator', new HTMLPurifier_Generator($config, $this->context));
     }
 
-    protected function invoke($input) {
+    protected function invoke($input)
+    {
         $validator = new HTMLPurifier_AttrValidator();
         $validator->validateToken($input, $this->config, $this->context);
     }
 
-    function testAttributesTransformedGlobalPre() {
+    public function testAttributesTransformedGlobalPre()
+    {
         $def = $this->config->getHTMLDefinition(true);
         generate_mock_once('HTMLPurifier_AttrTransform');
         $transform = new HTMLPurifier_AttrTransformMock();
@@ -36,7 +39,8 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
         $this->assertIdentical($result, $expect);
     }
 
-    function testAttributesTransformedLocalPre() {
+    public function testAttributesTransformedLocalPre()
+    {
         $this->config->set('HTML.TidyLevel', 'heavy');
         $input = array('align' => 'right');
         $output = array('style' => 'text-align:right;');
@@ -51,7 +55,8 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
 
     // too lazy to check for global post and global pre
 
-    function testAttributeRemoved() {
+    public function testAttributeRemoved()
+    {
         $token = new HTMLPurifier_Token_Start('p', array('foobar' => 'right'), 1);
         $this->invoke($token);
         $result = $this->collector->getRaw();

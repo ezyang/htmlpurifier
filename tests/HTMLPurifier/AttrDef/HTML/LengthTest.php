@@ -3,12 +3,13 @@
 class HTMLPurifier_AttrDef_HTML_LengthTest extends HTMLPurifier_AttrDef_HTML_PixelsTest
 {
 
-    function setup() {
+    public function setup()
+    {
         $this->def = new HTMLPurifier_AttrDef_HTML_Length();
     }
 
-    function test() {
-
+    public function test()
+    {
         // pixel check
         parent::test();
 

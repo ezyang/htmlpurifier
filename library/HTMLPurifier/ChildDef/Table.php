@@ -31,13 +31,44 @@
  */
 class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
 {
+    /**
+     * @type bool
+     */
     public $allow_empty = false;
+
+    /**
+     * @type string
+     */
     public $type = 'table';
-    public $elements = array('tr' => true, 'tbody' => true, 'thead' => true,
-        'tfoot' => true, 'caption' => true, 'colgroup' => true, 'col' => true);
-    public function __construct() {}
-    public function validateChildren($tokens_of_children, $config, $context) {
-        if (empty($tokens_of_children)) return false;
+
+    /**
+     * @type array
+     */
+    public $elements = array(
+        'tr' => true,
+        'tbody' => true,
+        'thead' => true,
+        'tfoot' => true,
+        'caption' => true,
+        'colgroup' => true,
+        'col' => true
+    );
+
+    public function __construct()
+    {
+    }
+
+    /**
+     * @param array $tokens_of_children
+     * @param HTMLPurifier_Config $config
+     * @param HTMLPurifier_Context $context
+     * @return array
+     */
+    public function validateChildren($tokens_of_children, $config, $context)
+    {
+        if (empty($tokens_of_children)) {
+            return false;
+        }
 
         // this ensures that the loop gets run one last time before closing
         // up. It's a little bit of a hack, but it works! Just make sure you
@@ -46,23 +77,23 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
 
         // only one of these elements is allowed in a table
         $caption = false;
-        $thead   = false;
-        $tfoot   = false;
+        $thead = false;
+        $tfoot = false;
 
         // as many of these as you want
-        $cols    = array();
+        $cols = array();
         $content = array();
 
         $nesting = 0; // current depth so we can determine nodes
         $is_collecting = false; // are we globbing together tokens to package
-                                // into one of the collectors?
+        // into one of the collectors?
         $collection = array(); // collected nodes
         // INVARIANT: if $is_collecting, then !empty($collection)
         // The converse does NOT hold, see [WHITESPACE]
         $tag_index = 0; // the first node might be whitespace,
-                            // so this tells us where the start tag is
+        // so this tells us where the start tag is
         $tbody_mode = false; // if true, then we need to wrap any stray
-                             // <tr>s with a <tbody>.
+        // <tr>s with a <tbody>.
 
         foreach ($tokens_of_children as $token) {
             $is_child = ($nesting == 0);
@@ -88,7 +119,9 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                             $content[] = $collection;
                             break;
                         case 'caption':
-                            if ($caption !== false) break;
+                            if ($caption !== false) {
+                                break;
+                            }
                             $caption = $collection;
                             break;
                         case 'thead':
@@ -116,11 +149,11 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                                 // doesn't float an extra tfoot to the
                                 // bottom like it does for the first one.
                                 $collection[$tag_index]->name = 'tbody';
-                                $collection[count($collection)-1]->name = 'tbody';
+                                $collection[count($collection) - 1]->name = 'tbody';
                                 $content[] = $collection;
                             }
                             break;
-                         case 'colgroup':
+                        case 'colgroup':
                             $cols[] = $collection;
                             break;
                     }
@@ -134,7 +167,9 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
             }
 
             // terminate
-            if ($token === false) break;
+            if ($token === false) {
+                break;
+            }
 
             if ($is_child) {
                 // determine what we're dealing with
@@ -147,7 +182,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                     $tag_index = 0;
                     continue;
                 }
-                switch($token->name) {
+                switch ($token->name) {
                     case 'caption':
                     case 'colgroup':
                     case 'thead':
@@ -172,7 +207,9 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
             }
         }
 
-        if (empty($content)) return false;
+        if (empty($content)) {
+            return false;
+        }
         // INVARIANT: all members of content are non-empty.  This can
         // be shown by observing when things are pushed onto content:
         // they are only ever pushed when is_collecting is true, and
@@ -180,10 +217,20 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
         // that collections are non-empty when is_collecting is true.
 
         $ret = array();
-        if ($caption !== false) $ret = array_merge($ret, $caption);
-        if ($cols !== false)    foreach ($cols as $token_array) $ret = array_merge($ret, $token_array);
-        if ($thead !== false)   $ret = array_merge($ret, $thead);
-        if ($tfoot !== false)   $ret = array_merge($ret, $tfoot);
+        if ($caption !== false) {
+            $ret = array_merge($ret, $caption);
+        }
+        if ($cols !== false) {
+            foreach ($cols as $token_array) {
+                $ret = array_merge($ret, $token_array);
+            }
+        }
+        if ($thead !== false) {
+            $ret = array_merge($ret, $thead);
+        }
+        if ($tfoot !== false) {
+            $ret = array_merge($ret, $tfoot);
+        }
 
         if ($tbody_mode) {
             // a little tricky, since the start of the collection may be
@@ -228,7 +275,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
             }
         }
 
-        if (!empty($collection) && $is_collecting == false){
+        if (!empty($collection) && $is_collecting == false) {
             // grab the trailing space
             $ret = array_merge($ret, $collection);
         }

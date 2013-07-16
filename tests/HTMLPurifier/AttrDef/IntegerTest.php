@@ -3,8 +3,8 @@
 class HTMLPurifier_AttrDef_IntegerTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_Integer();
 
         $this->assertDef('0');
@@ -23,7 +23,8 @@ class HTMLPurifier_AttrDef_IntegerTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function assertRange($negative, $zero, $positive) {
+    public function assertRange($negative, $zero, $positive)
+    {
         $this->assertDef('-100', $negative);
         $this->assertDef('-1', $negative);
         $this->assertDef('0', $zero);
@@ -31,8 +32,8 @@ class HTMLPurifier_AttrDef_IntegerTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('42', $positive);
     }
 
-    function testRange() {
-
+    public function testRange()
+    {
         $this->def = new HTMLPurifier_AttrDef_Integer(false);
         $this->assertRange(false, true, true); // non-negative
 

@@ -4,7 +4,8 @@
 class HTMLPurifier_AttrDef_CSS_MultipleTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_CSS_Multiple(
             new HTMLPurifier_AttrDef_Integer()
         );

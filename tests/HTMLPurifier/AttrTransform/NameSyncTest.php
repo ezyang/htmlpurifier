@@ -3,7 +3,8 @@
 class HTMLPurifier_AttrTransform_NameSyncTest extends HTMLPurifier_AttrTransformHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_AttrTransform_NameSync();
         $this->accumulator = new HTMLPurifier_IDAccumulator();
@@ -11,23 +12,27 @@ class HTMLPurifier_AttrTransform_NameSyncTest extends HTMLPurifier_AttrTransform
         $this->config->set('Attr.EnableID', true);
     }
 
-    function testEmpty() {
+    public function testEmpty()
+    {
         $this->assertResult( array() );
     }
 
-    function testAllowSame() {
+    public function testAllowSame()
+    {
         $this->assertResult(
             array('name' => 'free', 'id' => 'free')
         );
     }
 
-    function testAllowDifferent() {
+    public function testAllowDifferent()
+    {
         $this->assertResult(
             array('name' => 'tryit', 'id' => 'thisgood')
         );
     }
 
-    function testCheckName() {
+    public function testCheckName()
+    {
         $this->accumulator->add('notok');
         $this->assertResult(
             array('name' => 'notok', 'id' => 'ok'),

@@ -3,12 +3,13 @@
 class HTMLPurifier_AttrDef_HTML_MultiLengthTest extends HTMLPurifier_AttrDef_HTML_LengthTest
 {
 
-    function setup() {
+    public function setup()
+    {
         $this->def = new HTMLPurifier_AttrDef_HTML_MultiLength();
     }
 
-    function test() {
-
+    public function test()
+    {
         // length check
         parent::test();
 

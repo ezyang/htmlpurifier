@@ -1,6 +1,7 @@
 <?php
 
-function phorum_htmlpurifier_show_form() {
+function phorum_htmlpurifier_show_form()
+{
     if (phorum_htmlpurifier_config_file_exists()) {
         phorum_htmlpurifier_show_config_info();
         return;
@@ -61,7 +62,8 @@ function phorum_htmlpurifier_show_form() {
     $frm->show();
 }
 
-function phorum_htmlpurifier_show_config_info() {
+function phorum_htmlpurifier_show_config_info()
+{
     global $PHORUM;
 
     // update mod_htmlpurifier for housekeeping

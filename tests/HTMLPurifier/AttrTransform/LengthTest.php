@@ -3,37 +3,43 @@
 class HTMLPurifier_AttrTransform_LengthTest extends HTMLPurifier_AttrTransformHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_AttrTransform_Length('width');
     }
 
-    function testEmptyInput() {
+    public function testEmptyInput()
+    {
         $this->assertResult( array() );
     }
 
-    function testTransformPixel() {
+    public function testTransformPixel()
+    {
         $this->assertResult(
             array('width' => '10'),
             array('style' => 'width:10px;')
         );
     }
 
-    function testTransformPercentage() {
+    public function testTransformPercentage()
+    {
         $this->assertResult(
             array('width' => '10%'),
             array('style' => 'width:10%;')
         );
     }
 
-    function testPrependNewCSS() {
+    public function testPrependNewCSS()
+    {
         $this->assertResult(
             array('width' => '10%', 'style' => 'font-weight:bold'),
             array('style' => 'width:10%;font-weight:bold')
         );
     }
 
-    function testLenientTreatmentOfInvalidInput() {
+    public function testLenientTreatmentOfInvalidInput()
+    {
         $this->assertResult(
             array('width' => 'asdf'),
             array('style' => 'width:asdf;')

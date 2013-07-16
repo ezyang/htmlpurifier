@@ -3,7 +3,8 @@
 class HTMLPurifier_AttrTransform_EnumToCSSTest extends HTMLPurifier_AttrTransformHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
             'left'  => 'text-align:left;',
@@ -11,36 +12,42 @@ class HTMLPurifier_AttrTransform_EnumToCSSTest extends HTMLPurifier_AttrTransfor
         ));
     }
 
-    function testEmptyInput() {
+    public function testEmptyInput()
+    {
         $this->assertResult( array() );
     }
 
-    function testPreserveArraysWithoutInterestingAttributes() {
+    public function testPreserveArraysWithoutInterestingAttributes()
+    {
         $this->assertResult( array('style' => 'font-weight:bold;') );
     }
 
-    function testConvertAlignLeft() {
+    public function testConvertAlignLeft()
+    {
         $this->assertResult(
             array('align' => 'left'),
             array('style' => 'text-align:left;')
         );
     }
 
-    function testConvertAlignRight() {
+    public function testConvertAlignRight()
+    {
         $this->assertResult(
             array('align' => 'right'),
             array('style' => 'text-align:right;')
         );
     }
 
-    function testRemoveInvalidAlign() {
+    public function testRemoveInvalidAlign()
+    {
         $this->assertResult(
             array('align' => 'invalid'),
             array()
         );
     }
 
-    function testPrependNewCSS() {
+    public function testPrependNewCSS()
+    {
         $this->assertResult(
             array('align' => 'left', 'style' => 'font-weight:bold;'),
             array('style' => 'text-align:left;font-weight:bold;')
@@ -48,7 +55,8 @@ class HTMLPurifier_AttrTransform_EnumToCSSTest extends HTMLPurifier_AttrTransfor
 
     }
 
-    function testCaseInsensitive() {
+    public function testCaseInsensitive()
+    {
         $this->obj = new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
             'right' => 'text-align:right;'
         ));
@@ -58,7 +66,8 @@ class HTMLPurifier_AttrTransform_EnumToCSSTest extends HTMLPurifier_AttrTransfor
         );
     }
 
-    function testCaseSensitive() {
+    public function testCaseSensitive()
+    {
         $this->obj = new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
             'right' => 'text-align:right;'
         ), true);

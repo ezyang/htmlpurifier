@@ -3,23 +3,27 @@
 class HTMLPurifier_AttrTransform_NameTest extends HTMLPurifier_AttrTransformHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_AttrTransform_Name();
     }
 
-    function testEmpty() {
+    public function testEmpty()
+    {
         $this->assertResult( array() );
     }
 
-    function testTransformNameToID() {
+    public function testTransformNameToID()
+    {
         $this->assertResult(
             array('name' => 'free'),
             array('id' => 'free')
         );
     }
 
-    function testExistingIDOverridesName() {
+    public function testExistingIDOverridesName()
+    {
         $this->assertResult(
             array('name' => 'tryit', 'id' => 'tobad'),
             array('id' => 'tobad')
