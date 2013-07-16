@@ -54,34 +54,47 @@
 class HTMLPurifier
 {
 
-    /** Version of HTML Purifier */
+    /**
+     * @var string Version of HTML Purifier
+     */
     public $version = '4.5.0';
 
-    /** Constant with version of HTML Purifier */
+    /**
+     * Constant with version of HTML Purifier
+     */
     const VERSION = '4.5.0';
 
-    /** Global configuration object */
+    /**
+     * @var HTMLPurifier_Config Global configuration object
+     */
     public $config;
 
-    /** Array of extra HTMLPurifier_Filter objects to run on HTML, for backwards compatibility */
+    /**
+     * @var HTMLPurifier_Filter[] Array of extra filter objects to run on HTML,
+     * for backwards compatibility
+     */
     private $filters = array();
 
-    /** Single instance of HTML Purifier */
+    /**
+     * @var HTMLPurifier Single instance of HTML Purifier
+     */
     private static $instance;
 
     protected $strategy, $generator;
 
     /**
-     * Resultant HTMLPurifier_Context of last run purification. Is an array
-     * of contexts if the last called method was purifyArray().
+     * @var HTMLPurifier_Context Resultant context of last run purification.
+     * Is an array of contexts if the last called method was purifyArray().
      */
     public $context;
 
     /**
      * Initializes the purifier.
-     * @param $config Optional HTMLPurifier_Config object for all instances of
-     *                the purifier, if omitted, a default configuration is
-     *                supplied (which can be overridden on a per-use basis).
+     *
+     * @param HTMLPurifier_Config $config Optional HTMLPurifier_Config object
+     *                for all instances of the purifier, if omitted, a default
+     *                configuration is supplied (which can be overridden on a
+     *                per-use basis).
      *                The parameter can also be any type that
      *                HTMLPurifier_Config::create() supports.
      */
@@ -95,22 +108,28 @@ class HTMLPurifier
 
     /**
      * Adds a filter to process the output. First come first serve
-     * @param $filter HTMLPurifier_Filter object
+     *
+     * @param HTMLPurifier_Filter $filter HTMLPurifier_Filter object
      */
     public function addFilter($filter) {
-        trigger_error('HTMLPurifier->addFilter() is deprecated, use configuration directives in the Filter namespace or Filter.Custom', E_USER_WARNING);
+        trigger_error(
+            'HTMLPurifier->addFilter() is deprecated, use configuration directives'.
+            ' in the Filter namespace or Filter.Custom',
+            E_USER_WARNING
+        );
         $this->filters[] = $filter;
     }
 
     /**
      * Filters an HTML snippet/document to be XSS-free and standards-compliant.
      *
-     * @param $html String of HTML to purify
-     * @param $config HTMLPurifier_Config object for this operation, if omitted,
-     *                defaults to the config object specified during this
+     * @param string $html String of HTML to purify
+     * @param HTMLPurifier_Config $config Config object for this operation,
+     *                if omitted, defaults to the config object specified during this
      *                object's construction. The parameter can also be any type
      *                that HTMLPurifier_Config::create() supports.
-     * @return Purified HTML
+     *
+     * @return string Purified HTML
      */
     public function purify($html, $config = null) {
 
@@ -192,9 +211,12 @@ class HTMLPurifier
 
     /**
      * Filters an array of HTML snippets
-     * @param $config Optional HTMLPurifier_Config object for this operation.
+     *
+     * @param string[] $array_of_html Array of html snippets
+     * @param HTMLPurifier_Config $config Optional config object for this operation.
      *                See HTMLPurifier::purify() for more details.
-     * @return Array of purified HTML
+     *
+     * @return string[] Array of purified HTML
      */
     public function purifyArray($array_of_html, $config = null) {
         $context_array = array();
@@ -208,9 +230,13 @@ class HTMLPurifier
 
     /**
      * Singleton for enforcing just one HTML Purifier in your system
-     * @param $prototype Optional prototype HTMLPurifier instance to
-     *                   overload singleton with, or HTMLPurifier_Config
-     *                   instance to configure the generated version with.
+     *
+     * @param HTMLPurifier|HTMLPurifier_Config $prototype Optional prototype
+     *                   HTMLPurifier instance to overload singleton with,
+     *                   or HTMLPurifier_Config instance to configure the
+     *                   generated version with.
+     *
+     * @return HTMLPurifier
      */
     public static function instance($prototype = null) {
         if (!self::$instance || $prototype) {
@@ -226,6 +252,14 @@ class HTMLPurifier
     }
 
     /**
+     * Singleton for enforcing just one HTML Purifier in your system
+     *
+     * @param HTMLPurifier|HTMLPurifier_Config $prototype Optional prototype
+     *                   HTMLPurifier instance to overload singleton with,
+     *                   or HTMLPurifier_Config instance to configure the
+     *                   generated version with.
+     *
+     * @return HTMLPurifier
      * @note Backwards compatibility, see instance()
      */
     public static function getInstance($prototype = null) {
