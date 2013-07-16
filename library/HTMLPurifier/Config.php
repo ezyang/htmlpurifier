@@ -657,8 +657,8 @@ class HTMLPurifier_Config
             } else {
                 $namespace = $key;
                 $namespace_values = $value;
-                foreach ($namespace_values as $directive => $value) {
-                    $this->set($namespace .'.'. $directive, $value);
+                foreach ($namespace_values as $directive => $value2) {
+                    $this->set($namespace .'.'. $directive, $value2);
                 }
             }
         }
