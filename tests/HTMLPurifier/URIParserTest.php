@@ -140,6 +140,13 @@ class HTMLPurifier_URIParserTest extends HTMLPurifier_Harness
         );
     }
 
+    function testEmbeddedColon() {
+        $this->assertParsing(
+            '{:test:}',
+            null, null, null, null, '{:test:}', null, null
+        );
+    }
+
 }
 
 // vim: et sw=4 sts=4

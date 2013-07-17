@@ -52,11 +52,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $generator = new HTMLPurifier_Generator($config, $context);
         $escape_invalid_tags = $config->get('Core.EscapeInvalidTags');
         // used for autoclose early abortion
-        $global_parent_allowed_elements = array();
-        if (isset($definition->info[$definition->info_parent])) {
-            // may be unset under testing circumstances
-            $global_parent_allowed_elements = $definition->info[$definition->info_parent]->child->getAllowedElements($config);
-        }
+        $global_parent_allowed_elements = $definition->info_parent_def->child->getAllowedElements($config);
         $e = $context->get('ErrorCollector', true);
         $t = false; // token index
         $i = false; // injector index
@@ -241,11 +237,13 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     $parent = array_pop($this->stack);
                     $this->stack[] = $parent;
 
+                    $parent_def = null;
+                    $parent_elements = null;
+                    $autoclose = false;
                     if (isset($definition->info[$parent->name])) {
-                        $elements = $definition->info[$parent->name]->child->getAllowedElements($config);
-                        $autoclose = !isset($elements[$token->name]);
-                    } else {
-                        $autoclose = false;
+                        $parent_def = $definition->info[$parent->name];
+                        $parent_elements = $parent_def->child->getAllowedElements($config);
+                        $autoclose = !isset($parent_elements[$token->name]);
                     }
 
                     if ($autoclose && $definition->info[$token->name]->wrap) {
@@ -255,7 +253,6 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                         $wrapname = $definition->info[$token->name]->wrap;
                         $wrapdef = $definition->info[$wrapname];
                         $elements = $wrapdef->child->getAllowedElements($config);
-                        $parent_elements = $definition->info[$parent->name]->child->getAllowedElements($config);
                         if (isset($elements[$token->name]) && isset($parent_elements[$wrapname])) {
                             $newtoken = new HTMLPurifier_Token_Start($wrapname);
                             $this->insertBefore($newtoken);
@@ -265,7 +262,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     }
 
                     $carryover = false;
-                    if ($autoclose && $definition->info[$parent->name]->formatting) {
+                    if ($autoclose && $parent_def->formatting) {
                         $carryover = true;
                     }
 

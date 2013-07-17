@@ -9,6 +9,15 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.6.0, unknown release date
+# URI parsing algorithm was made more strict, so only prefixes which
+  looks like schemes will actually be schemes.  Thanks
+  Michael Gusev <mgusev@sugarcrm.com> for fixing.
+- Made Linkify URL parser a bit less permissive, so that non-breaking
+  spaces and commas are not included as part of URL.  Thanks nAS for fixing.
+- Fix some bad interactions with %HTML.Allowed and injectors.  Thanks
+  David Hirtz for reporting.
+
 4.5.0, released 2013-02-17
 # Fix bug where stacked attribute transforms clobber each other;
   this also means it's no longer possible to override attribute
@@ -20,10 +29,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Permit underscores in font families
 ! Support for page-break-* CSS3 properties when proprietary properties
   are enabled.
-! New directive %Core.EnableExcludes; can be set to 'false' to turn off
+! New directive %Core.DisableExcludes; can be set to 'true' to turn off
   SGML excludes checking.  If HTML Purifier is removing too much text
   and you don't care about full standards compliance, try setting this to
-  'false'.
+  'true'.
 - Use prepend for SPL autoloading on PHP 5.3 and later.
 - Fix bug with nofollow transform when pre-existing rel exists.
 - Fix bug where background:url() always gets lower-cased

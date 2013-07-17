@@ -510,6 +510,11 @@ Bar</div>",
         $this->assertResult('<b>foobar</b>');
     }
 
+    function testParentElement() {
+        $this->config->set('HTML.Allowed', 'p,ul,li');
+        $this->assertResult('Foo<ul><li>Bar</li></ul>', "<p>Foo</p>\n\n<ul><li>Bar</li></ul>");
+    }
+
 }
 
 // vim: et sw=4 sts=4
