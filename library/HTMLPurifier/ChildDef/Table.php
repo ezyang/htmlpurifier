@@ -81,6 +81,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                     switch ($collection[$tag_index]->name) {
                         case 'tbody':
                             $tbody_mode = true;
+                            break;
                         case 'tr':
                             $content[] = $collection;
                             break;
