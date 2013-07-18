@@ -34,6 +34,7 @@ class HTMLPurifier_AttrDef_CSS_Number extends HTMLPurifier_AttrDef
             case '-':
                 if ($this->non_negative) return false;
                 $sign = '-';
+                break;
             case '+':
                 $number = substr($number, 1);
         }
