@@ -2,7 +2,7 @@
 <usage>
  <directive id="Core.CollectErrors">
   <file name="HTMLPurifier.php">
-   <line>131</line>
+   <line>150</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>81</line>
@@ -54,7 +54,7 @@
  </directive>
  <directive id="Cache.DefinitionImpl">
   <file name="HTMLPurifier/DefinitionCacheFactory.php">
-   <line>49</line>
+   <line>59</line>
   </file>
  </directive>
  <directive id="HTML.Doctype">
@@ -355,9 +355,14 @@
    <line>30</line>
   </file>
  </directive>
+ <directive id="Core.AllowHostnameUnderscore">
+  <file name="HTMLPurifier/AttrDef/URI/Host.php">
+   <line>61</line>
+  </file>
+ </directive>
  <directive id="Core.EnableIDNA">
   <file name="HTMLPurifier/AttrDef/URI/Host.php">
-   <line>67</line>
+   <line>80</line>
   </file>
  </directive>
  <directive id="Attr.DefaultTextDir">
