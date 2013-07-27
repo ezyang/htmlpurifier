@@ -57,6 +57,8 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
         $is_collecting = false; // are we globbing together tokens to package
                                 // into one of the collectors?
         $collection = array(); // collected nodes
+        // INVARIANT: if $is_collecting, then !empty($collection)
+        // The converse does NOT hold, see [WHITESPACE]
         $tag_index = 0; // the first node might be whitespace,
                             // so this tells us where the start tag is
         $tbody_mode = false; // if true, then we need to wrap any stray
@@ -141,6 +143,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                     // immediately
                     $cols[] = array_merge($collection, array($token));
                     $collection = array();
+                    $is_collecting = false;
                     $tag_index = 0;
                     continue;
                 }
@@ -155,6 +158,11 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                         $collection[] = $token;
                         continue;
                     default:
+                        // [WHITESPACE] Whitespace is added to the
+                        // collection without triggering collection
+                        // mode. This is a hack to make whitespace
+                        // 'sticky' (that is to say, we ought /not/ to
+                        // drop whitespace.)
                         if (!empty($token->is_whitespace)) {
                             $collection[] = $token;
                             $tag_index++;
@@ -165,6 +173,11 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
         }
 
         if (empty($content)) return false;
+        // INVARIANT: all members of content are non-empty.  This can
+        // be shown by observing when things are pushed onto content:
+        // they are only ever pushed when is_collecting is true, and
+        // collection is the only thing ever pushed; but it is known
+        // that collections are non-empty when is_collecting is true.
 
         $ret = array();
         if ($caption !== false) $ret = array_merge($ret, $caption);
@@ -178,6 +191,8 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
             $inside_tbody = false;
             foreach ($content as $token_array) {
                 // find the starting token
+                // INVARIANT: token_array is not empty
+                $t = NULL;
                 foreach ($token_array as $t) {
                     if ($t->name === 'tr' || $t->name === 'tbody') {
                         break;
