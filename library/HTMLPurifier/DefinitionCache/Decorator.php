@@ -9,6 +9,12 @@ class HTMLPurifier_DefinitionCache_Decorator extends HTMLPurifier_DefinitionCach
      */
     public $cache;
 
+    /**
+     * The name of the decorator
+     * @var string
+     */
+    public $name;
+
     public function __construct() {}
 
     /**
