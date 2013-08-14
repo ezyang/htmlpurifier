@@ -3,8 +3,8 @@
 class HTMLPurifier_AttrDef_CSS_FilterTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_CSS_Filter();
 
         $this->assertDef('none');

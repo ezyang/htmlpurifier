@@ -3,18 +3,21 @@
 class HTMLPurifier_URIFilter_DisableResourcesTest extends HTMLPurifier_URIFilterHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->filter = new HTMLPurifier_URIFilter_DisableResources();
         $var = true;
         $this->context->register('EmbeddedURI', $var);
     }
 
-    function testRemoveResource() {
+    public function testRemoveResource()
+    {
         $this->assertFiltering('/foo/bar', false);
     }
 
-    function testPreserveRegular() {
+    public function testPreserveRegular()
+    {
         $this->context->destroy('EmbeddedURI'); // undo setUp
         $this->assertFiltering('/foo/bar');
     }

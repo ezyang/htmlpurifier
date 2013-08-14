@@ -7,7 +7,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
 {
 
     // usual use case:
-    function test_tokenizeHTML_extractStyleBlocks() {
+    public function test_tokenizeHTML_extractStyleBlocks()
+    {
         $this->config->set('Filter.ExtractStyleBlocks', true);
         $purifier = new HTMLPurifier($this->config);
         $result = $purifier->purify('<style type="text/css">.foo {text-align:center;bogus:remove-me;} body.class[foo="attr"] {text-align:right;}</style>Test<style>* {font-size:12pt;}</style>');
@@ -20,7 +21,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         );
     }
 
-    function assertExtractStyleBlocks($html, $expect = true, $styles = array()) {
+    public function assertExtractStyleBlocks($html, $expect = true, $styles = array())
+    {
         $filter = new HTMLPurifier_Filter_ExtractStyleBlocks(); // disable cleaning
         if ($expect === true) $expect = $html;
         $this->config->set('Filter.ExtractStyleBlocks.TidyImpl', false);
@@ -29,15 +31,18 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         $this->assertIdentical($this->context->get('StyleBlocks'), $styles);
     }
 
-    function test_extractStyleBlocks_preserve() {
+    public function test_extractStyleBlocks_preserve()
+    {
         $this->assertExtractStyleBlocks('Foobar');
     }
 
-    function test_extractStyleBlocks_allStyle() {
+    public function test_extractStyleBlocks_allStyle()
+    {
         $this->assertExtractStyleBlocks('<style>foo</style>', '', array('foo'));
     }
 
-    function test_extractStyleBlocks_multipleBlocks() {
+    public function test_extractStyleBlocks_multipleBlocks()
+    {
         $this->assertExtractStyleBlocks(
           "<style>1</style><style>2</style>NOP<style>4</style>",
           "NOP",
@@ -45,7 +50,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         );
     }
 
-    function test_extractStyleBlocks_blockWithAttributes() {
+    public function test_extractStyleBlocks_blockWithAttributes()
+    {
         $this->assertExtractStyleBlocks(
           '<style type="text/css">css</style>',
           '',
@@ -53,7 +59,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         );
     }
 
-    function test_extractStyleBlocks_styleWithPadding() {
+    public function test_extractStyleBlocks_styleWithPadding()
+    {
         $this->assertExtractStyleBlocks(
           "Alas<styled>Awesome</styled>\n<style>foo</style> Trendy!",
           "Alas<styled>Awesome</styled>\n Trendy!",
@@ -61,7 +68,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         );
     }
 
-    function assertCleanCSS($input, $expect = true) {
+    public function assertCleanCSS($input, $expect = true)
+    {
         $filter = new HTMLPurifier_Filter_ExtractStyleBlocks();
         if ($expect === true) $expect = $input;
         $this->normalize($input);
@@ -70,15 +78,18 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         $this->assertIdentical($result, $expect);
     }
 
-    function test_cleanCSS_malformed() {
+    public function test_cleanCSS_malformed()
+    {
         $this->assertCleanCSS('</style>', '');
     }
 
-    function test_cleanCSS_selector() {
+    public function test_cleanCSS_selector()
+    {
         $this->assertCleanCSS("a .foo #id div.cl#foo {\nfont-weight:700;\n}");
     }
 
-    function test_cleanCSS_angledBrackets() {
+    public function test_cleanCSS_angledBrackets()
+    {
         // [Content] No longer can smuggle in angled brackets using
         // font-family; when we add support for 'content', reinstate
         // this test.
@@ -88,7 +99,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         //);
     }
 
-    function test_cleanCSS_angledBrackets2() {
+    public function test_cleanCSS_angledBrackets2()
+    {
         // CSSTidy's behavior in this case is wrong, and should be fixed
         //$this->assertCleanCSS(
         //    "span[title=\"</style>\"] {\nfont-size:12pt;\n}",
@@ -96,18 +108,21 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         //);
     }
 
-    function test_cleanCSS_bogus() {
+    public function test_cleanCSS_bogus()
+    {
         $this->assertCleanCSS("div {bogus:tree;}", "div {\n}");
     }
 
     /* [CONTENT]
-    function test_cleanCSS_escapeCodes() {
+    public function test_cleanCSS_escapeCodes()
+    {
         $this->assertCleanCSS(
             ".class {\nfont-family:\"\\3C /style\\3E \";\n}"
         );
     }
 
-    function test_cleanCSS_noEscapeCodes() {
+    public function test_cleanCSS_noEscapeCodes()
+    {
         $this->config->set('Filter.ExtractStyleBlocks.Escaping', false);
         $this->assertCleanCSS(
             ".class {\nfont-family:\"</style>\";\n}"
@@ -115,7 +130,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     }
      */
 
-    function test_cleanCSS_scope() {
+    public function test_cleanCSS_scope()
+    {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
         $this->assertCleanCSS(
             "p {\ntext-indent:1em;\n}",
@@ -123,7 +139,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         );
     }
 
-    function test_cleanCSS_scopeWithSelectorCommas() {
+    public function test_cleanCSS_scopeWithSelectorCommas()
+    {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
         $this->assertCleanCSS(
             "b, i {\ntext-decoration:underline;\n}",
@@ -131,17 +148,20 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         );
     }
 
-    function test_cleanCSS_scopeWithNaughtySelector() {
+    public function test_cleanCSS_scopeWithNaughtySelector()
+    {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
         $this->assertCleanCSS("  + p {\ntext-indent:1em;\n}", '');
     }
 
-    function test_cleanCSS_scopeWithMultipleNaughtySelectors() {
+    public function test_cleanCSS_scopeWithMultipleNaughtySelectors()
+    {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
         $this->assertCleanCSS("  ++ ++ p {\ntext-indent:1em;\n}", '');
     }
 
-    function test_cleanCSS_scopeWithCommas() {
+    public function test_cleanCSS_scopeWithCommas()
+    {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo, .bar');
         $this->assertCleanCSS(
             "p {\ntext-indent:1em;\n}",
@@ -149,7 +169,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         );
     }
 
-    function test_cleanCSS_scopeAllWithCommas() {
+    public function test_cleanCSS_scopeAllWithCommas()
+    {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo, .bar');
         $this->assertCleanCSS(
             "p, div {\ntext-indent:1em;\n}",
@@ -157,7 +178,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         );
     }
 
-    function test_cleanCSS_scopeWithConflicts() {
+    public function test_cleanCSS_scopeWithConflicts()
+    {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', 'p');
         $this->assertCleanCSS(
 "div {
@@ -178,7 +200,8 @@ text-align:left;
         );
     }
 
-    function test_removeComments() {
+    public function test_removeComments()
+    {
         $this->assertCleanCSS(
 "<!--
 div {
@@ -191,7 +214,8 @@ text-align:right;
         );
     }
 
-    function test_atSelector() {
+    public function test_atSelector()
+    {
         $this->assertCleanCSS(
 "{
     b { text-align: center; }
@@ -200,7 +224,8 @@ text-align:right;
             );
     }
 
-    function test_selectorValidation() {
+    public function test_selectorValidation()
+    {
         $this->assertCleanCSS(
 "&, & {
 text-align: center;
@@ -226,7 +251,8 @@ text-align:center;
         $this->assertCleanCSS("doesnt-exist { text-align:center }", "");
     }
 
-    function test_cleanCSS_caseSensitive() {
+    public function test_cleanCSS_caseSensitive()
+    {
         $this->assertCleanCSS("a .foo #ID div.cl#foo {\nbackground:url(\"http://foo/BAR\");\n}");
     }
 

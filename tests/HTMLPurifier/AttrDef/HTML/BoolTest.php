@@ -3,14 +3,16 @@
 class HTMLPurifier_AttrDef_HTML_BoolTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_HTML_Bool('foo');
         $this->assertDef('foo');
         $this->assertDef('', false);
         $this->assertDef('bar', 'foo');
     }
 
-    function test_make() {
+    public function test_make()
+    {
         $factory = new HTMLPurifier_AttrDef_HTML_Bool();
         $def = $factory->make('foo');
         $def2 = new HTMLPurifier_AttrDef_HTML_Bool('foo');

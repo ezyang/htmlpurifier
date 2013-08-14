@@ -11,7 +11,8 @@ assertCli();
  * generated files are up-to-date.
  */
 
-function e($cmd) {
+function e($cmd)
+{
     echo "\$ $cmd\n";
     passthru($cmd, $status);
     echo "\n";

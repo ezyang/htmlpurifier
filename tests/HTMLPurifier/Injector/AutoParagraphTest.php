@@ -3,19 +3,22 @@
 class HTMLPurifier_Injector_AutoParagraphTest extends HTMLPurifier_InjectorHarness
 {
 
-    function setup() {
+    public function setup()
+    {
         parent::setup();
         $this->config->set('AutoFormat.AutoParagraph', true);
     }
 
-    function testSingleParagraph() {
+    public function testSingleParagraph()
+    {
         $this->assertResult(
             'Foobar',
             '<p>Foobar</p>'
         );
     }
 
-    function testSingleMultiLineParagraph() {
+    public function testSingleMultiLineParagraph()
+    {
         $this->assertResult(
 'Par 1
 Par 1 still',
@@ -24,7 +27,8 @@ Par 1 still</p>'
         );
     }
 
-    function testTwoParagraphs() {
+    public function testTwoParagraphs()
+    {
         $this->assertResult(
 'Par1
 
@@ -35,7 +39,8 @@ Par2',
         );
     }
 
-    function testTwoParagraphsWithLotsOfSpace() {
+    public function testTwoParagraphsWithLotsOfSpace()
+    {
         $this->assertResult(
 'Par1
 
@@ -48,7 +53,8 @@ Par2',
         );
     }
 
-    function testTwoParagraphsWithInlineElements() {
+    public function testTwoParagraphsWithInlineElements()
+    {
         $this->assertResult(
 '<b>Par1</b>
 
@@ -59,7 +65,8 @@ Par2',
         );
     }
 
-    function testSingleParagraphThatLooksLikeTwo() {
+    public function testSingleParagraphThatLooksLikeTwo()
+    {
         $this->assertResult(
 '<b>Par1
 
@@ -70,7 +77,8 @@ Par2</b></p>'
         );
     }
 
-    function testAddParagraphAdjacentToParagraph() {
+    public function testAddParagraphAdjacentToParagraph()
+    {
         $this->assertResult(
             'Par1<p>Par2</p>',
 '<p>Par1</p>
@@ -79,14 +87,16 @@ Par2</b></p>'
         );
     }
 
-    function testParagraphUnclosedInlineElement() {
+    public function testParagraphUnclosedInlineElement()
+    {
         $this->assertResult(
             '<b>Par1',
             '<p><b>Par1</b></p>'
         );
     }
 
-    function testPreservePreTags() {
+    public function testPreservePreTags()
+    {
         $this->assertResult(
 '<pre>Par1
 
@@ -94,7 +104,8 @@ Par1</pre>'
         );
     }
 
-    function testIgnoreTrailingWhitespace() {
+    public function testIgnoreTrailingWhitespace()
+    {
         $this->assertResult(
 'Par1
 
@@ -105,7 +116,8 @@ Par1</pre>'
         );
     }
 
-    function testDoNotParagraphBlockElements() {
+    public function testDoNotParagraphBlockElements()
+    {
         $this->assertResult(
 'Par1
 
@@ -120,14 +132,16 @@ Par3',
         );
     }
 
-    function testParagraphTextAndInlineNodes() {
+    public function testParagraphTextAndInlineNodes()
+    {
         $this->assertResult(
 'Par<b>1</b>',
             '<p>Par<b>1</b></p>'
         );
     }
 
-    function testPreserveLeadingWhitespace() {
+    public function testPreserveLeadingWhitespace()
+    {
         $this->assertResult(
 '
 
@@ -138,7 +152,8 @@ Par',
         );
     }
 
-    function testPreserveSurroundingWhitespace() {
+    public function testPreserveSurroundingWhitespace()
+    {
         $this->assertResult(
 '
 
@@ -153,7 +168,8 @@ Par
         );
     }
 
-    function testParagraphInsideBlockNode() {
+    public function testParagraphInsideBlockNode()
+    {
         $this->assertResult(
 '<div>Par1
 
@@ -164,7 +180,8 @@ Par2</div>',
         );
     }
 
-    function testParagraphInlineNodeInsideBlockNode() {
+    public function testParagraphInlineNodeInsideBlockNode()
+    {
         $this->assertResult(
 '<div><b>Par1</b>
 
@@ -175,11 +192,13 @@ Par2</div>',
         );
     }
 
-    function testNoParagraphWhenOnlyOneInsideBlockNode() {
+    public function testNoParagraphWhenOnlyOneInsideBlockNode()
+    {
         $this->assertResult('<div>Par1</div>');
     }
 
-    function testParagraphTwoInlineNodesInsideBlockNode() {
+    public function testParagraphTwoInlineNodesInsideBlockNode()
+    {
         $this->assertResult(
 '<div><b>Par1</b>
 
@@ -190,7 +209,8 @@ Par2</div>',
         );
     }
 
-    function testPreserveInlineNodesInPreTag() {
+    public function testPreserveInlineNodesInPreTag()
+    {
         $this->assertResult(
 '<pre><b>Par1</b>
 
@@ -198,7 +218,8 @@ Par2</div>',
         );
     }
 
-    function testSplitUpInternalsOfPTagInBlockNode() {
+    public function testSplitUpInternalsOfPTagInBlockNode()
+    {
         $this->assertResult(
 '<div><p>Foo
 
@@ -209,7 +230,8 @@ Bar</p></div>',
         );
     }
 
-    function testSplitUpInlineNodesInPTagInBlockNode() {
+    public function testSplitUpInlineNodesInPTagInBlockNode()
+    {
         $this->assertResult(
 '<div><p><b>Foo</b>
 
@@ -220,11 +242,13 @@ Bar</p></div>',
         );
     }
 
-    function testNoParagraphSingleInlineNodeInBlockNode() {
+    public function testNoParagraphSingleInlineNodeInBlockNode()
+    {
         $this->assertResult( '<div><b>Foo</b></div>' );
     }
 
-    function testParagraphInBlockquote() {
+    public function testParagraphInBlockquote()
+    {
         $this->assertResult(
 '<blockquote>Par1
 
@@ -235,7 +259,8 @@ Par2</blockquote>',
         );
     }
 
-    function testNoParagraphBetweenListItem() {
+    public function testNoParagraphBetweenListItem()
+    {
         $this->assertResult(
 '<ul><li>Foo</li>
 
@@ -243,7 +268,8 @@ Par2</blockquote>',
         );
     }
 
-    function testParagraphSingleElementWithSurroundingSpace() {
+    public function testParagraphSingleElementWithSurroundingSpace()
+    {
         $this->assertResult(
 '<div>
 
@@ -258,7 +284,8 @@ Bar
         );
     }
 
-    function testIgnoreExtraSpaceWithLeadingInlineNode() {
+    public function testIgnoreExtraSpaceWithLeadingInlineNode()
+    {
         $this->assertResult(
 '<b>Par1</b>a
 
@@ -271,7 +298,8 @@ Par2',
         );
     }
 
-    function testAbsorbExtraEndingPTag() {
+    public function testAbsorbExtraEndingPTag()
+    {
         $this->assertResult(
 'Par1
 
@@ -282,7 +310,8 @@ Par2</p>',
         );
     }
 
-    function testAbsorbExtraEndingDivTag() {
+    public function testAbsorbExtraEndingDivTag()
+    {
         $this->assertResult(
 'Par1
 
@@ -293,7 +322,8 @@ Par2</div>',
         );
     }
 
-    function testDoNotParagraphSingleSurroundingSpaceInBlockNode() {
+    public function testDoNotParagraphSingleSurroundingSpaceInBlockNode()
+    {
         $this->assertResult(
 '<div>
 Par1
@@ -301,7 +331,8 @@ Par1
         );
     }
 
-    function testBlockNodeTextDelimeterInBlockNode() {
+    public function testBlockNodeTextDelimeterInBlockNode()
+    {
         $this->assertResult(
 '<div>Par1
 
@@ -312,14 +343,16 @@ Par1
         );
     }
 
-    function testBlockNodeTextDelimeterWithoutDoublespaceInBlockNode() {
+    public function testBlockNodeTextDelimeterWithoutDoublespaceInBlockNode()
+    {
         $this->assertResult(
 '<div>Par1
 <div>Par2</div></div>'
         );
     }
 
-    function testBlockNodeTextDelimeterWithoutDoublespace() {
+    public function testBlockNodeTextDelimeterWithoutDoublespace()
+    {
         $this->assertResult(
 'Par1
 <div>Par2</div>',
@@ -330,7 +363,8 @@ Par1
         );
     }
 
-    function testTwoParagraphsOfTextAndInlineNode() {
+    public function testTwoParagraphsOfTextAndInlineNode()
+    {
         $this->assertResult(
 'Par1
 
@@ -341,32 +375,37 @@ Par1
         );
     }
 
-    function testLeadingInlineNodeParagraph() {
+    public function testLeadingInlineNodeParagraph()
+    {
         $this->assertResult(
 '<img /> Foo',
 '<p><img /> Foo</p>'
         );
     }
 
-    function testTrailingInlineNodeParagraph() {
+    public function testTrailingInlineNodeParagraph()
+    {
         $this->assertResult(
 '<li>Foo <a>bar</a></li>'
         );
     }
 
-    function testTwoInlineNodeParagraph() {
+    public function testTwoInlineNodeParagraph()
+    {
         $this->assertResult(
 '<li><b>baz</b><a>bar</a></li>'
         );
     }
 
-    function testNoParagraphTrailingBlockNodeInBlockNode() {
+    public function testNoParagraphTrailingBlockNodeInBlockNode()
+    {
         $this->assertResult(
 '<div><div>asdf</div><b>asdf</b></div>'
         );
     }
 
-    function testParagraphTrailingBlockNodeWithDoublespaceInBlockNode() {
+    public function testParagraphTrailingBlockNodeWithDoublespaceInBlockNode()
+    {
         $this->assertResult(
 '<div><div>asdf</div>
 
@@ -377,14 +416,16 @@ Par1
         );
     }
 
-    function testParagraphTwoInlineNodesAndWhitespaceNode() {
+    public function testParagraphTwoInlineNodesAndWhitespaceNode()
+    {
         $this->assertResult(
 '<b>One</b> <i>Two</i>',
 '<p><b>One</b> <i>Two</i></p>'
         );
     }
 
-    function testNoParagraphWithInlineRootNode() {
+    public function testNoParagraphWithInlineRootNode()
+    {
         $this->config->set('HTML.Parent', 'span');
         $this->assertResult(
 'Par
@@ -393,13 +434,15 @@ Par2'
         );
     }
 
-    function testInlineAndBlockTagInDivNoParagraph() {
+    public function testInlineAndBlockTagInDivNoParagraph()
+    {
         $this->assertResult(
             '<div><code>bar</code> mmm <pre>asdf</pre></div>'
         );
     }
 
-    function testInlineAndBlockTagInDivNeedingParagraph() {
+    public function testInlineAndBlockTagInDivNeedingParagraph()
+    {
         $this->assertResult(
 '<div><code>bar</code> mmm
 
@@ -410,7 +453,8 @@ Par2'
         );
     }
 
-    function testTextInlineNodeTextThenDoubleNewlineNeedsParagraph() {
+    public function testTextInlineNodeTextThenDoubleNewlineNeedsParagraph()
+    {
         $this->assertResult(
 '<div>asdf <code>bar</code> mmm
 
@@ -421,7 +465,8 @@ Par2'
         );
     }
 
-    function testUpcomingTokenHasNewline() {
+    public function testUpcomingTokenHasNewline()
+    {
         $this->assertResult(
 '<div>Test<b>foo</b>bar<b>bing</b>bang
 
@@ -432,7 +477,8 @@ boo</div>',
 );
     }
 
-    function testEmptyTokenAtEndOfDiv() {
+    public function testEmptyTokenAtEndOfDiv()
+    {
         $this->assertResult(
 '<div><p>foo</p>
 </div>',
@@ -441,7 +487,8 @@ boo</div>',
 );
     }
 
-    function testEmptyDoubleLineTokenAtEndOfDiv() {
+    public function testEmptyDoubleLineTokenAtEndOfDiv()
+    {
         $this->assertResult(
 '<div><p>foo</p>
 
@@ -452,26 +499,31 @@ boo</div>',
 );
     }
 
-    function testTextState11Root() {
+    public function testTextState11Root()
+    {
         $this->assertResult('<div></div>   ');
     }
 
-    function testTextState11Element() {
+    public function testTextState11Element()
+    {
         $this->assertResult(
 "<div><div></div>
 
 </div>");
     }
 
-    function testTextStateLikeElementState111NoWhitespace() {
+    public function testTextStateLikeElementState111NoWhitespace()
+    {
         $this->assertResult('<div><p>P</p>Boo</div>', '<div><p>P</p>Boo</div>');
     }
 
-    function testElementState111NoWhitespace() {
+    public function testElementState111NoWhitespace()
+    {
         $this->assertResult('<div><p>P</p><b>Boo</b></div>', '<div><p>P</p><b>Boo</b></div>');
     }
 
-    function testElementState133() {
+    public function testElementState133()
+    {
         $this->assertResult(
 "<div><b>B</b><pre>Ba</pre>
 
@@ -482,13 +534,15 @@ Bar</div>",
 );
     }
 
-    function testElementState22() {
+    public function testElementState22()
+    {
         $this->assertResult(
             '<ul><li>foo</li></ul>'
         );
     }
 
-    function testElementState311() {
+    public function testElementState311()
+    {
         $this->assertResult(
             '<p>Foo</p><b>Bar</b>',
 '<p>Foo</p>
@@ -497,20 +551,23 @@ Bar</div>",
         );
     }
 
-    function testAutoClose() {
+    public function testAutoClose()
+    {
         $this->assertResult(
             '<p></p>
 <hr />'
         );
     }
 
-    function testErrorNeeded() {
+    public function testErrorNeeded()
+    {
         $this->config->set('HTML.Allowed', 'b');
         $this->expectError('Cannot enable AutoParagraph injector because p is not allowed');
         $this->assertResult('<b>foobar</b>');
     }
 
-    function testParentElement() {
+    public function testParentElement()
+    {
         $this->config->set('HTML.Allowed', 'p,ul,li');
         $this->assertResult('Foo<ul><li>Bar</li></ul>', "<p>Foo</p>\n\n<ul><li>Bar</li></ul>");
     }

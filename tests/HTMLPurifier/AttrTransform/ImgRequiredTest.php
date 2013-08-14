@@ -3,12 +3,14 @@
 class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransformHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_AttrTransform_ImgRequired();
     }
 
-    function testAddMissingAttr() {
+    public function testAddMissingAttr()
+    {
         $this->config->set('Core.RemoveInvalidImg', false);
         $this->assertResult(
             array(),
@@ -16,7 +18,8 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
         );
     }
 
-    function testAlternateDefaults() {
+    public function testAlternateDefaults()
+    {
         $this->config->set('Attr.DefaultInvalidImage', 'blank.png');
         $this->config->set('Attr.DefaultInvalidImageAlt', 'Pawned!');
         $this->config->set('Attr.DefaultImageAlt', 'not pawned');
@@ -27,14 +30,16 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
         );
     }
 
-    function testGenerateAlt() {
+    public function testGenerateAlt()
+    {
         $this->assertResult(
             array('src' => '/path/to/foobar.png'),
             array('src' => '/path/to/foobar.png', 'alt' => 'foobar.png')
         );
     }
 
-    function testAddDefaultSrc() {
+    public function testAddDefaultSrc()
+    {
         $this->config->set('Core.RemoveInvalidImg', false);
         $this->assertResult(
             array('alt' => 'intrigue'),
@@ -42,7 +47,8 @@ class HTMLPurifier_AttrTransform_ImgRequiredTest extends HTMLPurifier_AttrTransf
         );
     }
 
-    function testAddDefaultAlt() {
+    public function testAddDefaultAlt()
+    {
         $this->config->set('Attr.DefaultImageAlt', 'default');
         $this->assertResult(
             array('src' => ''),

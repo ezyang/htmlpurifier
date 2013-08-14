@@ -3,23 +3,27 @@
 class HTMLPurifier_URIFilter_HostBlacklistTest extends HTMLPurifier_URIFilterHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->filter = new HTMLPurifier_URIFilter_HostBlacklist();
     }
 
-    function testRejectBlacklistedHost() {
+    public function testRejectBlacklistedHost()
+    {
         $this->config->set('URI.HostBlacklist', 'example.com');
         $this->assertFiltering('http://example.com', false);
     }
 
-    function testRejectBlacklistedHostThoughNotTrue() {
+    public function testRejectBlacklistedHostThoughNotTrue()
+    {
         // maybe this behavior should change
         $this->config->set('URI.HostBlacklist', 'example.com');
         $this->assertFiltering('http://example.comcast.com', false);
     }
 
-    function testPreserveNonBlacklistedHost() {
+    public function testPreserveNonBlacklistedHost()
+    {
         $this->config->set('URI.HostBlacklist', 'example.com');
         $this->assertFiltering('http://google.com');
     }

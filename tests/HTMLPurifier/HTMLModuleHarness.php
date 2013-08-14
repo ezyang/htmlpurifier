@@ -2,7 +2,8 @@
 
 class HTMLPurifier_HTMLModuleHarness extends HTMLPurifier_StrategyHarness
 {
-    function setup() {
+    public function setup()
+    {
         parent::setup();
         $this->obj = new HTMLPurifier_Strategy_Core();
     }

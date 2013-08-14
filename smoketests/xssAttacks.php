@@ -2,7 +2,8 @@
 
 require_once('common.php');
 
-function formatCode($string) {
+function formatCode($string)
+{
     return
         str_replace(
             array("\t", '»', '\0(null)'),

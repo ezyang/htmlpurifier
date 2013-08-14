@@ -5,16 +5,32 @@
  */
 class HTMLPurifier_ChildDef_List extends HTMLPurifier_ChildDef
 {
+    /**
+     * @type string
+     */
     public $type = 'list';
+    /**
+     * @type array
+     */
     // lying a little bit, so that we can handle ul and ol ourselves
     // XXX: This whole business with 'wrap' is all a bit unsatisfactory
     public $elements = array('li' => true, 'ul' => true, 'ol' => true);
-    public function validateChildren($tokens_of_children, $config, $context) {
+
+    /**
+     * @param array $tokens_of_children
+     * @param HTMLPurifier_Config $config
+     * @param HTMLPurifier_Context $context
+     * @return array
+     */
+    public function validateChildren($tokens_of_children, $config, $context)
+    {
         // Flag for subclasses
         $this->whitespace = false;
 
         // if there are no tokens, delete parent node
-        if (empty($tokens_of_children)) return false;
+        if (empty($tokens_of_children)) {
+            return false;
+        }
 
         // the new set of children
         $result = array();
@@ -62,7 +78,7 @@ class HTMLPurifier_ChildDef_List extends HTMLPurifier_ChildDef
                         $result[] = new HTMLPurifier_Token_Start('li');
                     } else {
                         // backtrack until </li> found
-                        while(true) {
+                        while (true) {
                             $t = array_pop($result);
                             if ($t instanceof HTMLPurifier_Token_End) {
                                 // XXX actually, these invariants could very plausibly be violated
@@ -84,7 +100,10 @@ class HTMLPurifier_ChildDef_List extends HTMLPurifier_ChildDef
                                 break;
                             } else {
                                 if (!$t->is_whitespace) {
-                                    trigger_error("Only whitespace present invariant violated in List ChildDef", E_USER_ERROR);
+                                    trigger_error(
+                                        "Only whitespace present invariant violated in List ChildDef",
+                                        E_USER_ERROR
+                                    );
                                     return false;
                                 }
                             }
@@ -108,11 +127,15 @@ class HTMLPurifier_ChildDef_List extends HTMLPurifier_ChildDef
         if ($need_close_li) {
             $result[] = new HTMLPurifier_Token_End('li');
         }
-        if (empty($result)) return false;
+        if (empty($result)) {
+            return false;
+        }
         if ($all_whitespace) {
             return false;
         }
-        if ($tokens_of_children == $result) return true;
+        if ($tokens_of_children == $result) {
+            return true;
+        }
         return $result;
     }
 }

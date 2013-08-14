@@ -5,12 +5,14 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
 
     protected $ac;
 
-    public function __construct($encoding, $ac) {
+    public function __construct($encoding, $ac)
+    {
         $this->ac = $ac;
         parent::__construct($encoding);
     }
 
-    public function paintHeader($test_name) {
+    public function paintHeader($test_name)
+    {
         parent::paintHeader($test_name);
 ?>
 <form action="" method="get" id="select">
@@ -29,7 +31,8 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
         flush();
     }
 
-    public function paintFooter($test_name) {
+    public function paintFooter($test_name)
+    {
         if (function_exists('xdebug_peak_memory_usage')) {
             $max_mem = number_format(xdebug_peak_memory_usage());
             echo "<div>Max memory usage: $max_mem bytes</div>";
@@ -37,7 +40,8 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
         parent::paintFooter($test_name);
     }
 
-    protected function getCss() {
+    protected function getCss()
+    {
         $css = parent::getCss();
         $css .= '
         #select {position:absolute;top:0.2em;right:0.2em;}
@@ -45,7 +49,8 @@ class HTMLPurifier_SimpleTest_Reporter extends HTMLReporter
         return $css;
     }
 
-    function getTestList() {
+    public function getTestList()
+    {
         // hacky; depends on a specific implementation of paintPass, etc.
         $list = parent::getTestList();
         $testcase = $list[1];

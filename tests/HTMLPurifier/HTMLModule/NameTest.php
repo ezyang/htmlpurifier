@@ -3,25 +3,29 @@
 class HTMLPurifier_HTMLModule_NameTest extends HTMLPurifier_HTMLModuleHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
     }
 
-    function testBasicUse() {
+    public function testBasicUse()
+    {
         $this->config->set('Attr.EnableID', true);
         $this->assertResult(
             '<a name="foo">bar</a>'
         );
     }
 
-    function testCDATA() {
+    public function testCDATA()
+    {
         $this->config->set('HTML.Attr.Name.UseCDATA', true);
         $this->assertResult(
             '<a name="2">Baz</a><a name="2">Bar</a>'
         );
     }
 
-    function testCDATAWithHeavyTidy() {
+    public function testCDATAWithHeavyTidy()
+    {
         $this->config->set('HTML.Attr.Name.UseCDATA', true);
         $this->config->set('HTML.TidyLevel', 'heavy');
         $this->assertResult('<a name="2">Baz</a>');

@@ -126,7 +126,8 @@ function phorum_htmlpurifier_format($data)
 /**
  * Generates a signature based on a message array
  */
-function phorum_htmlpurifier_generate_sig($row) {
+function phorum_htmlpurifier_generate_sig($row)
+{
     $phorum_sig = '';
     if(isset($row["user"]["signature"])
        && isset($row['meta']['show_signature']) && $row['meta']['show_signature']==1){
@@ -141,7 +142,8 @@ function phorum_htmlpurifier_generate_sig($row) {
 /**
  * Generates an edit message based on a message array
  */
-function phorum_htmlpurifier_generate_editmessage($row) {
+function phorum_htmlpurifier_generate_editmessage($row)
+{
     $PHORUM = $GLOBALS['PHORUM'];
     $editmessage = '';
     if(isset($row['meta']['edit_count']) && $row['meta']['edit_count'] > 0) {
@@ -160,7 +162,8 @@ function phorum_htmlpurifier_generate_editmessage($row) {
  * Removes the signature and edit message from a message
  * @param $row Message passed by reference
  */
-function phorum_htmlpurifier_remove_sig_and_editmessage(&$row) {
+function phorum_htmlpurifier_remove_sig_and_editmessage(&$row)
+{
     $signature = phorum_htmlpurifier_generate_sig($row);
     $editmessage = phorum_htmlpurifier_generate_editmessage($row);
     $replacements = array();
@@ -178,7 +181,8 @@ function phorum_htmlpurifier_remove_sig_and_editmessage(&$row) {
  * @note This function could generate the actual cache entries, but
  *       since there's data missing that must be deferred to the first read
  */
-function phorum_htmlpurifier_posting($message) {
+function phorum_htmlpurifier_posting($message)
+{
     $PHORUM = $GLOBALS["PHORUM"];
     unset($message['meta']['body_cache']); // invalidate the cache
     $message['meta']['body_cache_serial'] = $PHORUM['mod_htmlpurifier']['body_cache_serial'];
@@ -188,7 +192,8 @@ function phorum_htmlpurifier_posting($message) {
 /**
  * Overload quoting mechanism to prevent default, mail-style quote from happening
  */
-function phorum_htmlpurifier_quote($array) {
+function phorum_htmlpurifier_quote($array)
+{
     $PHORUM = $GLOBALS["PHORUM"];
     $purifier =& HTMLPurifier::getInstance();
     $text = $purifier->purify($array[1]);
@@ -200,8 +205,8 @@ function phorum_htmlpurifier_quote($array) {
  * Ensure that our format hook is processed last. Also, loads the library.
  * @credits <http://secretsauce.phorum.org/snippets/make_bbcode_last_formatter.php.txt>
  */
-function phorum_htmlpurifier_common() {
-
+function phorum_htmlpurifier_common()
+{
     require_once(dirname(__FILE__).'/htmlpurifier/HTMLPurifier.auto.php');
     require(dirname(__FILE__).'/init-config.php');
 
@@ -232,7 +237,8 @@ function phorum_htmlpurifier_common() {
  * Pre-emptively performs purification if it looks like a WYSIWYG editor
  * is being used
  */
-function phorum_htmlpurifier_before_editor($message) {
+function phorum_htmlpurifier_before_editor($message)
+{
     if (!empty($GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'])) {
         if (!empty($message['body'])) {
             $body = $message['body'];
@@ -248,7 +254,8 @@ function phorum_htmlpurifier_before_editor($message) {
     return $message;
 }
 
-function phorum_htmlpurifier_editor_after_subject() {
+function phorum_htmlpurifier_editor_after_subject()
+{
     // don't show this message if it's a WYSIWYG editor, since it will
     // then be handled automatically
     if (!empty($GLOBALS['PHORUM']['mod_htmlpurifier']['wysiwyg'])) {

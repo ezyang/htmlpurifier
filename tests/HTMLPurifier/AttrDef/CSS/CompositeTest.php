@@ -5,7 +5,8 @@ class HTMLPurifier_AttrDef_CSS_Composite_Testable extends
 {
 
     // we need to pass by ref to get the mocks in
-    function HTMLPurifier_AttrDef_CSS_Composite_Testable(&$defs) {
+    public function HTMLPurifier_AttrDef_CSS_Composite_Testable(&$defs)
+    {
         $this->defs =& $defs;
     }
 
@@ -16,8 +17,8 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
 
     protected $def1, $def2;
 
-    function test() {
-
+    public function test()
+    {
         generate_mock_once('HTMLPurifier_AttrDef');
 
         $config = HTMLPurifier_Config::createDefault();

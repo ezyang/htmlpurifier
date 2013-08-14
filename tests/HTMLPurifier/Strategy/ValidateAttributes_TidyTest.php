@@ -3,342 +3,391 @@
 class HTMLPurifier_Strategy_ValidateAttributes_TidyTest extends HTMLPurifier_StrategyHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_Strategy_ValidateAttributes();
         $this->config->set('HTML.TidyLevel', 'heavy');
     }
 
-    function testConvertCenterAlign() {
+    public function testConvertCenterAlign()
+    {
         $this->assertResult(
             '<h1 align="center">Centered Headline</h1>',
             '<h1 style="text-align:center;">Centered Headline</h1>'
         );
     }
 
-    function testConvertRightAlign() {
+    public function testConvertRightAlign()
+    {
         $this->assertResult(
             '<h1 align="right">Right-aligned Headline</h1>',
             '<h1 style="text-align:right;">Right-aligned Headline</h1>'
         );
     }
 
-    function testConvertLeftAlign() {
+    public function testConvertLeftAlign()
+    {
         $this->assertResult(
             '<h1 align="left">Left-aligned Headline</h1>',
             '<h1 style="text-align:left;">Left-aligned Headline</h1>'
         );
     }
 
-    function testConvertJustifyAlign() {
+    public function testConvertJustifyAlign()
+    {
         $this->assertResult(
             '<p align="justify">Justified Paragraph</p>',
             '<p style="text-align:justify;">Justified Paragraph</p>'
         );
     }
 
-    function testRemoveInvalidAlign() {
+    public function testRemoveInvalidAlign()
+    {
         $this->assertResult(
             '<h1 align="invalid">Invalid Headline</h1>',
             '<h1>Invalid Headline</h1>'
         );
     }
 
-    function testConvertTableLengths() {
+    public function testConvertTableLengths()
+    {
         $this->assertResult(
             '<td width="5%" height="10" /><th width="10" height="5%" /><hr width="10" height="10" />',
             '<td style="width:5%;height:10px;" /><th style="width:10px;height:5%;" /><hr style="width:10px;" />'
         );
     }
 
-    function testTdConvertNowrap() {
+    public function testTdConvertNowrap()
+    {
         $this->assertResult(
             '<td nowrap />',
             '<td style="white-space:nowrap;" />'
         );
     }
 
-    function testCaptionConvertAlignLeft() {
+    public function testCaptionConvertAlignLeft()
+    {
         $this->assertResult(
             '<caption align="left" />',
             '<caption style="text-align:left;" />'
         );
     }
 
-    function testCaptionConvertAlignRight() {
+    public function testCaptionConvertAlignRight()
+    {
         $this->assertResult(
             '<caption align="right" />',
             '<caption style="text-align:right;" />'
         );
     }
 
-    function testCaptionConvertAlignTop() {
+    public function testCaptionConvertAlignTop()
+    {
         $this->assertResult(
             '<caption align="top" />',
             '<caption style="caption-side:top;" />'
         );
     }
 
-    function testCaptionConvertAlignBottom() {
+    public function testCaptionConvertAlignBottom()
+    {
         $this->assertResult(
             '<caption align="bottom" />',
             '<caption style="caption-side:bottom;" />'
         );
     }
 
-    function testCaptionRemoveInvalidAlign() {
+    public function testCaptionRemoveInvalidAlign()
+    {
         $this->assertResult(
             '<caption align="nonsense" />',
             '<caption />'
         );
     }
 
-    function testTableConvertAlignLeft() {
+    public function testTableConvertAlignLeft()
+    {
         $this->assertResult(
             '<table align="left" />',
             '<table style="float:left;" />'
         );
     }
 
-    function testTableConvertAlignCenter() {
+    public function testTableConvertAlignCenter()
+    {
         $this->assertResult(
             '<table align="center" />',
             '<table style="margin-left:auto;margin-right:auto;" />'
         );
     }
 
-    function testTableConvertAlignRight() {
+    public function testTableConvertAlignRight()
+    {
         $this->assertResult(
             '<table align="right" />',
             '<table style="float:right;" />'
         );
     }
 
-    function testTableRemoveInvalidAlign() {
+    public function testTableRemoveInvalidAlign()
+    {
         $this->assertResult(
             '<table align="top" />',
             '<table />'
         );
     }
 
-    function testImgConvertAlignLeft() {
+    public function testImgConvertAlignLeft()
+    {
         $this->assertResult(
             '<img src="foobar.jpg" alt="foobar" align="left" />',
             '<img src="foobar.jpg" alt="foobar" style="float:left;" />'
         );
     }
 
-    function testImgConvertAlignRight() {
+    public function testImgConvertAlignRight()
+    {
         $this->assertResult(
             '<img src="foobar.jpg" alt="foobar" align="right" />',
             '<img src="foobar.jpg" alt="foobar" style="float:right;" />'
         );
     }
 
-    function testImgConvertAlignBottom() {
+    public function testImgConvertAlignBottom()
+    {
         $this->assertResult(
             '<img src="foobar.jpg" alt="foobar" align="bottom" />',
             '<img src="foobar.jpg" alt="foobar" style="vertical-align:baseline;" />'
         );
     }
 
-    function testImgConvertAlignMiddle() {
+    public function testImgConvertAlignMiddle()
+    {
         $this->assertResult(
             '<img src="foobar.jpg" alt="foobar" align="middle" />',
             '<img src="foobar.jpg" alt="foobar" style="vertical-align:middle;" />'
         );
     }
 
-    function testImgConvertAlignTop() {
+    public function testImgConvertAlignTop()
+    {
         $this->assertResult(
             '<img src="foobar.jpg" alt="foobar" align="top" />',
             '<img src="foobar.jpg" alt="foobar" style="vertical-align:top;" />'
         );
     }
 
-    function testImgRemoveInvalidAlign() {
+    public function testImgRemoveInvalidAlign()
+    {
         $this->assertResult(
             '<img src="foobar.jpg" alt="foobar" align="outerspace" />',
             '<img src="foobar.jpg" alt="foobar" />'
         );
     }
 
-    function testBorderConvertHVSpace() {
+    public function testBorderConvertHVSpace()
+    {
         $this->assertResult(
             '<img src="foo" alt="foo" hspace="1" vspace="3" />',
             '<img src="foo" alt="foo" style="margin-top:3px;margin-bottom:3px;margin-left:1px;margin-right:1px;" />'
         );
     }
 
-    function testHrConvertSize() {
+    public function testHrConvertSize()
+    {
         $this->assertResult(
             '<hr size="3" />',
             '<hr style="height:3px;" />'
         );
     }
 
-    function testHrConvertNoshade() {
+    public function testHrConvertNoshade()
+    {
         $this->assertResult(
             '<hr noshade />',
             '<hr style="color:#808080;background-color:#808080;border:0;" />'
         );
     }
 
-    function testHrConvertAlignLeft() {
+    public function testHrConvertAlignLeft()
+    {
         $this->assertResult(
             '<hr align="left" />',
             '<hr style="margin-left:0;margin-right:auto;text-align:left;" />'
         );
     }
 
-    function testHrConvertAlignCenter() {
+    public function testHrConvertAlignCenter()
+    {
         $this->assertResult(
             '<hr align="center" />',
             '<hr style="margin-left:auto;margin-right:auto;text-align:center;" />'
         );
     }
 
-    function testHrConvertAlignRight() {
+    public function testHrConvertAlignRight()
+    {
         $this->assertResult(
             '<hr align="right" />',
             '<hr style="margin-left:auto;margin-right:0;text-align:right;" />'
         );
     }
 
-    function testHrRemoveInvalidAlign() {
+    public function testHrRemoveInvalidAlign()
+    {
         $this->assertResult(
             '<hr align="bottom" />',
             '<hr />'
         );
     }
 
-    function testBrConvertClearLeft() {
+    public function testBrConvertClearLeft()
+    {
         $this->assertResult(
             '<br clear="left" />',
             '<br style="clear:left;" />'
         );
     }
 
-    function testBrConvertClearRight() {
+    public function testBrConvertClearRight()
+    {
         $this->assertResult(
             '<br clear="right" />',
             '<br style="clear:right;" />'
         );
     }
 
-    function testBrConvertClearAll() {
+    public function testBrConvertClearAll()
+    {
         $this->assertResult(
             '<br clear="all" />',
             '<br style="clear:both;" />'
         );
     }
 
-    function testBrConvertClearNone() {
+    public function testBrConvertClearNone()
+    {
         $this->assertResult(
             '<br clear="none" />',
             '<br style="clear:none;" />'
         );
     }
 
-    function testBrRemoveInvalidClear() {
+    public function testBrRemoveInvalidClear()
+    {
         $this->assertResult(
             '<br clear="foo" />',
             '<br />'
         );
     }
 
-    function testUlConvertTypeDisc() {
+    public function testUlConvertTypeDisc()
+    {
         $this->assertResult(
             '<ul type="disc" />',
             '<ul style="list-style-type:disc;" />'
         );
     }
 
-    function testUlConvertTypeSquare() {
+    public function testUlConvertTypeSquare()
+    {
         $this->assertResult(
             '<ul type="square" />',
             '<ul style="list-style-type:square;" />'
         );
     }
 
-    function testUlConvertTypeCircle() {
+    public function testUlConvertTypeCircle()
+    {
         $this->assertResult(
             '<ul type="circle" />',
             '<ul style="list-style-type:circle;" />'
         );
     }
 
-    function testUlConvertTypeCaseInsensitive() {
+    public function testUlConvertTypeCaseInsensitive()
+    {
         $this->assertResult(
             '<ul type="CIRCLE" />',
             '<ul style="list-style-type:circle;" />'
         );
     }
 
-    function testUlRemoveInvalidType() {
+    public function testUlRemoveInvalidType()
+    {
         $this->assertResult(
             '<ul type="a" />',
             '<ul />'
         );
     }
 
-    function testOlConvertType1() {
+    public function testOlConvertType1()
+    {
         $this->assertResult(
             '<ol type="1" />',
             '<ol style="list-style-type:decimal;" />'
         );
     }
 
-    function testOlConvertTypeLowerI() {
+    public function testOlConvertTypeLowerI()
+    {
         $this->assertResult(
             '<ol type="i" />',
             '<ol style="list-style-type:lower-roman;" />'
         );
     }
 
-    function testOlConvertTypeUpperI() {
+    public function testOlConvertTypeUpperI()
+    {
         $this->assertResult(
             '<ol type="I" />',
             '<ol style="list-style-type:upper-roman;" />'
         );
     }
 
-    function testOlConvertTypeLowerA() {
+    public function testOlConvertTypeLowerA()
+    {
         $this->assertResult(
             '<ol type="a" />',
             '<ol style="list-style-type:lower-alpha;" />'
         );
     }
 
-    function testOlConvertTypeUpperA() {
+    public function testOlConvertTypeUpperA()
+    {
         $this->assertResult(
             '<ol type="A" />',
             '<ol style="list-style-type:upper-alpha;" />'
         );
     }
 
-    function testOlRemoveInvalidType() {
+    public function testOlRemoveInvalidType()
+    {
         $this->assertResult(
             '<ol type="disc" />',
             '<ol />'
         );
     }
 
-    function testLiConvertTypeCircle() {
+    public function testLiConvertTypeCircle()
+    {
         $this->assertResult(
             '<li type="circle" />',
             '<li style="list-style-type:circle;" />'
         );
     }
 
-    function testLiConvertTypeA() {
+    public function testLiConvertTypeA()
+    {
         $this->assertResult(
             '<li type="A" />',
             '<li style="list-style-type:upper-alpha;" />'
         );
     }
 
-    function testLiConvertTypeCaseSensitive() {
+    public function testLiConvertTypeCaseSensitive()
+    {
         $this->assertResult(
             '<li type="CIRCLE" />',
             '<li />'

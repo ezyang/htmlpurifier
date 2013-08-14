@@ -3,8 +3,8 @@
 class HTMLPurifier_AttrDef_HTML_LinkTypesTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function testNull() {
-
+    public function testNull()
+    {
         $this->def = new HTMLPurifier_AttrDef_HTML_LinkTypes('rel');
         $this->config->set('Attr.AllowedRel', array('nofollow', 'foo'));
 

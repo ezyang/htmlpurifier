@@ -1,6 +1,7 @@
 <?php
 
-function phorum_htmlpurifier_save_settings() {
+function phorum_htmlpurifier_save_settings()
+{
     global $PHORUM;
     if (phorum_htmlpurifier_config_file_exists()) {
         echo "Cannot update settings, <code>mods/htmlpurifier/config.php</code> already exists. To change
@@ -19,7 +20,8 @@ function phorum_htmlpurifier_save_settings() {
     }
 }
 
-function phorum_htmlpurifier_commit_settings() {
+function phorum_htmlpurifier_commit_settings()
+{
     global $PHORUM;
     return phorum_db_update_settings(array("mod_htmlpurifier"=>$PHORUM["mod_htmlpurifier"]));
 }

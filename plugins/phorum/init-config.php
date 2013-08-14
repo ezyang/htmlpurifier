@@ -5,7 +5,8 @@
  * or a module configuration value
  * @return Instance of HTMLPurifier_Config
  */
-function phorum_htmlpurifier_get_config($default = false) {
+function phorum_htmlpurifier_get_config($default = false)
+{
     global $PHORUM;
     $config_exists = phorum_htmlpurifier_config_file_exists();
     if ($default || $config_exists || !isset($PHORUM['mod_htmlpurifier']['config'])) {
@@ -21,7 +22,8 @@ function phorum_htmlpurifier_get_config($default = false) {
     return $config;
 }
 
-function phorum_htmlpurifier_config_file_exists() {
+function phorum_htmlpurifier_config_file_exists()
+{
     return file_exists(dirname(__FILE__) . '/config.php');
 }
 

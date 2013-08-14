@@ -4,15 +4,18 @@ class HTMLPurifier_Strategy_MakeWellFormed_EndRewindInjector extends HTMLPurifie
 {
     public $name = 'EndRewindInjector';
     public $needed = array('span');
-    public function handleElement(&$token) {
+    public function handleElement(&$token)
+    {
         if (isset($token->_InjectorTest_EndRewindInjector_delete)) {
             $token = false;
         }
     }
-    public function handleText(&$token) {
+    public function handleText(&$token)
+    {
         $token = false;
     }
-    public function handleEnd(&$token) {
+    public function handleEnd(&$token)
+    {
         $i = null;
         if (
             $this->backward($i, $prev) &&

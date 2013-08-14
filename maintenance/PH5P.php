@@ -1,5 +1,6 @@
 <?php
-class HTML5 {
+class HTML5
+{
     private $data;
     private $char;
     private $EOF;
@@ -63,7 +64,8 @@ class HTML5 {
     const CHARACTR = 4;
     const EOF      = 5;
 
-    public function __construct($data) {
+    public function __construct($data)
+    {
         $data = str_replace("\r\n", "\n", $data);
         $date = str_replace("\r", null, $data);
 
@@ -80,17 +82,20 @@ class HTML5 {
         }
     }
 
-    public function save() {
+    public function save()
+    {
         return $this->tree->save();
     }
 
-    private function char() {
+    private function char()
+    {
         return ($this->char < $this->EOF)
             ? $this->data[$this->char]
             : false;
     }
 
-    private function character($s, $l = 0) {
+    private function character($s, $l = 0)
+    {
         if($s + $l < $this->EOF) {
             if($l === 0) {
                 return $this->data[$s];
@@ -100,11 +105,13 @@ class HTML5 {
         }
     }
 
-    private function characters($char_class, $start) {
+    private function characters($char_class, $start)
+    {
         return preg_replace('#^(['.$char_class.']+).*#s', '\\1', substr($this->data, $start));
     }
 
-    private function dataState() {
+    private function dataState()
+    {
         // Consume the next input character
         $this->char++;
         $char = $this->char();
@@ -204,7 +211,8 @@ class HTML5 {
         }
     }
 
-    private function entityDataState() {
+    private function entityDataState()
+    {
         // Attempt to consume an entity.
         $entity = $this->entity();
 
@@ -217,7 +225,8 @@ class HTML5 {
         $this->state = 'data';
     }
 
-    private function tagOpenState() {
+    private function tagOpenState()
+    {
         switch($this->content_model) {
             case self::RCDATA:
             case self::CDATA:
@@ -302,7 +311,8 @@ class HTML5 {
         }
     }
 
-    private function closeTagOpenState() {
+    private function closeTagOpenState()
+    {
         $next_node = strtolower($this->characters('A-Za-z', $this->char + 1));
         $the_same = count($this->tree->stack) > 0 && $next_node === end($this->tree->stack)->nodeName;
 
@@ -375,7 +385,8 @@ class HTML5 {
         }
     }
 
-    private function tagNameState() {
+    private function tagNameState()
+    {
         // Consume the next input character:
         $this->char++;
         $char = $this->character($this->char);
@@ -419,7 +430,8 @@ class HTML5 {
         }
     }
 
-    private function beforeAttributeNameState() {
+    private function beforeAttributeNameState()
+    {
         // Consume the next input character:
         $this->char++;
         $char = $this->character($this->char);
@@ -468,7 +480,8 @@ class HTML5 {
         }
     }
 
-    private function attributeNameState() {
+    private function attributeNameState()
+    {
         // Consume the next input character:
         $this->char++;
         $char = $this->character($this->char);
@@ -519,7 +532,8 @@ class HTML5 {
         }
     }
 
-    private function afterAttributeNameState() {
+    private function afterAttributeNameState()
+    {
         // Consume the next input character:
         $this->char++;
         $char = $this->character($this->char);
@@ -573,7 +587,8 @@ class HTML5 {
         }
     }
 
-    private function beforeAttributeValueState() {
+    private function beforeAttributeValueState()
+    {
         // Consume the next input character:
         $this->char++;
         $char = $this->character($this->char);
@@ -621,7 +636,8 @@ class HTML5 {
         }
     }
 
-    private function attributeValueDoubleQuotedState() {
+    private function attributeValueDoubleQuotedState()
+    {
         // Consume the next input character:
         $this->char++;
         $char = $this->character($this->char);
@@ -656,7 +672,8 @@ class HTML5 {
         }
     }
 
-    private function attributeValueSingleQuotedState() {
+    private function attributeValueSingleQuotedState()
+    {
         // Consume the next input character:
         $this->char++;
         $char = $this->character($this->char);
@@ -691,7 +708,8 @@ class HTML5 {
         }
     }
 
-    private function attributeValueUnquotedState() {
+    private function attributeValueUnquotedState()
+    {
         // Consume the next input character:
         $this->char++;
         $char = $this->character($this->char);
@@ -727,7 +745,8 @@ class HTML5 {
         }
     }
 
-    private function entityInAttributeValueState() {
+    private function entityInAttributeValueState()
+    {
         // Attempt to consume an entity.
         $entity = $this->entity();
 
@@ -741,7 +760,8 @@ class HTML5 {
         $this->emitToken($char);
     }
 
-    private function bogusCommentState() {
+    private function bogusCommentState()
+    {
         /* Consume every character up to the first U+003E GREATER-THAN SIGN
         character (>) or the end of the file (EOF), whichever comes first. Emit
         a comment token whose data is the concatenation of all the characters
@@ -767,7 +787,8 @@ class HTML5 {
         }
     }
 
-    private function markupDeclarationOpenState() {
+    private function markupDeclarationOpenState()
+    {
         /* If the next two characters are both U+002D HYPHEN-MINUS (-)
         characters, consume those two characters, create a comment token whose
         data is the empty string, and switch to the comment state. */
@@ -795,7 +816,8 @@ class HTML5 {
         }
     }
 
-    private function commentState() {
+    private function commentState()
+    {
         /* Consume the next input character: */
         $this->char++;
         $char = $this->char();
@@ -821,7 +843,8 @@ class HTML5 {
         }
     }
 
-    private function commentDashState() {
+    private function commentDashState()
+    {
         /* Consume the next input character: */
         $this->char++;
         $char = $this->char();
@@ -848,7 +871,8 @@ class HTML5 {
         }
     }
 
-    private function commentEndState() {
+    private function commentEndState()
+    {
         /* Consume the next input character: */
         $this->char++;
         $char = $this->char();
@@ -871,7 +895,8 @@ class HTML5 {
         }
     }
 
-    private function doctypeState() {
+    private function doctypeState()
+    {
         /* Consume the next input character: */
         $this->char++;
         $char = $this->char();
@@ -885,7 +910,8 @@ class HTML5 {
         }
     }
 
-    private function beforeDoctypeNameState() {
+    private function beforeDoctypeNameState()
+    {
         /* Consume the next input character: */
         $this->char++;
         $char = $this->char();
@@ -932,7 +958,8 @@ class HTML5 {
         }
     }
 
-    private function doctypeNameState() {
+    private function doctypeNameState()
+    {
         /* Consume the next input character: */
         $this->char++;
         $char = $this->char();
@@ -961,7 +988,8 @@ class HTML5 {
             : true;
     }
 
-    private function afterDoctypeNameState() {
+    private function afterDoctypeNameState()
+    {
         /* Consume the next input character: */
         $this->char++;
         $char = $this->char();
@@ -984,7 +1012,8 @@ class HTML5 {
         }
     }
 
-    private function bogusDoctypeState() {
+    private function bogusDoctypeState()
+    {
         /* Consume the next input character: */
         $this->char++;
         $char = $this->char();
@@ -1003,14 +1032,15 @@ class HTML5 {
         }
     }
 
-    private function entity() {
+    private function entity()
+    {
         $start = $this->char;
 
         // This section defines how to consume an entity. This definition is
         // used when parsing entities in text and in attributes.
 
         // The behaviour depends on the identity of the next character (the
-        // one immediately after the U+0026 AMPERSAND character): 
+        // one immediately after the U+0026 AMPERSAND character):
 
         switch($this->character($this->char + 1)) {
             // U+0023 NUMBER SIGN (#)
@@ -1088,7 +1118,8 @@ class HTML5 {
         return html_entity_decode('&'.$entity.';', ENT_QUOTES, 'UTF-8');
     }
 
-    private function emitToken($token) {
+    private function emitToken($token)
+    {
         $emit = $this->tree->emitToken($token);
 
         if(is_int($emit)) {
@@ -1099,7 +1130,8 @@ class HTML5 {
         }
     }
 
-    private function EOF() {
+    private function EOF()
+    {
         $this->state = null;
         $this->tree->emitToken(array(
             'type' => self::EOF
@@ -1107,7 +1139,8 @@ class HTML5 {
     }
 }
 
-class HTML5TreeConstructer {
+class HTML5TreeConstructer
+{
     public $stack = array();
 
     private $phase;
@@ -1159,7 +1192,8 @@ class HTML5TreeConstructer {
 
     const MARKER     = 0;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->phase = self::INIT_PHASE;
         $this->mode = self::BEFOR_HEAD;
         $this->dom = new DOMDocument;
@@ -1171,7 +1205,8 @@ class HTML5TreeConstructer {
     }
 
     // Process tag tokens
-    public function emitToken($token) {
+    public function emitToken($token)
+    {
         switch($this->phase) {
             case self::INIT_PHASE: return $this->initPhase($token); break;
             case self::ROOT_PHASE: return $this->rootElementPhase($token); break;
@@ -1180,7 +1215,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function initPhase($token) {
+    private function initPhase($token)
+    {
         /* Initially, the tree construction stage must handle each token
         emitted from the tokenisation stage as follows: */
 
@@ -1230,7 +1266,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function rootElementPhase($token) {
+    private function rootElementPhase($token)
+    {
         /* After the initial phase, as each token is emitted from the tokenisation
         stage, it must be processed as described in this section. */
 
@@ -1277,7 +1314,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function mainPhase($token) {
+    private function mainPhase($token)
+    {
         /* Tokens in the main phase must be handled as follows: */
 
         /* A DOCTYPE token */
@@ -1327,7 +1365,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function beforeHead($token) {
+    private function beforeHead($token)
+    {
         /* Handle the token as follows: */
 
         /* A character token that is one of one of U+0009 CHARACTER TABULATION,
@@ -1381,7 +1420,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function inHead($token) {
+    private function inHead($token)
+    {
         /* Handle the token as follows: */
 
         /* A character token that is one of one of U+0009 CHARACTER TABULATION,
@@ -1505,7 +1545,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function afterHead($token) {
+    private function afterHead($token)
+    {
         /* Handle the token as follows: */
 
         /* A character token that is one of one of U+0009 CHARACTER TABULATION,
@@ -1561,7 +1602,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function inBody($token) {
+    private function inBody($token)
+    {
         /* Handle the token as follows: */
 
         switch($token['type']) {
@@ -2161,7 +2203,7 @@ class HTML5TreeConstructer {
                     if($this->elementInScope($token['name'])) {
                         $this->generateImpliedEndTags();
 
-                    } 
+                    }
 
                     if(end($this->stack)->nodeName !== $token['name']) {
                         /* Now, if the current node is not an element with the
@@ -2540,7 +2582,7 @@ class HTML5TreeConstructer {
                             for($x = count($this->stack) - $n; $x >= $n; $x--) {
                                 array_pop($this->stack);
                             }
-                                    
+
                         } else {
                             $category = $this->getElementCategory($node);
 
@@ -2559,7 +2601,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function inTable($token) {
+    private function inTable($token)
+    {
         $clear = array('html', 'table');
 
         /* A character token that is one of one of U+0009 CHARACTER TABULATION,
@@ -2736,7 +2779,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function inCaption($token) {
+    private function inCaption($token)
+    {
         /* An end tag whose tag name is "caption" */
         if($token['type'] === HTML5::ENDTAG && $token['name'] === 'caption') {
             /* If the stack of open elements does not have an element in table
@@ -2804,7 +2848,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function inColumnGroup($token) {
+    private function inColumnGroup($token)
+    {
         /* A character token that is one of one of U+0009 CHARACTER TABULATION,
         U+000A LINE FEED (LF), U+000B LINE TABULATION, U+000C FORM FEED (FF),
         or U+0020 SPACE */
@@ -2861,7 +2906,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function inTableBody($token) {
+    private function inTableBody($token)
+    {
         $clear = array('tbody', 'tfoot', 'thead', 'html');
 
         /* A start tag whose tag name is "tr" */
@@ -2947,7 +2993,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function inRow($token) {
+    private function inRow($token)
+    {
         $clear = array('tr', 'html');
 
         /* A start tag whose tag name is one of: "th", "td" */
@@ -3032,7 +3079,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function inCell($token) {
+    private function inCell($token)
+    {
         /* An end tag whose tag name is one of: "td", "th" */
         if($token['type'] === HTML5::ENDTAG &&
         ($token['name'] === 'td' || $token['name'] === 'th')) {
@@ -3139,7 +3187,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function inSelect($token) {
+    private function inSelect($token)
+    {
         /* Handle the token as follows: */
 
         /* A character token */
@@ -3288,7 +3337,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function afterBody($token) {
+    private function afterBody($token)
+    {
         /* Handle the token as follows: */
 
         /* A character token that is one of one of U+0009 CHARACTER TABULATION,
@@ -3327,7 +3377,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function inFrameset($token) {
+    private function inFrameset($token)
+    {
         /* Handle the token as follows: */
 
         /* A character token that is one of one of U+0009 CHARACTER TABULATION,
@@ -3390,7 +3441,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function afterFrameset($token) {
+    private function afterFrameset($token)
+    {
         /* Handle the token as follows: */
 
         /* A character token that is one of one of U+0009 CHARACTER TABULATION,
@@ -3425,7 +3477,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function trailingEndPhase($token) {
+    private function trailingEndPhase($token)
+    {
         /* After the main phase, as each token is emitted from the tokenisation
         stage, it must be processed as described in this section. */
 
@@ -3465,7 +3518,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function insertElement($token, $append = true) {
+    private function insertElement($token, $append = true)
+    {
         $el = $this->dom->createElement($token['name']);
 
         foreach($token['attr'] as $attr) {
@@ -3480,17 +3534,20 @@ class HTML5TreeConstructer {
         return $el;
     }
 
-    private function insertText($data) {
+    private function insertText($data)
+    {
         $text = $this->dom->createTextNode($data);
         $this->appendToRealParent($text);
     }
 
-    private function insertComment($data) {
+    private function insertComment($data)
+    {
         $comment = $this->dom->createComment($data);
         $this->appendToRealParent($comment);
     }
 
-    private function appendToRealParent($node) {
+    private function appendToRealParent($node)
+    {
         if($this->foster_parent === null) {
             end($this->stack)->appendChild($node);
 
@@ -3518,7 +3575,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function elementInScope($el, $table = false) {
+    private function elementInScope($el, $table = false)
+    {
         if(is_array($el)) {
             foreach($el as $element) {
                 if($this->elementInScope($element, $table)) {
@@ -3567,7 +3625,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function reconstructActiveFormattingElements() {
+    private function reconstructActiveFormattingElements()
+    {
         /* 1. If there are no entries in the list of active formatting elements,
         then there is nothing to reconstruct; stop this algorithm. */
         $formatting_elements = count($this->a_formatting);
@@ -3638,7 +3697,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function clearTheActiveFormattingElementsUpToTheLastMarker() {
+    private function clearTheActiveFormattingElementsUpToTheLastMarker()
+    {
         /* When the steps below require the UA to clear the list of active
         formatting elements up to the last marker, the UA must perform the
         following steps: */
@@ -3659,7 +3719,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function generateImpliedEndTags(array $exclude = array()) {
+    private function generateImpliedEndTags(array $exclude = array())
+    {
         /* When the steps below require the UA to generate implied end tags,
         then, if the current node is a dd element, a dt element, an li element,
         a p element, a td element, a th  element, or a tr element, the UA must
@@ -3673,7 +3734,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function getElementCategory($name) {
+    private function getElementCategory($name)
+    {
         if(in_array($name, $this->special))
             return self::SPECIAL;
 
@@ -3687,7 +3749,8 @@ class HTML5TreeConstructer {
             return self::PHRASING;
     }
 
-    private function clearStackToTableContext($elements) {
+    private function clearStackToTableContext($elements)
+    {
         /* When the steps above require the UA to clear the stack back to a
         table context, it means that the UA must, while the current node is not
         a table element or an html element, pop elements from the stack of open
@@ -3704,7 +3767,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function resetInsertionMode() {
+    private function resetInsertionMode()
+    {
         /* 1. Let last be false. */
         $last = false;
         $leng = count($this->stack);
@@ -3802,7 +3866,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    private function closeCell() {
+    private function closeCell()
+    {
         /* If the stack of open elements has a td or th element in table scope,
         then act as if an end tag token with that tag name had been seen. */
         foreach(array('td', 'th') as $cell) {
@@ -3817,8 +3882,8 @@ class HTML5TreeConstructer {
         }
     }
 
-    public function save() {
+    public function save()
+    {
         return $this->dom;
     }
 }
-?>

@@ -3,8 +3,8 @@
 class HTMLPurifier_DoctypeRegistryTest extends HTMLPurifier_Harness
 {
 
-    function test_register() {
-
+    public function test_register()
+    {
         $registry = new HTMLPurifier_DoctypeRegistry();
 
         $d = $registry->register(
@@ -30,8 +30,8 @@ class HTMLPurifier_DoctypeRegistryTest extends HTMLPurifier_Harness
 
     }
 
-    function test_get() {
-
+    public function test_get()
+    {
         // see also alias and register tests
 
         $registry = new HTMLPurifier_DoctypeRegistry();
@@ -45,8 +45,8 @@ class HTMLPurifier_DoctypeRegistryTest extends HTMLPurifier_Harness
 
     }
 
-    function testAliases() {
-
+    public function testAliases()
+    {
         $registry = new HTMLPurifier_DoctypeRegistry();
 
         $d1 = $registry->register('Doc1', true, array(), array(), array('1'));

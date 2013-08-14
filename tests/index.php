@@ -29,7 +29,7 @@ error_reporting(E_ALL | E_STRICT);
 
 // Because we always want to know about errors, and because SimpleTest
 // will notify us about them, logging the errors to stderr is
-// counterproductive and in fact the wrong thing when a test case 
+// counterproductive and in fact the wrong thing when a test case
 // exercises an error condition to detect for it.
 ini_set('log_errors', false);
 

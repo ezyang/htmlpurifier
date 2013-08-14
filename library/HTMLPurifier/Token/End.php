@@ -10,8 +10,9 @@
 class HTMLPurifier_Token_End extends HTMLPurifier_Token_Tag
 {
     /**
-     * Token that started this node. Added by MakeWellFormed. Please
-     * do not edit this!
+     * Token that started this node.
+     * Added by MakeWellFormed. Please do not edit this!
+     * @type HTMLPurifier_Token
      */
     public $start;
 }

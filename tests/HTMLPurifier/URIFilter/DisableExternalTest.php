@@ -3,45 +3,52 @@
 class HTMLPurifier_URIFilter_DisableExternalTest extends HTMLPurifier_URIFilterHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->filter = new HTMLPurifier_URIFilter_DisableExternal();
     }
 
-    function testRemoveExternal() {
+    public function testRemoveExternal()
+    {
         $this->assertFiltering(
             'http://example.com', false
         );
     }
 
-    function testPreserveInternal() {
+    public function testPreserveInternal()
+    {
         $this->assertFiltering(
             '/foo/bar'
         );
     }
 
-    function testPreserveOurHost() {
+    public function testPreserveOurHost()
+    {
         $this->config->set('URI.Host', 'example.com');
         $this->assertFiltering(
             'http://example.com'
         );
     }
 
-    function testPreserveOurSubdomain() {
+    public function testPreserveOurSubdomain()
+    {
         $this->config->set('URI.Host', 'example.com');
         $this->assertFiltering(
             'http://www.example.com'
         );
     }
 
-    function testRemoveSuperdomain() {
+    public function testRemoveSuperdomain()
+    {
         $this->config->set('URI.Host', 'www.example.com');
         $this->assertFiltering(
             'http://example.com', false
         );
     }
 
-    function testBaseAsHost() {
+    public function testBaseAsHost()
+    {
         $this->config->set('URI.Base', 'http://www.example.com/foo/bar');
         $this->assertFiltering(
             'http://www.example.com/baz'

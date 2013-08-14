@@ -3,7 +3,8 @@
 class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
 {
 
-    protected function createManager() {
+    protected function createManager()
+    {
         $manager = new HTMLPurifier_HTMLModuleManager();
 
         $this->config->set('HTML.CustomDoctype', 'Blank');
@@ -18,8 +19,8 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
         return $manager;
     }
 
-    function test_addModule() {
-
+    public function test_addModule()
+    {
         $manager = $this->createManager();
 
         // ...but we add user modules
@@ -85,8 +86,8 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
 
     }
 
-    function testAllowedModules() {
-
+    public function testAllowedModules()
+    {
         $manager = new HTMLPurifier_HTMLModuleManager();
         $manager->doctypes->register(
             'Fantasy Inventory 1.0', true,

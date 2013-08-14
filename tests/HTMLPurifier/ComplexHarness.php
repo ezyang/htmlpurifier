@@ -9,48 +9,51 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
 {
 
     /**
-     * Instance of the object that will execute the method
+     * Instance of the object that will execute the method.
+     * @type object
      */
     protected $obj;
 
     /**
-     * Name of the function to be executed
+     * Name of the function to be executed.
+     * @type string
      */
     protected $func;
 
     /**
-     * Whether or not the method deals in tokens. If set to true, assertResult()
+     * Whether or not the method deals in tokens.
+     * If set to true, assertResult()
      * will transparently convert HTML to and back from tokens.
+     * @type bool
      */
     protected $to_tokens = false;
 
     /**
      * Whether or not to convert tokens back into HTML before performing
      * equality check, has no effect on bools.
+     * @type bool
      */
     protected $to_html = false;
 
     /**
      * Instance of an HTMLPurifier_Lexer implementation.
+     * @type HTMLPurifier_Lexer
      */
     protected $lexer;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->lexer     = new HTMLPurifier_Lexer_DirectLex();
         parent::__construct();
     }
 
     /**
      * Asserts a specific result from a one parameter + config/context function
-     * @param $input Input parameter
-     * @param $expect Expectation
-     * @param $config Configuration array in form of Ns.Directive => Value.
-     *                Has no effect if $this->config is set.
-     * @param $context_array Context array in form of Key => Value or an actual
-     *                       context object.
+     * @param string $input Input parameter
+     * @param bool|string $expect Expectation
      */
-    protected function assertResult($input, $expect = true) {
-
+    protected function assertResult($input, $expect = true)
+    {
         if ($this->to_tokens && is_string($input)) {
             // $func may cause $input to change, so "clone" another copy
             // to sacrifice
@@ -89,14 +92,16 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
     /**
      * Tokenize HTML into tokens, uses member variables for common variables
      */
-    protected function tokenize($html) {
+    protected function tokenize($html)
+    {
         return $this->lexer->tokenizeHTML($html, $this->config, $this->context);
     }
 
     /**
      * Generate textual HTML from tokens
      */
-    protected function generate($tokens) {
+    protected function generate($tokens)
+    {
         $generator = new HTMLPurifier_Generator($this->config, $this->context);
         return $generator->generateFromTokens($tokens);
     }

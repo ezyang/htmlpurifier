@@ -3,19 +3,22 @@
 class HTMLPurifier_PropertyListTest extends UnitTestCase
 {
 
-    function testBasic() {
+    public function testBasic()
+    {
         $plist = new HTMLPurifier_PropertyList();
         $plist->set('key', 'value');
         $this->assertIdentical($plist->get('key'), 'value');
     }
 
-    function testNotFound() {
+    public function testNotFound()
+    {
         $this->expectException(new HTMLPurifier_Exception("Key 'key' not found"));
         $plist = new HTMLPurifier_PropertyList();
         $plist->get('key');
     }
 
-    function testRecursion() {
+    public function testRecursion()
+    {
         $parent_plist = new HTMLPurifier_PropertyList();
         $parent_plist->set('key', 'value');
         $plist = new HTMLPurifier_PropertyList();
@@ -23,7 +26,8 @@ class HTMLPurifier_PropertyListTest extends UnitTestCase
         $this->assertIdentical($plist->get('key'), 'value');
     }
 
-    function testOverride() {
+    public function testOverride()
+    {
         $parent_plist = new HTMLPurifier_PropertyList();
         $parent_plist->set('key', 'value');
         $plist = new HTMLPurifier_PropertyList();
@@ -32,7 +36,8 @@ class HTMLPurifier_PropertyListTest extends UnitTestCase
         $this->assertIdentical($plist->get('key'), 'value2');
     }
 
-    function testRecursionNotFound() {
+    public function testRecursionNotFound()
+    {
         $this->expectException(new HTMLPurifier_Exception("Key 'key' not found"));
         $parent_plist = new HTMLPurifier_PropertyList();
         $plist = new HTMLPurifier_PropertyList();
@@ -40,14 +45,16 @@ class HTMLPurifier_PropertyListTest extends UnitTestCase
         $this->assertIdentical($plist->get('key'), 'value');
     }
 
-    function testHas() {
+    public function testHas()
+    {
         $plist = new HTMLPurifier_PropertyList();
         $this->assertIdentical($plist->has('key'), false);
         $plist->set('key', 'value');
         $this->assertIdentical($plist->has('key'), true);
     }
 
-    function testReset() {
+    public function testReset()
+    {
         $plist = new HTMLPurifier_PropertyList();
         $plist->set('key1', 'value');
         $plist->set('key2', 'value');
@@ -65,7 +72,8 @@ class HTMLPurifier_PropertyListTest extends UnitTestCase
         $this->assertIdentical($plist->has('key3'), false);
     }
 
-    function testSquash() {
+    public function testSquash()
+    {
         $parent = new HTMLPurifier_PropertyList();
         $parent->set('key1', 'hidden');
         $parent->set('key2', 2);

@@ -6,17 +6,32 @@
 class HTMLPurifier_Harness extends UnitTestCase
 {
 
-    public function __construct($name = null) {
+    public function __construct($name = null)
+    {
         parent::__construct($name);
     }
 
-    protected $config, $context, $purifier;
+    /**
+     * @type HTMLPurifier_Config
+     */
+    protected $config;
+
+    /**
+     * @type HTMLPurifier_Context
+     */
+    protected $context;
+
+    /**
+     * @type HTMLPurifier
+     */
+    protected $purifier;
 
     /**
      * Generates easily accessible default config/context, as well as
      * a convenience purifier for integration testing.
      */
-    public function setUp() {
+    public function setUp()
+    {
         list($this->config, $this->context) = $this->createCommon();
         $this->config->set('Output.Newline', '
 ');
@@ -25,9 +40,14 @@ class HTMLPurifier_Harness extends UnitTestCase
 
     /**
      * Asserts a purification. Good for integration testing.
+     * @param string $input
+     * @param string $expect
      */
-    function assertPurification($input, $expect = null) {
-        if ($expect === null) $expect = $input;
+    public function assertPurification($input, $expect = null)
+    {
+        if ($expect === null) {
+            $expect = $input;
+        }
         $result = $this->purifier->purify($input, $this->config);
         $this->assertIdentical($expect, $result);
     }
@@ -38,23 +58,28 @@ class HTMLPurifier_Harness extends UnitTestCase
      * @param &$config Reference to config variable
      * @param &$context Reference to context variable
      */
-    protected function prepareCommon(&$config, &$context) {
+    protected function prepareCommon(&$config, &$context)
+    {
         $config = HTMLPurifier_Config::create($config);
-        if (!$context) $context = new HTMLPurifier_Context();
+        if (!$context) {
+            $context = new HTMLPurifier_Context();
+        }
     }
 
     /**
      * Generates default configuration and context objects
      * @return Defaults in form of array($config, $context)
      */
-    protected function createCommon() {
+    protected function createCommon()
+    {
         return array(HTMLPurifier_Config::createDefault(), new HTMLPurifier_Context);
     }
 
     /**
      * Normalizes a string to Unix (\n) endings
      */
-    protected function normalize(&$string) {
+    protected function normalize(&$string)
+    {
         $string = str_replace(array("\r\n", "\r"), "\n", $string);
     }
 
@@ -65,7 +90,8 @@ class HTMLPurifier_Harness extends UnitTestCase
      * @param $result Mixed result from processing
      * @param $expect Mixed expectation for result
      */
-    protected function assertEitherFailOrIdentical($status, $result, $expect) {
+    protected function assertEitherFailOrIdentical($status, $result, $expect)
+    {
         if ($expect === false) {
             $this->assertFalse($status, 'Expected false result, got true');
         } else {
@@ -74,7 +100,8 @@ class HTMLPurifier_Harness extends UnitTestCase
         }
     }
 
-    public function getTests() {
+    public function getTests()
+    {
         // __onlytest makes only one test get triggered
         foreach (get_class_methods(get_class($this)) as $method) {
             if (strtolower(substr($method, 0, 10)) == '__onlytest') {

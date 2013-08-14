@@ -1,6 +1,7 @@
 <?php
 
-function assertCli() {
+function assertCli()
+{
     if (php_sapi_name() != 'cli' && !getenv('PHP_IS_CLI')) {
         echo 'Script cannot be called from web-browser (if you are indeed calling via cli,
 set environment variable PHP_IS_CLI to work around this).';
@@ -8,11 +9,13 @@ set environment variable PHP_IS_CLI to work around this).';
     }
 }
 
-function prefix_is($comp, $subject) {
+function prefix_is($comp, $subject)
+{
     return strncmp($comp, $subject, strlen($comp)) === 0;
 }
 
-function postfix_is($comp, $subject) {
+function postfix_is($comp, $subject)
+{
     return strlen($subject) < $comp ? false : substr($subject, -strlen($comp)) === $comp;
 }
 

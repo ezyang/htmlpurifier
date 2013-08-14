@@ -6,8 +6,8 @@
 class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_URI_Host();
 
         $this->assertDef('[2001:DB8:0:0:8:800:200C:417A]'); // IPv6
@@ -40,7 +40,8 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function testIDNA() {
+    public function testIDNA()
+    {
         if (!$GLOBALS['HTMLPurifierTest']['Net_IDNA2']) {
             return false;
         }

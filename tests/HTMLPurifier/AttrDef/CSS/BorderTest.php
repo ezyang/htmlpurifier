@@ -3,8 +3,8 @@
 class HTMLPurifier_AttrDef_CSS_BorderTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $config = HTMLPurifier_Config::createDefault();
         $this->def = new HTMLPurifier_AttrDef_CSS_Border($config);
 

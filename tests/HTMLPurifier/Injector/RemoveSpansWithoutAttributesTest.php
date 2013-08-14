@@ -2,34 +2,39 @@
 
 class HTMLPurifier_Injector_RemoveSpansWithoutAttributesTest extends HTMLPurifier_InjectorHarness
 {
-    function setup() {
+    public function setup()
+    {
         parent::setup();
         $this->config->set('HTML.Allowed', 'span[class],div,p,strong,em');
         $this->config->set('AutoFormat.RemoveSpansWithoutAttributes', true);
     }
 
-    function testSingleSpan() {
+    public function testSingleSpan()
+    {
         $this->assertResult(
             '<span>foo</span>',
             'foo'
         );
     }
 
-    function testSingleSpanWithAttributes() {
+    public function testSingleSpanWithAttributes()
+    {
         $this->assertResult(
             '<span class="bar">foo</span>',
             '<span class="bar">foo</span>'
         );
     }
 
-    function testSingleNestedSpan() {
+    public function testSingleNestedSpan()
+    {
         $this->assertResult(
             '<p><span>foo</span></p>',
             '<p>foo</p>'
         );
     }
 
-    function testSingleNestedSpanWithAttributes() {
+    public function testSingleNestedSpanWithAttributes()
+    {
         $this->assertResult(
             '<p><span class="bar">foo</span></p>',
             '<p><span class="bar">foo</span></p>'
@@ -37,49 +42,56 @@ class HTMLPurifier_Injector_RemoveSpansWithoutAttributesTest extends HTMLPurifie
     }
 
 
-    function testSpanWithChildren() {
+    public function testSpanWithChildren()
+    {
         $this->assertResult(
             '<span>foo <strong>bar</strong> <em>baz</em></span>',
             'foo <strong>bar</strong> <em>baz</em>'
         );
     }
 
-    function testSpanWithSiblings() {
+    public function testSpanWithSiblings()
+    {
         $this->assertResult(
             '<p>before <span>inside</span> <strong>after</strong></p>',
             '<p>before inside <strong>after</strong></p>'
         );
     }
 
-    function testNestedSpanWithSiblingsAndChildren() {
+    public function testNestedSpanWithSiblingsAndChildren()
+    {
         $this->assertResult(
             '<p>a <span>b <em>c</em> d</span> e</p>',
             '<p>a b <em>c</em> d e</p>'
         );
     }
 
-    function testNestedSpansWithoutAttributes() {
+    public function testNestedSpansWithoutAttributes()
+    {
         $this->assertResult(
             '<span>one<span>two<span>three</span></span></span>',
             'onetwothree'
         );
     }
 
-    function testDeeplyNestedSpan() {
+    public function testDeeplyNestedSpan()
+    {
         $this->assertResult(
             '<div><div><div><span class="a">a <span>b</span> c</span></div></div></div>',
             '<div><div><div><span class="a">a b c</span></div></div></div>'
         );
     }
 
-    function testSpanWithInvalidAttributes() {
+    public function testSpanWithInvalidAttributes()
+    {
         $this->assertResult(
             '<p><span snorkel buzzer="emu">foo</span></p>',
             '<p>foo</p>'
         );
     }
 
-    function testNestedAlternateSpans() {
+    public function testNestedAlternateSpans()
+    {
         $this->assertResult(
 '<span>a <span class="x">b <span>c <span class="y">d <span>e <span class="z">f
 </span></span></span></span></span></span>',
@@ -88,7 +100,8 @@ class HTMLPurifier_Injector_RemoveSpansWithoutAttributesTest extends HTMLPurifie
         );
     }
 
-    function testSpanWithSomeInvalidAttributes() {
+    public function testSpanWithSomeInvalidAttributes()
+    {
         $this->assertResult(
             '<p><span buzzer="emu" class="bar">foo</span></p>',
             '<p><span class="bar">foo</span></p>'

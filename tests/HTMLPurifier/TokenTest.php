@@ -14,8 +14,8 @@ class HTMLPurifier_TokenTest extends HTMLPurifier_Harness
         $this->assertIdentical($expect_attr, $token->attr);
     }
 
-    function testConstruct() {
-
+    public function testConstruct()
+    {
         // standard case
         $this->assertTokenConstruction('a', array('href' => 'about:blank'));
 

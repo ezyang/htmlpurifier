@@ -3,52 +3,61 @@
 class HTMLPurifier_Injector_PurifierLinkifyTest extends HTMLPurifier_InjectorHarness
 {
 
-    function setup() {
+    public function setup()
+    {
         parent::setup();
         $this->config->set('AutoFormat.PurifierLinkify', true);
         $this->config->set('AutoFormat.PurifierLinkify.DocURL', '#%s');
     }
 
-    function testNoTriggerCharacer() {
+    public function testNoTriggerCharacer()
+    {
         $this->assertResult('Foobar');
     }
 
-    function testTriggerCharacterInIrrelevantContext() {
+    public function testTriggerCharacterInIrrelevantContext()
+    {
         $this->assertResult('20% off!');
     }
 
-    function testPreserveNamespace() {
+    public function testPreserveNamespace()
+    {
         $this->assertResult('%Core namespace (not recognized)');
     }
 
-    function testLinkifyBasic() {
+    public function testLinkifyBasic()
+    {
         $this->assertResult(
           '%Namespace.Directive',
           '<a href="#Namespace.Directive">%Namespace.Directive</a>'
         );
     }
 
-    function testLinkifyWithAdjacentTextNodes() {
+    public function testLinkifyWithAdjacentTextNodes()
+    {
         $this->assertResult(
           'This %Namespace.Directive thing',
           'This <a href="#Namespace.Directive">%Namespace.Directive</a> thing'
         );
     }
 
-    function testLinkifyInBlock() {
+    public function testLinkifyInBlock()
+    {
         $this->assertResult(
           '<div>This %Namespace.Directive thing</div>',
           '<div>This <a href="#Namespace.Directive">%Namespace.Directive</a> thing</div>'
         );
     }
 
-    function testPreserveInATag() {
+    public function testPreserveInATag()
+    {
         $this->assertResult(
           '<a>%Namespace.Directive</a>'
         );
     }
 
-    function testNeeded() {
+    public function testNeeded()
+    {
         $this->config->set('HTML.Allowed', 'b');
         $this->expectError('Cannot enable PurifierLinkify injector because a is not allowed');
         $this->assertResult('%Namespace.Directive');

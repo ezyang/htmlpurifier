@@ -3,7 +3,8 @@
 class HTMLPurifier_ChildDef_RequiredTest extends HTMLPurifier_ChildDefHarness
 {
 
-    function testPrepareString() {
+    public function testPrepareString()
+    {
         $def = new HTMLPurifier_ChildDef_Required('foobar | bang |gizmo');
         $this->assertIdentical($def->elements,
           array(
@@ -13,7 +14,8 @@ class HTMLPurifier_ChildDef_RequiredTest extends HTMLPurifier_ChildDefHarness
           ));
     }
 
-    function testPrepareArray() {
+    public function testPrepareArray()
+    {
         $def = new HTMLPurifier_ChildDef_Required(array('href', 'src'));
         $this->assertIdentical($def->elements,
           array(
@@ -22,16 +24,19 @@ class HTMLPurifier_ChildDef_RequiredTest extends HTMLPurifier_ChildDefHarness
           ));
     }
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj = new HTMLPurifier_ChildDef_Required('dt | dd');
     }
 
-    function testEmptyInput() {
+    public function testEmptyInput()
+    {
         $this->assertResult('', false);
     }
 
-    function testRemoveIllegalTagsAndElements() {
+    public function testRemoveIllegalTagsAndElements()
+    {
         $this->assertResult(
           '<dt>Term</dt>Text in an illegal location'.
              '<dd>Definition</dd><b>Illegal tag</b>',
@@ -39,28 +44,33 @@ class HTMLPurifier_ChildDef_RequiredTest extends HTMLPurifier_ChildDefHarness
         $this->assertResult('How do you do!', false);
     }
 
-    function testIgnoreWhitespace() {
+    public function testIgnoreWhitespace()
+    {
         // whitespace shouldn't trigger it
         $this->assertResult("\n<dd>Definition</dd>       ");
     }
 
-    function testPreserveWhitespaceAfterRemoval() {
+    public function testPreserveWhitespaceAfterRemoval()
+    {
         $this->assertResult(
           '<dd>Definition</dd>       <b></b>       ',
           '<dd>Definition</dd>              '
         );
     }
 
-    function testDeleteNodeIfOnlyWhitespace() {
+    public function testDeleteNodeIfOnlyWhitespace()
+    {
         $this->assertResult("\t      ", false);
     }
 
-    function testPCDATAAllowed() {
+    public function testPCDATAAllowed()
+    {
         $this->obj = new HTMLPurifier_ChildDef_Required('#PCDATA | b');
         $this->assertResult('Out <b>Bold text</b><img />', 'Out <b>Bold text</b>');
     }
 
-    function testPCDATAAllowedWithEscaping() {
+    public function testPCDATAAllowedWithEscaping()
+    {
         $this->obj = new HTMLPurifier_ChildDef_Required('#PCDATA | b');
         $this->config->set('Core.EscapeInvalidChildren', true);
         $this->assertResult(

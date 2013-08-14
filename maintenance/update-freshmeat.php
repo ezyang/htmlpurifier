@@ -39,7 +39,8 @@ class XmlRpc_Freshmeat
      * @param $username Username to login with
      * @param $password Password to login with
      */
-    public function __construct($username = null, $password = null) {
+    public function __construct($username = null, $password = null)
+    {
         if ($username && $password) {
             $this->login($username, $password);
         }
@@ -48,7 +49,8 @@ class XmlRpc_Freshmeat
     /**
      * Performs a raw XML RPC call to self::URL
      */
-    protected function call($method, $params) {
+    protected function call($method, $params)
+    {
         $request = xmlrpc_encode_request($method, $params, $this->encodeOptions);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, self::URL);
@@ -73,7 +75,8 @@ class XmlRpc_Freshmeat
      * @param $name Name of method to call, can be methodName or method_name
      * @param $args Arguments of call, in form array('key1', 'val1', 'key2' ...)
      */
-    public function __call($name, $args) {
+    public function __call($name, $args)
+    {
         $method = $this->camelToUnderscore($name);
         $params = array();
         if ($this->sid) $params['SID'] = $this->sid;
@@ -102,7 +105,8 @@ class XmlRpc_Freshmeat
     /**
      * Munge methodName to method_name
      */
-    private function camelToUnderscore($name) {
+    private function camelToUnderscore($name)
+    {
         $method = '';
         for ($i = 0, $c = strlen($name); $i < $c; $i++) {
             $v = $name[$i];
@@ -115,7 +119,8 @@ class XmlRpc_Freshmeat
     /**
      * Automatically logout at end of scope
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         if ($this->sid) $this->logout();
     }
 

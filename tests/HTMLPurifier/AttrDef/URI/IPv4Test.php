@@ -6,8 +6,8 @@
 class HTMLPurifier_AttrDef_URI_IPv4Test extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_URI_IPv4();
 
         $this->assertDef('127.0.0.1'); // standard IPv4, loopback, non-routable

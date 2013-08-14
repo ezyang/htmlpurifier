@@ -3,8 +3,8 @@
 class HTMLPurifier_AttrDef_CSS_BackgroundPositionTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_CSS_BackgroundPosition();
 
         // explicitly cited in spec

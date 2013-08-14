@@ -6,7 +6,8 @@ class HTMLPurifier_AttrDef_URI_EmailHarness extends HTMLPurifier_AttrDefHarness
     /**
      * Tests common email strings that are obviously pass/fail
      */
-    function testCore() {
+    public function testCore()
+    {
         $this->assertDef('bob@example.com');
         $this->assertDef('  bob@example.com  ', 'bob@example.com');
         $this->assertDef('bob.thebuilder@example.net');

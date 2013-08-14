@@ -1,12 +1,15 @@
 <?php
 
-class HTMLPurifier_SimpleTest_TextReporter extends TextReporter {
+class HTMLPurifier_SimpleTest_TextReporter extends TextReporter
+{
     protected $verbose = false;
-    function __construct($AC) {
+    public function __construct($AC)
+    {
         parent::__construct();
         $this->verbose = $AC['verbose'];
     }
-    function paintPass($message) {
+    public function paintPass($message)
+    {
         parent::paintPass($message);
         if ($this->verbose) {
             print 'Pass ' . $this->getPassCount() . ") $message\n";

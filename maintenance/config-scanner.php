@@ -34,7 +34,8 @@ foreach ($raw_files as $file) {
 /**
  * Moves the $i cursor to the next non-whitespace token
  */
-function consumeWhitespace($tokens, &$i) {
+function consumeWhitespace($tokens, &$i)
+{
     do {$i++;} while (is_array($tokens[$i]) && $tokens[$i][0] === T_WHITESPACE);
 }
 
@@ -45,7 +46,8 @@ function consumeWhitespace($tokens, &$i) {
  *      - ($token, $expect_token, $expect_value): tests if token is $expect_token type, and
  *        its string representation is $expect_value
  */
-function testToken($token, $value_or_token, $value = null) {
+function testToken($token, $value_or_token, $value = null)
+{
     if (is_null($value)) {
         if (is_int($value_or_token)) return is_array($token) && $token[0] === $value_or_token;
         else return $token === $value_or_token;

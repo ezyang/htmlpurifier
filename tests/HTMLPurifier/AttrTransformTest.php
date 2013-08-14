@@ -8,8 +8,8 @@ Mock::generatePartial(
 class HTMLPurifier_AttrTransformTest extends HTMLPurifier_Harness
 {
 
-    function test_prependCSS() {
-
+    public function test_prependCSS()
+    {
         $t = new HTMLPurifier_AttrTransformTestable();
 
         $attr = array();
@@ -26,8 +26,8 @@ class HTMLPurifier_AttrTransformTest extends HTMLPurifier_Harness
 
     }
 
-    function test_confiscateAttr() {
-
+    public function test_confiscateAttr()
+    {
         $t = new HTMLPurifier_AttrTransformTestable();
 
         $attr = array('flavor' => 'sweet');

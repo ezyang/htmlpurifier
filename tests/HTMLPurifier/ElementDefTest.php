@@ -3,8 +3,8 @@
 class HTMLPurifier_ElementDefTest extends HTMLPurifier_Harness
 {
 
-    function test_mergeIn() {
-
+    public function test_mergeIn()
+    {
         $def1 = new HTMLPurifier_ElementDef();
         $def2 = new HTMLPurifier_ElementDef();
         $def3 = new HTMLPurifier_ElementDef();

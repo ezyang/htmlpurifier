@@ -5,11 +5,13 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
 
     protected $schema;
 
-    public function setup() {
+    public function setup()
+    {
         $this->schema = new HTMLPurifier_ConfigSchema();
     }
 
-    function test_define() {
+    public function test_define()
+    {
         $this->schema->add('Car.Seats', 5, 'int', false);
 
         $this->assertIdentical($this->schema->defaults['Car.Seats'], 5);
@@ -22,7 +24,8 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
 
     }
 
-    function test_defineAllowedValues() {
+    public function test_defineAllowedValues()
+    {
         $this->schema->add('QuantumNumber.Spin', 0.5, 'float', false);
         $this->schema->add('QuantumNumber.Current', 's', 'string', false);
         $this->schema->add('QuantumNumber.Difficulty', null, 'string', true);
@@ -44,7 +47,8 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
 
     }
 
-    function test_defineValueAliases() {
+    public function test_defineValueAliases()
+    {
         $this->schema->add('Abbrev.HTH', 'Happy to Help', 'string', false);
         $this->schema->addAllowedValues(
             'Abbrev.HTH', array(
@@ -84,7 +88,8 @@ class HTMLPurifier_ConfigSchemaTest extends HTMLPurifier_Harness
 
     }
 
-    function testAlias() {
+    public function testAlias()
+    {
         $this->schema->add('Home.Rug', 3, 'int', false);
         $this->schema->addAlias('Home.Carpet', 'Home.Rug');
 

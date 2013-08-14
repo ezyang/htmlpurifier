@@ -1,7 +1,7 @@
 <?php
 
-function phorum_htmlpurifier_show_migrate_sigs_form() {
-
+function phorum_htmlpurifier_show_migrate_sigs_form()
+{
     $frm = new PhorumInputForm ('', "post", "Migrate");
     $frm->hidden("module", "modsettings");
     $frm->hidden("mod", "htmlpurifier");

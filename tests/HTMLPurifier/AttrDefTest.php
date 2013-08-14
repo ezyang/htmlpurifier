@@ -8,8 +8,8 @@ Mock::generatePartial(
 class HTMLPurifier_AttrDefTest extends HTMLPurifier_Harness
 {
 
-    function test_parseCDATA() {
-
+    public function test_parseCDATA()
+    {
         $def = new HTMLPurifier_AttrDefTestable();
 
         $this->assertIdentical('', $def->parseCDATA(''));
@@ -19,8 +19,8 @@ class HTMLPurifier_AttrDefTest extends HTMLPurifier_Harness
 
     }
 
-    function test_make() {
-
+    public function test_make()
+    {
         $def = new HTMLPurifier_AttrDefTestable();
         $def2 = $def->make('');
         $this->assertIdentical($def, $def2);

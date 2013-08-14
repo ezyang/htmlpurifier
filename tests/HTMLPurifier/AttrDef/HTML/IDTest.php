@@ -3,7 +3,8 @@
 class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $id_accumulator = new HTMLPurifier_IDAccumulator();
@@ -13,8 +14,8 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function test() {
-
+    public function test()
+    {
         // valid ID names
         $this->assertDef('alpha');
         $this->assertDef('al_ha');
@@ -35,8 +36,8 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function testPrefix() {
-
+    public function testPrefix()
+    {
         $this->config->set('Attr.IDPrefix', 'user_');
 
         $this->assertDef('alpha', 'user_alpha');
@@ -50,8 +51,8 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function testTwoPrefixes() {
-
+    public function testTwoPrefixes()
+    {
         $this->config->set('Attr.IDPrefix', 'user_');
         $this->config->set('Attr.IDPrefixLocal', 'story95_');
 
@@ -64,7 +65,8 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('user_alas', 'user_story95_user_alas'); // !
     }
 
-    function testLocalPrefixWithoutMainPrefix() {
+    public function testLocalPrefixWithoutMainPrefix()
+    {
         // no effect when IDPrefix isn't set
         $this->config->set('Attr.IDPrefix', '');
         $this->config->set('Attr.IDPrefixLocal', 'story95_');
@@ -75,8 +77,8 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
     }
 
     // reference functionality is disabled for now
-    function disabled_testIDReference() {
-
+    public function disabled_testIDReference()
+    {
         $this->def = new HTMLPurifier_AttrDef_HTML_ID(true);
 
         $this->assertDef('good_id');
@@ -94,8 +96,8 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 
     }
 
-    function testRegexp() {
-
+    public function testRegexp()
+    {
         $this->config->set('Attr.IDBlacklistRegexp', '/^g_/');
 
         $this->assertDef('good_id');

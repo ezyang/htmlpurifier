@@ -86,8 +86,8 @@ class HTMLPurifier_TagTransformTest extends HTMLPurifier_Harness
 
     }
 
-    function testSimple() {
-
+    public function testSimple()
+    {
         $transformer = new HTMLPurifier_TagTransform_Simple('ul');
 
         $this->assertTransformation(
@@ -98,8 +98,8 @@ class HTMLPurifier_TagTransformTest extends HTMLPurifier_Harness
 
     }
 
-    function testSimpleWithCSS() {
-
+    public function testSimpleWithCSS()
+    {
         $transformer = new HTMLPurifier_TagTransform_Simple('div', 'text-align:center;');
 
         $this->assertTransformation(
@@ -119,7 +119,8 @@ class HTMLPurifier_TagTransformTest extends HTMLPurifier_Harness
 
     }
 
-    protected function assertSizeToStyle($transformer, $size, $style) {
+    protected function assertSizeToStyle($transformer, $size, $style)
+    {
         $this->assertTransformation(
             $transformer,
             'font', array('size' => $size),
@@ -127,8 +128,8 @@ class HTMLPurifier_TagTransformTest extends HTMLPurifier_Harness
         );
     }
 
-    function testFont() {
-
+    public function testFont()
+    {
         $transformer = new HTMLPurifier_TagTransform_Font();
 
         // test a font-face transformation
