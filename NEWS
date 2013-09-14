@@ -10,6 +10,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.6.0, unknown release date
+# Secure URI munge hashing algorithm has changed to hash_hmac("sha256", $url, $secret).
+  Please update any verification scripts you may have.
 # URI parsing algorithm was made more strict, so only prefixes which
   looks like schemes will actually be schemes.  Thanks
   Michael Gusev <mgusev@sugarcrm.com> for fixing.

@@ -107,7 +107,7 @@ class HTMLPurifier_URIFilter_MungeTest extends HTMLPurifier_URIFilterHarness
     public function testSecureMungeStandard()
     {
         $this->setSecureMunge();
-        $this->assertFiltering('http://google.com', '/redirect.php?url=http%3A%2F%2Fgoogle.com&checksum=0072e2f817fd2844825def74e54443debecf0892');
+        $this->assertFiltering('http://google.com', '/redirect.php?url=http%3A%2F%2Fgoogle.com&checksum=46267a796aca0ea5839f24c4c97ad2648373a4eca31b1c0d1fa7c7ff26798f79');
     }
 
     public function testSecureMungeIgnoreUnknownSchemes()
@@ -127,7 +127,7 @@ class HTMLPurifier_URIFilter_MungeTest extends HTMLPurifier_URIFilterHarness
     {
         $this->setSecureMunge();
         $this->setMunge('/links/%s/%t');
-        $this->assertFiltering('http://google.com', '/links/http%3A%2F%2Fgoogle.com/0072e2f817fd2844825def74e54443debecf0892');
+        $this->assertFiltering('http://google.com', '/links/http%3A%2F%2Fgoogle.com/46267a796aca0ea5839f24c4c97ad2648373a4eca31b1c0d1fa7c7ff26798f79');
     }
 
     public function testMungeIgnoreSameDomain()

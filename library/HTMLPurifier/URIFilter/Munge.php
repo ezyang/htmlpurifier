@@ -47,6 +47,9 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
         $this->parser = new HTMLPurifier_URIParser();
         $this->doEmbed = $config->get('URI.MungeResources');
         $this->secretKey = $config->get('URI.MungeSecretKey');
+        if ($this->secretKey && !function_exists('hash_hmac')) {
+            trigger_error("Cannot use %URI.MungeSecretKey without hash_hmac support.", E_USER_ERROR);
+        }
         return true;
     }
 
@@ -104,7 +107,7 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
         $this->replace['%p'] = $context->get('CurrentCSSProperty', true);
         // not always available
         if ($this->secretKey) {
-            $this->replace['%t'] = sha1($this->secretKey . ':' . $string);
+            $this->replace['%t'] = hash_hmac("sha256", $string, $this->secretKey);
         }
     }
 }
