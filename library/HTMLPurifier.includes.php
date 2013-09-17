@@ -57,6 +57,7 @@ require 'HTMLPurifier/Lexer.php';
 require 'HTMLPurifier/PercentEncoder.php';
 require 'HTMLPurifier/PropertyList.php';
 require 'HTMLPurifier/PropertyListIterator.php';
+require 'HTMLPurifier/Queue.php';
 require 'HTMLPurifier/Strategy.php';
 require 'HTMLPurifier/StringHash.php';
 require 'HTMLPurifier/StringHashParser.php';

@@ -51,6 +51,7 @@ require_once $__dir . '/HTMLPurifier/Lexer.php';
 require_once $__dir . '/HTMLPurifier/PercentEncoder.php';
 require_once $__dir . '/HTMLPurifier/PropertyList.php';
 require_once $__dir . '/HTMLPurifier/PropertyListIterator.php';
+require_once $__dir . '/HTMLPurifier/Queue.php';
 require_once $__dir . '/HTMLPurifier/Strategy.php';
 require_once $__dir . '/HTMLPurifier/StringHash.php';
 require_once $__dir . '/HTMLPurifier/StringHashParser.php';

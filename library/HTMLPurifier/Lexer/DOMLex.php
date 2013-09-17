@@ -92,11 +92,11 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     protected function tokenizeDOM($node, &$tokens)
     {
         $level = 0;
-        $nodes = array($level => array($node));
+        $nodes = array($level => new HTMLPurifier_Queue(array($node)));
         $closingNodes = array();
         do {
-            while (!empty($nodes[$level])) {
-                $node = array_shift($nodes[$level]); // FIFO
+            while (!$nodes[$level]->isEmpty()) {
+                $node = $nodes[$level]->shift(); // FIFO
                 $collect = $level > 0 ? true : false;
                 $needEndingTag = $this->createStartNode($node, $tokens, $collect);
                 if ($needEndingTag) {
@@ -104,9 +104,9 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
                 }
                 if ($node->childNodes && $node->childNodes->length) {
                     $level++;
-                    $nodes[$level] = array();
+                    $nodes[$level] = new HTMLPurifier_Queue();
                     foreach ($node->childNodes as $childNode) {
-                        array_push($nodes[$level], $childNode);
+                        $nodes[$level]->push($childNode);
                     }
                 }
             }
