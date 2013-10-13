@@ -22,3 +22,7 @@ docs/doxygen*
 /*.php
 vendor
 composer.lock
+*.rej
+*.orig
+*.bak
+core
