@@ -19,6 +19,8 @@
  */
 
 require 'HTMLPurifier.php';
+require 'HTMLPurifier/Array.php';
+require 'HTMLPurifier/ArrayNode.php';
 require 'HTMLPurifier/AttrCollections.php';
 require 'HTMLPurifier/AttrDef.php';
 require 'HTMLPurifier/AttrTransform.php';
@@ -36,6 +38,7 @@ require 'HTMLPurifier/DefinitionCache.php';
 require 'HTMLPurifier/DefinitionCacheFactory.php';
 require 'HTMLPurifier/Doctype.php';
 require 'HTMLPurifier/DoctypeRegistry.php';
+require 'HTMLPurifier/DoublyLinkedList.php';
 require 'HTMLPurifier/ElementDef.php';
 require 'HTMLPurifier/Encoder.php';
 require 'HTMLPurifier/EntityLookup.php';

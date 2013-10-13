@@ -45,7 +45,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     protected $context;
 
     public function execute($tokens, $config, $context) {
-
+        $tokens = new HTMLPurifier_Array($tokens);
         $definition = $config->getHTMLDefinition();
 
         // local variables
@@ -453,7 +453,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $context->destroy('CurrentToken');
 
         unset($this->injectors, $this->stack, $this->tokens, $this->t);
-        return $tokens;
+        return $tokens->getArray();
     }
 
     /**
@@ -490,6 +490,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         // array(number nodes to delete, new node 1, new node 2, ...)
 
         $delete = array_shift($token);
+        throw new Exception("unsupported");
         $old = array_splice($this->tokens, $this->t, $delete, $token);
 
         if ($injector > -1) {
@@ -508,7 +509,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
      * this token.  You must reprocess after this.
      */
     private function insertBefore($token) {
-        array_splice($this->tokens, $this->t, 0, array($token));
+        $this->tokens->insertBefore($this->t, $token);
     }
 
     /**
@@ -516,7 +517,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
      * occupied space.  You must reprocess after this.
      */
     private function remove() {
-        array_splice($this->tokens, $this->t, 1);
+        $this->tokens->remove($this->t);
     }
 
     /**

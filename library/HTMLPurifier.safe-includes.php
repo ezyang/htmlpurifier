@@ -13,6 +13,8 @@
 $__dir = dirname(__FILE__);
 
 require_once $__dir . '/HTMLPurifier.php';
+require_once $__dir . '/HTMLPurifier/Array.php';
+require_once $__dir . '/HTMLPurifier/ArrayNode.php';
 require_once $__dir . '/HTMLPurifier/AttrCollections.php';
 require_once $__dir . '/HTMLPurifier/AttrDef.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform.php';
@@ -30,6 +32,7 @@ require_once $__dir . '/HTMLPurifier/DefinitionCache.php';
 require_once $__dir . '/HTMLPurifier/DefinitionCacheFactory.php';
 require_once $__dir . '/HTMLPurifier/Doctype.php';
 require_once $__dir . '/HTMLPurifier/DoctypeRegistry.php';
+require_once $__dir . '/HTMLPurifier/DoublyLinkedList.php';
 require_once $__dir . '/HTMLPurifier/ElementDef.php';
 require_once $__dir . '/HTMLPurifier/Encoder.php';
 require_once $__dir . '/HTMLPurifier/EntityLookup.php';
