@@ -80,6 +80,14 @@ class HTMLPurifier_ContextTest extends HTMLPurifier_Harness
 
     }
 
+    public function testNull() {
+        $context = new HTMLPurifier_Context();
+        $var = NULL;
+        $context->register('var', $var);
+        $this->assertNull($context->get('var'));
+        $context->destroy('var');
+    }
+
 }
 
 // vim: et sw=4 sts=4

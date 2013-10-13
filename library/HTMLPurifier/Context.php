@@ -23,7 +23,7 @@ class HTMLPurifier_Context
      */
     public function register($name, &$ref)
     {
-        if (isset($this->_storage[$name])) {
+        if (array_key_exists($name, $this->_storage)) {
             trigger_error(
                 "Name $name produces collision, cannot re-register",
                 E_USER_ERROR
@@ -41,7 +41,7 @@ class HTMLPurifier_Context
      */
     public function &get($name, $ignore_error = false)
     {
-        if (!isset($this->_storage[$name])) {
+        if (!array_key_exists($name, $this->_storage)) {
             if (!$ignore_error) {
                 trigger_error(
                     "Attempted to retrieve non-existent variable $name",
@@ -60,7 +60,7 @@ class HTMLPurifier_Context
      */
     public function destroy($name)
     {
-        if (!isset($this->_storage[$name])) {
+        if (!array_key_exists($name, $this->_storage)) {
             trigger_error(
                 "Attempted to destroy non-existent variable $name",
                 E_USER_ERROR
@@ -77,7 +77,7 @@ class HTMLPurifier_Context
      */
     public function exists($name)
     {
-        return isset($this->_storage[$name]);
+        return array_key_exists($name, $this->_storage);
     }
 
     /**
