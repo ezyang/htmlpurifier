@@ -73,6 +73,7 @@ require 'HTMLPurifier/URISchemeRegistry.php';
 require 'HTMLPurifier/UnitConverter.php';
 require 'HTMLPurifier/VarParser.php';
 require 'HTMLPurifier/VarParserException.php';
+require 'HTMLPurifier/Zipper.php';
 require 'HTMLPurifier/AttrDef/CSS.php';
 require 'HTMLPurifier/AttrDef/Clone.php';
 require 'HTMLPurifier/AttrDef/Enum.php';
