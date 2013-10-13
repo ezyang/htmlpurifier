@@ -57,8 +57,9 @@ class HTMLPurifier_Injector_RemoveEmpty extends HTMLPurifier_Injector
             return;
         }
         $next = false;
-        for ($i = $this->inputIndex + 1, $c = count($this->inputTokens); $i < $c; $i++) {
-            $next = $this->inputTokens[$i];
+        $deleted = 1; // the current tag
+        for ($i = count($this->inputZipper->back) - 1; $i >= 0; $i--, $deleted++) {
+            $next = $this->inputZipper->back[$i];
             if ($next instanceof HTMLPurifier_Token_Text) {
                 if ($next->is_whitespace) {
                     continue;
@@ -82,16 +83,16 @@ class HTMLPurifier_Injector_RemoveEmpty extends HTMLPurifier_Injector
             if (isset($token->attr['id']) || isset($token->attr['name'])) {
                 return;
             }
-            $token = $i - $this->inputIndex + 1;
-            for ($b = $this->inputIndex - 1; $b > 0; $b--) {
-                $prev = $this->inputTokens[$b];
+            $token = $deleted + 1;
+            for ($b = 0, $c = count($this->inputZipper->front); $b < $c; $b++) {
+                $prev = $this->inputZipper->front[$b];
                 if ($prev instanceof HTMLPurifier_Token_Text && $prev->is_whitespace) {
                     continue;
                 }
                 break;
             }
             // This is safe because we removed the token that triggered this.
-            $this->rewind($b - 1);
+            $this->rewindOffset($b+$deleted);
             return;
         }
     }

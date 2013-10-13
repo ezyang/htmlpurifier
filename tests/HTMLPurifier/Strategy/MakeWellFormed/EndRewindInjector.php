@@ -24,7 +24,7 @@ class HTMLPurifier_Strategy_MakeWellFormed_EndRewindInjector extends HTMLPurifie
         ) {
             $token = false;
             $prev->_InjectorTest_EndRewindInjector_delete = true;
-            $this->rewind($i);
+            $this->rewindOffset(1);
         }
     }
 }

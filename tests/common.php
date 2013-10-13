@@ -182,10 +182,34 @@ function printTokens($tokens, $index = null)
     $string = '<pre>';
     $generator = new HTMLPurifier_Generator(HTMLPurifier_Config::createDefault(), new HTMLPurifier_Context);
     foreach ($tokens as $i => $token) {
-        if ($index === $i) $string .= '[<strong>';
-        $string .= "<sup>$i</sup>";
-        $string .= $generator->escape($generator->generateFromToken($token));
-        if ($index === $i) $string .= '</strong>]';
+        $string .= printToken($generator, $token, $i, $index == $i);
+    }
+    $string .= '</pre>';
+    echo $string;
+}
+
+function printToken($generator, $token, $i, $isCursor)
+{
+    $string = "";
+    if ($isCursor) $string .= '[<strong>';
+    $string .= "<sup>$i</sup>";
+    $string .= $generator->escape($generator->generateFromToken($token));
+    if ($isCursor) $string .= '</strong>]';
+    return $string;
+}
+
+function printZipper($zipper, $token)
+{
+    $string = '<pre>';
+    $generator = new HTMLPurifier_Generator(HTMLPurifier_Config::createDefault(), new HTMLPurifier_Context);
+    foreach ($zipper->front as $i => $t) {
+        $string .= printToken($generator, $t, $i, false);
+    }
+    if ($token !== NULL) {
+        $string .= printToken($generator, $token, "", true);
+    }
+    for ($i = count($zipper->back)-1; $i >= 0; $i--) {
+        $string .= printToken($generator, $zipper->back[$i], $i, false);
     }
     $string .= '</pre>';
     echo $string;

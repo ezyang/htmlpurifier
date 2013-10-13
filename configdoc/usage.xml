@@ -503,7 +503,7 @@
  </directive>
  <directive id="Core.EscapeInvalidTags">
   <file name="HTMLPurifier/Strategy/MakeWellFormed.php">
-   <line>66</line>
+   <line>72</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>26</line>

@@ -16,7 +16,8 @@ class HTMLPurifier_ZipperTest extends HTMLPurifier_Harness
         $z->insertBefore(4);
         $z->insertAfter(5);
         $this->assertIdentical($z->toArray($t), array(0,1,4,3,5));
-        $t = $z->splice($t, 2, array(6,7));
+        list($old, $t) = $z->splice($t, 2, array(6,7));
+        $this->assertIdentical($old, array(3,5));
         $this->assertIdentical($t, 6);
         $this->assertIdentical($z->toArray($t), array(0,1,4,6,7));
     }

@@ -35,19 +35,16 @@ abstract class HTMLPurifier_Injector
     protected $currentNesting;
 
     /**
-     * Reference to InputTokens variable in Context. This is an array
-     * list of the input tokens that are being processed.
-     * @type array
+     * Reference to current token.
+     * @type HTMLPurifier_Token
      */
-    protected $inputTokens;
+    protected $currentToken;
 
     /**
-     * Reference to InputIndex variable in Context. This is an integer
-     * array index for $this->inputTokens that indicates what token
-     * is currently being processed.
-     * @type int
+     * Reference to InputZipper variable in Context.
+     * @type HTMLPurifier_Zipper
      */
-    protected $inputIndex;
+    protected $inputZipper;
 
     /**
      * Array of elements and attributes this injector creates and therefore
@@ -58,33 +55,33 @@ abstract class HTMLPurifier_Injector
     public $needed = array();
 
     /**
-     * Index of inputTokens to rewind to.
+     * Number of elements to rewind backwards (relative).
      * @type bool|int
      */
-    protected $rewind = false;
+    protected $rewindOffset = false;
 
     /**
      * Rewind to a spot to re-perform processing. This is useful if you
      * deleted a node, and now need to see if this change affected any
      * earlier nodes. Rewinding does not affect other injectors, and can
      * result in infinite loops if not used carefully.
-     * @param bool|int $index
+     * @param bool|int $offset
      * @warning HTML Purifier will prevent you from fast-forwarding with this
      *          function.
      */
-    public function rewind($index)
+    public function rewindOffset($offset)
     {
-        $this->rewind = $index;
+        $this->rewindOffset = $offset;
     }
 
     /**
-     * Retrieves rewind, and then unsets it.
+     * Retrieves rewind offset, and then unsets it.
      * @return bool|int
      */
-    public function getRewind()
+    public function getRewindOffset()
     {
-        $r = $this->rewind;
-        $this->rewind = false;
+        $r = $this->rewindOffset;
+        $this->rewindOffset = false;
         return $r;
     }
 
@@ -108,8 +105,8 @@ abstract class HTMLPurifier_Injector
             return $result;
         }
         $this->currentNesting =& $context->get('CurrentNesting');
-        $this->inputTokens    =& $context->get('InputTokens');
-        $this->inputIndex     =& $context->get('InputIndex');
+        $this->currentToken   =& $context->get('CurrentToken');
+        $this->inputZipper    =& $context->get('InputZipper');
         return false;
     }
 
@@ -183,14 +180,14 @@ abstract class HTMLPurifier_Injector
     protected function forward(&$i, &$current)
     {
         if ($i === null) {
-            $i = $this->inputIndex + 1;
+            $i = count($this->inputZipper->back) - 1;
         } else {
-            $i++;
+            $i--;
         }
-        if (!isset($this->inputTokens[$i])) {
+        if ($i < 0) {
             return false;
         }
-        $current = $this->inputTokens[$i];
+        $current = $this->inputZipper->back[$i];
         return true;
     }
 
@@ -237,33 +234,15 @@ abstract class HTMLPurifier_Injector
     protected function backward(&$i, &$current)
     {
         if ($i === null) {
-            $i = $this->inputIndex - 1;
+            $i = count($this->inputZipper->front) - 1;
         } else {
             $i--;
         }
         if ($i < 0) {
             return false;
         }
-        $current = $this->inputTokens[$i];
+        $current = $this->inputZipper->front[$i];
         return true;
-    }
-
-    /**
-     * Initializes the iterator at the current position. Use in a do {} while;
-     * loop to force the _forward and _backward functions to start at the
-     * current location.
-     * @warning Please prevent previous references from interfering with this
-     *          functions by setting $i = null beforehand!
-     * @param int $i Current integer index variable for inputTokens
-     * @param HTMLPurifier_Token $current Current token variable.
-     *          Do NOT use $token, as that variable is also a reference
-     */
-    protected function current(&$i, &$current)
-    {
-        if ($i === null) {
-            $i = $this->inputIndex;
-        }
-        $current = $this->inputTokens[$i];
     }
 
     /**

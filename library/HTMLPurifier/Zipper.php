@@ -20,7 +20,7 @@
 
 class HTMLPurifier_Zipper
 {
-    private $front, $back;
+    public $front, $back;
 
     public function __construct($front, $back) {
         $this->front = $front;
@@ -96,6 +96,14 @@ class HTMLPurifier_Zipper
     }
 
     /**
+     * Returns true if we are at the end of the list.
+     * @return bool
+     */
+    public function done() {
+        return empty($this->back);
+    }
+
+    /**
      * Insert element before hole.
      * @param Element to insert
      */
@@ -115,14 +123,16 @@ class HTMLPurifier_Zipper
      * Splice in multiple elements at hole.  Functional specification
      * in terms of array_splice:
      *
-     *      $r1 = array_splice($arr, $i, $delete, $replacement);
+     *      $arr1 = $arr;
+     *      $old1 = array_splice($arr1, $i, $delete, $replacement);
      *
      *      list($z, $t) = HTMLPurifier_Zipper::fromArray($arr);
      *      $t = $z->advance($t, $i);
-     *      $t = $z->splice($t, $delete, $replacement);
-     *      $r2 = $z->toArray($t);
+     *      list($old2, $t) = $z->splice($t, $delete, $replacement);
+     *      $arr2 = $z->toArray($t);
      *
-     *      assert($r1 === $r2);
+     *      assert($old1 === $old2);
+     *      assert($arr1 === $arr2);
      *
      * NB: the absolute index location after this operation is
      * *unchanged!*
@@ -131,8 +141,10 @@ class HTMLPurifier_Zipper
      */
     public function splice($t, $delete, $replacement) {
         // delete
+        $old = array();
         $r = $t;
         for ($i = $delete; $i > 0; $i--) {
+            $old[] = $r;
             $r = $this->delete();
         }
         // insert
@@ -140,6 +152,6 @@ class HTMLPurifier_Zipper
             $this->insertAfter($r);
             $r = $replacement[$i];
         }
-        return $r;
+        return array($old, $r);
     }
 }
