@@ -9,17 +9,13 @@ class HTMLPurifier_AttrValidator
 {
 
     /**
-     * Validates the attributes of a token, returning a modified token
+     * Validates the attributes of a token, mutating it as necessary.
      * that has valid tokens
-     * @param HTMLPurifier_Token $token Reference to token to validate. We require a reference
-     *     because the operation this class performs on the token are
-     *     not atomic, so the context CurrentToken to be updated
-     *     throughout
+     * @param HTMLPurifier_Token $token Token to validate.
      * @param HTMLPurifier_Config $config Instance of HTMLPurifier_Config
      * @param HTMLPurifier_Context $context Instance of HTMLPurifier_Context
-     * @return HTMLPurifier_Token
      */
-    public function validateToken(&$token, &$config, $context)
+    public function validateToken($token, $config, $context)
     {
         $definition = $config->getHTMLDefinition();
         $e =& $context->get('ErrorCollector', true);
@@ -40,7 +36,7 @@ class HTMLPurifier_AttrValidator
         if (!$token instanceof HTMLPurifier_Token_Start &&
             !$token instanceof HTMLPurifier_Token_Empty
         ) {
-            return $token;
+            return;
         }
 
         // create alias to global definition array, see also $defs
