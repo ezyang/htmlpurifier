@@ -36,8 +36,6 @@ class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
 
             // note that we have no facilities here for removing tokens
             $validator->validateToken($token, $config, $context);
-
-            $tokens[$key] = $token; // for PHP 4
         }
         $context->destroy('CurrentToken');
         return $tokens;
