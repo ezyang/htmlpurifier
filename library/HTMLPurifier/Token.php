@@ -3,7 +3,7 @@
 /**
  * Abstract base token class that all others inherit from.
  */
-class HTMLPurifier_Token
+abstract class HTMLPurifier_Token
 {
     /**
      * Line number node was on in source document. Null if unknown.
