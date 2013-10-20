@@ -9,14 +9,8 @@
  * does have a "tag name" called #PCDATA, which is how the DTD represents it
  * in permissible child nodes.
  */
-class HTMLPurifier_Token_Text extends HTMLPurifier_Token
+class HTMLPurifier_Node_Text extends HTMLPurifier_Node
 {
-
-    /**
-     * @type string
-     */
-    public $name = '#PCDATA';
-    /**< PCDATA tag name compatible with DTD. */
 
     /**
      * @type string
@@ -37,16 +31,16 @@ class HTMLPurifier_Token_Text extends HTMLPurifier_Token
      * @param int $line
      * @param int $col
      */
-    public function __construct($data, $line = null, $col = null)
+    public function __construct($data, $is_whitespace, $line = null, $col = null)
     {
         $this->data = $data;
-        $this->is_whitespace = ctype_space($data);
+        $this->is_whitespace = $is_whitespace;
         $this->line = $line;
         $this->col = $col;
     }
 
-    public function toNode() {
-        return new HTMLPurifier_Node_Text($this->data, $this->is_whitespace, $this->line, $this->col);
+    public function toTokenPair() {
+        return array(new HTMLPurifier_Token_Text($this->data, $this->line, $this->col), null);
     }
 }
 

@@ -13,6 +13,7 @@
 $__dir = dirname(__FILE__);
 
 require_once $__dir . '/HTMLPurifier.php';
+require_once $__dir . '/HTMLPurifier/Arborize.php';
 require_once $__dir . '/HTMLPurifier/AttrCollections.php';
 require_once $__dir . '/HTMLPurifier/AttrDef.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform.php';
@@ -48,6 +49,7 @@ require_once $__dir . '/HTMLPurifier/Language.php';
 require_once $__dir . '/HTMLPurifier/LanguageFactory.php';
 require_once $__dir . '/HTMLPurifier/Length.php';
 require_once $__dir . '/HTMLPurifier/Lexer.php';
+require_once $__dir . '/HTMLPurifier/Node.php';
 require_once $__dir . '/HTMLPurifier/PercentEncoder.php';
 require_once $__dir . '/HTMLPurifier/PropertyList.php';
 require_once $__dir . '/HTMLPurifier/PropertyListIterator.php';
@@ -185,6 +187,9 @@ require_once $__dir . '/HTMLPurifier/Injector/RemoveSpansWithoutAttributes.php';
 require_once $__dir . '/HTMLPurifier/Injector/SafeObject.php';
 require_once $__dir . '/HTMLPurifier/Lexer/DOMLex.php';
 require_once $__dir . '/HTMLPurifier/Lexer/DirectLex.php';
+require_once $__dir . '/HTMLPurifier/Node/Comment.php';
+require_once $__dir . '/HTMLPurifier/Node/Element.php';
+require_once $__dir . '/HTMLPurifier/Node/Text.php';
 require_once $__dir . '/HTMLPurifier/Strategy/Composite.php';
 require_once $__dir . '/HTMLPurifier/Strategy/Core.php';
 require_once $__dir . '/HTMLPurifier/Strategy/FixNesting.php';

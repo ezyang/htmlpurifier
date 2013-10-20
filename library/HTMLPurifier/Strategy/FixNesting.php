@@ -58,6 +58,9 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
         //####################################################################//
         // Pre-processing
 
+        //$node = HTMLPurifier_Arborize::arborize($tokens, $config, $context);
+        //$new_tokens = HTMLPurifier_Arborize::flatten($node, $config, $context);
+
         // get a copy of the HTML definition
         $definition = $config->getHTMLDefinition();
 

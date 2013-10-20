@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Concrete comment token class. Generally will be ignored.
+ * Concrete comment node class.
  */
-class HTMLPurifier_Token_Comment extends HTMLPurifier_Token
+class HTMLPurifier_Node_Comment extends HTMLPurifier_Node
 {
     /**
      * Character data within comment.
@@ -30,9 +30,7 @@ class HTMLPurifier_Token_Comment extends HTMLPurifier_Token
         $this->col = $col;
     }
 
-    public function toNode() {
-        return new HTMLPurifier_Node_Comment($this->data, $this->line, $this->col);
+    public function toTokenPair() {
+        return array(new HTMLPurifier_Token_Comment($this->data, $this->line, $this->col), null);
     }
 }
-
-// vim: et sw=4 sts=4

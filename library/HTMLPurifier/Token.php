@@ -90,6 +90,11 @@ abstract class HTMLPurifier_Token
         $this->line = $l;
         $this->col = $c;
     }
+
+    /**
+     * Converts a token into its corresponding node.
+     */
+    abstract public function toNode();
 }
 
 // vim: et sw=4 sts=4

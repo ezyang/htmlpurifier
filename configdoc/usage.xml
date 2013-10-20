@@ -498,7 +498,7 @@
  </directive>
  <directive id="Core.DisableExcludes">
   <file name="HTMLPurifier/Strategy/FixNesting.php">
-   <line>64</line>
+   <line>67</line>
   </file>
  </directive>
  <directive id="Core.EscapeInvalidTags">
