@@ -20,20 +20,20 @@ class HTMLPurifier_ChildDef_Optional extends HTMLPurifier_ChildDef_Required
     public $type = 'optional';
 
     /**
-     * @param array $tokens_of_children
+     * @param array $children
      * @param HTMLPurifier_Config $config
      * @param HTMLPurifier_Context $context
      * @return array
      */
-    public function validateChildren($tokens_of_children, $config, $context)
+    public function validateChildren($children, $config, $context)
     {
-        $result = parent::validateChildren($tokens_of_children, $config, $context);
-        // we assume that $tokens_of_children is not modified
+        $result = parent::validateChildren($children, $config, $context);
+        // we assume that $children is not modified
         if ($result === false) {
-            if (empty($tokens_of_children)) {
+            if (empty($children)) {
                 return true;
             } elseif ($this->whitespace) {
-                return $tokens_of_children;
+                return $children;
             } else {
                 return array();
             }

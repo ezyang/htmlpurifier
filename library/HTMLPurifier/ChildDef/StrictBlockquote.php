@@ -43,68 +43,50 @@ class HTMLPurifier_ChildDef_StrictBlockquote extends HTMLPurifier_ChildDef_Requi
     }
 
     /**
-     * @param array $tokens_of_children
+     * @param array $children
      * @param HTMLPurifier_Config $config
      * @param HTMLPurifier_Context $context
      * @return array
      */
-    public function validateChildren($tokens_of_children, $config, $context)
+    public function validateChildren($children, $config, $context)
     {
         $this->init($config);
 
         // trick the parent class into thinking it allows more
         $this->elements = $this->fake_elements;
-        $result = parent::validateChildren($tokens_of_children, $config, $context);
+        $result = parent::validateChildren($children, $config, $context);
         $this->elements = $this->real_elements;
 
         if ($result === false) {
             return array();
         }
         if ($result === true) {
-            $result = $tokens_of_children;
+            $result = $children;
         }
 
         $def = $config->getHTMLDefinition();
-        $block_wrap_start = new HTMLPurifier_Token_Start($def->info_block_wrapper);
-        $block_wrap_end = new HTMLPurifier_Token_End($def->info_block_wrapper);
-        $is_inline = false;
-        $depth = 0;
+        $block_wrap_name = $def->info_block_wrapper;
+        $block_wrap = false;
         $ret = array();
 
-        // assuming that there are no comment tokens
-        foreach ($result as $i => $token) {
-            $token = $result[$i];
-            // ifs are nested for readability
-            if (!$is_inline) {
-                if (!$depth) {
-                    if (($token instanceof HTMLPurifier_Token_Text && !$token->is_whitespace) ||
-                        (!$token instanceof HTMLPurifier_Token_Text && !isset($this->elements[$token->name]))) {
-                        $is_inline = true;
-                        $ret[] = $block_wrap_start;
-                    }
+        foreach ($result as $node) {
+            if ($block_wrap === false) {
+                if (($node instanceof HTMLPurifier_Node_Text && !$node->is_whitespace) ||
+                    ($node instanceof HTMLPurifier_Node_Element && !isset($this->elements[$node->name]))) {
+                        $block_wrap = new HTMLPurifier_Node_Element($def->info_block_wrapper);
+                        $ret[] = $block_wrap;
                 }
             } else {
-                if (!$depth) {
-                    // starting tokens have been inline text / empty
-                    if ($token instanceof HTMLPurifier_Token_Start || $token instanceof HTMLPurifier_Token_Empty) {
-                        if (isset($this->elements[$token->name])) {
-                            // ended
-                            $ret[] = $block_wrap_end;
-                            $is_inline = false;
-                        }
-                    }
+                if ($node instanceof HTMLPurifier_Node_Element && isset($this->elements[$node->name])) {
+                    $block_wrap = false;
+
                 }
             }
-            $ret[] = $token;
-            if ($token instanceof HTMLPurifier_Token_Start) {
-                $depth++;
+            if ($block_wrap) {
+                $block_wrap->children[] = $node;
+            } else {
+                $ret[] = $node;
             }
-            if ($token instanceof HTMLPurifier_Token_End) {
-                $depth--;
-            }
-        }
-        if ($is_inline) {
-            $ret[] = $block_wrap_end;
         }
         return $ret;
     }

@@ -41,22 +41,22 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
     }
 
     /**
-     * @param array $tokens_of_children
+     * @param HTMLPurifier_Node[] $children
      * @param HTMLPurifier_Config $config
      * @param HTMLPurifier_Context $context
      * @return bool
      */
-    public function validateChildren($tokens_of_children, $config, $context)
+    public function validateChildren($children, $config, $context)
     {
         if ($context->get('IsInline') === false) {
             return $this->block->validateChildren(
-                $tokens_of_children,
+                $children,
                 $config,
                 $context
             );
         } else {
             return $this->inline->validateChildren(
-                $tokens_of_children,
+                $children,
                 $config,
                 $context
             );

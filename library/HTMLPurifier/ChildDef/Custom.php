@@ -73,31 +73,20 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
     }
 
     /**
-     * @param array $tokens_of_children
+     * @param HTMLPurifier_Node[] $children
      * @param HTMLPurifier_Config $config
      * @param HTMLPurifier_Context $context
      * @return bool
      */
-    public function validateChildren($tokens_of_children, $config, $context)
+    public function validateChildren($children, $config, $context)
     {
         $list_of_children = '';
         $nesting = 0; // depth into the nest
-        foreach ($tokens_of_children as $token) {
-            if (!empty($token->is_whitespace)) {
+        foreach ($children as $node) {
+            if (!empty($node->is_whitespace)) {
                 continue;
             }
-
-            $is_child = ($nesting == 0); // direct
-
-            if ($token instanceof HTMLPurifier_Token_Start) {
-                $nesting++;
-            } elseif ($token instanceof HTMLPurifier_Token_End) {
-                $nesting--;
-            }
-
-            if ($is_child) {
-                $list_of_children .= $token->name . ',';
-            }
+            $list_of_children .= $node->name . ',';
         }
         // add leading comma to deal with stray comma declarations
         $list_of_children = ',' . rtrim($list_of_children, ',');

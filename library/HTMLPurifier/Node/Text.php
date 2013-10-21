@@ -13,6 +13,13 @@ class HTMLPurifier_Node_Text extends HTMLPurifier_Node
 {
 
     /**
+     * PCDATA tag name compatible with DTD, see
+     * HTMLPurifier_ChildDef_Custom for details.
+     * @type string
+     */
+    public $name = '#PCDATA';
+
+    /**
      * @type string
      */
     public $data;

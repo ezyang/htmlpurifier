@@ -29,6 +29,14 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
     protected $to_tokens = false;
 
     /**
+     * Whether or not the method deals in a node list.
+     * If set to true, assertResult() will transparently convert HTML
+     * to and back from node.
+     * @type bool
+     */
+    protected $to_node_list = false;
+
+    /**
      * Whether or not to convert tokens back into HTML before performing
      * equality check, has no effect on bools.
      * @type bool
@@ -54,9 +62,12 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
      */
     protected function assertResult($input, $expect = true)
     {
-        if ($this->to_tokens && is_string($input)) {
-            // $func may cause $input to change, so "clone" another copy
-            // to sacrifice
+        // $func may cause $input to change, so "clone" another copy
+        // to sacrifice
+        if ($this->to_node_list && is_string($input)) {
+            $input = HTMLPurifier_Arborize::arborize($this->tokenize($temp = $input), $this->config, $this->context)->children;
+            $input_c = HTMLPurifier_Arborize::arborize($this->tokenize($temp), $this->config, $this->context)->children;
+        } elseif ($this->to_tokens && is_string($input)) {
             $input   = $this->tokenize($temp = $input);
             $input_c = $this->tokenize($temp);
         } else {
@@ -76,6 +87,12 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
         }
 
         if ($this->to_html) {
+            if ($this->to_node_list) {
+                $result = $this->generateTokens($result);
+                if (is_array($expect) && !empty($expect) && $expect[0] instanceof HTMLPurifier_Node) {
+                    $expect = $this->generateTokens($expect);
+                }
+            }
             $result = $this->generate($result);
             if (is_array($expect)) {
                 $expect = $this->generate($expect);
@@ -104,6 +121,16 @@ class HTMLPurifier_ComplexHarness extends HTMLPurifier_Harness
     {
         $generator = new HTMLPurifier_Generator($this->config, $this->context);
         return $generator->generateFromTokens($tokens);
+    }
+
+    /**
+     * Generate tokens from node list
+     */
+    protected function generateTokens($children)
+    {
+        $dummy = new HTMLPurifier_Node_Element("dummy");
+        $dummy->children = $children;
+        return HTMLPurifier_Arborize::flatten($dummy, $this->context, $this->config);
     }
 
 }

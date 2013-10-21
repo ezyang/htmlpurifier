@@ -15,10 +15,15 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 # URI parsing algorithm was made more strict, so only prefixes which
   looks like schemes will actually be schemes.  Thanks
   Michael Gusev <mgusev@sugarcrm.com> for fixing.
+# %Core.EscapeInvalidChildren is no longer supported, and no longer does
+  anything.
 ! New directive %Core.AllowHostnameUnderscore which allows underscores
   in hostnames.
 - Eliminate quadratic behavior in DOMLex by using a proper queue.
   Thanks Ole Laursen for noticing this.
+- Rewritten MakeWellFormed/FixNesting implementation eliminates quadratic
+  behavior in the rest of the purificaiton pipeline.  Thanks Chedburn
+  Networks for sponsoring this work.
 - Made Linkify URL parser a bit less permissive, so that non-breaking
   spaces and commas are not included as part of URL.  Thanks nAS for fixing.
 - Fix some bad interactions with %HTML.Allowed and injectors.  Thanks

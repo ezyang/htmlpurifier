@@ -24,12 +24,6 @@ class HTMLPurifier_ChildDef_ListTest extends HTMLPurifier_ChildDefHarness
         $this->assertResult('<li>asdf</li><li />');
     }
 
-    public function testIllegal()
-    {
-        // XXX actually this never gets triggered in practice
-        $this->assertResult('<li /><b />', '<li /><li><b /></li>');
-    }
-
     public function testOlAtBeginning()
     {
         $this->assertResult('<ol />', '<li><ol /></li>');

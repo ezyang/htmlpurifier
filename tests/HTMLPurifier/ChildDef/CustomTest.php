@@ -3,6 +3,11 @@
 class HTMLPurifier_ChildDef_CustomTest extends HTMLPurifier_ChildDefHarness
 {
 
+    public function setUp()
+    {
+        parent::setUp();
+    }
+
     public function test()
     {
         $this->obj = new HTMLPurifier_ChildDef_Custom('(a,b?,c*,d+,(a,b)*)');

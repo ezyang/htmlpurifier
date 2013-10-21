@@ -68,15 +68,10 @@ class HTMLPurifier_ChildDef_RequiredTest extends HTMLPurifier_ChildDefHarness
         $this->obj = new HTMLPurifier_ChildDef_Required('#PCDATA | b');
         $this->assertResult('Out <b>Bold text</b><img />', 'Out <b>Bold text</b>');
     }
-
-    public function testPCDATAAllowedWithEscaping()
+    public function testPCDATAAllowedJump()
     {
         $this->obj = new HTMLPurifier_ChildDef_Required('#PCDATA | b');
-        $this->config->set('Core.EscapeInvalidChildren', true);
-        $this->assertResult(
-            'Out <b>Bold text</b><img />',
-            'Out <b>Bold text</b>&lt;img /&gt;'
-        );
+        $this->assertResult('A <i>foo</i>', 'A foo');
     }
 }
 

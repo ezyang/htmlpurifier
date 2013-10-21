@@ -27,15 +27,6 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
         );
     }
 
-    public function testEscapeBlockInInline()
-    {
-        $this->config->set('Core.EscapeInvalidChildren', true);
-        $this->assertResult(
-            '<b><div>Illegal div.</div></b>',
-            '<b>&lt;div&gt;Illegal div.&lt;/div&gt;</b>'
-        );
-    }
-
     public function testRemoveNodeWithMissingRequiredElements()
     {
         $this->assertResult('<ul></ul>', '');
@@ -95,15 +86,6 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
     {
         $this->assertResult(
           '<div><ins><del><div>Allowed!</div></del></ins></div>'
-        );
-    }
-
-    public function testChameleonEscapeInvalidBlockInInline()
-    {
-        $this->config->set('Core.EscapeInvalidChildren', true);
-        $this->assertResult( // alt config
-          '<span><ins><div>Not allowed!</div></ins></span>',
-          '<span><ins>&lt;div&gt;Not allowed!&lt;/div&gt;</ins></span>'
         );
     }
 

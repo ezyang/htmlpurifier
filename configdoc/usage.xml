@@ -406,11 +406,6 @@
    <line>53</line>
   </file>
  </directive>
- <directive id="Core.EscapeInvalidChildren">
-  <file name="HTMLPurifier/ChildDef/Required.php">
-   <line>86</line>
-  </file>
- </directive>
  <directive id="Cache.SerializerPath">
   <file name="HTMLPurifier/DefinitionCache/Serializer.php">
    <line>171</line>
@@ -498,7 +493,7 @@
  </directive>
  <directive id="Core.DisableExcludes">
   <file name="HTMLPurifier/Strategy/FixNesting.php">
-   <line>67</line>
+   <line>54</line>
   </file>
  </directive>
  <directive id="Core.EscapeInvalidTags">

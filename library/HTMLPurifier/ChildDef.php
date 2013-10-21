@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Defines allowed child nodes and validates tokens against it.
+ * Defines allowed child nodes and validates nodes against it.
  */
 abstract class HTMLPurifier_ChildDef
 {
@@ -41,12 +41,12 @@ abstract class HTMLPurifier_ChildDef
     /**
      * Validates nodes according to definition and returns modification.
      *
-     * @param HTMLPurifier_Token[] $tokens_of_children Array of HTMLPurifier_Token
+     * @param HTMLPurifier_Node[] $children Array of HTMLPurifier_Node
      * @param HTMLPurifier_Config $config HTMLPurifier_Config object
      * @param HTMLPurifier_Context $context HTMLPurifier_Context object
-     * @return bool|array true to leave nodes as is, false to remove parent node, array of replacement child tokens
+     * @return bool|array true to leave nodes as is, false to remove parent node, array of replacement children
      */
-    abstract public function validateChildren($tokens_of_children, $config, $context);
+    abstract public function validateChildren($children, $config, $context);
 }
 
 // vim: et sw=4 sts=4
