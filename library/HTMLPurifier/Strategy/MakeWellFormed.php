@@ -582,7 +582,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     {
         // NB not $this->zipper->insertBefore(), due to positioning
         // differences
-        return $this->zipper->splice($this->token, 0, array($token))[1];
+        $splice = $this->zipper->splice($this->token, 0, array($token));
+
+        return $splice[1];
     }
 
     /**
