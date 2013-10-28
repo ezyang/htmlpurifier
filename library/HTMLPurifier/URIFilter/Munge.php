@@ -48,7 +48,7 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
         $this->doEmbed = $config->get('URI.MungeResources');
         $this->secretKey = $config->get('URI.MungeSecretKey');
         if ($this->secretKey && !function_exists('hash_hmac')) {
-            trigger_error("Cannot use %URI.MungeSecretKey without hash_hmac support.", E_USER_ERROR);
+            throw new Exception("Cannot use %URI.MungeSecretKey without hash_hmac support.");
         }
         return true;
     }

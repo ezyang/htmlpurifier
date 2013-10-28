@@ -1,3 +1,5 @@
+--SKIPIF--
+return !function_exists('hash_hmac');
 --INI--
 HTML.SafeObject = true
 HTML.SafeEmbed = true
