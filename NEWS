@@ -28,7 +28,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   spaces and commas are not included as part of URL.  Thanks nAS for fixing.
 - Fix some bad interactions with %HTML.Allowed and injectors.  Thanks
   David Hirtz for reporting.
-- Fix infinite loop in DirectLex. Thanks Ashar Javed for reporting.
+- Fix infinite loop in DirectLex. Thanks Ashar Javed (@soaj1664ashar)
+  for reporting.
 
 4.5.0, released 2013-02-17
 # Fix bug where stacked attribute transforms clobber each other;
