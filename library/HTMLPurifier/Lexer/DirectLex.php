@@ -441,11 +441,12 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         // space, so let's guarantee that there's always a terminating space.
         $string .= ' ';
 
-        while (true) {
-
-            if ($cursor >= $size) {
-                break;
+        $old_cursor = -1;
+        while ($cursor < $size) {
+            if ($old_cursor >= $cursor) {
+                throw new Exception("Infinite loop detected");
             }
+            $old_cursor = $cursor;
 
             $cursor += ($value = strspn($string, $this->_whitespace, $cursor));
             // grab the key
@@ -463,7 +464,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 if ($e) {
                     $e->send(E_ERROR, 'Lexer: Missing attribute key');
                 }
-                $cursor += strcspn($string, $this->_whitespace, $cursor + 1); // prevent infinite loop
+                $cursor += 1 + strcspn($string, $this->_whitespace, $cursor + 1); // prevent infinite loop
                 continue; // empty key
             }
 

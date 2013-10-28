@@ -56,7 +56,7 @@ class HTMLPurifier_Lexer_DirectLexTest extends HTMLPurifier_Harness
         $expect[11] = array();
 
         $input[12] = '="" =""';
-        $expect[12] = array('"' => ''); // tough to say, just don't throw a loop
+        $expect[12] = array(); // tough to say, just don't throw a loop
 
         $input[13] = 'href="';
         $expect[13] = array('href' => '');
