@@ -109,6 +109,7 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
         if ($this->secretKey) {
             $this->replace['%t'] = hash_hmac("sha256", $string, $this->secretKey);
         }
+        $this->replace['%b'] = base64_encode($string);
     }
 }
 
