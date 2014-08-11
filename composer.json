@@ -1,5 +1,5 @@
 {
-    "name": "ezyang/htmlpurifier",
+    "name": "grevus/htmlpurifier",
     "description": "Standards compliant HTML filter written in PHP",
     "type": "library",
     "keywords": ["html"],
