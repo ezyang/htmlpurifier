@@ -83,6 +83,8 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('background-position:left 90%;');
         $this->assertDef('border-spacing:1em;');
         $this->assertDef('border-spacing:1em 2em;');
+        $this->assertDef('border-color: rgb(0, 0, 0) rgb(10,0,10)', 'border-color:rgb(0,0,0) rgb(10,0,10);');
+        $this->assertDef('border: rgb(0, 0, 0)', 'border:rgb(0,0,0);');
 
         // duplicates
         $this->assertDef('text-align:right;text-align:left;',
