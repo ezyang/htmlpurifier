@@ -10,6 +10,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.7.0, unknown release date
+# opacity is now considered a "tricky" CSS property rather than a
+  proprietary one.
 - Don't truncate upon encountering </div> when using DOMLex.  Thanks
   Myrto Christina for finally convincing me to fix this.
 
