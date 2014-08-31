@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.7.0, unknown release date
+- Don't truncate upon encountering </div> when using DOMLex.  Thanks
+  Myrto Christina for finally convincing me to fix this.
+
 4.6.0, released 2013-11-30
 # Secure URI munge hashing algorithm has changed to hash_hmac("sha256", $url, $secret).
   Please update any verification scripts you may have.
