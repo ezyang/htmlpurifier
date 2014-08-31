@@ -481,6 +481,11 @@
    <line>47</line>
   </file>
  </directive>
+ <directive id="AutoFormat.RemoveEmpty.Predicate">
+  <file name="HTMLPurifier/Injector/RemoveEmpty.php">
+   <line>48</line>
+  </file>
+ </directive>
  <directive id="Core.AggressivelyFixLt">
   <file name="HTMLPurifier/Lexer/DOMLex.php">
    <line>54</line>

@@ -91,6 +91,25 @@ class HTMLPurifier_Injector_RemoveEmptyTest extends HTMLPurifier_InjectorHarness
         $this->assertResult('<b>&nbsp;</b>', "<b>\xC2\xA0</b>");
     }
 
+    public function testRemoveIframe()
+    {
+        $this->config->set('HTML.SafeIframe', true);
+        $this->assertResult('<iframe></iframe>', '');
+    }
+
+    public function testNoRemoveIframe()
+    {
+        $this->config->set('HTML.SafeIframe', true);
+        $this->assertResult('<iframe src="http://google.com"></iframe>', '');
+    }
+
+    public function testRemoveDisallowedIframe()
+    {
+        $this->config->set('HTML.SafeIframe', true);
+        $this->config->set('URI.SafeIframeRegexp', '%^http://www.youtube.com/embed/%');
+        $this->assertResult('<iframe src="http://google.com"></iframe>', '');
+    }
+
 }
 
 // vim: et sw=4 sts=4

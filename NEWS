@@ -12,6 +12,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 4.7.0, unknown release date
 # opacity is now considered a "tricky" CSS property rather than a
   proprietary one.
+! %AutoFormat.RemoveEmpty.Predicate for specifying exactly when
+  an element should be considered "empty" (maybe preserve if it
+  has attributes), and modify iframe support so that the iframe
+  is removed if it is missing a src attribute.  Thanks meeva for
+  reporting.
 - Don't truncate upon encountering </div> when using DOMLex.  Thanks
   Myrto Christina for finally convincing me to fix this.
 - Update YouTube filter for new code.
