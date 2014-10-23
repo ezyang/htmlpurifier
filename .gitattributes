@@ -1,1 +1,12 @@
-configdoc/usage.xml -crlf
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/Doxyfile export-ignore
+/art/ export-ignore
+/benchmarks/ export-ignore
+/configdoc/ export-ignore
+/configdoc/usage.xml -crlf
+/docs/ export-ignore
+/maintenance/ export-ignore
+/phpdoc.ini
+/smoketests/ export-ignore
+/tests/ export-ignore
