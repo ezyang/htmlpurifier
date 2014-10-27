@@ -219,9 +219,11 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             } elseif (!$this->_testPermissions($base, $chmod)) {
                 return false;
             }
-            $old = umask(0000);
-            mkdir($directory, $chmod);
-            umask($old);
+            // Fix for "chmod destroys ACL bug #32
+            // https://github.com/ezyang/htmlpurifier/issues/32
+            //$old = umask(0000);
+            mkdir($director);
+            //umask($old);
         } elseif (!$this->_testPermissions($directory, $chmod)) {
             return false;
         }
