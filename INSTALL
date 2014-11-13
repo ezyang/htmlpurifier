@@ -379,16 +379,15 @@ If you already have a reasonable autoloader set up for namespaced modules, eg,
 something like this:
 
 <?php
-    
-function __autoload_namespaced_module($class) {
-	$path = str_replace('\\', '/', $class);
-	if (file_exists($file = ('/path/to/modules/dir/ . $path . '.php'))) {
-		require_once($file);
-	}
-}
+    function __autoload_namespaced_module($class){
+        $path = str_replace('\\', '/', $class);
+        if(file_exists($file = ('/path/to/modules/dir/ . $path . '.php'))){
+            require_once($file);
+        }
+    }
 
-spl_autoload_register();
-spl_autoload_register('__autoload_namespaced_module');
+    spl_autoload_register();
+    spl_autoload_register('__autoload_namespaced_module');
 
 ?>
     
