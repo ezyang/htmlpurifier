@@ -211,14 +211,14 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $config->setReturnValue('get', 1, array('Test.DefinitionRev'));
         $dir = dirname(__FILE__) . '/SerializerTest';
         $config->setReturnValue('get', $dir, array('Cache.SerializerPath'));
-        $config->setReturnValue('get', 0777, array('Cache.SerializerPermissions'));
+        $config->setReturnValue('get', 0700, array('Cache.SerializerPermissions'));
 
         $def_original = $this->generateDefinition();
         $cache->add($def_original, $config);
         $this->assertFileExist($dir . '/Test/1.0.0,serial,1.ser');
 
-        $this->assertEqual(0666, 0777 & fileperms($dir . '/Test/1.0.0,serial,1.ser'));
-        $this->assertEqual(0777, 0777 & fileperms($dir . '/Test'));
+        $this->assertEqual(0600, 0777 & fileperms($dir . '/Test/1.0.0,serial,1.ser'));
+        $this->assertEqual(0700, 0777 & fileperms($dir . '/Test'));
 
         unlink($dir . '/Test/1.0.0,serial,1.ser');
         rmdir( $dir . '/Test');
