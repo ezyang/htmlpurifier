@@ -22,6 +22,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Update YouTube filter for new code.
 - Fix parsing of rgb() values with spaces in them for 'border'
   attribute.
+- Don't remove foo="" attributes if foo is a boolean attribute.  Thanks
+  valME for reporting.
 
 4.6.0, released 2013-11-30
 # Secure URI munge hashing algorithm has changed to hash_hmac("sha256", $url, $secret).
