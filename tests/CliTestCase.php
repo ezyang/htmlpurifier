@@ -32,7 +32,7 @@ class CliTestCase
     }
     public function _invokeCommand($command, $reporter)
     {
-       $xml = shell_exec($command);
+       $xml = shell_exec(escapeshellcmd($command));
         if (! $xml) {
             if (!$this->_quiet) {
                 $reporter->paintFail('Command did not have any output [' . $command . ']');
