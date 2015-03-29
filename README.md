@@ -1,9 +1,6 @@
 HTML Purifier
 =============
 
-[![Latest Stable Version](https://poser.pugx.org/ezyang/htmlpurifier/v/stable.svg)](https://packagist.org/packages/ezyang/htmlpurifier) [![Total Downloads](https://poser.pugx.org/ezyang/htmlpurifier/downloads.svg)](https://packagist.org/packages/ezyang/htmlpurifier) [![Latest Unstable Version](https://poser.pugx.org/ezyang/htmlpurifier/v/unstable.svg)](https://packagist.org/packages/ezyang/htmlpurifier) [![License](https://poser.pugx.org/ezyang/htmlpurifier/license.svg)](https://packagist.org/packages/ezyang/htmlpurifier)
-
-
 HTML Purifier is an HTML filtering solution that uses a unique combination
 of robust whitelists and agressive parsing to ensure that not only are
 XSS attacks thwarted, but the resulting HTML is standards compliant.
