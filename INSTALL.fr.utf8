@@ -19,7 +19,7 @@ Les extensions optionnelles sont iconv (généralement déjà installée) et tid
 vous pouvez utiliser HTML Purifier sans ces extensions.
 
 
-2.  Include la librairie
+2.  Inclure la librairie
 
 Quand vous devez l'utilisez, incluez le :
 
