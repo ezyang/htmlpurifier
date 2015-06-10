@@ -104,7 +104,7 @@ class HTMLPurifier
     /**
      * Initializes the purifier.
      *
-     * @param HTMLPurifier_Config $config Optional HTMLPurifier_Config object
+     * @param HTMLPurifier_Config|mixed $config Optional HTMLPurifier_Config object
      *                for all instances of the purifier, if omitted, a default
      *                configuration is supplied (which can be overridden on a
      *                per-use basis).
