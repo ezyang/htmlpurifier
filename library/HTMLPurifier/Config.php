@@ -646,16 +646,25 @@ class HTMLPurifier_Config
         return $this->getDefinition($name, true, true);
     }
 
+    /**
+     * @return HTMLPurifier_HTMLDefinition
+     */
     public function maybeGetRawHTMLDefinition()
     {
         return $this->getDefinition('HTML', true, true);
     }
-
+    
+    /**
+     * @return HTMLPurifier_CSSDefinition
+     */
     public function maybeGetRawCSSDefinition()
     {
         return $this->getDefinition('CSS', true, true);
     }
-
+    
+    /**
+     * @return HTMLPurifier_URIDefinition
+     */
     public function maybeGetRawURIDefinition()
     {
         return $this->getDefinition('URI', true, true);
