@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.7.0, unknown release date
+4.7.0, released 2015-08-04
 # opacity is now considered a "tricky" CSS property rather than a
   proprietary one.
 ! %AutoFormat.RemoveEmpty.Predicate for specifying exactly when

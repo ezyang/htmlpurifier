@@ -35,7 +35,6 @@ foreach ($files as $file) {
         postfix_is('.phpt', $file) ||
         postfix_is('VERSION', $file) ||
         postfix_is('WHATSNEW', $file) ||
-        postfix_is('FOCUS', $file) ||
         postfix_is('configdoc/usage.xml', $file) ||
         postfix_is('library/HTMLPurifier.includes.php', $file) ||
         postfix_is('library/HTMLPurifier.safe-includes.php', $file) ||
