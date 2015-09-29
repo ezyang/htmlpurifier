@@ -6,7 +6,6 @@
 /configdoc/ export-ignore
 /configdoc/usage.xml -crlf
 /docs/ export-ignore
-/maintenance/ export-ignore
 /phpdoc.ini
 /smoketests/ export-ignore
 /tests/ export-ignore
