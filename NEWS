@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.8.0, unknown release date
+- alt truncation could result in malformed UTF-8 sequence. Don't
+  truncate.  Thanks Brandon Farber for reporting.
+
 4.7.0, released 2015-08-04
 # opacity is now considered a "tricky" CSS property rather than a
   proprietary one.
