@@ -167,6 +167,13 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('z-index:-2;');
     }
 
+    public function testAllowDuplicates()
+    {
+        $this->config->set('CSS.AllowDuplicates', true);
+        $this->assertDef('text-align:right;text-align:left;');
+        $this->assertDef('text-align:right;text-align:left;text-align:right;');
+    }
+
 }
 
 // vim: et sw=4 sts=4

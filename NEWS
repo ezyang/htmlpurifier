@@ -10,6 +10,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.8.0, unknown release date
+! %CSS.AllowDuplicates permits duplicate CSS properties.
 - alt truncation could result in malformed UTF-8 sequence. Don't
   truncate.  Thanks Brandon Farber for reporting.
 
