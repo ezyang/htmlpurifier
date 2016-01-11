@@ -19,6 +19,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Non all-numeric top-level names (e.g., foo.1f, 1f) are now
   allowed.
 - Minor bounds error fix to squash a PHP 7 notice.
+- Support non-/tmp temporary directories for data:// validation
 
 4.7.0, released 2015-08-04
 # opacity is now considered a "tricky" CSS property rather than a
