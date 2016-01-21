@@ -76,7 +76,7 @@ class Debugger
     public $scope_nextID = 1;
     public $add_pre = true;
 
-    public function Debugger()
+    public function __construct()
     {
         $this->add_pre = !extension_loaded('xdebug');
     }
