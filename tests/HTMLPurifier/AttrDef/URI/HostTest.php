@@ -42,7 +42,7 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
 
     public function testIDNA()
     {
-        if (!$GLOBALS['HTMLPurifierTest']['Net_IDNA2']) {
+        if (!$GLOBALS['HTMLPurifierTest']['Net_IDNA2'] && !function_exists("idn_to_ascii")) {
             return false;
         }
         $this->config->set('Core.EnableIDNA', true);

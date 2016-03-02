@@ -89,11 +89,14 @@ class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
             return $string;
         }
 
+        // PHP 5.3 and later support this functionality natively
+        if (function_exists('idn_to_ascii')) {
+            return idn_to_ascii($string);
+
         // If we have Net_IDNA2 support, we can support IRIs by
         // punycoding them. (This is the most portable thing to do,
         // since otherwise we have to assume browsers support
-
-        if ($config->get('Core.EnableIDNA')) {
+        } elseif ($config->get('Core.EnableIDNA')) {
             $idna = new Net_IDNA2(array('encoding' => 'utf8', 'overlong' => false, 'strict' => true));
             // we need to encode each period separately
             $parts = explode('.', $string);
