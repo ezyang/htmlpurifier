@@ -52,6 +52,14 @@ class HTMLPurifier_Injector_LinkifyTest extends HTMLPurifier_InjectorHarness
         $this->assertResult('<a><span>http://example.com</span></a>');
     }
 
+    public function testRegexIsSmart()
+    {
+        $this->assertResult('http://example.com/foo.', '<a href="http://example.com/foo">http://example.com/foo</a>.');
+        $this->assertResult('“http://example.com/foo”', '“<a href="http://example.com/foo">http://example.com/foo</a>”');
+        $this->assertResult('“http://example.com”', '“<a href="http://example.com">http://example.com</a>”');
+        $this->assertResult('(http://example.com/f(o)o)', '(<a href="http://example.com/f(o)o">http://example.com/f(o)o</a>)');
+    }
+
 }
 
 // vim: et sw=4 sts=4
