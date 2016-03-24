@@ -26,7 +26,7 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
         $transform = new HTMLPurifier_AttrTransformMock();
         $input = array('original' => 'value');
         $output = array('class' => 'value'); // must be valid
-        $transform->setReturnValue('transform', $output, array($input, new AnythingExpectation(), new AnythingExpectation()));
+        $transform->returns('transform', $output, array($input, new AnythingExpectation(), new AnythingExpectation()));
         $def->info_attr_transform_pre[] = $transform;
 
         $token = new HTMLPurifier_Token_Start('span', $input, 1);

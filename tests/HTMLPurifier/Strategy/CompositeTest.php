@@ -47,13 +47,13 @@ class HTMLPurifier_Strategy_CompositeTest extends HTMLPurifier_Harness
         $params_3 = array($input_3, $config, $context);
 
         $mock_1->expectOnce('execute', $params_1);
-        $mock_1->setReturnValue('execute', $input_2, $params_1);
+        $mock_1->returns('execute', $input_2, $params_1);
 
         $mock_2->expectOnce('execute', $params_2);
-        $mock_2->setReturnValue('execute', $input_3, $params_2);
+        $mock_2->returns('execute', $input_3, $params_2);
 
         $mock_3->expectOnce('execute', $params_3);
-        $mock_3->setReturnValue('execute', $input_4, $params_3);
+        $mock_3->returns('execute', $input_4, $params_3);
 
         // perform test
 

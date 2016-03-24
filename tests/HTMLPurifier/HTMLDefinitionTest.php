@@ -326,7 +326,7 @@ a[href|title]
         generate_mock_once('HTMLPurifier_Injector');
         $injector = new HTMLPurifier_InjectorMock();
         $injector->name = 'MyInjector';
-        $injector->setReturnValue('checkNeeded', false);
+        $injector->returns('checkNeeded', false);
 
         $module = $this->config->getHTMLDefinition(true)->getAnonymousModule();
         $module->info_injector[] = $injector;
@@ -343,7 +343,7 @@ a[href|title]
         generate_mock_once('HTMLPurifier_Injector');
         $injector = new HTMLPurifier_InjectorMock();
         $injector->name = 'MyInjector';
-        $injector->setReturnValue('checkNeeded', 'a');
+        $injector->returns('checkNeeded', 'a');
 
         $module = $this->config->getHTMLDefinition(true)->getAnonymousModule();
         $module->info_injector[] = $injector;

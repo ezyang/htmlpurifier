@@ -528,7 +528,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $mock->expectNever('set');
         $config->set('HTML.DefinitionID', 'HTMLPurifier_ConfigTest->testDefinitionCachingOptimized');
         $mock->expectOnce('get');
-        $mock->setReturnValue('get', null);
+        $mock->returns('get', null);
         $this->assertTrue($config->maybeGetRawHTMLDefinition());
         $this->assertTrue($config->maybeGetRawHTMLDefinition());
         $mock->expectOnce('add');
@@ -546,7 +546,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         $mock->expectNever('set');
         $config->set('HTML.DefinitionID', 'HTMLPurifier_ConfigTest->testDefinitionCachingOptimizedHit');
         $mock->expectOnce('get');
-        $mock->setReturnValue('get', $fake_def);
+        $mock->returns('get', $fake_def);
         $this->assertNull($config->maybeGetRawHTMLDefinition());
         $config->getDefinition('HTML');
         $config->getDefinition('HTML');
@@ -564,7 +564,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
         generate_mock_once("HTMLPurifier_DefinitionCache");
         $mock = new HTMLPurifier_DefinitionCacheMock();
         $config = HTMLPurifier_Config::createDefault();
-        $factory->setReturnValue('create', $mock, array($type, $config));
+        $factory->returns('create', $mock, array($type, $config));
         return array($mock, $config);
     }
     protected function teardownCacheMock()

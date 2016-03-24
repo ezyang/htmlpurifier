@@ -12,7 +12,7 @@ class HTMLPurifier_DefinitionCacheHarness extends HTMLPurifier_Harness
     {
         generate_mock_once('HTMLPurifier_Config');
         $config = new HTMLPurifier_ConfigMock();
-        $config->setReturnValue('getBatchSerial', $serial, array('Test'));
+        $config->returns('getBatchSerial', $serial, array('Test'));
         $config->version = '1.0.0';
         return $config;
     }

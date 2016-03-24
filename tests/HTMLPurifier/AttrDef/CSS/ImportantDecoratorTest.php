@@ -17,7 +17,7 @@ class HTMLPurifier_AttrDef_CSS_ImportantDecoratorTest extends HTMLPurifier_AttrD
     {
         if ($output === null) $output = $input;
         $this->mock->expectOnce('validate', array($input, $this->config, $this->context));
-        $this->mock->setReturnValue('validate', $output);
+        $this->mock->returns('validate', $output);
     }
 
     public function testImportant()

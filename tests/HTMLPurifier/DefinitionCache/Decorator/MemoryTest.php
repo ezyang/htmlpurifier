@@ -14,21 +14,21 @@ class HTMLPurifier_DefinitionCache_Decorator_MemoryTest extends HTMLPurifier_Def
     public function setupMockForSuccess($op)
     {
         $this->mock->expectOnce($op, array($this->def, $this->config));
-        $this->mock->setReturnValue($op, true, array($this->def, $this->config));
+        $this->mock->returns($op, true, array($this->def, $this->config));
         $this->mock->expectNever('get');
     }
 
     public function setupMockForFailure($op)
     {
         $this->mock->expectOnce($op, array($this->def, $this->config));
-        $this->mock->setReturnValue($op, false, array($this->def, $this->config));
+        $this->mock->returns($op, false, array($this->def, $this->config));
         $this->mock->expectOnce('get', array($this->config));
     }
 
     public function test_get()
     {
         $this->mock->expectOnce('get', array($this->config)); // only ONE call!
-        $this->mock->setReturnValue('get', $this->def, array($this->config));
+        $this->mock->returns('get', $this->def, array($this->config));
         $this->assertEqual($this->cache->get($this->config), $this->def);
         $this->assertEqual($this->cache->get($this->config), $this->def);
     }

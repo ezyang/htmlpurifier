@@ -32,14 +32,14 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
     {
         $registry = $this->setUpSchemeRegistryMock();
         $scheme_mock = new HTMLPurifier_URISchemeMock();
-        $registry->setReturnValue('getScheme', $scheme_mock, array($name, '*', '*'));
+        $registry->returns('getScheme', $scheme_mock, array($name, '*', '*'));
         return $scheme_mock;
     }
 
     protected function setUpNoValidSchemes()
     {
         $registry = $this->setUpSchemeRegistryMock();
-        $registry->setReturnValue('getScheme', false, array('*', '*', '*'));
+        $registry->returns('getScheme', false, array('*', '*', '*'));
     }
 
     protected function tearDownSchemeRegistryMock()

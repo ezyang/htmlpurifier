@@ -105,9 +105,9 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         generate_mock_once('HTMLPurifier_URIDefinition');
         $uri_def = new HTMLPurifier_URIDefinitionMock();
         $uri_def->expectOnce('filter', array($uri, '*', '*'));
-        $uri_def->setReturnValue('filter', true, array($uri, '*', '*'));
+        $uri_def->returns('filter', true, array($uri, '*', '*'));
         $uri_def->expectOnce('postFilter', array($uri, '*', '*'));
-        $uri_def->setReturnValue('postFilter', true, array($uri, '*', '*'));
+        $uri_def->returns('postFilter', true, array($uri, '*', '*'));
         $uri_def->setup = true;
 
         // Since definitions are no longer passed by reference, we need
@@ -117,13 +117,13 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         // overload entire definitions.
         generate_mock_once('HTMLPurifier_DefinitionCache');
         $cache_mock = new HTMLPurifier_DefinitionCacheMock();
-        $cache_mock->setReturnValue('get', $uri_def);
+        $cache_mock->returns('get', $uri_def);
 
         generate_mock_once('HTMLPurifier_DefinitionCacheFactory');
         $factory_mock = new HTMLPurifier_DefinitionCacheFactoryMock();
         $old = HTMLPurifier_DefinitionCacheFactory::instance();
         HTMLPurifier_DefinitionCacheFactory::instance($factory_mock);
-        $factory_mock->setReturnValue('create', $cache_mock);
+        $factory_mock->returns('create', $cache_mock);
 
         $this->assertDef('http://example.com');
 

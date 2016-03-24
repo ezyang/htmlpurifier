@@ -35,7 +35,7 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
         $output = 'foobar';
         $def1_params = array($input, $config, $context);
         $def1->expectOnce('validate', $def1_params);
-        $def1->setReturnValue('validate', $output, $def1_params);
+        $def1->returns('validate', $output, $def1_params);
         $def2->expectNever('validate');
 
         $result = $def->validate($input, $config, $context);
@@ -51,9 +51,9 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
         $output = 'booma';
         $def_params = array($input, $config, $context);
         $def1->expectOnce('validate', $def_params);
-        $def1->setReturnValue('validate', false, $def_params);
+        $def1->returns('validate', false, $def_params);
         $def2->expectOnce('validate', $def_params);
-        $def2->setReturnValue('validate', $output, $def_params);
+        $def2->returns('validate', $output, $def_params);
 
         $result = $def->validate($input, $config, $context);
         $this->assertIdentical($output, $result);
@@ -68,9 +68,9 @@ class HTMLPurifier_AttrDef_CSS_CompositeTest extends HTMLPurifier_AttrDefHarness
         $output = false;
         $def_params = array($input, $config, $context);
         $def1->expectOnce('validate', $def_params);
-        $def1->setReturnValue('validate', false, $def_params);
+        $def1->returns('validate', false, $def_params);
         $def2->expectOnce('validate', $def_params);
-        $def2->setReturnValue('validate', false, $def_params);
+        $def2->returns('validate', false, $def_params);
 
         $result = $def->validate($input, $config, $context);
         $this->assertIdentical($output, $result);

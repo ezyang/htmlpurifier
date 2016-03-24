@@ -57,7 +57,7 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
             'heavy-fix-1'  => $hf1 = $j++,
             'heavy-fix-2'  => $hf2 = $j++
         );
-        $module->setReturnValue('makeFixes', $fixes);
+        $module->returns('makeFixes', $fixes);
 
         $config = HTMLPurifier_Config::create(array(
             'HTML.TidyLevel' => 'none'

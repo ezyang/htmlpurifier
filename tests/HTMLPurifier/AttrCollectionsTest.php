@@ -42,7 +42,7 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
             'Brocolli' => array()
         );
 
-        $collections->__construct($types, $modules);
+        $collections->doConstruct($types, $modules);
         // this is without identifier expansion or inclusions
         $this->assertIdentical(
             $collections->info,
@@ -113,8 +113,8 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
         $c_object = new HTMLPurifier_AttrDef_HTML_Color();
         $u_object = new HTMLPurifier_AttrDef_URI();
 
-        $types->setReturnValue('get', $c_object, array('Color'));
-        $types->setReturnValue('get', $u_object, array('URI'));
+        $types->returns('get', $c_object, array('Color'));
+        $types->returns('get', $u_object, array('URI'));
 
         $collections->expandIdentifiers($attr, $types);
 

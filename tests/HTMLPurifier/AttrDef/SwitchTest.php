@@ -19,7 +19,7 @@ class HTMLPurifier_AttrDef_SwitchTest extends HTMLPurifier_AttrDefHarness
         $token = new HTMLPurifier_Token_Start('tag');
         $this->context->register('CurrentToken', $token);
         $this->with->expectOnce('validate');
-        $this->with->setReturnValue('validate', 'foo');
+        $this->with->returns('validate', 'foo');
         $this->assertDef('bar', 'foo');
     }
 
@@ -28,7 +28,7 @@ class HTMLPurifier_AttrDef_SwitchTest extends HTMLPurifier_AttrDefHarness
         $token = new HTMLPurifier_Token_Start('other-tag');
         $this->context->register('CurrentToken', $token);
         $this->without->expectOnce('validate');
-        $this->without->setReturnValue('validate', 'foo');
+        $this->without->returns('validate', 'foo');
         $this->assertDef('bar', 'foo');
     }
 

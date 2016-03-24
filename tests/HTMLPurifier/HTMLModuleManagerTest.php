@@ -14,7 +14,7 @@ class HTMLPurifier_HTMLModuleManagerTest extends HTMLPurifier_Harness
 
         generate_mock_once('HTMLPurifier_AttrDef');
         $attrdef = new HTMLPurifier_AttrDefMock();
-        $attrdef->setReturnValue('make', $attrdef_nmtokens);
+        $attrdef->returns('make', $attrdef_nmtokens);
         $manager->attrTypes->set('NMTOKENS', $attrdef);
         return $manager;
     }

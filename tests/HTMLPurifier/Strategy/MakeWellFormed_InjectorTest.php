@@ -27,7 +27,7 @@ class HTMLPurifier_Strategy_MakeWellFormed_InjectorTest extends HTMLPurifier_Str
         $i->start->skip = array(0 => true, 1 => true);
         $mock->expectAt(1, 'handleEnd', array($i));
         $mock->expectCallCount('handleEnd', 2);
-        $mock->setReturnValue('getRewindOffset', false);
+        $mock->returns('getRewindOffset', false);
         $this->config->set('AutoFormat.AutoParagraph', false);
         $this->config->set('AutoFormat.Linkify',       false);
         $this->config->set('AutoFormat.Custom', array($mock));

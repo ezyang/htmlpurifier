@@ -10,8 +10,8 @@ class HTMLPurifier_URIDefinitionTest extends HTMLPurifier_URIHarness
         $mock = new HTMLPurifier_URIFilterMock();
         if ($expect) $mock->expectOnce('filter');
         else $mock->expectNever('filter');
-        $mock->setReturnValue('filter', $result);
-        $mock->setReturnValue('prepare', $setup);
+        $mock->returns('filter', $result);
+        $mock->returns('prepare', $setup);
         $mock->name = $i++;
         $mock->post = $post;
         return $mock;

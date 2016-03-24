@@ -15,9 +15,9 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
         generate_mock_once('HTMLPurifier_Generator');
         parent::setup();
         $this->language  = new HTMLPurifier_LanguageMock();
-        $this->language->setReturnValue('getErrorName',  'Error',   array(E_ERROR));
-        $this->language->setReturnValue('getErrorName',  'Warning', array(E_WARNING));
-        $this->language->setReturnValue('getErrorName',  'Notice',  array(E_NOTICE));
+        $this->language->returns('getErrorName',  'Error',   array(E_ERROR));
+        $this->language->returns('getErrorName',  'Warning', array(E_WARNING));
+        $this->language->returns('getErrorName',  'Notice',  array(E_NOTICE));
         // this might prove to be troublesome if we need to set config
         $this->generator = new HTMLPurifier_Generator($this->config, $this->context);
         $this->line = false;
@@ -30,10 +30,10 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
     public function test()
     {
         $language = $this->language;
-        $language->setReturnValue('getMessage',    'Message 1',   array('message-1'));
-        $language->setReturnValue('formatMessage', 'Message 2',   array('message-2', array(1 => 'param')));
-        $language->setReturnValue('formatMessage', ' at line 23', array('ErrorCollector: At line', array('line' => 23)));
-        $language->setReturnValue('formatMessage', ' at line 3',  array('ErrorCollector: At line', array('line' => 3)));
+        $language->returns('getMessage',    'Message 1',   array('message-1'));
+        $language->returns('formatMessage', 'Message 2',   array('message-2', array(1 => 'param')));
+        $language->returns('formatMessage', ' at line 23', array('ErrorCollector: At line', array('line' => 23)));
+        $language->returns('formatMessage', ' at line 3',  array('ErrorCollector: At line', array('line' => 3)));
 
         $this->line = 23;
         $this->collector->send(E_ERROR, 'message-1');
@@ -60,7 +60,7 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
 
     public function testNoErrors()
     {
-        $this->language->setReturnValue('getMessage', 'No errors', array('ErrorCollector: No errors'));
+        $this->language->returns('getMessage', 'No errors', array('ErrorCollector: No errors'));
 
         $formatted_result = '<p>No errors</p>';
         $this->assertIdentical(
@@ -71,8 +71,8 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
 
     public function testNoLineNumbers()
     {
-        $this->language->setReturnValue('getMessage', 'Message 1', array('message-1'));
-        $this->language->setReturnValue('getMessage', 'Message 2', array('message-2'));
+        $this->language->returns('getMessage', 'Message 1', array('message-1'));
+        $this->language->returns('getMessage', 'Message 2', array('message-2'));
 
         $this->collector->send(E_ERROR, 'message-1');
         $this->collector->send(E_ERROR, 'message-2');
@@ -98,12 +98,12 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
 
         // 0
         $current_token = new HTMLPurifier_Token_Start('a', array('href' => 'http://example.com'), 32);
-        $this->language->setReturnValue('formatMessage', 'Token message',
+        $this->language->returns('formatMessage', 'Token message',
           array('message-data-token', array('CurrentToken' => $current_token)));
         $this->collector->send(E_NOTICE, 'message-data-token');
 
         $current_attr  = 'href';
-        $this->language->setReturnValue('formatMessage', '$CurrentAttr.Name => $CurrentAttr.Value',
+        $this->language->returns('formatMessage', '$CurrentAttr.Name => $CurrentAttr.Value',
           array('message-attr', array('CurrentToken' => $current_token)));
 
         // 1
@@ -125,10 +125,10 @@ class HTMLPurifier_ErrorCollectorTest extends HTMLPurifier_Harness
     /*
     public function testNestedErrors()
     {
-        $this->language->setReturnValue('getMessage', 'Message 1',   array('message-1'));
-        $this->language->setReturnValue('getMessage', 'Message 2',   array('message-2'));
-        $this->language->setReturnValue('formatMessage', 'End Message', array('end-message', array(1 => 'param')));
-        $this->language->setReturnValue('formatMessage', ' at line 4', array('ErrorCollector: At line', array('line' => 4)));
+        $this->language->returns('getMessage', 'Message 1',   array('message-1'));
+        $this->language->returns('getMessage', 'Message 2',   array('message-2'));
+        $this->language->returns('formatMessage', 'End Message', array('end-message', array(1 => 'param')));
+        $this->language->returns('formatMessage', ' at line 4', array('ErrorCollector: At line', array('line' => 4)));
 
         $this->line = 4;
         $this->collector->start();
