@@ -19,12 +19,13 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('sub.test.');
         $this->assertDef('.test', false);
         $this->assertDef('ff');
-        $this->assertDef('1f', false);
+        $this->assertDef('1f'); // per RFC 1123
+        // See also http://serverfault.com/questions/638260/is-it-valid-for-a-hostname-to-start-with-a-digit
         $this->assertDef('-f', false);
         $this->assertDef('f1');
         $this->assertDef('f-', false);
         $this->assertDef('sub.ff');
-        $this->assertDef('sub.1f', false);
+        $this->assertDef('sub.1f'); // per RFC 1123
         $this->assertDef('sub.-f', false);
         $this->assertDef('sub.f1');
         $this->assertDef('sub.f-', false);
@@ -35,6 +36,7 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('f1.top');
         $this->assertDef('f1_f2.ex.top', false);
         $this->assertDef('f-.top', false);
+        $this->assertDef('1a');
 
         $this->assertDef("\xE4\xB8\xAD\xE6\x96\x87.com.cn", false);
 

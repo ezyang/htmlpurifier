@@ -15,6 +15,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   truncate.  Thanks Brandon Farber for reporting.
 - Linkify regex is smarter, based off of Gruber's regex.
 - IDNA supported natively on PHP 5.3 and later.
+- Non all-numeric top-level names (e.g., foo.1f, 1f) are now
+  allowed.
 
 4.7.0, released 2015-08-04
 # opacity is now considered a "tricky" CSS property rather than a
