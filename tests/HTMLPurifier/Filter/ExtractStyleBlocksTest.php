@@ -15,8 +15,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         $this->assertIdentical($result, 'Test');
         $this->assertIdentical($purifier->context->get('StyleBlocks'),
             array(
-                ".foo {\ntext-align:center;\n}",
-                "* {\nfont-size:12pt;\n}"
+                ".foo {\ntext-align:center\n}",
+                "* {\nfont-size:12pt\n}"
             )
         );
     }
@@ -85,7 +85,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
 
     public function test_cleanCSS_selector()
     {
-        $this->assertCleanCSS("a .foo #id div.cl#foo {\nfont-weight:700;\n}");
+        $this->assertCleanCSS("a .foo #id div.cl#foo {\nfont-weight:700\n}");
     }
 
     public function test_cleanCSS_angledBrackets()
@@ -110,7 +110,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
 
     public function test_cleanCSS_bogus()
     {
-        $this->assertCleanCSS("div {bogus:tree;}", "div {\n}");
+        $this->assertCleanCSS("div {bogus:tree}", "div {\n}");
     }
 
     /* [CONTENT]
@@ -134,8 +134,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
         $this->assertCleanCSS(
-            "p {\ntext-indent:1em;\n}",
-            "#foo p {\ntext-indent:1em;\n}"
+            "p {\ntext-indent:1em\n}",
+            "#foo p {\ntext-indent:1em\n}"
         );
     }
 
@@ -143,29 +143,29 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
         $this->assertCleanCSS(
-            "b, i {\ntext-decoration:underline;\n}",
-            "#foo b, #foo i {\ntext-decoration:underline;\n}"
+            "b, i {\ntext-decoration:underline\n}",
+            "#foo b, #foo i {\ntext-decoration:underline\n}"
         );
     }
 
     public function test_cleanCSS_scopeWithNaughtySelector()
     {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
-        $this->assertCleanCSS("  + p {\ntext-indent:1em;\n}", '');
+        $this->assertCleanCSS("  + p {\ntext-indent:1em\n}", "#foo p {\ntext-indent:1em\n}");
     }
 
     public function test_cleanCSS_scopeWithMultipleNaughtySelectors()
     {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo');
-        $this->assertCleanCSS("  ++ ++ p {\ntext-indent:1em;\n}", '');
+        $this->assertCleanCSS("  ++ ++ p {\ntext-indent:1em\n}", "#foo p {\ntext-indent:1em\n}");
     }
 
     public function test_cleanCSS_scopeWithCommas()
     {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo, .bar');
         $this->assertCleanCSS(
-            "p {\ntext-indent:1em;\n}",
-            "#foo p, .bar p {\ntext-indent:1em;\n}"
+            "p {\ntext-indent:1em\n}",
+            "#foo p, .bar p {\ntext-indent:1em\n}"
         );
     }
 
@@ -173,8 +173,8 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
     {
         $this->config->set('Filter.ExtractStyleBlocks.Scope', '#foo, .bar');
         $this->assertCleanCSS(
-            "p, div {\ntext-indent:1em;\n}",
-            "#foo p, .bar p, #foo div, .bar div {\ntext-indent:1em;\n}"
+            "p, div {\ntext-indent:1em\n}",
+            "#foo p, .bar p, #foo div, .bar div {\ntext-indent:1em\n}"
         );
     }
 
@@ -183,19 +183,19 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         $this->config->set('Filter.ExtractStyleBlocks.Scope', 'p');
         $this->assertCleanCSS(
 "div {
-text-align:right;
+text-align:right
 }
 
 p div {
-text-align:left;
+text-align:left
 }",
 
 "p div {
-text-align:right;
+text-align:right
 }
 
 p p div {
-text-align:left;
+text-align:left
 }"
         );
     }
@@ -205,11 +205,11 @@ text-align:left;
         $this->assertCleanCSS(
 "<!--
 div {
-text-align:right;
+text-align:right
 }
 -->",
 "div {
-text-align:right;
+text-align:right
 }"
         );
     }
@@ -218,7 +218,7 @@ text-align:right;
     {
         $this->assertCleanCSS(
 "{
-    b { text-align: center; }
+    b { text-align: center }
 }",
 ""
             );
@@ -228,24 +228,24 @@ text-align:right;
     {
         $this->assertCleanCSS(
 "&, & {
-text-align: center;
+text-align: center
 }",
 ""
         );
         $this->assertCleanCSS(
 "&, b {
-text-align:center;
+text-align:center
 }",
 "b {
-text-align:center;
+text-align:center
 }"
         );
         $this->assertCleanCSS(
 "& a #foo:hover.bar   +b > i {
-text-align:center;
+text-align:center
 }",
 "a #foo:hover.bar + b \\3E  i {
-text-align:center;
+text-align:center
 }"
         );
         $this->assertCleanCSS("doesnt-exist { text-align:center }", "");
@@ -253,7 +253,7 @@ text-align:center;
 
     public function test_cleanCSS_caseSensitive()
     {
-        $this->assertCleanCSS("a .foo #ID div.cl#foo {\nbackground:url(\"http://foo/BAR\");\n}");
+        $this->assertCleanCSS("a .foo #ID div.cl#foo {\nbackground:url(\"http://foo/BAR\")\n}");
     }
 
 }

@@ -29,7 +29,10 @@ These optional extensions can enhance the capabilities of HTML Purifier:
 These optional libraries can enhance the capabilities of HTML Purifier:
 
     * CSSTidy : Clean CSS stylesheets using %Core.ExtractStyleBlocks
+        Note: You should use the modernized fork of CSSTidy available
+        at https://github.com/Cerdic/CSSTidy
     * Net_IDNA2 (PEAR) : IRI support using %Core.EnableIDNA
+        Note: This is not necessary for PHP 5.3 or later
 
 ---------------------------------------------------------------------------
 2.  Reconnaissance
