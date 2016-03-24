@@ -17,6 +17,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - IDNA supported natively on PHP 5.3 and later.
 - Non all-numeric top-level names (e.g., foo.1f, 1f) are now
   allowed.
+- Minor bounds error fix to squash a PHP 7 notice.
 
 4.7.0, released 2015-08-04
 # opacity is now considered a "tricky" CSS property rather than a
