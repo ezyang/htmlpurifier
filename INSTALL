@@ -306,11 +306,9 @@ appropriate permissions using:
     chmod -R 0755 HTMLPurifier/DefinitionCache/Serializer
 
 If the above command doesn't work, you may need to assign write permissions
-to all. This may be necessary if your webserver runs as nobody, but is
-not recommended since it means any other user can write files in the
-directory. Use:
+to group:
 
-    chmod -R 0777 HTMLPurifier/DefinitionCache/Serializer
+    chmod -R 0775 HTMLPurifier/DefinitionCache/Serializer
 
 You can also chmod files via your FTP client; this option
 is usually accessible by right clicking the corresponding directory and
