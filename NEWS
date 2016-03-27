@@ -22,6 +22,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Support non-/tmp temporary directories for data:// validation
 - Give a better error message when a user attempts to allow
   ul/ol without allowing li.
+- On some versions of PHP, the Serializer DefinitionCache could
+  infinite loop when the directory exists but is not listable. (#49)
 
 4.7.0, released 2015-08-04
 # opacity is now considered a "tricky" CSS property rather than a

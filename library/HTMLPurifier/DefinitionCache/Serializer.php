@@ -97,6 +97,12 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         }
         $dir = $this->generateDirectoryPath($config);
         $dh = opendir($dir);
+        // Apparently, on some versions of PHP, readdir will return
+        // an empty string if you pass an invalid argument to readdir.
+        // So you need this test.  See #49.
+        if (false === $dh) {
+            return false;
+        }
         while (false !== ($filename = readdir($dh))) {
             if (empty($filename)) {
                 continue;
@@ -106,6 +112,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             }
             unlink($dir . '/' . $filename);
         }
+        return true;
     }
 
     /**
@@ -119,6 +126,10 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         }
         $dir = $this->generateDirectoryPath($config);
         $dh = opendir($dir);
+        // See #49 (and above).
+        if (false === $dh) {
+            return false;
+        }
         while (false !== ($filename = readdir($dh))) {
             if (empty($filename)) {
                 continue;
@@ -131,6 +142,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
                 unlink($dir . '/' . $filename);
             }
         }
+        return true;
     }
 
     /**

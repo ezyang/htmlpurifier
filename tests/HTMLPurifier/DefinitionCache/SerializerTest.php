@@ -224,6 +224,20 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         rmdir( $dir . '/Test');
 
     }
+
+    public function testNoInfiniteLoop()
+    {
+        $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
+
+        $config = $this->generateConfigMock('serial');
+        $config->version = '1.0.0';
+        $config->returns('get', 1, array('Test.DefinitionRev'));
+        $dir = dirname(__FILE__) . '/SerializerTest';
+        $config->returns('get', $dir, array('Cache.SerializerPath'));
+        $config->returns('get', 0400, array('Cache.SerializerPermissions'));
+
+        $cache->cleanup($config);
+    }
 }
 
 // vim: et sw=4 sts=4
