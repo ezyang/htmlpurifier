@@ -27,6 +27,9 @@ class HTMLPurifier_HTMLT extends HTMLPurifier_Harness
             $this->config->loadIni($ini_file);
         }
         $expect = isset($hash['EXPECT']) ? $hash['EXPECT'] : $hash['HTML'];
+        if (isset($hash['ERROR'])) {
+            $this->expectError($hash['ERROR']);
+        }
         $this->assertPurification(rtrim($hash['HTML']), rtrim($expect));
         if (isset($hash['INI'])) unlink($ini_file);
     }

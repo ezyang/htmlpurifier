@@ -151,6 +151,13 @@ class HTMLPurifier_Strategy_FixNestingTest extends HTMLPurifier_StrategyHarness
         $this->assertResult('<pre><font><font></font></font></pre>');
     }
 
+    public function testDoubleKill()
+    {
+        $this->config->set('HTML.Allowed', 'ul');
+        $this->expectError('Cannot allow ul/ol without allowing li');
+        $this->assertResult('<ul>foo</ul>', '');
+    }
+
 }
 
 // vim: et sw=4 sts=4
