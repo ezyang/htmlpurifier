@@ -26,6 +26,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   infinite loop when the directory exists but is not listable. (#49)
 - Don't match for <body> inside comments with
   %Core.ConvertDocumentToFragment. (#67)
+- SafeObject is now less case sensitive. (#57)
 
 4.7.0, released 2015-08-04
 # opacity is now considered a "tricky" CSS property rather than a

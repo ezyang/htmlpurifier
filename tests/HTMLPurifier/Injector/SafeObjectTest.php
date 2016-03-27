@@ -57,7 +57,7 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
     public function testIgnoreBogusData()
     {
         $this->assertResult(
-            '<object><param name="allowScriptAccess" value="always" /><param name="allowNetworking" value="always" /></object>',
+            '<object><param name="allowscriptaccess" value="always" /><param name="allowNetworking" value="always" /></object>',
             '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /></object>'
         );
     }
@@ -91,6 +91,13 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
         $this->assertResult(
             '<object><p><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /></p></object>',
             '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><p></p></object>'
+        );
+    }
+
+    public function testCaseInsensitive()
+    {
+        $this->assertResult(
+            '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="flashVars" value="a" /><param name="FlashVars" value="b" /></object>'
         );
     }
 
