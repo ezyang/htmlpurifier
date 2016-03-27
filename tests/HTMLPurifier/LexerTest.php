@@ -169,6 +169,16 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
         $this->assertExtractBody('<body>foo</body>bar</body>', 'foo</body>bar');
     }
 
+    public function test_extractBody_ignoreCommented()
+    {
+        $this->assertExtractBody('$<!-- <body>foo</body> -->^');
+    }
+
+    public function test_extractBody_butCanStillWork()
+    {
+        $this->assertExtractBody('<!-- b --><body>a</body>', 'a');
+    }
+
     // HTMLPurifier_Lexer->tokenizeHTML() --------------------------------------
 
     public function assertTokenization($input, $expect, $alt_expect = array())
