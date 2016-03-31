@@ -40,6 +40,10 @@ else {
     throw new Exception('Please create a test-settings.php file by copying test-settings.sample.php and configuring accordingly');
 }
 
+if (!is_dir($simpletest_location) or !file_exists($simpletest_location . 'unit_tester.php')) {
+    echo "Could not find SimpleTest, please configure SimpleTest directory variable: \$simpletest_location\n";
+    throw new Exception('Could not find SimpleTest, please configure SimpleTest directory variable: $simpletest_location');
+}
 // load SimpleTest
 require_once $simpletest_location . 'unit_tester.php';
 require_once $simpletest_location . 'reporter.php';
