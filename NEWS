@@ -12,6 +12,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 4.8.0, unknown release date
 ! Full PHP 7 compatibility, the test suite is ALL GO.
 ! %CSS.AllowDuplicates permits duplicate CSS properties.
+! Support for 'tel' URIs.
 - alt truncation could result in malformed UTF-8 sequence. Don't
   truncate.  Thanks Brandon Farber for reporting.
 - Linkify regex is smarter, based off of Gruber's regex.

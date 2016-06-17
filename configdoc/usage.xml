@@ -296,6 +296,11 @@
    <line>49</line>
   </file>
  </directive>
+ <directive id="CSS.AllowDuplicates">
+  <file name="HTMLPurifier/AttrDef/CSS.php">
+   <line>28</line>
+  </file>
+ </directive>
  <directive id="URI.Disable">
   <file name="HTMLPurifier/AttrDef/URI.php">
    <line>47</line>
@@ -362,7 +367,7 @@
  </directive>
  <directive id="Core.EnableIDNA">
   <file name="HTMLPurifier/AttrDef/URI/Host.php">
-   <line>96</line>
+   <line>105</line>
   </file>
  </directive>
  <directive id="Attr.DefaultTextDir">
@@ -390,7 +395,7 @@
  </directive>
  <directive id="Attr.DefaultInvalidImageAlt">
   <file name="HTMLPurifier/AttrTransform/ImgRequired.php">
-   <line>41</line>
+   <line>40</line>
   </file>
  </directive>
  <directive id="HTML.Attr.Name.UseCDATA">
@@ -408,13 +413,13 @@
  </directive>
  <directive id="Cache.SerializerPath">
   <file name="HTMLPurifier/DefinitionCache/Serializer.php">
-   <line>171</line>
+   <line>183</line>
   </file>
  </directive>
  <directive id="Cache.SerializerPermissions">
   <file name="HTMLPurifier/DefinitionCache/Serializer.php">
-   <line>188</line>
-   <line>206</line>
+   <line>200</line>
+   <line>218</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.TidyImpl">
