@@ -25,5 +25,6 @@ URIScheme - needs to have callable generic checks
     mailto - doesn't validate emails, doesn't validate querystring
     news - doesn't validate opaque path
     nntp - doesn't constrain path
+    tel - doesn't validate phone numbers, only allows characters '+', '1-9', and 'x'
 
     vim: et sw=4 sts=4

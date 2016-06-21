@@ -37,6 +37,11 @@ class HTMLPurifier_URIFilter_MakeAbsoluteTest extends HTMLPurifier_URIFilterHarn
         $this->assertFiltering('mailto:bob@example.com');
     }
 
+    public function testPreserveAltSchemeWithTel()
+    {
+        $this->assertFiltering('tel:+15555555555');
+    }
+
     public function testFilterIgnoreHTTPSpecialCase()
     {
         $this->assertFiltering('http:/', 'http://example.com/');

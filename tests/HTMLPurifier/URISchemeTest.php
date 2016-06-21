@@ -172,6 +172,25 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
+    public function test_tel_regular()
+    {
+        $this->assertValidation(
+            'tel:+1 (555) 555-5555'
+        );
+        
+        $this->assertValidation(
+            'tel:+15555555555'
+        );
+        
+        $this->assertValidation(
+            'tel:+1-555-555-5555x123'
+        );
+        
+        $this->assertValidation(
+            'tel:555-555-5555'
+        );
+    }
+
     public function test_data_png()
     {
         $this->assertValidation(
