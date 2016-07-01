@@ -44,12 +44,12 @@
  </directive>
  <directive id="CSS.AllowedProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>447</line>
+   <line>460</line>
   </file>
  </directive>
  <directive id="CSS.ForbiddenProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>463</line>
+   <line>476</line>
   </file>
  </directive>
  <directive id="Cache.DefinitionImpl">

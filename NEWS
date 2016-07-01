@@ -18,6 +18,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! Full PHP 7 compatibility, the test suite is ALL GO.
 ! %CSS.AllowDuplicates permits duplicate CSS properties.
 ! Support for 'tel' URIs.
+! Partial support for 'border-radius' properties when %CSS.AllowProprietary is true.
+  The slash syntax, i.e., 'border-radius: 2em 1em 4em / 0.5em 3em' is not
+  yet supported.
 - alt truncation could result in malformed UTF-8 sequence. Don't
   truncate.  Thanks Brandon Farber for reporting.
 - Linkify regex is smarter, based off of Gruber's regex.
