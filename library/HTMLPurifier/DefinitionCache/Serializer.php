@@ -198,11 +198,12 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         if ($result !== false) {
             // set permissions of the new file (no execute)
             $chmod = $config->get('Cache.SerializerPermissions');
-            if (!$chmod) {
-                $chmod = 0644; // invalid config or simpletest
+            if ($chmod === null) {
+                // don't do anything
+            } else {
+                $chmod = $chmod & 0666;
+                chmod($file, $chmod);
             }
-            $chmod = $chmod & 0666;
-            chmod($file, $chmod);
         }
         return $result;
     }
@@ -216,9 +217,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     {
         $directory = $this->generateDirectoryPath($config);
         $chmod = $config->get('Cache.SerializerPermissions');
-        if (!$chmod) {
-            $chmod = 0755; // invalid config or simpletest
-        }
         if (!is_dir($directory)) {
             $base = $this->generateBaseDirectoryPath($config);
             if (!is_dir($base)) {
@@ -231,7 +229,19 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             } elseif (!$this->_testPermissions($base, $chmod)) {
                 return false;
             }
-            mkdir($directory, $chmod);
+            if ($chmod === null) {
+                trigger_error(
+                    'Base directory ' . $base . ' does not exist,
+                    please create or change using %Cache.SerializerPath',
+                    E_USER_WARNING
+                );
+                return false;
+            }
+            if ($chmod !== null) {
+                mkdir($directory, $chmod);
+            } else {
+                mkdir($directory);
+            }
             if (!$this->_testPermissions($directory, $chmod)) {
                 trigger_error(
                     'Base directory ' . $base . ' does not exist,
@@ -268,7 +278,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             );
             return false;
         }
-        if (function_exists('posix_getuid')) {
+        if (function_exists('posix_getuid') && $chmod !== null) {
             // POSIX system, we can give more specific advice
             if (fileowner($dir) === posix_getuid()) {
                 // we can chmod it ourselves

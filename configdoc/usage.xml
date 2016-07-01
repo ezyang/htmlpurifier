@@ -424,7 +424,7 @@
  <directive id="Cache.SerializerPermissions">
   <file name="HTMLPurifier/DefinitionCache/Serializer.php">
    <line>200</line>
-   <line>218</line>
+   <line>219</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.TidyImpl">
