@@ -189,7 +189,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
     {
         $this->config->set('Attr.AllowedFrameTargets', '_top');
         $this->config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
-        $this->assertResult('<a href="foo" target="_top" />');
+        $this->assertResult('<a href="foo" target="_top" rel="noreferrer" />');
     }
 
     public function testRemoveTargetWhenNotSupported()

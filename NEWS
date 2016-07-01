@@ -10,6 +10,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.8.0, unknown release date
+# By default, when a link has a target attribute associated
+  with it, we now also add rel="noreferrer" in order to
+  prevent the new window from being able to overwrite
+  the original frame.  To disable this protection,
+  set %HTML.TargetNoreferrer to FALSE.
 ! Full PHP 7 compatibility, the test suite is ALL GO.
 ! %CSS.AllowDuplicates permits duplicate CSS properties.
 ! Support for 'tel' URIs.
