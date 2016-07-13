@@ -252,6 +252,16 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         $this->assertValidation('ftp:///example.com', false);
     }
 
+    public function test_data_bad_base64()
+    {
+        $this->assertValidation('data:image/png;base64,aGVsbG90aGVyZXk|', false);
+    }
+
+    public function test_data_too_short()
+    {
+        $this->assertValidation('data:image/png;base64,aGVsbG90aGVyZXk=', false);
+    }
+
 }
 
 // vim: et sw=4 sts=4
