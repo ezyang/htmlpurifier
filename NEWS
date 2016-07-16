@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.8.0, unknown release date
+4.8.0, released 2016-07-16
 # By default, when a link has a target attribute associated
   with it, we now also add rel="noreferrer" in order to
   prevent the new window from being able to overwrite
