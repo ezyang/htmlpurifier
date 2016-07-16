@@ -355,9 +355,14 @@
    <line>58</line>
   </file>
  </directive>
+ <directive id="Attr.ID.HTML5">
+  <file name="HTMLPurifier/AttrDef/HTML/ID.php">
+   <line>75</line>
+  </file>
+ </directive>
  <directive id="Attr.IDBlacklistRegexp">
   <file name="HTMLPurifier/AttrDef/HTML/ID.php">
-   <line>89</line>
+   <line>97</line>
   </file>
  </directive>
  <directive id="Attr.">

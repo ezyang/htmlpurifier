@@ -105,6 +105,17 @@ class HTMLPurifier_AttrDef_HTML_IDTest extends HTMLPurifier_AttrDefHarness
 
     }
 
+    public function testRelaxed()
+    {
+        $this->config->set('Attr.ID.HTML5', true);
+
+        $this->assertDef('123');
+        $this->assertDef('x[1]');
+        $this->assertDef('not ok', false);
+        $this->assertDef(' ', false);
+        $this->assertDef('', false);
+    }
+
 }
 
 // vim: et sw=4 sts=4
