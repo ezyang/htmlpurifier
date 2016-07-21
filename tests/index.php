@@ -212,6 +212,12 @@ if ($AC['file']) {
 
 if ($AC['dry']) $reporter->makeDry();
 
-$test->run($reporter);
+$result = $test->run($reporter);
+
+if ($result) {
+    exit(0); // Success!
+} else {
+    exit(1); // Abject failure.
+}
 
 // vim: et sw=4 sts=4
