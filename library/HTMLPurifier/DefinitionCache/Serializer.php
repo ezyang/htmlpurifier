@@ -198,10 +198,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         if ($result !== false) {
             // set permissions of the new file (no execute)
             $chmod = $config->get('Cache.SerializerPermissions');
-            if ($chmod === null) {
-                // don't do anything
-            } else {
-                $chmod = $chmod & 0666;
+            if ($chmod !== null) {
                 chmod($file, $chmod);
             }
         }
@@ -227,14 +224,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
                 );
                 return false;
             } elseif (!$this->_testPermissions($base, $chmod)) {
-                return false;
-            }
-            if ($chmod === null) {
-                trigger_error(
-                    'Base directory ' . $base . ' does not exist,
-                    please create or change using %Cache.SerializerPath',
-                    E_USER_WARNING
-                );
                 return false;
             }
             if ($chmod !== null) {
