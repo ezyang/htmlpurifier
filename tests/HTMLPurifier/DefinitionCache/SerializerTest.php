@@ -23,7 +23,6 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
             $rel_file = HTMLPURIFIER_PREFIX . '/HTMLPurifier/DefinitionCache/Serializer/Test/' .
             $config_md5 . '.ser'
         );
-        
         if($file && file_exists($file)) unlink($file); // prevent previous failures from causing problems
 
         $this->assertIdentical($config_md5, $cache->generateKey($config));
@@ -216,12 +215,10 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
 
         $def_original = $this->generateDefinition();
         $cache->add($def_original, $config);
+        $this->assertFileExist($dir . '/Test/1.0.0,serial,1.ser');
 
-        $file_path = $dir . '/Test/1.0.0,serial,1.ser';
-        $this->assertFileExist($file_path);
-
-        $file_permissions = substr(sprintf("%o",fileperms($file_path)),-4);;
-        $this->assertEqual("0700", $file_permissions);
+        $this->assertEqual(0600, 0777 & fileperms($dir . '/Test/1.0.0,serial,1.ser'));
+        $this->assertEqual(0700, 0777 & fileperms($dir . '/Test'));
 
         unlink($dir . '/Test/1.0.0,serial,1.ser');
         rmdir( $dir . '/Test');
