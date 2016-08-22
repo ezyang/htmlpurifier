@@ -214,6 +214,11 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     {
         $directory = $this->generateDirectoryPath($config);
         $chmod = $config->get('Cache.SerializerPermissions');
+        if ($chmod === null) {
+            // TODO: This races
+            if (is_dir($directory)) return true;
+            return mkdir($directory);
+        }
         if (!is_dir($directory)) {
             $base = $this->generateBaseDirectoryPath($config);
             if (!is_dir($base)) {
@@ -226,17 +231,14 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             } elseif (!$this->_testPermissions($base, $chmod)) {
                 return false;
             }
-            if ($chmod !== null) {
-                mkdir($directory, $chmod);
-            } else {
-                mkdir($directory);
-            }
-            if (!$this->_testPermissions($directory, $chmod)) {
+            if (!mkdir($directory, $chmod)) {
                 trigger_error(
-                    'Base directory ' . $base . ' does not exist,
-                    please create or change using %Cache.SerializerPath',
+                    'Could not create directory ' . $directory . '',
                     E_USER_WARNING
                 );
+                return false;
+            }
+            if (!$this->_testPermissions($directory, $chmod)) {
                 return false;
             }
         } elseif (!$this->_testPermissions($directory, $chmod)) {
