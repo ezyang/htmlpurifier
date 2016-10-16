@@ -112,6 +112,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             }
             unlink($dir . '/' . $filename);
         }
+        closedir($dh);
         return true;
     }
 
@@ -142,6 +143,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
                 unlink($dir . '/' . $filename);
             }
         }
+        closedir($dh);
         return true;
     }
 
