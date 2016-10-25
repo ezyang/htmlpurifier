@@ -225,6 +225,22 @@ class HTMLPurifier_URITest extends HTMLPurifier_URIHarness
         $this->assertValidation('http://google.com');
     }
 
+    public function test_validate_schemeIsDefaultAndTheOnlyAllowed()
+    {
+        $uri =
+            'data:'.
+            'image/png,'.
+            'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGP'.
+            'C/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YGARc5KB0XV+IA'.
+            'AAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAF1J'.
+            'REFUGNO9zL0NglAAxPEfdLTs4BZM4DIO4C7OwQg2JoQ9LE1exdlYvBBeZ7jq'.
+            'ch9//q1uH4TLzw4d6+ErXMMcXuHWxId3KOETnnXXV6MJpcq2MLaI97CER3N0'.
+            'vr4MkhoXe0rZigAAAABJRU5ErkJggg==';
+
+        $this->config->set('URI.DefaultScheme', 'data');
+        $this->config->set('URI.AllowedSchemes', array('data' => true));
+        $this->assertValidation($uri, $uri);
+    }
 }
 
 // vim: et sw=4 sts=4
