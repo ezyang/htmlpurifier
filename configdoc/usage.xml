@@ -24,32 +24,32 @@
  </directive>
  <directive id="CSS.Proprietary">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>319</line>
+   <line>323</line>
   </file>
  </directive>
  <directive id="CSS.AllowTricky">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>323</line>
+   <line>327</line>
   </file>
  </directive>
  <directive id="CSS.Trusted">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>327</line>
+   <line>331</line>
   </file>
  </directive>
  <directive id="CSS.AllowImportant">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>331</line>
+   <line>335</line>
   </file>
  </directive>
  <directive id="CSS.AllowedProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>460</line>
+   <line>464</line>
   </file>
  </directive>
  <directive id="CSS.ForbiddenProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>476</line>
+   <line>480</line>
   </file>
  </directive>
  <directive id="Cache.DefinitionImpl">
@@ -429,7 +429,7 @@
  <directive id="Cache.SerializerPermissions">
   <file name="HTMLPurifier/DefinitionCache/Serializer.php">
    <line>200</line>
-   <line>219</line>
+   <line>216</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.TidyImpl">
