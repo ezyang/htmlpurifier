@@ -30,7 +30,8 @@ class HTMLPurifier_DefinitionCacheFactoryTest extends HTMLPurifier_Harness
         $this->factory->addDecorator('Memory');
         $cache = $this->factory->create('Test', $this->config);
         $cache_real = new HTMLPurifier_DefinitionCache_Decorator_Memory();
-        $cache_real = $cache_real->decorate(new HTMLPurifier_DefinitionCache_Serializer('Test'));
+        $ser = new HTMLPurifier_DefinitionCache_Serializer('Test');
+        $cache_real = $cache_real->decorate($ser);
         $this->assertEqual($cache, $cache_real);
     }
 
@@ -39,7 +40,8 @@ class HTMLPurifier_DefinitionCacheFactoryTest extends HTMLPurifier_Harness
         $this->factory->addDecorator(new HTMLPurifier_DefinitionCache_Decorator_Memory());
         $cache = $this->factory->create('Test', $this->config);
         $cache_real = new HTMLPurifier_DefinitionCache_Decorator_Memory();
-        $cache_real = $cache_real->decorate(new HTMLPurifier_DefinitionCache_Serializer('Test'));
+        $ser = new HTMLPurifier_DefinitionCache_Serializer('Test');
+        $cache_real = $cache_real->decorate($ser);
         $this->assertEqual($cache, $cache_real);
     }
 

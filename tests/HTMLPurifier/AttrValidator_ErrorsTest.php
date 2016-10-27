@@ -10,7 +10,8 @@ class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
         $this->language = HTMLPurifier_LanguageFactory::instance()->create($config, $this->context);
         $this->context->register('Locale', $this->language);
         $this->collector = new HTMLPurifier_ErrorCollector($this->context);
-        $this->context->register('Generator', new HTMLPurifier_Generator($config, $this->context));
+        $gen = new HTMLPurifier_Generator($config, $this->context);
+        $this->context->register('Generator', $gen);
     }
 
     protected function invoke($input)
