@@ -38,7 +38,7 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('f-.top', false);
         $this->assertDef('1a');
 
-        $this->assertDef("\xE4\xB8\xAD\xE6\x96\x87.com.cn", false);
+        $this->assertDef("\xE4\xB8\xAD\xE6\x96\x87.com.cn", 'xn--fiq228c.com.cn', true);
 
     }
 

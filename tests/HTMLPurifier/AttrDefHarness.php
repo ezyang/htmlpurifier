@@ -13,14 +13,18 @@ class HTMLPurifier_AttrDefHarness extends HTMLPurifier_Harness
     }
 
     // cannot be used for accumulator
-    public function assertDef($string, $expect = true)
+    public function assertDef($string, $expect = true, $or_false = false)
     {
         // $expect can be a string or bool
         $result = $this->def->validate($string, $this->config, $this->context);
         if ($expect === true) {
-            $this->assertIdentical($string, $result);
+            if (!($or_false && $result === false)) {
+                $this->assertIdentical($string, $result);
+            }
         } else {
-            $this->assertIdentical($expect, $result);
+            if (!($or_false && $result === false)) {
+                $this->assertIdentical($expect, $result);
+            }
         }
     }
 
