@@ -12,6 +12,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 4.9.0, unknown release date
 ! %URI.DefaultScheme can now be set to null, in which case
   all relative paths are removed.
+! New CSS properties: min-width, max-width, min-height, max-height (#94)
+- When idn_to_ascii is defined, we might accept malformed
+  hostnames.  Apply validation to the result in such cases.
+- Close directory when done in Serializer DefinitionCache (#100)
+- Deleted some asserts to avoid linters from choking (#97)
+- Rework Serializer cache behavior to avoid chmod'ing if possible (#32)
 
 4.8.0, released 2016-07-16
 # By default, when a link has a target attribute associated
