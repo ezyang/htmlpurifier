@@ -9,6 +9,10 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.9.0, unknown release date
+! %URI.DefaultScheme can now be set to null, in which case
+  all relative paths are removed.
+
 4.8.0, released 2016-07-16
 # By default, when a link has a target attribute associated
   with it, we now also add rel="noreferrer" in order to

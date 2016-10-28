@@ -81,6 +81,12 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('http://example.com/foo/bar');
     }
 
+    public function testDefaultSchemeNull()
+    {
+        $this->config->set('URI.DefaultScheme', null);
+        $this->assertDef('foo', false);
+    }
+
     public function testAltSchemeNotRemoved()
     {
         $this->assertDef('mailto:this-looks-like-a-path@example.com');

@@ -423,13 +423,13 @@
  </directive>
  <directive id="Cache.SerializerPath">
   <file name="HTMLPurifier/DefinitionCache/Serializer.php">
-   <line>183</line>
+   <line>185</line>
   </file>
  </directive>
  <directive id="Cache.SerializerPermissions">
   <file name="HTMLPurifier/DefinitionCache/Serializer.php">
-   <line>200</line>
-   <line>216</line>
+   <line>202</line>
+   <line>218</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.TidyImpl">
