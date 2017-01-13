@@ -19,7 +19,11 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Deleted some asserts to avoid linters from choking (#97)
 - Rework Serializer cache behavior to avoid chmod'ing if possible (#32)
 - Embedded semicolons in strings in CSS are now handled correctly!
-! Added %HTML.Noopener to add rel="noopener" to external links.
+# By default, when a link has a target attribute associated
+  with it, we now also add rel="noopener" in order to
+  prevent the new window from being able to overwrite
+  the original frame.  To disable this protection,
+  set %HTML.TargetNoopener to FALSE.
 
 4.8.0, released 2016-07-16
 # By default, when a link has a target attribute associated
