@@ -268,6 +268,9 @@ class HTMLPurifier_HTMLModuleManager
         if ($config->get('HTML.Nofollow')) {
             $modules[] = 'Nofollow';
         }
+        if ($config->get('HTML.Noopener')) {
+            $modules[] = 'Noopener';
+        }
         if ($config->get('HTML.TargetBlank')) {
             $modules[] = 'TargetBlank';
         }

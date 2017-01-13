@@ -222,14 +222,19 @@
    <line>268</line>
   </file>
  </directive>
- <directive id="HTML.TargetBlank">
+ <directive id="HTML.Noopener">
   <file name="HTMLPurifier/HTMLModuleManager.php">
    <line>271</line>
   </file>
  </directive>
+ <directive id="HTML.TargetBlank">
+  <file name="HTMLPurifier/HTMLModuleManager.php">
+   <line>274</line>
+  </file>
+ </directive>
  <directive id="HTML.TargetNoreferrer">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>276</line>
+   <line>279</line>
   </file>
  </directive>
  <directive id="Attr.IDBlacklist">
