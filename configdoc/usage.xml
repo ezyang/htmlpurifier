@@ -222,17 +222,17 @@
    <line>268</line>
   </file>
  </directive>
- <directive id="HTML.Noopener">
+ <directive id="HTML.TargetBlank">
   <file name="HTMLPurifier/HTMLModuleManager.php">
    <line>271</line>
   </file>
  </directive>
- <directive id="HTML.TargetBlank">
+ <directive id="HTML.TargetNoreferrer">
   <file name="HTMLPurifier/HTMLModuleManager.php">
-   <line>274</line>
+   <line>276</line>
   </file>
  </directive>
- <directive id="HTML.TargetNoreferrer">
+ <directive id="HTML.TargetNoopener">
   <file name="HTMLPurifier/HTMLModuleManager.php">
    <line>279</line>
   </file>
