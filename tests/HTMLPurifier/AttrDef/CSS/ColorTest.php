@@ -37,7 +37,7 @@ class HTMLPurifier_AttrDef_CSS_ColorTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('cmyk(40, 23, 43, 23)', false);
         $this->assertDef('rgb(0%, 23, 68%)', false); // no mixed type
         $this->assertDef('rgb(231, 144, 28.2%)', false); // no mixed type
-        $this->assertDef('hsl(18%,12%%,89%)', false); // integer, percentage, percentage
+        $this->assertDef('hsl(18%,12%,89%)', false); // integer, percentage, percentage
 
         // clip numbers outside sRGB gamut
         $this->assertDef('rgb(200%, -10%, 0%)', 'rgb(100%,0%,0%)');
