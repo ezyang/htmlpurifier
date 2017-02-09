@@ -11,9 +11,14 @@ class HTMLPurifier_AttrDef_CSS_ColorTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('#fff');
         $this->assertDef('#eeeeee');
         $this->assertDef('#808080');
+
         $this->assertDef('rgb(255, 0, 0)', 'rgb(255,0,0)'); // rm spaces
         $this->assertDef('rgb(100%,0%,0%)');
         $this->assertDef('rgb(50.5%,23.2%,43.9%)'); // decimals okay
+
+        $this->assertDef('rgba(255, 0, 0, 0)', 'rgba(255,0,0,0)'); // rm spaces
+        $this->assertDef('rgba(100%,0%,0%,.4)');
+        $this->assertDef('rgba(38.1%,59.7%,1.8%,0.7)', 'rgba(38.1%,59.7%,1.8%,.7)'); // decimals okay
 
         $this->assertDef('#G00', false);
         $this->assertDef('cmyk(40, 23, 43, 23)', false);

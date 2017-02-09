@@ -29,24 +29,49 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
             return $colors[$lower];
         }
 
-        if (strpos($color, 'rgb(') !== false) {
+        if (preg_match('#(rgb|rgba)\(#', $color, $matches) === 1) {
+            // get used function : rgb or rgba
+            $function = $matches[1];
+            if ($function == 'rgba') {
+                $parameters_size = 4;
+            } else {
+                $parameters_size = 3;
+            }
+
             // rgb literal handling
             $length = strlen($color);
             if (strpos($color, ')') !== $length - 1) {
                 return false;
             }
-            $triad = substr($color, 4, $length - 4 - 1);
-            $parts = explode(',', $triad);
-            if (count($parts) !== 3) {
+
+            $values = substr($color, strlen($function) + 1, $length - strlen($function) - 2);
+
+            $parts = explode(',', $values);
+            if (count($parts) !== $parameters_size) {
                 return false;
             }
             $type = false; // to ensure that they're all the same type
             $new_parts = array();
+            $i = 0;
             foreach ($parts as $part) {
+                $i++;
                 $part = trim($part);
                 if ($part === '') {
                     return false;
                 }
+
+                // different check for alpha channel
+                if ($function === 'rgba' && $i === count($parts)) {
+                    $result = (new HTMLPurifier_AttrDef_CSS_AlphaValue())->validate($part, $config, $context);
+
+                    if ($result === false) {
+                        return false;
+                    }
+
+                    $new_parts[] = (string)$result;
+                    continue;
+                }
+
                 $length = strlen($part);
                 if ($part[$length - 1] === '%') {
                     // handle percents
@@ -80,8 +105,8 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
                     $new_parts[] = (string)$num;
                 }
             }
-            $new_triad = implode(',', $new_parts);
-            $color = "rgb($new_triad)";
+            $new_values = implode(',', $new_parts);
+            $color = "$function($new_values)";
         } else {
             // hexadecimal handling
             if ($color[0] === '#') {
