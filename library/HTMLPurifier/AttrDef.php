@@ -9,7 +9,6 @@
  * Besides defining (through code) what precisely makes the string valid,
  * subclasses are also responsible for cleaning the code if possible.
  */
-
 abstract class HTMLPurifier_AttrDef
 {
 
@@ -86,7 +85,13 @@ abstract class HTMLPurifier_AttrDef
      */
     protected function mungeRgb($string)
     {
-        return preg_replace('/rgb\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\)/', 'rgb(\1,\2,\3)', $string);
+        $p = '(\d+(\.\d+)?([%]?))';
+
+        if (preg_match('/(rgba|hsla)\(/', $string)) {
+            return preg_replace('/(rgba|hsla)\(' . $p . '\s*,\s*' . $p . '\s*,\s*' . $p . '\s*,\s*' . $p . '\)/', '\1(\2,\5,\8,\11)', $string);
+        }
+
+        return preg_replace('/(rgb|hsl)\(' . $p . '\s*,\s*' . $p . '\s*,\s*' . $p . '\)/', '\1(\2,\5,\8)', $string);
     }
 
     /**
