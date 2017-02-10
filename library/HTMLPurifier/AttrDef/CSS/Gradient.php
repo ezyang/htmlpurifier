@@ -22,11 +22,22 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
      */
     protected $angle;
 
+    /**
+     * @type HTMLPurifier_AttrDef_CSS_Composite
+     */
+    protected $size;
+
     public function __construct()
     {
         $this->color = new HTMLPurifier_AttrDef_CSS_Color();
         $this->direction = new HTMLPurifier_AttrDef_CSS_Direction();
         $this->angle = new HTMLPurifier_AttrDef_CSS_Angle();
+        $this->size = new HTMLPurifier_AttrDef_CSS_Composite(
+            array(
+                new HTMLPurifier_AttrDef_CSS_Length(),
+                new HTMLPurifier_AttrDef_CSS_Percentage()
+            )
+        );
     }
 
     /**
@@ -44,6 +55,11 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
         // Get gradient function (linear, radial, repeating-linear, repeating-radial)
         $function = explode('gradient', $string);
         $function = reset($function) . 'gradient';
+
+        $linear = false;
+        if (strpos($function, 'linear') !== false) {
+            $linear = true;
+        }
 
         preg_match('#gradient\((.*)\)#', $string, $values);
         $values = end($values);
@@ -79,8 +95,8 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
                 continue;
             }
 
-            // test for direction or angle but only for the first parameter
-            if ($i === 1) {
+            // test for direction or angle but only for the first parameter of linear function
+            if ($i === 1 && $linear === true) {
                 $r = $this->direction->validate($part, $config, $context);
                 if ($r !== false) {
                     $final .= $r.',';
@@ -94,14 +110,37 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
                 }
             }
 
-            // test for color
-            $r = $this->color->validate($part, $config, $context);
-            if ($r !== false) {
-                $final .= $r.',';
-                continue;
+            if ($i === 1 && $linear === false) {
+                if (in_array(trim($part), ['circle', 'ellipse'], true)) {
+                    $final .= trim($part).',';
+                    continue;
+                }
             }
 
-            // todo : check color size (size or percent) for repeating gradient : repeating-linear-gradient(red, yellow 10%, green 20%)
+            // test for color
+            $size = false;
+            if (preg_match('#(.*)\s+(\d+(\.\d+)?(%|px|ex|em|in|cm|mm|pt|pc))\s*$#', $part, $matches)) {
+                $color = $matches[1];
+                $size = $matches[2];
+            } else {
+                $color = $part;
+            }
+
+            $r = $this->color->validate($color, $config, $context);
+            if ($r !== false) {
+                $final .= $r;
+
+                if ($size !== false) {
+                    $r = $this->size->validate($size, $config, $context);
+                    if ($r !== false) {
+                        $final .= ' '.$r;
+                    }
+                }
+                $final .= ',';
+            }
+
+            // the different size keyword is not yet implemented
+            // correct values are: closest-side, farthest-side, closest-corner, farthest-corner
 
         }
 

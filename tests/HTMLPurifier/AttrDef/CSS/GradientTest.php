@@ -7,7 +7,7 @@ class HTMLPurifier_AttrDef_CSS_GradientTest extends HTMLPurifier_AttrDefHarness
     {
         $this->def = new HTMLPurifier_AttrDef_CSS_Gradient();
 
-        $this->assertDef('linear-gradient(rgb(255,0,0), #fff)', 'linear-gradient(rgb(255,0,0),#fff)'); // rm spaces
+        $this->assertDef('radial-gradient(rgb(255,0,0), #fff)', 'radial-gradient(rgb(255,0,0),#fff)'); // rm spaces
         $this->assertDef('linear-gradient(left,rgba(255,0,0,0),red)', 'linear-gradient(to left,rgba(255,0,0,0),#FF0000)');
         $this->assertDef('repeating-linear-gradient(#aaa,#bbb,#ccc,#ddd,#eee,#fff)'); // multiple colors
 
@@ -22,11 +22,23 @@ class HTMLPurifier_AttrDef_CSS_GradientTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('linear-gradient(360rad,#fff,#000)');
         $this->assertDef('repeating-linear-gradient(12turn,#fff,#000,#123456)');
 
+        // shape
+        $this->assertDef('radial-gradient(circle,#fff,#000)');
+        $this->assertDef('repeating-radial-gradient(ellipse,#fff,#000)');
+
+        // color size
+        $this->assertDef('radial-gradient(#f00 5%,#0f0 15%,#00f 15px)');
+        $this->assertDef('repeating-radial-gradient(#f00 5em,#0f0 15px,#00f 12cm)');
+
         // invalid parameter
-        $this->assertDef('linear-gradient(#fff,#000,to right)', 'linear-gradient(#fff,#000)');
+        $this->assertDef('repeating-radial-gradient(#f00 auto)', false); // invalid size
+        $this->assertDef('linear-gradient(#fff,#000,to right)', 'linear-gradient(#fff,#000)'); // wrong order
+        $this->assertDef('radial-gradient(57grad,hsl(147,12%,54%))', 'radial-gradient(hsl(147,12%,54%))'); // no angle for radial-gradient
+        $this->assertDef('linear-gradient(circle,hsla(255,0%,0%,0))', 'linear-gradient(hsla(255,0%,0%,0))'); // no shape for linear-gradient
         $this->assertDef('repeating-linear-gradient(#fff,foo,#000)', 'repeating-linear-gradient(#fff,#000)');
         $this->assertDef('repeating-linear-gradient(#fff,,#000)', 'repeating-linear-gradient(#fff,#000)');
         $this->assertDef('linear-gradient(rgba(255,0,0,0)', false); // missing bracket
+        $this->assertDef('repeating-radial-gradient(#f00 5)', false);
     }
 
 }
