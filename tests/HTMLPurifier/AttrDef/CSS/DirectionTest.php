@@ -1,11 +1,11 @@
 <?php
 
-class HTMLPurifier_AttrDef_CSS_PositionTest extends HTMLPurifier_AttrDefHarness
+class HTMLPurifier_AttrDef_CSS_DirectionTest extends HTMLPurifier_AttrDefHarness
 {
 
     public function test()
     {
-        $this->def = new HTMLPurifier_AttrDef_CSS_Position();
+        $this->def = new HTMLPurifier_AttrDef_CSS_Direction();
 
         $this->assertDef('top');
         $this->assertDef('left');
@@ -20,6 +20,11 @@ class HTMLPurifier_AttrDef_CSS_PositionTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('left bottom');
         $this->assertDef('center bottom');
         $this->assertDef('right bottom');
+
+        $this->assertDef('to left center');
+        $this->assertDef('to left bottom');
+        $this->assertDef('to right bottom');
+        $this->assertDef('to top');
 
         // reordered due to internal impl details
         $this->assertDef('top left', 'left top');
