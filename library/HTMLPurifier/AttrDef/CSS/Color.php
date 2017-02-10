@@ -7,6 +7,16 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
 {
 
     /**
+     * @type HTMLPurifier_AttrDef_CSS_AlphaValue
+     */
+    protected $alpha;
+
+    public function __construct()
+    {
+        $this->alpha = new HTMLPurifier_AttrDef_CSS_AlphaValue();
+    }
+
+    /**
      * @param string $color
      * @param HTMLPurifier_Config $config
      * @param HTMLPurifier_Context $context
@@ -86,7 +96,7 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
 
                 // different check for alpha channel
                 if ($alpha_channel === true && $i === count($parts)) {
-                    $result = (new HTMLPurifier_AttrDef_CSS_AlphaValue())->validate($part, $config, $context);
+                    $result = $this->alpha->validate($part, $config, $context);
 
                     if ($result === false) {
                         return false;
@@ -145,6 +155,7 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
         }
         return $color;
     }
+
 }
 
 // vim: et sw=4 sts=4
