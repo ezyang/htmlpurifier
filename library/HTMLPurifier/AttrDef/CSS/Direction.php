@@ -26,11 +26,8 @@ class HTMLPurifier_AttrDef_CSS_Direction extends HTMLPurifier_AttrDef
     {
         $string = $this->parseCDATA($string);
 
-        $to = false;
         if (substr($string, 0, 3) === 'to ') {
-            $string = str_replace('to ', '', $string);
-
-            $to = true;
+            $string = trim(substr($string, 3));
         }
 
         $r = $this->position->validate($string, $config, $context);
@@ -38,7 +35,7 @@ class HTMLPurifier_AttrDef_CSS_Direction extends HTMLPurifier_AttrDef
             return false;
         }
 
-        return ($to ? 'to ' : '') . $r;
+        return 'to ' . $r;
     }
 
 }

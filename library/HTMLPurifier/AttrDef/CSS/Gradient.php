@@ -12,9 +12,21 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
      */
     protected $color;
 
+    /**
+     * @type HTMLPurifier_AttrDef_CSS_Direction
+     */
+    protected $direction;
+
+    /**
+     * @type HTMLPurifier_AttrDef_CSS_Angle
+     */
+    protected $angle;
+
     public function __construct()
     {
         $this->color = new HTMLPurifier_AttrDef_CSS_Color();
+        $this->direction = new HTMLPurifier_AttrDef_CSS_Direction();
+        $this->angle = new HTMLPurifier_AttrDef_CSS_Angle();
     }
 
     /**
@@ -60,16 +72,37 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
         }
 
         $final = '';
+        $i = 0;
         foreach ($parts as $part) {
+            $i++;
             if (ctype_space($part)) {
                 continue;
             }
 
-            $result = $this->color->validate($part, $config, $context);
+            // test for direction or angle but only for the first parameter
+            if ($i === 1) {
+                $r = $this->direction->validate($part, $config, $context);
+                if ($r !== false) {
+                    $final .= $r.',';
+                    continue;
+                }
 
-            if ($result !== false) {
-                $final .= $result . ',';
+                $r = $this->angle->validate($part, $config, $context);
+                if ($r !== false) {
+                    $final .= $r.',';
+                    continue;
+                }
             }
+
+            // test for color
+            $r = $this->color->validate($part, $config, $context);
+            if ($r !== false) {
+                $final .= $r.',';
+                continue;
+            }
+
+            // todo : check color size (size or percent) for repeating gradient : repeating-linear-gradient(red, yellow 10%, green 20%)
+
         }
 
         if ($final === '') {
