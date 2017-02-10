@@ -54,10 +54,16 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
      */
     protected $percentage;
 
+    /**
+     * @type HTMLPurifier_AttrDef_CSS_Position
+     */
+    protected $position;
+
     public function __construct()
     {
         $this->length = new HTMLPurifier_AttrDef_CSS_Length();
         $this->percentage = new HTMLPurifier_AttrDef_CSS_Percentage();
+        $this->position = new HTMLPurifier_AttrDef_CSS_Position();
     }
 
     /**
@@ -70,6 +76,12 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
     {
         $string = $this->parseCDATA($string);
         $bits = explode(' ', $string);
+
+        // check if the whole string is a valid position
+        $r = $this->position->validate($string, $config, $context);
+        if ($r !== false) {
+            return $r;
+        }
 
         $keywords = array();
         $keywords['h'] = false; // left, right
@@ -94,9 +106,9 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
             }
 
             // test for keyword
-            $lbit = ctype_lower($bit) ? $bit : strtolower($bit);
-            if (isset($lookup[$lbit])) {
-                $status = $lookup[$lbit];
+            $r = $this->position->validate($bit, $config, $context);
+            if ($r !== false) {
+                $status = $lookup[$r];
                 if ($status == 'c') {
                     if ($i == 0) {
                         $status = 'ch';
@@ -104,7 +116,7 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
                         $status = 'cv';
                     }
                 }
-                $keywords[$status] = $lbit;
+                $keywords[$status] = $r;
                 $i++;
             }
 
