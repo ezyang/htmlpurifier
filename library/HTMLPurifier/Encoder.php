@@ -255,7 +255,7 @@ class HTMLPurifier_Encoder
                                 // 7F-9F is not strictly prohibited by XML,
                                 // but it is non-SGML, and thus we don't allow it
                                 (0xA0 <= $mUcs4 && 0xD7FF >= $mUcs4) ||
-                                (0x10000 <= $mUcs4 && 0x10FFFF >= $mUcs4)
+                                (0xE000 <= $mUcs4 && 0x10FFFF >= $mUcs4)
                             )
                         ) {
                             $out .= $char;
