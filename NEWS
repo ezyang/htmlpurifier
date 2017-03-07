@@ -22,6 +22,12 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - We accidentally dropped certain Unicode characters if there was
   one or more invalid characters.  This has been fixed, thanks
   to mpyw <ryosuke_i_628@yahoo.co.jp>
+- Fix for "Don't truncate upon encountering </div> when using DOMLex"
+  caused a regression with HTML 4.01 Strict parsing with libxml 2.9.1
+  (and maybe later versions, but known OK with libxml 2.9.4).  The
+  fix is to go about handling truncation a bit more cleverly so that
+  we can wrap with divs (sidestepping the bug) but slurping out the
+  rest of the text in case it ran off the end.  (#78)
 # By default, when a link has a target attribute associated
   with it, we now also add rel="noopener" in order to
   prevent the new window from being able to overwrite

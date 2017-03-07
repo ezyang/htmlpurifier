@@ -21,7 +21,7 @@ class HTMLPurifier_Lexer_PH5P extends HTMLPurifier_Lexer_DOMLex
     public function tokenizeHTML($html, $config, $context)
     {
         $new_html = $this->normalize($html, $config, $context);
-        $new_html = $this->wrapHTML($new_html, $config, $context);
+        $new_html = $this->wrapHTML($new_html, $config, $context, false /* no div */);
         try {
             $parser = new HTML5($new_html);
             $doc = $parser->save();
@@ -34,7 +34,7 @@ class HTMLPurifier_Lexer_PH5P extends HTMLPurifier_Lexer_DOMLex
         $tokens = array();
         $this->tokenizeDOM(
             $doc->getElementsByTagName('html')->item(0)-> // <html>
-                getElementsByTagName('body')->item(0) //   <body>
+                  getElementsByTagName('body')->item(0) //   <body>
             ,
             $tokens
         );

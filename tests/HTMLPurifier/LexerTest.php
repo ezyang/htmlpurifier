@@ -814,13 +814,21 @@ div {}
     public function test_tokenizeHTML_prematureDivClose()
     {
         $this->assertTokenization(
-            '</div>dontdie',
+            '</div>dont<b>die</b>',
             array(
                 new HTMLPurifier_Token_End('div'),
-                new HTMLPurifier_Token_Text('dontdie')
+                new HTMLPurifier_Token_Text('dont'),
+                new HTMLPurifier_Token_Start('b'),
+                new HTMLPurifier_Token_Text('die'),
+                new HTMLPurifier_Token_End('b'),
             ),
             array(
-                'DOMLex' => $alt = array(new HTMLPurifier_Token_Text('dontdie')),
+                'DOMLex' => $alt = array(
+                    new HTMLPurifier_Token_Text('dont'),
+                    new HTMLPurifier_Token_Start('b'),
+                    new HTMLPurifier_Token_Text('die'),
+                    new HTMLPurifier_Token_End('b')
+                ),
                 'PH5P' => $alt
             )
         );

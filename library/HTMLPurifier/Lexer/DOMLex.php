@@ -72,12 +72,20 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         $doc->loadHTML($html);
         restore_error_handler();
 
+        $body = $doc->getElementsByTagName('html')->item(0)-> // <html>
+                      getElementsByTagName('body')->item(0);  // <body>
+
+        $div = $body->getElementsByTagName('div')->item(0); // <div>
         $tokens = array();
-        $this->tokenizeDOM(
-            $doc->getElementsByTagName('html')->item(0)-> // <html>
-            getElementsByTagName('body')->item(0), //   <body>
-            $tokens
-        );
+        $this->tokenizeDOM($div, $tokens);
+        // If the div has a sibling, that means we tripped across
+        // a premature </div> tag.  So remove the div we parsed,
+        // and then tokenize the rest of body.  We can't tokenize
+        // the sibling directly as we'll lose the tags in that case.
+        if ($div->nextSibling) {
+            $body->removeChild($div);
+            $this->tokenizeDOM($body, $tokens);
+        }
         return $tokens;
     }
 
@@ -252,7 +260,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      * @param HTMLPurifier_Context $context
      * @return string
      */
-    protected function wrapHTML($html, $config, $context)
+    protected function wrapHTML($html, $config, $context, $use_div = true)
     {
         $def = $config->getDefinition('HTML');
         $ret = '';
@@ -271,7 +279,11 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         $ret .= '<html><head>';
         $ret .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
         // No protection if $html contains a stray </div>!
-        $ret .= '</head><body>' . $html . '</body></html>';
+        $ret .= '</head><body>';
+        if ($use_div) $ret .= '<div>';
+        $ret .= $html;
+        if ($use_div) $ret .= '</div>';
+        $ret .= '</body></html>';
         return $ret;
     }
 }
