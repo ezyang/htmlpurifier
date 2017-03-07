@@ -13,6 +13,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ! %URI.DefaultScheme can now be set to null, in which case
   all relative paths are removed.
 ! New CSS properties: min-width, max-width, min-height, max-height (#94)
+! Transparency (rgba) and hsl/hsla supported where color CSS is present.
+  Thanks @fxbt for contributing the patch. (#118)
 - When idn_to_ascii is defined, we might accept malformed
   hostnames.  Apply validation to the result in such cases.
 - Close directory when done in Serializer DefinitionCache (#100)
