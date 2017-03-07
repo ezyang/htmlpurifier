@@ -6,7 +6,7 @@
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>85</line>
-   <line>315</line>
+   <line>322</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>67</line>
@@ -124,7 +124,7 @@
    <line>122</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>297</line>
+   <line>304</line>
   </file>
  </directive>
  <directive id="Output.Newline">
@@ -172,7 +172,7 @@
    <line>234</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>302</line>
+   <line>309</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>37</line>
@@ -262,12 +262,12 @@
  </directive>
  <directive id="Core.ConvertDocumentToFragment">
   <file name="HTMLPurifier/Lexer.php">
-   <line>313</line>
+   <line>320</line>
   </file>
  </directive>
  <directive id="Core.RemoveProcessingInstructions">
   <file name="HTMLPurifier/Lexer.php">
-   <line>334</line>
+   <line>343</line>
   </file>
  </directive>
  <directive id="URI.">
@@ -444,12 +444,12 @@
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Scope">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>122</line>
+   <line>125</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Escaping">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>327</line>
+   <line>330</line>
   </file>
  </directive>
  <directive id="HTML.SafeIframe">

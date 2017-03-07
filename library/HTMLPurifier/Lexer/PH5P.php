@@ -36,7 +36,7 @@ class HTMLPurifier_Lexer_PH5P extends HTMLPurifier_Lexer_DOMLex
             $doc->getElementsByTagName('html')->item(0)-> // <html>
                   getElementsByTagName('body')->item(0) //   <body>
             ,
-            $tokens
+            $tokens, $config
         );
         return $tokens;
     }
@@ -1515,6 +1515,7 @@ class HTML5
                 // Consume the maximum number of characters possible, with the
                 // consumed characters case-sensitively matching one of the
                 // identifiers in the first column of the entities table.
+
                 $e_name = $this->characters('0-9A-Za-z;', $this->char + 1);
                 $len = strlen($e_name);
 
@@ -1547,7 +1548,7 @@ class HTML5
 
         // Return a character token for the character corresponding to the
         // entity name (as given by the second column of the entities table).
-        return html_entity_decode('&' . $entity . ';', ENT_QUOTES, 'UTF-8');
+        return html_entity_decode('&' . rtrim($entity, ';') . ';', ENT_QUOTES, 'UTF-8');
     }
 
     private function emitToken($token)

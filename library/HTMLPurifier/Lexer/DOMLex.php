@@ -77,14 +77,14 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
 
         $div = $body->getElementsByTagName('div')->item(0); // <div>
         $tokens = array();
-        $this->tokenizeDOM($div, $tokens);
+        $this->tokenizeDOM($div, $tokens, $config);
         // If the div has a sibling, that means we tripped across
         // a premature </div> tag.  So remove the div we parsed,
         // and then tokenize the rest of body.  We can't tokenize
         // the sibling directly as we'll lose the tags in that case.
         if ($div->nextSibling) {
             $body->removeChild($div);
-            $this->tokenizeDOM($body, $tokens);
+            $this->tokenizeDOM($body, $tokens, $config);
         }
         return $tokens;
     }
@@ -96,7 +96,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      * @param HTMLPurifier_Token[] $tokens   Array-list of already tokenized tokens.
      * @return HTMLPurifier_Token of node appended to previously passed tokens.
      */
-    protected function tokenizeDOM($node, &$tokens)
+    protected function tokenizeDOM($node, &$tokens, $config)
     {
         $level = 0;
         $nodes = array($level => new HTMLPurifier_Queue(array($node)));
@@ -105,7 +105,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             while (!$nodes[$level]->isEmpty()) {
                 $node = $nodes[$level]->shift(); // FIFO
                 $collect = $level > 0 ? true : false;
-                $needEndingTag = $this->createStartNode($node, $tokens, $collect);
+                $needEndingTag = $this->createStartNode($node, $tokens, $collect, $config);
                 if ($needEndingTag) {
                     $closingNodes[$level][] = $node;
                 }
@@ -135,7 +135,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      * @return bool if the token needs an endtoken
      * @todo data and tagName properties don't seem to exist in DOMNode?
      */
-    protected function createStartNode($node, &$tokens, $collect)
+    protected function createStartNode($node, &$tokens, $collect, $config)
     {
         // intercept non element nodes. WE MUST catch all of them,
         // but we're not getting the character reference nodes because
@@ -159,7 +159,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
                     }
                 }
             }
-            $tokens[] = $this->factory->createText($this->parseData($data));
+            $tokens[] = $this->factory->createText($this->parseText($data, $config));
             return false;
         } elseif ($node->nodeType === XML_COMMENT_NODE) {
             // this is code is only invoked for comments in script/style in versions
