@@ -256,6 +256,12 @@ text-align:center
         $this->assertCleanCSS("a .foo #ID div.cl#foo {\nbackground:url(\"http://foo/BAR\")\n}");
     }
 
+    public function test_extractStyleBlocks_backtracking()
+    {
+        $goo = str_repeat("a", 1000000); // 1M to trigger, sometimes it's less!
+        $this->assertExtractStyleBlocks("<style></style>" . $goo, $goo, array(''));
+    }
+
 }
 
 // vim: et sw=4 sts=4
