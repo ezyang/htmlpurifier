@@ -79,19 +79,19 @@
  </directive>
  <directive id="Core.Encoding">
   <file name="HTMLPurifier/Encoder.php">
-   <line>374</line>
-   <line>422</line>
+   <line>380</line>
+   <line>428</line>
   </file>
  </directive>
  <directive id="Test.ForceNoIconv">
   <file name="HTMLPurifier/Encoder.php">
-   <line>382</line>
-   <line>433</line>
+   <line>388</line>
+   <line>439</line>
   </file>
  </directive>
  <directive id="Core.EscapeNonASCIICharacters">
   <file name="HTMLPurifier/Encoder.php">
-   <line>423</line>
+   <line>429</line>
   </file>
  </directive>
  <directive id="Output.CommentScriptContents">
@@ -318,7 +318,7 @@
  </directive>
  <directive id="Core.ColorKeywords">
   <file name="HTMLPurifier/AttrDef/CSS/Color.php">
-   <line>19</line>
+   <line>29</line>
   </file>
   <file name="HTMLPurifier/AttrDef/HTML/Color.php">
    <line>19</line>
