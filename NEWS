@@ -30,6 +30,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   fix is to go about handling truncation a bit more cleverly so that
   we can wrap with divs (sidestepping the bug) but slurping out the
   rest of the text in case it ran off the end.  (#78)
+- Fix PREG_BACKTRACK_LIMIT_ERROR in HTMLPurifier_Filter_ExtractStyle.
+  Thanks @breathbath for contributing the report and fix (#120)
 # By default, when a link has a target attribute associated
   with it, we now also add rel="noopener" in order to
   prevent the new window from being able to overwrite
