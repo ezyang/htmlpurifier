@@ -19,6 +19,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - Deleted some asserts to avoid linters from choking (#97)
 - Rework Serializer cache behavior to avoid chmod'ing if possible (#32)
 - Embedded semicolons in strings in CSS are now handled correctly!
+- We accidentally dropped certain Unicode characters if there was
+  one or more invalid characters.  This has been fixed, thanks
+  to mpyw <ryosuke_i_628@yahoo.co.jp>
 # By default, when a link has a target attribute associated
   with it, we now also add rel="noopener" in order to
   prevent the new window from being able to overwrite
