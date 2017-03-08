@@ -348,6 +348,12 @@ class HTMLPurifier_Lexer
             $html = preg_replace('#<\?.+?\?>#s', '', $html);
         }
 
+        if ($config->get('Core.AggressivelyRemoveScript') &&
+            !($config->get('HTML.Trusted') || !$config->get('Core.RemoveScriptContents')
+            || empty($config->get('Core.HiddenElements')["script"]))) {
+            $html = preg_replace('#<script[^>]*>.*?</script>#i', '', $html);
+        }
+
         return $html;
     }
 

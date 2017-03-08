@@ -6,7 +6,7 @@
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>85</line>
-   <line>322</line>
+   <line>326</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>67</line>
@@ -124,7 +124,7 @@
    <line>122</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>304</line>
+   <line>308</line>
   </file>
  </directive>
  <directive id="Output.Newline">
@@ -172,7 +172,8 @@
    <line>234</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>309</line>
+   <line>313</line>
+   <line>351</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>37</line>
@@ -260,14 +261,25 @@
    <line>62</line>
   </file>
  </directive>
+ <directive id="Core.LegacyEntityDecoder">
+  <file name="HTMLPurifier/Lexer.php">
+   <line>215</line>
+   <line>337</line>
+  </file>
+ </directive>
  <directive id="Core.ConvertDocumentToFragment">
   <file name="HTMLPurifier/Lexer.php">
-   <line>320</line>
+   <line>324</line>
   </file>
  </directive>
  <directive id="Core.RemoveProcessingInstructions">
   <file name="HTMLPurifier/Lexer.php">
-   <line>343</line>
+   <line>347</line>
+  </file>
+ </directive>
+ <directive id="Core.AggressivelyRemoveScript">
+  <file name="HTMLPurifier/Lexer.php">
+   <line>351</line>
   </file>
  </directive>
  <directive id="URI.">

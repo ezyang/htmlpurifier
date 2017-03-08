@@ -36,6 +36,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   decoding entities that are missing trailing semicolon.
   To get old behavior, set %Core.LegacyEntityDecoder to true.
   (#119)
+- Workaround libxml bug when HTML tags are embedded inside
+  script tags.  To disable workaround set %Core.AggressivelyRemoveScript
+  to false. (#83)
 # By default, when a link has a target attribute associated
   with it, we now also add rel="noopener" in order to
   prevent the new window from being able to overwrite
