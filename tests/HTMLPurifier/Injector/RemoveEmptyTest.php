@@ -78,6 +78,11 @@ class HTMLPurifier_Injector_RemoveEmptyTest extends HTMLPurifier_InjectorHarness
         $this->assertResult('<b>&nbsp;   &nbsp;</b>', '');
     }
 
+    public function testRemoveLi()
+    {
+        $this->assertResult("<ul><li>\n\n\n</li></ul>", '');
+    }
+
     public function testDontRemoveNbsp()
     {
         $this->config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
