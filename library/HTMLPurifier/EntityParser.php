@@ -122,7 +122,7 @@ class HTMLPurifier_EntityParser
         if ($hex_part) {
             return HTMLPurifier_Encoder::unichr(hexdec($hex_part));
         } elseif ($dec_part) {
-            return HTMLPurifier_Encoder((int) $dec_part);
+            return HTMLPurifier_Encoder::unichr((int) $dec_part);
         } else {
             if (!$this->_entity_lookup) {
                 $this->_entity_lookup = HTMLPurifier_EntityLookup::instance();
