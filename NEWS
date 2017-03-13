@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.9.2, unknown release date
+4.9.2, released 2017-03-12
 - Fixes PHP 5.3 compatibility
 - Fix breakage when decoding decimal entities.  Thanks @rybakit (#129)
 

@@ -173,7 +173,7 @@
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>313</line>
-   <line>352</line>
+   <line>353</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>37</line>
@@ -277,25 +277,25 @@
    <line>347</line>
   </file>
  </directive>
- <directive id="Core.AggressivelyRemoveScript">
+ <directive id="Core.HiddenElements">
   <file name="HTMLPurifier/Lexer.php">
    <line>351</line>
+  </file>
+  <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
+   <line>36</line>
+  </file>
+ </directive>
+ <directive id="Core.AggressivelyRemoveScript">
+  <file name="HTMLPurifier/Lexer.php">
+   <line>352</line>
   </file>
  </directive>
  <directive id="Core.RemoveScriptContents">
   <file name="HTMLPurifier/Lexer.php">
-   <line>352</line>
-  </file>
-  <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
-   <line>35</line>
-  </file>
- </directive>
- <directive id="Core.HiddenElements">
-  <file name="HTMLPurifier/Lexer.php">
    <line>353</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
-   <line>36</line>
+   <line>35</line>
   </file>
  </directive>
  <directive id="URI.">
