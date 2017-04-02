@@ -2,11 +2,9 @@
 
 /**
  * Validates Gradient as defined by CSS.
- * Works with
  */
 class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
 {
-
     /**
      * @type HTMLPurifier_AttrDef_CSS_Color
      */
@@ -52,9 +50,26 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
             return false;
         }
 
+        $gradientFunctions = array(
+            'repeating-linear-gradient',
+            'repeating-radial-gradient',
+            'linear-gradient',
+            'radial-gradient',
+        );
+
         // Get gradient function (linear, radial, repeating-linear, repeating-radial)
-        $function = explode('gradient', $string);
-        $function = reset($function) . 'gradient';
+        $function = null;
+        foreach ($gradientFunctions as $gradientFunction) {
+            // If function exists and is in first position
+            if (strpos($string, $gradientFunction) === 0) {
+                $function = $gradientFunction;
+                break;
+            }
+        }
+
+        if (!$function) {
+            return false;
+        }
 
         $linear = false;
         if (strpos($function, 'linear') !== false) {
@@ -70,7 +85,7 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
 
         $values = (explode(',', $values));
         $bracket = false;
-        $parts = [];
+        $parts = array();
 
         for ($i = 0; $i < count($values); $i++) {
             if (strpos($values[$i], '(') !== false) {
