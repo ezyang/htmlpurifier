@@ -71,6 +71,7 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
             return false;
         }
 
+        // Check if function is linear or radial
         $linear = false;
         if (strpos($function, 'linear') !== false) {
             $linear = true;
@@ -125,9 +126,13 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
                 }
             }
 
+            // if function is radial, the first argument has to be a valid shape (circle or ellipse)
             if ($i === 1 && $linear === false) {
-                if (in_array(trim($part), ['circle', 'ellipse'], true)) {
-                    $final .= trim($part).',';
+                $shapes = array('circle', 'ellipse');
+                $part = trim($part);
+
+                if (in_array($part, $shapes, true)) {
+                    $final .= $part.',';
                     continue;
                 }
             }
