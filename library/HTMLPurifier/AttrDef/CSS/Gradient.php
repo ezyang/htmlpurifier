@@ -5,6 +5,7 @@
  */
 class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
 {
+
     /**
      * @type HTMLPurifier_AttrDef_CSS_Color
      */
@@ -138,19 +139,16 @@ class HTMLPurifier_AttrDef_CSS_Gradient extends HTMLPurifier_AttrDef
             }
 
             // test for color
-            $size = false;
-            if (preg_match('#(.*)\s+(\d+(\.\d+)?(%|px|ex|em|in|cm|mm|pt|pc))\s*$#', $part, $matches)) {
-                $color = $matches[1];
-                $size = $matches[2];
-            } else {
-                $color = $part;
-            }
+            $parameters = explode(' ', $part );
+            // add an empty value at the end of the array to make sure we always have 2 parameters
+            $parameters[] = '';
+            list($color, $size) = $parameters;
 
             $r = $this->color->validate($color, $config, $context);
             if ($r !== false) {
                 $final .= $r;
 
-                if ($size !== false) {
+                if ($size) {
                     $r = $this->size->validate($size, $config, $context);
                     if ($r !== false) {
                         $final .= ' '.$r;
