@@ -16,8 +16,12 @@ class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
         $char_theta = $this->_entity_lookup->table['theta'];
         $this->assertIdentical($char_theta,
             $this->EntityParser->substituteNonSpecialEntities('&theta;') );
+        $this->assertIdentical($char_theta,
+            $this->EntityParser->substituteTextEntities('&theta;') );
         $this->assertIdentical('"',
             $this->EntityParser->substituteNonSpecialEntities('"') );
+        $this->assertIdentical('"',
+            $this->EntityParser->substituteTextEntities('"') );
 
         // numeric tests, adapted from Feyd
         $args = array();
@@ -71,6 +75,11 @@ class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
                 $expect,
                 'Identical expectation [Hex: '. dechex($arg[0]) .']'
             );
+            $this->assertIdentical(
+                $this->EntityParser->substituteTextEntities($string),
+                $expect,
+                'Identical expectation [Hex: '. dechex($arg[0]) .']'
+            );
         }
 
     }
@@ -80,6 +89,10 @@ class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
         $this->assertIdentical(
             "'",
             $this->EntityParser->substituteSpecialEntities('&#39;')
+        );
+        $this->assertIdentical(
+            "'",
+            $this->EntityParser->substituteTextEntities('&#39;')
         );
     }
 

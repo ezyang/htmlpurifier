@@ -23,6 +23,7 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
         $this->assertCleanUTF8('Normal string.');
         $this->assertCleanUTF8("Test\tAllowed\nControl\rCharacters");
         $this->assertCleanUTF8("null byte: \0", 'null byte: ');
+        $this->assertCleanUTF8("あ（い）う（え）お\0", "あ（い）う（え）お"); // test for issue #122
         $this->assertCleanUTF8("\1\2\3\4\5\6\7", '');
         $this->assertCleanUTF8("\x7F", ''); // one byte invalid SGML char
         $this->assertCleanUTF8("\xC2\x80", ''); // two byte invalid SGML

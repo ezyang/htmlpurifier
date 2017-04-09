@@ -46,11 +46,11 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 
     // HTMLPurifier_Lexer->parseData() -----------------------------------------
 
-    public function assertParseData($input, $expect = true)
+    public function assertParseData($input, $expect = true, $is_attr = false)
     {
         if ($expect === true) $expect = $input;
         $lexer = new HTMLPurifier_Lexer();
-        $this->assertIdentical($expect, $lexer->parseData($input));
+        $this->assertIdentical($expect, $lexer->parseData($input, $is_attr, $this->config));
     }
 
     public function test_parseData_plainText()
@@ -95,7 +95,58 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 
     public function test_parseData_improperEntityFaultToleranceTest()
     {
-        $this->assertParseData('&#x2D;');
+        $this->assertParseData('&#x2D;', '-');
+    }
+
+    public function test_parseData_noTrailingSemi()
+    {
+        $this->assertParseData('&ampA', '&A');
+    }
+
+    public function test_parseData_noTrailingSemiAttr()
+    {
+        $this->assertParseData('&ampA', '&ampA', true);
+    }
+
+    public function test_parseData_T119()
+    {
+        $this->assertParseData('&ampA', '&ampA', true);
+    }
+
+    public function test_parseData_T119b()
+    {
+        $this->assertParseData('&trade=', true, true);
+    }
+
+    public function test_parseData_legacy1()
+    {
+        $this->config->set('Core.LegacyEntityDecoder', true);
+        $this->assertParseData('&ampa', true);
+        $this->assertParseData('&amp=', "&=");
+        $this->assertParseData('&ampa', true, true);
+        $this->assertParseData('&amp=', "&=", true);
+        $this->assertParseData('&lta', true);
+        $this->assertParseData('&lt=', "<=");
+        $this->assertParseData('&lta', true, true);
+        $this->assertParseData('&lt=', "<=", true);
+    }
+
+    public function test_parseData_nonlegacy1()
+    {
+        $this->assertParseData('&ampa', "&a");
+        $this->assertParseData('&amp=', "&=");
+        $this->assertParseData('&ampa', true, true);
+        $this->assertParseData('&amp=', true, true);
+        $this->assertParseData('&lta', "<a");
+        $this->assertParseData('&lt=', "<=");
+        $this->assertParseData('&lta', true, true);
+        $this->assertParseData('&lt=', true, true);
+        $this->assertParseData('&lta;', "<a;");
+    }
+
+    public function test_parseData_noTrailingSemiNever()
+    {
+        $this->assertParseData('&imath');
     }
 
     // HTMLPurifier_Lexer->extractBody() ---------------------------------------
@@ -814,13 +865,21 @@ div {}
     public function test_tokenizeHTML_prematureDivClose()
     {
         $this->assertTokenization(
-            '</div>dontdie',
+            '</div>dont<b>die</b>',
             array(
                 new HTMLPurifier_Token_End('div'),
-                new HTMLPurifier_Token_Text('dontdie')
+                new HTMLPurifier_Token_Text('dont'),
+                new HTMLPurifier_Token_Start('b'),
+                new HTMLPurifier_Token_Text('die'),
+                new HTMLPurifier_Token_End('b'),
             ),
             array(
-                'DOMLex' => $alt = array(new HTMLPurifier_Token_Text('dontdie')),
+                'DOMLex' => $alt = array(
+                    new HTMLPurifier_Token_Text('dont'),
+                    new HTMLPurifier_Token_Start('b'),
+                    new HTMLPurifier_Token_Text('die'),
+                    new HTMLPurifier_Token_End('b')
+                ),
                 'PH5P' => $alt
             )
         );
