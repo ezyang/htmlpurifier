@@ -9,6 +9,14 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.9.3, released 2017-06-02
+- Workaround PHP 7.1 infinite loop when opcode cache is enabled.
+  Thanks @Xiphin (#134, #135)
+- Don't use autoloader when testing for DOMDocument.  Hypothetically,
+  this could cause your install to start using DirectLex if you had
+  previously been monkeypatching in a custom, autoloaded implementation
+  of DOMDocument.  Don't do that.  Thanks @Izumi-kun (#130)
+
 4.9.2, released 2017-03-12
 - Fixes PHP 5.3 compatibility
 - Fix breakage when decoding decimal entities.  Thanks @rybakit (#129)
