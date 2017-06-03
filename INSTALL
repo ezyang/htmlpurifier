@@ -370,4 +370,35 @@ If your website is in a different encoding or doctype, use this code:
     $clean_html = $purifier->purify($dirty_html);
 ?>
 
+
+---------------------------------------------------------------------------
+8.   Simple install for existing namespaced module autoloader apps
+
+If you already have a reasonable autoloader set up for namespaced modules, eg,
+something like this:
+
+<?php
+    function __autoload_namespaced_module($class){
+        $path = str_replace('\\', '/', $class);
+        if(file_exists($file = ('/path/to/modules/dir/ . $path . '.php'))){
+            require_once($file);
+        }
+    }
+
+    spl_autoload_register();
+    spl_autoload_register('__autoload_namespaced_module');
+
+?>
+    
+.. then you can simply call the namespaced `Processor` class which initiates 
+the Bootstrap autoloader upon initial `require`, and live easy, eg:
+
+<?php
+    $purifier = new \HTMLPurifier\Processor();
+    $html = '<strong>a string<br></strong>'; // (notice the dirty <br> that should be <br />)
+    echo $purifier->purify($html); // outputs: <strong>a string<br /></strong>
+?>
+
+
+
     vim: et sw=4 sts=4
