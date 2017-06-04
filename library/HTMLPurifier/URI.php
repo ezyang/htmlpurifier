@@ -126,8 +126,10 @@ class HTMLPurifier_URI
         // scheme is in our registry, since a URIFilter may convert a
         // URI that we don't allow into one we do.  So instead, we just
         // check if the scheme can be dropped because there is no host
-        // and it is our default scheme.
-        if (!is_null($this->scheme) && is_null($this->host) || $this->host === '') {
+        // or the host can be omitted and it is our default scheme.
+        if (!is_null($this->scheme) &&
+            (!$this->getSchemeObj($config, $context)->may_omit_host && (is_null($this->host) || $this->host === ''))
+        ) {
             // support for relative paths is pretty abysmal when the
             // scheme is present, so axe it when possible
             $def = $config->getDefinition('URI');
