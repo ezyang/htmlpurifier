@@ -19,7 +19,7 @@
         "simpletest/simpletest": "^1.1"
     },
     "autoload": {
-        "psr-0": { "HTMLPurifier": "library/" },
+        "psr-0": { "HTMLPurifier_": "library/" },
         "files": ["library/HTMLPurifier.composer.php"]
     }
 }
