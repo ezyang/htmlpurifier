@@ -75,6 +75,9 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
         if ($uri->isBenign($config, $context)) {
             return true;
         } // don't redirect if a benign URL
+        if ($this->isLocalSubdomain($uri, $config)) {
+            return true;
+        }
 
         $this->makeReplace($uri, $config, $context);
         $this->replace = array_map('rawurlencode', $this->replace);
@@ -109,6 +112,24 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
         if ($this->secretKey) {
             $this->replace['%t'] = hash_hmac("sha256", $string, $this->secretKey);
         }
+        $this->replace['%b'] = base64_encode($string);
+    }
+
+    /**
+     * Is local subdomain
+     *
+     * @param HTMLPurifier_URI $uri
+     * @param HTMLPurifier_Config $config
+     * @access protected
+     * @return void
+     */
+
+    protected function isLocalSubdomain($uri, $config)
+    {
+        return preg_match(
+            '#^[a-z0-9]+\.' . preg_quote($config->getURIDefinition()->host, '#') . '$#',
+            $uri->host
+        );
     }
 }
 
