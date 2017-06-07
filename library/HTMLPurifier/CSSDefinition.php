@@ -121,6 +121,20 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
                 )
             );
 
+
+        // border-radius
+	$border_radius =
+	$this->info['border-top-left-radius'] =
+	$this->info['border-top-right-radius'] =
+	$this->info['border-bottom-left-radius'] =
+	$this->info['border-bottom-right-radius'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
+		 new HTMLPurifier_AttrDef_CSS_Length('0'),
+		 new HTMLPurifier_AttrDef_CSS_Percentage(true)
+	 ));
+
+	$this->info['border-radius'] = new HTMLPurifier_AttrDef_CSS_Multiple($border_radius);
+
+
         $this->info['background'] = new HTMLPurifier_AttrDef_CSS_Background($config);
 
         $this->info['border-color'] = new HTMLPurifier_AttrDef_CSS_Multiple($border_color);
