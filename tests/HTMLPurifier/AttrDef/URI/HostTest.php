@@ -49,6 +49,7 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
         }
         $this->config->set('Core.EnableIDNA', true);
         $this->assertDef("\xE4\xB8\xAD\xE6\x96\x87.com.cn", "xn--fiq228c.com.cn");
+        $this->assertDef("faß.de", "xn--fa-hia.de");
         $this->assertDef("\xe2\x80\x85.com", false); // rejected
     }
 
