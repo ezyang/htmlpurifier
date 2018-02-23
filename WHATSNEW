@@ -2,4 +2,6 @@ HTML Purifier 4.10.x is a maintenance release, collecting a year
 of accumulated bug fixes.  The most critical fixes relate to
 supporting PHP 7.2 properly, and there are a few other minor
 fixes.  One thing on the feature front: relative CSS length
-specifiers are now supported.
+specifiers are now supported.  Additionally, we have officially
+dropped support for PHP 5.3; while we have not purposely broken
+HTML Purifier for this version, we are no longer testing for it.
