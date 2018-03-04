@@ -133,11 +133,11 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      */
     protected function getTagName($node)
     {
-        if (property_exists($node, 'tagName')) {
+        if (isset($node->tagName)) {
             return $node->tagName;
-        } else if (property_exists($node, 'nodeName')) {
+        } else if (isset($node->nodeName)) {
             return $node->nodeName;
-        } else if (property_exists($node, 'localName')) {
+        } else if (isset($node->localName)) {
             return $node->localName;
         }
         return null;
@@ -150,11 +150,11 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      */
     protected function getData($node)
     {
-        if (property_exists($node, 'data')) {
+        if (isset($node->data)) {
             return $node->data;
-        } else if (property_exists($node, 'nodeValue')) {
+        } else if (isset($node->nodeValue)) {
             return $node->nodeValue;
-        } else if (property_exists($node, 'textContent')) {
+        } else if (isset($node->textContent)) {
             return $node->textContent;
         }
         return null;
