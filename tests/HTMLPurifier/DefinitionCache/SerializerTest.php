@@ -225,6 +225,28 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
 
     }
 
+    public function testAlternateGroupPermissions()
+    {
+        $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
+        $config = $this->generateConfigMock('serial');
+        $config->version = '1.0.0';
+        $config->returns('get', 1, array('Test.DefinitionRev'));
+        $dir = dirname(__FILE__) . '/SerializerTest';
+        $config->returns('get', $dir, array('Cache.SerializerPath'));
+        $config->returns('get', 0770, array('Cache.SerializerPermissions'));
+
+        $def_original = $this->generateDefinition();
+        $cache->add($def_original, $config);
+        $this->assertFileExist($dir . '/Test/1.0.0,serial,1.ser');
+
+        $this->assertEqual(0660, 0777 & fileperms($dir . '/Test/1.0.0,serial,1.ser'));
+        $this->assertEqual(0770, 0777 & fileperms($dir . '/Test'));
+
+        unlink($dir . '/Test/1.0.0,serial,1.ser');
+        rmdir( $dir . '/Test');
+
+    }
+
     public function testNoInfiniteLoop()
     {
         $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');

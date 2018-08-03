@@ -264,7 +264,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     private function _testPermissions($dir, $chmod)
     {
         // early abort, if it is writable, everything is hunky-dory
-        if (is_writable($dir)) {
+        if ($chmod === (0777 & fileperms($dir))) {
             return true;
         }
         if (!is_dir($dir)) {
