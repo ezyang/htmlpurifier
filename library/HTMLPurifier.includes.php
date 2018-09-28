@@ -162,6 +162,7 @@ require 'HTMLPurifier/HTMLModule/Iframe.php';
 require 'HTMLPurifier/HTMLModule/Image.php';
 require 'HTMLPurifier/HTMLModule/Legacy.php';
 require 'HTMLPurifier/HTMLModule/List.php';
+require 'HTMLPurifier/HTMLModule/Math.php';
 require 'HTMLPurifier/HTMLModule/Name.php';
 require 'HTMLPurifier/HTMLModule/Nofollow.php';
 require 'HTMLPurifier/HTMLModule/NonXMLCommonAttributes.php';

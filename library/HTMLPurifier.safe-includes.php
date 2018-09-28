@@ -156,6 +156,7 @@ require_once $__dir . '/HTMLPurifier/HTMLModule/Iframe.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/Image.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/Legacy.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/List.php';
+require_once $__dir . '/HTMLPurifier/HTMLModule/Math.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/Name.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/Nofollow.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/NonXMLCommonAttributes.php';
