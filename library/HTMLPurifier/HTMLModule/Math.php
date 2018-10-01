@@ -33,11 +33,14 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         // for special characters ('.', '-') in entity names
         $E = array();
 
+        // Prefix used for xlink attrs; is not specified by the MathML DTD
+        $E['XLINK.prefix'] = 'xlink';
+
         /*****************************************************************
          * DTD code
          * Code from the DTD ported and adapted
          *****************************************************************/
-        
+
         $E['MalignExpression'] = 'maligngroup|malignmark';
         $E['TokenExpression'] = 'mi|mn|mo|mtext|mspace|ms';
         $E['PresentationExpression'] =
@@ -47,12 +50,43 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             '|menclose|msub|msup|msubsup|munder|mover|munderover' .
             '|mmultiscripts|mtable|mstack|mlongdiv|maction';
 
+        $E['DefEncAtt'] = array(
+            'encoding' => 'CDATA',
+            'definitionURL' => 'CDATA'
+        );
+
+        $E['CommonAtt'] = array(
+            'xmlns:mml' => 'Bool#http://www.w3.org/1998/Math/MathML',
+            $E['XLINK.prefix'] . ':href' => 'CDATA',
+            $E['XLINK.prefix'] . ':type' => 'CDATA',
+            'xml:lang' => 'CDATA',
+            'xml:space' => 'Enum#default,preserve',
+            'id' => 'CDATA', // MathML allows multiple elements with same ID
+            'xref' => 'CDATA',
+            'class' => 'CDATA',
+            'href' => 'CDATA',
+            'other' => 'CDATA',
+        );
+
+        // These two sets of attrs appear commonly together.
+        // For conciseness and efficiency we merge them here once:
+        $CDEAtt = array_merge(
+            $E['CommonAtt'],
+            $E['DefEncAtt']
+        );
+
         $this->addElement(
             'cn',
             $default_display,
             'Custom: #PCDATA|mglyph|sep|' . $E['PresentationExpression'],
             array(),
-            array()
+            array_merge(
+                $CDEAtt,
+                array(
+                    'type' => 'CDATA',
+                    'base' => 'CDATA'
+                )
+            )
         );
 
         $this->addElement(
@@ -60,7 +94,12 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: #PCDATA|mglyph|' . $E['PresentationExpression'],
             array(),
-            array()
+            array_merge(
+                $CDEAtt,
+                array(
+                    'type' => 'CDATA'
+                )
+            )
         );
 
         $this->addElement(
@@ -68,7 +107,13 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: #PCDATA|mglyph|' . $E['PresentationExpression'],
             array(),
-            array()
+            array_merge(
+                $CDEAtt,
+                array(
+                    'type' => 'CDATA',
+                    'cd' => 'CDATA'
+                )
+            )
         );
 
         $E['SymbolName'] = '#PCDATA';
@@ -162,7 +207,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: ' . $E['apply.content'],
             array(),
-            array()
+            $E['CommonAtt']
         );
 
         $this->addElement(
@@ -170,7 +215,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: ' . $E['apply.content'],
             array(),
-            array()
+            $E['CommonAtt']
         );
 
         $this->addElement(
@@ -178,7 +223,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            array_merge(
+                $E['CommonAtt'],
+                array('src' => 'CDATA')
+            )
         );
 
         $this->addElement(
@@ -186,7 +234,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (csymbol,(' . $E['ContExp'] . ')*)',
             array(),
-            array()
+            $E['CommonAtt']
         );
 
         $this->addElement(
@@ -194,7 +242,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (#PCDATA)',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -202,7 +250,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (#PCDATA)',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -210,7 +258,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: ((degree,(ci|semantics))|((ci|semantics),(degree)?))',
             array(),
-            array()
+            $E['CommonAtt']
         );
 
         $this->addElement(
@@ -282,7 +330,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (piece|otherwise)',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -290,7 +338,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: ((' . $E['ContExp'] . '),(' . $E['ContExp'] . '))',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -298,7 +346,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['ContExp'] . ')',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -322,7 +370,15 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['ContExp'] . ')+',
             array(),
-            array()
+            array_merge(
+                array(
+                    'type' => 'CDATA',
+                    'scope' => 'CDATA',
+                    'nargs' => 'CDATA',
+                    'occurrence' => 'Enum#prefix,infix,function-model'
+                ),
+                $E['DefEncAtt']
+            )
         );
 
         $this->addElement(
@@ -330,7 +386,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: ((' . $E['ContExp'] . '),(' . $E['ContExp'] . '))',
             array(),
-            array()
+            array_merge(
+                $CDEAtt,
+                array('closure' => 'CDATA')
+            )
         );
 
         $this->addElement(
@@ -338,7 +397,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -346,7 +405,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -354,7 +413,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -362,7 +421,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -370,7 +429,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -378,7 +437,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -386,7 +445,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -394,7 +453,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -403,7 +462,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['BvarQ'] . '),(' . $E['DomainQ'] . '),(' .
                 $E['ContExp'] . '))',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -411,7 +470,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -419,7 +478,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -427,7 +486,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -435,7 +494,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -443,7 +502,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -451,7 +510,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -459,7 +518,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -467,7 +526,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -475,7 +534,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -483,7 +542,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -491,7 +550,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -499,7 +558,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -507,7 +566,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -515,7 +574,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -523,7 +582,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -531,7 +590,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -539,7 +598,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -547,7 +606,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -555,7 +614,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -563,7 +622,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -571,7 +630,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -579,7 +638,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -587,7 +646,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -595,7 +654,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -603,7 +662,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -611,7 +670,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -619,7 +678,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -627,7 +686,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -635,7 +694,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -643,7 +702,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -651,7 +710,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -659,7 +718,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -667,7 +726,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -675,7 +734,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -683,7 +742,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -691,7 +750,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -699,7 +758,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -707,7 +766,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -715,7 +774,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            array_merge(
+                $CDEAtt,
+                array('type' => 'CDATA')
+            )
         );
 
         $this->addElement(
@@ -723,7 +785,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -731,7 +793,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -739,7 +801,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -747,7 +809,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -755,7 +817,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -763,7 +825,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -771,7 +833,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -780,7 +842,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['BvarQ'] . ')*,(' . $E['DomainQ'] . ')*,(' .
                 $E['ContExp'] . ')*)',
             array(),
-            array()
+            array_merge(
+                $CDEAtt,
+                array('type' => 'CDATA')
+            )
         );
 
         $this->addElement(
@@ -789,7 +854,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['BvarQ'] . ')*,(' . $E['DomainQ'] . ')*,(' .
                 $E['ContExp'] . ')*)',
             array(),
-            array()
+            array_merge(
+                $CDEAtt,
+                array('order' => 'Enum#numeric,lexicographic')
+            )
         );
 
         $this->addElement(
@@ -797,7 +865,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -805,7 +873,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -813,7 +881,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -821,7 +889,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -829,7 +897,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -837,7 +905,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -845,7 +913,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -853,7 +921,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -861,7 +929,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -869,7 +937,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -877,7 +945,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -885,7 +953,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -893,7 +961,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -901,7 +969,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -909,7 +977,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -917,7 +985,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -925,7 +993,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -933,7 +1001,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -941,7 +1009,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -949,7 +1017,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -957,7 +1025,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -965,7 +1033,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -973,7 +1041,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -981,7 +1049,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -989,7 +1057,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -997,7 +1065,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1005,7 +1073,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1013,7 +1081,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1021,7 +1089,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1029,7 +1097,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1037,7 +1105,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1045,7 +1113,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1053,7 +1121,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1061,7 +1129,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1069,7 +1137,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1077,7 +1145,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1085,7 +1153,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1093,7 +1161,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1101,7 +1169,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1109,7 +1177,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1117,7 +1185,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1125,7 +1193,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1133,7 +1201,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1142,7 +1210,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['BvarQ'] . '),(' . $E['DomainQ'] . '),(' .
                 $E['ContExp'] . ')*)',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1151,7 +1219,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['BvarQ'] . '),(' . $E['DomainQ'] . '),(' .
                 $E['ContExp'] . ')*)',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1160,7 +1228,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['BvarQ'] . '),(' . $E['DomainQ'] . '),(' .
                 $E['ContExp'] . ')*)',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1168,7 +1236,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1176,7 +1244,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1184,7 +1252,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1192,7 +1260,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1200,7 +1268,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1208,7 +1276,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1216,7 +1284,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1224,7 +1292,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1232,7 +1300,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1240,7 +1308,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1248,7 +1316,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1256,7 +1324,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1264,7 +1332,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1272,7 +1340,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1280,7 +1348,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1288,7 +1356,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1296,7 +1364,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1304,7 +1372,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1312,7 +1380,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1320,7 +1388,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $this->addElement(
@@ -1328,7 +1396,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CDEAtt
         );
 
         $E['MathExpression'] = $E['ContExp'] .
@@ -1343,14 +1411,61 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $E['MathExpression'] . '|none),(' .
             $E['MathExpression'] . '|none)';
 
+        $E['mpadded-length'] = 'CDATA';
+        $E['linestyle'] = 'Enum#none,solid,dashed';
+        $E['columnalignstyle'] = 'Enum#left,center,right';
+        $E['unsigned-integer'] = 'CDATA';
+        $E['integer'] = 'CDATA';
+        $E['number'] = 'CDATA';
+        $E['character'] = 'CDATA';
+        $E['color'] = 'CDATA';
+        $E['positive-integer'] = 'CDATA';
+
         $E['token.content'] = '#PCDATA|mglyph|malignmark';
+
+        $E['length'] = 'CDATA';
+        $E['DeprecatedTokenAtt'] = array(
+            'fontfamily' => 'CDATA',
+            'fontweight' => 'Enum#normal,bold',
+            'fontstyle' => 'Enum#normal,italic',
+            'fontsize' => $E['length'],
+            'color' => $E['color'],
+            'background' => 'CDATA'
+        );
+        $E['TokenAtt'] = array_merge(
+            array(
+                'mathvariant' => 'Enum#normal,bold,italic,bold-italic' . 
+                    ',double-struck,bold-fraktur,script,bold-script,fraktur' .
+                    ',sans-serif,bold-sans-serif,sans-serif-italic' .
+                    ',sans-serif-bold-italic,monospace,initial,tailed,looped' .
+                    ',stretched',
+                'mathsize' => 'CDATA',
+                'dir' => 'Enum#ltr,rtl'
+            ),
+            $E['DeprecatedTokenAtt']
+        );
+        $E['CommonPresAtt'] = array(
+            'mathcolor' => $E['color'],
+            'mathbackground' => 'CDATA'
+        );
+
+        // These sets of attrs appear commonly together.
+        // For conciseness and efficiency we merge them here once:
+        $CCPAtt = array_merge(
+            $E['CommonAtt'],
+            $E['CommonPresAtt']
+        );
+        $CCPTAtt = array_merge(
+            $CCPAtt,
+            $E['TokenAtt']
+        );
 
         $this->addElement(
             'mi',
             $default_display,
             'Custom: (' . $E['token.content'] . ')*',
             array(),
-            array()
+            $CCPTAtt
         );
 
         $this->addElement(
@@ -1358,7 +1473,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['token.content'] . ')*',
             array(),
-            array()
+            $CCPTAtt
         );
 
         $this->addElement(
@@ -1366,7 +1481,38 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['token.content'] . ')*',
             array(),
-            array()
+            array_merge(
+                $CCPTAtt,
+                array(
+                    'form' => 'Enum#prefix,infix,postfix',
+                    'fence' => 'Enum#true,false',
+                    'separator' => 'Enum#true,false',
+                    'lspace' => $E['length'],
+                    'rspace' => $E['length'],
+                    'stretchy' => 'Enum#true,false',
+                    'symmetric' => 'Enum#true,false',
+                    'maxsize' => 'CDATA',
+                    'minsize' => $E['length'],
+                    'largeop' => 'Enum#true,false',
+                    'movablelimits' => 'Enum#true,false',
+                    'accent' => 'Enum#true,false',
+                    'linebreak' => 'Enum#auto,newline,nobreak,goodbreak' .
+                        ',badbreak',
+                    'lineleading' => $E['length'],
+                    'linebreakstyle' => 'Enum#before,after,duplicate' .
+                        'infixlinebreakstyle',
+                    'linebreakmultchar' => 'CDATA',
+                    'indentalign' => 'Enum#left,center,right,auto,id',
+                    'indentshift' => $E['length'],
+                    'indenttarget' => 'CDATA',
+                    'indentalignfirst' => 'Enum#left,center,right,auto,id' .
+                        ',indentalign',
+                    'indentshiftfirst' => 'CDATA',
+                    'indentalignlast' => 'Enum#left,center,right,auto,id' .
+                        ',indentalign',
+                    'indentshiftlast' => 'CDATA'
+                )
+            )
         );
 
         $this->addElement(
@@ -1374,7 +1520,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['token.content'] . ')*',
             array(),
-            array()
+            $CCPTAtt
         );
 
         $this->addElement(
@@ -1382,7 +1528,25 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            array_merge(
+                $CCPTAtt,
+                array(
+                    'width' => $E['length'],
+                    'height' => $E['length'],
+                    'depth' => $E['length'],
+                    'linebreak' => 'Enum#auto,newline,nobreak,goodbreak' .
+                        ',badbreak,indentingnewline',
+                    'indentalign' => 'Enum#left,center,right,auto,id',
+                    'indentshift' => $E['length'],
+                    'indenttarget' => 'CDATA',
+                    'indentalignfirst' => 'Enum#left,center,right,auto,id' .
+                        ',indentalign',
+                    'indentshiftfirst' => 'CDATA',
+                    'indentalignlast' => 'Enum#left,center,right,auto,id' .
+                        ',indentalign',
+                    'indentshiftlast' => 'CDATA',
+                )
+            )
         );
 
         $this->addElement(
@@ -1390,7 +1554,37 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['token.content'] . ')*',
             array(),
-            array()
+            array_merge(
+                $CCPTAtt,
+                array(
+                    'lquote' => 'CDATA',
+                    'rquote' => 'CDATA'
+                )
+            )
+        );
+
+        $E['mglyph.deprecatedattributes'] = array_merge(
+            array(
+                'index' => $E['integer'],
+                'mathvariant' => 'Enum#normal,bold,italic,bold-italic' .
+                    ',double-struck,bold-fraktur,script,bold-script,fraktur' .
+                    ',sans-serif,bold-sans-serif,sans-serif-italic' .
+                    ',sans-serif-bold-italic,monospace,initial,tailed,looped' .
+                    ',stretched',
+                'mathsize' => 'CDATA'
+            ),
+            $E['DeprecatedTokenAtt']
+        );
+
+        $E['mglyph.attributes'] = array_merge(
+            $CCPAtt,
+            array(
+                'src' => 'CDATA',
+                'width' => $E['length'],
+                'height' => $E['length'],
+                'valign' => $E['length'],
+                'alt' => 'CDATA'
+            )
         );
 
         $this->addElement(
@@ -1398,7 +1592,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            array_merge(
+                $E['mglyph.attributes'],
+                $E['mglyph.deprecatedattributes']
+            )
         );
 
         $this->addElement(
@@ -1406,7 +1603,16 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'position' => $E['integer'],
+                    'length' => $E['unsigned-integer'],
+                    'leftoverhang' => $E['length'],
+                    'rightoverhang' => $E['length'],
+                    'mslinethickness' => 'CDATA'
+                )
+            )
         );
 
         $this->addElement(
@@ -1414,7 +1620,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CCPAtt
         );
 
         $this->addElement(
@@ -1422,7 +1628,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            $CCPAtt
         );
 
         $this->addElement(
@@ -1430,7 +1636,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array('edge' => 'Enum#left,right')
+            )
         );
 
         $this->addElement(
@@ -1438,7 +1647,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Empty',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array('groupalign' => 'Enum#left,right,right,decimalpoint')
+            )
         );
 
         $this->addElement(
@@ -1446,7 +1658,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['MathExpression'] . ')*',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array('dir' => 'Enum#ltr,rtl')
+            )
         );
 
         $this->addElement(
@@ -1455,7 +1670,15 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['MathExpression'] . '),(' .
                 $E['MathExpression'] . '))',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'linethickness' => 'CDATA',
+                    'numalign' => 'Enum#left,center,right',
+                    'denomalign' => 'Enum#left,center,right',
+                    'bevelled' => 'Enum#true,false'
+                )
+            )
         );
 
         $this->addElement(
@@ -1463,7 +1686,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['ImpliedMrow'] . ')',
             array(),
-            array()
+            $CCPAtt
         );
 
         $this->addElement(
@@ -1472,7 +1695,108 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['MathExpression'] . '),(' .
                 $E['MathExpression'] . '))',
             array(),
-            array()
+            $CCPAtt
+        );
+
+        $E['mstyle.deprecatedattributes'] = array_merge(
+            $E['DeprecatedTokenAtt'],
+            array(
+                'veryverythinmathspace' => $E['length'],
+                'verythinmathspace' => $E['length'],
+                'thinmathspace' => $E['length'],
+                'mediummathspace' => $E['length'],
+                'thickmathspace' => $E['length'],
+                'verythickmathspace' => $E['length'],
+                'veryverythickmathspace' => $E['length']
+            )
+        );
+
+        $E['mstyle.generalattributes'] = array(
+            'accent' => 'Enum#true,false',
+            'accentunder' => 'Enum#true,false',
+            'align' => 'Enum#left,right,center',
+            'alignmentscope' => 'CDATA',
+            'bevelled' => 'Enum#true,false',
+            'charalign' => 'Enum#left,center,right',
+            'charspacing' => 'CDATA',
+            'columnspan' => $E['positive-integer'],
+            'columnwidth' => 'CDATA',
+            'crossout' => 'CDATA',
+            'denomalign' => 'Enum#left,center,right',
+            'depth' => $E['length'],
+            'dir' => 'Enum#ltr,rtl',
+            'edge' => 'Enum#left,right',
+            'equalcolumns' => 'Enum#true,false',
+            'equalrows' => 'Enum#true,false',
+            'fence' => 'Enum#true,false',
+            'form' => 'Enum#prefix,infix,postfix',
+            'frame' => $E['linestyle'],
+            'framespacing' => 'CDATA',
+            'groupalign' => 'CDATA',
+            'height' => $E['length'],
+            'indentalign' => 'Enum#left,center,right,auto,id',
+            'indentalignfirst' => 'Enum#left,center,right,auto,id,indentalign',
+            'indentalignlast' => 'Enum#left,center,right,auto,id,indentalign',
+            'indentshift' => $E['length'],
+            'indentshiftfirst' => 'CDATA',
+            'indentshiftlast' => 'CDATA',
+            'indenttarget' => 'CDATA',
+            'largeop' => 'Enum#true,false',
+            'leftoverhang' => $E['length'],
+            'length' => $E['unsigned-integer'],
+            'linebreak' => 'Enum#auto,newline,nobreak,goodbreak,badbreak',
+            'linebreakmultchar' => 'CDATA',
+            'linebreakstyle' => 'Enum#before,after,duplicate' .
+                ',infixlinebreakstyle',
+            'lineleading' => $E['length'],
+            'linethickness' => 'CDATA',
+            'location' => 'Enum#w,nw,n,ne,e,se,s,sw',
+            'longdivstyle' => 'CDATA',
+            'lquote' => 'CDATA',
+            'lspace' => $E['length'],
+            'mathsize' => 'CDATA',
+            'mathvariant' => 'Enum#normal,bold,italic,bold-italic' .
+                ',double-struck,bold-fraktur,script,bold-script,fraktur' .
+                ',sans-serif,bold-sans-serif,sans-serif-italic' .
+                ',sans-serif-bold-italic,monospace,initial,tailed,looped' .
+                ',stretched',
+            'maxsize' => 'CDATA',
+            'minlabelspacing' => $E['length'],
+            'minsize' => $E['length'],
+            'movablelimits' => 'Enum#true,false',
+            'mslinethickness' => 'CDATA',
+            'notation' => 'CDATA',
+            'numalign' => 'Enum#left,center,right',
+            'open' => 'CDATA',
+            'position' => $E['integer'],
+            'rightoverhang' => $E['length'],
+            'rowalign' => 'CDATA',
+            'rowlines' => 'CDATA',
+            'rowspacing' => 'CDATA',
+            'rowspan' => $E['positive-integer'],
+            'rquote' => 'CDATA',
+            'rspace' => $E['length'],
+            'selection' => $E['positive-integer'],
+            'separator' => 'Enum#true,false',
+            'separators' => 'CDATA',
+            'shift' => $E['integer'],
+            'side' => 'Enum#left,right,leftoverlap,rightoverlap',
+            'stackalign' => 'Enum#left,center,right,decimalpoint',
+            'stretchy' => 'Enum#true,false',
+            'subscriptshift' => $E['length'],
+            'superscriptshift' => $E['length'],
+            'symmetric' => 'Enum#true,false',
+            'valign' => $E['length'],
+            'width' => $E['length']
+        );
+
+        $E['mstyle.specificattributes'] = array(
+            'scriptlevel' => $E['integer'],
+            'displaystyle' => 'Enum#true,false',
+            'scriptsizemultiplier' => $E['number'],
+            'scriptminsize' => $E['length'],
+            'infixlinebreakstyle' => 'Enum#before,after,duplicate',
+            'decimalpoint' => $E['character']
         );
 
         $this->addElement(
@@ -1480,7 +1804,12 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['ImpliedMrow'] . ')',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                $E['mstyle.specificattributes'],
+                $E['mstyle.generalattributes'],
+                $E['mstyle.deprecatedattributes']
+            )
         );
 
         $this->addElement(
@@ -1488,7 +1817,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['ImpliedMrow'] . ')',
             array(),
-            array()
+            $CCPAtt
         );
 
         $this->addElement(
@@ -1496,7 +1825,16 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['ImpliedMrow'] . ')',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'height' => $E['mpadded-length'],
+                    'depth' => $E['mpadded-length'],
+                    'width' => $E['mpadded-length'],
+                    'lspace' => $E['mpadded-length'],
+                    'voffset' => $E['mpadded-length'],
+                )
+            )
         );
 
         $this->addElement(
@@ -1504,7 +1842,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['ImpliedMrow'] . ')',
             array(),
-            array()
+            $CCPAtt
         );
 
         $this->addElement(
@@ -1512,7 +1850,14 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['MathExpression'] . ')*',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'open' => 'CDATA',
+                    'close' => 'CDATA',
+                    'separators' => 'CDATA'
+                )
+            )
         );
 
         $this->addElement(
@@ -1520,7 +1865,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['ImpliedMrow'] . ')',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array('notation' => 'CDATA' )
+            )
         );
 
         $this->addElement(
@@ -1529,7 +1877,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['MathExpression'] . '),(' .
                 $E['MathExpression'] . '))',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array('subscriptshift' => $E['length'])
+            )
         );
 
         $this->addElement(
@@ -1538,7 +1889,18 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['MathExpression'] . '),(' .
                 $E['MathExpression'] . '))',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array('superscriptshift' => $E['length'])
+            )
+        );
+
+        $E['msubsup.attributes'] = array_merge(
+            $CCPAtt,
+            array(
+                'subscriptshift' => $E['length'],
+                'superscriptshift' => $E['length']
+            )
         );
 
         $this->addElement(
@@ -1548,7 +1910,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
                 $E['MathExpression'] . '),(' .
                 $E['MathExpression'] . '))',
             array(),
-            array()
+            $E['msubsup.attributes']
         );
 
         $this->addElement(
@@ -1557,7 +1919,13 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['MathExpression'] . '),(' .
                 $E['MathExpression'] . '))',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'accentunder' => 'Enum#true,false',
+                    'align' => 'Enum#left,right,center'
+                )
+            )
         );
 
         $this->addElement(
@@ -1566,7 +1934,13 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['MathExpression'] . '),(' .
                 $E['MathExpression'] . '))',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'accent' => 'Enum#true,false',
+                    'align' => 'Enum#left,right,center'
+                )
+            )
         );
 
         $this->addElement(
@@ -1576,7 +1950,14 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
                 $E['MathExpression'] . '),(' .
                 $E['MathExpression'] . '))',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'accent' => 'Enum#true,false',
+                    'accentunder' => 'Enum#true,false',
+                    'align' => 'Enum#left,right,center'
+                )
+            )
         );
 
         $this->addElement(
@@ -1586,7 +1967,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
                 $E['MultiscriptExpression'] . ')*,(mprescripts,(' .
                 $E['MultiscriptExpression'] . ')*)?)',
             array(),
-            array()
+            $E['msubsup.attributes']
         );
 
         $this->addElement(
@@ -1594,7 +1975,37 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['TableRowExpression'] . ')*',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'align' => 'CDATA',
+                    'rowalign' => 'CDATA',
+                    'columnalign' => 'CDATA',
+                    'groupalign' => 'CDATA',
+                    'alignmentscope' => 'CDATA',
+                    'columnwidth' => 'CDATA',
+                    'width' => 'CDATA',
+                    'rowspacing' => 'CDATA',
+                    'columnspacing' => 'CDATA',
+                    'rowlines' => 'CDATA',
+                    'columnlines' => 'CDATA',
+                    'frame' => $E['linestyle'],
+                    'framespacing' => 'CDATA',
+                    'equalrows' => 'Enum#true,false',
+                    'displaystyle' => 'Enum#true,false',
+                    'side' => 'Enum#left,right,leftoverlap,rightoverlap',
+                    'minlabelspacing' => $E['length']
+                )
+            )
+        );
+
+        $E['mtr.attributes'] = array_merge(
+            $CCPAtt,
+            array(
+                'rowalign' => 'Enum#top,bottom,center,baseline,axis',
+                'columnalign' => 'CDATA',
+                'groupalign' => 'CDATA'
+            )
         );
 
         $this->addElement(
@@ -1602,7 +2013,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['TableCellExpression'] . ')+',
             array(),
-            array()
+            $E['mtr.attributes']
         );
 
         $this->addElement(
@@ -1610,7 +2021,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['TableCellExpression'] . ')+',
             array(),
-            array()
+            $E['mtr.attributes']
         );
 
         $this->addElement(
@@ -1618,7 +2029,16 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['ImpliedMrow'] . ')',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'rowspan' => $E['positive-integer'],
+                    'columnspan' => $E['positive-integer'],
+                    'rowalign' => 'Enum#top,bottom,center,baseline,axis',
+                    'columnalign' => $E['columnalignstyle'],
+                    'groupalign' => 'CDATA'
+                )
+            )
         );
 
         $this->addElement(
@@ -1626,7 +2046,23 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['MstackExpression'] . ')*',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'align' => 'CDATA',
+                    'stackalign' => 'Enum#left,center,right,decimalpoint',
+                    'charalign' => 'Enum#left,center,right',
+                    'charspacing' => 'CDATA'
+                )
+            )
+        );
+
+        $E['msgroup.attributes'] = array_merge(
+            $CCPAtt,
+            array(
+                'position' => $E['integer'],
+                'shift' => $E['integer']
+            )
         );
 
         $this->addElement(
@@ -1635,7 +2071,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: ((' . $E['MstackExpression'] . '),(' .
                 $E['MstackExpression'] . '),(' . $E['MstackExpression'] . ')+)',
             array(),
-            array()
+            array_merge(
+                $E['msgroup.attributes'],
+                array('longdivstyle' => 'CDATA')
+            )
         );
 
         $this->addElement(
@@ -1643,7 +2082,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['MstackExpression'] . ')',
             array(),
-            array()
+            $E['msgroup.attributes']
         );
 
         $this->addElement(
@@ -1651,7 +2090,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['MsrowExpression'] . ')',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array('position' => $E['integer'])
+            )
         );
 
         $this->addElement(
@@ -1659,7 +2101,15 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['MsrowExpression'] . '|mscarry)*',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'position' => $E['integer'],
+                    'location' => 'Enum#w,nw,n,ne,e,se,s,sw',
+                    'crossout' => 'CDATA',
+                    'scriptsizemultiplier' => $E['number']
+                )
+            )
         );
 
         $this->addElement(
@@ -1667,7 +2117,13 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['MsrowExpression'] . ')*',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'location' => 'Enum#w,nw,n,ne,e,se,s,sw',
+                    'crossout' => 'CDATA'
+                )
+            )
         );
 
         $this->addElement(
@@ -1675,7 +2131,18 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['MathExpression'] . ')+',
             array(),
-            array()
+            array_merge(
+                $CCPAtt,
+                array(
+                    'actiontype*' => 'CDATA',
+                    'selection' => $E['positive-integer'],
+                )
+            )
+        );
+
+        $E['math.deprecatedattributes'] = array(
+            'mode' => 'CDATA',
+            'macros' => 'CDATA'
         );
 
         $this->addElement(
@@ -1687,7 +2154,34 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Flow',
             'Custom: (' . $E['MathExpression'] . ')*',
             array(),
-            array()
+            array_merge(
+                $E['CommonAtt'],
+                array(
+                    'display' => 'Enum#block,inline',
+                    'maxwidth' => $E['length'],
+                    'overflow' => 'Enum#linebreak,scroll,elide,truncate,scale',
+                    'altimg' => 'CDATA',
+                    'altimg-width' => $E['length'],
+                    'altimg-height' => $E['length'],
+                    'altimg-valign' => 'CDATA',
+                    'alttext' => 'CDATA',
+                    'cdgroup' => 'CDATA',
+                ),
+                $E['math.deprecatedattributes'],
+                $E['CommonPresAtt'],
+                $E['mstyle.specificattributes'],
+                $E['mstyle.generalattributes']
+            )
+        );
+
+        $E['annotation.attributes'] = array_merge(
+            $E['CommonAtt'],
+            array(
+                'cd' => 'CDATA',
+                'name' => 'CDATA'
+            ),
+            $E['DefEncAtt'],
+            array('src' => 'CDATA')
         );
 
         $this->addElement(
@@ -1695,7 +2189,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (#PCDATA)',
             array(),
-            array()
+            $E['annotation.attributes']
         );
 
         $this->addElement(
@@ -1703,7 +2197,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             $default_display,
             'Custom: (' . $E['MathExpression'] . ')*',
             array(),
-            array()
+            $E['annotation.attributes']
         );
 
         $this->addElement(
@@ -1712,7 +2206,13 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'Custom: (' . $E['MathExpression'] .
                 '),(annotation|annotation-xml)*)',
             array(),
-            array()
+            array_merge(
+                $CDEAtt,
+                array(
+                    'cd' => 'CDATA',
+                    'name' => 'CDATA'
+                )
+            )
         );
 
     }
