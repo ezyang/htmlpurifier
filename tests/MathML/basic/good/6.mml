@@ -1,0 +1,48 @@
+<math display="block">
+  <mrow>
+    <msub>
+      <mi>a</mi>
+      <mn>0</mn>
+    </msub>
+    <mo>+</mo>
+    <mfrac>
+      <mn>1</mn>
+      <mstyle displaystyle="true" scriptlevel="0">
+        <msub>
+          <mi>a</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>+</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mstyle displaystyle="true" scriptlevel="0">
+            <msub>
+              <mi>a</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>+</mo>
+            <mfrac>
+              <mn>1</mn>
+              <mstyle displaystyle="true" scriptlevel="0">
+                <msub>
+                  <mi>a</mi>
+                  <mn>3</mn>
+                </msub>
+                <mo>+</mo>
+                <mfrac>
+                  <mn>1</mn>
+                  <mstyle displaystyle="true" scriptlevel="0">
+                    <msub>
+                      <mi>a</mi>
+                      <mn>4</mn>
+                    </msub>
+                  </mstyle>
+                </mfrac>
+              </mstyle>
+            </mfrac>
+          </mstyle>
+        </mfrac>
+      </mstyle>
+    </mfrac>
+  </mrow>
+</math>

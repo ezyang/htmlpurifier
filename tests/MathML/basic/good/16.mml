@@ -1,0 +1,13 @@
+<math display="block">
+  <mrow>
+    <msubsup>
+      <mo stretchy="false">&amp;int;</mo>
+      <mn>1</mn>
+      <mi>x</mi>
+    </msubsup>
+    <mfrac>
+      <mrow><mi>d</mi><mi>t</mi></mrow>
+      <mi>t</mi>
+    </mfrac>
+  </mrow>
+</math>

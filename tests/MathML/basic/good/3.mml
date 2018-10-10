@@ -1,0 +1,19 @@
+<math display="block">
+  <mrow>
+    <mfrac>
+      <mrow>
+        <mi>x</mi>
+        <mo>+</mo>
+        <msup>
+          <mi>y</mi>
+          <mn>2</mn>
+        </msup>
+      </mrow>
+      <mrow>
+        <mi>k</mi>
+        <mo>+</mo>
+        <mn>1</mn>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>

@@ -1,0 +1,31 @@
+<math display="block">
+  <mrow>
+    <munder>
+      <mo>&amp;sum;</mo>
+      <mrow>
+        <mfrac linethickness="0px">
+          <mrow>
+            <mn>0</mn>
+            <mo>&amp;leq;</mo>
+            <mi>i</mi>
+            <mo>&amp;leq;</mo>
+            <mi>m</mi>
+          </mrow>
+          <mrow>
+            <mn>0</mn>
+            <mo>&amp;lt;</mo>
+            <mi>j</mi>
+            <mo>&amp;lt;</mo>
+            <mi>n</mi>
+          </mrow>
+        </mfrac>
+      </mrow>
+    </munder>
+    <mi>P</mi>
+    <mo stretchy="false">(</mo>
+    <mi>i</mi>
+    <mo>,</mo>
+    <mi>j</mi>
+    <mo stretchy="false">)</mo>
+  </mrow>
+</math>

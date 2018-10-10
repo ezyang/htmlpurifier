@@ -1,0 +1,12 @@
+<math display="block">
+  <mrow>
+    <mfrac>
+      <mi>a</mi>
+      <mrow>
+        <mi>b</mi>
+        <mo>/</mo>
+        <mn>2</mn>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>

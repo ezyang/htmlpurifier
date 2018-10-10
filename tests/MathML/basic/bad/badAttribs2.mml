@@ -1,0 +1,10 @@
+
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <msup foo="blue">
+    <mn>2</mn> 
+    <mn>5</mn> 
+  </msup> 
+  <mo bar="2ex">+</mo> 
+  <mi>x</mi> 
+</math>

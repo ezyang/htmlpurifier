@@ -1,0 +1,15 @@
+<math display="block">
+  <mover>
+    <mrow>
+      <mi>x</mi>
+      <mo>+</mo>
+      <mo>...</mo>
+      <mo>+</mo>
+      <mi>x</mi>
+    </mrow>
+    <mover>
+      <mo>&amp;OverBrace;</mo>
+      <mrow><mi>k</mi> <mspace width="thinmathspace"/> <mtext>times</mtext></mrow>
+    </mover>
+  </mover>
+</math>

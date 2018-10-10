@@ -1,0 +1,14 @@
+<math display="block">
+  <mrow>
+    <mo>(</mo>
+    <mfrac linethickness="0px">
+      <mi>n</mi>
+      <mrow>
+        <mi>k</mi>
+        <mo>/</mo>
+        <mn>2</mn>
+      </mrow>
+    </mfrac>
+    <mo>)</mo>
+  </mrow>
+</math>

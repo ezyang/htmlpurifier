@@ -1,0 +1,21 @@
+
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <msup>
+    <mn>5</mn> 
+    <foo>2</foo> 
+  </msup> 
+  <mo>+</mo> 
+  <msup>
+    <foo>2</foo> 
+    <mn>5</mn> 
+  </msup> 
+  <mo>+</mo> 
+  <mrow>
+    <mn>5</mn> 
+    <foo>+</foo> 
+    <mn>5</mn> 
+  </mrow> 
+  <mo>+</mo> 
+  <foo></foo> 
+</math>

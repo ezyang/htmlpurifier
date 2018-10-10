@@ -1,0 +1,15 @@
+<math display="block">
+  <msubsup>
+    <mi>x</mi>
+    <msubsup>
+      <mi>y</mi>
+      <mi>b</mi>
+      <mi>a</mi>
+    </msubsup>
+    <msubsup>
+      <mi>z</mi>
+      <mi>c</mi>
+      <mi>d</mi>
+    </msubsup>
+  </msubsup>
+</math>

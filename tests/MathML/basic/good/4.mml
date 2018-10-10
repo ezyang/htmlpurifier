@@ -1,0 +1,17 @@
+<math display="block">
+  <mrow>
+    <mi>x</mi>
+    <mo>+</mo>
+    <msup>
+      <mi>y</mi>
+      <mfrac>
+        <mn>2</mn>
+        <mrow>
+          <mi>k</mi>
+          <mo>+</mo>
+          <mn>1</mn>
+        </mrow>
+      </mfrac>
+    </msup>
+  </mrow>
+</math>
