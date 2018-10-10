@@ -36,6 +36,23 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         // Prefix used for xlink attrs; is not specified by the MathML DTD
         $E['XLINK.prefix'] = 'xlink';
 
+        $proprietary_att_wrs = array(
+            'wrs:valign' => 'CDATA',
+            'wrs:columnalign' => 'CDATA',
+            'wrs:positionable' => 'CDATA',
+            'wrs:linecolor' => 'CDATA',
+            'wrs:baseline' => 'CDATA',
+            'wrs:reserved' => 'CDATA',
+            'wrs:decimalseparators' => 'CDATA'
+            // TODO: Add xmlns:wrs
+        );
+
+        $proprietary_att_dsi = array(
+            'xmlns:dsi' => 'Bool#http://www.dessci.com/mathml',
+            'dsi:background' => 'CDATA',
+            'dsi:color' => 'CDATA'
+        );
+
         /*****************************************************************
          * DTD code
          * Code from the DTD ported and adapted
@@ -52,20 +69,25 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
 
         $E['DefEncAtt'] = array(
             'encoding' => 'CDATA',
-            'definitionURL' => 'CDATA'
+            'definitionurl' => 'CDATA'
         );
 
-        $E['CommonAtt'] = array(
-            'xmlns:mml' => 'Bool#http://www.w3.org/1998/Math/MathML',
-            $E['XLINK.prefix'] . ':href' => 'CDATA',
-            $E['XLINK.prefix'] . ':type' => 'CDATA',
-            'xml:lang' => 'CDATA',
-            'xml:space' => 'Enum#default,preserve',
-            'id' => 'CDATA', // MathML allows multiple elements with same ID
-            'xref' => 'CDATA',
-            'class' => 'CDATA',
-            'href' => 'CDATA',
-            'other' => 'CDATA',
+        $E['CommonAtt'] = array_merge(
+            array(
+                'xmlns' => 'Bool#http://www.w3.org/1998/Math/MathML',
+                $E['XLINK.prefix'] . ':href' => 'CDATA',
+                $E['XLINK.prefix'] . ':type' => 'CDATA',
+                'xml:lang' => 'CDATA',
+                'xml:space' => 'Enum#default,preserve',
+                'id' => 'CDATA', // MathML allows multiple elements with same ID
+                'xref' => 'CDATA',
+                'class' => 'CDATA',
+                'style' => 'CDATA',
+                'href' => 'CDATA',
+                'other' => 'CDATA',
+            ),
+            $proprietary_att_wrs,
+            $proprietary_att_dsi
         );
 
         // These two sets of attrs appear commonly together.
@@ -78,7 +100,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'cn',
             $default_display,
-            'Custom: #PCDATA|mglyph|sep|' . $E['PresentationExpression'],
+            'Custom: (#PCDATA|mglyph|sep|' . $E['PresentationExpression'] . ')*',
             array(),
             array_merge(
                 $CDEAtt,
@@ -92,7 +114,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'ci',
             $default_display,
-            'Custom: #PCDATA|mglyph|' . $E['PresentationExpression'],
+            'Custom: (#PCDATA|mglyph|' . $E['PresentationExpression'] . ')*',
             array(),
             array_merge(
                 $CDEAtt,
@@ -105,7 +127,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'csymbol',
             $default_display,
-            'Custom: #PCDATA|mglyph|' . $E['PresentationExpression'],
+            'Custom: (#PCDATA|mglyph|' . $E['PresentationExpression'] . ')*',
             array(),
             array_merge(
                 $CDEAtt,
@@ -169,6 +191,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             '|' . $E['lambda.mmlclass'] .
             '|' . $E['nary-functional.mmlclass'] .
             '|' . $E['binary-arith.mmlclass'] .
+            '|' . $E['unary-arith.mmlclass'] .
             '|' . $E['nary-minmax.mmlclass'] .
             '|' . $E['nary-arith.mmlclass'] .
             '|' . $E['nary-logical.mmlclass'] .
@@ -240,7 +263,8 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'cbytes',
             $default_display,
-            'Custom: (#PCDATA)',
+            // The * is not in the DTD but we add it to allow empty tag
+            'Custom: (#PCDATA)*',
             array(),
             $CDEAtt
         );
@@ -248,7 +272,8 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'cs',
             $default_display,
-            'Custom: (#PCDATA)',
+            // The * is not in the DTD but we add it to allow empty tag
+            'Custom: (#PCDATA)*',
             array(),
             $CDEAtt
         );
@@ -1401,7 +1426,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
 
         $E['MathExpression'] = $E['ContExp'] .
             '|' . $E['PresentationExpression'];
-        $E['ImpliedMrow'] = '(' . $E['MathExpression'] . ')';
+        $E['ImpliedMrow'] = '(' . $E['MathExpression'] . ')*';
         $E['TableRowExpression'] = 'mtr|mlabeledtr';
         $E['TableCellExpression'] = 'mtd';
         $E['MstackExpression'] = $E['MathExpression'] .
@@ -1500,7 +1525,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
                         ',badbreak',
                     'lineleading' => $E['length'],
                     'linebreakstyle' => 'Enum#before,after,duplicate' .
-                        'infixlinebreakstyle',
+                        ',infixlinebreakstyle',
                     'linebreakmultchar' => 'CDATA',
                     'indentalign' => 'Enum#left,center,right,auto,id',
                     'indentshift' => $E['length'],
@@ -1719,6 +1744,10 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             'bevelled' => 'Enum#true,false',
             'charalign' => 'Enum#left,center,right',
             'charspacing' => 'CDATA',
+            'close' => 'CDATA',
+            'columnalign' => 'CDATA',
+            'columnlines' => 'CDATA',
+            'columnspacing' => 'CDATA',
             'columnspan' => $E['positive-integer'],
             'columnwidth' => 'CDATA',
             'crossout' => 'CDATA',
@@ -1992,6 +2021,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
                     'frame' => $E['linestyle'],
                     'framespacing' => 'CDATA',
                     'equalrows' => 'Enum#true,false',
+                    'equalcolumns' => 'Enum#true,false',
                     'displaystyle' => 'Enum#true,false',
                     'side' => 'Enum#left,right,leftoverlap,rightoverlap',
                     'minlabelspacing' => $E['length']
@@ -2080,7 +2110,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'msgroup',
             $default_display,
-            'Custom: (' . $E['MstackExpression'] . ')',
+            'Custom: (' . $E['MstackExpression'] . ')*',
             array(),
             $E['msgroup.attributes']
         );
@@ -2088,7 +2118,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'msrow',
             $default_display,
-            'Custom: (' . $E['MsrowExpression'] . ')',
+            'Custom: (' . $E['MsrowExpression'] . ')*',
             array(),
             array_merge(
                 $CCPAtt,
@@ -2187,7 +2217,8 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'annotation',
             $default_display,
-            'Custom: (#PCDATA)',
+            // The * is not in the DTD but we add it to allow empty tag
+            'Custom: (#PCDATA)*',
             array(),
             $E['annotation.attributes']
         );
@@ -2195,7 +2226,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'annotation-xml',
             $default_display,
-            'Custom: (' . $E['MathExpression'] . ')*',
+            'Custom: ((' . $E['MathExpression'] . ')*)',
             array(),
             $E['annotation.attributes']
         );
@@ -2203,7 +2234,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'semantics',
             $default_display,
-            'Custom: (' . $E['MathExpression'] .
+            'Custom: ((' . $E['MathExpression'] .
                 '),(annotation|annotation-xml)*)',
             array(),
             array_merge(
