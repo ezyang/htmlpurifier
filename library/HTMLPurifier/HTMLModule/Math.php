@@ -147,7 +147,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
             '|naturalnumbers|complexes|primes|emptyset';
         $E['binary-linalg.mmlclass'] = 'vectorproduct|scalarproduct' .
             '|outerproduct';
-        $E['nary-linalg.mmlclass'] = 'max|min';
+        $E['nary-linalg.mmlclass'] = 'selector';
         $E['unary-linalg.mmlclass'] = 'determinant|transpose';
         $E['nary-constructor.mmlclass'] = 'vector|matrix|matrixrow';
         $E['nary-stats.mmlclass'] = 'mean|sdev|variance|median|mode';
@@ -353,7 +353,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
         $this->addElement(
             'piecewise',
             $default_display,
-            'Custom: (piece|otherwise)',
+            'Custom: (piece|otherwise)*',
             array(),
             $CDEAtt
         );
