@@ -1,11 +1,1 @@
-<math display="block">
-  <mrow>
-    <msup>
-      <mi>x</mi>
-      <mrow>
-        <mn>2</mn>
-        <mi>y</mi>
-      </mrow>
-    </msup>
-  </mrow>
-</math>
+<math display="block"><mrow><msup><mi>x</mi><mrow><mn>2</mn><mi>y</mi></mrow></msup></mrow></math>

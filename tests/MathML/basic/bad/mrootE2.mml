@@ -1,14 +1,1 @@
-
-
-<math xmlns="http://www.w3.org/1998/Math/MathML">
-  <mrow>
-    <mroot>
-      <mn>3</mn> 
-      <mi>x</mi> 
-      <mn>2</mn> 
-    </mroot> 
-    <mroot>
-      <mn>3</mn> 
-    </mroot> 
-  </mrow> 
-</math>
+<math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mroot><mn>3</mn><mi>x</mi><mn>2</mn></mroot><mroot><mn>3</mn></mroot></mrow></math>

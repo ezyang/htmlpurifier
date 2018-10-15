@@ -1,18 +1,1 @@
-
-
-<math xmlns="http://www.w3.org/1998/Math/MathML">
-  <mtable>
-    <mn>2</mn> 
-    <mtr>
-      <mn>5</mn> 
-    </mtr> 
-    <mtr>
-      <mtd></mtd> 
-    </mtr> 
-    <mtd>
-      <mn>4</mn> 
-      <mo>+</mo> 
-      <mn>3</mn> 
-    </mtd> 
-  </mtable> 
-</math>
+<math xmlns="http://www.w3.org/1998/Math/MathML"><mtable><mn>2</mn><mtr><mn>5</mn></mtr><mtr><mtd></mtd></mtr><mtd><mn>4</mn><mo>+</mo><mn>3</mn></mtd></mtable></math>

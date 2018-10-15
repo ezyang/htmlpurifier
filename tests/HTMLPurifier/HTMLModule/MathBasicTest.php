@@ -69,15 +69,7 @@ class HTMLPurifier_HTMLModule_MathBasicTest extends HTMLPurifier_HTMLModuleHarne
     // Incorrectly formed MathML trees that yield an error
     public function testError() {
 
-        $snippet = '' .
-'<math xmlns="http://www.w3.org/1998/Math/MathML">
-  <math>
-    <msup>
-      <mn>5</mn> 
-      <mn>2</mn> 
-    </msup> 
-  </math> 
-</math>';
+        $snippet = '<math xmlns="http://www.w3.org/1998/Math/MathML"><math><msup><mn>5</mn><mn>2</mn></msup></math></math>';
 
         $this->expectError();
 

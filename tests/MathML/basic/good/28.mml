@@ -1,7 +1,1 @@
-<math display="block">
-  <msubsup>
-    <mi>y</mi>
-    <mn>3</mn>
-    <mo>&amp;#x2034;</mo>
-  </msubsup>
-</math>
+<math display="block"><msubsup><mi>y</mi><mn>3</mn><mo>&amp;#x2034;</mo></msubsup></math>
