@@ -53,29 +53,14 @@ closedir($dh);
 if ( !$entity_files ) exit("Fatal Error: No entity files to parse.\n");
 
 $entity_table = array();
-//$regexp = '/<!ENTITY\s+([A-Za-z0-9]+)\s+"&#(?:38;#)?([0-9]+);">/';
-$regexp = '/<!ENTITY\s+([A-Za-z0-9]+)\s+"(.*)"\s*>/';
-$regexp_inner = '/&#(?:38;#)?(x?[A-Fa-f0-9]+);/';
+$regexp = '/<!ENTITY\s+([A-Za-z0-9]+)\s+"&#(?:38;#)?([0-9]+);">/';
 
 foreach ( $entity_files as $file ) {
     $contents = file_get_contents($entity_dir . $file);
-
-    // First we match each <!ENTITY name "definition"> tag
     $matches = array();
     preg_match_all($regexp, $contents, $matches, PREG_SET_ORDER);
-
     foreach ($matches as $match) {
-        //$entity_table[$match[1]] = unichr($match[2]);
-
-        // Then, for each tag, we match and parse each character in the definition string
-        $matches_inner = array();
-        preg_match_all($regexp_inner, $match[2], $matches_inner, PREG_SET_ORDER);
-
-        $entity_table[$match[1]] = '';
-
-        foreach ($matches_inner as $match_inner) {
-            $entity_table[$match[1]] .= unichr(intval(str_replace('x', '0x', $match_inner[1]), 0));
-        }
+        $entity_table[$match[1]] = unichr($match[2]);
     }
 }
 
