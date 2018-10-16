@@ -24,7 +24,7 @@ function e($php, $file)
         $cmd = $php . ' ' . $file;
     } else {
         echo "File " . $file . " does not exist.";
-        exit();
+        return false;
     }
     echo "\$ $cmd\n";
     passthru($cmd, $status);
@@ -32,7 +32,7 @@ function e($php, $file)
     if ($status) exit($status);
 }
 
-$php = PHP_BINARY . '/php';
+$php = PHP_BINARY;
 
 e($php, 'generate-includes.php');
 e($php, 'generate-schema-cache.php');

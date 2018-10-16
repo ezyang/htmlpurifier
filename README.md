@@ -27,3 +27,11 @@ Package available on [Composer](https://packagist.org/packages/ezyang/htmlpurifi
 If you're using Composer to manage dependencies, you can use
 
     $ composer require ezyang/htmlpurifier
+
+## Unit Testing
+
+Ensure phpunit is installed via composer `$ composer install`
+
+Run the following
+
+    $ ./vendor/bin/phpunit

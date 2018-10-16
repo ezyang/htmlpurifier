@@ -1,0 +1,11 @@
+<phpunit 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.7/phpunit.xsd" 
+    bootstrap="./unit-testing/bootstrap.php" 
+    colors="true">
+    <testsuites>
+        <testsuite name="html purifier unit testing">
+            <directory>./unit-testing/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
