@@ -23,7 +23,7 @@ function e($php, $file)
     if (in_array($file, $whitlistFiles)) {
         $cmd = $php . ' ' . $file;
     } else {
-        echo 'file ' . $file . ' is not existed';
+        echo "File " . $file . " does not exist.";
         exit();
     }
     echo "\$ $cmd\n";
