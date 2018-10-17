@@ -186,6 +186,7 @@ require_once $__dir . '/HTMLPurifier/HTMLModule/Tidy/XHTML.php';
 require_once $__dir . '/HTMLPurifier/Injector/AutoParagraph.php';
 require_once $__dir . '/HTMLPurifier/Injector/DisplayLinkURI.php';
 require_once $__dir . '/HTMLPurifier/Injector/Linkify.php';
+require_once $__dir . '/HTMLPurifier/Injector/MathSpaceNormalize.php';
 require_once $__dir . '/HTMLPurifier/Injector/PurifierLinkify.php';
 require_once $__dir . '/HTMLPurifier/Injector/RemoveEmpty.php';
 require_once $__dir . '/HTMLPurifier/Injector/RemoveSpansWithoutAttributes.php';

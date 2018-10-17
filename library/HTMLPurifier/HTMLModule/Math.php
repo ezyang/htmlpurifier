@@ -19,6 +19,9 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
     public function setup($config)
     {
 
+        // Normalize whitespace inside text elements as per MathML spec 2.1.7
+        $this->info_injector[] = new HTMLPurifier_Injector_MathSpaceNormalize();
+
         /*****************************************************************
          * Meta variables
          * Used in this file to simplify code and help adapt the DTD

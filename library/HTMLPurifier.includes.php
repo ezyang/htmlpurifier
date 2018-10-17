@@ -192,6 +192,7 @@ require 'HTMLPurifier/HTMLModule/Tidy/XHTML.php';
 require 'HTMLPurifier/Injector/AutoParagraph.php';
 require 'HTMLPurifier/Injector/DisplayLinkURI.php';
 require 'HTMLPurifier/Injector/Linkify.php';
+require 'HTMLPurifier/Injector/MathSpaceNormalize.php';
 require 'HTMLPurifier/Injector/PurifierLinkify.php';
 require 'HTMLPurifier/Injector/RemoveEmpty.php';
 require 'HTMLPurifier/Injector/RemoveSpansWithoutAttributes.php';
