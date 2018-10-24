@@ -15,7 +15,7 @@ with these contents.
 ---------------------------------------------------------------------------
 1.  Compatibility
 
-HTML Purifier is PHP 5 and PHP 7, and is actively tested from PHP 5.0.5
+HTML Purifier is PHP 5 and PHP 7, and is actively tested from PHP 5.3
 and up. It has no core dependencies with other libraries.
 
 These optional extensions can enhance the capabilities of HTML Purifier:
