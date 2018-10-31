@@ -210,6 +210,11 @@ class HTMLPurifier_Config
         return $this->plist->get($key);
     }
 
+    public function getBool($key, $a = null)
+    {
+        return filter_var($this->get($key, $a), FILTER_VALIDATE_BOOLEAN);
+    }
+
     /**
      * Retrieves an array of directives to values from a given namespace
      *
@@ -653,7 +658,7 @@ class HTMLPurifier_Config
     {
         return $this->getDefinition('HTML', true, true);
     }
-    
+
     /**
      * @return HTMLPurifier_CSSDefinition
      */
@@ -661,7 +666,7 @@ class HTMLPurifier_Config
     {
         return $this->getDefinition('CSS', true, true);
     }
-    
+
     /**
      * @return HTMLPurifier_URIDefinition
      */

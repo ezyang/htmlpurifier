@@ -1,0 +1,9 @@
+HTML.SafeScripting.CaseSensitive
+TYPE: bool
+VERSION: 4.11.0
+DEFAULT: false
+--DESCRIPTION--
+<p>
+    Enable or disable URL case changing on validation.
+</p>
+--# vim: et sw=4 sts=4
