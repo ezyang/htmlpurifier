@@ -410,7 +410,7 @@
  </directive>
  <directive id="Core.EnableIDNA">
   <file name="HTMLPurifier/AttrDef/URI/Host.php">
-   <line>105</line>
+   <line>109</line>
   </file>
  </directive>
  <directive id="Attr.DefaultTextDir">

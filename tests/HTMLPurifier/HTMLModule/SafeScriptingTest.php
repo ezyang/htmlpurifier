@@ -20,7 +20,15 @@ class HTMLPurifier_HTMLModule_SafeScriptingTest extends HTMLPurifier_HTMLModuleH
     public function testGood()
     {
         $this->assertResult(
-            '<script type="text/javascript" src="http://localhost/foo.js" />'
+            '<script type="text/javascript" src="http://localhost/foo.js"></script>'
+        );
+    }
+
+    public function testGoodWithAutoclosedTag()
+    {
+        $this->assertResult(
+            '<script type="text/javascript" src="http://localhost/foo.js"/>',
+            '<script type="text/javascript" src="http://localhost/foo.js"></script>'
         );
     }
 
