@@ -3,12 +3,12 @@
 /**
  * MathML 3 specification.
  */
-class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
+class HTMLPurifier_HTMLModule_MathML extends HTMLPurifier_HTMLModule
 {
     /**
      * @type string
      */
-    public $name = 'Math';
+    public $name = 'MathML';
 
     // Prefix in case MathML is imported
     private $mathml_prefix = 'm';
@@ -20,7 +20,7 @@ class HTMLPurifier_HTMLModule_Math extends HTMLPurifier_HTMLModule
     {
 
         // Normalize whitespace inside text elements as per MathML spec 2.1.7
-        $this->info_injector[] = new HTMLPurifier_Injector_MathSpaceNormalize();
+        $this->info_injector[] = new HTMLPurifier_Injector_MathMLSpaceNormalize();
 
         /*****************************************************************
          * Meta variables

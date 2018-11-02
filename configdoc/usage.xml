@@ -238,7 +238,7 @@
    <line>279</line>
   </file>
  </directive>
- <directive id="HTML.Math">
+ <directive id="HTML.MathML">
   <file name="HTMLPurifier/HTMLModuleManager.php">
    <line>282</line>
   </file>

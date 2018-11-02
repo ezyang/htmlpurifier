@@ -10,13 +10,13 @@
  * W3C's MathML Test Suite. See:
  * http://www.w3.org/Math/testsuite/build/mathml3tests.zip -> ErrorHandling folder
  */
-class HTMLPurifier_HTMLModule_MathBasicTest extends HTMLPurifier_HTMLModuleHarness
+class HTMLPurifier_HTMLModule_MathMLBasicTest extends HTMLPurifier_HTMLModuleHarness
 {
 
     public function setup() {
 
         parent::setup();
-        $this->config->set('HTML.Math', true);
+        $this->config->set('HTML.MathML', true);
 
         // We load each snippet and its purified version each into a
         // separate XML document. This normalizes some self-closing

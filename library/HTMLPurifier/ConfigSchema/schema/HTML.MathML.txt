@@ -1,7 +1,7 @@
-HTML.Math
+HTML.MathML
 TYPE: bool
 DEFAULT: false
 --DESCRIPTION--
 <p>
-    MathML.</p>
+    Enable MathML.</p>
 --# vim: et sw=4 sts=4

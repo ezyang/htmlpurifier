@@ -279,8 +279,8 @@ class HTMLPurifier_HTMLModuleManager
         if ($config->get('HTML.TargetNoopener')) {
             $modules[] = 'TargetNoopener';
         }
-        if ($config->get('HTML.Math')) {
-            $modules[] = 'Math';
+        if ($config->get('HTML.MathML')) {
+            $modules[] = 'MathML';
         }
 
         // merge in custom modules

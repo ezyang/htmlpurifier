@@ -1,6 +1,6 @@
 <?php
 
-class HTMLPurifier_Injector_MathSpaceNormalize extends HTMLPurifier_Injector
+class HTMLPurifier_Injector_MathMLSpaceNormalize extends HTMLPurifier_Injector
 {
 
     /**
