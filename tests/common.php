@@ -7,7 +7,7 @@ if (!defined('HTMLPurifierTest')) {
 
 // setup our own autoload, checking for HTMLPurifier library if spl_autoload_register
 // is not allowed
-function __autoload($class)
+function test_autoload($class)
 {
     if (!function_exists('spl_autoload_register')) {
         if (HTMLPurifier_Bootstrap::autoload($class)) return true;
@@ -17,7 +17,7 @@ function __autoload($class)
     return true;
 }
 if (function_exists('spl_autoload_register')) {
-    spl_autoload_register('__autoload');
+    spl_autoload_register('test_autoload');
 }
 
 // default settings (protect against register_globals)
