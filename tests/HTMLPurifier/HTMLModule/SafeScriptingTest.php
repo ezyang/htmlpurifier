@@ -38,6 +38,10 @@ class HTMLPurifier_HTMLModule_SafeScriptingTest extends HTMLPurifier_HTMLModuleH
             '<script type="text/javascript" src="http://localhost/foobar.js" />',
             ''
         );
+        $this->assertResult(
+            '<script type="text/javascript" src="http://localhost/FOO.JS" />',
+            ''
+        );
     }
 
 }

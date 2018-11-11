@@ -10,7 +10,9 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.10.1, unknown release date
-(nothing here yet)
+# SafeScripting is now case-sensitive (previously it was
+  case-insensitive.)  Thanks Dimitri Gritsajuk <gritsajuk.dimitri@gmail.com>
+  for reporting.
 
 4.10.0, released 2018-02-22
 # PHP 5.3 is no longer officially supported by HTML Purifier
