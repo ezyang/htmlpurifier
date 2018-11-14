@@ -72,21 +72,21 @@ class HTMLPurifier_HTMLModule_MathML extends HTMLPurifier_HTMLModule
 
         $E['DefEncAtt'] = array(
             'encoding' => 'CDATA',
-            'definitionurl' => 'CDATA'
+            'definitionurl' => 'URI'
         );
 
         $E['CommonAtt'] = array_merge(
             array(
                 'xmlns' => 'Bool#http://www.w3.org/1998/Math/MathML',
-                $E['XLINK.prefix'] . ':href' => 'CDATA',
+                $E['XLINK.prefix'] . ':href' => 'URI',
                 $E['XLINK.prefix'] . ':type' => 'CDATA',
                 'xml:lang' => 'CDATA',
                 'xml:space' => 'Enum#default,preserve',
-                'id' => 'CDATA', // MathML allows multiple elements with same ID
-                'xref' => 'CDATA',
-                'class' => 'CDATA',
-                'style' => 'CDATA',
-                'href' => 'CDATA',
+                'id' => new HTMLPurifier_AttrDef_MathML_ID(), // MathML allows multiple elements with same ID
+                'xref' => new HTMLPurifier_AttrDef_MathML_ID(),
+                'class' => 'Class',
+                'style' => new HTMLPurifier_AttrDef_CSS(),
+                'href' => 'URI',
                 'other' => 'CDATA',
             ),
             $proprietary_att_wrs,
