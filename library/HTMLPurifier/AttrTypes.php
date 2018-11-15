@@ -50,10 +50,23 @@ class HTMLPurifier_AttrTypes
 
         // "proprietary" types
         $this->info['Class'] = new HTMLPurifier_AttrDef_HTML_Class();
+        $this->info['CSS'] = new HTMLPurifier_AttrDef_CSS();
 
         // number is really a positive integer (one or more digits)
         // FIXME: ^^ not always, see start and value of list items
         $this->info['Number']   = new HTMLPurifier_AttrDef_Integer(false, false, true);
+
+        // MathML types
+        $this->info['MathML_ID'] = new HTMLPurifier_AttrDef_MathML_ID();
+        $this->info['MathML_Length'] = new HTMLPurifier_AttrDef_MathML_Length();
+        $this->info['MathML_UnsignedInteger'] = new HTMLPurifier_AttrDef_Integer(false, true, true);
+        $this->info['MathML_PositiveInteger'] = new HTMLPurifier_AttrDef_Integer(false, false, true);
+        $this->info['MathML_Integer'] = new HTMLPurifier_AttrDef_Integer(true, true, true);
+        $this->info['MathML_UnsignedNumber'] = new HTMLPurifier_AttrDef_CSS_Number(true);
+        $this->info['MathML_Number'] = new HTMLPurifier_AttrDef_CSS_Number(false);
+        $this->info['MathML_Character'] = new HTMLPurifier_AttrDef_MathML_Character();
+        $this->info['MathML_Color'] = new HTMLPurifier_AttrDef_MathML_Color();
+
     }
 
     private static function makeEnum($in)

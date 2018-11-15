@@ -82,10 +82,10 @@ class HTMLPurifier_HTMLModule_MathML extends HTMLPurifier_HTMLModule
                 $E['XLINK.prefix'] . ':type' => 'CDATA',
                 'xml:lang' => 'CDATA',
                 'xml:space' => 'Enum#default,preserve',
-                'id' => new HTMLPurifier_AttrDef_MathML_ID(), // MathML allows multiple elements with same ID
-                'xref' => new HTMLPurifier_AttrDef_MathML_ID(),
+                'id' => 'MathML_ID', // MathML allows multiple elements with same ID
+                'xref' => 'MathML_ID',
                 'class' => 'Class',
-                'style' => new HTMLPurifier_AttrDef_CSS(),
+                'style' => 'CSS',
                 'href' => 'URI',
                 'other' => 'CDATA',
             ),
@@ -1442,16 +1442,16 @@ class HTMLPurifier_HTMLModule_MathML extends HTMLPurifier_HTMLModule
         $E['mpadded-length'] = 'CDATA';
         $E['linestyle'] = 'Enum#none,solid,dashed';
         $E['columnalignstyle'] = 'Enum#left,center,right';
-        $E['unsigned-integer'] = 'CDATA';
-        $E['integer'] = 'CDATA';
-        $E['number'] = 'CDATA';
-        $E['character'] = 'CDATA';
-        $E['color'] = 'CDATA';
-        $E['positive-integer'] = 'CDATA';
+        $E['unsigned-integer'] = 'MathML_UnsignedInteger';
+        $E['integer'] = 'MathML_Integer';
+        $E['number'] = 'MathML_Number';
+        $E['character'] = 'MathML_Character';
+        $E['color'] = 'MathML_Color';
+        $E['positive-integer'] = 'MathML_PositiveInteger';
 
         $E['token.content'] = '#PCDATA|mglyph|malignmark';
 
-        $E['length'] = 'CDATA';
+        $E['length'] = 'MathML_Length';
         $E['DeprecatedTokenAtt'] = array(
             'fontfamily' => 'CDATA',
             'fontweight' => 'Enum#normal,bold',
@@ -2167,7 +2167,8 @@ class HTMLPurifier_HTMLModule_MathML extends HTMLPurifier_HTMLModule
             array_merge(
                 $CCPAtt,
                 array(
-                    'actiontype*' => 'CDATA',
+                    // Using 'actiontype*' removes maction element altogether 
+                    'actiontype' => 'CDATA',
                     'selection' => $E['positive-integer'],
                 )
             )
