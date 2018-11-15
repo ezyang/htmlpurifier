@@ -1,0 +1,1 @@
+<math xmlns="http://www.w3.org/1998/Math/MathML"><piecewise><piece><cn>0</cn><apply><lt></lt><ci>x</ci><cn>5</cn></apply></piece><foo><ci>x</ci></foo><otherwise><ci>y</ci></otherwise><otherwise><ci>x</ci></otherwise></piecewise></math>

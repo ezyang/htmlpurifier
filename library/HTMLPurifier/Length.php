@@ -81,7 +81,8 @@ class HTMLPurifier_Length
         if (!ctype_lower($this->unit)) {
             $this->unit = strtolower($this->unit);
         }
-        if (!isset(HTMLPurifier_Length::$allowedUnits[$this->unit])) {
+        if (!isset(static::$allowedUnits[$this->unit]) &&
+            !(isset(static::$allowedUnits['']) && $this->unit === false)) {
             return false;
         }
         // Hack:
