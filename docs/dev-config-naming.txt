@@ -75,6 +75,7 @@ Core is the potpourri of directives, mostly regarding some minor behavioral
 tweaks for HTML handling abilities.
 
     AggressivelyFixLt
+    AllowParseManyTags
     ConvertDocumentToFragment
     DirectLexLineNumberSyncInterval
     LexerImpl

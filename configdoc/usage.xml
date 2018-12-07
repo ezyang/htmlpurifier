@@ -94,6 +94,11 @@
    <line>429</line>
   </file>
  </directive>
+ <directive id="Core.AllowParseManyTags">
+  <file name="HTMLPurifier/Lexer/DOMLex.php">
+   <line>72</line>
+  </file>
+ </directive>
  <directive id="Output.CommentScriptContents">
   <file name="HTMLPurifier/Generator.php">
    <line>70</line>

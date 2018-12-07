@@ -387,6 +387,7 @@ a[href|title]
     public function test_manyNestedTags()
     {
         $config = HTMLPurifier_Config::createDefault();
+        $config->set('Core.AllowParseManyTags', true);
         $purifier = new HTMLPurifier($config);
 
         $input = 'I am inside a lot of tags';
