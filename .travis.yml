@@ -6,6 +6,7 @@ php:
     - '7.0'
     - '7.1'
     - '7.2'
+    - '7.3'
 before_script:
     - git clone --depth=50 https://github.com/ezyang/simpletest.git
     - cp test-settings.travis.php test-settings.php
