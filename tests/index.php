@@ -33,6 +33,10 @@ error_reporting(E_ALL | E_STRICT);
 // exercises an error condition to detect for it.
 ini_set('log_errors', false);
 
+// But make it easier for us to debug if there is some misconfiguration
+// in the initial setup of the tests.
+ini_set('display_errors', true);
+
 define('HTMLPurifierTest', 1);
 define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
 chdir(dirname(__FILE__));
