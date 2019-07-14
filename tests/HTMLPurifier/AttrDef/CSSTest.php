@@ -64,7 +64,9 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('width:-50px;', false);
         $this->assertDef('min-width:50%;');
         $this->assertDef('min-width:50px;');
-        $this->assertDef('min-width:auto;');
+        $this->assertDef('min-width:auto;', false);
+        $this->assertDef('min-width:initial;');
+        $this->assertDef('min-width:inherit;');
         $this->assertDef('min-width:-50px;', false);
         $this->assertDef('min-width:50ch;');
         $this->assertDef('min-width:50rem;');
