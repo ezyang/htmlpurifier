@@ -22,6 +22,16 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
 
     }
 
+    public function test_purifyArray_nested()
+    {
+        $this->assertIdentical(
+            $this->purifier->purifyArray(
+                array('Good', '<b>Sketchy', 'foo' => array('bar' => '<script>bad</script>'))
+            ),
+            array('Good', '<b>Sketchy</b>', 'foo' => array('bar' => ''))
+        );
+    }
+
     public function testGetInstance()
     {
         $purifier  = HTMLPurifier::getInstance();
