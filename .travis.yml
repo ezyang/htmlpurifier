@@ -5,12 +5,16 @@ php:
     - '7.1'
     - '7.2'
     - '7.3'
+    - '7.4snapshot'
 matrix:
     include:
         - php: '5.4'
           dist: trusty
         - php: '5.5'
           dist: trusty
+    allow_failures:
+        - php:
+            - 7.4snapshot
 before_script:
     - git clone --depth=50 https://github.com/ezyang/simpletest.git
     - cp test-settings.travis.php test-settings.php
