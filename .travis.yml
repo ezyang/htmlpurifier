@@ -12,8 +12,6 @@ matrix:
           dist: trusty
         - php: '5.5'
           dist: trusty
-    allow_failures:
-        - php: 7.4snapshot
 before_script:
     - git clone --depth=50 https://github.com/ezyang/simpletest.git
     - cp test-settings.travis.php test-settings.php
