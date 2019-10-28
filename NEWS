@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.12.0, unknown release date
+4.12.0, released 2019-10-27
 ! PHP 7.4 is supported, thank you Witold Wasiczko, Mateuz Turcza and
   Edi Modrić
 - PHPDocs for HTMLModule::addElement() and Bool attr are fixed (thanks

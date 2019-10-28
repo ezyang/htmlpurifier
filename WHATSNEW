@@ -1,7 +1,2 @@
-HTML Purifier 4.11.x is a maintenance release, collecting a year
-and a half of accumulated bug fixes.  Most notable fixes are
-compatibility with PHP 7.3, and case-sensitive matching for
-the SafeScripting whitelist.  There are a number small feature
-enhancements, including an expanded supported color list,
-initial and inherit support for {min-,max-,}{width,height}
-and multidimensional array support for purifyArray.
+HTML Purifier 4.12.x is a maintenance release which makes
+compatibility fixes for PHP 7.4.
