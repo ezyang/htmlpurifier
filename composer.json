@@ -20,6 +20,9 @@
     },
     "autoload": {
         "psr-0": { "HTMLPurifier": "library/" },
-        "files": ["library/HTMLPurifier.composer.php"]
+        "files": ["library/HTMLPurifier.composer.php"],
+        "exclude-from-classmap": [
+            "/library/HTMLPurifier/Language/"
+        ]
     }
 }
