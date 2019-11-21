@@ -20,8 +20,8 @@ class HTMLPurifier_AttrDef_CSS_ColorTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('rgb(12%,150%,0%)', 'rgb(12%,100%,0%)'); // percentage max values
 
         $this->assertDef('rgba(255, 0, 0, 0)', 'rgba(255,0,0,0)'); // rm spaces
-        $this->assertDef('rgba(100%,0%,0%,.4)');
-        $this->assertDef('rgba(38.1%,59.7%,1.8%,0.7)', 'rgba(38.1%,59.7%,1.8%,.7)'); // decimals okay
+        $this->assertDef('rgba(100%,0%,0%,0.4)');
+        $this->assertDef('rgba(38.1%,59.7%,1.8%,0.7)', 'rgba(38.1%,59.7%,1.8%,0.7)'); // decimals okay
 
         $this->assertDef('hsl(275, 45%, 81%)', 'hsl(275,45%,81%)'); // rm spaces
         $this->assertDef('hsl(100,0%,0%)');
@@ -30,8 +30,8 @@ class HTMLPurifier_AttrDef_CSS_ColorTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('hsl(380,125%,0%)', 'hsl(360,100%,0%)'); // max values
 
         $this->assertDef('hsla(100, 74%, 29%, 0)', 'hsla(100,74%,29%,0)'); // rm spaces
-        $this->assertDef('hsla(154,87%,21%,.4)');
-        $this->assertDef('hsla(45,94.3%,4.1%,0.7)', 'hsla(45,94.3%,4.1%,.7)'); // decimals okay
+        $this->assertDef('hsla(154,87%,21%,0.4)');
+        $this->assertDef('hsla(45,94.3%,4.1%,0.7)', 'hsla(45,94.3%,4.1%,0.7)'); // decimals okay
 
         $this->assertDef('#G00', false);
         $this->assertDef('cmyk(40, 23, 43, 23)', false);

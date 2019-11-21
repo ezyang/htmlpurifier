@@ -140,8 +140,8 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('scrollbar-highlight-color:#ff69b4;');
         $this->assertDef('scrollbar-shadow-color:#f0f;');
 
-        $this->assertDef('-moz-opacity:.2;');
-        $this->assertDef('-khtml-opacity:.2;');
+        $this->assertDef('-moz-opacity:0.2;');
+        $this->assertDef('-khtml-opacity:0.2;');
         $this->assertDef('filter:alpha(opacity=20);');
 
         $this->assertDef('border-top-left-radius:55pt 25pt;');
@@ -160,7 +160,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('display:none;');
         $this->assertDef('visibility:visible;');
         $this->assertDef('overflow:scroll;');
-        $this->assertDef('opacity:.2;');
+        $this->assertDef('opacity:0.2;');
     }
 
     public function testForbidden()

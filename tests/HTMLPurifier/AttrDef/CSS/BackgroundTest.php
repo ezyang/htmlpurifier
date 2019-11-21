@@ -17,7 +17,7 @@ class HTMLPurifier_AttrDef_CSS_BackgroundTest extends HTMLPurifier_AttrDefHarnes
         );
         $this->assertDef(
             'rgba(74, 12, 85, 0.35) repeat fixed bottom',
-            'rgba(74,12,85,.35) repeat fixed bottom'
+            'rgba(74,12,85,0.35) repeat fixed bottom'
         );
         $this->assertDef(
             'hsl(244, 47.4%, 88.1%) right center',
