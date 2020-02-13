@@ -240,6 +240,7 @@ class HTMLPurifier
     public function purifyArray($array_of_html, $config = null)
     {
         $context_array = array();
+        $array = array();
         foreach($array_of_html as $key=>$value){
             if (is_array($value)) {
                 $array[$key] = $this->purifyArray($value, $config);
