@@ -32,6 +32,13 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
         );
     }
 
+    public function test_purifyArray_empty() {
+        $purifiedEmptyArray = $this->purifier->purifyArray(array());
+        $this->assertTrue(
+            empty($purifiedEmptyArray)
+        );
+    }
+
     public function testGetInstance()
     {
         $purifier  = HTMLPurifier::getInstance();
