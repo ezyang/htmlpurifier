@@ -289,6 +289,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
                 );
 
         $this->info['text-decoration'] = new HTMLPurifier_AttrDef_CSS_TextDecoration();
+        $this->info['text-decoration-line'] = new HTMLPurifier_AttrDef_CSS_TextDecoration();
 
         $this->info['font-family'] = new HTMLPurifier_AttrDef_CSS_FontFamily();
 
