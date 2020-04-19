@@ -108,8 +108,13 @@ class HTMLPurifier_LanguageFactory
             $lang = new HTMLPurifier_Language($config, $context);
         } else {
             $class = 'HTMLPurifier_Language_' . $pcode;
+
+            // Old format
             $file  = $this->dir . '/Language/classes/' . $code . '.php';
-            if (file_exists($file) || class_exists($class, false)) {
+            // New, PSR-0 compliant format
+            $fileAlt = $this->dir . '/Language/' . $code . '.php';
+
+            if (file_exists($file) || class_exists($class, false) || file_exists($fileAlt)) {
                 $lang = new $class($config, $context);
             } else {
                 // Go fallback

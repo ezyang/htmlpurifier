@@ -63,7 +63,14 @@ class HTMLPurifier_Bootstrap
         // Custom implementations
         if (strncmp('HTMLPurifier_Language_', $class, 22) === 0) {
             $code = str_replace('_', '-', substr($class, 22));
+            // Classic structure
             $file = 'HTMLPurifier/Language/classes/' . $code . '.php';
+
+            // New PSR-0 compatible structure
+            $fileAlt = 'HTMLPurifier/Language/' . $code . '.php';
+
+            // Switch to PSR-0 compatible if possible
+            $file = file_exists(HTMLPURIFIER_PREFIX . '/' . $fileAlt) ? $fileAlt : $file;
         } else {
             $file = str_replace('_', '/', $class) . '.php';
         }
