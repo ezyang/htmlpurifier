@@ -480,6 +480,11 @@
    <line>330</line>
   </file>
  </directive>
+ <directive id="HTML.Forms">
+  <file name="HTMLPurifier/HTMLModule/Forms.php">
+   <line>31</line>
+  </file>
+ </directive>
  <directive id="HTML.SafeIframe">
   <file name="HTMLPurifier/HTMLModule/Iframe.php">
    <line>28</line>

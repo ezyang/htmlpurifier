@@ -161,6 +161,13 @@ class HTMLPurifier_HTMLModule_FormsTest extends HTMLPurifier_HTMLModuleHarness
         $this->assertResult('<form action=""><input align="left" /></form>');
     }
 
+    public function testHTMLFormsConfigDirective()
+    {
+        $this->config->set('HTML.Trusted', false);
+        $this->config->set('HTML.Forms', true);
+
+        $this->assertResult('<form action="..." method="post"><input type="text" /><textarea cols="20" rows="3"></textarea></form>');
+    }
 }
 
 // vim: et sw=4 sts=4
