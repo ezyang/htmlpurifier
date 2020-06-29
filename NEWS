@@ -9,6 +9,28 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.13.0, unknown release date
+! Add %HTML.Forms directive, which lets you accept forms in user
+  HTML without requiring full %HTML.Trusted.  Note that forms can
+  be (trivially) used to setup phishing; e.g., an attacker can
+  use CSS absolute positioning to overlay a form on top of a login
+  element, so please be sure to use this with care!   Fixes #213.
+  Thanks Mateusz Turcza for contributing this feature.
+! tr@bgcolor attribute is now supported.  Thanks Kieran Brahney
+  for this enhancement.
+- Further improvements to PHP 6.4 support, contributed by Witold
+  Wasiczko and Eloy Lafuente.
+- Fix PSR-0 compatibility.  Thanks Jordi Boggiano for contributing
+  part of this fix.
+- Fix bug with purifyArray where it doesn't work on empty arrays.
+  Thanks Fräntz Miccoli for the fix.
+- Reduce amount of maintenance scripts included in distribution
+  packages.  Thanks Sergei Morozov for this patch.
+- Remove leading zeros unless if it is only a zero, fixes #239.  Thanks
+  lubomirbartos for this fix.
+- Correct type hinting of maybeGet*, fixes #240.   Thanks Anders Jenbo
+  for this fix.
+
 4.12.0, released 2019-10-27
 ! PHP 7.4 is supported, thank you Witold Wasiczko, Mateuz Turcza and
   Edi Modrić
