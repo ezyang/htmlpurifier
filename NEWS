@@ -9,7 +9,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
-4.13.0, unknown release date
+4.13.0, released 2020-06-28
 ! Add %HTML.Forms directive, which lets you accept forms in user
   HTML without requiring full %HTML.Trusted.  Note that forms can
   be (trivially) used to setup phishing; e.g., an attacker can

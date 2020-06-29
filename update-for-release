@@ -104,7 +104,7 @@ file_put_contents('library/HTMLPurifier/Config.php', $config_c);
 
 passthru('maintenance/flush.sh');
 
-if ($is_dev) echo "Review changes, write something in WHATSNEW and FOCUS, and then commit with log 'Release $version.'" . PHP_EOL;
+if ($is_dev) echo "Review changes, write something in WHATSNEW, and then commit with log 'Release $version.'" . PHP_EOL;
 else echo "Numbers updated to dev, no other modifications necessary!";
 
 // vim: et sw=4 sts=4
