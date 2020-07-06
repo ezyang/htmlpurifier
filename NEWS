@@ -18,7 +18,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
   Thanks Mateusz Turcza for contributing this feature.
 ! tr@bgcolor attribute is now supported.  Thanks Kieran Brahney
   for this enhancement.
-- Further improvements to PHP 6.4 support, contributed by Witold
+- Further improvements to PHP 7.4 support, contributed by Witold
   Wasiczko and Eloy Lafuente.
 - Fix PSR-0 compatibility.  Thanks Jordi Boggiano for contributing
   part of this fix.
