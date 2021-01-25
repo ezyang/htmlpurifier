@@ -44,6 +44,22 @@ class HTMLPurifier_ChildDef_TableTest extends HTMLPurifier_ChildDefHarness
         );
     }
 
+    public function testTheadOnlyNotRemoved()
+    {
+        $this->assertResult(
+            '<thead><tr><th>a</th></tr></thead>',
+            '<thead><tr><th>a</th></tr></thead>'
+        );
+    }
+
+    public function testTbodyOnlyNotRemoved()
+    {
+        $this->assertResult(
+            '<tbody><tr><th>a</th></tr></tbody>',
+            '<tbody><tr><th>a</th></tr></tbody>'
+        );
+    }
+
     public function testTrOverflowAndClose()
     {
         $this->assertResult(
