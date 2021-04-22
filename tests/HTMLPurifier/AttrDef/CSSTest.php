@@ -92,6 +92,9 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('background-repeat:repeat-y;');
         $this->assertDef('background-attachment:fixed;');
         $this->assertDef('background-position:left 90%;');
+        $this->assertDef('background-size:50%;');
+        $this->assertDef('background-size:cover;');
+        $this->assertDef('background-size:200px;');
         $this->assertDef('border-spacing:1em;');
         $this->assertDef('border-spacing:1em 2em;');
         $this->assertDef('border-color: rgb(0, 0, 0) rgb(10,0,10)', 'border-color:rgb(0,0,0) rgb(10,0,10);');
