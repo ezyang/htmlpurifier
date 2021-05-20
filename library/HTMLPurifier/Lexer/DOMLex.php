@@ -213,7 +213,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             // this is code is only invoked for comments in script/style in versions
             // of libxml pre-2.6.28 (regular comments, of course, are still
             // handled regularly)
-            $tokens[] = $this->factory->createComment($node->data);
+            $tokens[] = $this->factory->createComment($node->data ?? null);
             return false;
         } elseif ($node->nodeType !== XML_ELEMENT_NODE) {
             // not-well tested: there may be other nodes we have to grab
@@ -264,6 +264,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         }
         $array = array();
         foreach ($node_map as $attr) {
+            if (!isset($attr->name)) continue;
             $array[$attr->name] = $attr->value;
         }
         return $array;
