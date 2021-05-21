@@ -194,7 +194,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         } elseif ($node->nodeType === XML_CDATA_SECTION_NODE) {
             // undo libxml's special treatment of <script> and <style> tags
             $last = end($tokens);
-            $data = $node->data;
+            $data = $node->data ?? "";
             // (note $node->tagname is already normalized)
             if ($last instanceof HTMLPurifier_Token_Start && ($last->name == 'script' || $last->name == 'style')) {
                 $new_data = trim($data);
