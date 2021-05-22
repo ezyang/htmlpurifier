@@ -1,6 +1,6 @@
 /.gitattributes export-ignore
+/.github export-ignore
 /.gitignore export-ignore
-/.travis.yml export-ignore
 /art export-ignore
 /benchmarks export-ignore
 /configdoc export-ignore
