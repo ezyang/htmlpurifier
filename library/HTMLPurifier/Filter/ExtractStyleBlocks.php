@@ -243,6 +243,10 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                                     if ($y === '*' || isset($html_definition->info[$y = strtolower($y)])) {
                                         $nx = $y;
                                     } else {
+	                                    $components2 = explode('[', $y);
+	                                    if (count($components2) === 2 && isset($html_definition->info[$y2 = strtolower($components2[0])])) {
+	                                    	$nx = $y2;
+	                                    }
                                         // $nx stays null; this matters
                                         // if we don't manage to find
                                         // any valid selector content,
