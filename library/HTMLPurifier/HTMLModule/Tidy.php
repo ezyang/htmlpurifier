@@ -146,7 +146,7 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
                         $type = "info_$type";
                         $e = $this;
                     }
-                    {$e->$type}[$attr] = $fix;
+                    $e->{$type}[$attr] = $fix;
                     break;
                 case 'tag_transform':
                     $this->info_tag_transform[$params['element']] = $fix;
