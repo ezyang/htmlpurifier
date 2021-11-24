@@ -298,7 +298,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             }
         }
 
-        if (is_array($allowed_elements)) {
+        if (is_array($allowed_elements) && !empty($allowed_elements)) {
             foreach ($this->info as $name => $d) {
                 if (!isset($allowed_elements[$name])) {
                     unset($this->info[$name]);
