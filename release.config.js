@@ -1,6 +1,14 @@
 module.exports = {
   debug: true,
   branch: 'master',
+  plugins: [
+    '@semantic-release/commit-analyzer',
+    '@semantic-release/release-notes-generator',
+    '@semantic-release/changelog',
+    '@semantic-release/exec',
+    '@semantic-release/git',
+    '@semantic-release/github'
+  ],
   verifyConditions: [
     '@semantic-release/changelog',
     '@semantic-release/github',
