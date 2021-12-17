@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [5.4, 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4]
+        php: [5.4, 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1]
 
     name: PHP ${{ matrix.php }}
 
@@ -24,7 +24,7 @@ jobs:
           php-version: ${{ matrix.php }}
 
       - name: Clone simpletest
-        run: git clone --depth=50 https://github.com/ezyang/simpletest.git
+        run: git clone --depth=50 -b php8-fixes https://github.com/bytestream/simpletest.git
 
       - name: Configure simpletest
         run: cp test-settings.travis.php test-settings.php
