@@ -172,8 +172,8 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule
         $r['table@width'] =
         $r['td@width'] =
         $r['th@width'] =
-        $r['hr@width'] =
-        $r['col@width'] = new HTMLPurifier_AttrTransform_Length('width');
+        $r['col@width'] =
+        $r['hr@width'] = new HTMLPurifier_AttrTransform_Length('width');
 
         return $r;
     }
