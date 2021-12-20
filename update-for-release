@@ -102,6 +102,19 @@ if (!$c) {
 }
 file_put_contents('library/HTMLPurifier/Config.php', $config_c);
 
+$includes = file_get_contents('library/HTMLPurifier.includes.php');
+$includes = preg_replace(
+    '/@version .+?/',
+    "@version $version",
+    $includes,
+    1, $c
+);
+if (!$c) {
+    echo 'Could not update HTMLPurifier.includes.php, missing @version docblock.' . PHP_EOL;
+    exit;
+}
+file_put_contents('HTMLPurifier.includes.php', $includes);
+
 passthru('maintenance/flush.sh');
 
 if ($is_dev) echo "Review changes, write something in WHATSNEW, and then commit with log 'Release $version.'" . PHP_EOL;

@@ -6,7 +6,9 @@ module.exports = {
     '@semantic-release/release-notes-generator',
     ['@semantic-release/changelog', {'changelogFile': 'NEWS'}],
     '@semantic-release/exec',
-    '@semantic-release/git',
+    ['@semantic-release/git', {
+      'assets': ['VERSION', 'NEWS', 'Doxyfile', 'library/HTMLPurifier.php', 'library/HTMLPurifier/Config.php', 'library/HTMLPurifier.includes.php'],
+    }],
     '@semantic-release/github'
   ],
   verifyConditions: [
