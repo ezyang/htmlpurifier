@@ -23,24 +23,7 @@ $version = trim($argv[1]);
 // ...in VERSION
 file_put_contents('VERSION', $version);
 
-// ...in NEWS
-if ($is_dev = (strpos($version, 'dev') === false)) {
-  $date = date('Y-m-d');
-  $news_c = str_replace(
-      $l = "$version, unknown release date",
-      "$version, released $date",
-      file_get_contents('NEWS'),
-      $c
-  );
-  if (!$c) {
-      echo 'Could not update NEWS, missing ' . $l . PHP_EOL;
-      exit;
-  } elseif ($c > 1) {
-      echo 'More than one release declaration in NEWS replaced' . PHP_EOL;
-      exit;
-  }
-  file_put_contents('NEWS', $news_c);
-}
+$is_dev = strpos($version, 'dev') === false;
 
 // ...in Doxyfile
 $doxyfile_c = preg_replace(
