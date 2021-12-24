@@ -24,7 +24,7 @@ jobs:
           php-version: ${{ matrix.php }}
 
       - name: Clone simpletest
-        run: git clone --depth=50 -b php8-fixes https://github.com/bytestream/simpletest.git
+        run: git clone --depth=50 https://github.com/ezyang/simpletest.git
 
       - name: Configure simpletest
         run: cp test-settings.travis.php test-settings.php
