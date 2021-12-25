@@ -1,4 +1,4 @@
-HTML Purifier 4.13.x is a maintenance release which fixes
-PSR-0 compatibility of our package.  There are also a few
-new features (%HTML.Forms and tg@bgcolor support) and
-a number of minor bugfixes.
+HTML Purifier 4.14.x is a maintenance release which improves
+PHP7 and PHP8 compatibility.  There are also some minor new features
+(background-size) and some miscellaneous fixes to remove notices
+from recent versions of PHP.

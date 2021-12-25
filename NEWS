@@ -9,6 +9,21 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.14.0, released 2021-12-24
+! Add "background-size" support (#289), contributed by Václav Smítal
+! Transform deprecated width attribute when tidying HTML, contributed by
+  Kieran.
+- PHP 8 support, contributed by Maksims Sļotovs.
+- Improved PHP 7.3 compatibility, contributed by kishor.
+- Avoid spurious magic quotes notice in PHP 7.4.  Thanks
+  Jasper Zonneveld for the fix.
+- Do not remove thead from table even if there are no tbody/tr (#264).
+  Thanks Marcus Artner for the fix.
+- Fix "Parameter must be an array or an object that implements
+  Countable" (#285)".  Thanks Kieran for this fix.
+. Fix unnecessary reference assignment, handling behavior change from
+  PHP5 and PHP7.  Thanks Arkadiusz Biczewski for the fix.
+
 4.13.0, released 2020-06-28
 ! Add %HTML.Forms directive, which lets you accept forms in user
   HTML without requiring full %HTML.Trusted.  Note that forms can
