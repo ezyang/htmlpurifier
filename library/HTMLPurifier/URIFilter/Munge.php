@@ -93,18 +93,18 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
     /**
      * @param HTMLPurifier_URI $uri
      * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @peram HTMLPurifier_Context $context
      */
     protected function makeReplace($uri, $config, $context)
     {
         $string = $uri->toString();
         // always available
         $this->replace['%s'] = $string;
-        $this->replace['%r'] = $context->get('EmbeddedURI', true);
-        $token = $context->get('CurrentToken', true);
-        $this->replace['%n'] = $token ? $token->name : null;
-        $this->replace['%m'] = $context->get('CurrentAttr', true);
-        $this->replace['%p'] = $context->get('CurrentCSSProperty', true);
+        $this->replace['%r'] = $context->get('EmbeddedURI', true) ?: '';
+        $token = $context->get('CurrentToken', true) ?: '';
+        $this->replace['%n'] = $token ? $token->name : '';
+        $this->replace['%m'] = $context->get('CurrentAttr', true) ?: '';
+        $this->replace['%p'] = $context->get('CurrentCSSProperty', true) ?: '';
         // not always available
         if ($this->secretKey) {
             $this->replace['%t'] = hash_hmac("sha256", $string, $this->secretKey);
