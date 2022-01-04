@@ -93,7 +93,7 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
     /**
      * @param HTMLPurifier_URI $uri
      * @param HTMLPurifier_Config $config
-     * @peram HTMLPurifier_Context $context
+     * @param HTMLPurifier_Context $context
      */
     protected function makeReplace($uri, $config, $context)
     {
