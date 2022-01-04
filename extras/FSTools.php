@@ -136,7 +136,7 @@ class FSTools
     /**
      * Recursively globs a directory.
      */
-    public function globr($dir, $pattern, $flags = NULL)
+    public function globr($dir, $pattern, $flags = 0)
     {
         $files = $this->glob("$dir/$pattern", $flags);
         if ($files === false) $files = array();
