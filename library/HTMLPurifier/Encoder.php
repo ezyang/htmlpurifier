@@ -399,7 +399,7 @@ class HTMLPurifier_Encoder
             $str = strtr($str, self::testEncodingSupportsASCII($encoding));
             return $str;
         } elseif ($encoding === 'iso-8859-1') {
-            $str = utf8_encode($str);
+            $str = self::iconv('iso-8859-1', 'utf-8', $str);
             return $str;
         }
         $bug = HTMLPurifier_Encoder::testIconvTruncateBug();
@@ -451,7 +451,7 @@ class HTMLPurifier_Encoder
             $str = self::iconv('utf-8', $encoding . '//IGNORE', $str);
             return $str;
         } elseif ($encoding === 'iso-8859-1') {
-            $str = utf8_decode($str);
+            $str = self::iconv('utf-8', 'iso-8859-1', $str);
             return $str;
         }
         trigger_error('Encoding not supported', E_USER_ERROR);
