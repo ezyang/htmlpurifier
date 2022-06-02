@@ -22,7 +22,7 @@
             "/library/HTMLPurifier/Language/"
         ]
     },
-    "suggests": {
+    "suggest": {
         "cerdic/css-tidy": "If you want to use the filter 'Filter.ExtractStyleBlocks'."
     }
 }
