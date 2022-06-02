@@ -21,5 +21,8 @@
         "exclude-from-classmap": [
             "/library/HTMLPurifier/Language/"
         ]
+    },
+    "suggests": {
+        "cerdic/css-tidy": "If you want to use the filter 'Filter.ExtractStyleBlocks'."
     }
 }
