@@ -3,6 +3,11 @@
 class HTMLPurifier_URIFilterHarness extends HTMLPurifier_URIHarness
 {
 
+    /**
+     * @type HTMLPurifier_URIFilter
+     */
+    public $filter;
+
     protected function assertFiltering($uri, $expect_uri = true)
     {
         $this->prepareURI($uri, $expect_uri);

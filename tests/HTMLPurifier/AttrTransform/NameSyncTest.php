@@ -3,6 +3,11 @@
 class HTMLPurifier_AttrTransform_NameSyncTest extends HTMLPurifier_AttrTransformHarness
 {
 
+    /**
+     * @type HTMLPurifier_IDAccumulator
+     */
+    public $accumulator;
+
     public function setUp()
     {
         parent::setUp();

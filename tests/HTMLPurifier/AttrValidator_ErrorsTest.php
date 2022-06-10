@@ -3,6 +3,11 @@
 class HTMLPurifier_AttrValidator_ErrorsTest extends HTMLPurifier_ErrorsHarness
 {
 
+    /**
+     * @type HTMLPurifier_Language
+     */
+    public $language;
+
     public function setup()
     {
         parent::setup();
