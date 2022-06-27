@@ -28,6 +28,12 @@ class HTMLPurifier_URIFilter_HostBlacklistTest extends HTMLPurifier_URIFilterHar
         $this->assertFiltering('http://google.com');
     }
 
+    public function testFragment()
+    {
+        $this->config->set('URI.HostBlacklist', 'example.com');
+        $this->assertFiltering('#foo');
+    }
+
 }
 
 // vim: et sw=4 sts=4
