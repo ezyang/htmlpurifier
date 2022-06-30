@@ -23,6 +23,9 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
 
+      - name: Composer dependencies
+        run: composer update
+
       - name: Clone simpletest
         run: git clone --depth=50 https://github.com/ezyang/simpletest.git
 

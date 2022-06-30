@@ -396,13 +396,12 @@ class HTMLPurifier_Encoder
             // If the string is bjorked by Shift_JIS or a similar encoding
             // that doesn't support all of ASCII, convert the naughty
             // characters to their true byte-wise ASCII/UTF-8 equivalents.
-            $str = strtr($str, self::testEncodingSupportsASCII($encoding));
-            return $str;
-        } elseif ($encoding === 'iso-8859-1') {
-            $str = utf8_encode($str);
-            return $str;
+            return strtr($str, self::testEncodingSupportsASCII($encoding));
         }
-        $bug = HTMLPurifier_Encoder::testIconvTruncateBug();
+        if ($encoding === 'iso-8859-1') {
+            return self::utf8Encode($str);
+        }
+        $bug = self::testIconvTruncateBug();
         if ($bug == self::ICONV_OK) {
             trigger_error('Encoding not supported, please install iconv', E_USER_ERROR);
         } else {
@@ -448,11 +447,10 @@ class HTMLPurifier_Encoder
             }
             $str = strtr($str, array_flip($ascii_fix));
             // Normal stuff
-            $str = self::iconv('utf-8', $encoding . '//IGNORE', $str);
-            return $str;
-        } elseif ($encoding === 'iso-8859-1') {
-            $str = utf8_decode($str);
-            return $str;
+            return self::iconv('utf-8', $encoding . '//IGNORE', $str);
+        }
+        if ($encoding === 'iso-8859-1') {
+            return self::utf8Decode($str);
         }
         trigger_error('Encoding not supported', E_USER_ERROR);
         // You might be tempted to assume that the ASCII representation
@@ -611,6 +609,26 @@ class HTMLPurifier_Encoder
         }
         $encodings[$encoding] = $ret;
         return $ret;
+    }
+
+    /**
+     * @param string $str
+     *
+     * @return string
+     */
+    public static function utf8Encode($str)
+    {
+        return (string) \Symfony\Polyfill\Php72\Php72::utf8_encode($str);
+    }
+
+    /**
+     * @param string $str
+     *
+     * @return string
+     */
+    public static function utf8Decode($str)
+    {
+        return (string) \Symfony\Polyfill\Php72\Php72::utf8_decode($str);
     }
 }
 

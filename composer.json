@@ -13,7 +13,8 @@
         }
     ],
     "require": {
-        "php": ">=5.2"
+        "php": ">=5.3.3",
+        "symfony/polyfill-php72": "^1.0"
     },
     "autoload": {
         "psr-0": { "HTMLPurifier": "library/" },

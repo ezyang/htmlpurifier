@@ -41,6 +41,8 @@ define('HTMLPurifierTest', 1);
 define('HTMLPURIFIER_SCHEMA_STRICT', true); // validate schemas
 chdir(dirname(__FILE__));
 
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+
 $php = 'php'; // for safety
 ini_set('memory_limit', '64M');
 
