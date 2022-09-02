@@ -5,6 +5,8 @@ class HTMLPurifier_EntityParserTest extends HTMLPurifier_Harness
 
     protected $EntityParser;
 
+    protected $_entity_lookup;
+
     public function setUp()
     {
         $this->EntityParser = new HTMLPurifier_EntityParser();
