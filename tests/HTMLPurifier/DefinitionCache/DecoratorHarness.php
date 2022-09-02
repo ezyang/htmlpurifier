@@ -9,6 +9,8 @@ class HTMLPurifier_DefinitionCache_DecoratorHarness extends HTMLPurifier_Definit
 
     public $mock;
 
+    public $def;
+
     public function setup()
     {
         $this->mock     = new HTMLPurifier_DefinitionCacheMock();
