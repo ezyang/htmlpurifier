@@ -5,6 +5,12 @@ generate_mock_once('HTMLPurifier_DefinitionCache');
 class HTMLPurifier_DefinitionCache_DecoratorHarness extends HTMLPurifier_DefinitionCacheHarness
 {
 
+    public $cache;
+
+    public $mock;
+
+    public $def;
+
     public function setup()
     {
         $this->mock     = new HTMLPurifier_DefinitionCacheMock();
