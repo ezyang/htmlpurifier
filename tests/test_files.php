@@ -29,6 +29,7 @@ switch ($AC['type']) {
         if ($break) break;
     case 'fstools':
         $test_dirs[] = 'FSTools';
+        if ($break) break;
     case 'htmlt':
         $htmlt_dirs[] = 'HTMLPurifier/HTMLT';
         if ($break) break;
