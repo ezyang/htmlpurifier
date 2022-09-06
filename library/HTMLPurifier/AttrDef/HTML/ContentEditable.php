@@ -2,22 +2,18 @@
 
 class HTMLPurifier_AttrDef_HTML_ContentEditable extends HTMLPurifier_AttrDef
 {
-    /** @var string[] */
-    protected static $values = array(
-        'true',
-        'false',
-    );
-
     public function validate($string, $config, $context)
     {
-        if ($string === '') {
-            return 'true';
+        if (strtolower($string) === 'false') {
+            return $string;
         }
 
-        if (! in_array(strtolower($string), self::$values, true)) {
-            return false;
+        if ($config->get('HTML.Trusted')) {
+            $enum = new HTMLPurifier_AttrDef_Enum(array('', 'true', 'false'));
+
+            return $enum->validate($string, $config, $context);
         }
 
-        return $string;
+        return false;
     }
 }
