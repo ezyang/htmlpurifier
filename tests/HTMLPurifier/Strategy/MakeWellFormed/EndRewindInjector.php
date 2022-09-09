@@ -4,7 +4,7 @@ class HTMLPurifier_Strategy_MakeWellFormed_EndRewindInjector extends HTMLPurifie
 {
     public $name = 'EndRewindInjector';
     public $needed = array('span');
-    public $deleteElement = false;
+    private $deleteElement = false;
 
     public function handleElement(&$token)
     {
