@@ -4,10 +4,13 @@ class HTMLPurifier_Strategy_MakeWellFormed_EndRewindInjector extends HTMLPurifie
 {
     public $name = 'EndRewindInjector';
     public $needed = array('span');
+    private $deleteElement = false;
+
     public function handleElement(&$token)
     {
-        if (isset($token->_InjectorTest_EndRewindInjector_delete)) {
+        if ($this->deleteElement) {
             $token = false;
+            $this->deleteElement = false;
         }
     }
     public function handleText(&$token)
@@ -23,7 +26,7 @@ class HTMLPurifier_Strategy_MakeWellFormed_EndRewindInjector extends HTMLPurifie
             $prev->name == 'span'
         ) {
             $token = false;
-            $prev->_InjectorTest_EndRewindInjector_delete = true;
+            $this->deleteElement = true;
             $this->rewindOffset(1);
         }
     }
