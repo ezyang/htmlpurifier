@@ -258,6 +258,13 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
         );
     }
 
+    public function testContentEditableAttribute()
+    {
+        $this->assertResult(
+            '<div contenteditable="false"></div>',
+            '<div contenteditable="false"></div>'
+        );
+    }
 }
 
 // vim: et sw=4 sts=4
