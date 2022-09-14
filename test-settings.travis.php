@@ -49,7 +49,7 @@ $GLOBALS['HTMLPurifierTest']['PHPT'] = false;
 // set_include_path('/path/to/phpt/Core/src' . PATH_SEPARATOR . get_include_path());
 
 // Where is CSSTidy located? (Include trailing slash. Leave false to disable.)
-$csstidy_location    = false;
+$csstidy_location    = dirname(__FILE__) . '/csstidy/';
 
 // For tests/multitest.php, which versions to test?
 $versions_to_test    = array();
