@@ -52,6 +52,6 @@ $GLOBALS['HTMLPurifierTest']['PEAR'] = false;
 
 // If PEAR is enabled, what PEAR tests should be run? (Note: you will
 // need to ensure these libraries are installed)
-$GLOBALS['HTMLPurifierTest']['Net_IDNA2'] = true;
+$GLOBALS['HTMLPurifierTest']['Net_IDNA2'] = false;
 
 // vim: et sw=4 sts=4
