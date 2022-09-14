@@ -22,12 +22,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          tools: composer:v2
+          ini-values: error_reporting=E_ALL
+          extensions: iconv, bcmath, tidy, mbstring
 
-      - name: Clone simpletest
-        run: git clone --depth=50 https://github.com/ezyang/simpletest.git
-
-      - name: Clone csstidy
-        run: git clone --depth=50 https://github.com/Cerdic/CSSTidy.git
+      - name: Install dependencies
+        run: composer install
 
       - name: Configure simpletest
         run: cp test-settings.travis.php test-settings.php
