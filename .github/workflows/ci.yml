@@ -24,7 +24,7 @@ jobs:
           php-version: ${{ matrix.php }}
           tools: composer:v2
           ini-values: error_reporting=E_ALL
-          extensions: iconv, bcmath, tidy, mbstring
+          extensions: iconv, bcmath, tidy, mbstring, intl
 
       - name: Install dependencies
         run: composer install
