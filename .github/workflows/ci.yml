@@ -30,7 +30,7 @@ jobs:
         run: composer install
 
       - name: Configure simpletest
-        run: cp test-settings.travis.php test-settings.php
+        run: cp test-settings.sample.php test-settings.php
 
       - name: Execute Unit tests
         run: php tests/index.php
