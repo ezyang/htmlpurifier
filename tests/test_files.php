@@ -18,9 +18,7 @@ switch ($AC['type']) {
         $test_dirs[] = 'HTMLPurifier';
         $test_files[] = 'HTMLPurifierTest.php';
         $test_dirs_exclude['HTMLPurifier/Filter/ExtractStyleBlocksTest.php'] = true;
-        if ($csstidy_location) {
-          $test_files[] = 'HTMLPurifier/Filter/ExtractStyleBlocksTest.php';
-        }
+        $test_files[] = 'HTMLPurifier/Filter/ExtractStyleBlocksTest.php';
         if ($break) break;
     case 'configdoc':
         if (version_compare(PHP_VERSION, '5.2', '>=')) {

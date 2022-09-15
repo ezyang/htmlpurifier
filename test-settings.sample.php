@@ -18,20 +18,6 @@ if ($data !== false && $data !== '') {
 }
 
 // -----------------------------------------------------------------------------
-// REQUIRED SETTINGS
-
-// Note on running SimpleTest:
-//      You want the Git copy of SimpleTest, found here:
-//          https://github.com/simpletest/simpletest/
-//
-//      If SimpleTest is borked with HTML Purifier, please contact me or
-//      the SimpleTest devs; I am a developer for SimpleTest so I should be
-//      able to quickly assess a fix. SimpleTest's problem is my problem!
-
-// Where is SimpleTest located? Remember to include a trailing slash!
-$simpletest_location = '/path/to/simpletest/';
-
-// -----------------------------------------------------------------------------
 // OPTIONAL SETTINGS
 
 // Note on running PHPT:
@@ -50,9 +36,6 @@ $GLOBALS['HTMLPurifierTest']['PHPT'] = false;
 // If PHPT isn't in your Path via PEAR, set that here:
 // set_include_path('/path/to/phpt/Core/src' . PATH_SEPARATOR . get_include_path());
 
-// Where is CSSTidy located? (Include trailing slash. Leave false to disable.)
-$csstidy_location    = false;
-
 // For tests/multitest.php, which versions to test?
 $versions_to_test    = array();
 
@@ -69,6 +52,6 @@ $GLOBALS['HTMLPurifierTest']['PEAR'] = false;
 
 // If PEAR is enabled, what PEAR tests should be run? (Note: you will
 // need to ensure these libraries are installed)
-$GLOBALS['HTMLPurifierTest']['Net_IDNA2'] = true;
+$GLOBALS['HTMLPurifierTest']['Net_IDNA2'] = false;
 
 // vim: et sw=4 sts=4

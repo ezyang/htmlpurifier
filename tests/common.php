@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__.'/../vendor/autoload.php';
+
 if (!defined('HTMLPurifierTest')) {
     echo "Invalid entry point\n";
     exit;
@@ -27,8 +29,6 @@ $GLOBALS['HTMLPurifierTest']['PHPT'] = true; // do PHPT tests
 $GLOBALS['HTMLPurifierTest']['PH5P'] = class_exists('DOMDocument');
 
 // default library settings
-$simpletest_location = 'simpletest/'; // reasonable guess
-$csstidy_location = false;
 $versions_to_test = array();
 $php  = 'php';
 $phpv = 'phpv';
@@ -38,20 +38,6 @@ if (file_exists('../conf/test-settings.php')) include '../conf/test-settings.php
 elseif (file_exists('../test-settings.php')) include '../test-settings.php';
 else {
     throw new Exception('Please create a test-settings.php file by copying test-settings.sample.php and configuring accordingly');
-}
-
-// load SimpleTest
-require_once $simpletest_location . 'unit_tester.php';
-require_once $simpletest_location . 'reporter.php';
-require_once $simpletest_location . 'mock_objects.php';
-require_once $simpletest_location . 'xml.php';
-require_once $simpletest_location . 'remote.php';
-
-// load CSS Tidy
-if ($csstidy_location !== false) {
-    $old = error_reporting(E_ALL);
-    require $csstidy_location . 'class.csstidy.php';
-    error_reporting($old);
 }
 
 // load PEAR to include path

@@ -3,23 +3,6 @@
 require_once 'common.php';
 require_once 'HTMLPurifier/Filter/ExtractStyleBlocks.php';
 
-// need CSSTidy location
-$csstidy_location = false;
-if (file_exists('../conf/test-settings.php')) include '../conf/test-settings.php';
-if (file_exists('../test-settings.php')) include '../test-settings.php';
-
-if (!$csstidy_location) {
-?>
-Error: <a href="http://csstidy.sourceforge.net/">CSSTidy</a> library not
-found, please install and configure <code>test-settings.php</code>
-accordingly.
-<?php
-    exit;
-}
-
-require_once $csstidy_location . 'class.csstidy.php';
-require_once $csstidy_location . 'class.csstidy_print.php';
-
 $purifier = new HTMLPurifier(array(
     'Filter.ExtractStyleBlocks' => true,
 ));
