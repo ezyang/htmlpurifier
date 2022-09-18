@@ -1,3 +1,0 @@
-HTML Purifier 4.15.x is a maintenance release which improves
-compatibility with PHP8.2.  There is also support for
-contenteditable="false" added.

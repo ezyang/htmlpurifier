@@ -19,5 +19,5 @@
 /tests export-ignore
 /TODO export-ignore
 /update-for-release export-ignore
-/WHATSNEW export-ignore
 /WYSIWYG export-ignore
+/release.config.js export-ignore
