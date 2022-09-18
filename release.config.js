@@ -23,11 +23,11 @@ module.exports = {
           'VERSION',
           'NEWS',
           'Doxyfile',
-          'library/HTMLPurifier.php',
-          'library/HTMLPurifier/Config.php',
-          'library/HTMLPurifier.includes.php'
+          'library/**/*',
+          'configdoc/**/*',
         ],
       }
-    ]
+    ],
+    '@semantic-release/github'
   ],
 }
