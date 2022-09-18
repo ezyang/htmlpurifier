@@ -23,24 +23,7 @@ $version = trim($argv[1]);
 // ...in VERSION
 file_put_contents('VERSION', $version);
 
-// ...in NEWS
-if ($is_dev = (strpos($version, 'dev') === false)) {
-  $date = date('Y-m-d');
-  $news_c = str_replace(
-      $l = "$version, unknown release date",
-      "$version, released $date",
-      file_get_contents('NEWS'),
-      $c
-  );
-  if (!$c) {
-      echo 'Could not update NEWS, missing ' . $l . PHP_EOL;
-      exit;
-  } elseif ($c > 1) {
-      echo 'More than one release declaration in NEWS replaced' . PHP_EOL;
-      exit;
-  }
-  file_put_contents('NEWS', $news_c);
-}
+$is_dev = strpos($version, 'dev') === false;
 
 // ...in Doxyfile
 $doxyfile_c = preg_replace(
@@ -102,9 +85,22 @@ if (!$c) {
 }
 file_put_contents('library/HTMLPurifier/Config.php', $config_c);
 
+$includes = file_get_contents('library/HTMLPurifier.includes.php');
+$includes = preg_replace(
+    '/@version .+?/',
+    "@version $version",
+    $includes,
+    1, $c
+);
+if (!$c) {
+    echo 'Could not update HTMLPurifier.includes.php, missing @version docblock.' . PHP_EOL;
+    exit;
+}
+file_put_contents('HTMLPurifier.includes.php', $includes);
+
 passthru('maintenance/flush.sh');
 
-if ($is_dev) echo "Review changes, write something in WHATSNEW, and then commit with log 'Release $version.'" . PHP_EOL;
+if ($is_dev) echo "Review changes, and then commit with log 'Release $version.'" . PHP_EOL;
 else echo "Numbers updated to dev, no other modifications necessary!";
 
 // vim: et sw=4 sts=4

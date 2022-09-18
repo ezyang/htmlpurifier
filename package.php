@@ -48,7 +48,6 @@ $pkg->setReleaseStability('stable');
 
 $pkg->addRelease();
 
-$pkg->setNotes(file_get_contents('WHATSNEW'));
 $pkg->setPackageType('php');
 
 $pkg->setPhpDep('5.0.0');
