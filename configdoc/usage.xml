@@ -5,8 +5,8 @@
    <line>162</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>85</line>
-   <line>326</line>
+   <line>90</line>
+   <line>331</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>67</line>
@@ -124,7 +124,7 @@
    <line>122</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>308</line>
+   <line>313</line>
   </file>
  </directive>
  <directive id="Output.Newline">
@@ -172,8 +172,11 @@
    <line>234</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>313</line>
-   <line>353</line>
+   <line>318</line>
+   <line>358</line>
+  </file>
+  <file name="HTMLPurifier/AttrDef/HTML/ContentEditable.php">
+   <line>8</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>37</line>
@@ -250,12 +253,12 @@
  </directive>
  <directive id="Core.LexerImpl">
   <file name="HTMLPurifier/Lexer.php">
-   <line>80</line>
+   <line>85</line>
   </file>
  </directive>
  <directive id="Core.MaintainLineNumbers">
   <file name="HTMLPurifier/Lexer.php">
-   <line>84</line>
+   <line>89</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>62</line>
@@ -263,23 +266,23 @@
  </directive>
  <directive id="Core.LegacyEntityDecoder">
   <file name="HTMLPurifier/Lexer.php">
-   <line>215</line>
-   <line>337</line>
+   <line>220</line>
+   <line>342</line>
   </file>
  </directive>
  <directive id="Core.ConvertDocumentToFragment">
   <file name="HTMLPurifier/Lexer.php">
-   <line>324</line>
+   <line>329</line>
   </file>
  </directive>
  <directive id="Core.RemoveProcessingInstructions">
   <file name="HTMLPurifier/Lexer.php">
-   <line>347</line>
+   <line>352</line>
   </file>
  </directive>
  <directive id="Core.HiddenElements">
   <file name="HTMLPurifier/Lexer.php">
-   <line>351</line>
+   <line>356</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>36</line>
@@ -287,12 +290,12 @@
  </directive>
  <directive id="Core.AggressivelyRemoveScript">
   <file name="HTMLPurifier/Lexer.php">
-   <line>352</line>
+   <line>357</line>
   </file>
  </directive>
  <directive id="Core.RemoveScriptContents">
   <file name="HTMLPurifier/Lexer.php">
-   <line>353</line>
+   <line>358</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>35</line>
@@ -451,7 +454,7 @@
  </directive>
  <directive id="HTML.FlashAllowFullScreen">
   <file name="HTMLPurifier/AttrTransform/SafeParam.php">
-   <line>53</line>
+   <line>58</line>
   </file>
  </directive>
  <directive id="Cache.SerializerPath">

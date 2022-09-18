@@ -9,6 +9,15 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+4.15.0, released 2022-09-18
+! PHP 8.1 and 8.2 support, esp. fixes for deprecation warnings.  A joint effort
+  by David Rans, Tim Düsterhus, Kieran and John Flatness.
+! Allow contenteditable="false" (#336), contributed by Kieran.
+- Replace PHP 8.1 deprecated utf8_ functions with mbstring (#326),
+  contributed by John Flatness.
+- Enhanced composer suggestions with extensions (#317), contributed by
+  func0der.
+
 4.14.0, released 2021-12-24
 ! Add "background-size" support (#289), contributed by Václav Smítal
 ! Transform deprecated width attribute when tidying HTML, contributed by

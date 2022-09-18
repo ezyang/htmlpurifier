@@ -7,7 +7,7 @@
  * primary concern and you are using an opcode cache. PLEASE DO NOT EDIT THIS
  * FILE, changes will be overwritten the next time the script is run.
  *
- * @version 4.14.0
+ * @version 4.15.0
  *
  * @warning
  *      You must *not* include any other HTML Purifier files before this file,
@@ -107,6 +107,7 @@ require 'HTMLPurifier/AttrDef/HTML/Bool.php';
 require 'HTMLPurifier/AttrDef/HTML/Nmtokens.php';
 require 'HTMLPurifier/AttrDef/HTML/Class.php';
 require 'HTMLPurifier/AttrDef/HTML/Color.php';
+require 'HTMLPurifier/AttrDef/HTML/ContentEditable.php';
 require 'HTMLPurifier/AttrDef/HTML/FrameTarget.php';
 require 'HTMLPurifier/AttrDef/HTML/ID.php';
 require 'HTMLPurifier/AttrDef/HTML/Pixels.php';
