@@ -23,7 +23,7 @@ module.exports = {
           'VERSION',
           'NEWS',
           'Doxyfile',
-          ['library/**/*', '!library/standalone/**/*'],
+          ['library/**/*', '!library/standalone/**/*', '!library/HTMLPurifier.standalone.php'],
           'configdoc/**/*',
         ],
       }
