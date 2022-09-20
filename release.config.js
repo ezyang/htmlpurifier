@@ -23,7 +23,7 @@ module.exports = {
           'VERSION',
           'NEWS',
           'Doxyfile',
-          'library/**/*',
+          ['library/**/*', '!library/standalone/**/*'],
           'configdoc/**/*',
         ],
       }
