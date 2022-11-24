@@ -75,6 +75,10 @@ class HTMLPurifier_URIParserTest extends HTMLPurifier_Harness
             'tel:+1 (555) 555-5555',
             'tel', null, null, null, '+1 (555) 555-5555', null, null
         );
+        $this->assertParsing(
+          'tel:+1%20(555)%20555-5555',
+          'tel', null, null, null, '+1%20(555)%20555-5555', null, null
+        );
     }
 
     public function testIPv4Address()
