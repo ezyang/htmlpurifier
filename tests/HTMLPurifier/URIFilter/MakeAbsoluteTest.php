@@ -40,6 +40,8 @@ class HTMLPurifier_URIFilter_MakeAbsoluteTest extends HTMLPurifier_URIFilterHarn
     public function testPreserveAltSchemeWithTel()
     {
         $this->assertFiltering('tel:+15555555555');
+        $this->assertFiltering('tel:+15555 555 555');
+        $this->assertFiltering('tel:+15555%20555%20555');
     }
 
     public function testFilterIgnoreHTTPSpecialCase()

@@ -23,6 +23,8 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('nntp://news.example.com/324234');
         $this->assertDef('mailto:bob@example.com');
         $this->assertDef('tel:+15555555555');
+        $this->assertDef('tel:+15555 555 555', 'tel:+15555555555');
+        $this->assertDef('tel:+15555%20555%20555', 'tel:+15555555555');
     }
 
     public function testIntegrationWithPercentEncoder()

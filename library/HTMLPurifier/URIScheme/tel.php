@@ -37,7 +37,7 @@ class HTMLPurifier_URIScheme_tel extends HTMLPurifier_URIScheme
         // from phone number, EXCEPT for a leading plus sign.
         $uri->path = preg_replace('/(?!^\+)[^\dx]/', '',
                      // Normalize e(x)tension to lower-case
-                     str_replace('X', 'x', $uri->path));
+                     str_replace('X', 'x', rawurldecode($uri->path)));
 
         return true;
     }
