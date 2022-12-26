@@ -262,6 +262,19 @@ text-align:center
         $this->assertExtractStyleBlocks("<style></style>" . $goo, $goo, array(''));
     }
 
+	public function test_cleanCSS_elementWithAttribute()
+	{
+		$this->assertCleanCSS(
+			"* img[tabindex=\"0\"] + div {\ntext-align:center\n}",
+			"* img + div {\ntext-align:center\n}"
+		);
+	}
+
+	public function test_cleanCSS_descendantSelector()
+	{
+		$this->assertCleanCSS("* img + div {\ntext-align:center\n}");
+	}
+
 }
 
 // vim: et sw=4 sts=4
