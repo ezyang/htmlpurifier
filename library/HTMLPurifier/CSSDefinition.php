@@ -304,7 +304,24 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
                     $trusted_max_wh
                 );
 
+        // text-decoration and related shorthands
         $this->info['text-decoration'] = new HTMLPurifier_AttrDef_CSS_TextDecoration();
+
+        $this->info['text-decoration-line'] = new HTMLPurifier_AttrDef_Enum(
+            ['none', 'underline', 'overline', 'line-through', 'initial', 'inherit']
+        );
+
+        $this->info['text-decoration-style'] = new HTMLPurifier_AttrDef_Enum(
+            ['solid', 'double', 'dotted', 'dashed', 'wavy', 'initial', 'inherit']
+        );
+
+        $this->info['text-decoration-color'] = new HTMLPurifier_AttrDef_CSS_Color();
+
+        $this->info['text-decoration-thickness'] = new HTMLPurifier_AttrDef_CSS_Composite([
+            new HTMLPurifier_AttrDef_CSS_Length(),
+            new HTMLPurifier_AttrDef_CSS_Percentage(),
+            new HTMLPurifier_AttrDef_Enum(['auto', 'from-font', 'initial', 'inherit'])
+        ]);
 
         $this->info['font-family'] = new HTMLPurifier_AttrDef_CSS_FontFamily();
 
