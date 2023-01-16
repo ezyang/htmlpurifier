@@ -219,10 +219,9 @@ text-align:right
         $this->assertCleanCSS(
             "/*! Important */
 div {
-text-align:right
+text-align:right /*! Important2 */
 }",
-            "/*! Important*/
-div {
+            "div {
 text-align:right
 }"
         );

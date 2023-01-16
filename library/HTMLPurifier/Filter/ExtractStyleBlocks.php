@@ -318,7 +318,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                     $new_decls[$selector] = $style;
                 }
             } else {
-                $new_decls = $decls;
+                continue;
             }
             $new_css[$k] = $new_decls;
         }
