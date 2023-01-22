@@ -214,6 +214,19 @@ text-align:right
         );
     }
 
+    public function test_keepImportantComments()
+    {
+        $this->assertCleanCSS(
+            "/*! Important */
+div {
+text-align:right /*! Important2 */
+}",
+            "div {
+text-align:right
+}"
+        );
+    }
+
     public function test_atSelector()
     {
         $this->assertCleanCSS(
