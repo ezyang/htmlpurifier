@@ -38,7 +38,8 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/ezyang/simpletest.git"
+            "url": "https://github.com/ezyang/simpletest.git",
+            "no-api": true
         }
     ]
 }
