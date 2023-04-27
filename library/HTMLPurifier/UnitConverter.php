@@ -175,7 +175,7 @@ class HTMLPurifier_UnitConverter
         //echo "<pre>n";
         //echo "$n\nsigfigs = $sigfigs\nnew_log = $new_log\nlog = $log\nrp = $rp\n</pre>\n";
 
-        $n = $this->round($n, $sigfigs);
+        $n = $this->round(floatval($n), $sigfigs);
         if (strpos($n, '.') !== false) {
             $n = rtrim($n, '0');
         }
