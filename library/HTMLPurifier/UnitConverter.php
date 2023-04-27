@@ -175,7 +175,7 @@ class HTMLPurifier_UnitConverter
         //echo "<pre>n";
         //echo "$n\nsigfigs = $sigfigs\nnew_log = $new_log\nlog = $log\nrp = $rp\n</pre>\n";
 
-        $n = $this->round(floatval($n), $sigfigs);
+        $n = $this->round($n, $sigfigs);
         if (strpos($n, '.') !== false) {
             $n = rtrim($n, '0');
         }
@@ -255,13 +255,13 @@ class HTMLPurifier_UnitConverter
     /**
      * Rounds a number according to the number of sigfigs it should have,
      * using arbitrary precision when available.
-     * @param float $n
+     * @param string $n
      * @param int $sigfigs
      * @return string
      */
     private function round($n, $sigfigs)
     {
-        $new_log = (int)floor(log(abs($n), 10)); // Number of digits left of decimal - 1
+        $new_log = (int)floor(log(abs(floatval($n)), 10)); // Number of digits left of decimal - 1
         $rp = $sigfigs - $new_log - 1; // Number of decimal places needed
         $neg = $n < 0 ? '-' : ''; // Negative sign
         if ($this->bcmath) {
@@ -279,6 +279,29 @@ class HTMLPurifier_UnitConverter
             return $this->scale(round($n, $sigfigs - $new_log - 1), $rp + 1);
         }
     }
+    
+    /**
+     * Converts a float to a string like strval() but without using the
+     * exponential notation (x.yE+z)
+     * @param float $n
+     * @return string
+     */
+    /*private function floatToStringNonExponential($n) {
+      $n_str = strval($n);
+      $exp_pos = strpos($n_str, 'E');
+      if($exp_pos === false){
+        return $n_str;
+      } else {
+        $exp = intval(substr($n_str, $exp_pos + 1));
+        $digits_to_add = $exp;
+        $dot_pos = strpos($n_str, '.');
+        if($dot_pos !== false){
+          $decimals = strlen(substr($n_str, $dot_pos + 1, $exp_pos));
+          $digits_to_add -= $decimals;
+        }
+        return str_pad(str_replace('.', '', substr($n_str, 0, $exp_pos)), $digits_to_add, '0');
+      }
+    }*/
 
     /**
      * Scales a float to $scale digits right of decimal point, like BCMath.
