@@ -101,6 +101,13 @@ class HTMLPurifier_UnitConverterTest extends HTMLPurifier_Harness
         $this->assertConversion('111.12pt', '1.5433in');
         $this->assertConversion('11.112pt', '0.15433in');
     }
+    
+    public function testDecimalSeparatorComma()
+    {
+        setlocale(LC_ALL, 'de_DE@euro', 'de_DE', 'deu_deu');
+        $this->assertConversion('11.11px', '0.294cm');
+        setlocale(LC_ALL, '');
+    }
 
     public function testRoundingBigNumber()
     {

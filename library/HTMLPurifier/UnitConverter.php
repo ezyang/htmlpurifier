@@ -46,6 +46,12 @@ class HTMLPurifier_UnitConverter
      * @type int
      */
     protected $internalPrecision;
+    
+    /**
+     * Currently used decimal separator based on locale.
+     * @type string
+     */
+    protected $decimalSeparator;
 
     /**
      * Whether or not BCMath is available.
@@ -57,6 +63,7 @@ class HTMLPurifier_UnitConverter
     {
         $this->outputPrecision = $output_precision;
         $this->internalPrecision = $internal_precision;
+        $this->decimalSeparator = localeconv()['decimal_point'];
         $this->bcmath = !$force_no_bcmath && function_exists('bcmul');
     }
 
@@ -276,32 +283,9 @@ class HTMLPurifier_UnitConverter
             }
             return $n;
         } else {
-            return $this->scale(round($n, $sigfigs - $new_log - 1), $rp + 1);
+            return $this->scale(round(floatval($n), $sigfigs - $new_log - 1), $rp + 1);
         }
     }
-    
-    /**
-     * Converts a float to a string like strval() but without using the
-     * exponential notation (x.yE+z)
-     * @param float $n
-     * @return string
-     */
-    /*private function floatToStringNonExponential($n) {
-      $n_str = strval($n);
-      $exp_pos = strpos($n_str, 'E');
-      if($exp_pos === false){
-        return $n_str;
-      } else {
-        $exp = intval(substr($n_str, $exp_pos + 1));
-        $digits_to_add = $exp;
-        $dot_pos = strpos($n_str, '.');
-        if($dot_pos !== false){
-          $decimals = strlen(substr($n_str, $dot_pos + 1, $exp_pos));
-          $digits_to_add -= $decimals;
-        }
-        return str_pad(str_replace('.', '', substr($n_str, 0, $exp_pos)), $digits_to_add, '0');
-      }
-    }*/
 
     /**
      * Scales a float to $scale digits right of decimal point, like BCMath.
@@ -323,7 +307,7 @@ class HTMLPurifier_UnitConverter
             // Now we return it, truncating the zero that was rounded off.
             return substr($precise, 0, -1) . str_repeat('0', -$scale + 1);
         }
-        return sprintf('%.' . $scale . 'f', (float)$r);
+        return str_replace($this->decimalSeparator, '.', sprintf('%.' . $scale . 'f', (float)$r));
     }
 }
 
