@@ -46,12 +46,6 @@ class HTMLPurifier_UnitConverter
      * @type int
      */
     protected $internalPrecision;
-    
-    /**
-     * Currently used decimal separator based on locale.
-     * @type string
-     */
-    protected $decimalSeparator;
 
     /**
      * Whether or not BCMath is available.
@@ -63,7 +57,6 @@ class HTMLPurifier_UnitConverter
     {
         $this->outputPrecision = $output_precision;
         $this->internalPrecision = $internal_precision;
-        $this->decimalSeparator = localeconv()['decimal_point'];
         $this->bcmath = !$force_no_bcmath && function_exists('bcmul');
     }
 
@@ -262,13 +255,13 @@ class HTMLPurifier_UnitConverter
     /**
      * Rounds a number according to the number of sigfigs it should have,
      * using arbitrary precision when available.
-     * @param string $n
+     * @param float $n
      * @param int $sigfigs
      * @return string
      */
     private function round($n, $sigfigs)
     {
-        $new_log = (int)floor(log(abs(floatval($n)), 10)); // Number of digits left of decimal - 1
+        $new_log = (int)floor(log(abs((float)$n), 10)); // Number of digits left of decimal - 1
         $rp = $sigfigs - $new_log - 1; // Number of decimal places needed
         $neg = $n < 0 ? '-' : ''; // Negative sign
         if ($this->bcmath) {
@@ -283,7 +276,7 @@ class HTMLPurifier_UnitConverter
             }
             return $n;
         } else {
-            return $this->scale(round(floatval($n), $sigfigs - $new_log - 1), $rp + 1);
+            return $this->scale(round((float)$n, $sigfigs - $new_log - 1), $rp + 1);
         }
     }
 
@@ -307,7 +300,7 @@ class HTMLPurifier_UnitConverter
             // Now we return it, truncating the zero that was rounded off.
             return substr($precise, 0, -1) . str_repeat('0', -$scale + 1);
         }
-        return str_replace($this->decimalSeparator, '.', sprintf('%.' . $scale . 'f', (float)$r));
+        return number_format((float)$r, $scale, '.', '');
     }
 }
 
