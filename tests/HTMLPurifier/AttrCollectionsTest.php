@@ -34,12 +34,12 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
         $modules['Module2'] = new HTMLPurifier_HTMLModule();
         $modules['Module2']->attr_collections = array(
             'Core' => array(
-                0 => array('Brocolli')
+                0 => array('Broccoli')
             ),
             'Soup' => array(
                 'attribute-3' => 'Type3'
             ),
-            'Brocolli' => array()
+            'Broccoli' => array()
         );
 
         $collections->doConstruct($types, $modules);
@@ -48,14 +48,14 @@ class HTMLPurifier_AttrCollectionsTest extends HTMLPurifier_Harness
             $collections->info,
             array(
                 'Core' => array(
-                    0 => array('Soup', 'Undefined', 'Brocolli'),
+                    0 => array('Soup', 'Undefined', 'Broccoli'),
                     'attribute' => 'Type',
                     'attribute-2' => 'Type2'
                 ),
                 'Soup' => array(
                     'attribute-3' => 'Type3'
                 ),
-                'Brocolli' => array()
+                'Broccoli' => array()
             )
         );
 

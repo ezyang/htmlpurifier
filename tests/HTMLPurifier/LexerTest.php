@@ -651,7 +651,7 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
             return;
         } elseif (LIBXML_VERSION < 20628) {
             // libxml's behavior is wrong prior to this version, so make
-            // appropriate accomodations
+            // appropriate accommodations
             $extra['DOMLex'] = $extra['DirectLex'];
         }
         $this->assertTokenization(

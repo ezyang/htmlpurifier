@@ -157,7 +157,7 @@ class HTMLPurifier_Strategy_MakeWellFormedTest extends HTMLPurifier_StrategyHarn
         );
     }
 
-    public function testNoAutocloseIfNoParentsCanAccomodateTag()
+    public function testNoAutocloseIfNoParentsCanAccommodateTag()
     {
         $this->assertResult(
             '<table><tr><td><li>foo</li></td></tr></table>',

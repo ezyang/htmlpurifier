@@ -101,7 +101,7 @@ if (!SimpleReporter::inCli()) {
 }
 
 // initialize and load HTML Purifier
-// use ?standalone to load the alterative standalone stub
+// use ?standalone to load the alternative standalone stub
 if ($AC['standalone']) {
     require '../library/HTMLPurifier.standalone.php';
 } else {
