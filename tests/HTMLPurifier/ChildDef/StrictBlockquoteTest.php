@@ -59,7 +59,7 @@ extends HTMLPurifier_ChildDefHarness
         );
     }
 
-    public function testWrapComplicatedSring()
+    public function testWrapComplicatedString()
     {
         $this->assertResult(
             $var = 'He said<br />perhaps<br />we should <b>nuke</b> them.',

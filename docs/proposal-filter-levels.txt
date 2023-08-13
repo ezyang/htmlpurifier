@@ -60,7 +60,7 @@ These are special use tags, they should be enabled on a blanket basis.
 Lists - dd, dl, dt, li, ol, ul ~ menu, dir
 Tables - caption, table, td, th, tr / col, colgroup, tbody, tfoot, thead
 
-Forms - fieldset, form, input, lable, legend, optgroup, option, select, textarea
+Forms - fieldset, form, input, label, legend, optgroup, option, select, textarea
 XSS - noscript, object, script ~ applet
 Meta - base, basefont, body, head, html, link, meta, style, title
 Frames - frame, frameset, iframe
@@ -91,7 +91,7 @@ attribute and put URI filtering higher up on the priority list.
 
 == Attribute Risk Analysis ==
 
-We actually have a suprisingly small assortment of allowed attributes (the
+We actually have a surprisingly small assortment of allowed attributes (the
 rest are deprecated in strict, and thus we opted not to allow them, even
 though our output is XHTML Transitional by default.)
 

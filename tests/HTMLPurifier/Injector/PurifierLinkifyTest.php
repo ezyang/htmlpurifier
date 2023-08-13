@@ -10,7 +10,7 @@ class HTMLPurifier_Injector_PurifierLinkifyTest extends HTMLPurifier_InjectorHar
         $this->config->set('AutoFormat.PurifierLinkify.DocURL', '#%s');
     }
 
-    public function testNoTriggerCharacer()
+    public function testNoTriggerCharacter()
     {
         $this->assertResult('Foobar');
     }
