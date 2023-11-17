@@ -1,3 +1,26 @@
+# [4.17.0](https://github.com/ezyang/htmlpurifier/compare/v4.16.0...v4.17.0) (2023-11-17)
+
+
+### Bug Fixes
+
+* CSSTidy ImportantComments not handled properly ([#359](https://github.com/ezyang/htmlpurifier/issues/359)) ([78a9b4d](https://github.com/ezyang/htmlpurifier/commit/78a9b4d0dae8bce9a70e4e7e551bf51e9a23706d))
+* fix CI ([#361](https://github.com/ezyang/htmlpurifier/issues/361)) ([9ec687c](https://github.com/ezyang/htmlpurifier/commit/9ec687c904a1fe66a5395d22c50f7043e045d1d3))
+* Invalid scheme check in Attr.TargetBlank ([#363](https://github.com/ezyang/htmlpurifier/issues/363)) ([0176ef4](https://github.com/ezyang/htmlpurifier/commit/0176ef4bb6f57103fdcb60a802603e60e81ee93e))
+* semantic release ([#339](https://github.com/ezyang/htmlpurifier/issues/339)) ([d82f3d9](https://github.com/ezyang/htmlpurifier/commit/d82f3d996a0d9b0f23364946d9a14408c1ad72c5))
+* semantic release ([#341](https://github.com/ezyang/htmlpurifier/issues/341)) ([e55fead](https://github.com/ezyang/htmlpurifier/commit/e55fead09f39430d30f48438f06e7bc2326efc94)), closes [#339](https://github.com/ezyang/htmlpurifier/issues/339)
+* Support for locales using decimal separators other than . (dot) ([#372](https://github.com/ezyang/htmlpurifier/issues/372)) ([43f49ac](https://github.com/ezyang/htmlpurifier/commit/43f49ac9a51b81dfd07d3bc8dcfc5ec5637a5e3b))
+
+
+### Features
+
+* Add support for all text-decoration properties ([#360](https://github.com/ezyang/htmlpurifier/issues/360)) ([2d775c0](https://github.com/ezyang/htmlpurifier/commit/2d775c01874e2f676ba1a2d9fe69b47c2a823061))
+* Allows commas to be included in tel URI ([#389](https://github.com/ezyang/htmlpurifier/issues/389)) ([ec92490](https://github.com/ezyang/htmlpurifier/commit/ec924901392f088d334622f806b9449b17b75d7b)), closes [#388](https://github.com/ezyang/htmlpurifier/issues/388)
+
+
+### Reverts
+
+* Revert "fix: semantic release (#339)" (#340) ([3e83215](https://github.com/ezyang/htmlpurifier/commit/3e832152a6173f880c6495a3ab2b0e5235e253a6)), closes [#339](https://github.com/ezyang/htmlpurifier/issues/339) [#340](https://github.com/ezyang/htmlpurifier/issues/340)
+
 NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 

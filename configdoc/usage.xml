@@ -24,32 +24,32 @@
  </directive>
  <directive id="CSS.Proprietary">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>381</line>
+   <line>398</line>
   </file>
  </directive>
  <directive id="CSS.AllowTricky">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>385</line>
+   <line>402</line>
   </file>
  </directive>
  <directive id="CSS.Trusted">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>389</line>
+   <line>406</line>
   </file>
  </directive>
  <directive id="CSS.AllowImportant">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>393</line>
+   <line>410</line>
   </file>
  </directive>
  <directive id="CSS.AllowedProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>522</line>
+   <line>539</line>
   </file>
  </directive>
  <directive id="CSS.ForbiddenProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>538</line>
+   <line>555</line>
   </file>
  </directive>
  <directive id="Cache.DefinitionImpl">
@@ -357,7 +357,7 @@
  </directive>
  <directive id="CSS.AllowedFonts">
   <file name="HTMLPurifier/AttrDef/CSS/FontFamily.php">
-   <line>64</line>
+   <line>62</line>
   </file>
  </directive>
  <directive id="Attr.AllowedClasses">
@@ -480,7 +480,7 @@
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Escaping">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>330</line>
+   <line>334</line>
   </file>
  </directive>
  <directive id="HTML.Forms">
