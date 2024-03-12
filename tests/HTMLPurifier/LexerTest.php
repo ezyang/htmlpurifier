@@ -380,6 +380,24 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
         );
     }
 
+    /**
+     * Conditional comments are not supported by HTMLPurifier, but we
+     * should make sure they don't break the lexer.
+     */
+    public function test_tokenizeHTML_conditionalComments()
+    {
+        $this->assertTokenization(
+            '<!--[if mso]>A<![endif]-->B<!--[if !mso]><!---->C<!-- <![endif]-->',
+            array(
+                new HTMLPurifier_Token_Comment('[if mso]>A<![endif]'),
+                new HTMLPurifier_Token_Text("B"),
+                new HTMLPurifier_Token_Comment('[if !mso]><!--'),
+                new HTMLPurifier_Token_Text("C"),
+                new HTMLPurifier_Token_Comment(' <![endif]'),
+            )
+        );
+    }
+
     public function test_tokenizeHTML_unterminatedTag()
     {
         $this->assertTokenization(
@@ -785,14 +803,6 @@ div {}
         );
     }
 
-    public function test_tokenizeHTML_ignoreIECondComment()
-    {
-        $this->assertTokenization(
-            '<!--[if IE]>foo<a>bar<!-- baz --><![endif]-->',
-            array()
-        );
-    }
-
     public function test_tokenizeHTML_removeProcessingInstruction()
     {
         $this->config->set('Core.RemoveProcessingInstructions', true);
@@ -823,16 +833,6 @@ div {}
             )
         );
      }
-
-    public function test_tokenizeHTML_conditionalCommentUngreedy()
-    {
-        $this->assertTokenization(
-            '<!--[if gte mso 9]>a<![endif]-->b<!--[if gte mso 9]>c<![endif]-->',
-            array(
-                new HTMLPurifier_Token_Text("b")
-            )
-        );
-    }
 
     public function test_tokenizeHTML_imgTag()
     {
