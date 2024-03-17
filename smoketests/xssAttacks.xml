@@ -864,7 +864,7 @@ As a side note, this was also effective against a real world XSS filter I came a
 	<attack>
 		<name>Extraneous Open Brackets</name>
 		<code>&lt;&lt;SCRIPT&gt;alert(&quot;XSS&quot;);//&lt;&lt;/SCRIPT&gt;</code>
-		<desc>(Submitted by Franz Sedlmaier http://www.pilorz.net/).  This XSS vector could defeat certain detection engines that work by first using matching pairs of open and close angle brackets and then by doing a comparison of the tag inside, instead of a more efficient algorythm like Boyer-Moore (http://www.cs.utexas.edu/users/moore/best-ideas/string-searching/) that looks for entire string matches of the open angle bracket and associated tag (post de-obfuscation, of course).  The double slash comments out the ending extraneous bracket to supress a JavaScript error.</desc>
+		<desc>(Submitted by Franz Sedlmaier http://www.pilorz.net/).  This XSS vector could defeat certain detection engines that work by first using matching pairs of open and close angle brackets and then by doing a comparison of the tag inside, instead of a more efficient algorithm like Boyer-Moore (http://www.cs.utexas.edu/users/moore/best-ideas/string-searching/) that looks for entire string matches of the open angle bracket and associated tag (post de-obfuscation, of course).  The double slash comments out the ending extraneous bracket to suppress a JavaScript error.</desc>
 
 		<label>Embedded Character Attacks</label>
 		<browser>Browser support: [&lt;span class=&quot;s&quot;&gt;IE6.0&lt;/span&gt;|&lt;span class=&quot;s&quot;&gt;NS8.1-IE&lt;/span&gt;] [&lt;span class=&quot;s&quot;&gt;NS8.1-G&lt;/span&gt;|&lt;span class=&quot;s&quot;&gt;FF1.5&lt;/span&gt;] [&lt;span class=&quot;s&quot;&gt;O8.54&lt;/span&gt;]</browser>
@@ -940,7 +940,7 @@ alert(a.source)&lt;/SCRIPT&gt;</code>
 
 -onCut() (user needs to copy something or it can be exploited using the execCommand(&quot;Cut&quot;) command)
 
--onDataAvailible() (user would need to change data in an element, or attacker could perform the same function)
+-onDataAvailable() (user would need to change data in an element, or attacker could perform the same function)
 
 -onDataSetChanged() (fires when the data set exposed by a data source object changes)
 
