@@ -399,6 +399,19 @@ a[href|title]
         $this->assertIdentical($input, $output);
     }
 
+    public function test_removeBlanks()
+    {
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('Core.RemoveBlanks', true);
+
+        $input = file_get_contents(__DIR__ . '/FixtureData/RemoveBlankTestCaseInput.html');
+        $expected = file_get_contents(__DIR__ . '/FixtureData/RemoveBlankTestCaseOutput.html');
+
+        $purifier = new HTMLPurifier($config);
+        $actual = $purifier->purify($input);
+        $this->assertIdentical($expected, $actual);
+    }
+
 }
 
 // vim: et sw=4 sts=4
