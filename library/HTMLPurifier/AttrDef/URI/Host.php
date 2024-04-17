@@ -80,7 +80,7 @@ class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
         // as per RFC 3696, the top label need only not be all numeric.
         // The productions describing this are:
         $a   = '[a-z]';     // alpha
-        $an  = '[a-z0-9]';  // alphanum
+        $an  = "[a-z0-9$underscore]";  // alphanum
         $and = "[a-z0-9-$underscore]"; // alphanum | "-"
         // domainlabel = alphanum | alphanum *( alphanum | "-" ) alphanum
         $domainlabel = "$an(?:$and*$an)?";
