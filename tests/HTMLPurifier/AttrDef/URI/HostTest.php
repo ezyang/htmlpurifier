@@ -56,7 +56,8 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
     function testAllowUnderscore() {
         $this->config->set('Core.AllowHostnameUnderscore', true);
         $this->assertDef("foo_bar.example.com");
-        $this->assertDef("foo_.example.com", false);
+        $this->assertDef("foo_.example.com");
+        $this->assertDef("_dmarc.example.com");
     }
 
 }
