@@ -41,7 +41,7 @@ FUTURE VERSIONS
  - Config: Add examples to everything (make built-in which also automatically
    gives output)
  - Add "register" field to config schemas to eliminate dependence on
-   naming conventions (try to remember why we ultimately decided on tihs)
+   naming conventions (try to remember why we ultimately decided on this)
 
 5.0 release [HTML 5]
  # Swap out code to use html5lib tokenizer and tree-builder
@@ -112,7 +112,7 @@ Neat feature related
    Also, enable disabling of directionality
  ? Externalize inline CSS to promote clean HTML, proposed by Sander Tekelenburg
  ? Remove redundant tags, ex. <u><u>Underlined</u></u>. Implementation notes:
-    1. Analyzing which tags to remove duplicants
+    1. Analyzing which tags to remove duplicates
     2. Ensure attributes are merged into the parent tag
     3. Extend the tag exclusion system to specify whether or not the
     contents should be dropped or not (currently, there's code that could do

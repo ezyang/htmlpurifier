@@ -72,7 +72,7 @@ class HTML5
         $this->data = $data;
         $this->char = -1;
         $this->EOF  = strlen($data);
-        $this->tree = new HTML5TreeConstructer;
+        $this->tree = new HTML5TreeConstructor;
         $this->content_model = self::PCDATA;
 
         $this->state = 'data';
@@ -800,7 +800,7 @@ class HTML5
                 'type' => self::COMMENT
             );
 
-        /* Otherwise if the next seven chacacters are a case-insensitive match
+        /* Otherwise if the next seven characters are a case-insensitive match
         for the word "DOCTYPE", then consume those characters and switch to the
         DOCTYPE state. */
         } elseif(strtolower($this->character($this->char + 1, 7)) === 'doctype') {
@@ -1139,7 +1139,7 @@ class HTML5
     }
 }
 
-class HTML5TreeConstructer
+class HTML5TreeConstructor
 {
     public $stack = array();
 
@@ -1169,20 +1169,21 @@ class HTML5TreeConstructer
     const END_PHASE  = 3;
 
     // The different insertion modes for the main phase.
-    const BEFOR_HEAD = 0;
-    const IN_HEAD    = 1;
-    const AFTER_HEAD = 2;
-    const IN_BODY    = 3;
-    const IN_TABLE   = 4;
-    const IN_CAPTION = 5;
-    const IN_CGROUP  = 6;
-    const IN_TBODY   = 7;
-    const IN_ROW     = 8;
-    const IN_CELL    = 9;
-    const IN_SELECT  = 10;
-    const AFTER_BODY = 11;
-    const IN_FRAME   = 12;
-    const AFTR_FRAME = 13;
+    const BEFORE_HEAD = 0;
+    const BEFOR_HEAD  = 0;
+    const IN_HEAD     = 1;
+    const AFTER_HEAD  = 2;
+    const IN_BODY     = 3;
+    const IN_TABLE    = 4;
+    const IN_CAPTION  = 5;
+    const IN_CGROUP   = 6;
+    const IN_TBODY    = 7;
+    const IN_ROW      = 8;
+    const IN_CELL     = 9;
+    const IN_SELECT   = 10;
+    const AFTER_BODY  = 11;
+    const IN_FRAME    = 12;
+    const AFTR_FRAME  = 13;
 
     // The different types of elements.
     const SPECIAL    = 0;
@@ -1195,7 +1196,7 @@ class HTML5TreeConstructer
     public function __construct()
     {
         $this->phase = self::INIT_PHASE;
-        $this->mode = self::BEFOR_HEAD;
+        $this->mode = self::BEFORE_HEAD;
         $this->dom = new DOMDocument;
 
         $this->dom->encoding = 'UTF-8';
@@ -1346,7 +1347,7 @@ class HTML5TreeConstructer
         } else {
             /* Depends on the insertion mode: */
             switch($this->mode) {
-                case self::BEFOR_HEAD: return $this->beforeHead($token); break;
+                case self::BEFORE_HEAD: return $this->beforeHead($token); break;
                 case self::IN_HEAD:    return $this->inHead($token); break;
                 case self::AFTER_HEAD: return $this->afterHead($token); break;
                 case self::IN_BODY:    return $this->inBody($token); break;
@@ -3852,7 +3853,7 @@ class HTML5TreeConstructer
             case, abort these steps. (innerHTML case) */
             } elseif($node->nodeName === 'html') {
                 $this->mode = ($this->head_pointer === null)
-                    ? self::BEFOR_HEAD
+                    ? self::BEFORE_HEAD
                     : self::AFTER_HEAD;
 
                 break;
