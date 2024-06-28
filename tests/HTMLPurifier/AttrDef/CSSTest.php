@@ -120,8 +120,10 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('text-transform:capitalize;destroy:it;',
                          'text-transform:capitalize;');
 
-        // inherit works for everything
+        // universal values work for everything
         $this->assertDef('text-align:inherit;');
+        $this->assertDef('text-align:initial;');
+        $this->assertDef('text-align:unset;');
 
         // bad props
         $this->assertDef('nodice:foobar;', false);

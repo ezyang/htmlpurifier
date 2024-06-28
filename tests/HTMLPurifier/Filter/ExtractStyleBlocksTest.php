@@ -88,6 +88,13 @@ class HTMLPurifier_Filter_ExtractStyleBlocksTest extends HTMLPurifier_Harness
         $this->assertCleanCSS("a .foo #id div.cl#foo {\nfont-weight:700\n}");
     }
 
+    public function test_cleanCSS_universals()
+    {
+        $this->assertCleanCSS("a {\nfont-weight:inherit\n}");
+        $this->assertCleanCSS("a {\nfont-weight:initial\n}");
+        $this->assertCleanCSS("a {\nfont-weight:unset\n}");
+    }
+
     public function test_cleanCSS_angledBrackets()
     {
         // [Content] No longer can smuggle in angled brackets using
