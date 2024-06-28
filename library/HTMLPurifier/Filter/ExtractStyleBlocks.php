@@ -67,12 +67,38 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
         $this->_class_attrdef = new HTMLPurifier_AttrDef_CSS_Ident();
         $this->_enum_attrdef = new HTMLPurifier_AttrDef_Enum(
             array(
-                'first-child',
-                'link',
-                'visited',
                 'active',
+                'after',
+                'before',
+                'checked',
+                'disabled',
+                'empty',
+                'enabled',
+                'first-child',
+                'first-letter',
+                'first-line',
+                'first-of-type',
+                'focus',
                 'hover',
-                'focus'
+                'in-range',
+                'invalid',
+                'last-child',
+                'last-of-type',
+                'link',
+                'nth-child(odd)',
+                'nth-child(even)',
+                'only-of-type',
+                'only-child',
+                'optional',
+                'out-of-range',
+                'read-only',
+                'read-write',
+                'required',
+                'root',
+                'selection',
+                'target',
+                'valid',
+                'visited',
             )
         );
         $this->_universal_attrdef = new HTMLPurifier_AttrDef_Enum(
