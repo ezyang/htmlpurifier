@@ -49,7 +49,7 @@ the properties:
     AllowedFrameTargets -> heavily <a> specific, but also used by <area>
         and <form>. Transitional DTD %FrameTarget, not present in strict,
         HTML5 calls them "browsing contexts"
-    Default*Image* -> as a default parameter, is almost entirely exlcusive
+    Default*Image* -> as a default parameter, is almost entirely exclusive
         to <img>
     EnableID -> global attribute
     Name.UseCDATA -> heavily <a> specific, but has heavy other usage by

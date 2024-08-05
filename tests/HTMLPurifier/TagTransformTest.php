@@ -1,6 +1,6 @@
 <?php
 
-// needs to be seperated into files
+// needs to be separated into files
 class HTMLPurifier_TagTransformTest extends HTMLPurifier_Harness
 {
 
