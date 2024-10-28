@@ -608,4 +608,9 @@
    <line>35</line>
   </file>
  </directive>
+ <directive id="URI.SafeIframeHosts">
+  <file name="HTMLPurifier/URIFilter/SafeIframe.php">
+   <line>67</line>
+  </file>
+ </directive>
 </usage>

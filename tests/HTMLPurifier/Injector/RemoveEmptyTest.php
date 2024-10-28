@@ -115,6 +115,12 @@ class HTMLPurifier_Injector_RemoveEmptyTest extends HTMLPurifier_InjectorHarness
         $this->assertResult('<iframe src="http://google.com"></iframe>', '');
     }
 
+    public function testRemoveDisallowedIframeDeniedByHostsList()
+    {
+        $this->config->set('HTML.SafeIframe', true);
+        $this->config->set('URI.SafeIframeHosts', ['www.youtube.com']);
+        $this->assertResult('<iframe src="http://maps.google.com"></iframe>', '');
+    }
 }
 
 // vim: et sw=4 sts=4
