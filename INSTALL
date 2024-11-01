@@ -99,7 +99,7 @@ Autoload compatibility
 
     HTML Purifier attempts to be as smart as possible when registering an
     autoloader, but there are some cases where you will need to change
-    your own code to accomodate HTML Purifier. These are those cases:
+    your own code to accommodate HTML Purifier. These are those cases:
 
     AN __autoload FUNCTION IS DECLARED AFTER OUR AUTOLOADER IS REGISTERED
         spl_autoload_register() has the curious behavior of disabling
