@@ -26,3 +26,4 @@ composer.lock
 *.orig
 *.bak
 core
+.idea
