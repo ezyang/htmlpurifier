@@ -6,7 +6,7 @@
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>90</line>
-   <line>331</line>
+   <line>315</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>67</line>
@@ -19,37 +19,37 @@
  </directive>
  <directive id="CSS.MaxImgLength">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>256</line>
+   <line>253</line>
   </file>
  </directive>
  <directive id="CSS.Proprietary">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>398</line>
+   <line>397</line>
   </file>
  </directive>
  <directive id="CSS.AllowTricky">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>402</line>
+   <line>401</line>
   </file>
  </directive>
  <directive id="CSS.Trusted">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>406</line>
+   <line>405</line>
   </file>
  </directive>
  <directive id="CSS.AllowImportant">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>410</line>
+   <line>409</line>
   </file>
  </directive>
  <directive id="CSS.AllowedProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>539</line>
+   <line>538</line>
   </file>
  </directive>
  <directive id="CSS.ForbiddenProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
-   <line>555</line>
+   <line>554</line>
   </file>
  </directive>
  <directive id="Cache.DefinitionImpl">
@@ -124,7 +124,7 @@
    <line>122</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>313</line>
+   <line>299</line>
   </file>
  </directive>
  <directive id="Output.Newline">
@@ -172,11 +172,14 @@
    <line>234</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>318</line>
-   <line>358</line>
+   <line>304</line>
+   <line>342</line>
   </file>
   <file name="HTMLPurifier/AttrDef/HTML/ContentEditable.php">
    <line>8</line>
+  </file>
+  <file name="HTMLPurifier/HTMLModule/Iframe.php">
+   <line>43</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>37</line>
@@ -267,22 +270,22 @@
  <directive id="Core.LegacyEntityDecoder">
   <file name="HTMLPurifier/Lexer.php">
    <line>220</line>
-   <line>342</line>
+   <line>326</line>
   </file>
  </directive>
  <directive id="Core.ConvertDocumentToFragment">
   <file name="HTMLPurifier/Lexer.php">
-   <line>329</line>
+   <line>313</line>
   </file>
  </directive>
  <directive id="Core.RemoveProcessingInstructions">
   <file name="HTMLPurifier/Lexer.php">
-   <line>352</line>
+   <line>336</line>
   </file>
  </directive>
  <directive id="Core.HiddenElements">
   <file name="HTMLPurifier/Lexer.php">
-   <line>356</line>
+   <line>340</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>36</line>
@@ -290,12 +293,12 @@
  </directive>
  <directive id="Core.AggressivelyRemoveScript">
   <file name="HTMLPurifier/Lexer.php">
-   <line>357</line>
+   <line>341</line>
   </file>
  </directive>
  <directive id="Core.RemoveScriptContents">
   <file name="HTMLPurifier/Lexer.php">
-   <line>358</line>
+   <line>342</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>35</line>
@@ -408,12 +411,12 @@
  </directive>
  <directive id="Core.AllowHostnameUnderscore">
   <file name="HTMLPurifier/AttrDef/URI/Host.php">
-   <line>77</line>
+   <line>71</line>
   </file>
  </directive>
  <directive id="Core.EnableIDNA">
   <file name="HTMLPurifier/AttrDef/URI/Host.php">
-   <line>109</line>
+   <line>103</line>
   </file>
  </directive>
  <directive id="Attr.DefaultTextDir">
@@ -470,17 +473,17 @@
  </directive>
  <directive id="Filter.ExtractStyleBlocks.TidyImpl">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>94</line>
+   <line>106</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Scope">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>125</line>
+   <line>137</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Escaping">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>334</line>
+   <line>351</line>
   </file>
  </directive>
  <directive id="HTML.Forms">
@@ -550,6 +553,11 @@
  <directive id="Core.AllowParseManyTags">
   <file name="HTMLPurifier/Lexer/DOMLex.php">
    <line>72</line>
+  </file>
+ </directive>
+ <directive id="Core.RemoveBlanks">
+  <file name="HTMLPurifier/Lexer/DOMLex.php">
+   <line>75</line>
   </file>
  </directive>
  <directive id="Core.DirectLexLineNumberSyncInterval">
