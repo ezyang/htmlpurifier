@@ -265,7 +265,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             $this->info_block_wrapper = $block_wrapper;
         } else {
             throw new Exception(
-                'Cannot use non-block element as block wrapper',
+                'Cannot use non-block element as block wrapper'
             );
         }
 
