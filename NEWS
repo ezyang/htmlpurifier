@@ -1,3 +1,23 @@
+# [4.18.0](https://github.com/ezyang/htmlpurifier/compare/v4.17.0...v4.18.0) (2024-11-01)
+
+
+### Bug Fixes
+
+* Adjust Core.AllowHostnameUnderscore to consider that "_" is defined as Unreserved Characters in RFC 3986 ([#406](https://github.com/ezyang/htmlpurifier/issues/406)) ([d9fbef8](https://github.com/ezyang/htmlpurifier/commit/d9fbef8e27f6a0848a8987a8534351de98eb0fa1))
+* Avoid a deprecated error when the attribute name is numeric and DirectLex is used ([#412](https://github.com/ezyang/htmlpurifier/issues/412)) ([f0fbf51](https://github.com/ezyang/htmlpurifier/commit/f0fbf510981b27fc03168efdb17d6bff48f521af))
+* checking that node has property name ([#399](https://github.com/ezyang/htmlpurifier/issues/399)) ([9ca5a36](https://github.com/ezyang/htmlpurifier/commit/9ca5a3687bd2e6e42ed9d5199b2cfb1dbd6dbdc2))
+* Ignore conditional comments ([#401](https://github.com/ezyang/htmlpurifier/issues/401)) ([4828fdf](https://github.com/ezyang/htmlpurifier/commit/4828fdf45a93eeeacfcbcc855f96f9a7e6b4ed44))
+* Support PHP 8.4 ([#396](https://github.com/ezyang/htmlpurifier/issues/396)) ([92da247](https://github.com/ezyang/htmlpurifier/commit/92da2473ffbb3ed5e894560d4166b1ca8032aeb3))
+* undefined array key warning ([#419](https://github.com/ezyang/htmlpurifier/issues/419)) ([01be377](https://github.com/ezyang/htmlpurifier/commit/01be377f93654fad4d3fbc8c81779f14316eaecf))
+
+
+### Features
+
+* Add allowfullscreen attr for iframe ([#411](https://github.com/ezyang/htmlpurifier/issues/411)) ([70754a2](https://github.com/ezyang/htmlpurifier/commit/70754a253342f67a67425cfa81029db3a5c1bd28))
+* add directive for removing blank nodes ([#404](https://github.com/ezyang/htmlpurifier/issues/404)) ([c9d60c9](https://github.com/ezyang/htmlpurifier/commit/c9d60c96d799c02bc357c88a49f422034b6914fd))
+* Add support for CSS aspect-ratio ([#408](https://github.com/ezyang/htmlpurifier/issues/408)) ([93bee73](https://github.com/ezyang/htmlpurifier/commit/93bee733497a098b65daf5910f1c435d347860a4))
+* Allow universal CSS values for all properties ([#410](https://github.com/ezyang/htmlpurifier/issues/410)) ([9723267](https://github.com/ezyang/htmlpurifier/commit/972326785d201b81e1095bc296b99bbcfa8c7fd4))
+
 # [4.17.0](https://github.com/ezyang/htmlpurifier/compare/v4.16.0...v4.17.0) (2023-11-17)
 
 
