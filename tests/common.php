@@ -48,7 +48,7 @@ if ( is_string($GLOBALS['HTMLPurifierTest']['PEAR']) ) {
 }
 
 // after external libraries are loaded, turn on compile time errors
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL);
 
 // initialize extra HTML Purifier libraries
 require '../extras/HTMLPurifierExtras.auto.php';

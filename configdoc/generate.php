@@ -16,7 +16,7 @@ TODO:
 */
 
 if (version_compare(PHP_VERSION, '5.2', '<')) exit('PHP 5.2+ required.');
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL);
 
 // load dual-libraries
 require_once dirname(__FILE__) . '/../extras/HTMLPurifierExtras.auto.php';
