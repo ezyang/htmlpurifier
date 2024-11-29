@@ -184,7 +184,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
             )
         );
 
-        // grab a non-existant namespace
+        // grab a non-existent namespace
         $this->expectError('Cannot retrieve undefined namespace Constants');
         $config->getBatch('Constants');
 
