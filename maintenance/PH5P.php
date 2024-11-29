@@ -1139,7 +1139,14 @@ class HTML5
     }
 }
 
-class HTML5TreeConstructor
+class HTML5TreeConstructor extends HTML5TreeConstructer
+{}
+
+/**
+ * @deprecated Use HTML5TreeConstructor instead
+ * @todo Remove with version 5
+ */
+class HTML5TreeConstructer
 {
     public $stack = array();
 
