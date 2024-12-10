@@ -6,6 +6,7 @@ class HTMLPurifier_HTMLModule_SafeEmbedTest extends HTMLPurifier_HTMLModuleHarne
     public function setUp()
     {
         parent::setUp();
+        $this->config->set('HTML.MaxImgLength', 1200);
         $def = $this->config->getHTMLDefinition(true);
         $def->manager->addModule('SafeEmbed');
     }

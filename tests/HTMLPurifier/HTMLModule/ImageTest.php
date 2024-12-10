@@ -11,6 +11,7 @@ class HTMLPurifier_HTMLModule_ImageTest extends HTMLPurifier_HTMLModuleHarness
 
     public function testLengthTooLarge()
     {
+        $this->config->set('HTML.MaxImgLength', 1200);
         $this->assertResult(
             '<img height="40000" width="40000" src="" alt="" />',
             '<img height="1200" width="1200" src="" alt="" />'
@@ -19,6 +20,7 @@ class HTMLPurifier_HTMLModule_ImageTest extends HTMLPurifier_HTMLModuleHarness
 
     public function testLengthPercentage()
     {
+        $this->config->set('HTML.MaxImgLength', 1200);
         $this->assertResult(
             '<img height="100%" width="100%" src="" alt="" />',
             '<img src="" alt="" />'

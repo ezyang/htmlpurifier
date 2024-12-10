@@ -211,6 +211,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
 
     public function testRemoveLargeCSSWidthAndHeightOnImg()
     {
+        $this->config->set('CSS.MaxImgLength', '1200px');
         $this->assertResult(
             '<img src="" alt="" style="width:10000000px;height:10000000px;border:1px solid #000;" />',
             '<img src="" alt="" style="border:1px solid #000;" />'
@@ -244,6 +245,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
 
     public function testRemoveRelativeCSSWidthAndHeightOnImg()
     {
+        $this->config->set('CSS.MaxImgLength', '1200px');
         $this->assertResult(
             '<img src="" alt="" style="width:10em;height:10em;border:1px solid #000;" />',
             '<img src="" alt="" style="border:1px solid #000;" />'
@@ -252,6 +254,7 @@ class HTMLPurifier_Strategy_ValidateAttributesTest extends
 
     public function testRemovePercentCSSWidthAndHeightOnImg()
     {
+        $this->config->set('CSS.MaxImgLength', '1200px');
         $this->assertResult(
             '<img src="" alt="" style="width:100%;height:100%;border:1px solid #000;" />',
             '<img src="" alt="" style="border:1px solid #000;" />'
