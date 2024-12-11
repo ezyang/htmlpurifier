@@ -8,6 +8,7 @@ class HTMLPurifier_HTMLModule_SafeObjectTest extends HTMLPurifier_HTMLModuleHarn
         parent::setUp();
         $this->config->set('HTML.DefinitionID', 'HTMLPurifier_HTMLModule_SafeObjectTest');
         $this->config->set('HTML.SafeObject', true);
+        $this->config->set('HTML.MaxImgLength', 1200);
     }
 
     public function testMinimal()
