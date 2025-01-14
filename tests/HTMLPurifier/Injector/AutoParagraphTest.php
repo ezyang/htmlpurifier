@@ -331,7 +331,7 @@ Par1
         );
     }
 
-    public function testBlockNodeTextDelimeterInBlockNode()
+    public function testBlockNodeTextDelimiterInBlockNode()
     {
         $this->assertResult(
 '<div>Par1
@@ -343,7 +343,7 @@ Par1
         );
     }
 
-    public function testBlockNodeTextDelimeterWithoutDoublespaceInBlockNode()
+    public function testBlockNodeTextDelimiterWithoutDoublespaceInBlockNode()
     {
         $this->assertResult(
 '<div>Par1
@@ -351,7 +351,7 @@ Par1
         );
     }
 
-    public function testBlockNodeTextDelimeterWithoutDoublespace()
+    public function testBlockNodeTextDelimiterWithoutDoublespace()
     {
         $this->assertResult(
 'Par1

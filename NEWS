@@ -482,7 +482,7 @@ real release we decided to skip this version number.
 
 3.3.0, released 2009-02-16
 ! Implement CSS property 'overflow' when %CSS.AllowTricky is true.
-! Implement generic property list classess
+! Implement generic property list classes
 - Fix bug with testEncodingSupportsASCII() algorithm when iconv() implementation
   does not do the "right thing" with characters not supported in the output
   set.
@@ -522,7 +522,7 @@ real release we decided to skip this version number.
 ! %Core.AggressivelyFixLt is on by default. This causes more sensible
   processing of left angled brackets in smileys and other whatnot.
 ! Test scripts now have a 'type' parameter, which lets you say 'htmlpurifier',
-  'phpt', 'vtest', etc. in order to only execute those tests. This supercedes
+  'phpt', 'vtest', etc. in order to only execute those tests. This supersedes
   the --only-phpt parameter, although for backwards-compatibility the flag
   will still work.
 ! AutoParagraph auto-formatter will now preserve double-newlines upon output.
@@ -573,7 +573,7 @@ real release we decided to skip this version number.
 . Added --quick option to multitest.php, which tests only the most recent
   release for each series.
 . Added --distro option to multitest.php, which accepts either 'normal' or
-  'standalone'. This supercedes --exclude-normal and --exclude-standalone
+  'standalone'. This supersedes --exclude-normal and --exclude-standalone
 
 3.1.1, released 2008-06-19
 # %URI.Munge now, by default, does not munge resources (for example, <img src="">)
@@ -723,7 +723,7 @@ real release we decided to skip this version number.
 # HTMLPurifier->addFilter is deprecated; built-in filters can now be
   enabled using %Filter.$filter_name or by setting your own filters using
   %Filter.Custom
-# Directive-level safety properties superceded in favor of module-level
+# Directive-level safety properties superseded in favor of module-level
   safety. Internal method HTMLModule->addElement() has changed, although
   the externally visible HTMLDefinition->addElement has *not* changed.
 ! Extra utility classes for testing and non-library operations can
@@ -769,7 +769,7 @@ real release we decided to skip this version number.
 . A couple of new historical maintenance scripts were added.
 . HTMLPurifier/HTMLModule/Tidy/XHTMLAndHTML4.php split into two files
 . tests/index.php can now be run from any directory.
-. HTMLPurifier_Token subclasses split into seperate files
+. HTMLPurifier_Token subclasses split into separate files
 . HTMLPURIFIER_PREFIX now is defined in Bootstrap.php, NOT HTMLPurifier.php
 . HTMLPURIFIER_PREFIX can now be defined outside of HTML Purifier
 . New --php=php flag added, allows PHP executable to be specified (command
@@ -835,7 +835,7 @@ real release we decided to skip this version number.
 - Fix warning emitted when a non-supported URI scheme is passed to the
   MakeAbsolute URIFilter, thanks NykO18 (again)
 - Further refine AutoParagraph injector. Behavior inside of elements
-  allowing paragraph tags clarified: only inline content delimeted by
+  allowing paragraph tags clarified: only inline content delimited by
   double newlines (not block elements) are paragraphed.
 - Buggy treatment of end tags of elements that have required attributes
   fixed (does not manifest on default tag-set)
@@ -881,7 +881,7 @@ real release we decided to skip this version number.
 ! CSS property border-spacing implemented
 - Fix non-visible parsing error in DirectLex with empty tags that have
   slashes inside attribute values.
-- Fix typo in CSS definition: border-collapse:seperate; was incorrectly
+- Fix typo in CSS definition: border-collapse:separate; was incorrectly
   accepted as valid CSS. Usually non-visible, because this styling is the
   default for tables in most browsers. Thanks Brett Zamir for pointing
   this out.
@@ -932,7 +932,7 @@ real release we decided to skip this version number.
 . HTMLPurifier_Config->getSerial() implemented, this is extremely useful
   for output cache invalidation
 . ConfigForm printer now can retrieve CSS and JS files as strings, in
-  case HTML Purifier's directory is not publically accessible
+  case HTML Purifier's directory is not publicly accessible
 . Introduce new text/itext configuration directive values: these represent
   longer strings that would be more appropriately edited with a textarea
 . Allow newlines to act as separators for lists, hashes, lookups and

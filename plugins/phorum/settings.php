@@ -14,7 +14,7 @@ if(!defined("PHORUM_ADMIN")) exit;
 // error reporting is good!
 error_reporting(E_ALL ^ E_NOTICE);
 
-// load library and other paraphenalia
+// load library and other paraphernalia
 require_once './include/admin/PhorumInputForm.php';
 require_once (dirname(__FILE__) . '/htmlpurifier/HTMLPurifier.auto.php');
 require_once (dirname(__FILE__) . '/init-config.php');

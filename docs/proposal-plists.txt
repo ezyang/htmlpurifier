@@ -70,7 +70,7 @@ Backfills/Data integrity:
 Type systems:
     - Flags: ReadOnly, Permanent, DontEnum
     - Typed properties isn't that useful [It's also Not-PHP]
-    - Seperate meta-list of directive properties IS useful
+    - Separate meta-list of directive properties IS useful
     - Duck typing is useful for systems designed fully around properties pattern
 
 Trade-off:

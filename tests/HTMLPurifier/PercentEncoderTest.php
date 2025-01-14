@@ -29,7 +29,7 @@ class HTMLPurifier_PercentEncoderTest extends HTMLPurifier_Harness
         $this->assertDecode('%2B2B%3A3A'); // extra text
         $this->assertDecode('%2b2B%4141', '%2B2BA41'); // extra text, with normalization
         $this->assertDecode('%', '%25'); // normalize stray percent sign
-        $this->assertDecode('%5%25', '%255%25'); // permaturely terminated encoding
+        $this->assertDecode('%5%25', '%255%25'); // prematurely terminated encoding
         $this->assertDecode('%GJ', '%25GJ'); // invalid hexadecimal chars
 
         // contested behavior, if this changes, we'll also have to have
