@@ -54,7 +54,7 @@ EXTERNAL: CSSTidy
   <div>
     <?php echo $html; ?>
   </div>
-</b]]><![CDATA[body>
+</b]]><![CDATA[ody>
 </html>
 ]]></pre>
 <p>
