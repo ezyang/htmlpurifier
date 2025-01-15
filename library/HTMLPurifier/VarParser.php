@@ -125,6 +125,7 @@ class HTMLPurifier_VarParser
                 $this->errorInconsistent(get_class($this), $type);
         }
         $this->errorGeneric($var, $type);
+        return null;
     }
 
     /**
