@@ -390,7 +390,7 @@ class HTMLPurifier_Encoder
             $str = self::unsafeIconv($encoding, 'utf-8//IGNORE', $str);
             if ($str === false) {
                 // $encoding is not a valid encoding
-                trigger_error('Invalid encoding ' . $encoding, E_USER_ERROR);
+                throw new Exception('Invalid encoding ' . $encoding);
                 return '';
             }
             // If the string is bjorked by Shift_JIS or a similar encoding
