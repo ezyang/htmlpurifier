@@ -1,0 +1,9 @@
+services:
+  htmlpurifier:
+    build:
+      context: "."
+      dockerfile: Dockerfile
+    container_name: 'htmlpurifier'
+    tty: true
+    volumes:
+      - .:/opt/htmlpurifier
