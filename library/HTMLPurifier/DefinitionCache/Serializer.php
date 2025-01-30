@@ -232,8 +232,8 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
                 trigger_error(
                     'Base directory ' . $base . ' does not exist,
                     please create or change using %Cache.SerializerPath',
-                    E_USER_WARNING
-                );
+                    %Cache.SerializerPath                
+                    );
                 return false;
             } elseif (!$this->_testPermissions($base, $chmod)) {
                 return false;
