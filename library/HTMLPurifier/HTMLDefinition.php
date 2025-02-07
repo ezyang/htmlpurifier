@@ -275,11 +275,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             $this->info_parent = $parent;
             $this->info_parent_def = $def;
         } else {
-            trigger_error(
-                'Cannot use unrecognized element as parent',
-                E_USER_ERROR
-            );
-            $this->info_parent_def = $this->manager->getElement($this->info_parent, true);
+            throw new Exception('Cannot use unrecognized element as parent');
         }
 
         // support template text
