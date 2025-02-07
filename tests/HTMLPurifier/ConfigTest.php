@@ -155,7 +155,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         $this->assertIdentical($config->get('Home.Rug'), 3);
 
-        $this->expectError('Cannot get value from aliased directive, use real name Home.Rug');
+        $this->expectException(new Exception('Cannot get value from aliased directive, use real name Home.Rug'));
         $config->get('Home.Carpet');
 
         $this->expectError('Home.Carpet is an alias, preferred directive name is Home.Rug');
@@ -384,7 +384,7 @@ class HTMLPurifier_ConfigTest extends HTMLPurifier_Harness
 
         $config->finalize();
 
-        $this->expectError('Cannot set directive after finalization');
+        $this->expectException(new Exception('Cannot set directive after finalization'));
         $config->set('Poem.Meter', 'vedic');
 
         $this->expectError('Cannot load directives after finalization');

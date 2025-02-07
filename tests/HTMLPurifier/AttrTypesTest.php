@@ -12,7 +12,7 @@ class HTMLPurifier_AttrTypesTest extends HTMLPurifier_Harness
             new HTMLPurifier_AttrDef_Text()
         );
 
-        $this->expectError('Cannot retrieve undefined attribute type foobar');
+        $this->expectException(new Exception('Cannot retrieve undefined attribute type foobar'));
         $types->get('foobar');
 
         $this->assertIdentical(

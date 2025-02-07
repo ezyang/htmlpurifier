@@ -36,7 +36,7 @@ class HTMLPurifier_DoctypeRegistryTest extends HTMLPurifier_Harness
 
         $registry = new HTMLPurifier_DoctypeRegistry();
 
-        $this->expectError('Doctype XHTML 2.0 does not exist');
+        $this->expectException(new Exception('Doctype XHTML 2.0 does not exist'));
         $registry->get('XHTML 2.0');
 
         // prevent XSS
