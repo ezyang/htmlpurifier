@@ -134,7 +134,7 @@ class HTMLPurifier_HTMLModule_TidyTest extends HTMLPurifier_Harness
         $module = new HTMLPurifier_HTMLModule_Tidy();
         $module->defaultLevel = 'bananas';
 
-        $this->expectError('Default level bananas does not exist');
+        $this->expectException(new Exception('Default level bananas does not exist'));
 
         $module->makeFixesForLevel(array(
             'fix-1' => 0

@@ -47,7 +47,7 @@ class HTMLPurifier_EncoderTest extends HTMLPurifier_Harness
     {
         if (!HTMLPurifier_Encoder::iconvAvailable()) return;
         $this->config->set('Core.Encoding', 'utf99');
-        $this->expectError('Invalid encoding utf99');
+        $this->expectException(new Exception('Invalid encoding utf99'));
         $this->assertIdentical(
             HTMLPurifier_Encoder::convertToUTF8("\xF6", $this->config, $this->context),
             ''
