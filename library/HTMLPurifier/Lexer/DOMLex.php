@@ -189,7 +189,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         } elseif ($node->nodeType === XML_CDATA_SECTION_NODE) {
             // undo libxml's special treatment of <script> and <style> tags
             $last = end($tokens);
-            $data = $node->data;
+            $data = $node->data ?? "";
             // (note $node->tagname is already normalized)
             if ($last instanceof HTMLPurifier_Token_Start && ($last->name == 'script' || $last->name == 'style')) {
                 $new_data = trim($data);
@@ -208,7 +208,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             // this is code is only invoked for comments in script/style in versions
             // of libxml pre-2.6.28 (regular comments, of course, are still
             // handled regularly)
-            $tokens[] = $this->factory->createComment($node->data);
+            $tokens[] = $this->factory->createComment($node->data ?? null);
             return false;
         } elseif ($node->nodeType !== XML_ELEMENT_NODE) {
             // not-well tested: there may be other nodes we have to grab
@@ -259,6 +259,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         }
         $array = array();
         foreach ($node_map as $attr) {
+            if (!isset($attr->name)) continue;
             $array[$attr->name] = $attr->value;
         }
         return $array;
