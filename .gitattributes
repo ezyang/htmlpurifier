@@ -5,6 +5,8 @@
 /benchmarks export-ignore
 /configdoc export-ignore
 /configdoc/usage.xml -crlf
+/docker-compose.yaml export-ignore
+/Dockerfile export-ignore
 /docs export-ignore
 /Doxyfile export-ignore
 /extras export-ignore
