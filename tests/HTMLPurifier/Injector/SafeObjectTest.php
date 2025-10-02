@@ -35,7 +35,7 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
     {
         $this->assertResult(
             '<object></object>',
-            '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /></object>'
+            '<object><param name="allowscriptaccess" value="never" /><param name="allownetworking" value="internal" /></object>'
         );
     }
 
@@ -43,14 +43,14 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
     {
         $this->assertResult(
             '<object><param /></object>',
-            '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /></object>'
+            '<object><param name="allowscriptaccess" value="never" /><param name="allownetworking" value="internal" /></object>'
         );
     }
 
     public function testIgnoreDuplicates()
     {
         $this->assertResult(
-            '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /></object>'
+            '<object><param name="allowscriptaccess" value="never" /><param name="allownetworking" value="internal" /></object>'
         );
     }
 
@@ -58,7 +58,7 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
     {
         $this->assertResult(
             '<object><param name="allowscriptaccess" value="always" /><param name="allowNetworking" value="always" /></object>',
-            '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /></object>'
+            '<object><param name="allowscriptaccess" value="never" /><param name="allownetworking" value="internal" /></object>'
         );
     }
 
@@ -66,7 +66,7 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
     {
         $this->assertResult(
             '<object><param name="foo" value="bar" /></object>',
-            '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /></object>'
+            '<object><param name="allowscriptaccess" value="never" /><param name="allownetworking" value="internal" /></object>'
         );
     }
 
@@ -74,7 +74,7 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
     {
         $this->assertResult(
             '<object><param name="movie" value="bar" /></object>',
-            '<object data="bar"><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="movie" value="bar" /></object>'
+            '<object data="bar"><param name="allowscriptaccess" value="never" /><param name="allownetworking" value="internal" /><param name="movie" value="bar" /></object>'
         );
     }
 
@@ -82,7 +82,7 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
     {
         $this->assertResult(
             '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><object></object></object>',
-            '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /></object></object>'
+            '<object><param name="allowscriptaccess" value="never" /><param name="allownetworking" value="internal" /><object><param name="allowscriptaccess" value="never" /><param name="allownetworking" value="internal" /></object></object>'
         );
     }
 
@@ -90,14 +90,14 @@ class HTMLPurifier_Injector_SafeObjectTest extends HTMLPurifier_InjectorHarness
     {
         $this->assertResult(
             '<object><p><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /></p></object>',
-            '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><p></p></object>'
+            '<object><param name="allowscriptaccess" value="never" /><param name="allownetworking" value="internal" /><p></p></object>'
         );
     }
 
     public function testCaseInsensitive()
     {
         $this->assertResult(
-            '<object><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" /><param name="flashVars" value="a" /><param name="FlashVars" value="b" /></object>'
+            '<object><param name="allowscriptaccess" value="never" /><param name="allownetworking" value="internal" /><param name="flashVars" value="a" /><param name="FlashVars" value="b" /></object>'
         );
     }
 
