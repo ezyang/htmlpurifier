@@ -169,14 +169,7 @@ class HTMLPurifier_Printer
      */
     protected function getClass($obj, $sec_prefix = '')
     {
-        static $five = null;
-        if ($five === null) {
-            $five = version_compare(PHP_VERSION, '5', '>=');
-        }
         $prefix = 'HTMLPurifier_' . $sec_prefix;
-        if (!$five) {
-            $prefix = strtolower($prefix);
-        }
         $class = str_replace($prefix, '', get_class($obj));
         $lclass = strtolower($class);
         $class .= '(';
