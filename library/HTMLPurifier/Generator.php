@@ -248,10 +248,10 @@ class HTMLPurifier_Generator
             // don't process user input with innerHTML or you don't plan
             // on supporting Internet Explorer.
             if ($this->_innerHTMLFix) {
-                if (strpos($value, '`') !== false) {
+                if (strpos($value ?? '', '`') !== false) {
                     // check if correct quoting style would not already be
                     // triggered
-                    if (strcspn($value, '"\' <>') === strlen($value)) {
+                    if (strcspn($value ?? '', '"\' <>') === strlen($value ?? '')) {
                         // protect!
                         $value .= ' ';
                     }
@@ -279,7 +279,7 @@ class HTMLPurifier_Generator
         if ($quote === null) {
             $quote = ENT_COMPAT;
         }
-        return htmlspecialchars($string, $quote, 'UTF-8');
+        return htmlspecialchars($string ?? '', $quote, 'UTF-8');
     }
 }
 
