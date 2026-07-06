@@ -40,6 +40,7 @@ class HTMLPurifier_URISchemeRegistry
      */
     public function getScheme($scheme, $config, $context)
     {
+        $scheme = (string) $scheme;
         if (!$config) {
             $config = HTMLPurifier_Config::createDefault();
         }

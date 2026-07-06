@@ -1,3 +1,12 @@
+# [4.19.1](https://github.com/ezyang/htmlpurifier/compare/v4.19.0...v4.19.1) (2026-07-06)
+
+
+### Bug Fixes
+
+* fix SplObjectStorage deprecated methods for PHP 8.5: attach()→offsetSet(), detach()→offsetUnset(), contains()→offsetExists()
+* fix null array offset deprecation in URISchemeRegistry for PHP 8.5
+
+
 # [4.19.0](https://github.com/ezyang/htmlpurifier/compare/v4.18.0...v4.19.0) (2025-10-17)
 
 
