@@ -303,11 +303,11 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                                     $x
                                 );
                                 $components = preg_split('/([#.:])/', $x_protected, -1, PREG_SPLIT_DELIM_CAPTURE);
-                                foreach ($components as $k => $v) {
-                                    $components[$k] = str_replace(
+                                foreach ($components as $ck => $cv) {
+                                    $components[$ck] = str_replace(
                                         array("\x01", "\x02", "\x03"),
                                         array(':', '.', '#'),
-                                        $v
+                                        $cv
                                     );
                                 }
                                 $sdelim = null;
