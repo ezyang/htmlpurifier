@@ -67,12 +67,54 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
         $this->_class_attrdef = new HTMLPurifier_AttrDef_CSS_Ident();
         $this->_enum_attrdef = new HTMLPurifier_AttrDef_Enum(
             array(
-                'first-child',
-                'link',
-                'visited',
                 'active',
+                'after',
+                'before',
+                'checked',
+                'default',
+                'defined',
+                'disabled',
+                'empty',
+                'enabled',
+                'first',
+                'first-child',
+                'first-letter',
+                'first-line',
+                'first-of-type',
+                'focus',
+                'focus-visible',
+                'focus-within',
+                'fullscreen',
+                'has',
                 'hover',
-                'focus'
+                'in-range',
+                'indeterminate',
+                'invalid',
+                'lang',
+                'last-child',
+                'last-of-type',
+                'link',
+                'not',
+                'nth-child',
+                'nth-last-child',
+                'nth-last-of-type',
+                'nth-of-type',
+                'only-child',
+                'only-of-type',
+                'optional',
+                'out-of-range',
+                'placeholder-shown',
+                'read-only',
+                'read-write',
+                'required',
+                'root',
+                'scope',
+                'selection',
+                'target',
+                'valid',
+                'visited',
+                'where',
+                'is',
             )
         );
         $this->_universal_attrdef = new HTMLPurifier_AttrDef_Enum(
@@ -247,7 +289,27 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                                 }
                             } else {
                                 // simple selector
-                                $components = preg_split('/([#.:])/', $x, -1, PREG_SPLIT_DELIM_CAPTURE);
+                                // Protect : inside functional pseudo parentheses (e.g. :has(br:only-child))
+                                // so we don't split the inner selector
+                                $x_protected = preg_replace_callback(
+                                    '/\([^)]*\)/',
+                                    function ($m) {
+                                        return str_replace(
+                                            array(':', '.', '#'),
+                                            array("\x01", "\x02", "\x03"),
+                                            $m[0]
+                                        );
+                                    },
+                                    $x
+                                );
+                                $components = preg_split('/([#.:])/', $x_protected, -1, PREG_SPLIT_DELIM_CAPTURE);
+                                foreach ($components as $k => $v) {
+                                    $components[$k] = str_replace(
+                                        array("\x01", "\x02", "\x03"),
+                                        array(':', '.', '#'),
+                                        $v
+                                    );
+                                }
                                 $sdelim = null;
                                 $nx = null;
                                 for ($j = 0, $cc = count($components); $j < $cc; $j++) {
@@ -272,6 +334,26 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                                         } elseif ($sdelim === '.') {
                                             $attrdef = $this->_class_attrdef;
                                         } elseif ($sdelim === ':') {
+                                            // Handle functional pseudo-classes like :has(), :not(), etc.
+                                            // These have parentheses with arguments, e.g. has(br:only-child)
+                                            $paren_pos = strpos($y, '(');
+                                            if ($paren_pos !== false) {
+                                                $func_name = substr($y, 0, $paren_pos);
+                                                $func_attrdef = $this->_enum_attrdef;
+                                                $func_r = $func_attrdef->validate($func_name, $config, $context);
+                                                if ($func_r !== false) {
+                                                    // Functional pseudo is allowed, keep whole value
+                                                    // e.g. has(br:only-child) -> valid if has is allowed
+                                                    if ($nx === null) {
+                                                        $nx = '';
+                                                    }
+                                                    $nx .= $sdelim . $y;
+                                                    continue;
+                                                } else {
+                                                    // Function not allowed, skip this pseudo
+                                                    continue;
+                                                }
+                                            }
                                             $attrdef = $this->_enum_attrdef;
                                         } else {
                                             throw new HTMLPurifier_Exception('broken invariant sdelim and preg_split');
