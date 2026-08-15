@@ -93,7 +93,9 @@ class HTMLPurifier_URIScheme_data extends HTMLPurifier_URIScheme
         }
         file_put_contents($file, $raw_data);
         if (function_exists('exif_imagetype')) {
+            set_error_handler(array($this, 'muteErrorHandler'));
             $image_code = exif_imagetype($file);
+            restore_error_handler();
             unlink($file);
         } elseif (function_exists('getimagesize')) {
             set_error_handler(array($this, 'muteErrorHandler'));
