@@ -5,21 +5,6 @@ if (!defined('HTMLPURIFIER_PREFIX')) {
     define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/..'));
 }
 
-// accommodations for versions earlier than 5.0.2
-// borrowed from PHP_Compat, LGPL licensed, by Aidan Lister <aidan@php.net>
-if (!defined('PHP_EOL')) {
-    switch (strtoupper(substr(PHP_OS, 0, 3))) {
-        case 'WIN':
-            define('PHP_EOL', "\r\n");
-            break;
-        case 'DAR':
-            define('PHP_EOL', "\r");
-            break;
-        default:
-            define('PHP_EOL', "\n");
-    }
-}
-
 /**
  * Bootstrap class that contains meta-functionality for HTML Purifier such as
  * the autoload function.
