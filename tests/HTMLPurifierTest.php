@@ -9,6 +9,37 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
         $this->assertPurification("Null byte\0", "Null byte");
     }
 
+    public function testNullInput()
+    {
+        $this->assertPurification(null, '');
+    }
+
+    public function testNullInput_withoutNormalizeNewlines()
+    {
+        $this->config->set('Core.NormalizeNewlines', false);
+        $this->assertPurification(null, '');
+    }
+
+    public function test_purify_postFilterReturningNull()
+    {
+        generate_mock_once('HTMLPurifier_Filter');
+        $filter = new HTMLPurifier_FilterMock();
+        $filter->returns('preFilter', 'foo');
+        $filter->returns('postFilter', null);
+        $this->config->set('Filter.Custom', array($filter));
+        $this->assertIdentical('', $this->purifier->purify('foo', $this->config));
+    }
+
+    public function test_purify_preFilterReturningNull()
+    {
+        generate_mock_once('HTMLPurifier_Filter');
+        $filter = new HTMLPurifier_FilterMock();
+        $filter->returns('preFilter', null);
+        $filter->returns('postFilter', 'foo');
+        $this->config->set('Filter.Custom', array($filter));
+        $this->assertIdentical('foo', $this->purifier->purify('foo', $this->config));
+    }
+
     public function test_purifyArray()
     {
         $this->assertIdentical(

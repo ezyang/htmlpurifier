@@ -174,6 +174,7 @@ class HTMLPurifier
         $id_accumulator = HTMLPurifier_IDAccumulator::build($config, $context);
         $context->register('IDAccumulator', $id_accumulator);
 
+        $html = (string) $html;
         $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);
 
         // setup filters
@@ -199,7 +200,7 @@ class HTMLPurifier
         // maybe prepare(), but later
 
         for ($i = 0, $filter_size = count($filters); $i < $filter_size; $i++) {
-            $html = $filters[$i]->preFilter($html, $config, $context);
+            $html = (string) $filters[$i]->preFilter($html, $config, $context);
         }
 
         // purified HTML
@@ -220,7 +221,7 @@ class HTMLPurifier
             );
 
         for ($i = $filter_size - 1; $i >= 0; $i--) {
-            $html = $filters[$i]->postFilter($html, $config, $context);
+            $html = (string) $filters[$i]->postFilter($html, $config, $context);
         }
 
         $html = HTMLPurifier_Encoder::convertFromUTF8($html, $config, $context);

@@ -44,6 +44,21 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
         HTMLPurifier_Lexer::create($this->config);
     }
 
+    // HTMLPurifier_Lexer->normalize() -----------------------------------------
+
+    public function test_normalize_null()
+    {
+        $lexer = new HTMLPurifier_Lexer();
+        $this->assertIdentical('', $lexer->normalize(null, $this->config, $this->context));
+    }
+
+    public function test_normalize_null_withoutNormalizeNewlines()
+    {
+        $this->config->set('Core.NormalizeNewlines', false);
+        $lexer = new HTMLPurifier_Lexer();
+        $this->assertIdentical('', $lexer->normalize(null, $this->config, $this->context));
+    }
+
     // HTMLPurifier_Lexer->parseData() -----------------------------------------
 
     public function assertParseData($input, $expect = true, $is_attr = false)
