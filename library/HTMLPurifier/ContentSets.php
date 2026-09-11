@@ -143,10 +143,7 @@ class HTMLPurifier_ContentSets
             return $return;
         }
 
-        throw new Exception(
-            'Could not determine which ChildDef class to instantiate',
-            E_USER_ERROR
-        );
+        throw new Exception('Could not determine which ChildDef class to instantiate');
     }
 
     /**

@@ -9,6 +9,10 @@ if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
 zend.ze1_compatibility_mode = 1
 --FILE--
 <?php
-require '../library/HTMLPurifier.auto.php';
+try {
+    require '../library/HTMLPurifier.auto.php';
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 --EXPECTF--
-Fatal error: HTML Purifier is not compatible with zend.ze1_compatibility_mode; please turn it off in %s
+HTML Purifier is not compatible with zend.ze1_compatibility_mode; please turn it off
