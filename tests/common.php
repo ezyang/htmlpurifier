@@ -156,7 +156,7 @@ function htmlpurifier_add_test($test, $test_file, $only_phpt = false)
         case '.htmlt':
             return $test->add(new HTMLPurifier_HTMLT($test_file));
         default:
-            trigger_error("$test_file is an invalid file for testing", E_USER_ERROR);
+            throw new Exception("$test_file is an invalid file for testing");
     }
 }
 
