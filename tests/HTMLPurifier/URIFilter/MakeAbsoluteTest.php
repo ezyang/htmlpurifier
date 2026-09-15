@@ -44,6 +44,15 @@ class HTMLPurifier_URIFilter_MakeAbsoluteTest extends HTMLPurifier_URIFilterHarn
         $this->assertFiltering('tel:+15555%20555%20555');
     }
 
+    public function testPreserveAltSchemeWithSms()
+    {
+        $this->assertFiltering('sms:+15555555555');
+        $this->assertFiltering('sms:+15555 555 555');
+        $this->assertFiltering('sms:+15555%20555%20555');
+        $this->assertFiltering('sms:5555&body=HOME');
+        $this->assertFiltering('sms:5555?body=HOME');
+    }
+
     public function testFilterIgnoreHTTPSpecialCase()
     {
         $this->assertFiltering('http:/', 'http://example.com/');

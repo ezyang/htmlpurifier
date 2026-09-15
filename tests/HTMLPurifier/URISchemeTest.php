@@ -215,6 +215,275 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
+    public function test_sms_strip_punctuation()
+    {
+        $this->assertValidation(
+            'sms:+1 (555) 555-5555', 'sms:+15555555555'
+        );
+    }
+
+    public function test_sms_with_url_encoding()
+    {
+        $this->assertValidation(
+            'sms:+1%20(555)%20555-5555', 'sms:+15555555555'
+        );
+    }
+
+    public function test_sms_regular()
+    {
+        $this->assertValidation(
+            'sms:+15555555555'
+        );
+    }
+
+    public function test_sms_no_plus()
+    {
+        $this->assertValidation(
+            'sms:555-555-5555', 'sms:5555555555'
+        );
+    }
+
+    public function test_sms_strip_letters()
+    {
+        $this->assertValidation(
+            'sms:abcd1234',
+            'sms:1234'
+        );
+    }
+
+    public function test_sms_with_body_query()
+    {
+        $this->assertValidation(
+            'sms:5555&body=HOME',
+            'sms:5555&body=HOME'
+        );
+    }
+
+    public function test_sms_strip_invalid_params()
+    {
+        $this->assertValidation(
+            'sms:+15555555555&body=Hello&subject=Test',
+            'sms:+15555555555&body=Hello'
+        );
+    }
+
+    public function test_sms_with_url_encoded_body()
+    {
+        $this->assertValidation(
+            'sms:5555&body=Hello%20World',
+            'sms:5555&body=Hello%20World'
+        );
+    }
+
+    public function test_sms_strip_dangerous_query_params()
+    {
+        // A literal "<" never reaches the scheme: HTMLPurifier_URIParser
+        // excludes ["<>] from the path, so the body is already empty here
+        $this->assertValidation(
+            'sms:5555&body=<script>alert("xss")</script>&subject=Test',
+            'sms:5555&body='
+        );
+    }
+
+    public function test_sms_encoded_markup_in_path_body_stays_encoded()
+    {
+        // Percent-encoded markup does reach sanitizeBody(). It is re-encoded
+        // rather than dropped, so it is inert in an href without losing text.
+        $this->assertValidation(
+            'sms:5555&body=%3Cscript%3Ealert(1)%3C/script%3E',
+            'sms:5555&body=%3Cscript%3Ealert%281%29%3C%2Fscript%3E'
+        );
+    }
+
+    public function test_sms_strip_invalid_query_params()
+    {
+        $this->assertValidation(
+            'sms:5555&body=HOME&invalid=param&subject=Test',
+            'sms:5555&body=HOME'
+        );
+    }
+
+    public function test_sms_no_body()
+    {
+        $this->assertValidation(
+            'sms:988'
+        );
+    }
+
+    public function test_sms_standard_query_format()
+    {
+        // RFC 5724's ?body= form is preserved as-is
+        $this->assertValidation(
+            'sms:741741?body=SEIZE'
+        );
+    }
+
+    public function test_sms_query_body_wins_over_path_body()
+    {
+        $this->assertValidation(
+            'sms:741741&body=PATH?body=QUERY',
+            'sms:741741?body=QUERY'
+        );
+    }
+
+    public function test_sms_strip_dangerous_query_params_standard_format()
+    {
+        // As above: the parser truncates at the literal "<" before the
+        // scheme sees it
+        $this->assertValidation(
+            'sms:5555?body=<script>alert("xss")</script>&subject=Test',
+            'sms:5555?body='
+        );
+    }
+
+    public function test_sms_encoded_markup_in_query_body_stays_encoded()
+    {
+        $this->assertValidation(
+            'sms:5555?body=%3Cimg%20src=x%20onerror=alert(1)%3E',
+            'sms:5555?body=%3Cimg%20src%3Dx%20onerror%3Dalert%281%29%3E'
+        );
+    }
+
+    public function test_sms_short_code()
+    {
+        $this->assertValidation(
+            'sms:741741&body=SEIZE'
+        );
+    }
+
+    public function test_sms_body_name_is_case_insensitive_in_query()
+    {
+        // RFC 5724 spells the field name as the ABNF literal "body", and
+        // RFC 5234 makes ABNF literals case-insensitive
+        $this->assertValidation(
+            'sms:5555?BODY=HOME',
+            'sms:5555?body=HOME'
+        );
+    }
+
+    public function test_sms_body_name_is_case_insensitive_in_path()
+    {
+        $this->assertValidation(
+            'sms:5555&Body=HOME',
+            'sms:5555&body=HOME'
+        );
+    }
+
+    public function test_sms_first_body_wins_in_query()
+    {
+        $this->assertValidation(
+            'sms:5555?body=first&body=second',
+            'sms:5555?body=first'
+        );
+    }
+
+    public function test_sms_first_body_wins_in_path()
+    {
+        $this->assertValidation(
+            'sms:5555&body=first&body=second',
+            'sms:5555&body=first'
+        );
+    }
+
+    public function test_sms_path_params_without_body()
+    {
+        $this->assertValidation(
+            'sms:5555&subject=T',
+            'sms:5555'
+        );
+    }
+
+    public function test_sms_query_params_without_body()
+    {
+        $this->assertValidation(
+            'sms:5555?subject=T',
+            'sms:5555'
+        );
+    }
+
+    public function test_sms_keeps_quotes_in_body_encoded()
+    {
+        // Quotes are percent-encoded, not deleted: the message survives and
+        // still cannot terminate the href attribute
+        $this->assertValidation(
+            'sms:5555?body=say%20%22hi%22%20%27there%27',
+            'sms:5555?body=say%20%22hi%22%20%27there%27'
+        );
+    }
+
+    public function test_sms_keeps_quotes_in_path_body_encoded()
+    {
+        $this->assertValidation(
+            'sms:5555&body=say%20%22hi%22',
+            'sms:5555&body=say%20%22hi%22'
+        );
+    }
+
+    public function test_sms_param_without_value_separator()
+    {
+        $this->assertValidation(
+            'sms:5555&body',
+            'sms:5555'
+        );
+    }
+
+    public function test_sms_empty_query()
+    {
+        $this->assertValidation(
+            'sms:5555?',
+            'sms:5555'
+        );
+    }
+
+    public function test_sms_strips_authority()
+    {
+        $this->assertValidation(
+            'sms://user@example.com:99/5555',
+            'sms:5555'
+        );
+    }
+
+    public function test_sms_recovers_recipient_from_authority()
+    {
+        // sms://NUMBER?body=... parses the recipient into the host; keep it
+        // rather than emitting a message with nobody to send it to
+        $this->assertValidation(
+            'sms://5551234?body=HOME',
+            'sms:5551234?body=HOME'
+        );
+    }
+
+    public function test_sms_drops_body_when_authority_is_not_a_number()
+    {
+        $this->assertValidation(
+            'sms://example.com?body=HOME',
+            'sms:'
+        );
+    }
+
+    public function test_sms_drops_body_without_recipient()
+    {
+        $this->assertValidation(
+            'sms:?body=HOME',
+            'sms:'
+        );
+    }
+
+    public function test_sms_drops_path_body_without_recipient()
+    {
+        $this->assertValidation(
+            'sms:&body=HOME',
+            'sms:'
+        );
+    }
+
+    public function test_sms_preserves_fragment()
+    {
+        $this->assertValidation(
+            'sms:5555#frag'
+        );
+    }
+
     public function test_data_png()
     {
         $this->assertValidation(

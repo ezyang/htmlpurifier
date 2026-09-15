@@ -25,6 +25,18 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('tel:+15555555555');
         $this->assertDef('tel:+15555 555 555', 'tel:+15555555555');
         $this->assertDef('tel:+15555%20555%20555', 'tel:+15555555555');
+        $this->assertDef('sms:+15555555555');
+        $this->assertDef('sms:+15555 555 555', 'sms:+15555555555');
+        $this->assertDef('sms:+15555%20555%20555', 'sms:+15555555555');
+        $this->assertDef('sms:5555&body=HOME', 'sms:5555&body=HOME');
+        $this->assertDef('sms:5555?body=HOME', 'sms:5555?body=HOME');
+        // an already normalized body is left alone, so purifying twice is stable
+        $this->assertDef('sms:5555?body=say%20%22hi%22');
+        // one decode, one encode: a double encoded body keeps its extra level
+        $this->assertDef('sms:5555?body=%253Cscript%253E');
+        // non-ASCII survives in both forms
+        $this->assertDef('sms:5555?body=%E2%9C%93%20ok');
+        $this->assertDef('sms:5555&body=%E2%9C%93');
     }
 
     public function testIntegrationWithPercentEncoder()

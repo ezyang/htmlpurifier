@@ -81,6 +81,29 @@ class HTMLPurifier_URIParserTest extends HTMLPurifier_Harness
         );
     }
 
+    public function testSmsURI()
+    {
+        $this->assertParsing(
+            'sms:+1 (555) 555-5555',
+            'sms', null, null, null, '+1 (555) 555-5555', null, null
+        );
+        $this->assertParsing(
+          'sms:+1%20(555)%20555-5555',
+          'sms', null, null, null, '+1%20(555)%20555-5555', null, null
+        );
+        // RFC 3986 only treats "?" as the query delimiter, so the common-on-the-web
+        // sms:NUMBER&body=TEXT form parses entirely into the path. Splitting the
+        // body out is HTMLPurifier_URIScheme_sms's job, not the generic parser's.
+        $this->assertParsing(
+            'sms:5555&body=HOME',
+            'sms', null, null, null, '5555&body=HOME', null, null
+        );
+        $this->assertParsing(
+            'sms:5555?body=HOME',
+            'sms', null, null, null, '5555', 'body=HOME', null
+        );
+    }
+
     public function testIPv4Address()
     {
         $this->assertParsing(
