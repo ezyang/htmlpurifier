@@ -78,6 +78,9 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('aspect-ratio:auto;');
         $this->assertDef('aspect-ratio:16/9 auto;');
         $this->assertDef('aspect-ratio:auto 16/9;');
+        $this->assertDef('aspect-ratio:16 / 9;', 'aspect-ratio:16/9;');
+        $this->assertDef('aspect-ratio:16 / 9 auto;', 'aspect-ratio:16/9 auto;');
+        $this->assertDef('aspect-ratio:auto 16 / 9;', 'aspect-ratio:auto 16/9;');
         $this->assertDef('text-decoration:underline;');
         $this->assertDef('text-decoration-line:overline;');
         $this->assertDef('text-decoration-style:dashed;');
