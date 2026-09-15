@@ -1,3 +1,12 @@
+## [4.19.1](https://github.com/ezyang/htmlpurifier/compare/v4.19.0...v4.19.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* "Passing null to parameter" deprecation in Lexer.php when `Core.NormalizeNewlines` is false ([#490](https://github.com/ezyang/htmlpurifier/issues/490)) ([67085e6](https://github.com/ezyang/htmlpurifier/commit/67085e6a150b4429d75e2bb497d141136e2f5602))
+* gate chmod on mkdir success, best-effort only ([a2de031](https://github.com/ezyang/htmlpurifier/commit/a2de031746dac7d7e21873e4b71006e7c4a59fab))
+* Improve compatibility with PHP 8.5 ([#484](https://github.com/ezyang/htmlpurifier/issues/484)) ([c93715e](https://github.com/ezyang/htmlpurifier/commit/c93715ee227ebb75cf5e90a154341c0986c7d523)), closes [#476](https://github.com/ezyang/htmlpurifier/issues/476) [#483](https://github.com/ezyang/htmlpurifier/issues/483)
+
 # [4.19.0](https://github.com/ezyang/htmlpurifier/compare/v4.18.0...v4.19.0) (2025-10-17)
 
 

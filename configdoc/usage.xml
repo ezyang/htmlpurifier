@@ -6,7 +6,7 @@
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>90</line>
-   <line>315</line>
+   <line>316</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>67</line>
@@ -124,7 +124,7 @@
    <line>122</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>299</line>
+   <line>300</line>
   </file>
  </directive>
  <directive id="Output.Newline">
@@ -172,8 +172,8 @@
    <line>230</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>304</line>
-   <line>342</line>
+   <line>305</line>
+   <line>343</line>
   </file>
   <file name="HTMLPurifier/AttrDef/HTML/ContentEditable.php">
    <line>8</line>
@@ -270,22 +270,22 @@
  <directive id="Core.LegacyEntityDecoder">
   <file name="HTMLPurifier/Lexer.php">
    <line>220</line>
-   <line>326</line>
+   <line>327</line>
   </file>
  </directive>
  <directive id="Core.ConvertDocumentToFragment">
   <file name="HTMLPurifier/Lexer.php">
-   <line>313</line>
+   <line>314</line>
   </file>
  </directive>
  <directive id="Core.RemoveProcessingInstructions">
   <file name="HTMLPurifier/Lexer.php">
-   <line>336</line>
+   <line>337</line>
   </file>
  </directive>
  <directive id="Core.HiddenElements">
   <file name="HTMLPurifier/Lexer.php">
-   <line>340</line>
+   <line>341</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>36</line>
@@ -293,12 +293,12 @@
  </directive>
  <directive id="Core.AggressivelyRemoveScript">
   <file name="HTMLPurifier/Lexer.php">
-   <line>341</line>
+   <line>342</line>
   </file>
  </directive>
  <directive id="Core.RemoveScriptContents">
   <file name="HTMLPurifier/Lexer.php">
-   <line>342</line>
+   <line>343</line>
   </file>
   <file name="HTMLPurifier/Strategy/RemoveForeignElements.php">
    <line>35</line>
@@ -337,12 +337,12 @@
  </directive>
  <directive id="URI.AllowedSchemes">
   <file name="HTMLPurifier/URISchemeRegistry.php">
-   <line>48</line>
+   <line>52</line>
   </file>
  </directive>
  <directive id="URI.OverrideAllowedSchemes">
   <file name="HTMLPurifier/URISchemeRegistry.php">
-   <line>49</line>
+   <line>53</line>
   </file>
  </directive>
  <directive id="CSS.AllowDuplicates">
@@ -483,12 +483,12 @@
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Scope">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>137</line>
+   <line>138</line>
   </file>
  </directive>
  <directive id="Filter.ExtractStyleBlocks.Escaping">
   <file name="HTMLPurifier/Filter/ExtractStyleBlocks.php">
-   <line>351</line>
+   <line>352</line>
   </file>
  </directive>
  <directive id="HTML.Forms">
