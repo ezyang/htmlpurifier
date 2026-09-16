@@ -167,6 +167,31 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $cache->flush($config1);
     }
 
+    public function testSafeUnlinkTreatsMissingFileAsSuccess()
+    {
+        $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
+
+        $this->assertTrue(
+            $this->invokeSafeUnlink(
+                $cache,
+                dirname(__FILE__) . '/SerializerTest/missing-file-' . uniqid('', true)
+            )
+        );
+    }
+
+    public function testSafeUnlinkWarnsWhenTargetStillExists()
+    {
+        $cache = new HTMLPurifier_DefinitionCache_Serializer('Test');
+
+        $dir = dirname(__FILE__) . '/SerializerTestDir-' . uniqid('', true);
+        mkdir($dir);
+
+        $this->expectError('Could not delete definition cache file ' . $dir);
+        $this->assertFalse($this->invokeSafeUnlink($cache, $dir));
+
+        rmdir($dir);
+    }
+
     /**
      * Asserts that a file exists, ignoring the stat cache
      */
@@ -237,6 +262,15 @@ class HTMLPurifier_DefinitionCache_SerializerTest extends HTMLPurifier_Definitio
         $config->returns('get', 0400, array('Cache.SerializerPermissions'));
 
         $cache->cleanup($config);
+    }
+
+    private function invokeSafeUnlink($cache, $file)
+    {
+        $callable = Closure::bind(function ($file) {
+            return $this->safeUnlink($file);
+        }, $cache, 'HTMLPurifier_DefinitionCache_Serializer');
+
+        return $callable($file);
     }
 }
 
