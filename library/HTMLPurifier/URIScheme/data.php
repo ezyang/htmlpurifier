@@ -19,6 +19,7 @@ class HTMLPurifier_URIScheme_data extends HTMLPurifier_URIScheme
         'image/jpeg' => true,
         'image/gif' => true,
         'image/png' => true,
+        'image/webp' => true,
     );
     // this is actually irrelevant since we only write out the path
     // component
@@ -69,6 +70,11 @@ class HTMLPurifier_URIScheme_data extends HTMLPurifier_URIScheme
         if ($content_type !== null && empty($this->allowed_types[$content_type])) {
             return false;
         }
+
+        if ($content_type === 'image/webp' && !$this->canValidateWebP()) {
+            return false;
+        }
+
         if ($charset !== null) {
             // error; we don't allow plaintext stuff
             $charset = null;
@@ -132,5 +138,15 @@ class HTMLPurifier_URIScheme_data extends HTMLPurifier_URIScheme
      */
     public function muteErrorHandler($errno, $errstr)
     {
+    }
+
+    /**
+     * exif_imagetype and getimagesize only support WebP from PHP 7.1
+     *
+     * @return bool
+     */
+    public function canValidateWebP()
+    {
+        return PHP_VERSION_ID >= 70100;
     }
 }
