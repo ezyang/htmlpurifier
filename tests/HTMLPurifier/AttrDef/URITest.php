@@ -37,6 +37,38 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         // non-ASCII survives in both forms
         $this->assertDef('sms:5555?body=%E2%9C%93%20ok');
         $this->assertDef('sms:5555&body=%E2%9C%93');
+        // RFC 5724 has no authority production, so sms:// is malformed and
+        // the recipient parsed into the host is not recovered. Asserted here
+        // rather than in URISchemeTest because only this layer runs
+        // HTMLPurifier_URI::validate(), which is what nulls the host.
+        $this->assertDef('sms://5551234?body=HOME', 'sms:');
+        $this->assertDef('sms://+15555555555?body=HOME', 'sms:');
+        $this->assertDef('sms://example.com?body=HOME', 'sms:');
+        // a comma-separated recipient list survives the full chain
+        $this->assertDef('sms:5551234,5555678?body=HOME');
+    }
+
+    public function testSmsBodyTruncatesAtLiteralQuote()
+    {
+        // HTMLPurifier_URIParser excludes ["<>] from every component, so a
+        // literal quote cuts the message before the scheme sees it. The
+        // link still works; the prefilled text is shorter than written.
+        $this->assertDef('sms:5555?body=say "hi"', 'sms:5555?body=say%20');
+        $this->assertDef('sms:5555?body=a<b', 'sms:5555?body=a');
+    }
+
+    public function testSmsUnderRestrictedAllowedSymbols()
+    {
+        // The class docblock states that a configuration dropping "&" or "="
+        // from %URI.AllowedSymbols encodes the delimiters we look for, so the
+        // body goes with them and the recipient is left
+        $this->config->set('URI.AllowedSymbols', '!$\'()*+;');
+        $this->assertDef('sms:5555?body=HOME', 'sms:5555');
+        $this->assertDef('sms:5555&body=HOME', 'sms:5555');
+        // the comma is dropped from the symbol set too, but the recipient
+        // list is rebuilt after encoding, so the separator survives and the
+        // two recipients stay distinct
+        $this->assertDef('sms:5551234,5555678', 'sms:5551234,5555678');
     }
 
     public function testIntegrationWithPercentEncoder()
