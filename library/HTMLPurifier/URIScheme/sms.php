@@ -7,7 +7,13 @@
  * the body parameter sms:number?body=message. The sms:number&body=message
  * form is common on the web, so we take both and keep whichever was
  * written: "&" leaves the body in the path, "?" leaves it in the query.
- * Numbers are normalized as in tel, and we drop every parameter but body.
+ * We drop every parameter but body.
+ *
+ * RFC 5724 allows a comma-separated list of recipients, so we keep every
+ * one of them. Each is reduced to a leading plus and digits; unlike tel we
+ * drop "x" extension syntax, since SMS has no extensions. A recipient left
+ * with no digit at all is dropped, and a URI left with no recipient keeps
+ * no body.
  *
  * Note we read the body after %URI.AllowedSymbols has been applied, so a
  * configuration that drops "&" or "=" from it encodes the delimiters we
@@ -34,7 +40,6 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
      */
     public function doValidate(&$uri, $config, $context)
     {
-        $authority     = $uri->host; // sms://NUMBER hides the recipient here
         $uri->userinfo = null;
         $uri->host     = null;
         $uri->port     = null;
@@ -60,10 +65,7 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
             }
         }
 
-        $phone_number = $this->cleanPhoneNumber($phone_number);
-        if ($phone_number === '' && !is_null($authority)) {
-            $phone_number = $this->cleanPhoneNumber($authority);
-        }
+        $phone_number = $this->cleanRecipients($phone_number);
 
         // nobody to send it to
         if ($phone_number === '') {
@@ -89,13 +91,39 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
     }
 
     /**
-     * Reduce a recipient to digits, EXCEPT for a leading plus sign.
+     * Clean every recipient in an RFC 5724 comma-separated list and drop the
+     * ones left with no digits. Returns the surviving list, or '' when none
+     * survive.
+     * @param string $candidates
+     * @return string
+     */
+    private function cleanRecipients($candidates)
+    {
+        // Decode before splitting, or an encoded comma is not read as the
+        // separator it is and two recipients fuse into one wrong number.
+        // Decoding here means cleanPhoneNumber() must not decode again.
+        $recipients = array();
+        foreach (explode(',', rawurldecode($candidates)) as $candidate) {
+            $number = $this->cleanPhoneNumber($candidate);
+            if ($number !== '') {
+                $recipients[] = $number;
+            }
+        }
+        return implode(',', $recipients);
+    }
+
+    /**
+     * Reduce one already-decoded recipient to digits, EXCEPT for a leading
+     * plus sign. A result holding no digit is not a recipient, so it comes
+     * back empty rather than as a lone plus. Do not decode here: the caller
+     * has decoded, and decoding twice would read %252C as a separator.
      * @param string $candidate
      * @return string
      */
     private function cleanPhoneNumber($candidate)
     {
-        return preg_replace('/(?!^\+)[^\d]/', '', rawurldecode($candidate));
+        $number = preg_replace('/(?!^\+)[^\d]/', '', $candidate);
+        return strpbrk($number, '0123456789') === false ? '' : $number;
     }
 
     /**

@@ -297,9 +297,11 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
 
     public function test_sms_strip_invalid_query_params()
     {
+        // The query form: body is matched after skipping the params before
+        // it, and the params after it are dropped
         $this->assertValidation(
-            'sms:5555&body=HOME&invalid=param&subject=Test',
-            'sms:5555&body=HOME'
+            'sms:5555?invalid=param&body=HOME&subject=Test',
+            'sms:5555?body=HOME'
         );
     }
 
@@ -443,13 +445,14 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
-    public function test_sms_recovers_recipient_from_authority()
+    public function test_sms_drops_authority_form_entirely()
     {
-        // sms://NUMBER?body=... parses the recipient into the host; keep it
-        // rather than emitting a message with nobody to send it to
+        // RFC 5724 has no authority production: sms-hier-part goes straight
+        // to sms-recipient, so sms://NUMBER is malformed and the recipient
+        // parsed into the host is not ours to recover. tel does the same.
         $this->assertValidation(
             'sms://5551234?body=HOME',
-            'sms:5551234?body=HOME'
+            'sms:'
         );
     }
 
@@ -457,6 +460,74 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
     {
         $this->assertValidation(
             'sms://example.com?body=HOME',
+            'sms:'
+        );
+    }
+
+    public function test_sms_drops_body_when_authority_merely_holds_digits()
+    {
+        // Digits inside a hostname are not a phone number
+        $this->assertValidation(
+            'sms://example5551234.com?body=HOME',
+            'sms:'
+        );
+    }
+
+    public function test_sms_keeps_multiple_recipients()
+    {
+        // RFC 5724: sms-hier-part = sms-recipient *( "," sms-recipient )
+        $this->assertValidation(
+            'sms:5551234,5555678'
+        );
+    }
+
+    public function test_sms_reads_an_encoded_comma_as_a_separator()
+    {
+        // The separator is decoded before the split, so two recipients do
+        // not fuse into one number that belongs to somebody else
+        $this->assertValidation(
+            'sms:5551234%2C5555678',
+            'sms:5551234,5555678'
+        );
+    }
+
+    public function test_sms_normalizes_each_recipient_in_a_list()
+    {
+        $this->assertValidation(
+            'sms:+1-555-123-4567,(555) 567-8901?body=HOME',
+            'sms:+15551234567,5555678901?body=HOME'
+        );
+    }
+
+    public function test_sms_drops_digitless_recipients_from_a_list()
+    {
+        $this->assertValidation(
+            'sms:5551234,+,5555678&body=HOME',
+            'sms:5551234,5555678&body=HOME'
+        );
+    }
+
+    public function test_sms_drops_body_when_no_recipient_in_list_survives()
+    {
+        $this->assertValidation(
+            'sms:+,,+?body=HOME',
+            'sms:'
+        );
+    }
+
+    public function test_sms_drops_digitless_recipient()
+    {
+        // A lone plus is not a recipient, so the body goes with it
+        $this->assertValidation(
+            'sms:+abc&body=HOME',
+            'sms:'
+        );
+    }
+
+    public function test_sms_drops_plus_only_recipient()
+    {
+        $this->assertValidation(
+            'sms:++++?body=HOME',
             'sms:'
         );
     }
