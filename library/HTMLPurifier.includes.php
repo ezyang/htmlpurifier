@@ -102,6 +102,7 @@ require 'HTMLPurifier/AttrDef/CSS/ListStyle.php';
 require 'HTMLPurifier/AttrDef/CSS/Multiple.php';
 require 'HTMLPurifier/AttrDef/CSS/Percentage.php';
 require 'HTMLPurifier/AttrDef/CSS/Ratio.php';
+require 'HTMLPurifier/AttrDef/CSS/AspectRatio.php';
 require 'HTMLPurifier/AttrDef/CSS/TextDecoration.php';
 require 'HTMLPurifier/AttrDef/CSS/URI.php';
 require 'HTMLPurifier/AttrDef/HTML/Bool.php';
