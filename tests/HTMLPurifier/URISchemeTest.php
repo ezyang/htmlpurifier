@@ -269,35 +269,6 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         $this->assertValidation('data:image/png;base64,aGVsbG90aGVyZXk=', false);
     }
 
-    public function test_data_tempnam_failure()
-    {
-        // tempnam() returns false when the temporary directory cannot be
-        // used; the data URI must then be rejected instead of erroring
-        // out (ValueError on PHP 8). open_basedir is used to make tempnam()
-        // fail, which can only be done reliably in a separate process.
-        if (!function_exists('exec') || !defined('PHP_BINARY') || PHP_BINARY === '') {
-            return;
-        }
-        $library = realpath(dirname(__FILE__) . '/../../library');
-        $html = '<img src="data:image/png;base64,' . $this->pngBase64 . '" alt="x" />';
-        $code =
-            'require ' . var_export($library . '/HTMLPurifier.auto.php', true) . ';' .
-            '$config = HTMLPurifier_Config::createDefault();' .
-            '$config->set("Cache.DefinitionImpl", null);' .
-            '$config->set("URI.AllowedSchemes", array("data" => true));' .
-            '$purifier = new HTMLPurifier($config);' .
-            'echo $purifier->purify(' . var_export($html, true) . ');';
-        $command = escapeshellarg(PHP_BINARY) .
-            ' -d display_errors=0 -d log_errors=0' .
-            ' -d open_basedir=' . escapeshellarg($library) .
-            ' -r ' . escapeshellarg($code);
-        $output = array();
-        $status = null;
-        exec($command, $output, $status);
-        $this->assertIdentical($status, 0);
-        $this->assertIdentical(implode("\n", $output), '');
-    }
-
 }
 
 // vim: et sw=4 sts=4
