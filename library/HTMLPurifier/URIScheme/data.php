@@ -91,6 +91,12 @@ class HTMLPurifier_URIScheme_data extends HTMLPurifier_URIScheme
         } else {
             $file = tempnam("/tmp", "");
         }
+        if ($file === false) {
+            // error; could not create a temporary file (e.g. the temp
+            // directory is not writable or is outside open_basedir), so
+            // we cannot verify the image data
+            return false;
+        }
         file_put_contents($file, $raw_data);
         if (function_exists('exif_imagetype')) {
             $image_code = exif_imagetype($file);
