@@ -15,9 +15,12 @@ class HTMLPurifier_AttrDef_CSS_ListStyleTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('none');
         $this->assertDef('url("foo.gif")');
         $this->assertDef('circle url("foo.gif") inside');
+        $this->assertDef('url("Foo.GIF")');
+        $this->assertDef('SQUARE Inside', 'square inside');
 
         // invalid values
         $this->assertDef('outside inside', 'outside');
+        $this->assertDef('circle url("foo.gif") inside bogus', 'circle url("foo.gif") inside');
 
         // ordering
         $this->assertDef('url(foo.gif) none', 'none url("foo.gif")');
