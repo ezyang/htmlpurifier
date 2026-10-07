@@ -601,10 +601,11 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
-    public function test_sms_preserves_fragment()
+    public function test_sms_strips_fragment()
     {
         $this->assertValidation(
-            'sms:5555#frag'
+            'sms:5555?body=HOME#frag',
+            'sms:5555?body=HOME'
         );
     }
 

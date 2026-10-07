@@ -6,7 +6,7 @@
  * The relevant specification for this protocol is RFC 5724, which spells
  * the body parameter sms:number?body=message. The sms:number&body=message
  * form is common on the web, so we read both, but always write the RFC
- * form. We drop every parameter but body.
+ * form. We drop every parameter but body, and the fragment.
  *
  * RFC 5724 allows a comma-separated list of recipients, so we keep every
  * one of them, normalized as tel normalizes a number but without "x"
@@ -44,6 +44,8 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
         $uri->userinfo = null;
         $uri->host     = null;
         $uri->port     = null;
+        // sms has no use for a fragment
+        $uri->fragment = null;
 
         // "&" is no query delimiter, so this all lands in the path
         $params = explode('&', $uri->path);
