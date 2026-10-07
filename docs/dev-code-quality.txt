@@ -26,5 +26,7 @@ URIScheme - needs to have callable generic checks
     news - doesn't validate opaque path
     nntp - doesn't constrain path
     tel - doesn't validate phone numbers, only allows characters '+', '1-9', and 'x'
+    sms - doesn't validate phone numbers, only allows '+' and digits; of the
+        RFC 5724 parameters only 'body' is kept
 
     vim: et sw=4 sts=4

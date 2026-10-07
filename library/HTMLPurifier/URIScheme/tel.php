@@ -35,11 +35,27 @@ class HTMLPurifier_URIScheme_tel extends HTMLPurifier_URIScheme
 
         // Delete all non-numeric characters, commas, and non-x characters
         // from phone number, EXCEPT for a leading plus sign.
-        $uri->path = preg_replace('/(?!^\+)[^\dx,]/', '',
-                     // Normalize e(x)tension to lower-case
-                     str_replace('X', 'x', rawurldecode($uri->path)));
+        $uri->path = self::normalizeNumber(
+            // Normalize e(x)tension to lower-case
+            str_replace('X', 'x', rawurldecode($uri->path)),
+            'x,'
+        );
 
         return true;
+    }
+
+    /**
+     * Delete every character but digits and $keep from an already decoded
+     * phone number, EXCEPT for a leading plus sign. Surrounding whitespace
+     * is trimmed first, so it cannot push the plus off the front. Also used
+     * by HTMLPurifier_URIScheme_sms.
+     * @param string $number
+     * @param string $keep Extra characters to keep, safe in a regex class
+     * @return string
+     */
+    public static function normalizeNumber($number, $keep = '')
+    {
+        return preg_replace('/(?!^\+)[^\d' . $keep . ']/', '', trim($number));
     }
 }
 
