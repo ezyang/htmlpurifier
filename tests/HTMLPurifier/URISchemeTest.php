@@ -294,7 +294,7 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
 
     public function test_sms_encoded_markup_in_path_body_stays_encoded()
     {
-        // Percent-encoded markup does reach sanitizeBody(). It is re-encoded
+        // Percent-encoded markup does reach the scheme. It is re-encoded
         // rather than dropped, so it is inert in an href without losing text.
         $this->assertValidation(
             'sms:5555&body=%3Cscript%3Ealert(1)%3C/script%3E',

@@ -47,65 +47,64 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
         // sms has no use for a fragment
         $uri->fragment = null;
 
-        // "&" is no query delimiter, so this all lands in the path
+        // parse: "&" is no query delimiter, so this all lands in the path
         $params = explode('&', $uri->path);
-        $phone_number = $this->cleanRecipients(array_shift($params));
+        $recipients = $this->parseRecipients(array_shift($params));
 
         // nobody to send it to
-        if ($phone_number === '') {
+        if (!$recipients) {
             return false;
         }
 
-        $body_content = $this->extractBody($params);
-        if (!is_null($body_content)) {
+        $body = $this->parseBody($params);
+        if (!is_null($body)) {
             // a "?" in a path body is part of the message, but the parser
             // split everything after it off into the query
             if (!is_null($uri->query)) {
-                $body_content .= '?' . $uri->query;
+                $body .= '?' . rawurldecode($uri->query);
             }
         } elseif (!is_null($uri->query)) {
-            $body_content = $this->extractBody(explode('&', $uri->query));
+            $body = $this->parseBody(explode('&', $uri->query));
         }
 
-        // always write the RFC 5724 form; an empty body keeps its parameter
-        $uri->path  = $phone_number;
-        $uri->query = null;
-        if (!is_null($body_content)) {
-            $uri->query = 'body=' . $this->sanitizeBody($body_content);
-        }
+        // write back out, always in the RFC 5724 form. Encoding the body
+        // keeps it from escaping the href (the generator escapes it again on
+        // output); an empty body keeps its parameter.
+        $uri->path  = implode(',', $recipients);
+        $uri->query = is_null($body) ? null : 'body=' . rawurlencode($body);
 
         return true;
     }
 
     /**
-     * Clean every recipient in an RFC 5724 comma-separated list and drop the
-     * ones left with no digits. Returns the surviving list, or '' when none
-     * survive.
-     * @param string $candidates
-     * @return string
+     * Parse an RFC 5724 comma-separated recipient list into its normalized
+     * numbers, dropping the ones left with no digits.
+     * @param string $list
+     * @return string[]
      */
-    private function cleanRecipients($candidates)
+    private function parseRecipients($list)
     {
         // Decode before splitting, or an encoded comma is not read as the
         // separator it is and two recipients fuse into one wrong number.
         $recipients = array();
-        foreach (explode(',', rawurldecode($candidates)) as $candidate) {
+        foreach (explode(',', rawurldecode($list)) as $candidate) {
             // Unlike tel we drop "x" extension syntax; SMS has no extensions
             $number = HTMLPurifier_URIScheme_tel::normalizeNumber($candidate);
             if (strpbrk($number, '0123456789') !== false) {
                 $recipients[] = $number;
             }
         }
-        return implode(',', $recipients);
+        return $recipients;
     }
 
     /**
-     * First 'body' value out of a list of name=value pairs, or null. RFC 5234
-     * makes the field name case-insensitive, so we take it in any case.
+     * Decoded value of the first 'body' out of a list of name=value pairs,
+     * or null. RFC 5234 makes the field name case-insensitive, so we take it
+     * in any case.
      * @param string[] $params
      * @return string|null
      */
-    private function extractBody($params)
+    private function parseBody($params)
     {
         foreach ($params as $param) {
             if (strpos($param, '=') === false) {
@@ -116,21 +115,9 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
             // leaves "amp;" glued to the name once the lexer decodes it
             $param_name = preg_replace('/^(?:amp;)+/i', '', $param_name);
             if (strtolower($param_name) === 'body') {
-                return $param_value;
+                return rawurldecode($param_value);
             }
         }
         return null;
-    }
-
-    /**
-     * Percent-encode the body so it cannot escape the href; the generator
-     * escapes it again on output. We decode first so purifying the same URI
-     * twice does not stack encoding levels.
-     * @param string $body
-     * @return string
-     */
-    private function sanitizeBody($body)
-    {
-        return rawurlencode(rawurldecode($body));
     }
 }
