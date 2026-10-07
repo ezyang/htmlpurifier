@@ -193,6 +193,13 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
+    public function test_tel_keeps_plus_after_leading_whitespace()
+    {
+        $this->assertValidation(
+            'tel:%20+15555555555', 'tel:+15555555555'
+        );
+    }
+
     public function test_tel_with_extension()
     {
         $this->assertValidation(
@@ -255,7 +262,7 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
     {
         $this->assertValidation(
             'sms:5555&body=HOME',
-            'sms:5555&body=HOME'
+            'sms:5555?body=HOME'
         );
     }
 
@@ -263,7 +270,7 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
     {
         $this->assertValidation(
             'sms:+15555555555&body=Hello&subject=Test',
-            'sms:+15555555555&body=Hello'
+            'sms:+15555555555?body=Hello'
         );
     }
 
@@ -271,7 +278,7 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
     {
         $this->assertValidation(
             'sms:5555&body=Hello%20World',
-            'sms:5555&body=Hello%20World'
+            'sms:5555?body=Hello%20World'
         );
     }
 
@@ -281,7 +288,7 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         // excludes ["<>] from the path, so the body is already empty here
         $this->assertValidation(
             'sms:5555&body=<script>alert("xss")</script>&subject=Test',
-            'sms:5555&body='
+            'sms:5555?body='
         );
     }
 
@@ -291,7 +298,7 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         // rather than dropped, so it is inert in an href without losing text.
         $this->assertValidation(
             'sms:5555&body=%3Cscript%3Ealert(1)%3C/script%3E',
-            'sms:5555&body=%3Cscript%3Ealert%281%29%3C%2Fscript%3E'
+            'sms:5555?body=%3Cscript%3Ealert%281%29%3C%2Fscript%3E'
         );
     }
 
@@ -320,11 +327,38 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
-    public function test_sms_query_body_wins_over_path_body()
+    public function test_sms_question_mark_in_path_body_stays_in_body()
+    {
+        // The parser splits at the "?", but it was written inside the
+        // message, so the query is the rest of the body
+        $this->assertValidation(
+            'sms:555&body=Are you there?Call me',
+            'sms:555?body=Are%20you%20there%3FCall%20me'
+        );
+    }
+
+    public function test_sms_query_after_path_body_is_part_of_it()
     {
         $this->assertValidation(
             'sms:741741&body=PATH?body=QUERY',
-            'sms:741741?body=QUERY'
+            'sms:741741?body=PATH%3Fbody%3DQUERY'
+        );
+    }
+
+    public function test_sms_body_after_double_escaped_ampersand()
+    {
+        // href="sms:5555&amp;amp;body=HOME" decodes to this
+        $this->assertValidation(
+            'sms:5555&amp;body=HOME',
+            'sms:5555?body=HOME'
+        );
+    }
+
+    public function test_sms_body_after_double_escaped_ampersand_in_query()
+    {
+        $this->assertValidation(
+            'sms:5555?amp;amp;body=HOME',
+            'sms:5555?body=HOME'
         );
     }
 
@@ -349,7 +383,8 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
     public function test_sms_short_code()
     {
         $this->assertValidation(
-            'sms:741741&body=SEIZE'
+            'sms:741741&body=SEIZE',
+            'sms:741741?body=SEIZE'
         );
     }
 
@@ -367,7 +402,7 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
     {
         $this->assertValidation(
             'sms:5555&Body=HOME',
-            'sms:5555&body=HOME'
+            'sms:5555?body=HOME'
         );
     }
 
@@ -383,7 +418,7 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
     {
         $this->assertValidation(
             'sms:5555&body=first&body=second',
-            'sms:5555&body=first'
+            'sms:5555?body=first'
         );
     }
 
@@ -417,7 +452,7 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
     {
         $this->assertValidation(
             'sms:5555&body=say%20%22hi%22',
-            'sms:5555&body=say%20%22hi%22'
+            'sms:5555?body=say%20%22hi%22'
         );
     }
 
@@ -445,31 +480,31 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
-    public function test_sms_drops_authority_form_entirely()
+    public function test_sms_rejects_authority_left_in_host()
     {
-        // RFC 5724 has no authority production: sms-hier-part goes straight
-        // to sms-recipient, so sms://NUMBER is malformed and the recipient
-        // parsed into the host is not ours to recover. tel does the same.
+        // HTMLPurifier_URI::validate() moves a numeric sms:// host into the
+        // path (see URITest); whatever reaches the scheme as a host is not a
+        // recipient
         $this->assertValidation(
             'sms://5551234?body=HOME',
-            'sms:'
+            false
         );
     }
 
-    public function test_sms_drops_body_when_authority_is_not_a_number()
+    public function test_sms_rejects_authority_that_is_not_a_number()
     {
         $this->assertValidation(
             'sms://example.com?body=HOME',
-            'sms:'
+            false
         );
     }
 
-    public function test_sms_drops_body_when_authority_merely_holds_digits()
+    public function test_sms_rejects_authority_that_merely_holds_digits()
     {
         // Digits inside a hostname are not a phone number
         $this->assertValidation(
             'sms://example5551234.com?body=HOME',
-            'sms:'
+            false
         );
     }
 
@@ -499,52 +534,70 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
+    public function test_sms_keeps_plus_after_whitespace_in_a_list()
+    {
+        // The space is encoded by the time the scheme sees it; it must not
+        // push the plus off the front and turn the number national
+        $this->assertValidation(
+            'sms:+15551234,%20+447700900123',
+            'sms:+15551234,+447700900123'
+        );
+    }
+
+    public function test_sms_keeps_plus_after_leading_whitespace()
+    {
+        $this->assertValidation(
+            'sms:%20+15551234',
+            'sms:+15551234'
+        );
+    }
+
     public function test_sms_drops_digitless_recipients_from_a_list()
     {
         $this->assertValidation(
             'sms:5551234,+,5555678&body=HOME',
-            'sms:5551234,5555678&body=HOME'
+            'sms:5551234,5555678?body=HOME'
         );
     }
 
-    public function test_sms_drops_body_when_no_recipient_in_list_survives()
+    public function test_sms_rejects_when_no_recipient_in_list_survives()
     {
         $this->assertValidation(
             'sms:+,,+?body=HOME',
-            'sms:'
+            false
         );
     }
 
-    public function test_sms_drops_digitless_recipient()
+    public function test_sms_rejects_digitless_recipient()
     {
-        // A lone plus is not a recipient, so the body goes with it
+        // A lone plus is not a recipient, so the link goes
         $this->assertValidation(
             'sms:+abc&body=HOME',
-            'sms:'
+            false
         );
     }
 
-    public function test_sms_drops_plus_only_recipient()
+    public function test_sms_rejects_plus_only_recipient()
     {
         $this->assertValidation(
             'sms:++++?body=HOME',
-            'sms:'
+            false
         );
     }
 
-    public function test_sms_drops_body_without_recipient()
+    public function test_sms_rejects_body_without_recipient()
     {
         $this->assertValidation(
             'sms:?body=HOME',
-            'sms:'
+            false
         );
     }
 
-    public function test_sms_drops_path_body_without_recipient()
+    public function test_sms_rejects_path_body_without_recipient()
     {
         $this->assertValidation(
             'sms:&body=HOME',
-            'sms:'
+            false
         );
     }
 

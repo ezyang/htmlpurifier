@@ -112,6 +112,19 @@ class HTMLPurifier_URI
         $chars_gen_delims = ':/?#[]@';
         $chars_pchar = $chars_sub_delims . ':@';
 
+        // sms has no authority (RFC 5724), but sms://NUMBER is common on
+        // the web. The parser reads the number as a host, which the host
+        // check below would discard, so put it back in the path where
+        // HTMLPurifier_URIScheme_sms looks for it. Only a bare host that
+        // reads as a list of numbers moves; sms://example5551234.com does not.
+        if ($this->scheme === 'sms' && is_null($this->userinfo) && is_null($this->port) &&
+            $this->path === '' && !is_null($this->host) &&
+            preg_match('/^[+\d(). ,-]*\d[+\d(). ,-]*$/', rawurldecode($this->host))
+        ) {
+            $this->path = $this->host;
+            $this->host = null;
+        }
+
         // validate host
         if (!is_null($this->host)) {
             $host_def = new HTMLPurifier_AttrDef_URI_Host();

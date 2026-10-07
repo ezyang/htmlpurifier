@@ -5,15 +5,16 @@
  *
  * The relevant specification for this protocol is RFC 5724, which spells
  * the body parameter sms:number?body=message. The sms:number&body=message
- * form is common on the web, so we take both and keep whichever was
- * written: "&" leaves the body in the path, "?" leaves it in the query.
- * We drop every parameter but body.
+ * form is common on the web, so we read both, but always write the RFC
+ * form. We drop every parameter but body.
  *
  * RFC 5724 allows a comma-separated list of recipients, so we keep every
- * one of them. Each is reduced to a leading plus and digits; unlike tel we
- * drop "x" extension syntax, since SMS has no extensions. A recipient left
- * with no digit at all is dropped, and a URI left with no recipient keeps
- * no body.
+ * one of them, normalized as tel normalizes a number but without "x"
+ * extensions. A recipient left with no digit at all is dropped, and a URI
+ * left with no recipient is rejected.
+ *
+ * RFC 5724 has no authority, but sms://number shows up on the web too;
+ * HTMLPurifier_URI::validate() moves such a number back into the path.
  *
  * Note we read the body after %URI.AllowedSymbols has been applied, so a
  * configuration that drops "&" or "=" from it encodes the delimiters we
@@ -44,47 +45,31 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
         $uri->host     = null;
         $uri->port     = null;
 
-        $phone_number = $uri->path;
-        $body_content = null;
-        $body_in_path = false;
-
         // "&" is no query delimiter, so this all lands in the path
-        if (strpos($phone_number, '&') !== false) {
-            $parts = explode('&', $phone_number);
-            $phone_number = array_shift($parts);
-            $body_content = $this->extractBody($parts);
-            $body_in_path = !is_null($body_content);
-        }
-
-        // query body wins, so a mixed URI comes out in spec form
-        if (!is_null($uri->query)) {
-            $query_body = $this->extractBody(explode('&', $uri->query));
-            if (!is_null($query_body)) {
-                $body_content = $query_body;
-                $body_in_path = false;
-            }
-        }
-
-        $phone_number = $this->cleanRecipients($phone_number);
+        $params = explode('&', $uri->path);
+        $phone_number = $this->cleanRecipients(array_shift($params));
 
         // nobody to send it to
         if ($phone_number === '') {
-            $body_content = null;
+            return false;
         }
 
-        if ($body_content !== null) {
-            $body_content = $this->sanitizeBody($body_content);
+        $body_content = $this->extractBody($params);
+        if (!is_null($body_content)) {
+            // a "?" in a path body is part of the message, but the parser
+            // split everything after it off into the query
+            if (!is_null($uri->query)) {
+                $body_content .= '?' . $uri->query;
+            }
+        } elseif (!is_null($uri->query)) {
+            $body_content = $this->extractBody(explode('&', $uri->query));
         }
 
-        // an empty body keeps its parameter
+        // always write the RFC 5724 form; an empty body keeps its parameter
         $uri->path  = $phone_number;
         $uri->query = null;
         if (!is_null($body_content)) {
-            if ($body_in_path) {
-                $uri->path .= '&body=' . $body_content;
-            } else {
-                $uri->query = 'body=' . $body_content;
-            }
+            $uri->query = 'body=' . $this->sanitizeBody($body_content);
         }
 
         return true;
@@ -101,29 +86,15 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
     {
         // Decode before splitting, or an encoded comma is not read as the
         // separator it is and two recipients fuse into one wrong number.
-        // Decoding here means cleanPhoneNumber() must not decode again.
         $recipients = array();
         foreach (explode(',', rawurldecode($candidates)) as $candidate) {
-            $number = $this->cleanPhoneNumber($candidate);
-            if ($number !== '') {
+            // Unlike tel we drop "x" extension syntax; SMS has no extensions
+            $number = HTMLPurifier_URIScheme_tel::normalizeNumber($candidate);
+            if (strpbrk($number, '0123456789') !== false) {
                 $recipients[] = $number;
             }
         }
         return implode(',', $recipients);
-    }
-
-    /**
-     * Reduce one already-decoded recipient to digits, EXCEPT for a leading
-     * plus sign. A result holding no digit is not a recipient, so it comes
-     * back empty rather than as a lone plus. Do not decode here: the caller
-     * has decoded, and decoding twice would read %252C as a separator.
-     * @param string $candidate
-     * @return string
-     */
-    private function cleanPhoneNumber($candidate)
-    {
-        $number = preg_replace('/(?!^\+)[^\d]/', '', $candidate);
-        return strpbrk($number, '0123456789') === false ? '' : $number;
     }
 
     /**
@@ -139,6 +110,9 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
                 continue;
             }
             list($param_name, $param_value) = explode('=', $param, 2);
+            // sms:5555&amp;amp;body=... (escaped twice, as some CMSes do)
+            // leaves "amp;" glued to the name once the lexer decodes it
+            $param_name = preg_replace('/^(?:amp;)+/i', '', $param_name);
             if (strtolower($param_name) === 'body') {
                 return $param_value;
             }
