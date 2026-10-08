@@ -11,48 +11,48 @@
 class HTMLPurifier_URI
 {
     /**
-     * @type string
+     * @type ?string
      */
     public $scheme;
 
     /**
-     * @type string
+     * @type ?string
      */
     public $userinfo;
 
     /**
-     * @type string
+     * @type ?string
      */
     public $host;
 
     /**
-     * @type int
+     * @type ?int
      */
     public $port;
 
     /**
-     * @type string
+     * @type ?string
      */
     public $path;
 
     /**
-     * @type string
+     * @type ?string
      */
     public $query;
 
     /**
-     * @type string
+     * @type ?string
      */
     public $fragment;
 
     /**
-     * @param string $scheme
-     * @param string $userinfo
-     * @param string $host
-     * @param int $port
-     * @param string $path
-     * @param string $query
-     * @param string $fragment
+     * @param ?string $scheme
+     * @param ?string $userinfo
+     * @param ?string $host
+     * @param ?int $port
+     * @param ?string $path
+     * @param ?string $query
+     * @param ?string $fragment
      * @note Automatically normalizes scheme and port
      */
     public function __construct($scheme, $userinfo, $host, $port, $path, $query, $fragment)
