@@ -51,6 +51,22 @@ class HTMLPurifier_HTMLModule_SafeObjectTest extends HTMLPurifier_HTMLModuleHarn
         );
     }
 
+    public function testParamsNamesNormalization()
+    {
+        $this->assertResult(
+'<b><object width="425" height="344" type="application/x-shockwave-flash" data="Foobar">
+<param name="allowscriptaccess" value="dummyValue" />
+<param name="flashVars" value="foobarbaz=bally" />
+<param name="allowfullscreen" value="true" />
+</object></b>',
+'<b><object width="425" height="344" type="application/x-shockwave-flash" data="Foobar"><param name="allowScriptAccess" value="never" /><param name="allowNetworking" value="internal" />
+
+<param name="flashvars" value="foobarbaz=bally" />
+<param name="allowFullScreen" value="false" />
+</object></b>'
+        );
+    }
+
 }
 
 // vim: et sw=4 sts=4

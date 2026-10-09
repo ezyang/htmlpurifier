@@ -45,16 +45,19 @@ class HTMLPurifier_AttrTransform_SafeParam extends HTMLPurifier_AttrTransform
     {
         // If we add support for other objects, we'll need to alter the
         // transforms.
-        switch ($attr['name']) {
+        switch (strtolower($attr['name'])) {
             // application/x-shockwave-flash
             // Keep this synchronized with Injector/SafeObject.php
-            case 'allowScriptAccess':
+            case 'allowscriptaccess':
+                $attr['name'] = 'allowScriptAccess';
                 $attr['value'] = 'never';
                 break;
-            case 'allowNetworking':
+            case 'allownetworking':
+                $attr['name'] = 'allowNetworking';
                 $attr['value'] = 'internal';
                 break;
-            case 'allowFullScreen':
+            case 'allowfullscreen':
+                $attr['name'] = 'allowFullScreen';
                 if ($config->get('HTML.FlashAllowFullScreen')) {
                     $attr['value'] = ($attr['value'] == 'true') ? 'true' : 'false';
                 } else {
@@ -62,6 +65,7 @@ class HTMLPurifier_AttrTransform_SafeParam extends HTMLPurifier_AttrTransform
                 }
                 break;
             case 'wmode':
+                $attr['name'] = 'wmode';
                 $attr['value'] = $this->wmode->validate($attr['value'], $config, $context);
                 break;
             case 'movie':
@@ -70,12 +74,13 @@ class HTMLPurifier_AttrTransform_SafeParam extends HTMLPurifier_AttrTransform
                 $attr['value'] = $this->uri->validate($attr['value'], $config, $context);
                 break;
             case 'flashvars':
+                $attr['name'] = "flashvars";
                 // we're going to allow arbitrary inputs to the SWF, on
                 // the reasoning that it could only hack the SWF, not us.
                 break;
             // add other cases to support other param name/value pairs
             default:
-                $attr['name'] = $attr['value'] = null;
+                $attr['name'] = $attr['value'] = '';
         }
         return $attr;
     }
