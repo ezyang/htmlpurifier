@@ -463,7 +463,7 @@ class HTML5
         $this->data = $data;
         $this->char = -1;
         $this->EOF = strlen($data);
-        $this->tree = new HTML5TreeConstructer;
+        $this->tree = new HTML5TreeConstructor;
         $this->content_model = self::PCDATA;
 
         $this->state = 'data';
@@ -1574,6 +1574,14 @@ class HTML5
     }
 }
 
+class HTML5TreeConstructor extends HTML5TreeConstructer
+{}
+
+/**
+ * @deprecated Use HTML5TreeConstructor instead
+ *
+ * @todo Remove with version 5
+ */
 class HTML5TreeConstructer
 {
     public $stack = array();
@@ -1674,6 +1682,8 @@ class HTML5TreeConstructer
     const END_PHASE = 3;
 
     // The different insertion modes for the main phase.
+    const BEFORE_HEAD = 0;
+    // For backward compatibility.
     const BEFOR_HEAD = 0;
     const IN_HEAD = 1;
     const AFTER_HEAD = 2;
@@ -1700,7 +1710,7 @@ class HTML5TreeConstructer
     public function __construct()
     {
         $this->phase = self::INIT_PHASE;
-        $this->mode = self::BEFOR_HEAD;
+        $this->mode = self::BEFORE_HEAD;
         $this->dom = new DOMDocument;
 
         $this->dom->encoding = 'UTF-8';
@@ -1865,7 +1875,7 @@ class HTML5TreeConstructer
         } else {
             /* Depends on the insertion mode: */
             switch ($this->mode) {
-                case self::BEFOR_HEAD:
+                case self::BEFORE_HEAD:
                     return $this->beforeHead($token);
                     break;
                 case self::IN_HEAD:
@@ -4749,7 +4759,7 @@ class HTML5TreeConstructer
                 case, abort these steps. (innerHTML case) */
             } elseif ($node->nodeName === 'html') {
                 $this->mode = ($this->head_pointer === null)
-                    ? self::BEFOR_HEAD
+                    ? self::BEFORE_HEAD
                     : self::AFTER_HEAD;
 
                 break;
