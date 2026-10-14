@@ -8,6 +8,8 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
 
     private $pngBase64;
 
+    private $webpBase64;
+
     public function __construct()
     {
         $this->pngBase64 =
@@ -17,6 +19,27 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
             'REFUGNO9zL0NglAAxPEfdLTs4BZM4DIO4C7OwQg2JoQ9LE1exdlYvBBeZ7jq'.
             'ch9//q1uH4TLzw4d6+ErXMMcXuHWxId3KOETnnXXV6MJpcq2MLaI97CER3N0'.
             'vr4MkhoXe0rZigAAAABJRU5ErkJggg==';
+
+        $this->webpBase64 =
+            'UklGRmgEAABXRUJQVlA4IFwEAADwHgCdASrSAFwAPpE+nUglo6MhMBYYwLASCW'.
+            'kA1UiodzVW9mz3k1fRnXP3Kw+iImBrW1Eu1RFN7L4yQYyffhCApE01KCCABFUjj'.
+            'WhCcZP2a3kGp6Pa1O782rJGNk8D4N/mM2SJi75bNKwe5ekf5gjywl+p4wVRDm5zyC'.
+            'Fk7SUnwQQzvdPbeMDerHH9+PHwm0lZtTSHS4jmvLtXW4xGcIjbpHUqEgWvnYs6JTex8i'.
+            'VxKqPsWsOi4HEEDLbP7ZruIOyQBcH/drSjn/V0WhcbKPdnbuqAfhxOIYMUEBQhirYVh3z3Z'.
+            '20sr/NFmMOXf8u2cOA5ZLJ9xpdu/FKj8MkP+8gAAP76osvQ/WtsL+wmS5SOeKpY23O1HJnSzpe'.
+            '/rDf1QtvwG/gOt3WR0rJ7iyLpcC3jQcSdH5mf2+h4WtixXwMm1w2YTGrRDjXR3hmjH7u6fisYn/pVA'.
+            'mmaAxVi+j/r242P8JXtWclQHshTyRDPW+US2ZWCh+9SxE1172aS4sYxUyuifikorBvNTaG12rsErGB/'.
+            'NV1OsKJQ85jGdjoVrAw1W5Pd1q/6QykwYJsK0i6hrynp8JDHyBegRPEpI1mSxoQE39pAUYEgFB8zENUBI'.
+            '0RKwcTKfd7fGb7LzEOndeIXYGi97+YRTreTn2oL6qiqJ6wFzKqN+JxQDwOgWcvZKIvA5CfV7RcEYkZ8++j'.
+            'OsBlzzZtk6649UiXCYFFcmzSp4i7V0fY7s92MbpXPM5Vxa6KSOL/a+VwV8++qltXKvjUAjeC7Pt1AFgoA+'.
+            'lPw+vltsTTYNWaUoe6DuD2QZeiGsyrurSZTXvaSdxRn+SkTSoQO1bL1vWfVaMK94MMOBEzNrTsNlr3JqEgL'.
+            '61SbF1MdJ30/3fTIzjuhHfUv0hmU9b2ZF/T9jCFbops+MMC8Z6UCPrf6MT++LoUy0Qb1BUDJeemvzwcXIwjbB'.
+            'eq5GWaCbdRucTUqiLGJbIDyFM0+IwzeyHeGCi3zrTfSCdrZ4wXLAejeE5dcK3rKuw/xu4bkzIbjdlTT6oCaaDs1'.
+            'gFkgYtglQTDTNNJm+Fi84iWs7+XRE1y7+Ox1yL7xTIQHTkwh6at/MTaIFOIlS7QZCoWQd5QaSxYdMm0CGV6am27Zrr'.
+            '/ubdrehqbwhl8uPo0dw8+2U+Q5e9q1mskmbs69/tjaGpkZX9RqzxzWYqq4qIpk9N0ypFm6LxrE9nvidgKtDGAel8KZr'.
+            '051mITKexV2NIf37++xV0B7aUFYYsI6C8QwU64FE4N3ePgX1QZ/TZOdTqvb88twSiiGtIoClw+gLawmF56cgNYLaX/Nu'.
+            'Wo4Er2y+XObYGKK3a6979iBRBFoYmEH/GLH7iFKl96vfl/tHwndp/+POAtQSsmIItU6JGQCoIMAofRQZEzkB3/PN+maHd9'.
+            'efqQEBqPJKAmQvaQT52O/pTdNOgY7XN+zgyCCS/sGPU3F3dg56R2HJgXXxvkA+5jqkhCOXG+XrnpEYF/kEnoAAAA=';
     }
 
     protected function assertValidation($uri, $expect_uri = true)
@@ -268,6 +291,32 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
     {
         $this->assertValidation('data:image/png;base64,aGVsbG90aGVyZXk=', false);
     }
+
+    public function test_data_webp()
+    {
+        if (PHP_VERSION_ID < 70100) {
+            // Webp not available below 7.1
+            return;
+        }
+
+        $this->assertValidation(
+            'data:image/webp;base64,'.$this->webpBase64
+        );
+    }
+
+    public function test_data_webp_not_valid_below_71()
+    {
+        if (PHP_VERSION_ID >= 70100) {
+            // Webp available above 7.1
+            return;
+        }
+
+        $this->assertValidation(
+            'data:image/webp;base64,'.$this->webpBase64,
+            false
+        );
+    }
+
 
 }
 
