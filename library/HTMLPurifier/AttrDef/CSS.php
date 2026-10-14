@@ -14,6 +14,20 @@
 class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
 {
 
+    const CACHE_LIMIT = 1000;
+
+    /**
+     * Internal values cache for styles.
+     * @type array
+     */
+    protected $cache = array();
+
+    /**
+     * Cached serial for the CSS config namespace.
+     * @type string|null
+     */
+    protected $cacheSerial;
+
     /**
      * @param string $css
      * @param HTMLPurifier_Config $config
@@ -23,6 +37,20 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
     public function validate($css, $config, $context)
     {
         $css = $this->parseCDATA($css);
+        if ($css === '') {
+            return false;
+        }
+
+        // Warning: This is a VERY simple cache, so we only keep it valid
+        // for the current CSS configuration namespace.
+        $serial = $config->getBatchSerial('CSS');
+        if ($this->cacheSerial !== $serial) {
+            $this->cache = array();
+            $this->cacheSerial = $serial;
+        }
+        if (array_key_exists($css, $this->cache)) {
+            return $this->cache[$css];
+        }
 
         $definition = $config->getCSSDefinition();
         $allow_duplicates = $config->get("CSS.AllowDuplicates");
@@ -131,7 +159,11 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
             $new_declarations .= "$prop:$value;";
         }
 
-        return $new_declarations ? $new_declarations : false;
+        $result = $new_declarations ? $new_declarations : false;
+        if (count($this->cache) < self::CACHE_LIMIT) {
+            $this->cache[$css] = $result;
+        }
+        return $result;
 
     }
 
