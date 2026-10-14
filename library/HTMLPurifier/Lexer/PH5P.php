@@ -1759,12 +1759,6 @@ class HTML5TreeConstructer
 
             /* A DOCTYPE token marked as being correct */
         } elseif (isset($token['error']) && !$token['error']) {
-            /* Append a DocumentType node to the Document  node, with the name
-            attribute set to the name given in the DOCTYPE token (which will be
-            "HTML"), and the other attributes specific to DocumentType objects
-            set to null, empty lists, or the empty string as appropriate. */
-            $doctype = new DOMDocumentType(null, null, 'HTML');
-
             /* Then, switch to the root element phase of the tree construction
             stage. */
             $this->phase = self::ROOT_PHASE;
