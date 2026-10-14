@@ -131,7 +131,6 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
 
         $ol = $this->addBlankElement('ol');
         $ol->attr['compact'] = 'Bool#compact';
-        $ol->attr['start'] = new HTMLPurifier_AttrDef_Integer();
         $ol->attr['type'] = 'Enum#s:1,i,I,a,A';
 
         $p = $this->addBlankElement('p');

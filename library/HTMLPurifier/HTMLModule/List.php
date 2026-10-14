@@ -30,6 +30,8 @@ class HTMLPurifier_HTMLModule_List extends HTMLPurifier_HTMLModule
     public function setup($config)
     {
         $ol = $this->addElement('ol', 'List', new HTMLPurifier_ChildDef_List(), 'Common');
+        $ol->attr['reversed'] = 'Bool#reversed';
+        $ol->attr['start'] = new HTMLPurifier_AttrDef_Integer();
         $ul = $this->addElement('ul', 'List', new HTMLPurifier_ChildDef_List(), 'Common');
         // XXX The wrap attribute is handled by MakeWellFormed.  This is all
         // quite unsatisfactory, because we generated this
