@@ -29,7 +29,7 @@ class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
         // the parent object
 
         $uri_string = $this->parseCDATA($uri_string);
-        if (strpos($uri_string, 'url(') !== 0) {
+        if (stripos($uri_string, 'url(') !== 0) {
             return false;
         }
         $uri_string = substr($uri_string, 4);
