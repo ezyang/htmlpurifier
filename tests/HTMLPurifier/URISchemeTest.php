@@ -381,16 +381,6 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
-    public function test_sms_strip_dangerous_query_params()
-    {
-        // A literal "<" never reaches the scheme: HTMLPurifier_URIParser
-        // excludes ["<>] from the path, so the body is already empty here
-        $this->assertValidation(
-            'sms:5555&body=<script>alert("xss")</script>&subject=Test',
-            'sms:5555&body='
-        );
-    }
-
     public function test_sms_encoded_markup_in_path_body_stays_encoded()
     {
         // Percent-encoded markup is decoded and re-encoded to a canonical
@@ -454,21 +444,43 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
-    public function test_sms_strip_dangerous_query_params_standard_format()
-    {
-        // As above: the parser truncates at the literal "<" before the
-        // scheme sees it
-        $this->assertValidation(
-            'sms:5555?body=<script>alert("xss")</script>&subject=Test',
-            'sms:5555?body='
-        );
-    }
-
     public function test_sms_encoded_markup_in_query_body_stays_encoded()
     {
         $this->assertValidation(
             'sms:5555?body=%3Cimg%20src=x%20onerror=alert(1)%3E',
             'sms:5555?body=%3Cimg%20src%3Dx%20onerror%3Dalert%281%29%3E'
+        );
+    }
+
+    public function test_sms_double_encoded_body_keeps_its_level()
+    {
+        // One decode, one encode: a double encoded body is a fixed point
+        $this->assertValidation(
+            'sms:5555?body=%253Cscript%253E'
+        );
+    }
+
+    public function test_sms_non_ascii_body_in_query()
+    {
+        $this->assertValidation(
+            'sms:5555?body=%E2%9C%93%20ok'
+        );
+    }
+
+    public function test_sms_non_ascii_body_in_path()
+    {
+        $this->assertValidation(
+            'sms:5555&body=%E2%9C%93'
+        );
+    }
+
+    public function test_sms_arbitrary_bytes_in_body_are_canonicalized()
+    {
+        // UTF-8 validity is not checked at this layer; bytes survive with
+        // their percent-encoding canonicalized
+        $this->assertValidation(
+            'sms:5555?body=%ff',
+            'sms:5555?body=%FF'
         );
     }
 

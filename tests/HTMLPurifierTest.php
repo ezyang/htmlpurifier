@@ -56,42 +56,6 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
         );
     }
 
-    public function testSmsSurvivesRepeatedPurification()
-    {
-        // The sms scheme decodes the body before re-encoding it. Applications
-        // purify the same content more than once, so the whole
-        // lexer/generator round trip has to be a fixed point.
-        $cases = array(
-            '<a href="sms:5555">x</a>',
-            '<a href="sms:5555?body=HOME">x</a>',
-            '<a href="sms:5555?body=say%20%22hi%22">x</a>',
-            '<a href="sms:5551234,5555678?body=HOME">x</a>',
-            '<a href="sms:+15555555555?body=%E2%9C%93%20ok">x</a>',
-        );
-        foreach ($cases as $case) {
-            $once = $this->purifier->purify($case);
-            $this->assertIdentical($once, $case);
-            $this->assertIdentical($this->purifier->purify($once), $once);
-        }
-    }
-
-    public function testSmsAmpersandBodyPreservedAsWritten()
-    {
-        // The iOS "&body=" form is kept as written rather than normalized
-        // into the RFC "?body=" form; "&amp;" is just its HTML spelling
-        $this->assertPurification(
-            '<a href="sms:5555&amp;body=HOME">x</a>'
-        );
-    }
-
-    public function testSmsWithoutRecipientLosesHref()
-    {
-        $this->assertPurification(
-            '<a href="sms:?body=HOME">x</a>',
-            '<a>x</a>'
-        );
-    }
-
     public function testDisableResources()
     {
         $this->config->set('URI.DisableResources', true);

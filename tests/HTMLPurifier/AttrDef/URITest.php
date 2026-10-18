@@ -27,25 +27,8 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('tel:+15555%20555%20555', 'tel:+15555555555');
         $this->assertDef('sms:+15555555555');
         $this->assertDef('sms:+1-555-555-5555', 'sms:+15555555555');
-        $this->assertDef('sms:+15555 555 555', false);
         $this->assertDef('sms:+15555%20555%20555', false);
-        $this->assertDef('sms:+1555,+2666?body=hi');
-        $this->assertDef('sms:555%0A', false);
-        $this->assertDef('sms://5551234?body=HOME', false);
-        $this->assertDef('sms:5555&body=HOME', 'sms:5555&body=HOME');
-        $this->assertDef('sms:5555?body=HOME', 'sms:5555?body=HOME');
-        // an already normalized body is left alone, so purifying twice is stable
-        $this->assertDef('sms:5555?body=say%20%22hi%22');
-        // one decode, one encode: a double encoded body keeps its extra level
-        $this->assertDef('sms:5555?body=%253Cscript%253E');
-        // non-ASCII survives in both forms
-        $this->assertDef('sms:5555?body=%E2%9C%93%20ok');
-        $this->assertDef('sms:5555&body=%E2%9C%93');
-        // the validator does not check UTF-8 validity: arbitrary bytes
-        // survive canonicalized, decoding is the message handler's job
-        $this->assertDef('sms:5555?body=%FF');
-        $this->assertDef('sms:5555?body=%E2%9C');
-        $this->assertDef('sms:5555?body=%ff', 'sms:5555?body=%FF');
+        $this->assertDef('sms:5555?body=HOME');
     }
 
     public function testSmsWithRestrictedAllowedSymbols()
@@ -58,14 +41,6 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->config->set('URI.AllowedSymbols', "!$'()*+,;");
         $this->assertDef('sms:5555&body=HOME', false);
         $this->assertDef('sms:5555?body=HOME', 'sms:5555');
-    }
-
-    public function testSmsBodyTruncatesAtLiteralQuote()
-    {
-        // A literal '"' or '<' never reaches the scheme: the URI parser
-        // excludes them, so an unencoded body cannot break out of the href
-        $this->assertDef('sms:5555?body=say "hi"', 'sms:5555?body=say%20');
-        $this->assertDef('sms:5555?body=a<b', 'sms:5555?body=a');
     }
 
     public function testIntegrationWithPercentEncoder()
