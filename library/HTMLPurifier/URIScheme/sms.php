@@ -1,24 +1,49 @@
 <?php
 
 /**
- * Validates sms (for text messaging).
+ * Validates sms (for text messaging) using a security-oriented restricted
+ * subset of RFC 5724.
  *
- * The relevant specification for this protocol is RFC 5724, which spells
- * the body parameter sms:number?body=message. The sms:number&body=message
- * form is common on the web, so we read both, but always write the RFC
- * form. We drop every parameter but body, and the fragment.
+ * Each recipient must be either a global number (a leading plus followed
+ * by digits) or a legacy bare digit string such as a short code.
+ * The visual separators "-", ".", "(" and ")" carry no meaning (RFC 3966)
+ * and are removed. This is deliberately narrower than the full RFC 3966
+ * telephone-subscriber grammar: local numbers with phone-context and
+ * recipient parameters such as ";ext=" are rejected rather than
+ * interpreted. Anything else in the recipient -- spaces, letters, or
+ * other punctuation -- also fails validation. A sanitizer must not
+ * manufacture a different destination out of malformed input, so
+ * malformed recipients are rejected, not repaired. Comma-separated
+ * multiple recipients (RFC 5724) are supported; each is validated
+ * independently.
  *
- * RFC 5724 allows a comma-separated list of recipients, so we keep every
- * one of them, normalized as tel normalizes a number but without "x"
- * extensions. A recipient left with no digit at all is dropped, and a URI
- * left with no recipient is rejected.
+ * The message uses the "?body=" field, matched case-insensitively. Its
+ * value is canonicalized by percent-decoding and re-encoding; this
+ * validator does not check that it is valid UTF-8 (RFC 5724 defines it
+ * as percent-encoded UTF-8, but encoding validity is the message
+ * handler's job, and the URI layer is byte-oriented throughout).
+ * The body must occur at most once (RFC 5724):
+ * duplicates are rejected. Other fields are dropped as a deliberate
+ * allowlist policy: RFC 5724 permits future extension fields, so an
+ * extension-aware receiver could understand a field this validator does
+ * not; the sanitizer keeps only the field whose meaning it knows instead
+ * of passing unknown semantics through.
  *
- * RFC 5724 has no authority, but sms://number shows up on the web too;
- * HTMLPurifier_URI::validate() moves such a number back into the path.
+ * Compatibility: the undocumented iOS convention "sms:<recipient>&body=<text>"
+ * (no "?") is accepted and preserved as written. It is not RFC 5724 syntax;
+ * the "?" form is canonical. The ";body=" variant is deliberately not
+ * accepted: some clients treat ";" as a recipient separator, which makes
+ * it unsafe as a cross-platform compatibility syntax.
  *
- * Note we read the body after %URI.AllowedSymbols has been applied, so a
+ * Like the other non-hierarchical schemes, an authority component is
+ * discarded; the strict recipient check then rejects the "sms://..." form
+ * in practice.
+ *
+ * Note we read the fields after %URI.AllowedSymbols has been applied, so a
  * configuration that drops "&" or "=" from it encodes the delimiters we
- * look for and the body goes with them, leaving the number.
+ * look for. In the "&body=" form they land in the recipient, which then
+ * fails validation and the URI is rejected; in the "?body=" form the
+ * field is unrecognizable and the body is dropped, leaving the recipient.
  */
 
 class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
@@ -44,80 +69,96 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
         $uri->userinfo = null;
         $uri->host     = null;
         $uri->port     = null;
-        // sms has no use for a fragment
-        $uri->fragment = null;
 
-        // parse: "&" is no query delimiter, so this all lands in the path
-        $params = explode('&', $uri->path);
-        $recipients = $this->parseRecipients(array_shift($params));
+        $recipient = $uri->path;
+        $body = null;
+        $body_in_path = false;
+        $query_body = null;
 
-        // nobody to send it to
-        if (!$recipients) {
-            return false;
-        }
-
-        $body = $this->parseBody($params);
-        if (!is_null($body)) {
-            // a "?" in a path body is part of the message, but the parser
-            // split everything after it off into the query
-            if (!is_null($uri->query)) {
-                $body .= '?' . rawurldecode($uri->query);
+        // "&" is no query delimiter (RFC 3986), so the iOS compatibility
+        // form arrives with the body in the path; handle it as a field list.
+        // Unknown fields are dropped as an allowlist policy.
+        if (strpos($recipient, '&') !== false) {
+            $parts = explode('&', $recipient);
+            $recipient = array_shift($parts);
+            foreach ($parts as $field) {
+                $pos = strpos($field, '=');
+                if ($pos === false) {
+                    continue;
+                }
+                // The parser has already decoded pct-encoded unreserved
+                // characters, so the name arrives canonical; match it as-is.
+                if (strtolower(substr($field, 0, $pos)) !== 'body') {
+                    continue;
+                }
+                if (!is_null($body)) {
+                    return false; // body must occur at most once (RFC 5724)
+                }
+                // Decode and re-encode so the value is canonical (purifying
+                // twice is stable) and cannot carry a raw delimiter.
+                $body = rawurlencode(rawurldecode(substr($field, $pos + 1)));
+                $body_in_path = true;
             }
-        } elseif (!is_null($uri->query)) {
-            $body = $this->parseBody(explode('&', $uri->query));
         }
 
-        // write back out, always in the RFC 5724 form. Encoding the body
-        // keeps it from escaping the href (the generator escapes it again on
-        // output); an empty body keeps its parameter.
-        $uri->path  = implode(',', $recipients);
-        $uri->query = is_null($body) ? null : 'body=' . rawurlencode($body);
+        $query = $uri->query;
+        if ($query === '') {
+            $query = null; // a trailing "?" carries no fields
+        }
+        if (!is_null($query)) {
+            // The canonical query form: a body here is checked against the
+            // compatibility form's below, but a bodiless query on its own
+            // leaves it alone.
+            foreach (explode('&', $query) as $field) {
+                $pos = strpos($field, '=');
+                if ($pos === false) {
+                    continue;
+                }
+                if (strtolower(substr($field, 0, $pos)) !== 'body') {
+                    continue;
+                }
+                if (!is_null($query_body)) {
+                    return false; // body must occur at most once (RFC 5724)
+                }
+                $query_body = rawurlencode(rawurldecode(substr($field, $pos + 1)));
+            }
+        }
+        if (!is_null($query_body)) {
+            if (!is_null($body)) {
+                return false; // body in both path and query forms
+            }
+            $body = $query_body;
+            $body_in_path = false;
+        }
+
+        // Split multiple recipients before decoding: a pct-encoded comma
+        // is data, not a separator.
+        $validated = array();
+        foreach (explode(',', $recipient) as $one) {
+            $one = rawurldecode($one);
+            // Visual separators are semantically ignorable (RFC 3966).
+            $one = preg_replace('/[-.()]/', '', $one);
+            // Optional leading plus, then digits: anything else is rejected.
+            // /D so a trailing newline cannot satisfy the end anchor.
+            if (!preg_match('/^\+?\d+$/D', $one)) {
+                return false;
+            }
+            $validated[] = $one;
+        }
+
+        // An empty body keeps its parameter.
+        $uri->path  = implode(',', $validated);
+        $uri->query = null;
+        if (!is_null($body)) {
+            if ($body_in_path) {
+                $uri->path .= '&body=' . $body;
+            } else {
+                $uri->query = 'body=' . $body;
+            }
+        }
 
         return true;
     }
-
-    /**
-     * Parse an RFC 5724 comma-separated recipient list into its normalized
-     * numbers, dropping the ones left with no digits.
-     * @param string $list
-     * @return string[]
-     */
-    private function parseRecipients($list)
-    {
-        // Decode before splitting, or an encoded comma is not read as the
-        // separator it is and two recipients fuse into one wrong number.
-        $recipients = array();
-        foreach (explode(',', rawurldecode($list)) as $candidate) {
-            // Unlike tel we drop "x" extension syntax; SMS has no extensions
-            $number = HTMLPurifier_URIScheme_tel::normalizeNumber($candidate);
-            if (strpbrk($number, '0123456789') !== false) {
-                $recipients[] = $number;
-            }
-        }
-        return $recipients;
-    }
-
-    /**
-     * Decoded value of the first 'body' out of a list of name=value pairs,
-     * or null. RFC 5234 makes the field name case-insensitive, so we take it
-     * in any case.
-     * @param string[] $params
-     * @return string|null
-     */
-    private function parseBody($params)
-    {
-        foreach ($params as $param) {
-            if (strpos($param, '=') === false) {
-                continue;
-            }
-            list($param_name, $param_value) = explode('=', $param, 2);
-            // sms:5555&amp;amp;body=... (escaped twice, as some CMSes do)
-            // leaves "amp;" glued to the name once the lexer decodes it
-            $param_name = preg_replace('/^(?:amp;)+/i', '', $param_name);
-            if (strtolower($param_name) === 'body') {
-                return rawurldecode($param_value);
-            }
-        }
-        return null;
-    }
 }
+
+// vim: et sw=4 sts=4

@@ -75,16 +75,12 @@ class HTMLPurifierTest extends HTMLPurifier_Harness
         }
     }
 
-    public function testSmsAmpersandBodyComesOutInRfcForm()
+    public function testSmsAmpersandBodyPreservedAsWritten()
     {
-        // "&amp;" in the attribute, and "&amp;amp;" from markup escaped twice
+        // The iOS "&body=" form is kept as written rather than normalized
+        // into the RFC "?body=" form; "&amp;" is just its HTML spelling
         $this->assertPurification(
-            '<a href="sms:5555&amp;body=HOME">x</a>',
-            '<a href="sms:5555?body=HOME">x</a>'
-        );
-        $this->assertPurification(
-            '<a href="sms:5555&amp;amp;body=HOME">x</a>',
-            '<a href="sms:5555?body=HOME">x</a>'
+            '<a href="sms:5555&amp;body=HOME">x</a>'
         );
     }
 

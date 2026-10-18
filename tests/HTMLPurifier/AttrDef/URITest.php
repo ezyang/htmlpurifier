@@ -26,9 +26,13 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('tel:+15555 555 555', 'tel:+15555555555');
         $this->assertDef('tel:+15555%20555%20555', 'tel:+15555555555');
         $this->assertDef('sms:+15555555555');
-        $this->assertDef('sms:+15555 555 555', 'sms:+15555555555');
-        $this->assertDef('sms:+15555%20555%20555', 'sms:+15555555555');
-        $this->assertDef('sms:5555&body=HOME', 'sms:5555?body=HOME');
+        $this->assertDef('sms:+1-555-555-5555', 'sms:+15555555555');
+        $this->assertDef('sms:+15555 555 555', false);
+        $this->assertDef('sms:+15555%20555%20555', false);
+        $this->assertDef('sms:+1555,+2666?body=hi');
+        $this->assertDef('sms:555%0A', false);
+        $this->assertDef('sms://5551234?body=HOME', false);
+        $this->assertDef('sms:5555&body=HOME', 'sms:5555&body=HOME');
         $this->assertDef('sms:5555?body=HOME', 'sms:5555?body=HOME');
         // an already normalized body is left alone, so purifying twice is stable
         $this->assertDef('sms:5555?body=say%20%22hi%22');
@@ -36,45 +40,32 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('sms:5555?body=%253Cscript%253E');
         // non-ASCII survives in both forms
         $this->assertDef('sms:5555?body=%E2%9C%93%20ok');
-        $this->assertDef('sms:5555&body=%E2%9C%93', 'sms:5555?body=%E2%9C%93');
-        // RFC 5724 has no authority production, but sms://NUMBER is common,
-        // so HTMLPurifier_URI::validate() moves a numeric host back into the
-        // path. Asserted here because URISchemeTest skips that layer.
-        $this->assertDef('sms://5551234?body=HOME', 'sms:5551234?body=HOME');
-        $this->assertDef('sms://+15555555555?body=HOME', 'sms:+15555555555?body=HOME');
-        $this->assertDef('sms://555-1234,555-5678', 'sms:5551234,5555678');
-        // a host that is not a number is no recipient, so the link goes
-        $this->assertDef('sms://example.com?body=HOME', false);
-        $this->assertDef('sms://example5551234.com?body=HOME', false);
-        // a space before a recipient does not cost it its plus
-        $this->assertDef('sms:+15551234, +447700900123', 'sms:+15551234,+447700900123');
-        // a comma-separated recipient list survives the full chain
-        $this->assertDef('sms:5551234,5555678?body=HOME');
+        $this->assertDef('sms:5555&body=%E2%9C%93');
+        // the validator does not check UTF-8 validity: arbitrary bytes
+        // survive canonicalized, decoding is the message handler's job
+        $this->assertDef('sms:5555?body=%FF');
+        $this->assertDef('sms:5555?body=%E2%9C');
+        $this->assertDef('sms:5555?body=%ff', 'sms:5555?body=%FF');
+    }
+
+    public function testSmsWithRestrictedAllowedSymbols()
+    {
+        // If %URI.AllowedSymbols drops "&" and "=", generic validation
+        // encodes the delimiters before the scheme sees them. In the
+        // "&body=" form they land in the recipient, which then fails
+        // validation; in the "?body=" form the field is unrecognizable
+        // and the body is dropped, leaving the recipient.
+        $this->config->set('URI.AllowedSymbols', "!$'()*+,;");
+        $this->assertDef('sms:5555&body=HOME', false);
+        $this->assertDef('sms:5555?body=HOME', 'sms:5555');
     }
 
     public function testSmsBodyTruncatesAtLiteralQuote()
     {
-        // HTMLPurifier_URIParser excludes ["<>] from every component, so a
-        // literal quote cuts the message before the scheme sees it. The
-        // link still works; the prefilled text is shorter than written.
+        // A literal '"' or '<' never reaches the scheme: the URI parser
+        // excludes them, so an unencoded body cannot break out of the href
         $this->assertDef('sms:5555?body=say "hi"', 'sms:5555?body=say%20');
         $this->assertDef('sms:5555?body=a<b', 'sms:5555?body=a');
-    }
-
-    public function testSmsUnderRestrictedAllowedSymbols()
-    {
-        // The class docblock states that a configuration dropping "&" or "="
-        // from %URI.AllowedSymbols encodes the delimiters we look for, so the
-        // body goes with them and the recipient is left
-        $this->config->set('URI.AllowedSymbols', '!$\'()*+;');
-        $this->assertDef('sms:5555?body=HOME', 'sms:5555');
-        $this->assertDef('sms:5555&body=HOME', 'sms:5555');
-        // a URI with no recipient is rejected outright
-        $this->assertDef('sms:?body=HOME', false);
-        // the comma is dropped from the symbol set too, but the recipient
-        // list is rebuilt after encoding, so the separator survives and the
-        // two recipients stay distinct
-        $this->assertDef('sms:5551234,5555678', 'sms:5551234,5555678');
     }
 
     public function testIntegrationWithPercentEncoder()
