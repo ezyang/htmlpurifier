@@ -18,6 +18,7 @@ class HTMLPurifier_AttrDef_CSS_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('url(http://www.example.com/)', $result);
         $this->assertDef('url("http://www.example.com/")', $result);
         $this->assertDef("url('http://www.example.com/')", $result);
+        $this->assertDef('URL("http://www.example.com/")', $result);
         $this->assertDef(
             '  url(  "http://www.example.com/" )   ', $result);
         $this->assertDef("url(http://www.example.com/foo,bar\)\'\()",
