@@ -100,9 +100,6 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
         }
 
         $query = $uri->query;
-        if ($query === '') {
-            $query = null; // a trailing "?" carries no fields
-        }
         if (!is_null($query)) {
             // The canonical query form: a body here is checked against the
             // compatibility form's below, but a bodiless query on its own
