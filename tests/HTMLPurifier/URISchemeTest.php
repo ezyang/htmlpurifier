@@ -383,12 +383,11 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
 
     public function test_sms_encoded_markup_in_path_body_stays_encoded()
     {
-        // Percent-encoded markup is decoded and re-encoded to a canonical
-        // form rather than dropped, so it is inert in an href without
-        // losing text.
+        // The body value passes through as received: already-encoded text
+        // stays encoded, and characters the generic layer preserves are
+        // not encoded further by this scheme
         $this->assertValidation(
-            'sms:5555&body=%3Cscript%3Ealert(1)%3C/script%3E',
-            'sms:5555&body=%3Cscript%3Ealert%281%29%3C%2Fscript%3E'
+            'sms:5555&body=%3Cscript%3Ealert(1)%3C/script%3E'
         );
     }
 
@@ -447,8 +446,7 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
     public function test_sms_encoded_markup_in_query_body_stays_encoded()
     {
         $this->assertValidation(
-            'sms:5555?body=%3Cimg%20src=x%20onerror=alert(1)%3E',
-            'sms:5555?body=%3Cimg%20src%3Dx%20onerror%3Dalert%281%29%3E'
+            'sms:5555?body=%3Cimg%20src=x%20onerror=alert(1)%3E'
         );
     }
 

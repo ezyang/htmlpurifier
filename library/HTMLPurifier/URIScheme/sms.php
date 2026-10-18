@@ -18,7 +18,10 @@
  * independently.
  *
  * The message uses the "?body=" field, matched case-insensitively. Its
- * value is canonicalized by percent-decoding and re-encoding.
+ * value is kept as received; percent-encoding has already been
+ * canonicalized by the parser and generic validation before the scheme
+ * runs, as for every other scheme's components (compare mailto's
+ * query fields, which are likewise passed through).
  * The body must occur at most once (RFC 5724):
  * duplicates are rejected. Other fields are dropped as a deliberate
  * allowlist policy: RFC 5724 permits future extension fields, so an
@@ -91,9 +94,7 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
                 if (!is_null($body)) {
                     return false; // body must occur at most once (RFC 5724)
                 }
-                // Decode and re-encode so the value is canonical (purifying
-                // twice is stable) and cannot carry a raw delimiter.
-                $body = rawurlencode(rawurldecode(substr($field, $pos + 1)));
+                $body = substr($field, $pos + 1);
                 $body_in_path = true;
             }
         }
@@ -117,7 +118,7 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
                 if (!is_null($query_body)) {
                     return false; // body must occur at most once (RFC 5724)
                 }
-                $query_body = rawurlencode(rawurldecode(substr($field, $pos + 1)));
+                $query_body = substr($field, $pos + 1);
             }
         }
         if (!is_null($query_body)) {
