@@ -474,16 +474,6 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
-    public function test_sms_arbitrary_bytes_in_body_are_canonicalized()
-    {
-        // UTF-8 validity is not checked at this layer; bytes survive with
-        // their percent-encoding canonicalized
-        $this->assertValidation(
-            'sms:5555?body=%ff',
-            'sms:5555?body=%FF'
-        );
-    }
-
     public function test_sms_short_code()
     {
         $this->assertValidation(

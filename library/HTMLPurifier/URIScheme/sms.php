@@ -18,10 +18,7 @@
  * independently.
  *
  * The message uses the "?body=" field, matched case-insensitively. Its
- * value is canonicalized by percent-decoding and re-encoding; this
- * validator does not check that it is valid UTF-8 (RFC 5724 defines it
- * as percent-encoded UTF-8, but encoding validity is the message
- * handler's job, and the URI layer is byte-oriented throughout).
+ * value is canonicalized by percent-decoding and re-encoding.
  * The body must occur at most once (RFC 5724):
  * duplicates are rejected. Other fields are dropped as a deliberate
  * allowlist policy: RFC 5724 permits future extension fields, so an
