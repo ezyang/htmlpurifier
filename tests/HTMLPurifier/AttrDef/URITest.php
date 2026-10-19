@@ -25,6 +25,22 @@ class HTMLPurifier_AttrDef_URITest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('tel:+15555555555');
         $this->assertDef('tel:+15555 555 555', 'tel:+15555555555');
         $this->assertDef('tel:+15555%20555%20555', 'tel:+15555555555');
+        $this->assertDef('sms:+15555555555');
+        $this->assertDef('sms:+1-555-555-5555', 'sms:+15555555555');
+        $this->assertDef('sms:+15555%20555%20555', false);
+        $this->assertDef('sms:5555?body=HOME');
+    }
+
+    public function testSmsWithRestrictedAllowedSymbols()
+    {
+        // If %URI.AllowedSymbols drops "&" and "=", generic validation
+        // encodes the delimiters before the scheme sees them. In the
+        // "&body=" form they land in the recipient, which then fails
+        // validation; in the "?body=" form the field is unrecognizable
+        // and the body is dropped, leaving the recipient.
+        $this->config->set('URI.AllowedSymbols', "!$'()*+,;");
+        $this->assertDef('sms:5555&body=HOME', false);
+        $this->assertDef('sms:5555?body=HOME', 'sms:5555');
     }
 
     public function testIntegrationWithPercentEncoder()

@@ -215,6 +215,428 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
+    public function test_sms_rejects_spaces_in_recipient()
+    {
+        // RFC 3966: spaces MUST NOT be used as visual separators, so the
+        // recipient is rejected rather than repaired
+        $this->assertValidation(
+            'sms:+1 (555) 555-5555', false
+        );
+    }
+
+    public function test_sms_rejects_encoded_spaces_in_recipient()
+    {
+        $this->assertValidation(
+            'sms:+1%20(555)%20555-5555', false
+        );
+    }
+
+    public function test_sms_regular()
+    {
+        $this->assertValidation(
+            'sms:+15555555555'
+        );
+    }
+
+    public function test_sms_strips_visual_separators()
+    {
+        // "-", ".", "(" and ")" carry no meaning (RFC 3966) and are removed
+        $this->assertValidation(
+            'sms:+1-555.555(5555)', 'sms:+15555555555'
+        );
+    }
+
+    public function test_sms_strips_dashes()
+    {
+        $this->assertValidation(
+            'sms:555-555-5555', 'sms:5555555555'
+        );
+    }
+
+    public function test_sms_rejects_letters_in_recipient()
+    {
+        // RFC 3966 does not support keypad letters (1-800-FLOWERS); silently
+        // deleting them would manufacture a different destination
+        $this->assertValidation(
+            'sms:abcd1234', false
+        );
+    }
+
+    public function test_sms_rejects_interior_plus()
+    {
+        $this->assertValidation(
+            'sms:555+555', false
+        );
+    }
+
+    public function test_sms_rejects_encoded_interior_plus()
+    {
+        $this->assertValidation(
+            'sms:555%2B555', false
+        );
+    }
+
+    public function test_sms_rejects_lone_plus()
+    {
+        $this->assertValidation(
+            'sms:+', false
+        );
+    }
+
+    public function test_sms_multiple_recipients()
+    {
+        // RFC 5724 allows comma-separated recipients; each is validated
+        $this->assertValidation(
+            'sms:+1555,+2666?body=hi'
+        );
+    }
+
+    public function test_sms_rejects_invalid_recipient_in_list()
+    {
+        $this->assertValidation(
+            'sms:+1555,abc?body=hi', false
+        );
+    }
+
+    public function test_sms_rejects_recipient_parameters()
+    {
+        // RFC 3966 ";ext=" etc. are not supported: reject rather than
+        // folding their digits into the number
+        $this->assertValidation(
+            'sms:5555;ext=123?body=hi', false
+        );
+    }
+
+    public function test_sms_rejects_phone_context()
+    {
+        // Valid RFC 3966 for a local number, but outside the restricted
+        // subset this validator accepts: reject rather than interpret
+        $this->assertValidation(
+            'sms:5555;phone-context=+1-555?body=hi', false
+        );
+    }
+
+    public function test_sms_rejects_star_in_recipient()
+    {
+        $this->assertValidation(
+            'sms:555*555?body=hi', false
+        );
+    }
+
+    public function test_sms_rejects_encoded_comma_in_recipient()
+    {
+        // Only a literal comma separates recipients; "%" is no digit,
+        // so a percent-encoded comma fails validation
+        $this->assertValidation(
+            'sms:555%2C666?body=hi', false
+        );
+    }
+
+    public function test_sms_rejects_malformed_percent_escape_in_recipient()
+    {
+        $this->assertValidation(
+            'sms:555%zz?body=hi', false
+        );
+    }
+
+    public function test_sms_rejects_trailing_newline_in_recipient()
+    {
+        // The recipient pattern must anchor past a trailing newline,
+        // hence the /D modifier
+        $this->assertValidation(
+            "sms:555\n", false
+        );
+    }
+
+    public function test_sms_rejects_trailing_newline_in_recipient_with_body()
+    {
+        $this->assertValidation(
+            "sms:+1555\n?body=hi", false
+        );
+    }
+
+    public function test_sms_rejects_encoded_newline_in_recipient()
+    {
+        $this->assertValidation(
+            'sms:555%0A', false
+        );
+    }
+
+    public function test_sms_with_body_query()
+    {
+        // Undocumented iOS compatibility form (no "?"); preserved as written
+        $this->assertValidation(
+            'sms:5555&body=HOME',
+            'sms:5555&body=HOME'
+        );
+    }
+
+    public function test_sms_path_body_runs_to_end_of_path()
+    {
+        // The compatibility form has one "&body=" suffix, not a field
+        // list, so a later "&" is part of the message
+        $this->assertValidation(
+            'sms:+15555555555&body=Hello&subject=Test'
+        );
+    }
+
+    public function test_sms_with_url_encoded_body()
+    {
+        $this->assertValidation(
+            'sms:5555&body=Hello%20World',
+            'sms:5555&body=Hello%20World'
+        );
+    }
+
+    public function test_sms_encoded_markup_in_path_body_stays_encoded()
+    {
+        // The body value passes through as received: already-encoded text
+        // stays encoded, and characters the generic layer preserves are
+        // not encoded further by this scheme
+        $this->assertValidation(
+            'sms:5555&body=%3Cscript%3Ealert(1)%3C/script%3E'
+        );
+    }
+
+    public function test_sms_drops_unknown_query_field()
+    {
+        $this->assertValidation(
+            'sms:5555?body=HOME&subject=Test',
+            'sms:5555?body=HOME'
+        );
+    }
+
+    public function test_sms_keeps_path_body_with_bodiless_query()
+    {
+        // A query without a body does not erase the compatibility form's body
+        $this->assertValidation(
+            'sms:5555&body=HOME?subject=T',
+            'sms:5555&body=HOME'
+        );
+    }
+
+    public function test_sms_pct_encoded_field_name_is_normalized()
+    {
+        // The parser decodes pct-encoded unreserved characters (RFC 3986
+        // normalization), so this arrives as "body=hi"
+        $this->assertValidation(
+            'sms:5555?%62ody=hi',
+            'sms:5555?body=hi'
+        );
+    }
+
+    public function test_sms_no_body()
+    {
+        $this->assertValidation(
+            'sms:988'
+        );
+    }
+
+    public function test_sms_standard_query_format()
+    {
+        // RFC 5724's ?body= form is preserved as-is
+        $this->assertValidation(
+            'sms:741741?body=SEIZE'
+        );
+    }
+
+    public function test_sms_rejects_body_in_path_and_query()
+    {
+        // The body must occur at most once (RFC 5724); a body in both the
+        // compatibility path form and the query is a duplicate
+        $this->assertValidation(
+            'sms:741741&body=PATH?body=QUERY',
+            false
+        );
+    }
+
+    public function test_sms_encoded_markup_in_query_body_stays_encoded()
+    {
+        $this->assertValidation(
+            'sms:5555?body=%3Cimg%20src=x%20onerror=alert(1)%3E'
+        );
+    }
+
+    public function test_sms_double_encoded_body_keeps_its_level()
+    {
+        // One decode, one encode: a double encoded body is a fixed point
+        $this->assertValidation(
+            'sms:5555?body=%253Cscript%253E'
+        );
+    }
+
+    public function test_sms_non_ascii_body_in_query()
+    {
+        $this->assertValidation(
+            'sms:5555?body=%E2%9C%93%20ok'
+        );
+    }
+
+    public function test_sms_non_ascii_body_in_path()
+    {
+        $this->assertValidation(
+            'sms:5555&body=%E2%9C%93'
+        );
+    }
+
+    public function test_sms_short_code()
+    {
+        $this->assertValidation(
+            'sms:741741&body=SEIZE'
+        );
+    }
+
+    public function test_sms_body_name_is_case_insensitive_in_query()
+    {
+        // RFC 5724 spells the field name as the ABNF literal "body", and
+        // RFC 5234 makes ABNF literals case-insensitive
+        $this->assertValidation(
+            'sms:5555?BODY=HOME',
+            'sms:5555?body=HOME'
+        );
+    }
+
+    public function test_sms_body_name_is_case_insensitive_in_path()
+    {
+        $this->assertValidation(
+            'sms:5555&Body=HOME',
+            'sms:5555&body=HOME'
+        );
+    }
+
+    public function test_sms_rejects_duplicate_body_in_query()
+    {
+        $this->assertValidation(
+            'sms:5555?body=first&body=second',
+            false
+        );
+    }
+
+    public function test_sms_second_body_marker_in_path_body_is_text()
+    {
+        // There is one path suffix; a later "&body=" is message text,
+        // unlike a second body field in the query
+        $this->assertValidation(
+            'sms:5555&body=first&body=second'
+        );
+    }
+
+    public function test_sms_rejects_non_body_path_suffix()
+    {
+        $this->assertValidation(
+            'sms:5555&subject=T',
+            false
+        );
+    }
+
+    public function test_sms_drops_query_without_body()
+    {
+        $this->assertValidation(
+            'sms:5555?subject=T',
+            'sms:5555'
+        );
+    }
+
+    public function test_sms_keeps_quotes_in_body_encoded()
+    {
+        // Quotes are percent-encoded, not deleted: the message survives and
+        // still cannot terminate the href attribute
+        $this->assertValidation(
+            'sms:5555?body=say%20%22hi%22%20%27there%27',
+            'sms:5555?body=say%20%22hi%22%20%27there%27'
+        );
+    }
+
+    public function test_sms_keeps_quotes_in_path_body_encoded()
+    {
+        $this->assertValidation(
+            'sms:5555&body=say%20%22hi%22',
+            'sms:5555&body=say%20%22hi%22'
+        );
+    }
+
+    public function test_sms_rejects_path_suffix_without_equals()
+    {
+        $this->assertValidation(
+            'sms:5555&body',
+            false
+        );
+    }
+
+    public function test_sms_encoded_ampersand_in_body()
+    {
+        // A pct-encoded "&" is data and does not split fields
+        $this->assertValidation(
+            'sms:5555?body=a%26b',
+            'sms:5555?body=a%26b'
+        );
+    }
+
+    public function test_sms_empty_query()
+    {
+        $this->assertValidation(
+            'sms:5555?',
+            'sms:5555'
+        );
+    }
+
+    public function test_sms_rejects_authority()
+    {
+        // The authority is discarded like the other non-hierarchical
+        // schemes do; the remaining "/..." path is no valid recipient
+        $this->assertValidation(
+            'sms://user@example.com:99/5555',
+            false
+        );
+    }
+
+    public function test_sms_rejects_numeric_authority()
+    {
+        $this->assertValidation(
+            'sms://5551234?body=HOME',
+            false
+        );
+    }
+
+    public function test_sms_rejects_hostname_authority()
+    {
+        $this->assertValidation(
+            'sms://example.com?body=HOME',
+            false
+        );
+    }
+
+    public function test_sms_rejects_missing_recipient()
+    {
+        $this->assertValidation(
+            'sms:?body=HOME',
+            false
+        );
+    }
+
+    public function test_sms_rejects_missing_recipient_path_form()
+    {
+        $this->assertValidation(
+            'sms:&body=HOME',
+            false
+        );
+    }
+
+    public function test_sms_rejects_empty()
+    {
+        $this->assertValidation(
+            'sms:',
+            false
+        );
+    }
+
+    public function test_sms_preserves_fragment()
+    {
+        $this->assertValidation(
+            'sms:5555#frag'
+        );
+    }
+
     public function test_data_png()
     {
         $this->assertValidation(

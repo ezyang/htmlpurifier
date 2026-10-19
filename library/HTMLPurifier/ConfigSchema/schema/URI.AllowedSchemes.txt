@@ -9,6 +9,7 @@ array (
   'nntp' => true,
   'news' => true,
   'tel' => true,
+  'sms' => true,
 )
 --DESCRIPTION--
 Whitelist that defines the schemes that a URI is allowed to have.  This
