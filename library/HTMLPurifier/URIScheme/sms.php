@@ -126,11 +126,8 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
             $body_in_path = false;
         }
 
-        // Split multiple recipients before decoding: a pct-encoded comma
-        // is data, not a separator.
         $validated = array();
         foreach (explode(',', $recipient) as $one) {
-            $one = rawurldecode($one);
             // Visual separators are semantically ignorable (RFC 3966).
             $one = preg_replace('/[-.()]/', '', $one);
             // Optional leading plus, then digits: anything else is rejected.

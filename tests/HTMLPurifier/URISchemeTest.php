@@ -325,8 +325,8 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
 
     public function test_sms_rejects_encoded_comma_in_recipient()
     {
-        // Recipients are split before decoding: a pct-encoded comma is
-        // data, not a separator, and fails validation
+        // Only a literal comma separates recipients; "%" is no digit,
+        // so a percent-encoded comma fails validation
         $this->assertValidation(
             'sms:555%2C666?body=hi', false
         );
@@ -341,17 +341,24 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
 
     public function test_sms_rejects_trailing_newline_in_recipient()
     {
-        // The recipient pattern must anchor past a trailing newline
-        // (the /D modifier), or %0A smuggles a raw LF into the href
+        // The recipient pattern must anchor past a trailing newline,
+        // hence the /D modifier
         $this->assertValidation(
-            'sms:555%0A', false
+            "sms:555\n", false
         );
     }
 
     public function test_sms_rejects_trailing_newline_in_recipient_with_body()
     {
         $this->assertValidation(
-            'sms:+1555%0A?body=hi', false
+            "sms:+1555\n?body=hi", false
+        );
+    }
+
+    public function test_sms_rejects_encoded_newline_in_recipient()
+    {
+        $this->assertValidation(
+            'sms:555%0A', false
         );
     }
 
