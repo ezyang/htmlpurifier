@@ -28,7 +28,8 @@ URIScheme - needs to have callable generic checks
     tel - doesn't validate phone numbers, only allows characters '+', '1-9', and 'x'
     sms - validates a restricted subset of RFC 5724 recipients (global
         numbers and bare digit strings; malformed input is rejected rather
-        than repaired) and keeps only the 'body' field; unknown fields
-        are dropped, duplicate bodies rejected
+        than repaired) and keeps only the 'body' query field (or the
+        single '&body=' path suffix); unknown query fields are dropped,
+        duplicate query bodies rejected
 
     vim: et sw=4 sts=4

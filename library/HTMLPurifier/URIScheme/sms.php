@@ -17,20 +17,22 @@
  * multiple recipients (RFC 5724) are supported; each is validated
  * independently.
  *
- * The message uses the "?body=" field, matched case-insensitively. Its
- * value is kept as received; percent-encoding has already been
+ * The message uses the "?body=" query field, matched case-insensitively.
+ * Its value is kept as received; percent-encoding has already been
  * canonicalized by the parser and generic validation before the scheme
  * runs, as for every other scheme's components (compare mailto's
  * query fields, which are likewise passed through).
  * The body must occur at most once (RFC 5724):
- * duplicates are rejected. Other fields are dropped as a deliberate
+ * duplicates are rejected. Other query fields are dropped as a deliberate
  * allowlist policy: RFC 5724 permits future extension fields, so an
  * extension-aware receiver could understand a field this validator does
  * not; the sanitizer keeps only the field whose meaning it knows instead
  * of passing unknown semantics through.
  *
  * Compatibility: the undocumented iOS convention "sms:<recipient>&body=<text>"
- * (no "?") is accepted and preserved as written. It is not RFC 5724 syntax;
+ * (no "?") is accepted and preserved as written. It is parsed as one
+ * final "&body=" suffix -- everything after it is the message -- rather
+ * than as another field list. It is not RFC 5724 syntax;
  * the "?" form is canonical. The ";body=" variant is deliberately not
  * accepted: some clients treat ";" as a recipient separator, which makes
  * it unsafe as a cross-platform compatibility syntax.
@@ -75,37 +77,28 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
         $body_in_path = false;
 
         // "&" is no query delimiter (RFC 3986), so the iOS compatibility
-        // form arrives with its fields in the path. Collect the fields
-        // from both forms, tagged with where each came from so a body
-        // found is written back in the form it arrived in.
-        // Unknown fields are dropped as an allowlist policy.
-        $parts = explode('&', $recipient);
-        $recipient = array_shift($parts);
-        $fields = array();
-        foreach ($parts as $field) {
-            $fields[] = array($field, true);
+        // form arrives in the path. It is a single "&body=" suffix:
+        // everything after it is the message. Any other use of "&" is
+        // left in the recipient, where validation below rejects it.
+        $parts = explode('&', $recipient, 2);
+        if (isset($parts[1]) && stripos($parts[1], 'body=') === 0) {
+            $recipient = $parts[0];
+            $body = substr($parts[1], 5);
+            $body_in_path = true;
         }
+
+        // The parser has already decoded pct-encoded unreserved
+        // characters, so a query field name arrives canonical.
         if (!is_null($uri->query)) {
             foreach (explode('&', $uri->query) as $field) {
-                $fields[] = array($field, false);
+                if (stripos($field, 'body=') !== 0) {
+                    continue;
+                }
+                if (!is_null($body)) {
+                    return false; // body must occur at most once (RFC 5724)
+                }
+                $body = substr($field, 5);
             }
-        }
-        foreach ($fields as $tagged) {
-            list($field, $in_path) = $tagged;
-            $pos = strpos($field, '=');
-            if ($pos === false) {
-                continue;
-            }
-            // The parser has already decoded pct-encoded unreserved
-            // characters, so the name arrives canonical; match it as-is.
-            if (strtolower(substr($field, 0, $pos)) !== 'body') {
-                continue;
-            }
-            if (!is_null($body)) {
-                return false; // body must occur at most once (RFC 5724)
-            }
-            $body = substr($field, $pos + 1);
-            $body_in_path = $in_path;
         }
 
         $validated = array();

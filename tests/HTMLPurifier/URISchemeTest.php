@@ -371,12 +371,12 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
-    public function test_sms_drops_unknown_field_in_path()
+    public function test_sms_path_body_runs_to_end_of_path()
     {
-        // Unknown fields are dropped by the sanitizer's allowlist policy
+        // The compatibility form has one "&body=" suffix, not a field
+        // list, so a later "&" is part of the message
         $this->assertValidation(
-            'sms:+15555555555&body=Hello&subject=Test',
-            'sms:+15555555555&body=Hello'
+            'sms:+15555555555&body=Hello&subject=Test'
         );
     }
 
@@ -512,19 +512,20 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
-    public function test_sms_rejects_duplicate_body_in_path()
+    public function test_sms_second_body_marker_in_path_body_is_text()
     {
+        // There is one path suffix; a later "&body=" is message text,
+        // unlike a second body field in the query
         $this->assertValidation(
-            'sms:5555&body=first&body=second',
-            false
+            'sms:5555&body=first&body=second'
         );
     }
 
-    public function test_sms_drops_path_field_without_body()
+    public function test_sms_rejects_non_body_path_suffix()
     {
         $this->assertValidation(
             'sms:5555&subject=T',
-            'sms:5555'
+            false
         );
     }
 
@@ -554,11 +555,11 @@ class HTMLPurifier_URISchemeTest extends HTMLPurifier_URIHarness
         );
     }
 
-    public function test_sms_drops_field_without_value()
+    public function test_sms_rejects_path_suffix_without_equals()
     {
         $this->assertValidation(
             'sms:5555&body',
-            'sms:5555'
+            false
         );
     }
 
