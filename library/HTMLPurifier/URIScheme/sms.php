@@ -73,57 +73,39 @@ class HTMLPurifier_URIScheme_sms extends HTMLPurifier_URIScheme
         $recipient = $uri->path;
         $body = null;
         $body_in_path = false;
-        $query_body = null;
 
         // "&" is no query delimiter (RFC 3986), so the iOS compatibility
-        // form arrives with the body in the path; handle it as a field list.
+        // form arrives with its fields in the path. Collect the fields
+        // from both forms, tagged with where each came from so a body
+        // found is written back in the form it arrived in.
         // Unknown fields are dropped as an allowlist policy.
-        if (strpos($recipient, '&') !== false) {
-            $parts = explode('&', $recipient);
-            $recipient = array_shift($parts);
-            foreach ($parts as $field) {
-                $pos = strpos($field, '=');
-                if ($pos === false) {
-                    continue;
-                }
-                // The parser has already decoded pct-encoded unreserved
-                // characters, so the name arrives canonical; match it as-is.
-                if (strtolower(substr($field, 0, $pos)) !== 'body') {
-                    continue;
-                }
-                if (!is_null($body)) {
-                    return false; // body must occur at most once (RFC 5724)
-                }
-                $body = substr($field, $pos + 1);
-                $body_in_path = true;
+        $parts = explode('&', $recipient);
+        $recipient = array_shift($parts);
+        $fields = array();
+        foreach ($parts as $field) {
+            $fields[] = array($field, true);
+        }
+        if (!is_null($uri->query)) {
+            foreach (explode('&', $uri->query) as $field) {
+                $fields[] = array($field, false);
             }
         }
-
-        $query = $uri->query;
-        if (!is_null($query)) {
-            // The canonical query form: a body here is checked against the
-            // compatibility form's below, but a bodiless query on its own
-            // leaves it alone.
-            foreach (explode('&', $query) as $field) {
-                $pos = strpos($field, '=');
-                if ($pos === false) {
-                    continue;
-                }
-                if (strtolower(substr($field, 0, $pos)) !== 'body') {
-                    continue;
-                }
-                if (!is_null($query_body)) {
-                    return false; // body must occur at most once (RFC 5724)
-                }
-                $query_body = substr($field, $pos + 1);
+        foreach ($fields as $tagged) {
+            list($field, $in_path) = $tagged;
+            $pos = strpos($field, '=');
+            if ($pos === false) {
+                continue;
             }
-        }
-        if (!is_null($query_body)) {
+            // The parser has already decoded pct-encoded unreserved
+            // characters, so the name arrives canonical; match it as-is.
+            if (strtolower(substr($field, 0, $pos)) !== 'body') {
+                continue;
+            }
             if (!is_null($body)) {
-                return false; // body in both path and query forms
+                return false; // body must occur at most once (RFC 5724)
             }
-            $body = $query_body;
-            $body_in_path = false;
+            $body = substr($field, $pos + 1);
+            $body_in_path = $in_path;
         }
 
         $validated = array();
