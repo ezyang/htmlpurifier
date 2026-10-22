@@ -36,6 +36,12 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
     );
 
     /**
+     * Lower-cased map for $addParam
+     * @type array
+     */
+    protected $addParamMap = array();
+
+    /**
      * These are all lower-case keys.
      * @type array
      */
@@ -46,6 +52,13 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
         'src' => true,
         'allowfullscreen' => true, // if omitted, assume to be 'false'
     );
+
+    public function __construct()
+    {
+        foreach (array_keys($this->addParam) as $name) {
+            $this->addParamMap[strtolower($name)] = $name;
+        }
+    }
 
     /**
      * @param HTMLPurifier_Config $config
@@ -64,11 +77,13 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
     {
         if ($token->name == 'object') {
             $this->objectStack[] = $token;
-            $this->paramStack[] = array();
+            $paramStack = array();
             $new = array($token);
             foreach ($this->addParam as $name => $value) {
                 $new[] = new HTMLPurifier_Token_Empty('param', array('name' => $name, 'value' => $value));
+                $paramStack[strtolower($name)] = true;
             }
+            $this->paramStack[] = $paramStack;
             $token = $new;
         } elseif ($token->name == 'param') {
             $nest = count($this->currentNesting) - 1;
@@ -78,23 +93,24 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
                     $token = false;
                     return;
                 }
-                $n = $token->attr['name'];
+                $n = strtolower($token->attr['name']);
                 // We need this fix because YouTube doesn't supply a data
                 // attribute, which we need if a type is specified. This is
                 // *very* Flash specific.
                 if (!isset($this->objectStack[$i]->attr['data']) &&
-                    ($token->attr['name'] == 'movie' || $token->attr['name'] == 'src')
+                    ($n == 'movie' || $n == 'src')
                 ) {
                     $this->objectStack[$i]->attr['data'] = $token->attr['value'];
                 }
+                /** @TODO: fix comment */
                 // Check if the parameter is the correct value but has not
                 // already been added
                 if (!isset($this->paramStack[$i][$n]) &&
-                    isset($this->addParam[$n]) &&
-                    $token->attr['name'] === $this->addParam[$n]) {
+                    isset($this->addParamMap[$n]) &&
+                    $token->attr['value'] === $this->addParam[$this->addParamMap[$n]]) {
                     // keep token, and add to param stack
                     $this->paramStack[$i][$n] = true;
-                } elseif (isset($this->allowedParam[strtolower($n)])) {
+                } elseif (isset($this->allowedParam[$n])) {
                     // keep token, don't do anything to it
                     // (could possibly check for duplicates here)
                     // Note: In principle, parameters should be case sensitive.
