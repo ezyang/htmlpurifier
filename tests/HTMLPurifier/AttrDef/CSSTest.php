@@ -163,6 +163,7 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('filter:alpha(opacity=20);');
 
         $this->assertDef('border-top-left-radius:55pt 25pt;');
+        $this->assertDef('border-radius:10px / 5px;');
 
     }
 

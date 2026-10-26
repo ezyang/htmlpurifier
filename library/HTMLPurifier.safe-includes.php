@@ -83,6 +83,7 @@ require_once $__dir . '/HTMLPurifier/AttrDef/CSS/AlphaValue.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Background.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/BackgroundPosition.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Border.php';
+require_once $__dir . '/HTMLPurifier/AttrDef/CSS/BorderRadius.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Color.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/Composite.php';
 require_once $__dir . '/HTMLPurifier/AttrDef/CSS/DenyElementDecorator.php';
