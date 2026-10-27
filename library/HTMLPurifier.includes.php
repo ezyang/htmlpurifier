@@ -89,6 +89,7 @@ require 'HTMLPurifier/AttrDef/CSS/AlphaValue.php';
 require 'HTMLPurifier/AttrDef/CSS/Background.php';
 require 'HTMLPurifier/AttrDef/CSS/BackgroundPosition.php';
 require 'HTMLPurifier/AttrDef/CSS/Border.php';
+require 'HTMLPurifier/AttrDef/CSS/BorderRadius.php';
 require 'HTMLPurifier/AttrDef/CSS/Color.php';
 require 'HTMLPurifier/AttrDef/CSS/Composite.php';
 require 'HTMLPurifier/AttrDef/CSS/DenyElementDecorator.php';
