@@ -415,14 +415,22 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 
     public function test_tokenizeHTML_unterminatedTag()
     {
+        $alt_expect = array(
+            // I like our behavior better, but it's non-standard
+            'DOMLex'   => array( new HTMLPurifier_Token_Empty('a', array('href'=>'')) ),
+            'PH5P' => false, // total barfing, grabs scaffolding too
+        );
+        if (defined('LIBXML_VERSION') && LIBXML_VERSION >= 21400) {
+            // libxml >= 2.14 parses per HTML5 and swallows the
+            // scaffolding markup into the unterminated tag
+            $alt_expect['DOMLex'] = array(
+                new HTMLPurifier_Token_Empty('a', array('href'=>'', '<'=>'', 'div'=>'')),
+            );
+        }
         $this->assertTokenization(
             '<a href=""',
             array( new HTMLPurifier_Token_Text('<a href=""') ),
-            array(
-                // I like our behavior better, but it's non-standard
-                'DOMLex'   => array( new HTMLPurifier_Token_Empty('a', array('href'=>'')) ),
-                'PH5P' => false, // total barfing, grabs scaffolding too
-            )
+            $alt_expect
         );
     }
 
@@ -446,16 +454,23 @@ class HTMLPurifier_LexerTest extends HTMLPurifier_Harness
 
     public function test_tokenizeHTML_earlyQuote()
     {
+        $alt_expect = array(
+            // we barf on this input
+            'DirectLex' => array(
+                new HTMLPurifier_Token_Start('a', array('"' => ''))
+            ),
+            'PH5P' => false, // behavior varies; handle this personally
+        );
+        if (defined('LIBXML_VERSION') && LIBXML_VERSION >= 21400) {
+            // libxml >= 2.14 keeps the stray quote as an attribute name
+            $alt_expect['DOMLex'] = array(
+                new HTMLPurifier_Token_Empty('a', array('"' => ''))
+            );
+        }
         $this->assertTokenization(
             '<a "=>',
             array( new HTMLPurifier_Token_Empty('a') ),
-            array(
-                // we barf on this input
-                'DirectLex' => array(
-                    new HTMLPurifier_Token_Start('a', array('"' => ''))
-                ),
-                'PH5P' => false, // behavior varies; handle this personally
-            )
+            $alt_expect
         );
     }
 
@@ -709,6 +724,17 @@ div {}
             new HTMLPurifier_Token_Start('a@'),
             new HTMLPurifier_Token_Text('>'),
         );
+        $expect = array(
+            'DirectLex' => $alt_expect,
+        );
+        if (defined('LIBXML_VERSION') && LIBXML_VERSION >= 21400) {
+            // libxml >= 2.14 keeps '@' as part of the tag name
+            $expect['DOMLex'] = array(
+                new HTMLPurifier_Token_Start('a@'),
+                new HTMLPurifier_Token_Text('>'),
+                new HTMLPurifier_Token_End('a@'),
+            );
+        }
         $this->assertTokenization(
             '<a@>>',
             array(
@@ -716,9 +742,7 @@ div {}
                 new HTMLPurifier_Token_Text('>'),
                 new HTMLPurifier_Token_End('a'),
             ),
-            array(
-                'DirectLex' => $alt_expect,
-            )
+            $expect
         );
     }
 
@@ -841,11 +865,20 @@ div {}
    public function test_tokenizeHTML_noRemoveNewline()
    {
         $this->config->set('Core.NormalizeNewlines', false);
+        $alt_expect = array();
+        if (defined('LIBXML_VERSION') && LIBXML_VERSION >= 21400) {
+            // libxml >= 2.14 normalizes CR to LF while parsing,
+            // so DOMLex cannot preserve the original newlines
+            $alt_expect['DOMLex'] = array(
+                new HTMLPurifier_Token_Text("plain\ntext\n")
+            );
+        }
         $this->assertTokenization(
             "plain\rtext\r\n",
             array(
                 new HTMLPurifier_Token_Text("plain\rtext\r\n")
-            )
+            ),
+            $alt_expect
         );
      }
 
