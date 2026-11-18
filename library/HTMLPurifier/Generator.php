@@ -165,7 +165,7 @@ class HTMLPurifier_Generator
 
         } elseif ($token instanceof HTMLPurifier_Token_Empty) {
             if ($this->_flashCompat && $token->name == "param" && !empty($this->_flashStack)) {
-                $this->_flashStack[count($this->_flashStack)-1]->param[$token->attr['name']] = $token->attr['value'];
+                $this->_flashStack[count($this->_flashStack)-1]->param[$token->attr['name'] ?? ''] = $token->attr['value'] ?? '';
             }
             $attr = $this->generateAttributes($token->attr, $token->name);
              return '<' . $token->name . ($attr ? ' ' : '') . $attr .
@@ -248,10 +248,10 @@ class HTMLPurifier_Generator
             // don't process user input with innerHTML or you don't plan
             // on supporting Internet Explorer.
             if ($this->_innerHTMLFix) {
-                if (strpos($value, '`') !== false) {
+                if (strpos($value ?? '', '`') !== false) {
                     // check if correct quoting style would not already be
                     // triggered
-                    if (strcspn($value, '"\' <>') === strlen($value)) {
+                    if (strcspn($value ?? '', '"\' <>') === strlen($value ?? '')) {
                         // protect!
                         $value .= ' ';
                     }
@@ -279,7 +279,7 @@ class HTMLPurifier_Generator
         if ($quote === null) {
             $quote = ENT_COMPAT;
         }
-        return htmlspecialchars($string, $quote, 'UTF-8');
+        return htmlspecialchars($string ?? '', $quote, 'UTF-8');
     }
 }
 
