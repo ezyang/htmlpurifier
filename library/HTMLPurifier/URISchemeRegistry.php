@@ -40,6 +40,12 @@ class HTMLPurifier_URISchemeRegistry
      */
     public function getScheme($scheme, $config, $context)
     {
+        // Prevent deprecated "null used as array offset" in PHP 8.1+.
+        // A null scheme indicates "no scheme", so return early.
+        if ($scheme === null) {
+            return;
+        }
+        
         if (!$config) {
             $config = HTMLPurifier_Config::createDefault();
         }
