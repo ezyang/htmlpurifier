@@ -83,7 +83,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         if (!file_exists($file)) {
             return false;
         }
-        return unlink($file);
+        return $this->safeUnlink($file);
     }
 
     /**
@@ -110,7 +110,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             if ($filename[0] === '.') {
                 continue;
             }
-            unlink($dir . '/' . $filename);
+            $this->safeUnlink($dir . '/' . $filename);
         }
         closedir($dh);
         return true;
@@ -141,7 +141,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             $key = substr($filename, 0, strlen($filename) - 4);
             $file = $dir . '/' . $filename;
             if ($this->isOld($key, $config) && file_exists($file)) {
-                unlink($file);
+                $this->safeUnlink($file);
             }
         }
         closedir($dh);
@@ -186,6 +186,31 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         $base = $config->get('Cache.SerializerPath');
         $base = is_null($base) ? HTMLPURIFIER_PREFIX . '/HTMLPurifier/DefinitionCache/Serializer' : $base;
         return $base;
+    }
+
+    /**
+     * Silently handles files already deleted by another process,
+     * but still emits a warning when the file remains after unlink.
+     * @param string $file
+     * @return bool
+     */
+    private function safeUnlink($file)
+    {
+        if (!file_exists($file)) {
+            return true;
+        }
+        if (@unlink($file)) {
+            return true;
+        }
+        clearstatcache(true, $file);
+        if (!file_exists($file)) {
+            return true;
+        }
+        trigger_error(
+            'Could not delete definition cache file ' . $file,
+            E_USER_WARNING
+        );
+        return false;
     }
 
     /**
