@@ -478,6 +478,8 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
                 'table',
                 'inline-block',
                 'inline-table',
+                'flex',
+                'inline-flex',
                 'table-row-group',
                 'table-header-group',
                 'table-footer-group',
@@ -489,6 +491,19 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
                 'none'
             ]
         );
+        $this->info['justify-content'] = new HTMLPurifier_AttrDef_Enum(
+            ['normal', 'center', 'flex-start', 'flex-end', 'space-between', 'space-around', 'space-evenly']
+        );
+        $this->info['align-items'] = new HTMLPurifier_AttrDef_Enum(
+            ['normal', 'center', 'stretch', 'flex-start', 'flex-end', 'baseline']
+        );
+        $this->info['flex-direction'] = new HTMLPurifier_AttrDef_Enum(
+            ['row', 'row-reverse', 'column', 'column-reverse']
+        );
+        $this->info['flex-wrap'] = new HTMLPurifier_AttrDef_Enum(
+            ['nowrap', 'wrap', 'wrap-reverse']
+        );
+        $this->info['flex'] = new HTMLPurifier_AttrDef_CSS_Number(true);
         $this->info['visibility'] = new HTMLPurifier_AttrDef_Enum(
             ['visible', 'hidden', 'collapse']
         );

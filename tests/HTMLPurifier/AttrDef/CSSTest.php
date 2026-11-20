@@ -182,6 +182,91 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('opacity:0.2;');
     }
 
+    public function testFlexbox()
+    {
+        $this->config->set('CSS.AllowTricky', true);
+
+        $this->assertDef('display:flex;');
+        $this->assertDef('display:inline-flex;');
+        $this->assertDef('display:block;');
+        $this->assertDef('display:none;');
+        $this->assertDef('display:table-cell;');
+
+        $this->assertDef('justify-content:center;');
+        $this->assertDef('justify-content:space-between;');
+        $this->assertDef('align-items:flex-end;');
+        $this->assertDef('align-items:stretch;');
+        $this->assertDef('flex-direction:column;');
+        $this->assertDef('flex-direction:row-reverse;');
+        $this->assertDef('flex-wrap:wrap;');
+        $this->assertDef('flex-wrap:wrap-reverse;');
+
+        $this->assertDef('flex:2;');
+        $this->assertDef('flex:0;');
+        $this->assertDef('flex:0.5;');
+
+        $this->assertDef('display:flex !important;', 'display:flex;');
+        $this->assertDef('flex:2 !important;', 'flex:2;');
+
+        $this->assertDef('display:invalid;', false);
+        $this->assertDef('justify-content:invalid;', false);
+        $this->assertDef('align-items:invalid;', false);
+        $this->assertDef('flex-direction:invalid;', false);
+        $this->assertDef('flex-wrap:invalid;', false);
+        $this->assertDef('flex:-2;', false);
+        $this->assertDef('flex:2 1 auto;', false);
+        $this->assertDef('flex:url(https://example.com/a);', false);
+        $this->assertDef('flex:expression(alert(1));', false);
+        $this->assertDef('flex:-2 !important;', false);
+
+        $this->assertDef('position:fixed;', false);
+        $this->assertDef('position:absolute;', false);
+        $this->assertDef('position:relative;', false);
+        $this->assertDef('top:20px;', false);
+        $this->assertDef('left:20px;', false);
+        $this->assertDef('z-index:9999;', false);
+
+        $this->assertDef('display:flex;justify-content:space-between;align-items:flex-end;');
+    }
+
+    public function testFlexboxDisabled()
+    {
+        $this->config->set('CSS.AllowTricky', false);
+
+        $this->assertDef(
+            'display:flex;justify-content:center;align-items:center;flex-direction:column;flex-wrap:wrap;flex:2;',
+            false
+        );
+        $this->assertDef('display:inline-flex;text-align:right;', 'text-align:right;');
+    }
+
+    public function testFlexboxImportant()
+    {
+        $this->config->set('CSS.AllowTricky', true);
+        $this->config->set('CSS.AllowImportant', true);
+
+        $this->assertDef('display:flex !important;');
+        $this->assertDef('flex:2 !important;');
+    }
+
+    public function testFlexboxAllowedProperties()
+    {
+        $this->config->set('CSS.AllowTricky', true);
+        $this->config->set('CSS.AllowedProperties', 'display');
+
+        $this->assertDef('display:flex;flex:2;justify-content:center;', 'display:flex;');
+        $this->assertDef('display:block;');
+    }
+
+    public function testFlexboxForbiddenProperties()
+    {
+        $this->config->set('CSS.AllowTricky', true);
+        $this->config->set('CSS.ForbiddenProperties', 'flex');
+
+        $this->assertDef('flex:2;', false);
+        $this->assertDef('display:flex;flex:2;', 'display:flex;');
+    }
+
     public function testForbidden()
     {
         $this->config->set('CSS.ForbiddenProperties', 'float');
