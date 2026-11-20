@@ -171,6 +171,11 @@ class HTMLPurifier_AttrDef_CSSTest extends HTMLPurifier_AttrDefHarness
     {
         $this->config->set('CSS.AllowImportant', true);
         $this->assertDef('float:left !important;');
+        $this->assertDef('float:invalid !important;', false);
+        $this->assertDef(
+            'float:left;float:invalid !important;',
+            'float:left;'
+        );
     }
 
     public function testTricky()

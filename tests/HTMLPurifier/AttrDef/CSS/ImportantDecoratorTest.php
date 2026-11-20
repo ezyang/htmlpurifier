@@ -44,6 +44,18 @@ class HTMLPurifier_AttrDef_CSS_ImportantDecoratorTest extends HTMLPurifier_AttrD
         $this->assertDef('! foo important');
     }
 
+    public function testImportantInvalidValue()
+    {
+        $this->setMock('invalid', false);
+        $this->assertDef('invalid !important', false);
+    }
+
+    public function testImportantZeroValue()
+    {
+        $this->setMock('0');
+        $this->assertDef('0 !important');
+    }
+
     public function testStrip()
     {
         $this->def  = new HTMLPurifier_AttrDef_CSS_ImportantDecorator($this->mock, false);
